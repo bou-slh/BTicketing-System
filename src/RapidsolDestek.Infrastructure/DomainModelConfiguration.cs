@@ -46,6 +46,14 @@ public static class DomainModelConfiguration
                 .OnDelete(DeleteBehavior.Restrict);
             e.HasOne<Ticket>().WithMany().HasForeignKey(x => x.ParentId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            // Full-text search (osTicket "search" replaced with Postgres tsvector).
+            // Shadow property keeps the Domain entity framework-free; "simple" config
+            // because the corpus is mixed TR/EN — stemming asymmetry hurts more than
+            // no stemming. Generated column + GIN index land in migration S4_Search.
+            e.Property<NpgsqlTypes.NpgsqlTsVector>("SearchVector")
+                .IsGeneratedTsVectorColumn("simple", nameof(Ticket.Number), nameof(Ticket.Subject));
+            e.HasIndex("SearchVector").HasMethod("GIN");
         });
 
         b.Entity<EffortProposal>(e =>
@@ -64,6 +72,11 @@ public static class DomainModelConfiguration
             e.HasIndex(x => x.Type);
             e.HasOne(x => x.Thread).WithMany(t => t.Entries)
                 .HasForeignKey(x => x.ThreadId).OnDelete(DeleteBehavior.Cascade);
+
+            // Body-level full-text (bodies are sanitized at ingress, so tag noise is low).
+            e.Property<NpgsqlTypes.NpgsqlTsVector>("SearchVector")
+                .IsGeneratedTsVectorColumn("simple", nameof(ThreadEntry.Title), nameof(ThreadEntry.Body));
+            e.HasIndex("SearchVector").HasMethod("GIN");
         });
 
         b.Entity<ThreadEventType>(e => e.HasIndex(x => x.Name).IsUnique());

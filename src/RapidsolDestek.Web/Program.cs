@@ -35,6 +35,7 @@ builder.Services.Configure<RequestLocalizationOptions>(o =>
 // ---- Data ------------------------------------------------------------------
 
 builder.Services.AddRapidsolData(builder.Configuration);
+builder.Services.AddRapidsolServices(builder.Configuration);
 
 // ---- AuthN: two principals, separate cookie schemes ------------------------
 
@@ -126,6 +127,12 @@ builder.Services.AddAuthorization(o =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<ISidebarBadgeService, StubSidebarBadgeService>();
 builder.Services.AddSingleton<IAppEmailSender, DevLoggingEmailSender>();
+
+// Interim B8 effort emails (S8 replaces the transport, the handler contract stays).
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortProposed>, EffortEmailHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRevised>, EffortEmailHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortApproved>, EffortEmailHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRejected>, EffortEmailHandler>();
 
 var app = builder.Build();
 

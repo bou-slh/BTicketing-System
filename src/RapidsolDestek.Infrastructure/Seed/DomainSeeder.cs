@@ -58,8 +58,8 @@ public static class DomainSeeder
         }.ToDictionary(n => n, n => new ThreadEventType { Name = n });
         db.ThreadEventTypes.AddRange(events.Values);
 
-        // ----- Sequences (next = max seeded number + 1) -------------------------------
-        var seqTickets = new Sequence { Name = "Genel Talepler", Next = 716567, IsInternal = true };
+        // ----- Sequences (next safely above the highest seeded number, R716592) -------
+        var seqTickets = new Sequence { Name = "Genel Talepler", Next = 716600, IsInternal = true };
         var seqTasks = new Sequence { Name = "Görev Sırası", Next = 2042, IsInternal = true };
         db.Sequences.AddRange(seqTickets, seqTasks);
 
