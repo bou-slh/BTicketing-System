@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="home.welcome" xml:space="preserve">
+    <value>RapidSol Çözüm Merkezi'ne hoş geldiniz</value>
+  </data>
+  <data name="home.sub" xml:space="preserve">
+    <value>Yeni bir destek talebi oluşturabilir veya mevcut taleplerinizin güncel durumunu takip edebilirsiniz.</value>
+  </data>
+  <data name="home.newBtn" xml:space="preserve">
+    <value>＋ Yeni destek talebi</value>
+  </data>
+  <data name="home.statOpen" xml:space="preserve">
+    <value>Açık taleplerim</value>
+  </data>
+  <data name="home.statOpenNote" xml:space="preserve">
+    <value>{0} talepte RapidSol çalışıyor</value>
+  </data>
+  <data name="home.statWaiting" xml:space="preserve">
+    <value>Onayım / yanıtım bekleniyor</value>
+  </data>
+  <data name="home.statWaitingNote" xml:space="preserve">
+    <value>Efor onayı veya ek bilgi bekleniyor</value>
+  </data>
+  <data name="home.statClosed" xml:space="preserve">
+    <value>Bu ay kapatılan</value>
+  </data>
+  <data name="home.statClosedNote" xml:space="preserve">
+    <value>Çözümlenerek tamamlandı</value>
+  </data>
+  <data name="home.statCancelled" xml:space="preserve">
+    <value>Bu ay iptal edilen</value>
+  </data>
+  <data name="home.statCancelledNote" xml:space="preserve">
+    <value>Çözüm uygulanmadan kapatıldı</value>
+  </data>
+  <data name="home.recent" xml:space="preserve">
+    <value>Son taleplerim</value>
+  </data>
+  <data name="home.viewAll" xml:space="preserve">
+    <value>Tümünü görüntüle →</value>
+  </data>
+  <data name="home.process" xml:space="preserve">
+    <value>Talep süreci nasıl işler?</value>
+  </data>
+  <data name="home.step1" xml:space="preserve">
+    <value>Talebinizi iletin</value>
+  </data>
+  <data name="home.step1Sub" xml:space="preserve">
+    <value>Konu ve detayları paylaşın.</value>
+  </data>
+  <data name="home.step2" xml:space="preserve">
+    <value>Danışman incelesin</value>
+  </data>
+  <data name="home.step2Sub" xml:space="preserve">
+    <value>Uzman ekibimiz talebi değerlendirir.</value>
+  </data>
+  <data name="home.step3" xml:space="preserve">
+    <value>Durumu takip edin</value>
+  </data>
+  <data name="home.step3Sub" xml:space="preserve">
+    <value>Tüm güncellemeleri buradan görün.</value>
+  </data>
+  <data name="home.kbTitle" xml:space="preserve">
+    <value>Bilgi Bankası'nda arayın</value>
+  </data>
+  <data name="home.kbSub" xml:space="preserve">
+    <value>Sık sorulan sorulara ve kılavuzlara göz atın — çoğu sorunun yanıtı hazır.</value>
+  </data>
+  <data name="home.kbPlaceholder" xml:space="preserve">
+    <value>Örn. bordro, izin, vardiya…</value>
+  </data>
+  <data name="status.effortWait" xml:space="preserve">
+    <value>Efor onayınız bekleniyor</value>
+  </data>
+  <data name="meta.updToday" xml:space="preserve">
+    <value>Son güncelleme bugün {0}</value>
+  </data>
+  <data name="meta.updYesterday" xml:space="preserve">
+    <value>Son güncelleme dün {0}</value>
+  </data>
+  <data name="meta.updOn" xml:space="preserve">
+    <value>Son güncelleme {0}</value>
+  </data>
+</root>

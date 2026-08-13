@@ -208,7 +208,7 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 - [ ] **register.html** — real registration, password match/strength, consent (KVKK), multi-step per design (B6)
 - [ ] **pwreset.html** — 3 steps as an actual flow (request → code → new password) (B6)
 - [ ] **offline.html** — served by real maintenance-mode switch (settings-system)
-- [ ] **index.html** — live tile counts, KB mini-search works, recent tickets from data, account menu + logout (B9)
+- [x] **index.html** — live tile counts, KB mini-search works, recent tickets from data, account menu + logout (B9) *(S5; recent rows deep-link `/ticket-view?id=` — dead until portal ticket-view ports; account menu + logout via shared portal header)*
 - [ ] **open.html** — help-topic → dynamic form fields (form designer output), file list on attach, validation, creates a real ticket (B3/B5)
 - [ ] **tickets.html** — real list: tabs from data, search + topic filter work, deep links `ticket-view?id=` (B1)
 - [ ] **ticket-view.html** — thread from data; **effort card Onayla/Reddet** (B8); reply composer appends + attach file list (B5)

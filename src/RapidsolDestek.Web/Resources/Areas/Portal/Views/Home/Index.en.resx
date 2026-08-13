@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="home.welcome" xml:space="preserve">
+    <value>Welcome to the RapidSol Solution Center</value>
+  </data>
+  <data name="home.sub" xml:space="preserve">
+    <value>Create a new support request or follow the current status of your existing requests.</value>
+  </data>
+  <data name="home.newBtn" xml:space="preserve">
+    <value>＋ New support request</value>
+  </data>
+  <data name="home.statOpen" xml:space="preserve">
+    <value>My open requests</value>
+  </data>
+  <data name="home.statOpenNote" xml:space="preserve">
+    <value>RapidSol is working on {0} requests</value>
+  </data>
+  <data name="home.statWaiting" xml:space="preserve">
+    <value>Awaiting my approval / reply</value>
+  </data>
+  <data name="home.statWaitingNote" xml:space="preserve">
+    <value>Effort approval or extra info needed</value>
+  </data>
+  <data name="home.statClosed" xml:space="preserve">
+    <value>Closed this month</value>
+  </data>
+  <data name="home.statClosedNote" xml:space="preserve">
+    <value>Completed with a resolution</value>
+  </data>
+  <data name="home.statCancelled" xml:space="preserve">
+    <value>Cancelled this month</value>
+  </data>
+  <data name="home.statCancelledNote" xml:space="preserve">
+    <value>Closed without applying a fix</value>
+  </data>
+  <data name="home.recent" xml:space="preserve">
+    <value>My recent requests</value>
+  </data>
+  <data name="home.viewAll" xml:space="preserve">
+    <value>View all →</value>
+  </data>
+  <data name="home.process" xml:space="preserve">
+    <value>How does the process work?</value>
+  </data>
+  <data name="home.step1" xml:space="preserve">
+    <value>Submit your request</value>
+  </data>
+  <data name="home.step1Sub" xml:space="preserve">
+    <value>Share the topic and the details.</value>
+  </data>
+  <data name="home.step2" xml:space="preserve">
+    <value>A consultant reviews it</value>
+  </data>
+  <data name="home.step2Sub" xml:space="preserve">
+    <value>Our expert team evaluates the request.</value>
+  </data>
+  <data name="home.step3" xml:space="preserve">
+    <value>Track the status</value>
+  </data>
+  <data name="home.step3Sub" xml:space="preserve">
+    <value>See every update right here.</value>
+  </data>
+  <data name="home.kbTitle" xml:space="preserve">
+    <value>Search the Knowledge Base</value>
+  </data>
+  <data name="home.kbSub" xml:space="preserve">
+    <value>Browse FAQs and guides — most questions already have an answer.</value>
+  </data>
+  <data name="home.kbPlaceholder" xml:space="preserve">
+    <value>E.g. payroll, leave, shifts…</value>
+  </data>
+  <data name="status.effortWait" xml:space="preserve">
+    <value>Awaiting your effort approval</value>
+  </data>
+  <data name="meta.updToday" xml:space="preserve">
+    <value>Last updated today {0}</value>
+  </data>
+  <data name="meta.updYesterday" xml:space="preserve">
+    <value>Last updated yesterday {0}</value>
+  </data>
+  <data name="meta.updOn" xml:space="preserve">
+    <value>Last updated {0}</value>
+  </data>
+</root>
