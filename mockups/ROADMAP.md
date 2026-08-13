@@ -18,12 +18,13 @@ domain-model reference; §3 tracks feature parity with it subsystem by subsystem
   is never done.
 - **Definition of done — per stage**: the stage's exit gate (§5) passes, `/verify` (build + tests + i18n audit +
   Playwright smoke) is green, and the visual differ accepts the stage's pages against their mockup twins.
+- **Tenancy**: **single-tenant** (decided 2026-08-13) — one deployment, one company's helpdesk; no tenant isolation in the schema.
 - **Scope**: full scope, single launch. The admin **builders** (queue builder, form designer, list editor,
   filter rule editor) are **in v1** — no deferred-to-v2 components anywhere.
 
 ## 2. Canonical domain data
 
-Single source of truth for sample/seed data. It serves twice: (a) the S0 mockup consistency pass edits every
+Single source of truth for sample/seed data. **All of it is illustrative sample content** — it exists so pages read coherently and the dev/demo database has consistent fixtures; real business data replaces it at launch and nothing in the product may hardcode these values. It serves twice: (a) the S0 mockup consistency pass edits every
 mockup page to conform, (b) S3 seeds the database with exactly this canon. Authority pages win conflicts.
 
 | Domain | Canon (authority page) | Currently conflicting pages to conform |
@@ -294,7 +295,7 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
 
 ## 7. Open decisions (carry-over, timeline questions removed)
 
-1. **Single-tenant or multi-tenant?** — still the schema blocker; must be answered before S3.
+1. ~~Single-tenant or multi-tenant?~~ — **DECIDED 2026-08-13: single-tenant.** S3 domain modelling is unblocked; no tenancy column/filter anywhere.
 2. Hosting: Linux containers (recommended) vs Windows/IIS; cloud vs on-prem.
 3. Integrations: SSO (Entra ID/LDAP), CRM/ERP, WhatsApp/telephony, billing on approved effort hours.
 4. Legacy migration source (live osTicket data?) — shapes S9.

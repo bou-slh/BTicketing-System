@@ -1,0 +1,39 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in */RapidsolDestek/*.cs) cd \"$CLAUDE_PROJECT_DIR\" && dotnet format RapidsolDestek.sln --include \"${f#\"$CLAUDE_PROJECT_DIR\"/}\" --no-restore -v q >/dev/null 2>&1; dotnet build RapidsolDestek.sln -v q --nologo 2>&1 | grep -E 'error|Error' && exit 2 || exit 0 ;; esac; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in */mockups/*.html) cd \"$CLAUDE_PROJECT_DIR\" && node tools/check-i18n.mjs --mockups-only || exit 2 ;; *.cshtml|*.resx) cd \"$CLAUDE_PROJECT_DIR\" && node tools/check-i18n.mjs --resx-only || exit 2 ;; esac; exit 0"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in */Migrations/*) echo 'BLOCKED: never hand-edit EF migrations — regenerate with dotnet ef' >&2; exit 2 ;; esac; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "c=$(jq -r '.tool_input.command // empty'); case \"$c\" in *'git push'*main*) echo 'BLOCKED: pushes to main are PR-only' >&2; exit 2 ;; esac; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

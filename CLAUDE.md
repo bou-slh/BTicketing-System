@@ -34,9 +34,18 @@ mockups/                           the binding spec (do not edit without S0-styl
 - Build: `dotnet build` · Tests: `dotnet test`
 - Full stack: `docker compose up --build`
 
+## AI tooling (committed in this repo — use it)
+
+- **Skills**: `/port-page <mockup>` (the S5–S7 unit of work: port → i18n audit → visual diff), `/add-entity <Name>` (S3), `/add-setting <key>` (S7), `/verify` (gate before every commit), `/run` (db + watch + open).
+- **Subagents** (`.claude/agents/`): `page-porter`, `schema-reviewer`, `i18n-auditor`, `visual-differ`, `test-writer`. For bulk page porting, fan out one page-porter per page in isolated worktrees; audit + diff each page before merge. All agents treat `mockups/ROADMAP.md` + `mockups/CONVENTIONS.md` + this file as the shared contract.
+- **MCP** (`.mcp.json`): `playwright` (browser for visual verification against localhost and the mockup twins), `postgres` (inspect schema/data on the compose db).
+- **Hooks** (`.claude/settings.json`): C# edits auto-format + build-check; view/mockup/resx edits run `tools/check-i18n.mjs`; edits under `Migrations/` and `git push` to main are blocked.
+- **CSS parity rule**: `src/RapidsolDestek.Web/wwwroot/css/{base,portal,admin}.css` must stay byte-identical to `mockups/assets/css/` — product-only styles go in `wwwroot/css/app.css`.
+- **i18n converter**: `dotnet run tools/i18n-convert.cs -- shared` (mockup dicts → SharedResources resx) and `-- page <mockup.html> <viewPath>` (PAGE_I18N → per-view resx).
+
 ## Conventions
 
-- Two auth principals: Customer (portal) and Staff (agent/admin), separate cookies. 2FA mandatory for admins.
+- Two auth principals: Customer (portal) and Staff (agent/admin), separate cookies (`rd.customer` / `rd.staff`). Admin = staff + `Admin` role + mandatory TOTP 2FA (`AdminOnly` policy).
 - i18n: every UI string via `IStringLocalizer` + resx (tr default, en); no hardcoded literals in views.
   Key names mirror the mockup `data-i18n` keys.
 - Every mutation writes an AuditEvent (EF interceptor). Status enum and seed data must match the canon
