@@ -1,0 +1,190 @@
+@model RapidsolDestek.Web.Areas.Portal.Controllers.OpenVm
+@{
+    ViewData["Title"] = SL["nav.newTicket"];
+
+    // B3 error presentation: same .rd-form-error block as Login/Register
+    // (_FormErrors pattern), with this page's validation codes mapped to i18n here.
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+    string ErrorText(string code) => code switch
+    {
+        "errTopic" => L["open.errTopic"].Value,
+        "errSummary" => L["open.errSummary"].Value,
+        "errDetails" => L["open.errDetails"].Value,
+        _ when code.StartsWith("errField:") => L["open.errField", code["errField:".Length..]].Value,
+        _ => code,
+    };
+
+    // Mockup priority labels over real priority rows (open.prNormal/prHigh/prCritical).
+    string PriorityLabel(string key) => key switch
+    {
+        "high" => L["open.prHigh"].Value,
+        "emergency" => L["open.prCritical"].Value,
+        _ => L["open.prNormal"].Value,
+    };
+
+    var selectedTopic = Model.Form.Topic;
+    var selectedPriority = Model.Form.Priority;
+}
+
+<div class="rc-heading">
+    <div>
+        <h1>@L["open.title"]</h1>
+        <p>@L["open.sub"]</p>
+    </div>
+</div>
+
+<div class="rc-form-layout">
+    <form class="rc-form" method="post" enctype="multipart/form-data" asp-action="Index">
+        @if (errors.Count > 0)
+        {
+            <div class="rd-form-error" role="alert">
+                @foreach (var e in errors)
+                {
+                    <div>@ErrorText(e)</div>
+                }
+            </div>
+        }
+        <div class="rc-form-grid">
+            <div class="rc-form-step"><span class="rc-step-icon">1</span><span>@L["open.step1"]</span></div>
+
+            <div>
+                <label class="rc-label" for="rc-company">@L["open.customer"]</label>
+                <input id="rc-company" class="rc-control" value="@Model.CustomerName" readonly>
+            </div>
+            <div>
+                <label class="rc-label" for="rc-topic">@L["open.topic"]</label>
+                <select id="rc-topic" class="rc-control" name="Topic" data-topic-select>
+                    <option value="">@L["open.topicSelect"]</option>
+                    @foreach (var t in Model.Topics)
+                    {
+                        <option value="@t.Id" selected="@(selectedTopic == t.Id)">@t.Name</option>
+                    }
+                </select>
+                <div class="rd-help">@L["open.topicHelp"]</div>
+            </div>
+            @* Help-topic → dynamic form fields (ROADMAP §6.1 open.html row): each
+               public topic's designed fields render hidden and swap in client-side
+               when the topic is selected. Data comes from seeded HelpTopicForm rows;
+               the S7 admin form designer will edit these definitions. *@
+            @foreach (var t in Model.Topics)
+            {
+                var active = selectedTopic == t.Id;
+                foreach (var f in t.Fields)
+                {
+                    var fieldId = $"rc-field-{f.Id}";
+                    var name = $"Fields[{f.Id}]";
+                    Model.Form.Fields.TryGetValue(f.Id, out var value);
+                    <div data-topic-field="@t.Id" hidden="@(!active)">
+                        <label class="rc-label" for="@fieldId">@f.Label</label>
+                        @switch (f.Type)
+                        {
+                            case "choices":
+                                <select id="@fieldId" class="rc-control" name="@name" disabled="@(!active)">
+                                    <option value=""></option>
+                                    @foreach (var c in f.Choices)
+                                    {
+                                        <option value="@c.Id" selected="@(value == c.Id.ToString())">@c.Value</option>
+                                    }
+                                </select>
+                                break;
+                            case "date":
+                                <input id="@fieldId" class="rc-control" type="date" name="@name" value="@value" disabled="@(!active)">
+                                break;
+                            case "memo":
+                                <textarea id="@fieldId" class="rc-control" name="@name" data-plain disabled="@(!active)">@value</textarea>
+                                break;
+                            default:
+                                <input id="@fieldId" class="rc-control" type="text" name="@name" value="@value" disabled="@(!active)">
+                                break;
+                        }
+                        @if (!string.IsNullOrWhiteSpace(f.Hint))
+                        {
+                            <div class="rd-help">@f.Hint</div>
+                        }
+                    </div>
+                }
+            }
+            <div>
+                <label class="rc-label" for="rc-summary">@L["open.summary"]</label>
+                <input id="rc-summary" class="rc-control" name="Summary" value="@Model.Form.Summary" placeholder="@L["open.summaryPh"]">
+            </div>
+
+            <div class="rc-form-step"><span class="rc-step-icon">2</span><span>@L["open.step2"]</span></div>
+
+            <div>
+                <label class="rc-label" for="rc-priority">@L["open.priority"]</label>
+                <select id="rc-priority" class="rc-control" name="Priority">
+                    @foreach (var p in Model.Priorities)
+                    {
+                        <option value="@p.Id" selected="@(selectedPriority == p.Id)">@PriorityLabel(p.Key)</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label class="rc-label" for="rc-reference">@L["open.reference"]</label>
+                <input id="rc-reference" class="rc-control" name="Reference" value="@Model.Form.Reference" placeholder="@L["open.referencePh"]">
+            </div>
+            <div>
+                <label class="rc-label" for="rc-details">@L["open.details"]</label>
+                <textarea id="rc-details" class="rc-control" name="Details" placeholder="@L["open.detailsPh"]">@Model.Form.Details</textarea>
+            </div>
+
+            <div class="rc-form-step"><span class="rc-step-icon">3</span><span>@L["open.step3"]</span></div>
+
+            <label class="rc-upload" for="rc-new-files">
+                <span>@L["open.upload"]</span>
+                <input id="rc-new-files" name="Files" type="file" multiple hidden>
+            </label>
+            <div class="rc-file-name" data-file-list hidden></div>
+        </div>
+
+        <div class="rc-form-footer">
+            <small>@L["open.eta"]</small>
+            <button class="rc-button-primary">@L["open.submit"]</button>
+        </div>
+    </form>
+
+    <aside class="rc-surface">
+        <div class="rc-aside-block">
+            <h3>@L["open.tipsTitle"]</h3>
+            <div class="rc-aside-tip"><span>✓</span><div>@L["open.tip1"]</div></div>
+            <div class="rc-aside-tip"><span>✓</span><div>@L["open.tip2"]</div></div>
+            <div class="rc-aside-tip"><span>✓</span><div>@L["open.tip3"]</div></div>
+            <div class="rc-notice">@L["open.notice"]</div>
+        </div>
+    </aside>
+</div>
+
+@* Page-local behavior, mirroring the mockups' inline-script pattern:
+   topic → field swap (B3) and the attach file list (B5). *@
+<script>
+(() => {
+  const topicSelect = document.querySelector("[data-topic-select]");
+  const sync = () => {
+    document.querySelectorAll("[data-topic-field]").forEach((panel) => {
+      const active = topicSelect.value !== "" && panel.getAttribute("data-topic-field") === topicSelect.value;
+      panel.hidden = !active;
+      panel.querySelectorAll("input,select,textarea").forEach((c) => (c.disabled = !active));
+    });
+  };
+  topicSelect?.addEventListener("change", sync);
+
+  const input = document.getElementById("rc-new-files");
+  const list = document.querySelector("[data-file-list]");
+  const render = () => {
+    const names = [...(input.files || [])].map((f) => `📎 ${f.name}`);
+    list.textContent = names.join("  ·  ");
+    list.hidden = names.length === 0;
+  };
+  input?.addEventListener("change", render);
+  const zone = input?.closest(".rc-upload");
+  zone?.addEventListener("dragover", (e) => e.preventDefault());
+  zone?.addEventListener("drop", (e) => {
+    e.preventDefault();
+    if (e.dataTransfer?.files?.length) {
+      input.files = e.dataTransfer.files;
+      render();
+    }
+  });
+})();
+</script>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="open.title" xml:space="preserve">
+    <value>New support request</value>
+  </data>
+  <data name="open.sub" xml:space="preserve">
+    <value>Fill in the details below so we can route your request to the right team quickly.</value>
+  </data>
+  <data name="open.step1" xml:space="preserve">
+    <value>Topic</value>
+  </data>
+  <data name="open.step2" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="open.step3" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="open.customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="open.topic" xml:space="preserve">
+    <value>Help topic</value>
+  </data>
+  <data name="open.topicHelp" xml:space="preserve">
+    <value>Choosing a topic routes the request to the right team.</value>
+  </data>
+  <data name="open.topicSelect" xml:space="preserve">
+    <value>Select a topic</value>
+  </data>
+  <data name="open.topicChange" xml:space="preserve">
+    <value>New adjustment</value>
+  </data>
+  <data name="open.topicBug" xml:space="preserve">
+    <value>Bug / issue</value>
+  </data>
+  <data name="open.topicConsult" xml:space="preserve">
+    <value>Consulting</value>
+  </data>
+  <data name="open.topicLegal" xml:space="preserve">
+    <value>Legal change</value>
+  </data>
+  <data name="open.summary" xml:space="preserve">
+    <value>Request summary</value>
+  </data>
+  <data name="open.summaryPh" xml:space="preserve">
+    <value>E.g. Commute allowance differs on the July payroll</value>
+  </data>
+  <data name="open.priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="open.prNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="open.prHigh" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="open.prCritical" xml:space="preserve">
+    <value>Critical — work stopped</value>
+  </data>
+  <data name="open.reference" xml:space="preserve">
+    <value>Related record / reference</value>
+  </data>
+  <data name="open.referencePh" xml:space="preserve">
+    <value>Employee no, transaction no or module name (optional)</value>
+  </data>
+  <data name="open.details" xml:space="preserve">
+    <value>Request details</value>
+  </data>
+  <data name="open.detailsPh" xml:space="preserve">
+    <value>Describe the problem, the outcome you expect and any sample employee/transaction numbers…</value>
+  </data>
+  <data name="open.upload" xml:space="preserve">
+    <value>Drag files here or choose from your computer</value>
+  </data>
+  <data name="open.eta" xml:space="preserve">
+    <value>Estimated first response: within 2 hours</value>
+  </data>
+  <data name="open.submit" xml:space="preserve">
+    <value>Create request →</value>
+  </data>
+  <data name="open.tipsTitle" xml:space="preserve">
+    <value>For a faster resolution</value>
+  </data>
+  <data name="open.tip1" xml:space="preserve">
+    <value>Include the related employee or transaction number.</value>
+  </data>
+  <data name="open.tip2" xml:space="preserve">
+    <value>Mention the screen where the error occurs and the steps.</value>
+  </data>
+  <data name="open.tip3" xml:space="preserve">
+    <value>Mask files containing personal data.</value>
+  </data>
+  <data name="open.notice" xml:space="preserve">
+    <value>When your request is created the system will generate a tracking number automatically and every update will be emailed to you.</value>
+  </data>
+  <!-- Product-only keys (B3 validation; no mockup twin — the static page never validates). -->
+  <data name="open.errTopic" xml:space="preserve">
+    <value>Please select a help topic.</value>
+  </data>
+  <data name="open.errSummary" xml:space="preserve">
+    <value>Please enter a request summary.</value>
+  </data>
+  <data name="open.errDetails" xml:space="preserve">
+    <value>Please enter the request details.</value>
+  </data>
+  <data name="open.errField" xml:space="preserve">
+    <value>Please fill in the "{0}" field.</value>
+  </data>
+</root>

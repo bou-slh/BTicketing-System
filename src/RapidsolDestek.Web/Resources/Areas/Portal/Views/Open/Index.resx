@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="open.title" xml:space="preserve">
+    <value>Yeni destek talebi</value>
+  </data>
+  <data name="open.sub" xml:space="preserve">
+    <value>Doğru ekibe hızlıca yönlendirebilmemiz için aşağıdaki bilgileri doldurun.</value>
+  </data>
+  <data name="open.step1" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="open.step2" xml:space="preserve">
+    <value>Detaylar</value>
+  </data>
+  <data name="open.step3" xml:space="preserve">
+    <value>Ekler</value>
+  </data>
+  <data name="open.customer" xml:space="preserve">
+    <value>Müşteri</value>
+  </data>
+  <data name="open.topic" xml:space="preserve">
+    <value>Yardım konusu</value>
+  </data>
+  <data name="open.topicHelp" xml:space="preserve">
+    <value>Konu seçimi talebi doğru ekibe yönlendirir.</value>
+  </data>
+  <data name="open.topicSelect" xml:space="preserve">
+    <value>Konu seçin</value>
+  </data>
+  <data name="open.topicChange" xml:space="preserve">
+    <value>Yeni düzenleme</value>
+  </data>
+  <data name="open.topicBug" xml:space="preserve">
+    <value>Hata / sorun</value>
+  </data>
+  <data name="open.topicConsult" xml:space="preserve">
+    <value>Danışmanlık</value>
+  </data>
+  <data name="open.topicLegal" xml:space="preserve">
+    <value>Yasal değişiklik</value>
+  </data>
+  <data name="open.summary" xml:space="preserve">
+    <value>Talep özeti</value>
+  </data>
+  <data name="open.summaryPh" xml:space="preserve">
+    <value>Örn. Temmuz bordrosunda yol ücreti farkı oluşuyor</value>
+  </data>
+  <data name="open.priority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="open.prNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="open.prHigh" xml:space="preserve">
+    <value>Yüksek</value>
+  </data>
+  <data name="open.prCritical" xml:space="preserve">
+    <value>Kritik — çalışma durdu</value>
+  </data>
+  <data name="open.reference" xml:space="preserve">
+    <value>İlgili kayıt / referans</value>
+  </data>
+  <data name="open.referencePh" xml:space="preserve">
+    <value>Personel no, işlem no veya modül adı (isteğe bağlı)</value>
+  </data>
+  <data name="open.details" xml:space="preserve">
+    <value>Talep detayları</value>
+  </data>
+  <data name="open.detailsPh" xml:space="preserve">
+    <value>Sorunu, beklediğiniz sonucu ve varsa örnek personel/işlem numarasını paylaşın…</value>
+  </data>
+  <data name="open.upload" xml:space="preserve">
+    <value>Dosyaları buraya sürükleyin veya bilgisayarınızdan seçin</value>
+  </data>
+  <data name="open.eta" xml:space="preserve">
+    <value>Tahmini ilk yanıt: 2 saat içinde</value>
+  </data>
+  <data name="open.submit" xml:space="preserve">
+    <value>Talebi oluştur →</value>
+  </data>
+  <data name="open.tipsTitle" xml:space="preserve">
+    <value>Daha hızlı çözüm için</value>
+  </data>
+  <data name="open.tip1" xml:space="preserve">
+    <value>İlgili personel veya işlem numarasını ekleyin.</value>
+  </data>
+  <data name="open.tip2" xml:space="preserve">
+    <value>Hatanın oluştuğu ekranı ve adımları belirtin.</value>
+  </data>
+  <data name="open.tip3" xml:space="preserve">
+    <value>Kişisel veri içeren dosyaları maskeleyin.</value>
+  </data>
+  <data name="open.notice" xml:space="preserve">
+    <value>Talebiniz oluşturulduğunda sistem kayıt numarasını otomatik üretecek ve tüm güncellemeler e-posta ile bildirilecektir.</value>
+  </data>
+  <!-- Product-only keys (B3 validation; no mockup twin — the static page never validates). -->
+  <data name="open.errTopic" xml:space="preserve">
+    <value>Lütfen bir yardım konusu seçin.</value>
+  </data>
+  <data name="open.errSummary" xml:space="preserve">
+    <value>Lütfen talep özetini girin.</value>
+  </data>
+  <data name="open.errDetails" xml:space="preserve">
+    <value>Lütfen talep detaylarını girin.</value>
+  </data>
+  <data name="open.errField" xml:space="preserve">
+    <value>Lütfen "{0}" alanını doldurun.</value>
+  </data>
+</root>
