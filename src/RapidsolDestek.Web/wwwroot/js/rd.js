@@ -11,6 +11,12 @@
     if (sel && sel.form) sel.form.submit();
   });
 
+  /* ---------- Toolbar filter selects: submit their GET form on change ---------- */
+  document.addEventListener("change", (e) => {
+    const sel = e.target.closest("select[data-autosubmit]");
+    if (sel && sel.form) sel.form.submit();
+  });
+
   /* ---------- Tabs: [data-tabs] > [data-tab=panelId]; panels .rd-tab-panel ---------- */
   document.addEventListener("click", (e) => {
     const tabBtn = e.target.closest("[data-tab]");

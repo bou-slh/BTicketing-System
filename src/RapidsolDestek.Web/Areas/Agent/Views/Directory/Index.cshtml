@@ -1,0 +1,85 @@
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model DirectoryIndexVm
+@{
+    ViewData["Title"] = L["dr.title"];
+
+    string AvatarClass(DirectoryPresence p) => p switch
+    {
+        DirectoryPresence.Online => "rd-avatar online",
+        DirectoryPresence.Away => "rd-avatar away",
+        _ => "rd-avatar",
+    };
+    string PillClass(DirectoryPresence p) => p switch
+    {
+        DirectoryPresence.Online => "rd-pill rd-pill-solved",
+        DirectoryPresence.Away => "rd-pill rd-pill-wait",
+        _ => "rd-pill rd-pill-closed",
+    };
+    string PillKey(DirectoryPresence p) => p switch
+    {
+        DirectoryPresence.Online => "dr.online",
+        DirectoryPresence.Away => "dr.away",
+        _ => "dr.offline",
+    };
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <h1>@L["dr.title"]</h1>
+        <p>@L["dr.subtitle"]</p>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/agent/directory">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["dr.searchPh"]">
+    <select class="rd-control" name="dept" data-autosubmit>
+        <option value="">@L["dr.allDepts"]</option>
+        @foreach (var department in Model.Departments)
+        {
+            <option value="@department.Id" selected="@(Model.DepartmentId == department.Id)">@department.Name</option>
+        }
+    </select>
+</form>
+
+<div class="rd-surface">
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    @* TODO(S6): B1 sort — headers keep the mockup's sortable classes; toggling arrives with the list engine. *@
+                    <th class="sortable sorted-desc">@SL["common.name"]</th>
+                    <th class="sortable">@L["dr.colDept"]</th>
+                    <th>@L["dr.colEmail"]</th>
+                    <th>@L["dr.colPhone"]</th>
+                    <th>@L["dr.colExt"]</th>
+                    <th>@SL["common.status"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        <td style="display:flex;align-items:center;gap:10px">
+                            <span class="@AvatarClass(row.Presence)">@row.Initials</span> @row.FullName
+                        </td>
+                        <td>@row.DepartmentName</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(row.Email))
+                            {
+                                <a href="mailto:@row.Email">@row.Email</a>
+                            }
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(row.Phone))
+                            {
+                                <a href="tel:@row.Phone.Replace(" ", "")">@row.Phone</a>
+                            }
+                        </td>
+                        <td>@row.PhoneExt</td>
+                        <td><span class="@PillClass(row.Presence)">@L[PillKey(row.Presence)]</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

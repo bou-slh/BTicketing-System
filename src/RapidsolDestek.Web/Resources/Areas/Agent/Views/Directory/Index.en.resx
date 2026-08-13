@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="dr.title" xml:space="preserve">
+    <value>Team Directory</value>
+  </data>
+  <data name="dr.subtitle" xml:space="preserve">
+    <value>Contact details and live status of RapidSol agents.</value>
+  </data>
+  <data name="dr.searchPh" xml:space="preserve">
+    <value>Search agents…</value>
+  </data>
+  <data name="dr.allDepts" xml:space="preserve">
+    <value>All Departments</value>
+  </data>
+  <data name="dr.colDept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="dr.colEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="dr.colPhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="dr.colExt" xml:space="preserve">
+    <value>Ext.</value>
+  </data>
+  <data name="dr.online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="dr.away" xml:space="preserve">
+    <value>Away</value>
+  </data>
+  <data name="dr.offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+</root>

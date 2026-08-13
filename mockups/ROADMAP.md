@@ -214,7 +214,7 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 - [ ] **ticket-view.html** — thread from data; **effort card Onayla/Reddet** (B8); reply composer appends + attach file list (B5)
 - [x] **check-status.html** — guest lookup (ticket# + email) renders a result/failure state *(S5; access-link mail via dev sender until S8; signed guest token → TODO S5 ticket-view)*
 - [x] **kb.html** — search actually searches, category filter, article counts (B1) *(S5)*
-- [x] **kb-article.html** — helpful yes/no vote with thank-you state; attachments downloadable *(S5; vote + thank-you live, attachment names render — download endpoint TODO with IFileStore wiring)*
+- [x] **kb-article.html** — helpful yes/no vote with thank-you state; attachments downloadable *(S5; vote + thank-you live; attachments download via IFileStore — seeded canon files carry placeholder bytes)*
 - [ ] **profile.html** — saves; language select actually switches culture; password change validated (B3)
 - [ ] *(portal header everywhere)* — profile + check-status reachable, logout (B9)
 
@@ -244,7 +244,7 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 - [ ] **kb.html** — category tabs (fixed in S0) filter; search; manage-categories dialog CRUD
 - [ ] **kb-faq.html** — saves; attachments upload with file list (input added in S0); preview; delete (B2/B5)
 - [ ] **canned.html** — B1 engine; per-row edit dialog prefilled (B2); create/disable/delete
-- [ ] **directory.html** — search + department filter work; mailto/tel links; presence from real sessions
+- [x] **directory.html** — search + department filter work; mailto/tel links *(S6; presence from real sessions still TODO — current pills are a stub: LastLoginAt/OnVacation-derived; B1 header sort TODO)*
 - [ ] **profile.html** — saves; 2FA setup ("Yapılandır"); vacation switch has effect (assignment guard);
       signature editor; language select switches culture
 

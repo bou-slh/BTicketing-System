@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="dr.title" xml:space="preserve">
+    <value>Ekip Rehberi</value>
+  </data>
+  <data name="dr.subtitle" xml:space="preserve">
+    <value>RapidSol temsilcilerinin iletişim bilgileri ve anlık durumu.</value>
+  </data>
+  <data name="dr.searchPh" xml:space="preserve">
+    <value>Temsilci ara…</value>
+  </data>
+  <data name="dr.allDepts" xml:space="preserve">
+    <value>Tüm Departmanlar</value>
+  </data>
+  <data name="dr.colDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="dr.colEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="dr.colPhone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="dr.colExt" xml:space="preserve">
+    <value>Dahili</value>
+  </data>
+  <data name="dr.online" xml:space="preserve">
+    <value>Çevrimiçi</value>
+  </data>
+  <data name="dr.away" xml:space="preserve">
+    <value>Uzakta</value>
+  </data>
+  <data name="dr.offline" xml:space="preserve">
+    <value>Çevrimdışı</value>
+  </data>
+</root>
