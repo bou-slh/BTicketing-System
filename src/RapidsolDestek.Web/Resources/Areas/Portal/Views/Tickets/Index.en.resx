@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tickets.title" xml:space="preserve">
+    <value>My Requests</value>
+  </data>
+  <data name="tickets.sub" xml:space="preserve">
+    <value>All of your open and past support requests.</value>
+  </data>
+  <data name="tickets.new" xml:space="preserve">
+    <value>＋ New request</value>
+  </data>
+  <data name="tickets.searchPh" xml:space="preserve">
+    <value>Search by request no or subject…</value>
+  </data>
+  <data name="tickets.allTopics" xml:space="preserve">
+    <value>— All help topics —</value>
+  </data>
+  <data name="tickets.open" xml:space="preserve">
+    <value>Open ({0})</value>
+  </data>
+  <data name="tickets.closed" xml:space="preserve">
+    <value>Closed ({0})</value>
+  </data>
+  <data name="tickets.openHead" xml:space="preserve">
+    <value>Open requests · {0}</value>
+  </data>
+  <data name="tickets.closedHead" xml:space="preserve">
+    <value>Closed requests · {0}</value>
+  </data>
+  <data name="status.effortWait" xml:space="preserve">
+    <value>Awaiting your effort approval</value>
+  </data>
+  <data name="topic.payroll" xml:space="preserve">
+    <value>Payroll</value>
+  </data>
+  <data name="topic.leave" xml:space="preserve">
+    <value>Leave</value>
+  </data>
+  <data name="topic.shift" xml:space="preserve">
+    <value>Shifts</value>
+  </data>
+  <data name="meta.yesterday" xml:space="preserve">
+    <value>Yesterday {0}</value>
+  </data>
+</root>

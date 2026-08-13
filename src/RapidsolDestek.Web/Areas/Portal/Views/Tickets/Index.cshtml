@@ -1,0 +1,96 @@
+@using System.Globalization
+@model RapidsolDestek.Web.Areas.Portal.Controllers.TicketsVm
+@{
+    ViewData["Title"] = SL["nav.myTickets"];
+
+    // Mockup pill classes (portal.css): open/wait/test/solved/closed; derived and
+    // internal keys map onto them (effortWait→wait per portal mockups, new→open,
+    // anything internal like "overdue" falls back to the open pill) — Home parity.
+    static string StatusClass(string key) => key switch
+    {
+        "effortWait" => "rc-status-wait",
+        "new" => "rc-status-open",
+        "open" or "wait" or "test" or "solved" or "closed" => $"rc-status-{key}",
+        _ => "rc-status-open",
+    };
+
+    // Table-cell agent name convention (§2 canon): "Ümit Yaşar Akın" → "Ümit Y. Akın".
+    static string ShortName(string? full)
+    {
+        if (string.IsNullOrWhiteSpace(full))
+            return "—";
+        var parts = full.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 3)
+            return full;
+        var middles = string.Join(" ", parts[1..^1].Select(p => $"{char.ToUpperInvariant(p[0])}."));
+        return $"{parts[0]} {middles} {parts[^1]}";
+    }
+
+    // Meta date, mockup formats: open rows carry the time ("10:18", "Dün 15:03",
+    // "5 Ağustos 16:05"); closed rows show the date only ("28 Temmuz").
+    string MetaDate(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        if (Model.ClosedTab)
+            return local.ToString("m", CultureInfo.CurrentUICulture);
+        var today = DateTime.Now.Date;
+        if (local.Date == today)
+            return local.ToString("HH:mm");
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("meta.yesterday", local.ToString("HH:mm"));
+        return $"{local.ToString("m", CultureInfo.CurrentUICulture)} {local:HH:mm}";
+    }
+
+    var tab = Model.ClosedTab ? "closed" : "open";
+    string TabLink(string target)
+    {
+        var query = new List<string> { $"tab={target}" };
+        if (!string.IsNullOrWhiteSpace(Model.Query))
+            query.Add($"q={Uri.EscapeDataString(Model.Query)}");
+        if (Model.TopicId is { } topicId)
+            query.Add($"topic={topicId}");
+        return "/tickets?" + string.Join("&", query);
+    }
+}
+
+<div class="rc-heading">
+    <div>
+        <h1>@L["tickets.title"]</h1>
+        <p>@L["tickets.sub"]</p>
+    </div>
+    <a class="rc-button-primary" href="/open">@L["tickets.new"]</a>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/tickets">
+    <input type="hidden" name="tab" value="@tab">
+    <input class="rc-control" type="search" name="q" value="@Model.Query" placeholder="@L["tickets.searchPh"]">
+    <select class="rc-control" name="topic" data-autosubmit>
+        <option value="">@L["tickets.allTopics"]</option>
+        @foreach (var t in Model.Topics)
+        {
+            <option value="@t.Id" selected="@(Model.TopicId == t.Id)">@t.Name</option>
+        }
+    </select>
+    <div class="rd-tabs" style="margin:0;border:0">
+        <a class="@(Model.ClosedTab ? null : "active")" href="@TabLink("open")">@L["tickets.open", Model.OpenCount]</a>
+        <a class="@(Model.ClosedTab ? "active" : null)" href="@TabLink("closed")">@L["tickets.closed", Model.ClosedCount]</a>
+    </div>
+</form>
+
+<div class="rd-tab-panel active" id="panel-@tab">
+    <div class="rc-surface">
+        <div class="rc-surface-head">@(Model.ClosedTab ? L["tickets.closedHead", Model.ClosedCount] : L["tickets.openHead", Model.OpenCount])</div>
+        @foreach (var t in Model.Rows)
+        {
+            <a class="rc-ticket-row" href="/ticket-view?id=@t.Id">
+                <div class="rc-ticket-id">@t.Number</div>
+                <div>
+                    <div class="rc-ticket-title">@t.Subject</div>
+                    <div class="rc-ticket-meta">@(t.OrgName is null ? MetaDate(t.UpdatedAt) : $"{t.OrgName} · {MetaDate(t.UpdatedAt)}")</div>
+                </div>
+                <div class="rc-status @StatusClass(t.StatusKey)">@(t.StatusKey == "effortWait" ? L["status.effortWait"] : SL[$"status.{t.StatusKey}"])</div>
+                <div>@ShortName(t.AgentName)</div>
+            </a>
+        }
+    </div>
+</div>

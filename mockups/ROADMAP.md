@@ -210,10 +210,12 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 - [ ] **offline.html** — served by real maintenance-mode switch (settings-system)
 - [x] **index.html** — live tile counts, KB mini-search works, recent tickets from data, account menu + logout (B9) *(S5; recent rows deep-link `/ticket-view?id=` — dead until portal ticket-view ports; account menu + logout via shared portal header)*
 - [ ] **open.html** — help-topic → dynamic form fields (form designer output), file list on attach, validation, creates a real ticket (B3/B5)
-- [ ] **tickets.html** — real list: tabs from data, search + topic filter work, deep links `ticket-view?id=` (B1)
+- [x] **tickets.html** — real list: tabs from data, search + topic filter work, deep links `ticket-view?id=` (B1) *(S5; open/closed tabs + counts live incl. derived effortWait pills, search + public-topic filter compose with the active tab; row links `/ticket-view?id=` — dead until portal ticket-view ports)*
 - [ ] **ticket-view.html** — thread from data; **effort card Onayla/Reddet** (B8); reply composer appends + attach file list (B5)
 - [x] **check-status.html** — guest lookup (ticket# + email) renders a result/failure state *(S5; access-link mail via dev sender until S8; signed guest token → TODO S5 ticket-view)*
-- [x] **kb.html** — search actually searches, category filter, article counts (B1) *(S5)*
+- [x] **kb.html** — search actually searches, category filter, article counts (B1) *(S5; two visual-differ notes:
+      category headers are DB data so they stay TR in EN — mockup's kb.cat* localization needs a per-category
+      translation decision; card subtitles fall back to the category description until articles carry a summary)*
 - [x] **kb-article.html** — helpful yes/no vote with thank-you state; attachments downloadable *(S5; vote + thank-you live; attachments download via IFileStore — seeded canon files carry placeholder bytes)*
 - [ ] **profile.html** — saves; language select actually switches culture; password change validated (B3)
 - [ ] *(portal header everywhere)* — profile + check-status reachable, logout (B9)
@@ -303,3 +305,7 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
 6. PostgreSQL confirmed, or mandated SQL Server?
 7. Who operates production; uptime/backup SLA; DNS control for SPF/DKIM; KVKK residency/retention.
 8. UAT owners and acceptance criteria; single decision-maker for design disputes.
+9. Portal ticket scope: own tickets only (current QueueEngine behavior; matches every mockup row — the §2
+   "own org's tickets" canon is satisfied trivially since all portal-mockup rows are Bourla's) vs org-wide
+   visibility via `Organization` sharing flags (osTicket parity). Decide before S6 user/org pages; if org-wide,
+   widen QueueEngine portal scope + portal home/tickets together.
