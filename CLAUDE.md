@@ -5,7 +5,7 @@ osTicket (separate checkout) is a **domain-model reference only** — never copy
 
 ## Golden rule: the mockups are the spec
 
-`mockups/` contains 70 static TR/EN pages (portal 12, agent 17, admin 41). The shipped product must look
+`mockups/` contains 72 static TR/EN pages (portal 12, agent 18, admin 42). The shipped product must look
 and behave exactly like them — **every visible component must work**, including controls that are dead in
 the static HTML. The roadmap, parity checklists, and canonical sample data live in **`mockups/ROADMAP.md`**;
 markup/i18n conventions live in `mockups/CONVENTIONS.md`. A page is done when its ROADMAP checklist is green

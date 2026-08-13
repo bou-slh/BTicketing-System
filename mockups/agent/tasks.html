@@ -87,10 +87,10 @@ window.PAGE_I18N = {
   </div>
 
   <div class="rd-tabs" data-tabs>
-    <button><span data-i18n="ta.qOpen"></span> · 7</button>
-    <button class="active"><span data-i18n="ta.qMine"></span> · 6</button>
-    <button><span data-i18n="ta.qOverdue"></span> · 2</button>
-    <button><span data-i18n="ta.qDone"></span> · 41</button>
+    <button type="button" data-tab="ta-panel-open"><span data-i18n="ta.qOpen"></span> · 7</button>
+    <button type="button" class="active" data-tab="ta-panel-mine"><span data-i18n="ta.qMine"></span> · 6</button>
+    <button type="button" data-tab="ta-panel-overdue"><span data-i18n="ta.qOverdue"></span> · 2</button>
+    <button type="button" data-tab="ta-panel-done"><span data-i18n="ta.qDone"></span> · 41</button>
   </div>
 
   <div class="rd-list-toolbar">
@@ -101,6 +101,7 @@ window.PAGE_I18N = {
     <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
   </div>
 
+  <div class="rd-tab-panel active" id="ta-panel-mine">
   <div class="rd-surface">
     <div style="overflow-x:auto">
       <table class="rd-table" id="tbl-tasks">
@@ -140,7 +141,7 @@ window.PAGE_I18N = {
             <td>9 Ağu 2026</td>
             <td><a href="task-view.html">Vardiya şablonu içe aktarma</a></td>
             <td><a href="ticket-view.html">R716512</a></td>
-            <td>Vardiya Planlama</td>
+            <td>Destek</td>
             <td>Ümit Y. Akın</td>
           </tr>
           <tr>
@@ -149,7 +150,7 @@ window.PAGE_I18N = {
             <td>8 Ağu 2026</td>
             <td><a href="task-view.html">Test ortamı yenileme</a></td>
             <td><a href="ticket-view.html">R716498</a></td>
-            <td>Teknik Destek</td>
+            <td>Destek</td>
             <td>Ümit Y. Akın</td>
           </tr>
           <tr>
@@ -158,7 +159,7 @@ window.PAGE_I18N = {
             <td>7 Ağu 2026</td>
             <td><a href="task-view.html">İzin devri düzeltmesi</a></td>
             <td><a href="ticket-view.html">R716455</a></td>
-            <td>İK</td>
+            <td>Danışmanlık</td>
             <td>Ümit Y. Akın</td>
           </tr>
           <tr>
@@ -174,14 +175,195 @@ window.PAGE_I18N = {
       </table>
     </div>
     <div class="rd-pagination">
-      <span><span data-i18n="common.showing"></span> 1–6 / 53</span>
+      <span><span data-i18n="common.showing"></span> 1–6 / 6</span>
       <div class="pages">
         <span class="current">1</span>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">›</a>
       </div>
     </div>
+  </div>
+  </div>
+
+  <div class="rd-tab-panel" id="ta-panel-open">
+  <div class="rd-surface">
+    <div style="overflow-x:auto">
+      <table class="rd-table" id="tbl-tasks-open">
+        <thead>
+          <tr>
+            <th class="col-check"><input type="checkbox" data-check-all="#tbl-tasks-open" aria-label="Tümünü seç"></th>
+            <th class="sortable" data-i18n="ta.colNo"></th>
+            <th class="sortable sorted-desc" data-i18n="ta.colDate"></th>
+            <th class="sortable" data-i18n="ta.colTitle"></th>
+            <th data-i18n="ta.colTicket"></th>
+            <th class="sortable" data-i18n="ta.colDept"></th>
+            <th class="sortable" data-i18n="ta.colAssignee"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2038</a></td>
+            <td>12 Ağu 2026</td>
+            <td><a href="task-view.html">İşe giriş bildirge takibi</a></td>
+            <td><a href="ticket-view.html">R716528</a></td>
+            <td>Destek</td>
+            <td>Merve Çetin</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2041</a></td>
+            <td>11 Ağu 2026</td>
+            <td><a href="task-view.html">Bordro parametre güncellemesi</a></td>
+            <td><a href="ticket-view.html">R716555</a></td>
+            <td>Bordro</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2040</a></td>
+            <td>10 Ağu 2026</td>
+            <td><a href="task-view.html">SGK bildirge kontrolü</a></td>
+            <td><a href="ticket-view.html">R716540</a></td>
+            <td>Bordro</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2039</a></td>
+            <td>9 Ağu 2026</td>
+            <td><a href="task-view.html">Vardiya şablonu içe aktarma</a></td>
+            <td><a href="ticket-view.html">R716512</a></td>
+            <td>Destek</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2036</a></td>
+            <td>8 Ağu 2026</td>
+            <td><a href="task-view.html">Test ortamı yenileme</a></td>
+            <td><a href="ticket-view.html">R716498</a></td>
+            <td>Destek</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2035</a></td>
+            <td>7 Ağu 2026</td>
+            <td><a href="task-view.html">İzin devri düzeltmesi</a></td>
+            <td><a href="ticket-view.html">R716455</a></td>
+            <td>Danışmanlık</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2033</a></td>
+            <td>5 Ağu 2026</td>
+            <td><a href="task-view.html">Yıl sonu rapor taslağı</a></td>
+            <td><a href="ticket-view.html">R716410</a></td>
+            <td>Bordro</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rd-pagination">
+      <span><span data-i18n="common.showing"></span> 1–7 / 7</span>
+      <div class="pages">
+        <span class="current">1</span>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="rd-tab-panel" id="ta-panel-overdue">
+  <div class="rd-surface">
+    <div style="overflow-x:auto">
+      <table class="rd-table" id="tbl-tasks-overdue">
+        <thead>
+          <tr>
+            <th class="col-check"><input type="checkbox" data-check-all="#tbl-tasks-overdue" aria-label="Tümünü seç"></th>
+            <th class="sortable" data-i18n="ta.colNo"></th>
+            <th class="sortable sorted-desc" data-i18n="ta.colDate"></th>
+            <th class="sortable" data-i18n="ta.colTitle"></th>
+            <th data-i18n="ta.colTicket"></th>
+            <th class="sortable" data-i18n="ta.colDept"></th>
+            <th class="sortable" data-i18n="ta.colAssignee"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2036</a></td>
+            <td>8 Ağu 2026</td>
+            <td><a href="task-view.html">Test ortamı yenileme</a></td>
+            <td><a href="ticket-view.html">R716498</a></td>
+            <td>Destek</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2035</a></td>
+            <td>7 Ağu 2026</td>
+            <td><a href="task-view.html">İzin devri düzeltmesi</a></td>
+            <td><a href="ticket-view.html">R716455</a></td>
+            <td>Danışmanlık</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rd-pagination">
+      <span><span data-i18n="common.showing"></span> 1–2 / 2</span>
+      <div class="pages">
+        <span class="current">1</span>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="rd-tab-panel" id="ta-panel-done">
+  <div class="rd-surface">
+    <div style="overflow-x:auto">
+      <table class="rd-table" id="tbl-tasks-done">
+        <thead>
+          <tr>
+            <th class="col-check"><input type="checkbox" data-check-all="#tbl-tasks-done" aria-label="Tümünü seç"></th>
+            <th class="sortable" data-i18n="ta.colNo"></th>
+            <th class="sortable sorted-desc" data-i18n="ta.colDate"></th>
+            <th class="sortable" data-i18n="ta.colTitle"></th>
+            <th data-i18n="ta.colTicket"></th>
+            <th class="sortable" data-i18n="ta.colDept"></th>
+            <th class="sortable" data-i18n="ta.colAssignee"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2032</a></td>
+            <td>4 Ağu 2026</td>
+            <td><a href="task-view.html">Ağustos bordro ön kontrolü</a></td>
+            <td><a href="ticket-view.html">R716401</a></td>
+            <td>Bordro</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2031</a></td>
+            <td>3 Ağu 2026</td>
+            <td><a href="task-view.html">Konecta SLA raporu</a></td>
+            <td><a href="ticket-view.html">R716388</a></td>
+            <td>Danışmanlık</td>
+            <td>Merve Çetin</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rd-pagination">
+      <span><span data-i18n="common.showing"></span> 1–2 / 41</span>
+      <div class="pages">
+        <span class="current">1</span>
+      </div>
+    </div>
+  </div>
   </div>
 
   <dialog class="rd-dialog" id="dlg-newtask">
@@ -199,10 +381,9 @@ window.PAGE_I18N = {
           <div class="rd-field">
             <label class="rd-label" for="nt-dept" data-i18n="ta.fDept"></label>
             <select id="nt-dept" class="rd-control">
+              <option>Destek</option>
               <option>Bordro</option>
-              <option>İK</option>
-              <option>Teknik Destek</option>
-              <option>Vardiya Planlama</option>
+              <option>Danışmanlık</option>
             </select>
           </div>
           <div class="rd-field">

@@ -59,7 +59,7 @@
       { key: "dashboard", href: "dashboard.html", label: "nav.dashboard", icon: "▤" },
       { key: "live", href: "live.html", label: "nav.live", icon: "◉", live: true },
       { key: "tickets", href: "tickets.html", label: "nav.tickets", icon: "◫", count: "8" },
-      { key: "tasks", href: "tasks.html", label: "nav.tasks", icon: "☑", count: "3" },
+      { key: "tasks", href: "tasks.html", label: "nav.tasks", icon: "☑", count: "6" },
     ]},
     { group: "nav.group.records", items: [
       { key: "users", href: "users.html", label: "nav.users", icon: "◔" },
@@ -142,10 +142,10 @@
                href="${item.href}" data-i18n="${item.label}"></a>`).join("")}
         </nav>
         ${langSelect()}
-        <div class="rc-account">
-          <div class="rc-account-copy">Bourla Salehi<small>RapidSol</small></div>
+        <a class="rc-account" href="profile.html" style="text-decoration:none;color:inherit">
+          <div class="rc-account-copy">Bourla Salehi<small>Ulaşım A.Ş.</small></div>
           <div class="rd-avatar">BS</div>
-        </div>
+        </a>
       </header>`;
   }
 

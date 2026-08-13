@@ -70,11 +70,11 @@ window.PAGE_I18N = {
   </div>
 
   <div class="rd-tabs" data-tabs>
-    <button class="active" data-i18n="kb.allCats"></button>
-    <button>Bordro · 12</button>
-    <button>İzin · 8</button>
-    <button>Vardiya · 5</button>
-    <button>Sistem · 9</button>
+    <button type="button" class="active" data-tab="kb-panel-all" data-i18n="kb.allCats"></button>
+    <button type="button" data-tab="kb-panel-bordro">Bordro · 12</button>
+    <button type="button" data-tab="kb-panel-izin">İzin · 8</button>
+    <button type="button" data-tab="kb-panel-vardiya">Vardiya · 5</button>
+    <button type="button" data-tab="kb-panel-sistem">Sistem · 9</button>
   </div>
 
   <div class="rd-list-toolbar">
@@ -82,6 +82,7 @@ window.PAGE_I18N = {
   </div>
 
   <div class="rd-grid-2">
+  <div class="rd-tab-panel active" id="kb-panel-all">
     <div class="rd-surface">
       <div class="rd-surface-head">
         Bordro
@@ -169,6 +170,104 @@ window.PAGE_I18N = {
         </div>
       </div>
     </div>
+  </div>
+  </div>
+
+  <div class="rd-tab-panel" id="kb-panel-bordro">
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        Bordro
+        <span class="spacer"></span>
+        <span class="text-sm rd-muted">12 <span data-i18n="kb.articles"></span></span>
+      </div>
+      <div class="rd-surface-body">
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Yol ücreti nasıl hesaplanır?</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Ek mesai bordroya nasıl yansır?</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Bordro kesinti kalemleri rehberi</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-tab-panel" id="kb-panel-izin">
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        İzin
+        <span class="spacer"></span>
+        <span class="text-sm rd-muted">8 <span data-i18n="kb.articles"></span></span>
+      </div>
+      <div class="rd-surface-body">
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Yıllık izin devri nasıl yapılır?</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Mazeret izni girişi</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">İzin bakiyesi raporu alma</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-tab-panel" id="kb-panel-vardiya">
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        Vardiya
+        <span class="spacer"></span>
+        <span class="text-sm rd-muted">5 <span data-i18n="kb.articles"></span></span>
+      </div>
+      <div class="rd-surface-body">
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Vardiya planı yükleme adımları</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Gece vardiyası katsayısı ayarı</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Vardiya değişim talepleri</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-tab-panel" id="kb-panel-sistem">
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        Sistem
+        <span class="spacer"></span>
+        <span class="text-sm rd-muted">9 <span data-i18n="kb.articles"></span></span>
+      </div>
+      <div class="rd-surface-body">
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Parola sıfırlama işlemi</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Toplu personel içe aktarma</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">API erişim anahtarları</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 
   <dialog class="rd-dialog" id="dlg-cats">

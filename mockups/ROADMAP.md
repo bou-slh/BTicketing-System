@@ -1,7 +1,7 @@
 # RapidsolDestek — Product Roadmap
 
 Timeline-free, dependency-ordered roadmap for building the real RapidsolDestek helpdesk in C#/ASP.NET Core.
-The mockups in this folder (70 TR/EN pages: portal 12, agent 17, admin 41) are the **binding spec**: the shipped
+The mockups in this folder (72 TR/EN pages: portal 12, agent 18, admin 42 — incl. the staff pwreset pages added in S0) are the **binding spec**: the shipped
 product must look and behave exactly like them, and **every component visible in a mockup must work** — including
 every control that is currently dead in the static HTML. osTicket (`/Users/rapidsolbilisim/os/osTicket`) is the
 domain-model reference; §3 tracks feature parity with it subsystem by subsystem. No osTicket code is reused (GPLv2).
@@ -29,11 +29,11 @@ mockup page to conform, (b) S3 seeds the database with exactly this canon. Autho
 | Domain | Canon (authority page) | Currently conflicting pages to conform |
 |---|---|---|
 | Departments | **Destek**, **Bordro** (child of Destek), **Danışmanlık** (`admin/departments.html`) | `admin/settings-system.html` ("İK Danışmanlık"), `admin/helptopics.html` + `helptopic-edit.html` ("Bordro Yönetimi", "İnsan Kaynakları"), `admin/dashboard.html` stats (5 invented depts), `admin/department-edit.html` parent select |
-| Agents | **Ümit Yaşar Akın, Merve Çetin, Deniz Kaya, Selin Aydın, Kerem Yılmaz** (`agent/directory.html`); display name always full form, short forms only where space demands one rule ("Ümit Y. Akın") | "Ümit Akın" spellings (~8 files); `admin/staff.html` phantom "zarslan"; dashboard-only agents get real staff rows |
+| Agents | **Ümit Yaşar Akın (uakin·Bordro), Merve Çetin (mcetin·Danışmanlık), Deniz Kaya (dkaya·Destek), Selin Aydın (saydin·Bordro), Kerem Yılmaz (kyilmaz·Destek), Aslı Doğan (adogan·Destek)** (`agent/directory.html` roster); full name in headers/directory, "Ümit Y. Akın" in table cells | "Ümit Akın" spellings (~8 files, fixed S0); `admin/staff.html` phantom "zarslan" → saydin (fixed S0) |
 | SLA plans | **Standart (48h grace), VIP, Kritik, Dahili Talepler (72h)** (`admin/slas.html`) | `admin/department-edit.html` ("Standart — 8 saat"), `admin/settings-tickets.html` ("Standart — 4 saat", invented "Bordro Dönemi") |
 | Schedules | **Hafta içi 09:00–18:00**, **7/24**, **Resmi Tatiller 2026**, **Cumartesi Yarım Gün** (`admin/schedules.html`) | spelling variants in `admin/department-edit.html`, `admin/settings-system.html` |
 | Statuses | Global enum in `assets/js/i18n-tr.js`: `open, wait, test, solved, closed, overdue, new, effortWait, effortApproved, effortRejected` | portal-local inventions `replyWait`, `testing`, `inProgress` (`portal/index.html`, `portal/tickets.html`) map onto the global enum |
-| Hero end-user | **Bourla Salehi · bourla.salehi@rapidsol.com.tr · org RapidSol** | `agent/tickets.html`/`ticket-view.html` (@ulasim.com.tr identity), `portal/profile.html` (b.salehi@) |
+| Hero end-user | **Bourla Salehi · bourla.salehi@ulasim.com.tr · org Ulaşım A.Ş.** (the hero-ticket story wins: R716555 is an Ulaşım ticket and Bourla approves its effort on the portal) | `agent/users.html`/`user-view.html` + `app.js` account block (were RapidSol), `portal/profile.html` (b.salehi@) — all conformed in S0 |
 | Portal ownership | A portal user sees only their own org's tickets | `portal/tickets.html` currently mixes 4 companies for one user |
 | Ticket numbering | One scheme, `R` + 6 digits (R7165xx family) across all panels | portal-only R794094/R11xxxx numbers renumbered into the family |
 | Hero ticket | **R716555** "Yol ücreti hatası hakkında" (Ulaşım A.Ş., 6h effort pending) — already consistent across 7 pages; stays the golden-path story | keep; align its status (`open` + pending effort) on `agent/dashboard.html` (`effortWait`) and `agent/user-view.html` (`wait`) |
@@ -176,10 +176,10 @@ pattern dead in the mockups.
   `IFileStore`. *Gate*: service test suite green incl. full effort lifecycle and revision loops.
 - **S5 — Portal area** (12 pages, checklists §6.1). *Gate*: portal E2E — register → open → reply → effort
   approve + reject paths; visual diff accepted.
-- **S6 — Agent area** (17 pages, §6.2; B1 on lists, B5 composers, B7 live board). *Gate*: golden path E2E
+- **S6 — Agent area** (18 pages, §6.2; B1 on lists, B5 composers, B7 live board). *Gate*: golden path E2E
   (portal open → agent proposes 6h → portal approves → agent resolves); live board updates <1s across two
   browsers.
-- **S7 — Admin area** (41 pages, §6.3; B1–B4 everywhere, builders, settings actually consumed by the engine).
+- **S7 — Admin area** (42 pages, §6.3; B1–B4 everywhere, builders, settings actually consumed by the engine).
   *Gate*: every setting round-trips (flip block-work-until-approved → S4 guard flips); builder-created
   queue/form/list/filter demonstrably affects the agent panel.
 - **S8 — Email subsystem.** Outbound: Razor template rendering with variables, event→template map (incl.
@@ -217,9 +217,10 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 - [ ] **profile.html** — saves; language select actually switches culture; password change validated (B3)
 - [ ] *(portal header everywhere)* — profile + check-status reachable, logout (B9)
 
-### 6.2 Agent (17 pages)
+### 6.2 Agent (18 pages)
 
-- [ ] **login.html** — real form, 2FA, lockout, forgot-password → staff pwreset (B6)
+- [ ] **login.html** — real form, 2FA, lockout, forgot-password → pwreset (B6)
+- [ ] **pwreset.html** — staff reset-link flow (request → mail → new password) (B6)
 - [ ] **dashboard.html** — live stat tiles, tables from data with row deep-links, topbar search (B9)
 - [ ] **live.html** — SignalR board: real column membership, drag between columns, Üstlen/claim, ticker from
       domain events, recoverable SLA countdown, pause (B7)
@@ -246,12 +247,13 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 - [ ] **profile.html** — saves; 2FA setup ("Yapılandır"); vacation switch has effect (assignment guard);
       signature editor; language select switches culture
 
-### 6.3 Admin (41 pages)
+### 6.3 Admin (42 pages)
 
 Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty state), every dialog B2
 (parameterized + correct submit), every settings page B3 (gating) + B9 scroll-spy, builders B4.
 
-- [ ] **login.html** — real form, mandatory 2FA, forgot-password (page added in S0) (B6)
+- [ ] **login.html** — real form, mandatory 2FA, forgot-password (B6)
+- [ ] **pwreset.html** — admin reset-link flow, admin-only lockout policy (B6)
 - [ ] **dashboard.html** — date range re-renders data-driven charts with tooltips; export; 3 stats tables sortable (B10)
 - [ ] **system-info.html** — real server/PHP→.NET runtime/db info; update check
 - [ ] **system-logs.html** — filters + Apply work; purge deletes; row detail dialog (B1/B2)

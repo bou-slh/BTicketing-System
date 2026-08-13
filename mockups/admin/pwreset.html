@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Yönetici Parola Sıfırlama</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "pw.title": "Parola Sıfırlama",
+    "pw.subtitle": "Yönetici hesabınızın e-posta adresini girin; sıfırlama bağlantısı gönderelim.",
+    "pw.fEmail": "E-posta",
+    "pw.fEmailPh": "ornek@rapidsol.com.tr",
+    "pw.send": "Sıfırlama Bağlantısı Gönder",
+    "pw.help": "Bağlantı 30 dakika geçerlidir. E-posta gelmezse yöneticinizle iletişime geçin.",
+    "pw.back": "← Girişe dön",
+  },
+  en: {
+    "pw.title": "Password Reset",
+    "pw.subtitle": "Enter your administrator account email and we will send a reset link.",
+    "pw.fEmail": "Email",
+    "pw.fEmailPh": "you@rapidsol.com.tr",
+    "pw.send": "Send Reset Link",
+    "pw.help": "The link is valid for 30 minutes. If no email arrives, contact your administrator.",
+    "pw.back": "← Back to sign-in",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal">
+
+<div style="position:fixed;top:18px;right:18px;z-index:10">
+  <select class="rc-language" data-lang-switch aria-label="Language">
+    <option value="tr">TR</option>
+    <option value="en">EN</option>
+  </select>
+</div>
+
+<div class="rc-auth-wrap" style="min-height:100vh">
+  <div class="rc-auth-card">
+    <a class="rc-logo" href="../portal/index.html" style="margin-bottom:18px;display:inline-flex">
+      <span class="rc-logo-mark"></span>
+      <span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1 data-i18n="pw.title"></h1>
+    <p data-i18n="pw.subtitle"></p>
+
+    <form>
+      <div class="rd-field">
+        <label class="rd-label" for="pw-email" data-i18n="pw.fEmail"></label>
+        <input id="pw-email" class="rd-control" type="email" data-i18n-placeholder="pw.fEmailPh" autocomplete="email">
+      </div>
+      <button type="submit" class="rd-btn-primary" style="display:flex;justify-content:center;width:100%" data-i18n="pw.send"></button>
+      <div class="rd-help" style="margin-top:10px" data-i18n="pw.help"></div>
+    </form>
+
+    <div class="rc-auth-foot">
+      <a href="login.html" data-i18n="pw.back"></a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
