@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Kayıt</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "rg.title": "Hesap oluşturun",
+    "rg.sub": "Destek taleplerinizi tek yerden takip etmek için ücretsiz bir hesap oluşturun.",
+    "rg.secContact": "İletişim bilgileri",
+    "rg.email": "E-posta",
+    "rg.emailHelp": "Talep bildirimleri bu adrese gönderilecektir.",
+    "rg.name": "Ad Soyad",
+    "rg.phone": "Telefon",
+    "rg.secPrefs": "Tercihler",
+    "rg.tz": "Saat dilimi",
+    "rg.secAccess": "Erişim bilgileri",
+    "rg.password": "Parola oluşturun",
+    "rg.password2": "Parolayı doğrulayın",
+    "rg.passHelp": "En az 8 karakter; harf ve rakam içermelidir.",
+    "rg.submit": "Kayıt ol",
+    "rg.haveAccount": "Zaten hesabınız var mı?",
+    "rg.signin": "Giriş yapın",
+  },
+  en: {
+    "rg.title": "Create an account",
+    "rg.sub": "Create a free account to track all your support requests in one place.",
+    "rg.secContact": "Contact information",
+    "rg.email": "Email",
+    "rg.emailHelp": "Request notifications will be sent to this address.",
+    "rg.name": "Full name",
+    "rg.phone": "Phone",
+    "rg.secPrefs": "Preferences",
+    "rg.tz": "Time zone",
+    "rg.secAccess": "Access credentials",
+    "rg.password": "Create password",
+    "rg.password2": "Confirm password",
+    "rg.passHelp": "At least 8 characters; must contain letters and digits.",
+    "rg.submit": "Register",
+    "rg.haveAccount": "Already have an account?",
+    "rg.signin": "Sign in",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal">
+
+<div style="position:fixed;top:18px;right:18px;z-index:5">
+  <select class="rc-language" data-lang-switch aria-label="Language">
+    <option value="tr">TR</option>
+    <option value="en">EN</option>
+  </select>
+</div>
+
+<div class="rc-auth-wrap">
+  <div class="rc-auth-card" style="width:min(560px,100%)">
+    <a class="rc-logo" href="index.html" style="justify-content:center;margin-bottom:20px">
+      <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1 data-i18n="rg.title"></h1>
+    <p data-i18n="rg.sub"></p>
+
+    <form class="rc-form-grid">
+      <div class="rc-form-step"><span class="rc-step-icon">1</span><span data-i18n="rg.secContact"></span></div>
+      <div>
+        <label class="rc-label" for="rg-email" data-i18n="rg.email"></label>
+        <input id="rg-email" class="rc-control" type="email" autocomplete="email">
+        <div class="rd-help" data-i18n="rg.emailHelp"></div>
+      </div>
+      <div class="rd-grid-2">
+        <div>
+          <label class="rc-label" for="rg-name" data-i18n="rg.name"></label>
+          <input id="rg-name" class="rc-control" type="text" autocomplete="name">
+        </div>
+        <div>
+          <label class="rc-label" for="rg-phone" data-i18n="rg.phone"></label>
+          <input id="rg-phone" class="rc-control" type="tel" placeholder="+90 5xx xxx xx xx" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="rc-form-step"><span class="rc-step-icon">2</span><span data-i18n="rg.secPrefs"></span></div>
+      <div>
+        <label class="rc-label" for="rg-tz" data-i18n="rg.tz"></label>
+        <select id="rg-tz" class="rc-control">
+          <option selected>Europe/Istanbul (GMT+3)</option>
+          <option>Europe/Berlin (GMT+2)</option>
+          <option>Europe/London (GMT+1)</option>
+          <option>UTC</option>
+        </select>
+      </div>
+
+      <div class="rc-form-step"><span class="rc-step-icon">3</span><span data-i18n="rg.secAccess"></span></div>
+      <div class="rd-grid-2">
+        <div>
+          <label class="rc-label" for="rg-pass" data-i18n="rg.password"></label>
+          <input id="rg-pass" class="rc-control" type="password" autocomplete="new-password">
+        </div>
+        <div>
+          <label class="rc-label" for="rg-pass2" data-i18n="rg.password2"></label>
+          <input id="rg-pass2" class="rc-control" type="password" autocomplete="new-password">
+        </div>
+      </div>
+      <div class="rd-help" data-i18n="rg.passHelp"></div>
+
+      <button class="rc-button-primary" style="justify-content:center" data-i18n="rg.submit"></button>
+    </form>
+
+    <div class="rc-auth-foot">
+      <span data-i18n="rg.haveAccount"></span>
+      <a href="login.html" data-i18n="rg.signin"></a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

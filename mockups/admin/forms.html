@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Formlar</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "fm.title": "Formlar",
+    "fm.sub": "Talep, görev, kullanıcı ve şirket kayıtlarında kullanılan veri formları.",
+    "fm.searchPh": "Form ara…",
+    "fm.new": "＋ Yeni Form",
+    "fm.builtinHead": "Yerleşik Formlar",
+    "fm.builtinHelp": "Sistemle gelen formlar silinemez; alanları özelleştirilebilir.",
+    "fm.customHead": "Özel Formlar",
+    "fm.customHelp": "Yardım konularına ve liste öğelerine bağlanabilen ek formlar.",
+    "fm.showing": "2 özel formdan 1–2 arası gösteriliyor",
+    "fm.bulkTitle": "Toplu işlemler",
+    "fm.bulkHelp": "Seçili özel formlara uygulanır.",
+    "fm.emptyTitle": "Henüz özel form yok",
+    "fm.emptyText": "Taleplerde ek bilgi toplamak için ilk özel formunuzu oluşturun.",
+  },
+  en: {
+    "fm.title": "Forms",
+    "fm.sub": "Data forms used on request, task, user and company records.",
+    "fm.searchPh": "Search forms…",
+    "fm.new": "＋ New Form",
+    "fm.builtinHead": "Built-in Forms",
+    "fm.builtinHelp": "Forms shipped with the system cannot be deleted; their fields can be customized.",
+    "fm.customHead": "Custom Forms",
+    "fm.customHelp": "Extra forms that can be attached to help topics and list items.",
+    "fm.showing": "Showing 1–2 of 2 custom forms",
+    "fm.bulkTitle": "Bulk actions",
+    "fm.bulkHelp": "Applied to the selected custom forms.",
+    "fm.emptyTitle": "No custom forms yet",
+    "fm.emptyText": "Create your first custom form to collect extra data on requests.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="forms">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="fm.title"></h1>
+      <p data-i18n="fm.sub"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="fm.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-dialog-open="dlg-more"><span data-i18n="common.more"></span> ▾</button>
+    <a class="rd-btn rd-btn-primary" href="form-edit.html" data-i18n="fm.new"></a>
+  </div>
+
+  <!-- Yerleşik formlar -->
+  <div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-head"><span data-i18n="fm.builtinHead"></span></div>
+    <table class="rd-table" id="tbl-builtin">
+      <thead>
+        <tr>
+          <th class="sortable" data-i18n="common.name"></th>
+          <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="form-edit.html">Kullanıcı Bilgileri</a></td>
+          <td>4 Ağu 2026</td>
+        </tr>
+        <tr>
+          <td><a href="form-edit.html">Talep Detayları</a></td>
+          <td>28 Tem 2026</td>
+        </tr>
+        <tr>
+          <td><a href="form-edit.html">Görev Detayları</a></td>
+          <td>12 May 2026</td>
+        </tr>
+        <tr>
+          <td><a href="form-edit.html">Şirket Bilgileri</a></td>
+          <td>3 Oca 2026</td>
+        </tr>
+        <tr>
+          <td><a href="form-edit.html">Şirket Profili</a></td>
+          <td>3 Oca 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft);padding:12px 19px">
+      <span class="rd-help" data-i18n="fm.builtinHelp"></span>
+    </div>
+  </div>
+
+  <!-- Özel formlar -->
+  <div class="rd-surface">
+    <div class="rd-surface-head"><span data-i18n="fm.customHead"></span></div>
+    <table class="rd-table" id="tbl-forms">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-forms" data-i18n-title="common.selectAll"></th>
+          <th class="sortable" data-i18n="common.name"></th>
+          <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="form-edit.html">Bordro Ek Bilgileri</a></td>
+          <td>4 Ağu 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="form-edit.html">Proje Talebi</a></td>
+          <td>22 May 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft);padding:12px 19px">
+      <span class="rd-help" data-i18n="fm.customHelp"></span>
+    </div>
+    <div class="rd-pagination">
+      <span data-i18n="fm.showing"></span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="fm-empty">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">▤</div>
+        <h3 data-i18n="fm.emptyTitle"></h3>
+        <p data-i18n="fm.emptyText"></p>
+        <a class="rd-btn rd-btn-primary" href="form-edit.html" data-i18n="fm.new"></a>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span data-i18n="fm.bulkTitle"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <p class="rd-help" style="margin-top:0" data-i18n="fm.bulkHelp"></p>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+        <button class="rd-btn" data-dialog-close data-i18n="common.enable"></button>
+        <button class="rd-btn" data-dialog-close data-i18n="common.disable"></button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-dialog-close data-i18n="common.delete"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Rol Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "re.back": "← Roller",
+    "re.subtitle": "Bu rolü taşıyan temsilcilerin yapabileceklerini belirleyin. Grup anahtarı tüm grubu açıp kapatır; tek tek izinler aşağıda.",
+    "re.tabDef": "Tanım",
+    "re.tabPerms": "İzinler",
+    "re.secDef": "Rol Bilgileri",
+    "re.name": "Ad",
+    "re.nameHelp": "Temsilci erişim ayarlarında görünen rol adı.",
+
+    "re.grpTickets": "Talepler",
+    "re.grpTicketsHelp": "Talep yaşam döngüsü üzerindeki yetkiler.",
+    "re.grpTasks": "Görevler",
+    "re.grpTasksHelp": "Görevler üzerindeki yetkiler.",
+    "re.grpUsers": "Kullanıcılar",
+    "re.grpUsersHelp": "Kullanıcı kayıtları ve hesapları üzerindeki yetkiler.",
+    "re.grpOrgs": "Şirketler",
+    "re.grpOrgsHelp": "Şirket kayıtları üzerindeki yetkiler.",
+    "re.grpKb": "Bilgi Bankası",
+    "re.grpKbHelp": "SSS ve hazır yanıt içerikleri üzerindeki yetkiler.",
+    "re.grpMisc": "Diğer",
+    "re.grpMiscHelp": "Genel panel yetkileri.",
+
+    "re.pCreate": "Oluştur",
+    "re.pEdit": "Düzenle",
+    "re.pAssign": "Ata",
+    "re.pRelease": "Serbest Bırak",
+    "re.pTransfer": "Aktar",
+    "re.pRefer": "Yönlendir",
+    "re.pMerge": "Birleştir",
+    "re.pLink": "Bağlantıla",
+    "re.pReplySend": "Yanıt Gönder",
+    "re.pEffortPropose": "Efor Öner",
+    "re.pMarkAnswered": "Yanıtlandı İşaretle",
+    "re.pClose": "Kapat",
+    "re.pDelete": "Sil",
+    "re.pEditThread": "Konuşma Düzenle",
+    "re.pReply": "Yanıtla",
+    "re.pManageAccount": "Hesap Yönet",
+    "re.pDirectory": "Dizin",
+    "re.pFaq": "SSS Yönet",
+    "re.pCanned": "Hazır Yanıtlar",
+    "re.pDept": "Departman",
+    "re.pStaff": "Temsilci",
+    "re.pBanlist": "Engel Listesi",
+    "re.pStats": "İstatistikler",
+    "re.pSearch": "Gelişmiş Arama",
+  },
+  en: {
+    "re.back": "← Roles",
+    "re.subtitle": "Define what agents holding this role may do. The group switch toggles the whole group; individual permissions are below.",
+    "re.tabDef": "Definition",
+    "re.tabPerms": "Permissions",
+    "re.secDef": "Role Details",
+    "re.name": "Name",
+    "re.nameHelp": "The role name shown in agent access settings.",
+
+    "re.grpTickets": "Tickets",
+    "re.grpTicketsHelp": "Authority over the ticket lifecycle.",
+    "re.grpTasks": "Tasks",
+    "re.grpTasksHelp": "Authority over tasks.",
+    "re.grpUsers": "Users",
+    "re.grpUsersHelp": "Authority over user records and accounts.",
+    "re.grpOrgs": "Companies",
+    "re.grpOrgsHelp": "Authority over company records.",
+    "re.grpKb": "Knowledge Base",
+    "re.grpKbHelp": "Authority over FAQ and canned-response content.",
+    "re.grpMisc": "Miscellaneous",
+    "re.grpMiscHelp": "General panel authority.",
+
+    "re.pCreate": "Create",
+    "re.pEdit": "Edit",
+    "re.pAssign": "Assign",
+    "re.pRelease": "Release",
+    "re.pTransfer": "Transfer",
+    "re.pRefer": "Refer",
+    "re.pMerge": "Merge",
+    "re.pLink": "Link",
+    "re.pReplySend": "Post Reply",
+    "re.pEffortPropose": "Propose Effort",
+    "re.pMarkAnswered": "Mark Answered",
+    "re.pClose": "Close",
+    "re.pDelete": "Delete",
+    "re.pEditThread": "Edit Thread",
+    "re.pReply": "Reply",
+    "re.pManageAccount": "Manage Account",
+    "re.pDirectory": "Directory",
+    "re.pFaq": "Manage FAQ",
+    "re.pCanned": "Canned Responses",
+    "re.pDept": "Department",
+    "re.pStaff": "Agent",
+    "re.pBanlist": "Ban List",
+    "re.pStats": "Statistics",
+    "re.pSearch": "Advanced Search",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="roles">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <p><a href="roles.html" data-i18n="re.back"></a></p>
+      <h1>Kıdemli Temsilci</h1>
+      <p data-i18n="re.subtitle"></p>
+    </div>
+  </div>
+
+  <form>
+    <div class="rd-tabs" data-tabs data-tabs-scope="main">
+      <button type="button" class="active" data-tab="panel-def" data-i18n="re.tabDef"></button>
+      <button type="button" data-tab="panel-perms" data-i18n="re.tabPerms"></button>
+    </div>
+
+    <!-- ============ Tanım ============ -->
+    <div class="rd-tab-panel active" id="panel-def" data-tab-group="main">
+      <div class="rd-surface">
+        <div class="rd-surface-head" data-i18n="re.secDef"></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="re-name" data-i18n="re.name"></label>
+            <input id="re-name" class="rd-control" type="text" value="Kıdemli Temsilci" style="max-width:380px">
+            <p class="rd-help" data-i18n="re.nameHelp"></p>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-label" for="re-notes" data-i18n="common.notes"></label>
+            <textarea id="re-notes" class="rd-control" style="min-height:80px">Silme dışında tüm talep yetkileri; kullanıcı ve şirket kayıtlarını düzenleyebilir.</textarea>
+            <p class="rd-help" data-i18n="common.notesHelp"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ İzinler ============ -->
+    <div class="rd-tab-panel" id="panel-perms" data-tab-group="main">
+
+      <!-- Talepler (14) -->
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="re.grpTickets"></b>
+            <small data-i18n="re.grpTicketsHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pCreate"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pEdit"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pAssign"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pRelease"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pTransfer"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pRefer"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pMerge"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pLink"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pReplySend"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pEffortPropose"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pMarkAnswered"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pClose"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="re.pDelete"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="re.pEditThread"></span></label>
+        </div>
+      </div>
+
+      <!-- Görevler (7) -->
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="re.grpTasks"></b>
+            <small data-i18n="re.grpTasksHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pCreate"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pEdit"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pAssign"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pTransfer"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pReply"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pClose"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="re.pDelete"></span></label>
+        </div>
+      </div>
+
+      <!-- Kullanıcılar (5) -->
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="re.grpUsers"></b>
+            <small data-i18n="re.grpUsersHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pCreate"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pEdit"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="re.pDelete"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pManageAccount"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pDirectory"></span></label>
+        </div>
+      </div>
+
+      <!-- Şirketler (3) -->
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="re.grpOrgs"></b>
+            <small data-i18n="re.grpOrgsHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pCreate"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pEdit"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="re.pDelete"></span></label>
+        </div>
+      </div>
+
+      <!-- Bilgi Bankası (2) -->
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="re.grpKb"></b>
+            <small data-i18n="re.grpKbHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pFaq"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pCanned"></span></label>
+        </div>
+      </div>
+
+      <!-- Diğer (5) -->
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="re.grpMisc"></b>
+            <small data-i18n="re.grpMiscHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox"><span data-i18n="re.pDept"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="re.pStaff"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pBanlist"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pStats"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="re.pSearch"></span></label>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="rd-btn-primary" data-i18n="common.save"></button>
+      <a class="rd-btn" href="roles.html" data-i18n="common.cancel"></a>
+    </div>
+  </form>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Bilgi Bankası</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "kb.heroTitle": "Size nasıl yardımcı olabiliriz?",
+    "kb.heroSub": "Bordro, izin, vardiya ve sistem kullanımı hakkında hazır yanıtları arayın.",
+    "kb.searchPh": "Makalelerde arayın… örn. yol ücreti",
+    "kb.catPayroll": "Bordro",
+    "kb.catLeave": "İzin Yönetimi",
+    "kb.catShift": "Vardiya",
+    "kb.catSystem": "Sistem Kullanımı",
+  },
+  en: {
+    "kb.heroTitle": "How can we help you?",
+    "kb.heroSub": "Search ready answers about payroll, leave, shifts and using the system.",
+    "kb.searchPh": "Search articles… e.g. commute allowance",
+    "kb.catPayroll": "Payroll",
+    "kb.catLeave": "Leave Management",
+    "kb.catShift": "Shifts",
+    "kb.catSystem": "Using the System",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal" data-nav="kb">
+<div id="rd-header"></div>
+
+<main class="rc-main">
+  <div class="rc-hero" style="display:block;text-align:center;padding:38px 30px">
+    <h1 data-i18n="kb.heroTitle"></h1>
+    <p data-i18n="kb.heroSub" style="max-width:590px;margin:0 auto 20px"></p>
+    <form class="rc-kb-search">
+      <input class="rc-control" type="search" data-i18n-placeholder="kb.searchPh">
+      <button class="rc-button-primary" data-i18n="common.search"></button>
+    </form>
+  </div>
+
+  <div class="rd-grid-2">
+    <div class="rc-surface">
+      <div class="rc-surface-head" data-i18n="kb.catPayroll"></div>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Yol ücreti nasıl hesaplanır?</h3>
+        <p>Fiili çalışılan gün, vergi istisnası ve kesinti kuralları · Güncellendi: 12 Tem 2026</p>
+      </a>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Ek mesai bordroya nasıl yansır?</h3>
+        <p>Fazla mesai katsayıları ve hafta tatili çalışması · Güncellendi: 28 Haz 2026</p>
+      </a>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Asgari ücret güncellemesi sonrası kontroller</h3>
+        <p>Parametre güncellemesi sonrası yapılması gereken kontroller · Güncellendi: 5 Oca 2026</p>
+      </a>
+    </div>
+
+    <div class="rc-surface">
+      <div class="rc-surface-head" data-i18n="kb.catLeave"></div>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Yıllık izin devri kuralları</h3>
+        <p>Devreden izin günleri ve zaman aşımı süreleri · Güncellendi: 3 Tem 2026</p>
+      </a>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Rapor (istirahat) girişi nasıl yapılır?</h3>
+        <p>SGK rapor bildirimi ve bordro etkisi · Güncellendi: 19 May 2026</p>
+      </a>
+    </div>
+
+    <div class="rc-surface">
+      <div class="rc-surface-head" data-i18n="kb.catShift"></div>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Vardiya planı yükleme şablonu</h3>
+        <p>Excel şablonu ile toplu vardiya planı aktarımı · Güncellendi: 22 Haz 2026</p>
+      </a>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Gece vardiyası ek ödemeleri</h3>
+        <p>Gece çalışması zam oranları ve puantaj kuralları · Güncellendi: 14 Nis 2026</p>
+      </a>
+    </div>
+
+    <div class="rc-surface">
+      <div class="rc-surface-head" data-i18n="kb.catSystem"></div>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Yeni kullanıcı nasıl eklenir?</h3>
+        <p>Kullanıcı davetleri ve yetki seviyeleri · Güncellendi: 30 Tem 2026</p>
+      </a>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Toplu personel aktarımı (Excel)</h3>
+        <p>İçe aktarma şablonu ve alan eşleştirme · Güncellendi: 8 Tem 2026</p>
+      </a>
+      <a class="rc-kb-cat" href="kb-article.html">
+        <h3>Bildirim tercihleri nasıl değiştirilir?</h3>
+        <p>E-posta bildirimlerini yönetme · Güncellendi: 2 Haz 2026</p>
+      </a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

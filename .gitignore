@@ -1,0 +1,25 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+artifacts/
+TestResults/
+*.binlog
+
+# Rider / VS Code
+.idea/
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# macOS
+.DS_Store
+
+# Local secrets / env
+*.env
+appsettings.*.Local.json
+
+# Node (mockup tooling, if any)
+node_modules/

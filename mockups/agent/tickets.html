@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Talepler</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "tq.title": "Talepler",
+    "tq.subtitle": "Kuyruklardaki tüm destek taleplerini görüntüleyin, filtreleyin ve yönetin.",
+    "tq.newTicket": "＋ Yeni Talep",
+    "tq.qOpen": "Açık",
+    "tq.qUnanswered": "Yanıtlanmamış",
+    "tq.qAnswered": "Yanıtlanmış",
+    "tq.qOverdue": "Gecikmiş",
+    "tq.qMine": "Taleplerim",
+    "tq.qAssignedMe": "Bana Atanan",
+    "tq.qAssignedTeam": "Takımıma Atanan",
+    "tq.qClosed": "Kapalı",
+    "tq.qToday": "Bugün",
+    "tq.qWeek": "Bu Hafta",
+    "tq.qMonth": "Bu Ay",
+    "tq.qSaved": "Kayıtlı Aramalarım",
+    "tq.qSlaVip": "SLA Riskli VIP",
+    "tq.searchPh": "Taleplerde ara…",
+    "tq.fldPriority": "Öncelik",
+    "tq.clearFilters": "Filtreleri temizle",
+    "tq.sortUpdated": "Sırala: Son güncellenen",
+    "tq.sortCreated": "Sırala: Oluşturulma",
+    "tq.sortPriority": "Sırala: Öncelik",
+    "tq.sortDue": "Sırala: Son tarih",
+    "tq.advSearch": "[Gelişmiş arama]",
+    "tq.assign": "Ata",
+    "tq.merge": "Birleştir",
+    "tq.transfer": "Aktar",
+    "tq.changeStatus": "Durum Değiştir",
+    "tq.colNo": "Talep No",
+    "tq.colSubject": "Konu",
+    "tq.colUser": "Kullanıcı",
+    "tq.colOrg": "Şirket",
+    "tq.colPriority": "Öncelik",
+    "tq.colAssigned": "Atanan",
+    "tq.pageOf": "/ 24 talep",
+    "tq.advTitle": "Gelişmiş Arama",
+    "tq.tabCriteria": "Kriterler",
+    "tq.tabColumns": "Sütunlar",
+    "tq.tabSort": "Sıralama",
+    "tq.tabSave": "Kaydet",
+    "tq.colEffort": "Efor",
+    "tq.qEffort": "Efor Onayında",
+    "tq.fldEffort": "Efor Durumu",
+    "tq.fldStatus": "Durum",
+    "tq.fldDept": "Departman",
+    "tq.fldAssigned": "Atanan",
+    "tq.fldOrg": "Şirket",
+    "tq.fldDate": "Tarih",
+    "tq.opIs": "eşittir",
+    "tq.opNot": "eşit değildir",
+    "tq.opContains": "içerir",
+    "tq.opAfter": "sonrasında",
+    "tq.valuePh": "Değer",
+    "tq.addRule": "＋ Kriter ekle",
+    "tq.columnsHint": "Listede gösterilecek sütunları seçin.",
+    "tq.sortHint": "Sonuçların varsayılan sıralamasını seçin.",
+    "tq.saveName": "Arama adı",
+    "tq.saveNamePh": "Örn. SLA Riskli VIP",
+    "tq.saveHelp": "Kaydedilen aramalar soldaki kuyruk ağacında görünür.",
+    "tq.saveSearch": "Aramayı Kaydet",
+    "tq.emptyTitle": "Bu kuyrukta talep yok",
+    "tq.emptyText": "Seçili kriterlere uyan talep bulunamadı. Filtreleri temizleyin veya yeni bir talep açın.",
+  },
+  en: {
+    "tq.title": "Tickets",
+    "tq.subtitle": "View, filter and manage all support tickets across your queues.",
+    "tq.newTicket": "＋ New Ticket",
+    "tq.qOpen": "Open",
+    "tq.qUnanswered": "Unanswered",
+    "tq.qAnswered": "Answered",
+    "tq.qOverdue": "Overdue",
+    "tq.qMine": "My Tickets",
+    "tq.qAssignedMe": "Assigned to Me",
+    "tq.qAssignedTeam": "Assigned to My Team",
+    "tq.qClosed": "Closed",
+    "tq.qToday": "Today",
+    "tq.qWeek": "This Week",
+    "tq.qMonth": "This Month",
+    "tq.qSaved": "My Saved Searches",
+    "tq.qSlaVip": "SLA Risk VIP",
+    "tq.searchPh": "Search tickets…",
+    "tq.fldPriority": "Priority",
+    "tq.clearFilters": "Clear filters",
+    "tq.sortUpdated": "Sort: Last updated",
+    "tq.sortCreated": "Sort: Created",
+    "tq.sortPriority": "Sort: Priority",
+    "tq.sortDue": "Sort: Due date",
+    "tq.advSearch": "[Advanced search]",
+    "tq.assign": "Assign",
+    "tq.merge": "Merge",
+    "tq.transfer": "Transfer",
+    "tq.changeStatus": "Change Status",
+    "tq.colNo": "Ticket #",
+    "tq.colSubject": "Subject",
+    "tq.colUser": "User",
+    "tq.colOrg": "Company",
+    "tq.colPriority": "Priority",
+    "tq.colAssigned": "Assigned To",
+    "tq.pageOf": "/ 24 tickets",
+    "tq.advTitle": "Advanced Search",
+    "tq.tabCriteria": "Criteria",
+    "tq.tabColumns": "Columns",
+    "tq.tabSort": "Sort",
+    "tq.tabSave": "Save",
+    "tq.colEffort": "Effort",
+    "tq.qEffort": "Awaiting Effort Approval",
+    "tq.fldEffort": "Effort Status",
+    "tq.fldStatus": "Status",
+    "tq.fldDept": "Department",
+    "tq.fldAssigned": "Assigned To",
+    "tq.fldOrg": "Company",
+    "tq.fldDate": "Date",
+    "tq.opIs": "is",
+    "tq.opNot": "is not",
+    "tq.opContains": "contains",
+    "tq.opAfter": "is after",
+    "tq.valuePh": "Value",
+    "tq.addRule": "＋ Add criterion",
+    "tq.columnsHint": "Choose the columns shown in the list.",
+    "tq.sortHint": "Choose the default sort order for results.",
+    "tq.saveName": "Search name",
+    "tq.saveNamePh": "e.g. SLA Risk VIP",
+    "tq.saveHelp": "Saved searches appear in the queue tree on the left.",
+    "tq.saveSearch": "Save Search",
+    "tq.emptyTitle": "No tickets in this queue",
+    "tq.emptyText": "No tickets match the selected criteria. Clear the filters or open a new ticket.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="tickets">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="tq.title"></h1>
+      <p data-i18n="tq.subtitle"></p>
+    </div>
+    <div class="actions">
+      <a class="rd-btn-ghost rd-btn" href="tickets.html" data-i18n="common.export"></a>
+      <a class="rd-btn-primary" href="ticket-open.html" data-i18n="tq.newTicket"></a>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:208px minmax(0,1fr);gap:18px;align-items:start">
+
+    <!-- Queue tree -->
+    <div class="rd-surface">
+      <div class="rd-surface-body" style="padding:13px 9px">
+        <div class="bo-nav-group">
+          <div class="group-label" data-i18n="tq.qOpen"></div>
+          <a href="tickets.html"><span data-i18n="tq.qUnanswered"></span><span class="count">12</span></a>
+          <a href="tickets.html"><span data-i18n="tq.qAnswered"></span><span class="count">8</span></a>
+          <a href="tickets.html"><span data-i18n="tq.qOverdue"></span><span class="count">4</span></a>
+          <a href="tickets.html"><span data-i18n="tq.qEffort"></span><span class="count">2</span></a>
+        </div>
+        <div class="bo-nav-group">
+          <div class="group-label" data-i18n="tq.qMine"></div>
+          <a href="tickets.html" class="active"><span data-i18n="tq.qAssignedMe"></span><span class="count">8</span></a>
+          <a href="tickets.html"><span data-i18n="tq.qAssignedTeam"></span><span class="count">3</span></a>
+        </div>
+        <div class="bo-nav-group">
+          <div class="group-label" data-i18n="tq.qClosed"></div>
+          <a href="tickets.html"><span data-i18n="tq.qToday"></span></a>
+          <a href="tickets.html"><span data-i18n="tq.qWeek"></span></a>
+          <a href="tickets.html"><span data-i18n="tq.qMonth"></span></a>
+        </div>
+        <div class="bo-nav-group" style="margin-bottom:0">
+          <div class="group-label" data-i18n="tq.qSaved"></div>
+          <a href="tickets.html"><span data-i18n="tq.qSlaVip"></span></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div>
+      <div class="rd-list-toolbar">
+        <input class="rd-control" type="search" data-i18n-placeholder="tq.searchPh">
+        <details class="rd-filter">
+          <summary><span data-i18n="tq.fldStatus"></span><b class="rd-filter-count">0</b></summary>
+          <div class="rd-filter-menu">
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="status.open"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="status.wait"></span></label>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="status.effortWait"></span></label>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="status.overdue"></span></label>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="status.solved"></span></label>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="status.closed"></span></label>
+          </div>
+        </details>
+        <details class="rd-filter">
+          <summary><span data-i18n="tq.fldPriority"></span><b class="rd-filter-count">0</b></summary>
+          <div class="rd-filter-menu">
+            <label class="rd-check"><input type="checkbox"><span data-i18n="priority.low"></span></label>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="priority.normal"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="priority.high"></span></label>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="priority.emergency"></span></label>
+          </div>
+        </details>
+        <select class="rd-control">
+          <option data-i18n="tq.sortUpdated"></option>
+          <option data-i18n="tq.sortCreated"></option>
+          <option data-i18n="tq.sortPriority"></option>
+          <option data-i18n="tq.sortDue"></option>
+        </select>
+        <a href="#" data-dialog-open="dlg-advsearch" data-i18n="tq.advSearch"></a>
+        <div class="spacer"></div>
+        <button class="rd-btn rd-btn-sm" data-i18n="tq.assign"></button>
+        <button class="rd-btn rd-btn-sm" data-i18n="tq.merge"></button>
+        <button class="rd-btn rd-btn-sm" data-i18n="tq.transfer"></button>
+        <button class="rd-btn rd-btn-sm" data-i18n="tq.changeStatus"></button>
+        <button class="rd-btn rd-btn-sm rd-btn-danger" data-i18n="common.delete"></button>
+      </div>
+
+      <div class="rd-filter-chips" data-filter-chips hidden>
+        <a href="#" class="clear" data-filter-clear data-i18n="tq.clearFilters"></a>
+      </div>
+
+      <div class="rd-surface">
+        <table class="rd-table" id="tq-table">
+          <thead>
+            <tr>
+              <th class="col-check"><input type="checkbox" data-check-all="#tq-table" aria-label="Select all"></th>
+              <th data-i18n="tq.colNo"></th>
+              <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+              <th class="sortable" data-i18n="tq.colSubject"></th>
+              <th data-i18n="tq.colUser"></th>
+              <th data-i18n="tq.colOrg"></th>
+              <th class="sortable" data-i18n="tq.colPriority"></th>
+              <th class="sortable" data-i18n="tq.colEffort"></th>
+              <th data-i18n="common.status"></th>
+              <th data-i18n="tq.colAssigned"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="col-check"><input type="checkbox"></td>
+              <td><a href="ticket-view.html">R716555</a></td>
+              <td>Bugün 10:18</td>
+              <td><a href="ticket-view.html">Yol ücreti hatası hakkında</a> <span class="rd-muted text-sm">💬 4 📎</span></td>
+              <td><a href="user-view.html">Bourla Salehi</a></td>
+              <td><a href="org-view.html">Ulaşım A.Ş.</a></td>
+              <td><span class="rd-pill rd-pill-teal" data-i18n="priority.normal"></span></td>
+              <td><span class="rd-pill rd-pill-wait" data-i18n-title="status.effortWait">6s</span></td>
+              <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+              <td>Ümit Akın</td>
+            </tr>
+            <tr>
+              <td class="col-check"><input type="checkbox"></td>
+              <td><a href="ticket-view.html">R716561</a></td>
+              <td>Bugün 09:47</td>
+              <td><a href="ticket-view.html">AGİ tutarı güncellemesi</a> <span class="rd-muted text-sm">💬 1</span></td>
+              <td><a href="user-view.html">Seda Yılmaz</a></td>
+              <td><a href="org-view.html">RapidSol</a></td>
+              <td><span class="rd-pill rd-pill-closed" data-i18n="priority.low"></span></td>
+              <td class="rd-muted">—</td>
+              <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+              <td>Ümit Akın</td>
+            </tr>
+            <tr>
+              <td class="col-check"><input type="checkbox"></td>
+              <td><a href="ticket-view.html">R716560</a></td>
+              <td>Bugün 09:12</td>
+              <td><a href="ticket-view.html">Temmuz bordrosunda SGK kesintisi farkı</a> <span class="rd-muted text-sm">💬 2 📎</span></td>
+              <td><a href="user-view.html">Kerem Doğan</a></td>
+              <td><a href="org-view.html">Konecta</a></td>
+              <td><span class="rd-pill rd-pill-wait" data-i18n="priority.high"></span></td>
+              <td class="rd-muted">—</td>
+              <td><span class="rd-pill rd-pill-wait" data-i18n="status.wait"></span></td>
+              <td>Ümit Akın</td>
+            </tr>
+            <tr>
+              <td class="col-check"><input type="checkbox"></td>
+              <td><a href="ticket-view.html">R716548</a></td>
+              <td>Dün 17:40</td>
+              <td><a href="ticket-view.html">Yıllık izin devri hesaplama sorusu</a> <span class="rd-muted text-sm">💬 3</span></td>
+              <td><a href="user-view.html">Elif Aksoy</a></td>
+              <td><a href="org-view.html">Tosyalı Holding</a></td>
+              <td><span class="rd-pill rd-pill-teal" data-i18n="priority.normal"></span></td>
+              <td class="rd-muted">—</td>
+              <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+              <td>Ümit Akın</td>
+            </tr>
+            <tr>
+              <td class="col-check"><input type="checkbox"></td>
+              <td><a href="ticket-view.html">R716544</a></td>
+              <td>Dün 15:03</td>
+              <td><a href="ticket-view.html">Fazla mesai onay akışı çalışmıyor</a> <span class="rd-muted text-sm">💬 5 📎</span></td>
+              <td><a href="user-view.html">Bourla Salehi</a></td>
+              <td><a href="org-view.html">Ulaşım A.Ş.</a></td>
+              <td><span class="rd-pill rd-pill-wait" data-i18n="priority.high"></span></td>
+              <td><span class="rd-pill rd-pill-overdue" data-i18n-title="status.effortRejected">8s ✕</span></td>
+              <td><span class="rd-pill rd-pill-wait" data-i18n="status.wait"></span></td>
+              <td>Ümit Akın</td>
+            </tr>
+            <tr>
+              <td class="col-check"><input type="checkbox"></td>
+              <td><a href="ticket-view.html">R716539</a></td>
+              <td>Dün 11:26</td>
+              <td><a href="ticket-view.html">Vardiya planı içe aktarma hatası</a> <span class="rd-muted text-sm">💬 6 📎</span></td>
+              <td><a href="user-view.html">Murat Şen</a></td>
+              <td><a href="org-view.html">Ulaşım A.Ş.</a></td>
+              <td><span class="rd-pill rd-pill-overdue" data-i18n="priority.emergency"></span></td>
+              <td class="rd-muted">—</td>
+              <td><span class="rd-pill rd-pill-overdue" data-i18n="status.overdue"></span></td>
+              <td>Ümit Akın</td>
+            </tr>
+            <tr>
+              <td class="col-check"><input type="checkbox"></td>
+              <td><a href="ticket-view.html">R716532</a></td>
+              <td>8 Ağu 16:55</td>
+              <td><a href="ticket-view.html">Kıdem tazminatı raporu talebi</a> <span class="rd-muted text-sm">💬 2</span></td>
+              <td><a href="user-view.html">Elif Aksoy</a></td>
+              <td><a href="org-view.html">Tosyalı Holding</a></td>
+              <td><span class="rd-pill rd-pill-teal" data-i18n="priority.normal"></span></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n-title="status.effortApproved">5s ✓</span></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="status.solved"></span></td>
+              <td>Ümit Akın</td>
+            </tr>
+            <tr>
+              <td class="col-check"><input type="checkbox"></td>
+              <td><a href="ticket-view.html">R716528</a></td>
+              <td>8 Ağu 10:31</td>
+              <td><a href="ticket-view.html">Personel işe giriş bildirgesi gecikmesi</a> <span class="rd-muted text-sm">💬 3 📎</span></td>
+              <td><a href="user-view.html">Kerem Doğan</a></td>
+              <td><a href="org-view.html">Konecta</a></td>
+              <td><span class="rd-pill rd-pill-wait" data-i18n="priority.high"></span></td>
+              <td class="rd-muted">—</td>
+              <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+              <td>Ümit Akın</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="rd-pagination">
+          <span data-i18n="common.showing"></span> <b>1–8</b> <span data-i18n="tq.pageOf"></span>
+          <div class="pages">
+            <span class="current">1</span>
+            <a href="tickets.html">2</a>
+            <a href="tickets.html">3</a>
+            <a href="tickets.html">›</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty-state variant (hidden; shown when a queue has no tickets)
+      <div class="rd-surface">
+        <div class="rd-empty">
+          <div class="icon">◫</div>
+          <h3 data-i18n="tq.emptyTitle"></h3>
+          <p data-i18n="tq.emptyText"></p>
+          <a class="rd-btn-primary" href="ticket-open.html" data-i18n="tq.newTicket"></a>
+        </div>
+      </div>
+      -->
+    </div>
+  </div>
+</main>
+
+<!-- Advanced search dialog -->
+<dialog class="rd-dialog" id="dlg-advsearch" style="width:min(680px,calc(100vw - 40px))">
+  <div class="rd-dialog-head">
+    <span data-i18n="tq.advTitle"></span>
+    <button class="close" data-dialog-close>✕</button>
+  </div>
+  <form>
+    <div class="rd-dialog-body">
+      <div class="rd-tabs" data-tabs data-tabs-scope="advs">
+        <button type="button" class="active" data-tab="adv-criteria" data-i18n="tq.tabCriteria"></button>
+        <button type="button" data-tab="adv-columns" data-i18n="tq.tabColumns"></button>
+        <button type="button" data-tab="adv-sort" data-i18n="tq.tabSort"></button>
+        <button type="button" data-tab="adv-save" data-i18n="tq.tabSave"></button>
+      </div>
+
+      <div class="rd-tab-panel active" data-tab-group="advs" id="adv-criteria">
+        <div class="bo-rule-row">
+          <select class="rd-control">
+            <option data-i18n="tq.fldStatus"></option>
+            <option data-i18n="tq.fldEffort"></option>
+            <option data-i18n="tq.fldDept"></option>
+            <option data-i18n="tq.fldAssigned"></option>
+            <option data-i18n="tq.fldOrg"></option>
+            <option data-i18n="tq.fldDate"></option>
+          </select>
+          <select class="rd-control">
+            <option data-i18n="tq.opIs"></option>
+            <option data-i18n="tq.opNot"></option>
+            <option data-i18n="tq.opContains"></option>
+            <option data-i18n="tq.opAfter"></option>
+          </select>
+          <input class="rd-control" data-i18n-placeholder="tq.valuePh" value="Açık">
+          <button type="button" class="remove">✕</button>
+        </div>
+        <div class="bo-rule-row">
+          <select class="rd-control">
+            <option data-i18n="tq.fldDept"></option>
+            <option data-i18n="tq.fldStatus"></option>
+            <option data-i18n="tq.fldAssigned"></option>
+            <option data-i18n="tq.fldOrg"></option>
+            <option data-i18n="tq.fldDate"></option>
+          </select>
+          <select class="rd-control">
+            <option data-i18n="tq.opIs"></option>
+            <option data-i18n="tq.opNot"></option>
+            <option data-i18n="tq.opContains"></option>
+            <option data-i18n="tq.opAfter"></option>
+          </select>
+          <input class="rd-control" data-i18n-placeholder="tq.valuePh" value="Bordro Danışmanlık">
+          <button type="button" class="remove">✕</button>
+        </div>
+        <div class="bo-rule-row">
+          <select class="rd-control">
+            <option data-i18n="tq.fldOrg"></option>
+            <option data-i18n="tq.fldStatus"></option>
+            <option data-i18n="tq.fldDept"></option>
+            <option data-i18n="tq.fldAssigned"></option>
+            <option data-i18n="tq.fldDate"></option>
+          </select>
+          <select class="rd-control">
+            <option data-i18n="tq.opContains"></option>
+            <option data-i18n="tq.opIs"></option>
+            <option data-i18n="tq.opNot"></option>
+            <option data-i18n="tq.opAfter"></option>
+          </select>
+          <input class="rd-control" data-i18n-placeholder="tq.valuePh" value="Ulaşım A.Ş.">
+          <button type="button" class="remove">✕</button>
+        </div>
+        <button type="button" class="rd-btn-ghost rd-btn rd-btn-sm" data-i18n="tq.addRule"></button>
+      </div>
+
+      <div class="rd-tab-panel" data-tab-group="advs" id="adv-columns">
+        <p class="rd-help" style="margin-bottom:12px" data-i18n="tq.columnsHint"></p>
+        <div style="display:flex;flex-wrap:wrap;gap:9px 22px">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="tq.colNo"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="common.updated"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="tq.colSubject"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="tq.colUser"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="tq.colOrg"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="tq.colPriority"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="tq.colEffort"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="tq.colAssigned"></span></label>
+        </div>
+      </div>
+
+      <div class="rd-tab-panel" data-tab-group="advs" id="adv-sort">
+        <p class="rd-help" style="margin-bottom:12px" data-i18n="tq.sortHint"></p>
+        <select class="rd-control" style="max-width:280px">
+          <option data-i18n="tq.sortUpdated"></option>
+          <option data-i18n="tq.sortCreated"></option>
+          <option data-i18n="tq.sortPriority"></option>
+          <option data-i18n="tq.sortDue"></option>
+        </select>
+      </div>
+
+      <div class="rd-tab-panel" data-tab-group="advs" id="adv-save">
+        <div class="rd-field">
+          <label class="rd-label" data-i18n="tq.saveName"></label>
+          <input class="rd-control" data-i18n-placeholder="tq.saveNamePh">
+          <div class="rd-help" data-i18n="tq.saveHelp"></div>
+        </div>
+      </div>
+    </div>
+    <div class="rd-dialog-foot">
+      <button type="button" class="rd-btn" data-i18n="tq.saveSearch"></button>
+      <button type="submit" class="rd-btn-primary" data-i18n="common.search"></button>
+    </div>
+  </form>
+</dialog>
+
+</body>
+</html>

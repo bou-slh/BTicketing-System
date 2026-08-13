@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Profilim</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "pf.title": "Profilim",
+    "pf.subtitle": "Hesap bilgilerinizi, çalışma tercihlerinizi ve imzanızı yönetin.",
+    "pf.tabAccount": "Hesap",
+    "pf.tabPrefs": "Tercihler",
+    "pf.tabSig": "İmza",
+    "pf.personal": "Kişisel Bilgiler",
+    "pf.fFirst": "Ad",
+    "pf.fLast": "Soyad",
+    "pf.fEmail": "E-posta",
+    "pf.fPhone": "Telefon",
+    "pf.fExt": "Dahili",
+    "pf.fMobile": "Mobil",
+    "pf.auth": "Kimlik Doğrulama",
+    "pf.fUsername": "Kullanıcı adı",
+    "pf.password": "Parola",
+    "pf.changePass": "Parola Değiştir",
+    "pf.passHelp": "Son değişiklik: 12 Haz 2026.",
+    "pf.f2fa": "İki adımlı doğrulama (2FA)",
+    "pf.f2faNone": "Devre dışı",
+    "pf.f2faApp": "Doğrulama uygulaması",
+    "pf.f2faEmail": "E-posta kodu",
+    "pf.configure": "Yapılandır",
+    "pf.f2faHelp": "Girişte parolanıza ek olarak 6 haneli bir kod istenir.",
+    "pf.statusHead": "Durum",
+    "pf.vacation": "Tatil Modu",
+    "pf.vacationHelp": "Etkinken size yeni talep atanmaz; mevcut talepleriniz kuyruğa alınır.",
+    "pf.dlgPass": "Parola Değiştir",
+    "pf.fCurPass": "Mevcut parola",
+    "pf.fNewPass": "Yeni parola",
+    "pf.fNewPass2": "Yeni parola (tekrar)",
+    "pf.fPageSize": "Sayfa boyutu",
+    "pf.fPageSizeHelp": "Liste sayfalarında bir seferde gösterilecek satır sayısı.",
+    "pf.fRefresh": "Otomatik yenileme",
+    "pf.refOff": "Kapalı",
+    "pf.ref1": "1 dakika",
+    "pf.ref3": "3 dakika",
+    "pf.fRefreshHelp": "Talep listeleri seçilen aralıkta kendiliğinden yenilenir.",
+    "pf.fQueue": "Varsayılan kuyruk",
+    "pf.qOpen": "Açık Talepler",
+    "pf.qMine": "Taleplerim",
+    "pf.fQueueHelp": "Talepler sekmesi açıldığında gösterilecek kuyruk.",
+    "pf.fThreadOrder": "Konu görünüm sırası",
+    "pf.orderNewest": "En yeni üstte",
+    "pf.orderOldest": "En eski üstte",
+    "pf.fSig": "Varsayılan imza",
+    "pf.sigMine": "İmzam",
+    "pf.sigDept": "Departman imzası",
+    "pf.sigNone": "Yok",
+    "pf.fTz": "Zaman dilimi",
+    "pf.fTimeFmt": "Saat biçimi",
+    "pf.fmt24": "24 saat",
+    "pf.fmt12": "12 saat (ÖÖ/ÖS)",
+    "pf.fLang": "Tercih edilen dil",
+    "pf.fLangHelp": "Panel arayüzü bu dilde açılır; kullanıcı yazışmalarını etkilemez.",
+    "pf.sigLabel": "İmza metni",
+    "pf.sigHelp": "İmza, gönderdiğiniz yanıtların altına otomatik eklenir.",
+  },
+  en: {
+    "pf.title": "My Profile",
+    "pf.subtitle": "Manage your account details, working preferences and signature.",
+    "pf.tabAccount": "Account",
+    "pf.tabPrefs": "Preferences",
+    "pf.tabSig": "Signature",
+    "pf.personal": "Personal Information",
+    "pf.fFirst": "First name",
+    "pf.fLast": "Last name",
+    "pf.fEmail": "Email",
+    "pf.fPhone": "Phone",
+    "pf.fExt": "Ext.",
+    "pf.fMobile": "Mobile",
+    "pf.auth": "Authentication",
+    "pf.fUsername": "Username",
+    "pf.password": "Password",
+    "pf.changePass": "Change Password",
+    "pf.passHelp": "Last changed: 12 Jun 2026.",
+    "pf.f2fa": "Two-factor authentication (2FA)",
+    "pf.f2faNone": "Disabled",
+    "pf.f2faApp": "Authenticator app",
+    "pf.f2faEmail": "Email code",
+    "pf.configure": "Configure",
+    "pf.f2faHelp": "A 6-digit code is required at sign-in in addition to your password.",
+    "pf.statusHead": "Status",
+    "pf.vacation": "Vacation Mode",
+    "pf.vacationHelp": "While on, no new tickets are assigned to you; your current tickets are queued.",
+    "pf.dlgPass": "Change Password",
+    "pf.fCurPass": "Current password",
+    "pf.fNewPass": "New password",
+    "pf.fNewPass2": "New password (repeat)",
+    "pf.fPageSize": "Page size",
+    "pf.fPageSizeHelp": "Number of rows shown at once on list pages.",
+    "pf.fRefresh": "Auto-refresh",
+    "pf.refOff": "Off",
+    "pf.ref1": "1 minute",
+    "pf.ref3": "3 minutes",
+    "pf.fRefreshHelp": "Ticket lists refresh themselves at the selected interval.",
+    "pf.fQueue": "Default queue",
+    "pf.qOpen": "Open Tickets",
+    "pf.qMine": "My Tickets",
+    "pf.fQueueHelp": "The queue shown when the Tickets tab is opened.",
+    "pf.fThreadOrder": "Thread view order",
+    "pf.orderNewest": "Newest first",
+    "pf.orderOldest": "Oldest first",
+    "pf.fSig": "Default signature",
+    "pf.sigMine": "My signature",
+    "pf.sigDept": "Department signature",
+    "pf.sigNone": "None",
+    "pf.fTz": "Time zone",
+    "pf.fTimeFmt": "Time format",
+    "pf.fmt24": "24-hour",
+    "pf.fmt12": "12-hour (AM/PM)",
+    "pf.fLang": "Preferred language",
+    "pf.fLangHelp": "The panel opens in this language; it does not affect user correspondence.",
+    "pf.sigLabel": "Signature text",
+    "pf.sigHelp": "The signature is appended automatically below the replies you send.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="profile">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="pf.title"></h1>
+      <p data-i18n="pf.subtitle"></p>
+    </div>
+  </div>
+
+  <form>
+    <div class="rd-tabs" data-tabs>
+      <button type="button" class="active" data-tab="pf-panel-account" data-i18n="pf.tabAccount"></button>
+      <button type="button" data-tab="pf-panel-prefs" data-i18n="pf.tabPrefs"></button>
+      <button type="button" data-tab="pf-panel-sig" data-i18n="pf.tabSig"></button>
+    </div>
+
+    <div class="rd-tab-panel active" id="pf-panel-account">
+      <div class="rd-surface" style="margin-bottom:20px">
+        <div class="rd-surface-head" data-i18n="pf.personal"></div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="pf-first" data-i18n="pf.fFirst"></label>
+              <input id="pf-first" class="rd-control" value="Ümit Yaşar">
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-last" data-i18n="pf.fLast"></label>
+              <input id="pf-last" class="rd-control" value="Akın">
+            </div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="pf-email" data-i18n="pf.fEmail"></label>
+            <input id="pf-email" type="email" class="rd-control" value="umit.akin@rapidsol.com.tr">
+          </div>
+          <div class="rd-grid-3">
+            <div class="rd-field">
+              <label class="rd-label" for="pf-phone" data-i18n="pf.fPhone"></label>
+              <input id="pf-phone" class="rd-control" value="+90 212 555 0101">
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-ext" data-i18n="pf.fExt"></label>
+              <input id="pf-ext" class="rd-control" value="101">
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-mobile" data-i18n="pf.fMobile"></label>
+              <input id="pf-mobile" class="rd-control" value="+90 532 555 0101">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface" style="margin-bottom:20px">
+        <div class="rd-surface-head" data-i18n="pf.auth"></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="pf-username" data-i18n="pf.fUsername"></label>
+            <input id="pf-username" class="rd-control" value="umit.akin" readonly>
+          </div>
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="pf.password"></span>
+            <button type="button" class="rd-btn" data-dialog-open="dlg-pass" data-i18n="pf.changePass"></button>
+            <div class="rd-help" data-i18n="pf.passHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="pf-2fa" data-i18n="pf.f2fa"></label>
+            <div style="display:flex;gap:10px">
+              <select id="pf-2fa" class="rd-control" style="width:auto;min-width:220px">
+                <option data-i18n="pf.f2faNone"></option>
+                <option selected data-i18n="pf.f2faApp"></option>
+                <option data-i18n="pf.f2faEmail"></option>
+              </select>
+              <button type="button" class="rd-btn rd-btn-ghost" data-i18n="pf.configure"></button>
+            </div>
+            <div class="rd-help" data-i18n="pf.f2faHelp"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface">
+        <div class="rd-surface-head" data-i18n="pf.statusHead"></div>
+        <div class="rd-surface-body">
+          <label class="rd-switch">
+            <input type="checkbox">
+            <span class="track"></span>
+            <span class="rd-switch-copy">
+              <b data-i18n="pf.vacation"></b>
+              <small data-i18n="pf.vacationHelp"></small>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tab-panel" id="pf-panel-prefs">
+      <div class="rd-surface">
+        <div class="rd-surface-body">
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="pf-pagesize" data-i18n="pf.fPageSize"></label>
+              <select id="pf-pagesize" class="rd-control">
+                <option>10</option>
+                <option selected>25</option>
+                <option>50</option>
+              </select>
+              <div class="rd-help" data-i18n="pf.fPageSizeHelp"></div>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-refresh" data-i18n="pf.fRefresh"></label>
+              <select id="pf-refresh" class="rd-control">
+                <option data-i18n="pf.refOff"></option>
+                <option selected data-i18n="pf.ref1"></option>
+                <option data-i18n="pf.ref3"></option>
+              </select>
+              <div class="rd-help" data-i18n="pf.fRefreshHelp"></div>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-queue" data-i18n="pf.fQueue"></label>
+              <select id="pf-queue" class="rd-control">
+                <option selected data-i18n="pf.qOpen"></option>
+                <option data-i18n="pf.qMine"></option>
+              </select>
+              <div class="rd-help" data-i18n="pf.fQueueHelp"></div>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-order" data-i18n="pf.fThreadOrder"></label>
+              <select id="pf-order" class="rd-control">
+                <option selected data-i18n="pf.orderNewest"></option>
+                <option data-i18n="pf.orderOldest"></option>
+              </select>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-sig-default" data-i18n="pf.fSig"></label>
+              <select id="pf-sig-default" class="rd-control">
+                <option selected data-i18n="pf.sigMine"></option>
+                <option data-i18n="pf.sigDept"></option>
+                <option data-i18n="pf.sigNone"></option>
+              </select>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-tz" data-i18n="pf.fTz"></label>
+              <select id="pf-tz" class="rd-control">
+                <option selected>Europe/Istanbul (GMT+3)</option>
+                <option>Europe/London (GMT+1)</option>
+                <option>Europe/Berlin (GMT+2)</option>
+              </select>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-timefmt" data-i18n="pf.fTimeFmt"></label>
+              <select id="pf-timefmt" class="rd-control">
+                <option selected data-i18n="pf.fmt24"></option>
+                <option data-i18n="pf.fmt12"></option>
+              </select>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="pf-lang" data-i18n="pf.fLang"></label>
+              <select id="pf-lang" class="rd-control">
+                <option selected>Türkçe</option>
+                <option>English</option>
+              </select>
+              <div class="rd-help" data-i18n="pf.fLangHelp"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tab-panel" id="pf-panel-sig">
+      <div class="rd-surface">
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="pf-sig" data-i18n="pf.sigLabel"></label>
+            <textarea id="pf-sig" class="rd-control" style="min-height:160px">Ümit Yaşar Akın
+Kıdemli Bordro Danışmanı · RapidSol
+Tel: +90 212 555 0101 (Dahili 101)</textarea>
+            <div class="rd-help" data-i18n="pf.sigHelp"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button type="submit" class="rd-btn-primary" data-i18n="common.save"></button>
+      <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+    </div>
+  </form>
+
+  <dialog class="rd-dialog" id="dlg-pass">
+    <div class="rd-dialog-head">
+      <span data-i18n="pf.dlgPass"></span>
+      <button class="close" data-dialog-close aria-label="Kapat">✕</button>
+    </div>
+    <form>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="pw-cur" data-i18n="pf.fCurPass"></label>
+          <input id="pw-cur" type="password" class="rd-control" required>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="pw-new" data-i18n="pf.fNewPass"></label>
+          <input id="pw-new" type="password" class="rd-control" required>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="pw-new2" data-i18n="pf.fNewPass2"></label>
+          <input id="pw-new2" type="password" class="rd-control" required>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="submit" class="rd-btn-primary" data-i18n="common.save"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

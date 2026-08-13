@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Profil</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "pf.title": "Profil",
+    "pf.sub": "Profil bilgilerinizi yönetin",
+    "pf.secContact": "İletişim bilgileri",
+    "pf.email": "E-posta",
+    "pf.emailHelp": "E-posta adresi değiştirilemez; değişiklik için destek ekibiyle iletişime geçin.",
+    "pf.name": "Ad Soyad",
+    "pf.phone": "Telefon",
+    "pf.secPrefs": "Tercihler",
+    "pf.tz": "Saat dilimi",
+    "pf.lang": "Tercih edilen dil",
+    "pf.secAccess": "Erişim bilgileri",
+    "pf.current": "Mevcut parola",
+    "pf.new": "Yeni parola",
+    "pf.new2": "Yeni parola (tekrar)",
+    "pf.passHelp": "Parolanızı değiştirmek istemiyorsanız bu alanları boş bırakın.",
+  },
+  en: {
+    "pf.title": "Profile",
+    "pf.sub": "Manage your profile details",
+    "pf.secContact": "Contact information",
+    "pf.email": "Email",
+    "pf.emailHelp": "The email address cannot be changed; contact the support team to update it.",
+    "pf.name": "Full name",
+    "pf.phone": "Phone",
+    "pf.secPrefs": "Preferences",
+    "pf.tz": "Time zone",
+    "pf.lang": "Preferred language",
+    "pf.secAccess": "Access credentials",
+    "pf.current": "Current password",
+    "pf.new": "New password",
+    "pf.new2": "New password (repeat)",
+    "pf.passHelp": "Leave these fields empty if you do not want to change your password.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal" data-nav="home">
+<div id="rd-header"></div>
+
+<main class="rc-main">
+  <div class="rc-heading">
+    <div>
+      <h1 data-i18n="pf.title"></h1>
+      <p data-i18n="pf.sub"></p>
+    </div>
+  </div>
+
+  <form class="rc-form" style="max-width:720px">
+    <div class="rc-form-grid">
+      <div class="rc-form-step"><span class="rc-step-icon">1</span><span data-i18n="pf.secContact"></span></div>
+      <div>
+        <label class="rc-label" for="pf-email" data-i18n="pf.email"></label>
+        <input id="pf-email" class="rc-control" type="email" value="b.salehi@rapidsol.com.tr" readonly>
+        <div class="rd-help" data-i18n="pf.emailHelp"></div>
+      </div>
+      <div class="rd-grid-2">
+        <div>
+          <label class="rc-label" for="pf-name" data-i18n="pf.name"></label>
+          <input id="pf-name" class="rc-control" type="text" value="Bourla Salehi" autocomplete="name">
+        </div>
+        <div>
+          <label class="rc-label" for="pf-phone" data-i18n="pf.phone"></label>
+          <input id="pf-phone" class="rc-control" type="tel" value="+90 532 481 22 15" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="rc-form-step"><span class="rc-step-icon">2</span><span data-i18n="pf.secPrefs"></span></div>
+      <div class="rd-grid-2">
+        <div>
+          <label class="rc-label" for="pf-tz" data-i18n="pf.tz"></label>
+          <select id="pf-tz" class="rc-control">
+            <option selected>Europe/Istanbul (GMT+3)</option>
+            <option>Europe/Berlin (GMT+2)</option>
+            <option>Europe/London (GMT+1)</option>
+            <option>UTC</option>
+          </select>
+        </div>
+        <div>
+          <label class="rc-label" for="pf-lang" data-i18n="pf.lang"></label>
+          <select id="pf-lang" class="rc-control">
+            <option selected>Türkçe</option>
+            <option>English</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="rc-form-step"><span class="rc-step-icon">3</span><span data-i18n="pf.secAccess"></span></div>
+      <div>
+        <label class="rc-label" for="pf-current" data-i18n="pf.current"></label>
+        <input id="pf-current" class="rc-control" type="password" autocomplete="current-password">
+      </div>
+      <div class="rd-grid-2">
+        <div>
+          <label class="rc-label" for="pf-new" data-i18n="pf.new"></label>
+          <input id="pf-new" class="rc-control" type="password" autocomplete="new-password">
+        </div>
+        <div>
+          <label class="rc-label" for="pf-new2" data-i18n="pf.new2"></label>
+          <input id="pf-new2" class="rc-control" type="password" autocomplete="new-password">
+        </div>
+      </div>
+      <div class="rd-help" data-i18n="pf.passHelp"></div>
+    </div>
+
+    <div class="rc-form-footer">
+      <a class="rd-btn" href="index.html" data-i18n="common.cancel"></a>
+      <button class="rc-button-primary" data-i18n="common.save"></button>
+    </div>
+  </form>
+</main>
+</body>
+</html>

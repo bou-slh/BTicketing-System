@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Departmanlar</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "dp.title": "Departmanlar",
+    "dp.subtitle": "Taleplerin yönlendirildiği çalışma birimleri. Alt departmanlar üst departmanın altında girintili gösterilir.",
+    "dp.add": "＋ Yeni Departman",
+    "dp.searchPh": "Departman ara…",
+    "dp.colName": "Ad",
+    "dp.colType": "Tür",
+    "dp.colAgents": "Temsilci",
+    "dp.colEmail": "E-posta",
+    "dp.colManager": "Yönetici",
+    "dp.typePublic": "Herkese Açık",
+    "dp.typePrivate": "Özel",
+    "dp.emptyTitle": "Henüz departman yok",
+    "dp.emptyText": "Talepleri yönlendireceğiniz ilk departmanı oluşturun.",
+  },
+  en: {
+    "dp.title": "Departments",
+    "dp.subtitle": "The working units tickets are routed to. Sub-departments are shown indented under their parent.",
+    "dp.add": "＋ New Department",
+    "dp.searchPh": "Search departments…",
+    "dp.colName": "Name",
+    "dp.colType": "Type",
+    "dp.colAgents": "Agents",
+    "dp.colEmail": "Email",
+    "dp.colManager": "Manager",
+    "dp.typePublic": "Public",
+    "dp.typePrivate": "Private",
+    "dp.emptyTitle": "No departments yet",
+    "dp.emptyText": "Create the first department to route tickets to.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="departments">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="dp.title"></h1>
+      <p data-i18n="dp.subtitle"></p>
+    </div>
+    <div class="actions">
+      <a class="rd-btn-primary" href="department-edit.html" data-i18n="dp.add"></a>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="dp.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="common.enable"></button>
+    <button class="rd-btn" data-i18n="common.disable"></button>
+    <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+  </div>
+
+  <div class="rd-surface" id="tbl-departments">
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-departments" data-i18n-title="common.selectAll"></th>
+          <th class="sortable sorted-desc" data-i18n="dp.colName"></th>
+          <th class="sortable" data-i18n="common.status"></th>
+          <th class="sortable" data-i18n="dp.colType"></th>
+          <th class="num" data-i18n="dp.colAgents"></th>
+          <th data-i18n="dp.colEmail"></th>
+          <th class="sortable" data-i18n="dp.colManager"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="department-edit.html">Destek</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td data-i18n="dp.typePublic"></td>
+          <td class="num">2</td>
+          <td>destek@rapidsol.com.tr</td>
+          <td>Merve Çetin</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><span style="padding-left:22px;display:inline-block"><span class="rd-muted">└</span> <a href="department-edit.html">Bordro</a></span></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td data-i18n="dp.typePublic"></td>
+          <td class="num">1</td>
+          <td>bordro@rapidsol.com.tr</td>
+          <td>Ümit Akın</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="department-edit.html">Danışmanlık</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td data-i18n="dp.typePrivate"></td>
+          <td class="num">1</td>
+          <td>bilgi@rapidsol.com.tr</td>
+          <td class="rd-muted">—</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="common.showing"></span><span>1–3 / 3</span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="empty-departments">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">▥</div>
+        <h3 data-i18n="dp.emptyTitle"></h3>
+        <p data-i18n="dp.emptyText"></p>
+        <a class="rd-btn-primary" href="department-edit.html" data-i18n="dp.add"></a>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

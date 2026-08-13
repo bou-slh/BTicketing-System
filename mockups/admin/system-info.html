@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Sistem Bilgisi</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "si.title": "Sistem Bilgisi",
+    "si.subtitle": "Sunucu, veritabanı ve PHP ortamının salt okunur özeti. Sorun bildirirken bu sayfadaki bilgileri paylaşın.",
+    "si.secServer": "Sunucu Bilgisi",
+    "si.secPhp": "PHP Eklentileri",
+    "si.secDb": "Veritabanı",
+    "si.secLang": "Dil Paketleri",
+    "si.version": "RapidsolDestek Sürümü",
+    "si.webServer": "Web Sunucusu",
+    "si.mysqlVersion": "MySQL Sürümü",
+    "si.phpVersion": "PHP Sürümü",
+    "si.upToDate": "Güncel",
+    "si.ok": "✓ Yüklü",
+    "si.recommended": "⚠ Önerilir",
+    "si.phpHelp": "Yeşil işaretli eklentiler kurulu ve çalışıyor. Sarı işaretliler zorunlu değildir ancak performansı artırır.",
+    "si.extGd": "Ek dosyalarındaki ve avatarlardaki görselleri işler.",
+    "si.extIconv": "Farklı karakter kodlamaları arasında dönüştürme yapar.",
+    "si.extImap": "Posta kutularından e-posta ile talep almayı sağlar.",
+    "si.extCtype": "Metin türü denetimleri için kullanılır.",
+    "si.extXml": "XML ayrıştırma; API ve içe aktarma işlemleri için gerekir.",
+    "si.extJson": "JSON verilerini okur ve üretir; API için gerekir.",
+    "si.extMbstring": "Türkçe gibi çok baytlı karakterlerin doğru işlenmesini sağlar.",
+    "si.extPhar": "Eklenti (plugin) paketlerini çalıştırır.",
+    "si.extIntl": "Tarih, sayı ve para biçimlerini yerel ayara göre gösterir.",
+    "si.extFileinfo": "Yüklenen ek dosyalarının gerçek türünü algılar.",
+    "si.extZip": "Yedekleri ve dışa aktarmaları sıkıştırır.",
+    "si.extApcu": "Bellek içi önbellek; sayfaların daha hızlı açılmasını sağlar.",
+    "si.extOpcache": "PHP kodunu önbelleğe alarak yanıt süresini kısaltır.",
+    "si.dbSchema": "Şema",
+    "si.dbSize": "Veritabanı Boyutu",
+    "si.dbAttach": "Ek Dosya Alanı",
+    "si.dbTz": "Veritabanı Zaman Dilimi",
+    "si.colLanguage": "Dil",
+    "si.colCode": "Kod",
+    "si.colVersion": "Sürüm",
+    "si.colStatus": "Durum",
+    "si.langActive": "✓ Etkin",
+    "si.langHelp": "Portal ve panellerde kullanılabilen arayüz dilleri. Birincil dil, Sistem ayarlarından seçilir.",
+  },
+  en: {
+    "si.title": "System Information",
+    "si.subtitle": "Read-only summary of the server, database and PHP environment. Share this page when reporting an issue.",
+    "si.secServer": "Server Information",
+    "si.secPhp": "PHP Extensions",
+    "si.secDb": "Database",
+    "si.secLang": "Language Packs",
+    "si.version": "RapidsolDestek Version",
+    "si.webServer": "Web Server",
+    "si.mysqlVersion": "MySQL Version",
+    "si.phpVersion": "PHP Version",
+    "si.upToDate": "Up to date",
+    "si.ok": "✓ Installed",
+    "si.recommended": "⚠ Recommended",
+    "si.phpHelp": "Extensions marked green are installed and working. Yellow ones are optional but improve performance.",
+    "si.extGd": "Processes images in attachments and avatars.",
+    "si.extIconv": "Converts between different character encodings.",
+    "si.extImap": "Enables fetching tickets from email mailboxes.",
+    "si.extCtype": "Used for text-type validation.",
+    "si.extXml": "XML parsing; required for the API and imports.",
+    "si.extJson": "Reads and produces JSON data; required for the API.",
+    "si.extMbstring": "Handles multi-byte characters such as Turkish correctly.",
+    "si.extPhar": "Runs plugin packages.",
+    "si.extIntl": "Formats dates, numbers and currency per locale.",
+    "si.extFileinfo": "Detects the real type of uploaded attachments.",
+    "si.extZip": "Compresses backups and exports.",
+    "si.extApcu": "In-memory cache; makes pages load faster.",
+    "si.extOpcache": "Caches PHP code to shorten response times.",
+    "si.dbSchema": "Schema",
+    "si.dbSize": "Database Size",
+    "si.dbAttach": "Attachment Storage",
+    "si.dbTz": "Database Time Zone",
+    "si.colLanguage": "Language",
+    "si.colCode": "Code",
+    "si.colVersion": "Version",
+    "si.colStatus": "Status",
+    "si.langActive": "✓ Active",
+    "si.langHelp": "Interface languages available on the portal and panels. The primary language is chosen in System settings.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="system-info">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="si.title"></h1>
+      <p data-i18n="si.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+      <a href="#sec-server" class="active" data-i18n="si.secServer"></a>
+      <a href="#sec-php" data-i18n="si.secPhp"></a>
+      <a href="#sec-db" data-i18n="si.secDb"></a>
+      <a href="#sec-lang" data-i18n="si.secLang"></a>
+    </nav>
+
+    <div class="bo-settings-sections">
+
+      <section class="rd-surface bo-section" id="sec-server">
+        <div class="rd-surface-head"><span data-i18n="si.secServer"></span></div>
+        <div class="rd-surface-body">
+          <div class="bo-def">
+            <div class="row">
+              <span data-i18n="si.version"></span>
+              <span><b>v0.1-mockup</b> <span class="rd-pill rd-pill-teal" data-i18n="si.upToDate"></span></span>
+            </div>
+            <div class="row">
+              <span data-i18n="si.webServer"></span>
+              <span>nginx 1.25.4 <span class="rd-pill rd-pill-solved">✓</span></span>
+            </div>
+            <div class="row">
+              <span data-i18n="si.mysqlVersion"></span>
+              <span>8.0.36 <span class="rd-pill rd-pill-solved">✓</span></span>
+            </div>
+            <div class="row">
+              <span data-i18n="si.phpVersion"></span>
+              <span>8.2.19 <span class="rd-pill rd-pill-solved">✓</span></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-php">
+        <div class="rd-surface-head"><span data-i18n="si.secPhp"></span></div>
+        <div class="rd-surface-body">
+          <p class="rd-help" style="margin:0 0 16px" data-i18n="si.phpHelp"></p>
+          <div class="rd-grid-2">
+            <div class="rd-field mb-0">
+              <span class="rd-label">gd <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extGd"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">iconv <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extIconv"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">imap <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extImap"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">ctype <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extCtype"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">xml <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extXml"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">json <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extJson"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">mbstring <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extMbstring"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">phar <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extPhar"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">intl <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extIntl"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">fileinfo <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extFileinfo"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">zip <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extZip"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">APCu <span class="rd-pill rd-pill-wait" data-i18n="si.recommended"></span></span>
+              <div class="rd-help" data-i18n="si.extApcu"></div>
+            </div>
+            <div class="rd-field mb-0">
+              <span class="rd-label">OPcache <span class="rd-pill rd-pill-solved" data-i18n="si.ok"></span></span>
+              <div class="rd-help" data-i18n="si.extOpcache"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-db">
+        <div class="rd-surface-head"><span data-i18n="si.secDb"></span></div>
+        <div class="rd-surface-body">
+          <div class="bo-def">
+            <div class="row"><span data-i18n="si.dbSchema"></span><span>rapidsol_destek (utf8mb4)</span></div>
+            <div class="row"><span data-i18n="si.dbSize"></span><span>128 MiB</span></div>
+            <div class="row"><span data-i18n="si.dbAttach"></span><span>342 MiB</span></div>
+            <div class="row"><span data-i18n="si.dbTz"></span><span>Europe/Istanbul (+03:00)</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-lang">
+        <div class="rd-surface-head"><span data-i18n="si.secLang"></span></div>
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th data-i18n="si.colLanguage"></th>
+              <th data-i18n="si.colCode"></th>
+              <th data-i18n="si.colVersion"></th>
+              <th data-i18n="si.colStatus"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Türkçe</td>
+              <td>tr</td>
+              <td>1.0.0</td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="si.langActive"></span></td>
+            </tr>
+            <tr>
+              <td>English (United States)</td>
+              <td>en</td>
+              <td>1.0.0</td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="si.langActive"></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="rd-surface-body" style="padding-top:12px">
+          <div class="rd-help" data-i18n="si.langHelp"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+</body>
+</html>

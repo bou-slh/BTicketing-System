@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Taleplerim</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "tickets.title": "Taleplerim",
+    "tickets.sub": "Açık ve geçmiş destek taleplerinizin tamamı.",
+    "tickets.new": "＋ Yeni talep",
+    "tickets.searchPh": "Talep no veya konu ara…",
+    "tickets.allTopics": "— Tüm yardım konuları —",
+    "tickets.open": "Açık (4)",
+    "tickets.closed": "Kapalı (9)",
+    "tickets.openHead": "Açık talepler · 4",
+    "tickets.closedHead": "Kapalı talepler · 9",
+    "status.effortWait": "Efor onayınız bekleniyor",
+    "status.replyWait": "Yanıtınız bekleniyor",
+    "status.testing": "Test aşamasında",
+    "status.inProgress": "Çalışma sürüyor",
+    "topic.payroll": "Bordro",
+    "topic.leave": "İzin",
+    "topic.shift": "Vardiya",
+  },
+  en: {
+    "tickets.title": "My Requests",
+    "tickets.sub": "All of your open and past support requests.",
+    "tickets.new": "＋ New request",
+    "tickets.searchPh": "Search by request no or subject…",
+    "tickets.allTopics": "— All help topics —",
+    "tickets.open": "Open (4)",
+    "tickets.closed": "Closed (9)",
+    "tickets.openHead": "Open requests · 4",
+    "tickets.closedHead": "Closed requests · 9",
+    "status.effortWait": "Awaiting your effort approval",
+    "status.replyWait": "Awaiting your reply",
+    "status.testing": "In testing",
+    "status.inProgress": "Work in progress",
+    "topic.payroll": "Payroll",
+    "topic.leave": "Leave",
+    "topic.shift": "Shifts",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal" data-nav="tickets">
+<div id="rd-header"></div>
+
+<main class="rc-main">
+  <div class="rc-heading">
+    <div>
+      <h1 data-i18n="tickets.title"></h1>
+      <p data-i18n="tickets.sub"></p>
+    </div>
+    <a class="rc-button-primary" href="open.html" data-i18n="tickets.new"></a>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input class="rc-control" data-i18n-placeholder="tickets.searchPh">
+    <select class="rc-control">
+      <option data-i18n="tickets.allTopics"></option>
+      <option data-i18n="topic.payroll"></option>
+      <option data-i18n="topic.leave"></option>
+      <option data-i18n="topic.shift"></option>
+    </select>
+    <div class="rd-tabs" style="margin:0;border:0" data-tabs>
+      <button class="active" data-tab="panel-open" data-i18n="tickets.open"></button>
+      <button data-tab="panel-closed" data-i18n="tickets.closed"></button>
+    </div>
+  </div>
+
+  <div class="rd-tab-panel active" id="panel-open">
+    <div class="rc-surface">
+      <div class="rc-surface-head" data-i18n="tickets.openHead"></div>
+      <a class="rc-ticket-row" href="ticket-view.html">
+        <div class="rc-ticket-id">R716555</div>
+        <div>
+          <div class="rc-ticket-title">Yol ücreti hatası hakkında</div>
+          <div class="rc-ticket-meta">Ulaşım A.Ş. · 10:18</div>
+        </div>
+        <div class="rc-status rc-status-wait" data-i18n="status.effortWait"></div>
+        <div>Ümit Akın</div>
+      </a>
+      <a class="rc-ticket-row" href="ticket-view.html">
+        <div class="rc-ticket-id">R794094</div>
+        <div>
+          <div class="rc-ticket-title">Saatlik ücretsiz izin</div>
+          <div class="rc-ticket-meta">Tosyalı Holding · 16:42</div>
+        </div>
+        <div class="rc-status rc-status-wait" data-i18n="status.replyWait"></div>
+        <div>Ümit Akın</div>
+      </a>
+      <a class="rc-ticket-row" href="ticket-view.html">
+        <div class="rc-ticket-id">R110271</div>
+        <div>
+          <div class="rc-ticket-title">Vardiya ekleme talebi</div>
+          <div class="rc-ticket-meta">Konecta · 5 Ağustos 16:05</div>
+        </div>
+        <div class="rc-status rc-status-test" data-i18n="status.testing"></div>
+        <div>Merve Çetin</div>
+      </a>
+      <a class="rc-ticket-row" href="ticket-view.html">
+        <div class="rc-ticket-id">R109913</div>
+        <div>
+          <div class="rc-ticket-title">Fazla mesai raporu düzenlemesi</div>
+          <div class="rc-ticket-meta">RapidSol · 4 Ağustos 11:20</div>
+        </div>
+        <div class="rc-status rc-status-open" data-i18n="status.inProgress"></div>
+        <div>Deniz Kaya</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="rd-tab-panel" id="panel-closed">
+    <div class="rc-surface">
+      <div class="rc-surface-head" data-i18n="tickets.closedHead"></div>
+      <a class="rc-ticket-row" href="ticket-view.html">
+        <div class="rc-ticket-id">R108250</div>
+        <div>
+          <div class="rc-ticket-title">Kıdem tazminatı tavanı güncellemesi</div>
+          <div class="rc-ticket-meta">RapidSol · 28 Temmuz</div>
+        </div>
+        <div class="rc-status rc-status-solved" data-i18n="status.solved"></div>
+        <div>Ümit Akın</div>
+      </a>
+      <a class="rc-ticket-row" href="ticket-view.html">
+        <div class="rc-ticket-id">R107891</div>
+        <div>
+          <div class="rc-ticket-title">SGK bildirge formatı sorusu</div>
+          <div class="rc-ticket-meta">Ulaşım A.Ş. · 21 Temmuz</div>
+        </div>
+        <div class="rc-status rc-status-closed" data-i18n="status.closed"></div>
+        <div>Merve Çetin</div>
+      </a>
+      <a class="rc-ticket-row" href="ticket-view.html">
+        <div class="rc-ticket-id">R107533</div>
+        <div>
+          <div class="rc-ticket-title">Yıllık izin devri hesaplaması</div>
+          <div class="rc-ticket-meta">Tosyalı Holding · 15 Temmuz</div>
+        </div>
+        <div class="rc-status rc-status-solved" data-i18n="status.solved"></div>
+        <div>Deniz Kaya</div>
+      </a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

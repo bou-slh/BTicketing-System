@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Talep Filtreleri</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "fl.title": "Talep Filtreleri",
+    "fl.sub": "Gelen talepler oluşturulmadan önce bu kurallardan geçer; eşleşen filtre tanımlı eylemleri uygular.",
+    "fl.searchPh": "Filtre ara…",
+    "fl.new": "＋ Yeni Filtre",
+    "fl.colOrder": "Sıra",
+    "fl.colRules": "Kural Sayısı",
+    "fl.colTarget": "Hedef",
+    "fl.targetWeb": "Web",
+    "fl.targetEmail": "E-posta",
+    "fl.targetApi": "API",
+    "fl.showing": "4 filtreden 1–4 arası gösteriliyor",
+    "fl.bulkTitle": "Toplu işlemler",
+    "fl.bulkHelp": "Seçili filtrelere uygulanır.",
+    "fl.emptyTitle": "Henüz filtre yok",
+    "fl.emptyText": "Gelen talepleri otomatik yönlendirmek için ilk filtrenizi oluşturun.",
+  },
+  en: {
+    "fl.title": "Ticket Filters",
+    "fl.sub": "Incoming requests pass through these rules before being created; a matching filter applies its actions.",
+    "fl.searchPh": "Search filters…",
+    "fl.new": "＋ New Filter",
+    "fl.colOrder": "Order",
+    "fl.colRules": "Rule Count",
+    "fl.colTarget": "Target",
+    "fl.targetWeb": "Web",
+    "fl.targetEmail": "Email",
+    "fl.targetApi": "API",
+    "fl.showing": "Showing 1–4 of 4 filters",
+    "fl.bulkTitle": "Bulk actions",
+    "fl.bulkHelp": "Applied to the selected filters.",
+    "fl.emptyTitle": "No filters yet",
+    "fl.emptyText": "Create your first filter to route incoming requests automatically.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="filters">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="fl.title"></h1>
+      <p data-i18n="fl.sub"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="fl.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-dialog-open="dlg-more"><span data-i18n="common.more"></span> ▾</button>
+    <a class="rd-btn rd-btn-primary" href="filter-edit.html" data-i18n="fl.new"></a>
+  </div>
+
+  <div class="rd-surface">
+    <table class="rd-table" id="tbl-filters">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-filters" data-i18n-title="common.selectAll"></th>
+          <th class="sortable" data-i18n="common.name"></th>
+          <th data-i18n="common.status"></th>
+          <th class="num sortable sorted-desc" data-i18n="fl.colOrder"></th>
+          <th class="num" data-i18n="fl.colRules"></th>
+          <th data-i18n="fl.colTarget"></th>
+          <th class="sortable" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="filter-edit.html">VIP kullanıcı önceliklendirme</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td data-i18n="fl.targetEmail"></td>
+          <td>4 Ağu 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="filter-edit.html">Spam engelleme</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td class="num">2</td>
+          <td class="num">2</td>
+          <td data-i18n="fl.targetEmail"></td>
+          <td>15 Tem 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="filter-edit.html">Web formu yönlendirme</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td class="num">3</td>
+          <td class="num">1</td>
+          <td data-i18n="fl.targetWeb"></td>
+          <td>2 Haz 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="filter-edit.html">API talepleri etiketleme</a></td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="common.disabled"></span></td>
+          <td class="num">4</td>
+          <td class="num">2</td>
+          <td data-i18n="fl.targetApi"></td>
+          <td>21 Nis 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="fl.showing"></span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="fl-empty">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">⏚</div>
+        <h3 data-i18n="fl.emptyTitle"></h3>
+        <p data-i18n="fl.emptyText"></p>
+        <a class="rd-btn rd-btn-primary" href="filter-edit.html" data-i18n="fl.new"></a>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span data-i18n="fl.bulkTitle"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <p class="rd-help" style="margin-top:0" data-i18n="fl.bulkHelp"></p>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+        <button class="rd-btn" data-dialog-close data-i18n="common.enable"></button>
+        <button class="rd-btn" data-dialog-close data-i18n="common.disable"></button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-dialog-close data-i18n="common.delete"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

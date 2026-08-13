@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Talep Ayarları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "st.title": "Talep Ayarları",
+    "st.subtitle": "Talep numaralandırma, varsayılanlar, davranış kuralları, otomatik yanıtlar ve temsilci uyarıları.",
+    "st.secNumbering": "Numaralandırma",
+    "st.secDefaults": "Varsayılanlar",
+    "st.secBehavior": "Davranış",
+    "st.secEffort": "Efor Onayı",
+    "st.secAutoresp": "Otomatik Yanıtlar",
+    "st.efEnable": "Efor onayını etkinleştir",
+    "st.efEnableHelp": "Temsilciler talepler için efor önerisi gönderebilir; kullanıcı portaldan onaylar veya notla reddeder.",
+    "st.efBlockWork": "Onaysız çalışma başlatılamaz",
+    "st.efBlockWorkHelp": "Efor onaylanmadan talep 'çalışılıyor' durumuna alınamaz.",
+    "st.efRejectNote": "Redde not zorunlu",
+    "st.efRejectNoteHelp": "Kullanıcı bir öneriyi reddederken açıklama notu yazmak zorundadır.",
+    "st.efUnit": "Efor birimi",
+    "st.efUnitHours": "Saat",
+    "st.efUnitDays": "Gün",
+    "st.efUnitHelp": "Önerilerde kullanılacak birim.",
+    "st.efReminder": "Hatırlatma süresi (gün)",
+    "st.efReminderHelp": "Öneri bu kadar gün yanıtsız kalırsa kullanıcıya hatırlatma gönderilir.",
+    "st.efAutoApprove": "Otomatik onay eşiği (saat)",
+    "st.efAutoApproveHelp": "Bu değerin altındaki öneriler otomatik onaylanır; 0 = kapalı.",
+    "st.efRevLimit": "Revizyon limiti",
+    "st.efRevLimitHelp": "Bir talep için en fazla bu kadar kez yeni öneri gönderilebilir.",
+    "st.arEffort": "Efor önerisi → kullanıcıya bildirim",
+    "st.arEffortHelp": "Yeni bir efor önerisi gönderildiğinde kullanıcıya onay bağlantısı içeren e-posta iletilir.",
+    "st.secAlerts": "Uyarılar ve Bildirimler",
+    "st.secQueues": "Kuyruklar",
+
+    "st.numberFormat": "Numara biçimi",
+    "st.numberFormatHelp": "# işaretleri rastgele/ardışık rakamlarla değiştirilir. Örnek: R716555",
+    "st.sequence": "Sıra",
+    "st.sequenceHelp": "Rastgele numaralar tahmin edilemez; ardışık sıralar sayaçtan ilerler.",
+    "st.seqRandom": "Rastgele",
+    "st.seqSequential": "Ardışık",
+    "st.manage": "Yönet",
+    "st.dlgSeqTitle": "Numara sıraları",
+    "st.dlgSeqHelp": "Ardışık sıralar burada tanımlanır; her biçim ayrı bir sayaç kullanabilir.",
+    "st.seqName": "Ad",
+    "st.seqNext": "Sıradaki",
+    "st.addSequence": "Sıra ekle",
+
+    "st.defStatus": "Varsayılan durum",
+    "st.defStatusHelp": "Yeni talepler bu durumla açılır.",
+    "st.defPriority": "Varsayılan öncelik",
+    "st.defPriorityHelp": "Yardım konusu veya form bir öncelik belirtmezse kullanılır.",
+    "st.defSla": "Varsayılan SLA",
+    "st.defSlaHelp": "Departman veya yardım konusu bir SLA atamazsa geçerli plan.",
+    "st.defTopic": "Varsayılan yardım konusu",
+    "st.defTopicHelp": "E-posta ile açılan taleplerde konu seçilmemişse uygulanır.",
+    "st.defQueue": "Varsayılan kuyruk",
+    "st.defQueueHelp": "Temsilci panelinde talepler açılışta bu kuyrukla listelenir.",
+    "st.topCounts": "Üst düzey sayaçlar",
+    "st.topCountsHelp": "Yan menüde kuyruk başına talep sayısını gösterir; büyük kurulumlarda kapatmak performansı artırır.",
+
+    "st.lock": "Kilit semantiği",
+    "st.lockHelp": "Aynı talebe iki temsilcinin aynı anda yanıt yazmasını önler.",
+    "st.lockDisabled": "Devre dışı",
+    "st.lockOnView": "Görüntülerken kilitle",
+    "st.lockOnActivity": "Yanıt yazarken kilitle",
+    "st.maxOpen": "Kullanıcı başına açık talep limiti",
+    "st.maxOpenHelp": "0 = limitsiz. Limit aşılırsa yeni talep reddedilir ve bildirim gönderilebilir.",
+    "st.captcha": "CAPTCHA doğrulaması",
+    "st.captchaHelp": "Giriş yapmamış ziyaretçiler talep açarken robot denetiminden geçer.",
+    "st.claimOnResponse": "Yanıtta üstlen",
+    "st.claimOnResponseHelp": "Sahipsiz bir talebe yanıt veren temsilci talebi otomatik üstlenir.",
+    "st.autoReferOnClose": "Kapanışta otomatik yönlendir",
+    "st.autoReferOnCloseHelp": "Talebi kapatan temsilci, yeniden açılırsa haberdar olması için takipçi olarak eklenir.",
+    "st.requireTopicToClose": "Kapanış için yardım konusu zorunlu",
+    "st.requireTopicToCloseHelp": "Yardım konusu boş olan talepler kapatılamaz; raporlar tutarlı kalır.",
+    "st.externalImages": "Harici görsellere izin ver",
+    "st.externalImagesHelp": "E-postalardaki uzak sunucu görselleri yazışmalarda gösterilir. Gizlilik için kapalı tutulabilir.",
+    "st.collabVisibility": "Katılımcı talep görünürlüğü",
+    "st.collabVisibilityHelp": "Katılımcı olarak eklenen kişiler talebi kullanıcı portalından görüntüleyebilir.",
+    "st.attachNote": "Ek dosya kuralları (izin verilen türler, adet, boyut) Talep Detayları formundaki Ekler alanından yapılandırılır:",
+    "st.attachNoteLink": "Formları aç",
+
+    "st.arNewTicket": "Yeni talep → sahibine",
+    "st.arNewTicketHelp": "Talep açıldığında kullanıcıya onay e-postası gönderilir.",
+    "st.arAgentNew": "Temsilcinin açtığı talep → sahibine",
+    "st.arAgentNewHelp": "Bir temsilci kullanıcı adına talep açtığında kullanıcı bilgilendirilir.",
+    "st.arNewMessage": "Yeni mesaj → gönderene",
+    "st.arNewMessageHelp": "Kullanıcının her mesajı için 'alındı' onayı gönderilir.",
+    "st.arNewMessageCollab": "Yeni mesaj → katılımcılara",
+    "st.arNewMessageCollabHelp": "Yeni mesajların kopyası talep katılımcılarına iletilir.",
+    "st.arOverlimit": "Limit aşımı bildirimi",
+    "st.arOverlimitHelp": "Açık talep limitini aşan kullanıcıya açıklayıcı bir e-posta gönderilir.",
+
+    "st.alNewTicket": "Yeni Talep Uyarısı",
+    "st.alNewTicketHelp": "Sisteme yeni bir talep düştüğünde gönderilir.",
+    "st.alNewMessage": "Yeni Mesaj Uyarısı",
+    "st.alNewMessageHelp": "Kullanıcı mevcut bir talebe yanıt yazdığında gönderilir.",
+    "st.alNewActivity": "Yeni İç Aktivite Uyarısı",
+    "st.alNewActivityHelp": "İç not veya temsilci aktivitesi eklendiğinde gönderilir.",
+    "st.alAssignment": "Atama Uyarısı",
+    "st.alAssignmentHelp": "Talep bir temsilciye veya ekibe atandığında gönderilir.",
+    "st.alTransfer": "Aktarım Uyarısı",
+    "st.alTransferHelp": "Talep başka bir departmana aktarıldığında gönderilir.",
+    "st.alEffort": "Efor Yanıtı Uyarısı",
+    "st.alEffortHelp": "Kullanıcı efor önerisini onayladığında veya reddettiğinde gönderilir.",
+    "st.alOverdue": "Gecikme Uyarısı",
+    "st.alOverdueHelp": "Talep SLA süresini aşıp gecikmiş duruma düştüğünde gönderilir.",
+    "st.alSystemErrors": "Sistem Hataları",
+    "st.alSystemErrorsHelp": "Kritik sistem sorunları yöneticiye e-postayla bildirilir.",
+    "st.rcpAdmin": "Yönetici",
+    "st.rcpDeptManager": "Departman Yöneticisi",
+    "st.rcpDeptMembers": "Departman Üyeleri",
+    "st.rcpAccountManager": "Hesap Yöneticisi",
+    "st.rcpLastRespondent": "Son yanıtlayan",
+    "st.rcpAssigned": "Atanan temsilci / ekip",
+    "st.rcpTeamLead": "Ekip lideri",
+    "st.rcpTeamMembers": "Ekip üyeleri",
+    "st.rcpSystemErrors": "Sistem hataları (her zaman açık)",
+    "st.rcpSqlErrors": "SQL hataları",
+    "st.rcpLoginErrors": "Giriş hataları",
+
+    "st.colQueue": "Kuyruk",
+    "st.colType": "Tür",
+    "st.typeSystem": "Sistem",
+    "st.typeCustom": "Özel",
+    "st.queueBuilder": "Kuyruk Oluşturucu →",
+    "st.queuesHelp": "Kuyruklar, temsilci panelindeki talep listelerini tanımlar. Kriter, sütun ve sıralama düzenlemek için oluşturucuyu kullanın.",
+  },
+  en: {
+    "st.title": "Ticket Settings",
+    "st.subtitle": "Ticket numbering, defaults, behavior rules, autoresponses and agent alerts.",
+    "st.secNumbering": "Numbering",
+    "st.secDefaults": "Defaults",
+    "st.secBehavior": "Behavior",
+    "st.secEffort": "Effort Approval",
+    "st.secAutoresp": "Autoresponses",
+    "st.efEnable": "Enable effort approval",
+    "st.efEnableHelp": "Agents can send effort proposals on tickets; the user approves or rejects with a note from the portal.",
+    "st.efBlockWork": "Work cannot start without approval",
+    "st.efBlockWorkHelp": "A ticket cannot be moved to 'in progress' until the effort is approved.",
+    "st.efRejectNote": "Note required on rejection",
+    "st.efRejectNoteHelp": "Users must write an explanatory note when rejecting a proposal.",
+    "st.efUnit": "Effort unit",
+    "st.efUnitHours": "Hours",
+    "st.efUnitDays": "Days",
+    "st.efUnitHelp": "Unit used in proposals.",
+    "st.efReminder": "Reminder period (days)",
+    "st.efReminderHelp": "If a proposal stays unanswered this many days, the user gets a reminder.",
+    "st.efAutoApprove": "Auto-approve threshold (hours)",
+    "st.efAutoApproveHelp": "Proposals under this value are approved automatically; 0 = off.",
+    "st.efRevLimit": "Revision limit",
+    "st.efRevLimitHelp": "At most this many proposals can be sent for one ticket.",
+    "st.arEffort": "Effort proposal → user notification",
+    "st.arEffortHelp": "When a new effort proposal is sent, the user receives an email with an approval link.",
+    "st.secAlerts": "Alerts and Notices",
+    "st.secQueues": "Queues",
+
+    "st.numberFormat": "Number format",
+    "st.numberFormatHelp": "# marks are replaced with random/sequential digits. Example: R716555",
+    "st.sequence": "Sequence",
+    "st.sequenceHelp": "Random numbers are unguessable; sequential ones advance from a counter.",
+    "st.seqRandom": "Random",
+    "st.seqSequential": "Sequential",
+    "st.manage": "Manage",
+    "st.dlgSeqTitle": "Number sequences",
+    "st.dlgSeqHelp": "Sequential counters are defined here; each format can use its own counter.",
+    "st.seqName": "Name",
+    "st.seqNext": "Next",
+    "st.addSequence": "Add sequence",
+
+    "st.defStatus": "Default status",
+    "st.defStatusHelp": "New tickets open in this status.",
+    "st.defPriority": "Default priority",
+    "st.defPriorityHelp": "Used when no help topic or form sets a priority.",
+    "st.defSla": "Default SLA",
+    "st.defSlaHelp": "The plan applied when no department or help topic assigns an SLA.",
+    "st.defTopic": "Default help topic",
+    "st.defTopicHelp": "Applied to email-created tickets when no topic was chosen.",
+    "st.defQueue": "Default queue",
+    "st.defQueueHelp": "The agent panel opens ticket lists with this queue.",
+    "st.topCounts": "Top-level counts",
+    "st.topCountsHelp": "Shows per-queue ticket counts in the side menu; turning it off improves performance on large installs.",
+
+    "st.lock": "Lock semantics",
+    "st.lockHelp": "Prevents two agents replying to the same ticket at once.",
+    "st.lockDisabled": "Disabled",
+    "st.lockOnView": "Lock on view",
+    "st.lockOnActivity": "Lock while composing",
+    "st.maxOpen": "Open tickets per user",
+    "st.maxOpenHelp": "0 = unlimited. Over the limit, new tickets are rejected and a notice can be sent.",
+    "st.captcha": "CAPTCHA verification",
+    "st.captchaHelp": "Visitors who are not signed in pass a robot check when opening a ticket.",
+    "st.claimOnResponse": "Claim on response",
+    "st.claimOnResponseHelp": "An agent replying to an unassigned ticket automatically claims it.",
+    "st.autoReferOnClose": "Auto-refer on close",
+    "st.autoReferOnCloseHelp": "The closing agent is added as a referrer so they hear about reopenings.",
+    "st.requireTopicToClose": "Require help topic to close",
+    "st.requireTopicToCloseHelp": "Tickets without a help topic cannot be closed; reports stay consistent.",
+    "st.externalImages": "Allow external images",
+    "st.externalImagesHelp": "Remote images in emails are displayed in threads. Keep off for privacy.",
+    "st.collabVisibility": "Participant ticket visibility",
+    "st.collabVisibilityHelp": "People added as participants can view the ticket on the user portal.",
+    "st.attachNote": "Attachment rules (allowed types, count, size) are configured on the Attachments field of the Ticket Details form:",
+    "st.attachNoteLink": "Open Forms",
+
+    "st.arNewTicket": "New ticket → owner",
+    "st.arNewTicketHelp": "A confirmation email is sent to the user when a ticket is opened.",
+    "st.arAgentNew": "Agent-opened ticket → owner",
+    "st.arAgentNewHelp": "The user is notified when an agent opens a ticket on their behalf.",
+    "st.arNewMessage": "New message → submitter",
+    "st.arNewMessageHelp": "A 'received' confirmation is sent for every user message.",
+    "st.arNewMessageCollab": "New message → participants",
+    "st.arNewMessageCollabHelp": "Copies of new messages are forwarded to ticket participants.",
+    "st.arOverlimit": "Overlimit notice",
+    "st.arOverlimitHelp": "Users exceeding the open-ticket limit receive an explanatory email.",
+
+    "st.alNewTicket": "New Ticket Alert",
+    "st.alNewTicketHelp": "Sent when a new ticket arrives in the system.",
+    "st.alNewMessage": "New Message Alert",
+    "st.alNewMessageHelp": "Sent when a user replies to an existing ticket.",
+    "st.alNewActivity": "New Internal Activity Alert",
+    "st.alNewActivityHelp": "Sent when an internal note or agent activity is added.",
+    "st.alAssignment": "Assignment Alert",
+    "st.alAssignmentHelp": "Sent when a ticket is assigned to an agent or team.",
+    "st.alTransfer": "Transfer Alert",
+    "st.alTransferHelp": "Sent when a ticket is transferred to another department.",
+    "st.alEffort": "Effort Response Alert",
+    "st.alEffortHelp": "Sent when the user approves or rejects an effort proposal.",
+    "st.alOverdue": "Overdue Alert",
+    "st.alOverdueHelp": "Sent when a ticket passes its SLA and becomes overdue.",
+    "st.alSystemErrors": "System Errors",
+    "st.alSystemErrorsHelp": "Critical system problems are emailed to the administrator.",
+    "st.rcpAdmin": "Admin",
+    "st.rcpDeptManager": "Department Manager",
+    "st.rcpDeptMembers": "Department Members",
+    "st.rcpAccountManager": "Account Manager",
+    "st.rcpLastRespondent": "Last respondent",
+    "st.rcpAssigned": "Assigned agent / team",
+    "st.rcpTeamLead": "Team lead",
+    "st.rcpTeamMembers": "Team members",
+    "st.rcpSystemErrors": "System errors (always on)",
+    "st.rcpSqlErrors": "SQL errors",
+    "st.rcpLoginErrors": "Login errors",
+
+    "st.colQueue": "Queue",
+    "st.colType": "Type",
+    "st.typeSystem": "System",
+    "st.typeCustom": "Custom",
+    "st.queueBuilder": "Queue Builder →",
+    "st.queuesHelp": "Queues define the ticket lists in the agent panel. Use the builder to edit criteria, columns and sorting.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="settings-tickets">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="st.title"></h1>
+      <p data-i18n="st.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+      <a href="#sec-numbering" class="active" data-i18n="st.secNumbering"></a>
+      <a href="#sec-defaults" data-i18n="st.secDefaults"></a>
+      <a href="#sec-behavior" data-i18n="st.secBehavior"></a>
+      <a href="#sec-effort" data-i18n="st.secEffort"></a>
+      <a href="#sec-autoresp" data-i18n="st.secAutoresp"></a>
+      <a href="#sec-alerts" data-i18n="st.secAlerts"></a>
+      <a href="#sec-queues" data-i18n="st.secQueues"></a>
+    </nav>
+
+    <form class="bo-settings-sections">
+
+      <section class="rd-surface bo-section" id="sec-numbering">
+        <div class="rd-surface-head"><span data-i18n="st.secNumbering"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="tk-format" data-i18n="st.numberFormat"></label>
+            <input id="tk-format" class="rd-control" value="R######" style="max-width:220px">
+            <div class="rd-help" data-i18n="st.numberFormatHelp"></div>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-label" for="tk-seq" data-i18n="st.sequence"></label>
+            <div class="bo-rule-row" style="margin-bottom:0">
+              <select id="tk-seq" class="rd-control" style="max-width:220px">
+                <option selected data-i18n="st.seqRandom"></option>
+                <option data-i18n="st.seqSequential"></option>
+              </select>
+              <button type="button" class="rd-btn" data-dialog-open="dlg-seq" data-i18n="st.manage"></button>
+            </div>
+            <div class="rd-help" data-i18n="st.sequenceHelp"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-defaults">
+        <div class="rd-surface-head"><span data-i18n="st.secDefaults"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="tk-status" data-i18n="st.defStatus"></label>
+              <select id="tk-status" class="rd-control">
+                <option selected data-i18n="status.open"></option>
+                <option data-i18n="status.wait"></option>
+              </select>
+              <div class="rd-help" data-i18n="st.defStatusHelp"></div>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="tk-priority" data-i18n="st.defPriority"></label>
+              <select id="tk-priority" class="rd-control">
+                <option data-i18n="priority.low"></option>
+                <option selected data-i18n="priority.normal"></option>
+                <option data-i18n="priority.high"></option>
+                <option data-i18n="priority.emergency"></option>
+              </select>
+              <div class="rd-help" data-i18n="st.defPriorityHelp"></div>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="tk-sla" data-i18n="st.defSla"></label>
+              <select id="tk-sla" class="rd-control">
+                <option selected>Standart — 4 saat</option>
+                <option>VIP — 1 saat</option>
+                <option>Bordro Dönemi — 2 saat</option>
+              </select>
+              <div class="rd-help" data-i18n="st.defSlaHelp"></div>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="tk-topic" data-i18n="st.defTopic"></label>
+              <select id="tk-topic" class="rd-control">
+                <option selected>Genel Soru</option>
+                <option>Bordro</option>
+                <option>İzin / Puantaj</option>
+              </select>
+              <div class="rd-help" data-i18n="st.defTopicHelp"></div>
+            </div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="tk-queue" data-i18n="st.defQueue"></label>
+            <select id="tk-queue" class="rd-control" style="max-width:340px">
+              <option selected>Açık</option>
+              <option>Taleplerim</option>
+              <option>SLA Riskli VIP</option>
+            </select>
+            <div class="rd-help" data-i18n="st.defQueueHelp"></div>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.topCounts"></b>
+                <small data-i18n="st.topCountsHelp"></small>
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-behavior">
+        <div class="rd-surface-head"><span data-i18n="st.secBehavior"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="tk-lock" data-i18n="st.lock"></label>
+            <select id="tk-lock" class="rd-control" style="max-width:340px">
+              <option data-i18n="st.lockDisabled"></option>
+              <option data-i18n="st.lockOnView"></option>
+              <option selected data-i18n="st.lockOnActivity"></option>
+            </select>
+            <div class="rd-help" data-i18n="st.lockHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="tk-maxopen" data-i18n="st.maxOpen"></label>
+            <input id="tk-maxopen" class="rd-control" type="number" min="0" value="0" style="max-width:220px">
+            <div class="rd-help" data-i18n="st.maxOpenHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.captcha"></b>
+                <small data-i18n="st.captchaHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.claimOnResponse"></b>
+                <small data-i18n="st.claimOnResponseHelp"></small>
+              </span>
+            </label>
+          </div>
+
+          <details class="rd-advanced">
+            <summary data-i18n="common.advanced"></summary>
+            <div class="rd-advanced-body">
+              <div class="rd-field">
+                <label class="rd-switch">
+                  <input type="checkbox">
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="st.autoReferOnClose"></b>
+                    <small data-i18n="st.autoReferOnCloseHelp"></small>
+                  </span>
+                </label>
+              </div>
+              <div class="rd-field">
+                <label class="rd-switch">
+                  <input type="checkbox" checked>
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="st.requireTopicToClose"></b>
+                    <small data-i18n="st.requireTopicToCloseHelp"></small>
+                  </span>
+                </label>
+              </div>
+              <div class="rd-field">
+                <label class="rd-switch">
+                  <input type="checkbox">
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="st.externalImages"></b>
+                    <small data-i18n="st.externalImagesHelp"></small>
+                  </span>
+                </label>
+              </div>
+              <div class="rd-field">
+                <label class="rd-switch">
+                  <input type="checkbox" checked>
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="st.collabVisibility"></b>
+                    <small data-i18n="st.collabVisibilityHelp"></small>
+                  </span>
+                </label>
+              </div>
+              <div class="rd-banner rd-banner-info" style="margin-bottom:0">
+                <span aria-hidden="true">📎</span>
+                <span>
+                  <span data-i18n="st.attachNote"></span>
+                  <a href="forms.html" data-i18n="st.attachNoteLink"></a>
+                </span>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-effort">
+        <div class="rd-surface-head"><span data-i18n="st.secEffort"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.efEnable"></b>
+                <small data-i18n="st.efEnableHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.efBlockWork"></b>
+                <small data-i18n="st.efBlockWorkHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.efRejectNote"></b>
+                <small data-i18n="st.efRejectNoteHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="ef-unit" data-i18n="st.efUnit"></label>
+            <select id="ef-unit" class="rd-control" style="max-width:220px">
+              <option data-i18n="st.efUnitHours"></option>
+              <option data-i18n="st.efUnitDays"></option>
+            </select>
+            <div class="rd-help" data-i18n="st.efUnitHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="ef-reminder" data-i18n="st.efReminder"></label>
+            <input id="ef-reminder" type="number" class="rd-control" value="2" min="0" style="max-width:120px">
+            <div class="rd-help" data-i18n="st.efReminderHelp"></div>
+          </div>
+          <details class="rd-advanced">
+            <summary data-i18n="common.advanced"></summary>
+            <div class="rd-advanced-body">
+              <div class="rd-field">
+                <label class="rd-label" for="ef-autoapprove" data-i18n="st.efAutoApprove"></label>
+                <input id="ef-autoapprove" type="number" class="rd-control" value="0" min="0" style="max-width:120px">
+                <div class="rd-help" data-i18n="st.efAutoApproveHelp"></div>
+              </div>
+              <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label" for="ef-revlimit" data-i18n="st.efRevLimit"></label>
+                <input id="ef-revlimit" type="number" class="rd-control" value="3" min="1" style="max-width:120px">
+                <div class="rd-help" data-i18n="st.efRevLimitHelp"></div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-autoresp">
+        <div class="rd-surface-head"><span data-i18n="st.secAutoresp"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.arNewTicket"></b>
+                <small data-i18n="st.arNewTicketHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.arAgentNew"></b>
+                <small data-i18n="st.arAgentNewHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.arNewMessage"></b>
+                <small data-i18n="st.arNewMessageHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.arNewMessageCollab"></b>
+                <small data-i18n="st.arNewMessageCollabHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.arOverlimit"></b>
+                <small data-i18n="st.arOverlimitHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="st.arEffort"></b>
+                <small data-i18n="st.arEffortHelp"></small>
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-alerts">
+        <div class="rd-surface-head"><span data-i18n="st.secAlerts"></span></div>
+        <div class="rd-surface-body">
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="st.alNewTicket"></b>
+                <small data-i18n="st.alNewTicketHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpAdmin"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpDeptManager"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="st.rcpDeptMembers"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpAccountManager"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="st.alNewMessage"></b>
+                <small data-i18n="st.alNewMessageHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpLastRespondent"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="st.rcpDeptManager"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="st.rcpAccountManager"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="st.alNewActivity"></b>
+                <small data-i18n="st.alNewActivityHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox"><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpLastRespondent"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="st.rcpDeptManager"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="st.alAssignment"></b>
+                <small data-i18n="st.alAssignmentHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpTeamLead"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="st.rcpTeamMembers"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="st.alTransfer"></b>
+                <small data-i18n="st.alTransferHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpDeptManager"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="st.rcpDeptMembers"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="st.alOverdue"></b>
+                <small data-i18n="st.alOverdueHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpDeptManager"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="st.rcpDeptMembers"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="st.alEffort"></b>
+                <small data-i18n="st.alEffortHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="st.rcpDeptManager"></span></label>
+            </div>
+          </div>
+          <div class="bo-toggle-card" style="margin-bottom:0">
+            <div class="head">
+              <div>
+                <b data-i18n="st.alSystemErrors"></b>
+                <small data-i18n="st.alSystemErrorsHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked disabled><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked disabled><span data-i18n="st.rcpSystemErrors"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpSqlErrors"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="st.rcpLoginErrors"></span></label>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-queues">
+        <div class="rd-surface-head">
+          <span data-i18n="st.secQueues"></span>
+          <span class="spacer"></span>
+          <a class="rd-btn rd-btn-ghost rd-btn-sm" href="queues.html" data-i18n="st.queueBuilder"></a>
+        </div>
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th data-i18n="st.colQueue"></th>
+              <th data-i18n="st.colType"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Açık</td>
+              <td><span class="rd-pill rd-pill-closed" data-i18n="st.typeSystem"></span></td>
+            </tr>
+            <tr>
+              <td>Taleplerim</td>
+              <td><span class="rd-pill rd-pill-closed" data-i18n="st.typeSystem"></span></td>
+            </tr>
+            <tr>
+              <td>Kapalı</td>
+              <td><span class="rd-pill rd-pill-closed" data-i18n="st.typeSystem"></span></td>
+            </tr>
+            <tr>
+              <td>SLA Riskli VIP</td>
+              <td><span class="rd-pill rd-pill-teal" data-i18n="st.typeCustom"></span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="rd-surface-body" style="padding-top:12px">
+          <div class="rd-help" data-i18n="st.queuesHelp"></div>
+        </div>
+      </section>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<dialog class="rd-dialog" id="dlg-seq">
+  <div class="rd-dialog-head">
+    <span data-i18n="st.dlgSeqTitle"></span>
+    <button class="close" data-dialog-close aria-label="Close">✕</button>
+  </div>
+  <div class="rd-dialog-body">
+    <p class="rd-help" style="margin:0 0 12px" data-i18n="st.dlgSeqHelp"></p>
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th data-i18n="st.seqName"></th>
+          <th class="num" data-i18n="st.seqNext"></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Genel</td>
+          <td class="num">716556</td>
+          <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+        </tr>
+        <tr>
+          <td>Görevler</td>
+          <td class="num">4022</td>
+          <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="button" class="rd-btn rd-btn-sm" style="margin-top:12px" data-i18n="st.addSequence"></button>
+  </div>
+  <div class="rd-dialog-foot">
+    <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+    <button class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+  </div>
+</dialog>
+</body>
+</html>

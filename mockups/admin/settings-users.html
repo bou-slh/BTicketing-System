@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Kullanıcı Ayarları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "su.title": "Kullanıcı Ayarları",
+    "su.subtitle": "Kullanıcıların görünümü, kayıt ve giriş kuralları ile kullanıcılara gönderilen şablon içerikleri.",
+    "su.secGeneral": "Genel",
+    "su.secAuth": "Kayıt ve Giriş",
+    "su.secTemplates": "Şablonlar",
+
+    "su.nameFormat": "Ad biçimi",
+    "su.nameFormatHelp": "Kullanıcı adlarının panellerde ve e-postalarda nasıl görüneceği.",
+    "su.nfFull": "Ad Soyad",
+    "su.nfLastFirst": "Soyad, Ad",
+    "su.nfShort": "Ad S.",
+    "su.avatarSource": "Avatar kaynağı",
+    "su.avatarSourceHelp": "Yazışmalarda kullanıcı avatarlarının nereden üretileceği.",
+    "su.avInitials": "Baş harfler (yerel)",
+    "su.avGravatar": "Gravatar",
+
+    "su.regRequired": "Kayıt zorunlu",
+    "su.regRequiredHelp": "Talep açmak için hesap gerekir. Kapalıysa misafirler yalnızca e-posta adresiyle talep açabilir.",
+    "su.regMode": "Kayıt modu",
+    "su.regModeHelp": "Portalda kimlerin kendi kendine hesap oluşturabileceği.",
+    "su.regClosed": "Kapalı — hesaplar yalnızca temsilciler tarafından açılır",
+    "su.regPublic": "Herkese Açık — dileyen kayıt olabilir",
+    "su.regPrivate": "Özel — yalnızca davet edilenler kayıt olabilir",
+    "su.pwPolicy": "Parola politikası",
+    "su.pwPolicyHelp": "Kullanıcı parolalarının karşılaması gereken asgari kurallar.",
+    "su.pwNone": "Yok",
+    "su.pwBasic": "Temel — en az 8 karakter",
+    "su.pwStrong": "Güçlü — harf, rakam ve simge",
+    "su.maxAttempts": "En fazla giriş denemesi",
+    "su.maxAttemptsHelp": "Bu sayıda hatalı denemeden sonra hesap geçici olarak kilitlenir.",
+    "su.lockDuration": "Kilit süresi",
+    "su.lockDurationHelp": "Kilitlenen hesabın yeniden denemeden önce bekleyeceği süre.",
+    "su.sessionTimeout": "Oturum zaman aşımı (dakika)",
+    "su.sessionTimeoutHelp": "Bu süre boyunca işlem yapılmayan oturum kapatılır. 0 = sınırsız.",
+    "su.authTokens": "Otomatik giriş bağlantıları",
+    "su.authTokensHelp": "E-postalardaki bağlantılar, parolasız tek tıkla talebe erişim sağlar.",
+    "su.emailVerify": "E-posta doğrulama",
+    "su.emailVerifyHelp": "Yeni hesaplar, e-posta adresi doğrulanana kadar askıda kalır.",
+    "su.min15": "15 dakika",
+    "su.min30": "30 dakika",
+    "su.hour1": "1 saat",
+
+    "su.tplHelp": "Kullanıcılara gönderilen sistem içeriklerini iki dilde düzenleyin.",
+    "su.tplGuest": "Misafir Erişim Bağlantısı",
+    "su.tplGuestHelp": "Kayıtsız kullanıcıya talebine erişim bağlantısı gönderen e-posta.",
+    "su.tplLogin": "Giriş Sayfası",
+    "su.tplLoginHelp": "Kullanıcı giriş sayfasında gösterilen karşılama metni.",
+    "su.tplPwreset": "Parola Sıfırlama",
+    "su.tplPwresetHelp": "Parola sıfırlama bağlantısını içeren e-posta.",
+    "su.tplVerifyPage": "E-posta Doğrulama Sayfası",
+    "su.tplVerifyPageHelp": "Doğrulama bağlantısına tıklanınca gösterilen sayfa içeriği.",
+    "su.tplConfirmEmail": "Hesap Onay E-postası",
+    "su.tplConfirmEmailHelp": "Kayıt sonrası hesabı doğrulamak için gönderilen e-posta.",
+    "su.tplConfirmedPage": "Hesap Onaylandı Sayfası",
+    "su.tplConfirmedPageHelp": "Hesap doğrulandıktan sonra gösterilen sayfa içeriği.",
+    "su.dlgTitle": "Şablonu düzenle",
+    "su.dlgName": "Ad",
+    "su.dlgContent": "İçerik",
+    "su.dlgContentHelp": "%{user.name}, %{link} gibi değişkenler gönderim sırasında doldurulur.",
+  },
+  en: {
+    "su.title": "User Settings",
+    "su.subtitle": "How users appear, registration and sign-in rules, and the template content sent to users.",
+    "su.secGeneral": "General",
+    "su.secAuth": "Registration and Sign-in",
+    "su.secTemplates": "Templates",
+
+    "su.nameFormat": "Name format",
+    "su.nameFormatHelp": "How user names appear in panels and emails.",
+    "su.nfFull": "First Last",
+    "su.nfLastFirst": "Last, First",
+    "su.nfShort": "First L.",
+    "su.avatarSource": "Avatar source",
+    "su.avatarSourceHelp": "Where user avatars on threads are generated from.",
+    "su.avInitials": "Initials (local)",
+    "su.avGravatar": "Gravatar",
+
+    "su.regRequired": "Registration required",
+    "su.regRequiredHelp": "An account is required to open a ticket. When off, guests can open tickets with just an email address.",
+    "su.regMode": "Registration mode",
+    "su.regModeHelp": "Who may self-register on the portal.",
+    "su.regClosed": "Closed — accounts are created by agents only",
+    "su.regPublic": "Public — anyone can register",
+    "su.regPrivate": "Private — invited users only",
+    "su.pwPolicy": "Password policy",
+    "su.pwPolicyHelp": "Minimum rules user passwords must satisfy.",
+    "su.pwNone": "None",
+    "su.pwBasic": "Basic — at least 8 characters",
+    "su.pwStrong": "Strong — letters, digits and symbols",
+    "su.maxAttempts": "Maximum login attempts",
+    "su.maxAttemptsHelp": "After this many failed attempts the account is locked temporarily.",
+    "su.lockDuration": "Lockout duration",
+    "su.lockDurationHelp": "How long a locked account waits before retrying.",
+    "su.sessionTimeout": "Session timeout (minutes)",
+    "su.sessionTimeoutHelp": "Idle sessions are signed out after this long. 0 = unlimited.",
+    "su.authTokens": "Auto-login links",
+    "su.authTokensHelp": "Links in emails give one-click, passwordless access to the ticket.",
+    "su.emailVerify": "Email verification",
+    "su.emailVerifyHelp": "New accounts stay pending until the email address is verified.",
+    "su.min15": "15 minutes",
+    "su.min30": "30 minutes",
+    "su.hour1": "1 hour",
+
+    "su.tplHelp": "Edit the system content sent to users, in both languages.",
+    "su.tplGuest": "Guest Access Link",
+    "su.tplGuestHelp": "Email sending an unregistered user a link to their ticket.",
+    "su.tplLogin": "Sign-in Page",
+    "su.tplLoginHelp": "The welcome text shown on the user sign-in page.",
+    "su.tplPwreset": "Password Reset",
+    "su.tplPwresetHelp": "The email containing the password reset link.",
+    "su.tplVerifyPage": "Email Verification Page",
+    "su.tplVerifyPageHelp": "The page shown after clicking the verification link.",
+    "su.tplConfirmEmail": "Account Confirmation Email",
+    "su.tplConfirmEmailHelp": "The email sent after registration to confirm the account.",
+    "su.tplConfirmedPage": "Account Confirmed Page",
+    "su.tplConfirmedPageHelp": "The page shown once the account is confirmed.",
+    "su.dlgTitle": "Edit template",
+    "su.dlgName": "Name",
+    "su.dlgContent": "Content",
+    "su.dlgContentHelp": "Variables such as %{user.name} and %{link} are filled in at send time.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="settings-users">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="su.title"></h1>
+      <p data-i18n="su.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+      <a href="#sec-general" class="active" data-i18n="su.secGeneral"></a>
+      <a href="#sec-auth" data-i18n="su.secAuth"></a>
+      <a href="#sec-templates" data-i18n="su.secTemplates"></a>
+    </nav>
+
+    <form class="bo-settings-sections">
+
+      <section class="rd-surface bo-section" id="sec-general">
+        <div class="rd-surface-head"><span data-i18n="su.secGeneral"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="us-nameformat" data-i18n="su.nameFormat"></label>
+            <select id="us-nameformat" class="rd-control" style="max-width:340px">
+              <option selected data-i18n="su.nfFull"></option>
+              <option data-i18n="su.nfLastFirst"></option>
+              <option data-i18n="su.nfShort"></option>
+            </select>
+            <div class="rd-help" data-i18n="su.nameFormatHelp"></div>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-label" for="us-avatar" data-i18n="su.avatarSource"></label>
+            <select id="us-avatar" class="rd-control" style="max-width:340px">
+              <option selected data-i18n="su.avInitials"></option>
+              <option data-i18n="su.avGravatar"></option>
+            </select>
+            <div class="rd-help" data-i18n="su.avatarSourceHelp"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-auth">
+        <div class="rd-surface-head"><span data-i18n="su.secAuth"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="su.regRequired"></b>
+                <small data-i18n="su.regRequiredHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="us-regmode" data-i18n="su.regMode"></label>
+            <select id="us-regmode" class="rd-control">
+              <option data-i18n="su.regClosed"></option>
+              <option selected data-i18n="su.regPublic"></option>
+              <option data-i18n="su.regPrivate"></option>
+            </select>
+            <div class="rd-help" data-i18n="su.regModeHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="us-pwpolicy" data-i18n="su.pwPolicy"></label>
+            <select id="us-pwpolicy" class="rd-control" style="max-width:340px">
+              <option data-i18n="su.pwNone"></option>
+              <option selected data-i18n="su.pwBasic"></option>
+              <option data-i18n="su.pwStrong"></option>
+            </select>
+            <div class="rd-help" data-i18n="su.pwPolicyHelp"></div>
+          </div>
+
+          <details class="rd-advanced">
+            <summary data-i18n="common.advanced"></summary>
+            <div class="rd-advanced-body">
+              <div class="rd-grid-2">
+                <div class="rd-field">
+                  <label class="rd-label" for="us-maxattempts" data-i18n="su.maxAttempts"></label>
+                  <select id="us-maxattempts" class="rd-control">
+                    <option>3</option>
+                    <option selected>5</option>
+                    <option>10</option>
+                  </select>
+                  <div class="rd-help" data-i18n="su.maxAttemptsHelp"></div>
+                </div>
+                <div class="rd-field">
+                  <label class="rd-label" for="us-lockduration" data-i18n="su.lockDuration"></label>
+                  <select id="us-lockduration" class="rd-control">
+                    <option data-i18n="su.min15"></option>
+                    <option selected data-i18n="su.min30"></option>
+                    <option data-i18n="su.hour1"></option>
+                  </select>
+                  <div class="rd-help" data-i18n="su.lockDurationHelp"></div>
+                </div>
+              </div>
+              <div class="rd-field">
+                <label class="rd-label" for="us-session" data-i18n="su.sessionTimeout"></label>
+                <input id="us-session" class="rd-control" type="number" min="0" value="0" style="max-width:220px">
+                <div class="rd-help" data-i18n="su.sessionTimeoutHelp"></div>
+              </div>
+              <div class="rd-field">
+                <label class="rd-switch">
+                  <input type="checkbox" checked>
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="su.authTokens"></b>
+                    <small data-i18n="su.authTokensHelp"></small>
+                  </span>
+                </label>
+              </div>
+              <div class="rd-field mb-0">
+                <label class="rd-switch">
+                  <input type="checkbox" checked>
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="su.emailVerify"></b>
+                    <small data-i18n="su.emailVerifyHelp"></small>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-templates">
+        <div class="rd-surface-head"><span data-i18n="su.secTemplates"></span></div>
+        <div class="rd-surface-body">
+          <p class="rd-help" style="margin:0 0 12px" data-i18n="su.tplHelp"></p>
+          <div class="bo-def">
+            <div class="row">
+              <span data-i18n="su.tplGuest"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="su.tplGuestHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+            <div class="row">
+              <span data-i18n="su.tplLogin"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="su.tplLoginHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+            <div class="row">
+              <span data-i18n="su.tplPwreset"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="su.tplPwresetHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+            <div class="row">
+              <span data-i18n="su.tplVerifyPage"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="su.tplVerifyPageHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+            <div class="row">
+              <span data-i18n="su.tplConfirmEmail"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="su.tplConfirmEmailHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+            <div class="row">
+              <span data-i18n="su.tplConfirmedPage"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="su.tplConfirmedPageHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<dialog class="rd-dialog" id="dlg-tpl">
+  <div class="rd-dialog-head">
+    <span data-i18n="su.dlgTitle"></span>
+    <button class="close" data-dialog-close aria-label="Close">✕</button>
+  </div>
+  <div class="rd-dialog-body">
+    <div class="rd-field">
+      <label class="rd-label" for="tpl-name" data-i18n="su.dlgName"></label>
+      <input id="tpl-name" class="rd-control" value="Misafir Erişim Bağlantısı">
+    </div>
+    <div class="rd-field mb-0">
+      <span class="rd-label" data-i18n="su.dlgContent"></span>
+      <div class="rd-tabs" data-tabs data-tabs-scope="tpl" style="margin-bottom:12px">
+        <button type="button" class="active" data-tab="tpl-tr">Türkçe</button>
+        <button type="button" data-tab="tpl-en">English</button>
+      </div>
+      <div class="rd-tab-panel active" id="tpl-tr" data-tab-group="tpl">
+        <textarea class="rd-control">Merhaba %{user.name},
+
+Talebinize erişmek için aşağıdaki bağlantıyı kullanabilirsiniz: %{link}</textarea>
+      </div>
+      <div class="rd-tab-panel" id="tpl-en" data-tab-group="tpl">
+        <textarea class="rd-control">Hello %{user.name},
+
+You can use the link below to access your request: %{link}</textarea>
+      </div>
+      <div class="rd-help" data-i18n="su.dlgContentHelp"></div>
+    </div>
+  </div>
+  <div class="rd-dialog-foot">
+    <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+    <button class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+  </div>
+</dialog>
+</body>
+</html>

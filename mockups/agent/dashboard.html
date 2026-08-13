@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Panom</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "db.title": "Panom",
+    "db.newTicket": "Yeni Talep",
+    "db.subtitle": "Size atanan taleplere ve görevlere genel bakış — ekip istatistikleri Yönetim panelindedir.",
+    "db.statMyOpen": "Açık Taleplerim",
+    "db.statMyOpenNote": "2'si bugün güncellendi",
+    "db.statDueToday": "Bugün Teslim",
+    "db.statDueTodayNote": "SLA süresi bugün dolan",
+    "db.statEffort": "Efor Onayında",
+    "db.statEffortNote": "kullanıcı yanıtı bekleniyor",
+    "db.statMyTasks": "Açık Görevlerim",
+    "db.statMyTasksNote": "1'i gecikmiş",
+    "db.myTickets": "Taleplerim",
+    "db.myTasks": "Görevlerim",
+    "db.viewAll": "Tümünü gör",
+    "db.colNo": "No",
+    "db.colSubject": "Konu",
+    "db.colUser": "Kullanıcı",
+    "db.colPriority": "Öncelik",
+    "db.colDue": "Son Tarih",
+    "db.taskDue1": "Bugün 17:00",
+    "db.taskDue2": "Yarın 12:00",
+    "db.taskDue3": "Dün 17:00",
+    "db.task1": "Bordro fark hesaplaması için test senaryosu hazırla",
+    "db.task2": "Konecta sözleşme yenileme evraklarını yükle",
+    "db.task3": "Vardiya içe aktarma hatası için log incelemesi",
+    "db.due1": "Bugün 17:00",
+    "db.due2": "Bugün 15:30",
+    "db.due3": "Yarın 10:00",
+    "db.due4": "13 Ağu 17:00",
+    "db.due5": "14 Ağu 12:00",
+  },
+  en: {
+    "db.title": "My Dashboard",
+    "db.newTicket": "New Ticket",
+    "db.subtitle": "Overview of the tickets and tasks assigned to you — team statistics live in the Admin panel.",
+    "db.statMyOpen": "My Open Tickets",
+    "db.statMyOpenNote": "2 updated today",
+    "db.statDueToday": "Due Today",
+    "db.statDueTodayNote": "SLA expires today",
+    "db.statEffort": "Awaiting Effort Approval",
+    "db.statEffortNote": "waiting for the client",
+    "db.statMyTasks": "My Open Tasks",
+    "db.statMyTasksNote": "1 overdue",
+    "db.myTickets": "My Tickets",
+    "db.myTasks": "My Tasks",
+    "db.viewAll": "View all",
+    "db.colNo": "No",
+    "db.colSubject": "Subject",
+    "db.colUser": "User",
+    "db.colPriority": "Priority",
+    "db.colDue": "Due",
+    "db.taskDue1": "Today 17:00",
+    "db.taskDue2": "Tomorrow 12:00",
+    "db.taskDue3": "Yesterday 17:00",
+    "db.task1": "Prepare test scenario for the payroll difference calculation",
+    "db.task2": "Upload the Konecta contract renewal documents",
+    "db.task3": "Review logs for the shift import error",
+    "db.due1": "Today 17:00",
+    "db.due2": "Today 15:30",
+    "db.due3": "Tomorrow 10:00",
+    "db.due4": "Aug 13 17:00",
+    "db.due5": "Aug 14 12:00",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="dashboard">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="db.title"></h1>
+      <p data-i18n="db.subtitle"></p>
+    </div>
+    <div class="actions">
+      <a class="rd-btn-primary" href="ticket-open.html" data-i18n="db.newTicket"></a>
+    </div>
+  </div>
+
+  <div class="rd-grid-4" style="margin-bottom:20px">
+    <div class="rd-stat">
+      <div class="rd-stat-label" data-i18n="db.statMyOpen"></div>
+      <div class="rd-stat-value">8</div>
+      <div class="rd-stat-note" data-i18n="db.statMyOpenNote"></div>
+    </div>
+    <div class="rd-stat">
+      <div class="rd-stat-label" data-i18n="db.statDueToday"></div>
+      <div class="rd-stat-value">2</div>
+      <div class="rd-stat-note" data-i18n="db.statDueTodayNote"></div>
+    </div>
+    <div class="rd-stat">
+      <div class="rd-stat-label" data-i18n="db.statEffort"></div>
+      <div class="rd-stat-value">2</div>
+      <div class="rd-stat-note" data-i18n="db.statEffortNote"></div>
+    </div>
+    <div class="rd-stat">
+      <div class="rd-stat-label" data-i18n="db.statMyTasks"></div>
+      <div class="rd-stat-value">3</div>
+      <div class="rd-stat-note" data-i18n="db.statMyTasksNote"></div>
+    </div>
+  </div>
+
+  <div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-head">
+      <span data-i18n="db.myTickets"></span>
+      <span class="spacer"></span>
+      <a class="rd-btn rd-btn-sm rd-btn-ghost" href="tickets.html" data-i18n="db.viewAll"></a>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="rd-table">
+        <thead>
+          <tr>
+            <th data-i18n="db.colNo"></th>
+            <th data-i18n="db.colSubject"></th>
+            <th data-i18n="db.colUser"></th>
+            <th data-i18n="db.colPriority"></th>
+            <th data-i18n="common.status"></th>
+            <th data-i18n="db.colDue"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="ticket-view.html">R716555</a></td>
+            <td><a href="ticket-view.html">Yol ücreti hatası hakkında</a></td>
+            <td><a href="user-view.html">Bourla Salehi</a></td>
+            <td><span class="rd-pill rd-pill-teal" data-i18n="priority.normal"></span></td>
+            <td><span class="rd-pill rd-pill-wait" data-i18n="status.effortWait"></span></td>
+            <td data-i18n="db.due1"></td>
+          </tr>
+          <tr>
+            <td><a href="ticket-view.html">R716544</a></td>
+            <td><a href="ticket-view.html">Fazla mesai onay akışı çalışmıyor</a></td>
+            <td><a href="user-view.html">Bourla Salehi</a></td>
+            <td><span class="rd-pill rd-pill-wait" data-i18n="priority.high"></span></td>
+            <td><span class="rd-pill rd-pill-wait" data-i18n="status.wait"></span></td>
+            <td data-i18n="db.due2"></td>
+          </tr>
+          <tr>
+            <td><a href="ticket-view.html">R716560</a></td>
+            <td><a href="ticket-view.html">Temmuz bordrosunda SGK kesintisi farkı</a></td>
+            <td><a href="user-view.html">Kerem Doğan</a></td>
+            <td><span class="rd-pill rd-pill-wait" data-i18n="priority.high"></span></td>
+            <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+            <td data-i18n="db.due3"></td>
+          </tr>
+          <tr>
+            <td><a href="ticket-view.html">R716548</a></td>
+            <td><a href="ticket-view.html">Yıllık izin devri hesaplama sorusu</a></td>
+            <td><a href="user-view.html">Elif Aksoy</a></td>
+            <td><span class="rd-pill rd-pill-teal" data-i18n="priority.normal"></span></td>
+            <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+            <td data-i18n="db.due4"></td>
+          </tr>
+          <tr>
+            <td><a href="ticket-view.html">R716532</a></td>
+            <td><a href="ticket-view.html">Kıdem tazminatı raporu talebi</a></td>
+            <td><a href="user-view.html">Elif Aksoy</a></td>
+            <td><span class="rd-pill rd-pill-teal" data-i18n="priority.normal"></span></td>
+            <td><span class="rd-pill rd-pill-solved" data-i18n="status.solved"></span></td>
+            <td data-i18n="db.due5"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="rd-surface">
+    <div class="rd-surface-head">
+      <span data-i18n="db.myTasks"></span>
+      <span class="spacer"></span>
+      <a class="rd-btn rd-btn-sm rd-btn-ghost" href="tasks.html" data-i18n="db.viewAll"></a>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="rd-table">
+        <thead>
+          <tr>
+            <th data-i18n="db.colSubject"></th>
+            <th data-i18n="common.status"></th>
+            <th data-i18n="db.colDue"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="task-view.html" data-i18n="db.task1"></a></td>
+            <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+            <td data-i18n="db.taskDue1"></td>
+          </tr>
+          <tr>
+            <td><a href="task-view.html" data-i18n="db.task2"></a></td>
+            <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+            <td data-i18n="db.taskDue2"></td>
+          </tr>
+          <tr>
+            <td><a href="task-view.html" data-i18n="db.task3"></a></td>
+            <td><span class="rd-pill rd-pill-overdue" data-i18n="status.overdue"></span></td>
+            <td data-i18n="db.taskDue3"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Yardım Konuları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "ht.title": "Yardım Konuları",
+    "ht.sub": "Kullanıcıların talep açarken seçtiği konular. Her konu departman, öncelik ve SLA atamalarını belirler.",
+    "ht.searchPh": "Konu ara…",
+    "ht.sortMode": "Sıralama modu",
+    "ht.sortAlpha": "Alfabetik",
+    "ht.sortManual": "Manuel",
+    "ht.saveSort": "Kaydet",
+    "ht.new": "＋ Yeni Konu",
+    "ht.colTopic": "Konu",
+    "ht.colType": "Tür",
+    "ht.colPriority": "Öncelik",
+    "ht.colDept": "Departman",
+    "ht.typePublic": "Herkese Açık",
+    "ht.typeInternal": "Dahili",
+    "ht.showing": "5 konudan 1–5 arası gösteriliyor",
+    "ht.bulkTitle": "Toplu işlemler",
+    "ht.bulkHelp": "Seçili konulara uygulanır.",
+    "ht.emptyTitle": "Henüz yardım konusu yok",
+    "ht.emptyText": "Kullanıcıların talep açarken seçeceği ilk konuyu oluşturun.",
+  },
+  en: {
+    "ht.title": "Help Topics",
+    "ht.sub": "Topics users pick when opening a request. Each topic controls department, priority and SLA assignments.",
+    "ht.searchPh": "Search topics…",
+    "ht.sortMode": "Sort mode",
+    "ht.sortAlpha": "Alphabetical",
+    "ht.sortManual": "Manual",
+    "ht.saveSort": "Save",
+    "ht.new": "＋ New Topic",
+    "ht.colTopic": "Topic",
+    "ht.colType": "Type",
+    "ht.colPriority": "Priority",
+    "ht.colDept": "Department",
+    "ht.typePublic": "Public",
+    "ht.typeInternal": "Internal",
+    "ht.showing": "Showing 1–5 of 5 topics",
+    "ht.bulkTitle": "Bulk actions",
+    "ht.bulkHelp": "Applied to the selected topics.",
+    "ht.emptyTitle": "No help topics yet",
+    "ht.emptyText": "Create the first topic users will pick when opening a request.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="helptopics">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="ht.title"></h1>
+      <p data-i18n="ht.sub"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="ht.searchPh">
+    <select class="rd-control" data-i18n-title="ht.sortMode" style="min-width:130px">
+      <option data-i18n="ht.sortAlpha"></option>
+      <option selected data-i18n="ht.sortManual"></option>
+    </select>
+    <button class="rd-btn rd-btn-sm" data-i18n="ht.saveSort"></button>
+    <span class="spacer"></span>
+    <button class="rd-btn" data-dialog-open="dlg-more"><span data-i18n="common.more"></span> ▾</button>
+    <a class="rd-btn rd-btn-primary" href="helptopic-edit.html" data-i18n="ht.new"></a>
+  </div>
+
+  <div class="rd-surface">
+    <table class="rd-table" id="tbl-topics">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-topics" data-i18n-title="common.selectAll"></th>
+          <th class="sortable" data-i18n="ht.colTopic"></th>
+          <th data-i18n="common.status"></th>
+          <th data-i18n="ht.colType"></th>
+          <th data-i18n="ht.colPriority"></th>
+          <th data-i18n="ht.colDept"></th>
+          <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="helptopic-edit.html">Bordro</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td data-i18n="ht.typePublic"></td>
+          <td data-i18n="priority.normal"></td>
+          <td>Bordro Yönetimi</td>
+          <td>28 Tem 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td style="padding-left:34px"><span class="rd-muted">└</span> <a href="helptopic-edit.html">Bordro / Yol Ücreti</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td data-i18n="ht.typePublic"></td>
+          <td data-i18n="priority.high"></td>
+          <td>Bordro Yönetimi</td>
+          <td>4 Ağu 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="helptopic-edit.html">İzin</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td data-i18n="ht.typePublic"></td>
+          <td data-i18n="priority.normal"></td>
+          <td>İnsan Kaynakları</td>
+          <td>12 May 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="helptopic-edit.html">Vardiya</a></td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="common.disabled"></span></td>
+          <td data-i18n="ht.typePublic"></td>
+          <td data-i18n="priority.low"></td>
+          <td>İnsan Kaynakları</td>
+          <td>3 Oca 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="helptopic-edit.html">Danışmanlık</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td data-i18n="ht.typeInternal"></td>
+          <td data-i18n="priority.normal"></td>
+          <td>Danışmanlık</td>
+          <td>19 Haz 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="ht.showing"></span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="ht-empty">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">❓</div>
+        <h3 data-i18n="ht.emptyTitle"></h3>
+        <p data-i18n="ht.emptyText"></p>
+        <a class="rd-btn rd-btn-primary" href="helptopic-edit.html" data-i18n="ht.new"></a>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span data-i18n="ht.bulkTitle"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <p class="rd-help" style="margin-top:0" data-i18n="ht.bulkHelp"></p>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+        <button class="rd-btn" data-dialog-close data-i18n="common.enable"></button>
+        <button class="rd-btn" data-dialog-close data-i18n="common.disable"></button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-dialog-close data-i18n="common.delete"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

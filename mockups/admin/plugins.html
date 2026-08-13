@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Eklentiler</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "pl.title": "Eklentiler",
+    "pl.sub": "Sistemi kimlik doğrulama, depolama ve entegrasyonlarla genişleten eklentiler.",
+    "pl.searchPh": "Eklenti ara…",
+    "pl.new": "＋ Eklenti Kur",
+    "pl.installedHead": "Kurulu Eklentiler",
+    "pl.colVersion": "Sürüm",
+    "pl.colInstalled": "Kurulma",
+    "pl.showing": "3 eklentiden 1–3 arası gösteriliyor",
+    "pl.availHead": "Kurulabilir Eklentiler",
+    "pl.availHelp": "Eklenti dizininde bulunan, tek tıkla kurulabilecek paketler.",
+    "pl.install": "Kur",
+    "pl.bulkTitle": "Toplu işlemler",
+    "pl.bulkHelp": "Seçili eklentilere uygulanır. Silme işlemi eklenti yapılandırmasını da kaldırır.",
+    "pl.emptyTitle": "Henüz eklenti kurulmadı",
+    "pl.emptyText": "Aşağıdaki dizinden ilk eklentinizi kurarak sistemi genişletin.",
+  },
+  en: {
+    "pl.title": "Plugins",
+    "pl.sub": "Plugins extending the system with authentication, storage and integrations.",
+    "pl.searchPh": "Search plugins…",
+    "pl.new": "＋ Install Plugin",
+    "pl.installedHead": "Installed Plugins",
+    "pl.colVersion": "Version",
+    "pl.colInstalled": "Installed",
+    "pl.showing": "Showing 1–3 of 3 plugins",
+    "pl.availHead": "Available Plugins",
+    "pl.availHelp": "Packages from the plugin directory that can be installed with one click.",
+    "pl.install": "Install",
+    "pl.bulkTitle": "Bulk actions",
+    "pl.bulkHelp": "Applied to the selected plugins. Deleting also removes the plugin's configuration.",
+    "pl.emptyTitle": "No plugins installed yet",
+    "pl.emptyText": "Install your first plugin from the directory below to extend the system.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="plugins">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="pl.title"></h1>
+      <p data-i18n="pl.sub"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="pl.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-dialog-open="dlg-more"><span data-i18n="common.more"></span> ▾</button>
+    <a class="rd-btn rd-btn-primary" href="#avail" data-i18n="pl.new"></a>
+  </div>
+
+  <!-- Kurulu eklentiler -->
+  <div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-head"><span data-i18n="pl.installedHead"></span></div>
+    <table class="rd-table" id="tbl-plugins">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-plugins" data-i18n-title="common.selectAll"></th>
+          <th class="sortable" data-i18n="common.name"></th>
+          <th data-i18n="pl.colVersion"></th>
+          <th data-i18n="common.status"></th>
+          <th class="sortable sorted-desc" data-i18n="pl.colInstalled"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>
+            <b style="font-weight:500">LDAP Kimlik Doğrulama</b>
+            <div class="rd-muted text-sm" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">plugins/auth-ldap</div>
+          </td>
+          <td>0.6.2</td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td>12 May 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>
+            <b style="font-weight:500">S3 Depolama</b>
+            <div class="rd-muted text-sm" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">plugins/storage-s3</div>
+          </td>
+          <td>1.0.1</td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td>3 Oca 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>
+            <b style="font-weight:500">Denetim Günlüğü</b>
+            <div class="rd-muted text-sm" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">plugins/audit</div>
+          </td>
+          <td>1.1.0</td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="common.disabled"></span></td>
+          <td>22 Şub 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="pl.showing"></span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Kurulabilir eklentiler -->
+  <div class="rd-surface" id="avail">
+    <div class="rd-surface-head"><span data-i18n="pl.availHead"></span></div>
+    <div class="rd-surface-body" style="padding:0">
+      <div style="display:flex;gap:12px;align-items:center;padding:15px 19px;border-bottom:1px solid var(--rd-border-soft)">
+        <div style="flex:1">
+          <b style="font-weight:500;font-size:13px">2FA E-posta Doğrulama</b>
+          <div class="rd-muted text-sm">Temsilci girişlerinde e-posta ile ikinci doğrulama adımı ekler. — v1.2.0</div>
+        </div>
+        <button class="rd-btn rd-btn-ghost" data-i18n="pl.install"></button>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;padding:15px 19px;border-bottom:1px solid var(--rd-border-soft)">
+        <div style="flex:1">
+          <b style="font-weight:500;font-size:13px">Depolama: Dosya Sistemi</b>
+          <div class="rd-muted text-sm">Ekleri veritabanı yerine sunucu diskinde saklar. — v1.0.3</div>
+        </div>
+        <button class="rd-btn rd-btn-ghost" data-i18n="pl.install"></button>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;padding:15px 19px">
+        <div style="flex:1">
+          <b style="font-weight:500;font-size:13px">Slack Bildirimleri</b>
+          <div class="rd-muted text-sm">Yeni talep ve yanıt olaylarını seçilen Slack kanalına iletir. — v0.9.4</div>
+        </div>
+        <button class="rd-btn rd-btn-ghost" data-i18n="pl.install"></button>
+      </div>
+    </div>
+    <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft);padding:12px 19px">
+      <span class="rd-help" data-i18n="pl.availHelp"></span>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="pl-empty">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">✦</div>
+        <h3 data-i18n="pl.emptyTitle"></h3>
+        <p data-i18n="pl.emptyText"></p>
+        <a class="rd-btn rd-btn-primary" href="#avail" data-i18n="pl.new"></a>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span data-i18n="pl.bulkTitle"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <p class="rd-help" style="margin-top:0" data-i18n="pl.bulkHelp"></p>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+        <button class="rd-btn" data-dialog-close data-i18n="common.enable"></button>
+        <button class="rd-btn" data-dialog-close data-i18n="common.disable"></button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-dialog-close data-i18n="common.delete"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

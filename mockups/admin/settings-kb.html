@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Bilgi Bankası Ayarları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "skb.title": "Bilgi Bankası Ayarları",
+    "skb.subtitle": "Kullanıcı portalındaki bilgi bankası ve temsilcilerin hazır yanıtları için genel anahtarlar.",
+    "skb.secGeneral": "Genel",
+    "skb.enable": "Bilgi Bankasını etkinleştir",
+    "skb.enableHelp": "Kullanıcı portalında SSS makaleleri ve arama görünür. Kapatıldığında portalın Bilgi Bankası bölümü tamamen gizlenir; mevcut makaleler silinmez, yalnızca yayından kalkar.",
+    "skb.requireLogin": "Kullanıcı girişi zorunlu",
+    "skb.requireLoginHelp": "Makaleleri yalnızca oturum açmış kullanıcılar okuyabilir. Şirketlere özel süreç anlatımları (bordro takvimi, onay akışları gibi) içeriyorsanız açık tutmanız önerilir.",
+    "skb.canned": "Hazır yanıtları etkinleştir",
+    "skb.cannedHelp": "Temsilciler yanıt yazarken önceden hazırlanmış kalıp metinleri tek tıkla ekleyebilir. Kapatıldığında yanıt kutusundaki hazır yanıt menüsü gizlenir.",
+    "skb.banner": "Makaleler, kategoriler ve hazır yanıt içerikleri temsilci panelindeki Bilgi Bankası bölümünden yönetilir:",
+    "skb.bannerLink": "Bilgi Bankasını aç",
+  },
+  en: {
+    "skb.title": "Knowledge Base Settings",
+    "skb.subtitle": "Master switches for the user-portal knowledge base and agents' canned responses.",
+    "skb.secGeneral": "General",
+    "skb.enable": "Enable Knowledge Base",
+    "skb.enableHelp": "FAQ articles and search appear on the user portal. When off, the portal's Knowledge Base section is hidden entirely; existing articles are not deleted, only unpublished.",
+    "skb.requireLogin": "Require user sign-in",
+    "skb.requireLoginHelp": "Only signed-in users can read articles. Recommended if your articles describe company-specific processes (payroll calendars, approval flows and the like).",
+    "skb.canned": "Enable canned responses",
+    "skb.cannedHelp": "Agents can insert prepared boilerplate answers with one click while replying. When off, the canned-response menu in the reply box is hidden.",
+    "skb.banner": "Articles, categories and canned-response content are managed in the agent panel's Knowledge Base section:",
+    "skb.bannerLink": "Open the Knowledge Base",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="settings-kb">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="skb.title"></h1>
+      <p data-i18n="skb.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+      <a href="#sec-general" class="active" data-i18n="skb.secGeneral"></a>
+    </nav>
+
+    <form class="bo-settings-sections">
+
+      <section class="rd-surface bo-section" id="sec-general">
+        <div class="rd-surface-head"><span data-i18n="skb.secGeneral"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-banner rd-banner-info">
+            <span aria-hidden="true">✎</span>
+            <span>
+              <span data-i18n="skb.banner"></span>
+              <a href="../agent/kb.html" data-i18n="skb.bannerLink"></a>
+            </span>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="skb.enable"></b>
+                <small data-i18n="skb.enableHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="skb.requireLogin"></b>
+                <small data-i18n="skb.requireLoginHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="skb.canned"></b>
+                <small data-i18n="skb.cannedHelp"></small>
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+      </div>
+    </form>
+  </div>
+</main>
+</body>
+</html>

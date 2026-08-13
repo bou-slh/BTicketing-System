@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Görev Ayarları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "tg.title": "Görev Ayarları",
+    "tg.subtitle": "Görev numaralandırma, varsayılanlar ve görevlerle ilgili temsilci uyarıları.",
+    "tg.secNumbering": "Numaralandırma",
+    "tg.secDefaults": "Varsayılanlar",
+    "tg.secAlerts": "Uyarılar ve Bildirimler",
+
+    "tg.numberFormat": "Numara biçimi",
+    "tg.numberFormatHelp": "# işaretleri rakamlarla değiştirilir. Örnek: G4021",
+    "tg.sequence": "Sıra",
+    "tg.sequenceHelp": "Rastgele numaralar tahmin edilemez; ardışık sıralar sayaçtan ilerler.",
+    "tg.seqRandom": "Rastgele",
+    "tg.seqSequential": "Ardışık",
+    "tg.manage": "Yönet",
+    "tg.dlgSeqTitle": "Numara sıraları",
+    "tg.dlgSeqHelp": "Ardışık sıralar burada tanımlanır; görevler için ayrı bir sayaç kullanılabilir.",
+    "tg.seqName": "Ad",
+    "tg.seqNext": "Sıradaki",
+    "tg.addSequence": "Sıra ekle",
+
+    "tg.defPriority": "Varsayılan öncelik",
+    "tg.defPriorityHelp": "Yeni görevler bu öncelikle açılır.",
+    "tg.attachNote": "Görev eklerinin kuralları (izin verilen türler, adet, boyut) Görev Detayları formundaki Ekler alanından yapılandırılır:",
+    "tg.attachNoteLink": "Formları aç",
+
+    "tg.alNewTask": "Yeni Görev Uyarısı",
+    "tg.alNewTaskHelp": "Yeni bir görev oluşturulduğunda gönderilir.",
+    "tg.alNewActivity": "Yeni Aktivite Uyarısı",
+    "tg.alNewActivityHelp": "Göreve not veya yanıt eklendiğinde gönderilir.",
+    "tg.alAssignment": "Atama Uyarısı",
+    "tg.alAssignmentHelp": "Görev bir temsilciye veya ekibe atandığında gönderilir.",
+    "tg.alTransfer": "Aktarım Uyarısı",
+    "tg.alTransferHelp": "Görev başka bir departmana aktarıldığında gönderilir.",
+    "tg.alOverdue": "Gecikme Uyarısı",
+    "tg.alOverdueHelp": "Görev bitiş tarihini aşıp gecikmiş duruma düştüğünde gönderilir.",
+    "tg.rcpAdmin": "Yönetici",
+    "tg.rcpDeptManager": "Departman Yöneticisi",
+    "tg.rcpDeptMembers": "Departman Üyeleri",
+    "tg.rcpLastRespondent": "Son yanıtlayan",
+    "tg.rcpAssigned": "Atanan temsilci / ekip",
+    "tg.rcpTeamLead": "Ekip lideri",
+    "tg.rcpTeamMembers": "Ekip üyeleri",
+  },
+  en: {
+    "tg.title": "Task Settings",
+    "tg.subtitle": "Task numbering, defaults and agent alerts related to tasks.",
+    "tg.secNumbering": "Numbering",
+    "tg.secDefaults": "Defaults",
+    "tg.secAlerts": "Alerts and Notices",
+
+    "tg.numberFormat": "Number format",
+    "tg.numberFormatHelp": "# marks are replaced with digits. Example: G4021",
+    "tg.sequence": "Sequence",
+    "tg.sequenceHelp": "Random numbers are unguessable; sequential ones advance from a counter.",
+    "tg.seqRandom": "Random",
+    "tg.seqSequential": "Sequential",
+    "tg.manage": "Manage",
+    "tg.dlgSeqTitle": "Number sequences",
+    "tg.dlgSeqHelp": "Sequential counters are defined here; tasks may use a separate counter.",
+    "tg.seqName": "Name",
+    "tg.seqNext": "Next",
+    "tg.addSequence": "Add sequence",
+
+    "tg.defPriority": "Default priority",
+    "tg.defPriorityHelp": "New tasks open with this priority.",
+    "tg.attachNote": "Task attachment rules (allowed types, count, size) are configured on the Attachments field of the Task Details form:",
+    "tg.attachNoteLink": "Open Forms",
+
+    "tg.alNewTask": "New Task Alert",
+    "tg.alNewTaskHelp": "Sent when a new task is created.",
+    "tg.alNewActivity": "New Activity Alert",
+    "tg.alNewActivityHelp": "Sent when a note or reply is added to a task.",
+    "tg.alAssignment": "Assignment Alert",
+    "tg.alAssignmentHelp": "Sent when a task is assigned to an agent or team.",
+    "tg.alTransfer": "Transfer Alert",
+    "tg.alTransferHelp": "Sent when a task is transferred to another department.",
+    "tg.alOverdue": "Overdue Alert",
+    "tg.alOverdueHelp": "Sent when a task passes its due date and becomes overdue.",
+    "tg.rcpAdmin": "Admin",
+    "tg.rcpDeptManager": "Department Manager",
+    "tg.rcpDeptMembers": "Department Members",
+    "tg.rcpLastRespondent": "Last respondent",
+    "tg.rcpAssigned": "Assigned agent / team",
+    "tg.rcpTeamLead": "Team lead",
+    "tg.rcpTeamMembers": "Team members",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="settings-tasks">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="tg.title"></h1>
+      <p data-i18n="tg.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+      <a href="#sec-numbering" class="active" data-i18n="tg.secNumbering"></a>
+      <a href="#sec-defaults" data-i18n="tg.secDefaults"></a>
+      <a href="#sec-alerts" data-i18n="tg.secAlerts"></a>
+    </nav>
+
+    <form class="bo-settings-sections">
+
+      <section class="rd-surface bo-section" id="sec-numbering">
+        <div class="rd-surface-head"><span data-i18n="tg.secNumbering"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="ta-format" data-i18n="tg.numberFormat"></label>
+            <input id="ta-format" class="rd-control" value="G####" style="max-width:220px">
+            <div class="rd-help" data-i18n="tg.numberFormatHelp"></div>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-label" for="ta-seq" data-i18n="tg.sequence"></label>
+            <div class="bo-rule-row" style="margin-bottom:0">
+              <select id="ta-seq" class="rd-control" style="max-width:220px">
+                <option data-i18n="tg.seqRandom"></option>
+                <option selected data-i18n="tg.seqSequential"></option>
+              </select>
+              <button type="button" class="rd-btn" data-dialog-open="dlg-seq" data-i18n="tg.manage"></button>
+            </div>
+            <div class="rd-help" data-i18n="tg.sequenceHelp"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-defaults">
+        <div class="rd-surface-head"><span data-i18n="tg.secDefaults"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="ta-priority" data-i18n="tg.defPriority"></label>
+            <select id="ta-priority" class="rd-control" style="max-width:340px">
+              <option data-i18n="priority.low"></option>
+              <option selected data-i18n="priority.normal"></option>
+              <option data-i18n="priority.high"></option>
+              <option data-i18n="priority.emergency"></option>
+            </select>
+            <div class="rd-help" data-i18n="tg.defPriorityHelp"></div>
+          </div>
+          <div class="rd-banner rd-banner-info" style="margin-bottom:0">
+            <span aria-hidden="true">📎</span>
+            <span>
+              <span data-i18n="tg.attachNote"></span>
+              <a href="forms.html" data-i18n="tg.attachNoteLink"></a>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-alerts">
+        <div class="rd-surface-head"><span data-i18n="tg.secAlerts"></span></div>
+        <div class="rd-surface-body">
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="tg.alNewTask"></b>
+                <small data-i18n="tg.alNewTaskHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpAdmin"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpDeptManager"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="tg.rcpDeptMembers"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="tg.alNewActivity"></b>
+                <small data-i18n="tg.alNewActivityHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpLastRespondent"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="tg.rcpDeptManager"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="tg.alAssignment"></b>
+                <small data-i18n="tg.alAssignmentHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpTeamLead"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="tg.rcpTeamMembers"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card">
+            <div class="head">
+              <div>
+                <b data-i18n="tg.alTransfer"></b>
+                <small data-i18n="tg.alTransferHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpDeptManager"></span></label>
+            </div>
+          </div>
+
+          <div class="bo-toggle-card" style="margin-bottom:0">
+            <div class="head">
+              <div>
+                <b data-i18n="tg.alOverdue"></b>
+                <small data-i18n="tg.alOverdueHelp"></small>
+              </div>
+              <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div class="recipients">
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpAssigned"></span></label>
+              <label class="rd-check"><input type="checkbox" checked><span data-i18n="tg.rcpDeptManager"></span></label>
+              <label class="rd-check"><input type="checkbox"><span data-i18n="tg.rcpDeptMembers"></span></label>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<dialog class="rd-dialog" id="dlg-seq">
+  <div class="rd-dialog-head">
+    <span data-i18n="tg.dlgSeqTitle"></span>
+    <button class="close" data-dialog-close aria-label="Close">✕</button>
+  </div>
+  <div class="rd-dialog-body">
+    <p class="rd-help" style="margin:0 0 12px" data-i18n="tg.dlgSeqHelp"></p>
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th data-i18n="tg.seqName"></th>
+          <th class="num" data-i18n="tg.seqNext"></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Genel</td>
+          <td class="num">716556</td>
+          <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+        </tr>
+        <tr>
+          <td>Görevler</td>
+          <td class="num">4022</td>
+          <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="button" class="rd-btn rd-btn-sm" style="margin-top:12px" data-i18n="tg.addSequence"></button>
+  </div>
+  <div class="rd-dialog-foot">
+    <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+    <button class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+  </div>
+</dialog>
+</body>
+</html>

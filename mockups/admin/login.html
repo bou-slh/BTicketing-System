@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Yönetici Girişi</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "lg.title": "Yönetici Girişi",
+    "lg.subtitle": "Yönetim paneline erişmek için yönetici hesabınızla giriş yapın.",
+    "lg.fUser": "E-posta veya kullanıcı adı",
+    "lg.fUserPh": "ornek@rapidsol.com.tr",
+    "lg.fPass": "Parola",
+    "lg.forgot": "Parolamı Unuttum",
+    "lg.signin": "Giriş",
+    "lg.twofaCaption": "İkinci adım — doğrulama kodu (önizleme)",
+    "lg.twofaHelp": "Doğrulama uygulamanızdaki 6 haneli kodu girin. Yönetici hesapları için iki adımlı doğrulama zorunludur.",
+    "lg.verify": "Doğrula",
+    "lg.backAgent": "← Temsilci girişine dön",
+  },
+  en: {
+    "lg.title": "Admin Sign-in",
+    "lg.subtitle": "Sign in with your administrator account to access the admin panel.",
+    "lg.fUser": "Email or username",
+    "lg.fUserPh": "you@rapidsol.com.tr",
+    "lg.fPass": "Password",
+    "lg.forgot": "Forgot Password",
+    "lg.signin": "Sign In",
+    "lg.twofaCaption": "Second step — verification code (preview)",
+    "lg.twofaHelp": "Enter the 6-digit code from your authenticator app. Two-factor authentication is mandatory for administrator accounts.",
+    "lg.verify": "Verify",
+    "lg.backAgent": "← Back to agent sign-in",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal">
+
+<div style="position:fixed;top:18px;right:18px;z-index:10">
+  <select class="rc-language" data-lang-switch aria-label="Language">
+    <option value="tr">TR</option>
+    <option value="en">EN</option>
+  </select>
+</div>
+
+<div class="rc-auth-wrap" style="min-height:100vh">
+  <div class="rc-auth-card">
+    <a class="rc-logo" href="../portal/index.html" style="margin-bottom:18px;display:inline-flex">
+      <span class="rc-logo-mark"></span>
+      <span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1 data-i18n="lg.title"></h1>
+    <p data-i18n="lg.subtitle"></p>
+
+    <div class="rd-field">
+      <label class="rd-label" for="lg-user" data-i18n="lg.fUser"></label>
+      <input id="lg-user" class="rd-control" data-i18n-placeholder="lg.fUserPh" autocomplete="username">
+    </div>
+    <div class="rd-field">
+      <label class="rd-label" for="lg-pass" data-i18n="lg.fPass"></label>
+      <input id="lg-pass" type="password" class="rd-control" autocomplete="current-password">
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <a href="#" class="text-sm" data-i18n="lg.forgot"></a>
+    </div>
+    <a class="rd-btn-primary" href="dashboard.html" style="display:flex;justify-content:center" data-i18n="lg.signin"></a>
+
+    <div style="margin-top:22px;border:1px solid var(--rd-border);border-radius:13px;padding:16px;background:var(--rd-surface-2)">
+      <div class="text-sm rd-muted" style="margin-bottom:10px" data-i18n="lg.twofaCaption"></div>
+      <div style="display:flex;gap:10px">
+        <input class="rd-control" maxlength="6" inputmode="numeric" placeholder="••••••"
+               style="letter-spacing:7px;text-align:center;font-size:17px;font-variant-numeric:tabular-nums">
+        <button class="rd-btn" data-i18n="lg.verify"></button>
+      </div>
+      <div class="rd-help" data-i18n="lg.twofaHelp"></div>
+    </div>
+
+    <div class="rc-auth-foot">
+      <a href="../agent/login.html" data-i18n="lg.backAgent"></a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

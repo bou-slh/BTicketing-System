@@ -1,0 +1,1187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Rapidsol Musteri Destek</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts" referrerpolicy="no-referrer" title="Rapidsol Musteri Destek" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Rapidsol Musteri Destek&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: var(--border-radius-lg, 12.5px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed=&quot;true&quot;],
+    [aria-selected=&quot;true&quot;],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: 16px !important;
+  height: 16px !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;style&gt;
+#rapidsol-customer{font-family:Inter,ui-sans-serif,system-ui,-apple-system,&quot;Segoe UI&quot;,sans-serif;color:light-dark(#18272b,#ecf7f5);background:light-dark(#f3f8f7,#0d1719);border:1px solid light-dark(#dbe8e6,#293b3e);border-radius:20px;overflow:hidden;min-height:760px;box-shadow:0 26px 70px rgba(18,62,65,.14)}
+#rapidsol-customer *{box-sizing:border-box}#rapidsol-customer button,#rapidsol-customer input,#rapidsol-customer select,#rapidsol-customer textarea{font:inherit}
+#rapidsol-customer .rc-header{height:76px;background:light-dark(#ffffff,#142226);border-bottom:1px solid light-dark(#e0ebe9,#2a3b3e);display:flex;align-items:center;padding:0 30px;gap:32px}
+#rapidsol-customer .rc-logo{display:flex;align-items:center;gap:11px;font-size:21px;font-weight:500;letter-spacing:-.6px;white-space:nowrap}.rc-logo-mark{width:32px;height:32px;position:relative}.rc-logo-mark:before,.rc-logo-mark:after{content:&quot;&quot;;position:absolute;left:12px;top:-1px;width:7px;height:34px;border-radius:6px}.rc-logo-mark:before{background:#10b5aa;transform:rotate(45deg)}.rc-logo-mark:after{background:#29393e;transform:rotate(-45deg)}#rapidsol-customer .rc-logo-accent{color:#0aa69d}
+#rapidsol-customer .rc-nav{display:flex;align-items:center;gap:6px;height:100%}#rapidsol-customer .rc-nav-button{height:42px;padding:0 14px;border:0;border-radius:10px;background:transparent;color:light-dark(#66777b,#a8b9bb);cursor:pointer;font-weight:500;white-space:nowrap}#rapidsol-customer .rc-nav-button:hover{background:light-dark(#edf7f5,#1a3033);color:light-dark(#087f79,#61d5cc)}#rapidsol-customer .rc-nav-button.rc-selected{color:light-dark(#087f79,#8de2db);background:light-dark(#e2f5f2,#1a3b3b)}
+#rapidsol-customer .rc-account{margin-left:auto;display:flex;align-items:center;gap:11px}.rc-account-copy{text-align:right;font-size:13px}.rc-account-copy small{display:block;color:light-dark(#748488,#9caeb0);margin-top:3px}.rc-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:light-dark(#dff5f2,#1a4948);color:light-dark(#087b75,#7ce1d9);font-weight:500}
+#rapidsol-customer .rc-main{padding:34px;max-width:1180px;margin:0 auto}.rc-page{display:none}.rc-page.rc-selected{display:block}.rc-heading{display:flex;align-items:flex-start;gap:18px;margin-bottom:25px}.rc-heading h1{margin:0 0 7px;font-size:29px;font-weight:500;letter-spacing:-.8px}.rc-heading p{margin:0;color:light-dark(#6e7e82,#9fb0b2);font-size:14px}.rc-heading&gt;div{margin-left:18px}.rc-button-primary{margin-left:auto;border:0;border-radius:11px;background:#0ba69d;color:#fff;padding:12px 17px;cursor:pointer;font-weight:500;box-shadow:0 7px 18px rgba(11,166,157,.22)}
+#rapidsol-customer .rc-hero{background:linear-gradient(120deg,light-dark(#103c3e,#142f32),light-dark(#0a716d,#0a5b59));color:#fff;border-radius:20px;padding:28px 30px;display:flex;align-items:center;gap:22px;margin-bottom:20px;overflow:hidden;position:relative}.rc-hero:after{content:&quot;&quot;;position:absolute;width:230px;height:230px;border:44px solid rgba(255,255,255,.06);border-radius:50%;right:-70px;top:-105px}.rc-hero h1{font-size:27px;font-weight:500;margin:0 0 8px;letter-spacing:-.6px}.rc-hero p{margin:0;color:#d9ebea;font-size:14px;max-width:590px}.rc-hero .rc-button-primary{background:#fff;color:#087b75;position:relative;z-index:2;white-space:nowrap}
+#rapidsol-customer .rc-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}.rc-summary-item{background:light-dark(#fff,#142226);border:1px solid light-dark(#e0eae9,#2a3b3e);border-radius:15px;padding:18px}.rc-summary-label{font-size:13px;color:light-dark(#748488,#9fb0b2)}.rc-summary-value{font-size:27px;font-weight:500;margin:6px 0}.rc-summary-note{font-size:12px;color:light-dark(#718286,#9fb1b3)}
+#rapidsol-customer .rc-columns{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(260px,.7fr);gap:18px}.rc-surface{background:light-dark(#fff,#142226);border:1px solid light-dark(#e0eae9,#2a3b3e);border-radius:16px;overflow:hidden}.rc-surface-head{padding:17px 19px;border-bottom:1px solid light-dark(#ebf1f0,#2a3b3e);display:flex;align-items:center;font-weight:500}.rc-surface-head button{margin-left:auto;border:0;background:transparent;color:#0a9189;cursor:pointer}
+#rapidsol-customer .rc-ticket-row{display:grid;grid-template-columns:86px minmax(170px,1.7fr) minmax(150px,170px) 105px;gap:13px;align-items:center;padding:15px 19px;border-bottom:1px solid light-dark(#edf2f1,#293b3e);font-size:13px;cursor:pointer}.rc-ticket-row:last-child{border-bottom:0}.rc-ticket-row:hover{background:light-dark(#f4fbfa,#17292c)}.rc-ticket-id{color:#078c84;font-weight:500}.rc-ticket-title{font-weight:500;margin-bottom:4px}.rc-ticket-meta{color:light-dark(#7d8c8f,#9baeb0);font-size:12px}.rc-status{width:100%;max-width:170px;justify-self:end;border-radius:99px;padding:6px 10px;font-size:11px;font-weight:500;line-height:1.25;text-align:center;white-space:normal}.rc-status-wait{background:light-dark(#fff3d6,#43361c);color:light-dark(#8f610b,#f2ce7d)}.rc-status-open{background:light-dark(#e4f4ff,#173a4c);color:light-dark(#126b9c,#81c9ed)}.rc-status-test{background:light-dark(#eeeaff,#302c4d);color:light-dark(#634bab,#c0afff)}
+#rapidsol-customer .rc-steps{padding:9px 18px}.rc-step{display:flex;gap:13px;padding:13px 0;border-bottom:1px solid light-dark(#edf2f1,#293b3e);font-size:13px}.rc-step:last-child{border:0}.rc-step-icon{width:28px;height:28px;border-radius:9px;background:light-dark(#e3f6f4,#19413f);color:#0a9189;display:grid;place-items:center;flex:none}.rc-step b{display:block;font-weight:500;margin-bottom:3px}.rc-step small{color:light-dark(#7f8f92,#9dafb1)}
+#rapidsol-customer .rc-form-layout{display:grid;grid-template-columns:minmax(0,1.4fr) 290px;gap:19px}.rc-form{background:light-dark(#fff,#142226);border:1px solid light-dark(#e0eae9,#2a3b3e);border-radius:17px;padding:24px}.rc-form-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:17px}.rc-field-full{grid-column:1}.rc-label{display:block;font-size:13px;font-weight:500;margin-bottom:7px}.rc-label small{font-weight:400;color:light-dark(#849397,#96aaac)}.rc-control{width:100%;border:1px solid light-dark(#d4e2e0,#33494d);border-radius:10px;background:light-dark(#fbfdfd,#101c1f);color:inherit;padding:11px 12px;outline:none}.rc-control:focus{border-color:#0ba69d;box-shadow:0 0 0 3px rgba(11,166,157,.13)}textarea.rc-control{min-height:128px;resize:vertical}.rc-upload{border:1px dashed #70c5be;border-radius:11px;background:light-dark(#f1fbfa,#122729);color:light-dark(#187e78,#7ed9d2);padding:17px;text-align:center;font-size:13px}.rc-form-footer{display:flex;justify-content:flex-end;align-items:center;gap:15px;margin-top:20px}.rc-form-footer small{color:light-dark(#829195,#9caeb0)}
+#rapidsol-customer .rc-aside-block{padding:18px}.rc-aside-block h3{font-size:14px;font-weight:500;margin:0 0 13px}.rc-aside-tip{display:flex;gap:10px;margin-bottom:14px;font-size:12px;line-height:1.45;color:light-dark(#65767a,#afbec0)}.rc-aside-tip span{color:#0a9991}.rc-notice{margin-top:15px;padding:14px;border-radius:11px;background:light-dark(#f3f8f7,#101c1f);font-size:12px;line-height:1.5;color:light-dark(#627377,#aababc)}
+#rapidsol-customer .rc-detail-grid{display:grid;grid-template-columns:minmax(0,1.45fr) 300px;gap:18px}.rc-detail-title{display:flex;gap:13px;align-items:center}.rc-detail-title button{border:0;background:transparent;color:#0a9189;cursor:pointer;padding:0}.rc-message{padding:19px;border-bottom:1px solid light-dark(#eaf0ef,#2a3b3e)}.rc-message-head{display:flex;gap:10px;align-items:center;font-size:13px;font-weight:500}.rc-message-head time{margin-left:auto;color:light-dark(#849397,#99abad);font-weight:400}.rc-message p{font-size:14px;line-height:1.6;color:light-dark(#47585d,#c5d1d2)}.rc-attachment{display:inline-flex;gap:7px;padding:8px 10px;border:1px solid light-dark(#dce8e6,#31474b);border-radius:9px;color:#088b83;font-size:12px}.rc-reply{padding:18px}.rc-info{padding:17px}.rc-info-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid light-dark(#edf2f1,#293b3e);font-size:13px}.rc-info-row:last-child{border:0}.rc-info-row span{color:light-dark(#78888b,#9caeb0)}.rc-timeline{padding:16px 18px}.rc-timeline-item{position:relative;padding:0 0 18px 20px;font-size:12px;border-left:1px solid light-dark(#cee2df,#355052)}.rc-timeline-item:last-child{padding-bottom:0}.rc-timeline-item:before{content:&quot;&quot;;position:absolute;left:-5px;top:2px;width:9px;height:9px;border-radius:50%;background:#0ba69d}.rc-timeline-item b{display:block;font-weight:500;margin-bottom:3px}.rc-timeline-item small{color:light-dark(#7f8e91,#9caeb0)}
+#rapidsol-customer .rc-approval{margin:18px;border:1px solid light-dark(#ead28d,#695a2d);border-radius:14px;background:light-dark(#fff9e9,#2b2719);padding:18px}.rc-approval-top{display:flex;align-items:flex-start;gap:14px}.rc-approval-icon{width:36px;height:36px;border-radius:10px;background:light-dark(#fff0bd,#4b3e1b);display:grid;place-items:center;flex:none}.rc-approval h3{font-size:15px;font-weight:500;margin:0 0 5px}.rc-approval p{font-size:13px!important;margin:0!important}.rc-effort{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}.rc-effort div{padding:11px;background:light-dark(rgba(255,255,255,.7),rgba(0,0,0,.12));border-radius:9px}.rc-effort small{display:block;color:light-dark(#7c745c,#bdb28f);margin-bottom:3px}.rc-approval-actions{display:flex;gap:9px;justify-content:flex-end}.rc-button-secondary{border:1px solid light-dark(#d7c68f,#736638);border-radius:10px;background:transparent;color:inherit;padding:10px 14px;cursor:pointer}.rc-file-label{display:inline-flex;align-items:center;gap:7px;border:1px solid light-dark(#d5e3e1,#344a4e);border-radius:9px;padding:9px 11px;color:#088b83;font-size:12px;cursor:pointer}.rc-file-label input{display:none}.rc-file-name{font-size:12px;color:light-dark(#718286,#9fb0b2);margin-left:8px}
+@media(max-width:800px){#rapidsol-customer .rc-header{height:auto;min-height:76px;padding:12px 18px;flex-wrap:wrap;gap:8px 16px}#rapidsol-customer .rc-nav{display:flex;width:100%;height:auto;order:3;justify-content:space-between;border-top:1px solid light-dark(#e5eeed,#293b3e);padding-top:8px}#rapidsol-customer .rc-nav-button{height:38px;flex:1;padding:0 8px}.rc-account-copy{display:none}.rc-main{padding:22px!important}.rc-columns,.rc-form-layout,.rc-detail-grid{grid-template-columns:1fr!important}.rc-summary{grid-template-columns:1fr 1fr!important}.rc-ticket-row{grid-template-columns:80px minmax(0,1fr) 160px!important}.rc-ticket-row&gt;*:last-child{display:none}.rc-form-grid{grid-template-columns:1fr!important}.rc-field-full{grid-column:auto!important}.rc-hero{align-items:flex-start;flex-direction:column}.rc-hero .rc-button-primary{margin-left:0!important}}@media(max-width:480px){#rapidsol-customer .rc-nav-button{font-size:12px}.rc-summary{grid-template-columns:1fr!important}.rc-ticket-row{grid-template-columns:70px 1fr!important}.rc-ticket-row&gt;*:nth-child(3){display:none}.rc-heading{flex-direction:column}.rc-heading .rc-button-primary{margin-left:0!important}}
+&lt;/style&gt;
+&lt;div id=&quot;rapidsol-customer&quot;&gt;
+  &lt;header class=&quot;rc-header&quot;&gt;&lt;div class=&quot;rc-logo&quot;&gt;&lt;span class=&quot;rc-logo-mark&quot;&gt;&lt;/span&gt;&lt;span&gt;RAPID&lt;span class=&quot;rc-logo-accent&quot;&gt;SOL&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;nav class=&quot;rc-nav&quot; aria-label=&quot;Ana menü&quot;&gt;&lt;button class=&quot;rc-nav-button rc-selected&quot; data-page-button=&quot;home&quot;&gt;Ana Sayfa&lt;/button&gt;&lt;button class=&quot;rc-nav-button&quot; data-page-button=&quot;new&quot;&gt;Yeni Talep&lt;/button&gt;&lt;button class=&quot;rc-nav-button&quot; data-page-button=&quot;tickets&quot;&gt;Taleplerim (4)&lt;/button&gt;&lt;/nav&gt;&lt;div class=&quot;rc-account&quot;&gt;&lt;div class=&quot;rc-account-copy&quot;&gt;Bourla Salehi&lt;small&gt;RapidSol&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;rc-avatar&quot;&gt;BS&lt;/div&gt;&lt;/div&gt;&lt;/header&gt;
+  &lt;main class=&quot;rc-main&quot;&gt;
+    &lt;section class=&quot;rc-page rc-selected&quot; data-page=&quot;home&quot;&gt;
+      &lt;div class=&quot;rc-hero&quot;&gt;&lt;div&gt;&lt;h1&gt;RapidSol Çözüm Merkezi’ne hoş geldiniz&lt;/h1&gt;&lt;p&gt;Yeni bir destek talebi oluşturabilir veya mevcut taleplerinizin güncel durumunu takip edebilirsiniz.&lt;/p&gt;&lt;/div&gt;&lt;button class=&quot;rc-button-primary&quot; data-open-new&gt;＋ Yeni destek talebi&lt;/button&gt;&lt;/div&gt;
+      &lt;div class=&quot;rc-summary&quot;&gt;&lt;div class=&quot;rc-summary-item&quot;&gt;&lt;div class=&quot;rc-summary-label&quot;&gt;Açık taleplerim&lt;/div&gt;&lt;div class=&quot;rc-summary-value&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;rc-summary-note&quot;&gt;2 talepte RapidSol çalışıyor&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-summary-item&quot;&gt;&lt;div class=&quot;rc-summary-label&quot;&gt;Onayım / yanıtım bekleniyor&lt;/div&gt;&lt;div class=&quot;rc-summary-value&quot; id=&quot;rc-waiting-count&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;rc-summary-note&quot;&gt;Efor onayı veya ek bilgi bekleniyor&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-summary-item&quot;&gt;&lt;div class=&quot;rc-summary-label&quot;&gt;Bu ay kapatılan&lt;/div&gt;&lt;div class=&quot;rc-summary-value&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;rc-summary-note&quot;&gt;Çözümlenerek tamamlandı&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-summary-item&quot;&gt;&lt;div class=&quot;rc-summary-label&quot;&gt;Bu ay iptal edilen&lt;/div&gt;&lt;div class=&quot;rc-summary-value&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;rc-summary-note&quot;&gt;Çözüm uygulanmadan kapatıldı&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;rc-columns&quot;&gt;&lt;div class=&quot;rc-surface&quot;&gt;&lt;div class=&quot;rc-surface-head&quot;&gt;Son taleplerim &lt;button data-open-tickets&gt;Tümünü görüntüle →&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;rc-ticket-row&quot; data-open-detail&gt;&lt;div class=&quot;rc-ticket-id&quot;&gt;R716555&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;rc-ticket-title&quot;&gt;Yol ücreti hatası hakkında&lt;/div&gt;&lt;div class=&quot;rc-ticket-meta&quot;&gt;Son güncelleme bugün 10:18&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-status rc-status-wait&quot; data-r716555-status&gt;Efor onayınız bekleniyor&lt;/div&gt;&lt;div&gt;Ümit Akın&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-ticket-row&quot;&gt;&lt;div class=&quot;rc-ticket-id&quot;&gt;R794094&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;rc-ticket-title&quot;&gt;Saatlik ücretsiz izin&lt;/div&gt;&lt;div class=&quot;rc-ticket-meta&quot;&gt;Son güncelleme dün 16:42&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-status rc-status-wait&quot;&gt;Yanıtınız bekleniyor&lt;/div&gt;&lt;div&gt;Ümit Akın&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-ticket-row&quot;&gt;&lt;div class=&quot;rc-ticket-id&quot;&gt;R110271&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;rc-ticket-title&quot;&gt;Vardiya ekleme talebi&lt;/div&gt;&lt;div class=&quot;rc-ticket-meta&quot;&gt;Son güncelleme 5 Ağustos&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-status rc-status-test&quot;&gt;Test aşamasında&lt;/div&gt;&lt;div&gt;Merve Çetin&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;aside class=&quot;rc-surface&quot;&gt;&lt;div class=&quot;rc-surface-head&quot;&gt;Talep süreci nasıl işler?&lt;/div&gt;&lt;div class=&quot;rc-steps&quot;&gt;&lt;div class=&quot;rc-step&quot;&gt;&lt;span class=&quot;rc-step-icon&quot;&gt;1&lt;/span&gt;&lt;div&gt;&lt;b&gt;Talebinizi iletin&lt;/b&gt;&lt;small&gt;Konu ve detayları paylaşın.&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-step&quot;&gt;&lt;span class=&quot;rc-step-icon&quot;&gt;2&lt;/span&gt;&lt;div&gt;&lt;b&gt;Danışman incelesin&lt;/b&gt;&lt;small&gt;Uzman ekibimiz talebi değerlendirir.&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-step&quot;&gt;&lt;span class=&quot;rc-step-icon&quot;&gt;3&lt;/span&gt;&lt;div&gt;&lt;b&gt;Durumu takip edin&lt;/b&gt;&lt;small&gt;Tüm güncellemeleri buradan görün.&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/aside&gt;&lt;/div&gt;
+    &lt;/section&gt;
+    &lt;section class=&quot;rc-page&quot; data-page=&quot;new&quot;&gt;&lt;div class=&quot;rc-heading&quot;&gt;&lt;div&gt;&lt;h1&gt;Yeni destek talebi&lt;/h1&gt;&lt;p&gt;Doğru ekibe hızlıca yönlendirebilmemiz için aşağıdaki bilgileri doldurun.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-form-layout&quot;&gt;&lt;form class=&quot;rc-form&quot; onsubmit=&quot;return false&quot;&gt;&lt;div class=&quot;rc-form-grid&quot;&gt;&lt;div&gt;&lt;label class=&quot;rc-label&quot; for=&quot;rc-company&quot;&gt;Müşteri&lt;/label&gt;&lt;input id=&quot;rc-company&quot; class=&quot;rc-control&quot; value=&quot;RapidSol&quot; readonly&gt;&lt;/div&gt;&lt;div&gt;&lt;label class=&quot;rc-label&quot; for=&quot;rc-topic&quot;&gt;Yardım konusu&lt;/label&gt;&lt;select id=&quot;rc-topic&quot; class=&quot;rc-control&quot;&gt;&lt;option value=&quot;&quot;&gt;Konu seçin&lt;/option&gt;&lt;option&gt;Yeni düzenleme&lt;/option&gt;&lt;option&gt;Hata / sorun&lt;/option&gt;&lt;option&gt;Danışmanlık&lt;/option&gt;&lt;option&gt;Yasal değişiklik&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;div class=&quot;rc-field-full&quot;&gt;&lt;label class=&quot;rc-label&quot; for=&quot;rc-summary&quot;&gt;Talep özeti&lt;/label&gt;&lt;input id=&quot;rc-summary&quot; class=&quot;rc-control&quot; placeholder=&quot;Örn. Temmuz bordrosunda yol ücreti farkı oluşuyor&quot;&gt;&lt;/div&gt;&lt;div class=&quot;rc-field-full&quot;&gt;&lt;label class=&quot;rc-label&quot; for=&quot;rc-priority&quot;&gt;Öncelik&lt;/label&gt;&lt;select id=&quot;rc-priority&quot; class=&quot;rc-control&quot;&gt;&lt;option&gt;Normal&lt;/option&gt;&lt;option&gt;Yüksek&lt;/option&gt;&lt;option&gt;Kritik — çalışma durdu&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;div class=&quot;rc-field-full&quot;&gt;&lt;label class=&quot;rc-label&quot; for=&quot;rc-details&quot;&gt;Talep detayları&lt;/label&gt;&lt;textarea id=&quot;rc-details&quot; class=&quot;rc-control&quot; placeholder=&quot;Sorunu, beklediğiniz sonucu ve varsa örnek personel/işlem numarasını paylaşın…&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;&lt;label class=&quot;rc-field-full rc-upload&quot; for=&quot;rc-new-files&quot;&gt;Dosyaları buraya sürükleyin veya bilgisayarınızdan seçin&lt;input id=&quot;rc-new-files&quot; type=&quot;file&quot; multiple hidden&gt;&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;rc-form-footer&quot;&gt;&lt;small&gt;Tahmini ilk yanıt: 2 saat içinde&lt;/small&gt;&lt;button class=&quot;rc-button-primary&quot; id=&quot;rc-submit&quot;&gt;Talebi oluştur →&lt;/button&gt;&lt;/div&gt;&lt;/form&gt;&lt;aside class=&quot;rc-surface&quot;&gt;&lt;div class=&quot;rc-aside-block&quot;&gt;&lt;h3&gt;Daha hızlı çözüm için&lt;/h3&gt;&lt;div class=&quot;rc-aside-tip&quot;&gt;&lt;span&gt;✓&lt;/span&gt;&lt;div&gt;İlgili personel veya işlem numarasını ekleyin.&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-aside-tip&quot;&gt;&lt;span&gt;✓&lt;/span&gt;&lt;div&gt;Hatanın oluştuğu ekranı ve adımları belirtin.&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-aside-tip&quot;&gt;&lt;span&gt;✓&lt;/span&gt;&lt;div&gt;Kişisel veri içeren dosyaları maskeleyin.&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-notice&quot;&gt;Talebiniz oluşturulduğunda sistem kayıt numarasını otomatik üretecek ve tüm güncellemeler e-posta ile bildirilecektir.&lt;/div&gt;&lt;/div&gt;&lt;/aside&gt;&lt;/div&gt;&lt;/section&gt;
+    &lt;section class=&quot;rc-page&quot; data-page=&quot;tickets&quot;&gt;&lt;div class=&quot;rc-heading&quot;&gt;&lt;div&gt;&lt;h1&gt;Taleplerim&lt;/h1&gt;&lt;p&gt;Açık ve geçmiş destek taleplerinizin tamamı.&lt;/p&gt;&lt;/div&gt;&lt;button class=&quot;rc-button-primary&quot; data-open-new&gt;＋ Yeni talep&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;rc-surface&quot;&gt;&lt;div class=&quot;rc-surface-head&quot;&gt;Açık talepler · 4&lt;/div&gt;&lt;div class=&quot;rc-ticket-row&quot; data-open-detail&gt;&lt;div class=&quot;rc-ticket-id&quot;&gt;R716555&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;rc-ticket-title&quot;&gt;Yol ücreti hatası hakkında&lt;/div&gt;&lt;div class=&quot;rc-ticket-meta&quot;&gt;Ulaşım A.Ş. · Bugün 10:18&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-status rc-status-wait&quot; data-r716555-status&gt;Efor onayınız bekleniyor&lt;/div&gt;&lt;div&gt;Ümit Akın&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-ticket-row&quot;&gt;&lt;div class=&quot;rc-ticket-id&quot;&gt;R794094&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;rc-ticket-title&quot;&gt;Saatlik ücretsiz izin&lt;/div&gt;&lt;div class=&quot;rc-ticket-meta&quot;&gt;Tosyalı Holding · Dün 16:42&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-status rc-status-wait&quot;&gt;Yanıtınız bekleniyor&lt;/div&gt;&lt;div&gt;Ümit Akın&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-ticket-row&quot;&gt;&lt;div class=&quot;rc-ticket-id&quot;&gt;R110271&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;rc-ticket-title&quot;&gt;Vardiya ekleme talebi&lt;/div&gt;&lt;div class=&quot;rc-ticket-meta&quot;&gt;Konecta · 5 Ağustos 16:05&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-status rc-status-test&quot;&gt;Test aşamasında&lt;/div&gt;&lt;div&gt;Merve Çetin&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+    &lt;section class=&quot;rc-page&quot; data-page=&quot;detail&quot;&gt;&lt;div class=&quot;rc-heading rc-detail-title&quot;&gt;&lt;button data-open-tickets&gt;← Taleplerim&lt;/button&gt;&lt;div&gt;&lt;h1&gt;R716555 · Yol ücreti hatası hakkında&lt;/h1&gt;&lt;p&gt;Oluşturulma: 6 Ağustos 2026, 16:29&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-detail-grid&quot;&gt;&lt;div class=&quot;rc-surface&quot;&gt;&lt;div class=&quot;rc-approval&quot; id=&quot;rc-approval&quot;&gt;&lt;div class=&quot;rc-approval-top&quot;&gt;&lt;span class=&quot;rc-approval-icon&quot;&gt;◷&lt;/span&gt;&lt;div&gt;&lt;h3&gt;Efor onayınız bekleniyor&lt;/h3&gt;&lt;p&gt;RapidSol yöneticisi çalışmanın tamamlanması için aşağıdaki eforu önerdi.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-effort&quot;&gt;&lt;div&gt;&lt;small&gt;Önerilen efor&lt;/small&gt;&lt;b&gt;6 saat&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;small&gt;Onaya gönderen&lt;/small&gt;&lt;b&gt;Ümit Y. Akın&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-approval-actions&quot;&gt;&lt;button class=&quot;rc-button-secondary&quot; id=&quot;rc-reject-effort&quot;&gt;Reddet / açıklama iste&lt;/button&gt;&lt;button class=&quot;rc-button-primary&quot; id=&quot;rc-approve-effort&quot;&gt;6 saati onayla&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-surface-head&quot;&gt;Yazışmalar&lt;/div&gt;&lt;div class=&quot;rc-message&quot;&gt;&lt;div class=&quot;rc-message-head&quot;&gt;&lt;div class=&quot;rc-avatar&quot;&gt;BS&lt;/div&gt;Bourla Salehi &lt;time&gt;Dün 16:29&lt;/time&gt;&lt;/div&gt;&lt;p&gt;Temmuz bordrosunda yol ücreti kesintisi beklenenden yüksek görünüyor. İlgili personel numaralarını ve ekran görüntüsünü ekledim.&lt;/p&gt;&lt;span class=&quot;rc-attachment&quot;&gt;📎 yol-ucreti-kontrol.xlsx&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;rc-message&quot;&gt;&lt;div class=&quot;rc-message-head&quot;&gt;&lt;div class=&quot;rc-avatar&quot;&gt;ÜA&lt;/div&gt;Ümit Yaşar Akın · RapidSol &lt;time&gt;Bugün 10:18&lt;/time&gt;&lt;/div&gt;&lt;p&gt;İnceleme tamamlandı. Düzenleme ve test çalışması için toplam 6 saat efor öngörüyoruz. Onayınızdan sonra çalışmaya başlayacağız.&lt;/p&gt;&lt;span class=&quot;rc-attachment&quot;&gt;📎 efor-detayi.pdf&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;rc-reply&quot;&gt;&lt;label class=&quot;rc-label&quot; for=&quot;rc-reply&quot;&gt;Yanıtınız&lt;/label&gt;&lt;textarea id=&quot;rc-reply&quot; class=&quot;rc-control&quot; placeholder=&quot;Mesajınızı yazın…&quot;&gt;&lt;/textarea&gt;&lt;div class=&quot;rc-form-footer&quot;&gt;&lt;label class=&quot;rc-file-label&quot; for=&quot;rc-reply-files&quot;&gt;📎 Dosya ekle&lt;input id=&quot;rc-reply-files&quot; type=&quot;file&quot; multiple&gt;&lt;/label&gt;&lt;span class=&quot;rc-file-name&quot; id=&quot;rc-file-name&quot;&gt;&lt;/span&gt;&lt;button class=&quot;rc-button-primary&quot;&gt;Yanıtı gönder&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;aside&gt;&lt;div class=&quot;rc-surface&quot;&gt;&lt;div class=&quot;rc-surface-head&quot;&gt;Talep bilgileri&lt;/div&gt;&lt;div class=&quot;rc-info&quot;&gt;&lt;div class=&quot;rc-info-row&quot;&gt;&lt;span&gt;Durum&lt;/span&gt;&lt;b class=&quot;rc-status rc-status-wait&quot; id=&quot;rc-detail-status&quot;&gt;Efor onayınız bekleniyor&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rc-info-row&quot;&gt;&lt;span&gt;Önerilen efor&lt;/span&gt;&lt;b id=&quot;rc-effort-value&quot;&gt;6 saat&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rc-info-row&quot;&gt;&lt;span&gt;Öncelik&lt;/span&gt;&lt;b&gt;Normal&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rc-info-row&quot;&gt;&lt;span&gt;Danışman&lt;/span&gt;&lt;b&gt;Ümit Y. Akın&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;rc-info-row&quot;&gt;&lt;span&gt;Yardım konusu&lt;/span&gt;&lt;b&gt;Bordro&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;rc-surface&quot; style=&quot;margin-top:14px&quot;&gt;&lt;div class=&quot;rc-surface-head&quot;&gt;Talep geçmişi&lt;/div&gt;&lt;div class=&quot;rc-timeline&quot;&gt;&lt;div class=&quot;rc-timeline-item&quot;&gt;&lt;b&gt;6 saat efor onayınıza sunuldu&lt;/b&gt;&lt;small&gt;Bugün 10:18&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;rc-timeline-item&quot;&gt;&lt;b&gt;Yönetici incelemesi tamamlandı&lt;/b&gt;&lt;small&gt;Bugün 10:05&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;rc-timeline-item&quot;&gt;&lt;b&gt;Ümit Y. Akın&#x27;a atandı&lt;/b&gt;&lt;small&gt;Bugün 09:54&lt;/small&gt;&lt;/div&gt;&lt;div class=&quot;rc-timeline-item&quot;&gt;&lt;b&gt;Talep oluşturuldu&lt;/b&gt;&lt;small&gt;Dün 16:29&lt;/small&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/aside&gt;&lt;/div&gt;&lt;/section&gt;
+  &lt;/main&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(()=&gt;{const root=document.getElementById(&#x27;rapidsol-customer&#x27;);const show=name=&gt;{root.querySelectorAll(&#x27;.rc-page&#x27;).forEach(page=&gt;page.classList.toggle(&#x27;rc-selected&#x27;,page.dataset.page===name));root.querySelectorAll(&#x27;[data-page-button]&#x27;).forEach(button=&gt;button.classList.toggle(&#x27;rc-selected&#x27;,button.dataset.pageButton===name));setTimeout(()=&gt;root.scrollIntoView({block:&#x27;start&#x27;,behavior:&#x27;smooth&#x27;}),0);};root.querySelectorAll(&#x27;[data-page-button]&#x27;).forEach(button=&gt;button.addEventListener(&#x27;click&#x27;,()=&gt;show(button.dataset.pageButton)));root.querySelectorAll(&#x27;[data-open-new]&#x27;).forEach(button=&gt;button.addEventListener(&#x27;click&#x27;,()=&gt;show(&#x27;new&#x27;)));root.querySelectorAll(&#x27;[data-open-tickets]&#x27;).forEach(button=&gt;button.addEventListener(&#x27;click&#x27;,()=&gt;show(&#x27;tickets&#x27;)));root.querySelectorAll(&#x27;[data-open-detail]&#x27;).forEach(button=&gt;button.addEventListener(&#x27;click&#x27;,()=&gt;show(&#x27;detail&#x27;)));const submit=root.querySelector(&#x27;#rc-submit&#x27;);submit.addEventListener(&#x27;click&#x27;,()=&gt;{submit.textContent=&#x27;Talep oluşturuldu ✓&#x27;;submit.style.background=&#x27;#087d76&#x27;;});const files=root.querySelector(&#x27;#rc-reply-files&#x27;);const fileName=root.querySelector(&#x27;#rc-file-name&#x27;);files.addEventListener(&#x27;change&#x27;,()=&gt;{fileName.textContent=files.files.length?`${files.files.length} dosya seçildi`:&#x27;&#x27;;});const approval=root.querySelector(&#x27;#rc-approval&#x27;);const detailStatus=root.querySelector(&#x27;#rc-detail-status&#x27;);root.querySelector(&#x27;#rc-approve-effort&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{approval.innerHTML=&#x27;&lt;div class=&quot;rc-approval-top&quot;&gt;&lt;span class=&quot;rc-approval-icon&quot;&gt;✓&lt;/span&gt;&lt;div&gt;&lt;h3&gt;6 saat efor onaylandı&lt;/h3&gt;&lt;p&gt;RapidSol ekibi çalışmaya başlayabilir. Güncellemeleri bu ekrandan takip edebilirsiniz.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&#x27;;detailStatus.textContent=&#x27;Çalışma başlatılıyor&#x27;;detailStatus.className=&#x27;rc-status rc-status-open&#x27;;root.querySelectorAll(&#x27;[data-r716555-status]&#x27;).forEach(status=&gt;{status.textContent=&#x27;Çalışma başlatılıyor&#x27;;status.className=&#x27;rc-status rc-status-open&#x27;;});root.querySelector(&#x27;#rc-waiting-count&#x27;).textContent=&#x27;1&#x27;;});root.querySelector(&#x27;#rc-reject-effort&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{root.querySelector(&#x27;#rc-reply&#x27;).value=&#x27;Önerilen efor hakkında aşağıdaki konularda açıklama rica ederim: &#x27;;root.querySelector(&#x27;#rc-reply&#x27;).focus();});})();
+&lt;/script&gt;
+&lt;script&gt;
+(()=&gt;{const root=document.getElementById(&#x27;rapidsol-customer&#x27;);const oldDetails=root.querySelector(&#x27;#rc-details&#x27;);if(!oldDetails)return;const wrap=document.createElement(&#x27;div&#x27;);wrap.className=&#x27;rc-editor-wrap&#x27;;wrap.innerHTML=&#x27;&lt;div class=&quot;rc-editor-toolbar&quot; role=&quot;toolbar&quot; aria-label=&quot;Talep detayları biçimlendirme&quot;&gt;&lt;select class=&quot;rc-editor-font&quot; aria-label=&quot;Yazı tipi&quot;&gt;&lt;option value=&quot;Arial&quot;&gt;Arial&lt;/option&gt;&lt;option value=&quot;Georgia&quot;&gt;Georgia&lt;/option&gt;&lt;option value=&quot;Courier New&quot;&gt;Courier New&lt;/option&gt;&lt;/select&gt;&lt;span class=&quot;rc-editor-separator&quot;&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-new-command=&quot;bold&quot; aria-label=&quot;Kalın&quot;&gt;&lt;b&gt;B&lt;/b&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-new-command=&quot;italic&quot; aria-label=&quot;İtalik&quot;&gt;&lt;i&gt;I&lt;/i&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-new-command=&quot;underline&quot; aria-label=&quot;Altı çizili&quot;&gt;&lt;u&gt;U&lt;/u&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-new-command=&quot;strikeThrough&quot; aria-label=&quot;Üstü çizili&quot;&gt;&lt;s&gt;S&lt;/s&gt;&lt;/button&gt;&lt;span class=&quot;rc-editor-separator&quot;&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-new-command=&quot;insertUnorderedList&quot; aria-label=&quot;Madde işaretli liste&quot;&gt;☷&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-new-command=&quot;insertOrderedList&quot; aria-label=&quot;Numaralı liste&quot;&gt;1.&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-new-action=&quot;link&quot; aria-label=&quot;Bağlantı ekle&quot;&gt;🔗&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-new-action=&quot;table&quot; aria-label=&quot;Tablo ekle&quot;&gt;▦&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-new-command=&quot;insertHorizontalRule&quot; aria-label=&quot;Yatay çizgi&quot;&gt;―&lt;/button&gt;&lt;/div&gt;&lt;div id=&quot;rc-details&quot; class=&quot;rc-rich-editor&quot; contenteditable=&quot;true&quot; role=&quot;textbox&quot; aria-multiline=&quot;true&quot; data-placeholder=&quot;Sorunu, beklediğiniz sonucu ve varsa örnek personel/işlem numarasını paylaşın…&quot;&gt;&lt;/div&gt;&lt;div class=&quot;rc-editor-bottom&quot;&gt;&lt;span id=&quot;rc-new-char-count&quot;&gt;0 / 50.000 karakter&lt;/span&gt;&lt;/div&gt;&#x27;;oldDetails.replaceWith(wrap);const editor=root.querySelector(&#x27;#rc-details&#x27;);wrap.querySelectorAll(&#x27;[data-new-command]&#x27;).forEach(button=&gt;button.addEventListener(&#x27;click&#x27;,()=&gt;{editor.focus();document.execCommand(button.dataset.newCommand,false);}));wrap.querySelector(&#x27;.rc-editor-font&#x27;).addEventListener(&#x27;change&#x27;,event=&gt;{editor.focus();document.execCommand(&#x27;fontName&#x27;,false,event.target.value);});wrap.querySelector(&#x27;[data-new-action=&quot;link&quot;]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{const url=prompt(&#x27;Bağlantı adresini girin:&#x27;,&#x27;https://&#x27;);if(url){editor.focus();document.execCommand(&#x27;createLink&#x27;,false,url);}});wrap.querySelector(&#x27;[data-new-action=&quot;table&quot;]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{editor.focus();document.execCommand(&#x27;insertHTML&#x27;,false,&#x27;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th&gt;Başlık 1&lt;/th&gt;&lt;th&gt;Başlık 2&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;İçerik&lt;/td&gt;&lt;td&gt;İçerik&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&#x27;);});const counter=wrap.querySelector(&#x27;#rc-new-char-count&#x27;);editor.addEventListener(&#x27;input&#x27;,()=&gt;{if(editor.innerText.length&gt;50000)editor.innerText=editor.innerText.slice(0,50000);counter.textContent=`${editor.innerText.length.toLocaleString(&#x27;tr-TR&#x27;)} / 50.000 karakter`;});})();
+&lt;/script&gt;
+&lt;style&gt;
+#rapidsol-customer .rc-detail-title .rc-back-link{display:inline-flex;align-items:center;gap:7px;width:max-content;margin:0 0 16px;border:0;background:transparent;color:#d9f3f0;padding:4px 0;box-shadow:none;white-space:nowrap;font-size:13px;font-weight:500}#rapidsol-customer .rc-detail-title .rc-back-link:hover{text-decoration:underline;text-underline-offset:3px}
+#rapidsol-customer .rc-detail-title{display:block;margin-bottom:25px;padding:24px 26px;border-radius:18px;background:linear-gradient(120deg,#103c3e,#0a716d);color:#fff;overflow:hidden;position:relative}#rapidsol-customer .rc-detail-title&gt;div{width:100%;margin-left:0;position:relative;z-index:1}#rapidsol-customer .rc-editor-wrap{border:1px solid light-dark(#d4e2e0,#33494d);border-radius:11px;overflow:hidden;background:light-dark(#fbfdfd,#101c1f)}#rapidsol-customer .rc-editor-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:3px;padding:7px;border-bottom:1px solid light-dark(#dfe9e7,#304448);background:light-dark(#f3f8f7,#172629)}#rapidsol-customer .rc-editor-tool{min-width:32px;height:30px;border:0;border-radius:7px;background:transparent;color:inherit;cursor:pointer;padding:0 8px}#rapidsol-customer .rc-editor-tool:hover{background:light-dark(#e1efed,#243b3e)}#rapidsol-customer .rc-editor-font{height:30px;max-width:125px;border:1px solid light-dark(#d6e2e0,#34494d);border-radius:7px;background:light-dark(#fff,#101c1f);color:inherit;padding:0 7px}#rapidsol-customer .rc-editor-separator{width:1px;height:20px;background:light-dark(#d8e4e2,#34494d);margin:0 3px}#rapidsol-customer .rc-rich-editor{min-height:190px;max-height:520px;overflow:auto;padding:14px;outline:none;font-size:14px;line-height:1.6}#rapidsol-customer .rc-rich-editor:empty:before{content:attr(data-placeholder);color:light-dark(#8b999c,#85999b)}#rapidsol-customer .rc-rich-editor table{border-collapse:collapse;width:100%;margin:8px 0}#rapidsol-customer .rc-rich-editor td,#rapidsol-customer .rc-rich-editor th{border:1px solid light-dark(#cfdedc,#3a5154);padding:6px}#rapidsol-customer .rc-editor-bottom{display:flex;justify-content:flex-end;padding:6px 10px;border-top:1px solid light-dark(#e4eceb,#2d4144);font-size:11px;color:light-dark(#77878b,#9aacaf)}#rapidsol-customer .rc-detail-title:after{content:&quot;&quot;;position:absolute;width:180px;height:180px;border:34px solid rgba(255,255,255,.06);border-radius:50%;right:-55px;top:-90px}#rapidsol-customer .rc-detail-title h1{color:#fff;font-size:24px;line-height:1.25;letter-spacing:-.5px;margin-bottom:6px}#rapidsol-customer .rc-detail-title p{color:#d4e9e7;font-size:13px}
+&lt;/style&gt;
+&lt;script&gt;
+(()=&gt;{const root=document.getElementById(&#x27;rapidsol-customer&#x27;);const priority=root.querySelector(&#x27;#rc-priority&#x27;)?.parentElement;if(priority&amp;&amp;!root.querySelector(&#x27;#rc-reference&#x27;)){const field=document.createElement(&#x27;div&#x27;);field.className=&#x27;rc-field-full&#x27;;field.innerHTML=&#x27;&lt;label class=&quot;rc-label&quot; for=&quot;rc-reference&quot;&gt;Müşteri talep numarası &lt;small&gt;(opsiyonel)&lt;/small&gt;&lt;/label&gt;&lt;input id=&quot;rc-reference&quot; class=&quot;rc-control&quot; placeholder=&quot;Varsa kendi sisteminizdeki referans numarası&quot;&gt;&#x27;;priority.insertAdjacentElement(&#x27;afterend&#x27;,field);}const back=root.querySelector(&#x27;.rc-detail-title [data-open-tickets]&#x27;);if(back){back.className=&#x27;rc-back-link&#x27;;back.innerHTML=&#x27;&lt;span aria-hidden=&quot;true&quot;&gt;←&lt;/span&gt; Taleplerim&#x27;;}const oldEditor=root.querySelector(&#x27;#rc-reply&#x27;);if(!oldEditor)return;const editorWrap=document.createElement(&#x27;div&#x27;);editorWrap.className=&#x27;rc-editor-wrap&#x27;;editorWrap.innerHTML=&#x27;&lt;div class=&quot;rc-editor-toolbar&quot; role=&quot;toolbar&quot; aria-label=&quot;Metin biçimlendirme&quot;&gt;&lt;select class=&quot;rc-editor-font&quot; aria-label=&quot;Yazı tipi&quot;&gt;&lt;option value=&quot;Arial&quot;&gt;Arial&lt;/option&gt;&lt;option value=&quot;Georgia&quot;&gt;Georgia&lt;/option&gt;&lt;option value=&quot;Courier New&quot;&gt;Courier New&lt;/option&gt;&lt;/select&gt;&lt;span class=&quot;rc-editor-separator&quot;&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-command=&quot;bold&quot; aria-label=&quot;Kalın&quot;&gt;&lt;b&gt;B&lt;/b&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-command=&quot;italic&quot; aria-label=&quot;İtalik&quot;&gt;&lt;i&gt;I&lt;/i&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-command=&quot;underline&quot; aria-label=&quot;Altı çizili&quot;&gt;&lt;u&gt;U&lt;/u&gt;&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-command=&quot;strikeThrough&quot; aria-label=&quot;Üstü çizili&quot;&gt;&lt;s&gt;S&lt;/s&gt;&lt;/button&gt;&lt;span class=&quot;rc-editor-separator&quot;&gt;&lt;/span&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-command=&quot;insertUnorderedList&quot; aria-label=&quot;Madde işaretli liste&quot;&gt;☷&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-command=&quot;insertOrderedList&quot; aria-label=&quot;Numaralı liste&quot;&gt;1.&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-action=&quot;link&quot; aria-label=&quot;Bağlantı ekle&quot;&gt;🔗&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-action=&quot;table&quot; aria-label=&quot;Tablo ekle&quot;&gt;▦&lt;/button&gt;&lt;button type=&quot;button&quot; class=&quot;rc-editor-tool&quot; data-command=&quot;insertHorizontalRule&quot; aria-label=&quot;Yatay çizgi&quot;&gt;―&lt;/button&gt;&lt;/div&gt;&lt;div id=&quot;rc-reply&quot; class=&quot;rc-rich-editor&quot; contenteditable=&quot;true&quot; role=&quot;textbox&quot; aria-multiline=&quot;true&quot; data-placeholder=&quot;Mesajınızı yazın…&quot;&gt;&lt;/div&gt;&lt;div class=&quot;rc-editor-bottom&quot;&gt;&lt;span id=&quot;rc-char-count&quot;&gt;0 / 50.000 karakter&lt;/span&gt;&lt;/div&gt;&#x27;;oldEditor.replaceWith(editorWrap);const editor=root.querySelector(&#x27;#rc-reply&#x27;);root.querySelectorAll(&#x27;.rc-editor-tool[data-command]&#x27;).forEach(button=&gt;button.addEventListener(&#x27;click&#x27;,()=&gt;{editor.focus();document.execCommand(button.dataset.command,false); }));root.querySelector(&#x27;.rc-editor-font&#x27;).addEventListener(&#x27;change&#x27;,event=&gt;{editor.focus();document.execCommand(&#x27;fontName&#x27;,false,event.target.value);});root.querySelector(&#x27;[data-action=&quot;link&quot;]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{const url=prompt(&#x27;Bağlantı adresini girin:&#x27;,&#x27;https://&#x27;);if(url){editor.focus();document.execCommand(&#x27;createLink&#x27;,false,url);}});root.querySelector(&#x27;[data-action=&quot;table&quot;]&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{editor.focus();document.execCommand(&#x27;insertHTML&#x27;,false,&#x27;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th&gt;Başlık 1&lt;/th&gt;&lt;th&gt;Başlık 2&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;İçerik&lt;/td&gt;&lt;td&gt;İçerik&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&#x27;);});const counter=root.querySelector(&#x27;#rc-char-count&#x27;);editor.addEventListener(&#x27;input&#x27;,()=&gt;{if(editor.innerText.length&gt;50000)editor.innerText=editor.innerText.slice(0,50000);counter.textContent=`${editor.innerText.length.toLocaleString(&#x27;tr-TR&#x27;)} / 50.000 karakter`;});const reject=root.querySelector(&#x27;#rc-reject-effort&#x27;);reject.addEventListener(&#x27;click&#x27;,()=&gt;{editor.textContent=&#x27;Önerilen efor hakkında aşağıdaki konularda açıklama rica ederim: &#x27;;editor.dispatchEvent(new Event(&#x27;input&#x27;));editor.focus();});})();
+&lt;/script&gt;
+&lt;style&gt;
+#rapidsol-customer .rc-language{margin-left:auto;border:1px solid light-dark(#d5e3e1,#344a4e);border-radius:9px;background:light-dark(#f8fbfb,#101c1f);color:inherit;padding:7px 9px;font-size:12px}#rapidsol-customer .rc-language+.rc-account{margin-left:0}#rapidsol-customer .rc-message-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12px}#rapidsol-customer .rc-message-table th,#rapidsol-customer .rc-message-table td{border:1px solid light-dark(#d9e5e3,#344a4e);padding:8px;text-align:left;vertical-align:top}#rapidsol-customer .rc-message-table th{background:light-dark(#f1f7f6,#1a2c2f);font-weight:500}#rapidsol-customer .rc-attachment-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}#rapidsol-customer .rc-message-note{margin:12px 0;padding:12px 14px;border-left:3px solid #0ba69d;background:light-dark(#f1faf8,#142b2c);font-size:13px;line-height:1.55}#rapidsol-customer .rc-message ul,#rapidsol-customer .rc-message ol{font-size:14px;line-height:1.6;color:light-dark(#47585d,#c5d1d2)}
+&lt;/style&gt;
+&lt;script&gt;
+(()=&gt;{const root=document.getElementById(&#x27;rapidsol-customer&#x27;);const reply=root.querySelector(&#x27;.rc-reply&#x27;);if(!reply||root.querySelector(&#x27;[data-long-example]&#x27;))return;const holder=document.createElement(&#x27;div&#x27;);holder.setAttribute(&#x27;data-long-example&#x27;,&#x27;&#x27;);holder.innerHTML=&#x27;&lt;article class=&quot;rc-message&quot;&gt;&lt;div class=&quot;rc-message-head&quot;&gt;&lt;div class=&quot;rc-avatar&quot;&gt;BS&lt;/div&gt;Bourla Salehi &lt;time&gt;Bugün 11:06&lt;/time&gt;&lt;/div&gt;&lt;p&gt;Merhaba, kontrolü farklı personel grupları ve üç ayrı bordro dönemi üzerinde tekrarladık. Sorun yalnızca yol yardımı ücret türünün geriye dönük tarihli kayıtlarında oluşuyor. Aşağıdaki tabloda örnek personelleri, beklenen ve gerçekleşen tutarları paylaşıyorum. Kişisel veriler güvenlik amacıyla maskelenmiştir.&lt;/p&gt;&lt;table class=&quot;rc-message-table&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Personel&lt;/th&gt;&lt;th&gt;Bordro dönemi&lt;/th&gt;&lt;th&gt;Beklenen&lt;/th&gt;&lt;th&gt;Gerçekleşen&lt;/th&gt;&lt;th&gt;Fark&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;10••42&lt;/td&gt;&lt;td&gt;Temmuz 2026&lt;/td&gt;&lt;td&gt;1.250,00 ₺&lt;/td&gt;&lt;td&gt;1.875,00 ₺&lt;/td&gt;&lt;td&gt;+625,00 ₺&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;10••87&lt;/td&gt;&lt;td&gt;Temmuz 2026&lt;/td&gt;&lt;td&gt;1.250,00 ₺&lt;/td&gt;&lt;td&gt;2.500,00 ₺&lt;/td&gt;&lt;td&gt;+1.250,00 ₺&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11••03&lt;/td&gt;&lt;td&gt;Haziran 2026&lt;/td&gt;&lt;td&gt;1.100,00 ₺&lt;/td&gt;&lt;td&gt;1.100,00 ₺&lt;/td&gt;&lt;td&gt;0,00 ₺&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;11••19&lt;/td&gt;&lt;td&gt;Ağustos 2026&lt;/td&gt;&lt;td&gt;1.300,00 ₺&lt;/td&gt;&lt;td&gt;1.950,00 ₺&lt;/td&gt;&lt;td&gt;+650,00 ₺&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;div class=&quot;rc-message-note&quot;&gt;&lt;b&gt;Ek bilgi:&lt;/b&gt; Aynı personeller için standart ücret simülasyonu doğru sonuç veriyor; fark yalnızca canlı bordro çalıştırmasında oluşuyor. Test ortamında 01.07.2026 tarihli konfigürasyon kopyası kullanıldı.&lt;/div&gt;&lt;p&gt;İnceleme sırasında kullandığımız kontrol dosyasını, ücret türü ekran görüntülerini ve bordro log çıktısını ekliyorum. Gerekirse ilgili dönemin anonimleştirilmiş test verisini de paylaşabiliriz.&lt;/p&gt;&lt;div class=&quot;rc-attachment-group&quot;&gt;&lt;span class=&quot;rc-attachment&quot;&gt;📊 yol-yardimi-karsilastirma.xlsx · 284 KB&lt;/span&gt;&lt;span class=&quot;rc-attachment&quot;&gt;🖼️ konfigürasyon-ekrani.png · 1,8 MB&lt;/span&gt;&lt;span class=&quot;rc-attachment&quot;&gt;📄 bordro-loglari.zip · 4,2 MB&lt;/span&gt;&lt;/div&gt;&lt;/article&gt;&lt;article class=&quot;rc-message&quot;&gt;&lt;div class=&quot;rc-message-head&quot;&gt;&lt;div class=&quot;rc-avatar&quot;&gt;ÜA&lt;/div&gt;Ümit Yaşar Akın · RapidSol &lt;time&gt;Bugün 12:24&lt;/time&gt;&lt;/div&gt;&lt;p&gt;Detaylı çalışma ve örnekler için teşekkürler. Paylaşılan tablo ile logları karşılaştırdık. İlk bulgularımıza göre geriye dönük kayıtların bölünmesi sırasında aynı ücret türü ikinci kez değerlendirmeye giriyor.&lt;/p&gt;&lt;ol&gt;&lt;li&gt;Ücret türü tarih aralıkları yeniden düzenlenecek.&lt;/li&gt;&lt;li&gt;Temmuz bordrosu seçilen dört personel için simüle edilecek.&lt;/li&gt;&lt;li&gt;Fark oluşmaması halinde toplu regresyon testi çalıştırılacak.&lt;/li&gt;&lt;li&gt;Sonuçlar müşteri testine açılmadan önce kontrol raporu paylaşılacak.&lt;/li&gt;&lt;/ol&gt;&lt;p&gt;Bu düzenleme, test ve sonuç raporu için toplam &lt;b&gt;6 saat&lt;/b&gt; efor öngörüyoruz. Onay sonrasında aynı iş günü içinde çalışmayı başlatabiliriz.&lt;/p&gt;&lt;div class=&quot;rc-attachment-group&quot;&gt;&lt;span class=&quot;rc-attachment&quot;&gt;📄 teknik-inceleme-ve-efor.pdf · 612 KB&lt;/span&gt;&lt;span class=&quot;rc-attachment&quot;&gt;📊 test-senaryolari.xlsx · 96 KB&lt;/span&gt;&lt;/div&gt;&lt;/article&gt;&lt;article class=&quot;rc-message&quot;&gt;&lt;div class=&quot;rc-message-head&quot;&gt;&lt;div class=&quot;rc-avatar&quot;&gt;BS&lt;/div&gt;Bourla Salehi &lt;time&gt;Bugün 13:02&lt;/time&gt;&lt;/div&gt;&lt;p&gt;Teşekkürler. Efor teklifini ilgili yöneticimizle paylaştım. Onay öncesinde bir noktayı netleştirmek istiyoruz: yapılacak tarih düzenlemesi Ağustos bordrosunda daha önce doğru hesaplanan personelleri etkiler mi? Çalışmanın kapsamına Ağustos dönemi regresyon kontrolünün de dahil olduğunu teyit edebilir misiniz?&lt;/p&gt;&lt;blockquote class=&quot;rc-message-note&quot;&gt;Özellikle 11••19 numaralı personelde Ağustos tutarının tekrar değişmemesi kritik. Bu personelin mevcut doğru sonucu kontrol senaryosuna referans olarak eklenebilir.&lt;/blockquote&gt;&lt;p&gt;Ayrıca toplantıda üzerinden geçtiğimiz ekran görüntüsünün işaretlenmiş sürümünü ve iç onay formumuzu ekliyorum. Yanıtınıza göre efor onayını bu ekran üzerinden tamamlayacağız.&lt;/p&gt;&lt;div class=&quot;rc-attachment-group&quot;&gt;&lt;span class=&quot;rc-attachment&quot;&gt;🖼️ isaretli-ekran-goruntusu.png · 2,1 MB&lt;/span&gt;&lt;span class=&quot;rc-attachment&quot;&gt;📄 ic-onay-formu.pdf · 348 KB&lt;/span&gt;&lt;/div&gt;&lt;/article&gt;&#x27;;reply.before(holder);})();(()=&gt;{const root=document.getElementById(&#x27;rapidsol-customer&#x27;);const map={&#x27;Ana Sayfa&#x27;:&#x27;Home&#x27;,&#x27;Yeni Talep&#x27;:&#x27;New Request&#x27;,&#x27;Taleplerim (4)&#x27;:&#x27;My Requests (4)&#x27;,&#x27;Taleplerim&#x27;:&#x27;My Requests&#x27;,&#x27;Yeni destek talebi&#x27;:&#x27;New support request&#x27;,&#x27;＋ Yeni destek talebi&#x27;:&#x27;＋ New support request&#x27;,&#x27;＋ Yeni talep&#x27;:&#x27;＋ New request&#x27;,&#x27;RapidSol Çözüm Merkezi’ne hoş geldiniz&#x27;:&#x27;Welcome to the RapidSol Solution Center&#x27;,&#x27;Yeni bir destek talebi oluşturabilir veya mevcut taleplerinizin güncel durumunu takip edebilirsiniz.&#x27;:&#x27;Create a new support request or track your existing requests.&#x27;,&#x27;Açık taleplerim&#x27;:&#x27;My open requests&#x27;,&#x27;2 talepte RapidSol çalışıyor&#x27;:&#x27;RapidSol is working on 2 requests&#x27;,&#x27;Onayım / yanıtım bekleniyor&#x27;:&#x27;Waiting for my approval / reply&#x27;,&#x27;Efor onayı veya ek bilgi bekleniyor&#x27;:&#x27;Effort approval or additional information required&#x27;,&#x27;Bu ay kapatılan&#x27;:&#x27;Closed this month&#x27;,&#x27;Çözümlenerek tamamlandı&#x27;:&#x27;Completed with a resolution&#x27;,&#x27;Bu ay iptal edilen&#x27;:&#x27;Cancelled this month&#x27;,&#x27;Çözüm uygulanmadan kapatıldı&#x27;:&#x27;Closed without resolution&#x27;,&#x27;Son taleplerim&#x27;:&#x27;Recent requests&#x27;,&#x27;Tümünü görüntüle →&#x27;:&#x27;View all →&#x27;,&#x27;Yol ücreti hatası hakkında&#x27;:&#x27;Regarding transportation allowance error&#x27;,&#x27;Son güncelleme bugün 10:18&#x27;:&#x27;Last updated today at 10:18&#x27;,&#x27;Efor onayınız bekleniyor&#x27;:&#x27;Waiting for your effort approval&#x27;,&#x27;Yanıtınız bekleniyor&#x27;:&#x27;Waiting for your reply&#x27;,&#x27;Test aşamasında&#x27;:&#x27;Testing in progress&#x27;,&#x27;Talep süreci nasıl işler?&#x27;:&#x27;How does the request process work?&#x27;,&#x27;Talebinizi iletin&#x27;:&#x27;Submit your request&#x27;,&#x27;Konu ve detayları paylaşın.&#x27;:&#x27;Share the subject and details.&#x27;,&#x27;Danışman incelesin&#x27;:&#x27;Consultant review&#x27;,&#x27;Uzman ekibimiz talebi değerlendirir.&#x27;:&#x27;Our specialist team reviews the request.&#x27;,&#x27;Durumu takip edin&#x27;:&#x27;Track the status&#x27;,&#x27;Tüm güncellemeleri buradan görün.&#x27;:&#x27;View all updates here.&#x27;,&#x27;Doğru ekibe hızlıca yönlendirebilmemiz için aşağıdaki bilgileri doldurun.&#x27;:&#x27;Complete the information below so we can route your request to the right team.&#x27;,&#x27;Müşteri&#x27;:&#x27;Customer&#x27;,&#x27;Yardım konusu&#x27;:&#x27;Help topic&#x27;,&#x27;Konu seçin&#x27;:&#x27;Select a topic&#x27;,&#x27;Yeni düzenleme&#x27;:&#x27;New configuration&#x27;,&#x27;Hata / sorun&#x27;:&#x27;Error / issue&#x27;,&#x27;Danışmanlık&#x27;:&#x27;Consulting&#x27;,&#x27;Yasal değişiklik&#x27;:&#x27;Legal change&#x27;,&#x27;Talep özeti&#x27;:&#x27;Request summary&#x27;,&#x27;Öncelik&#x27;:&#x27;Priority&#x27;,&#x27;Normal&#x27;:&#x27;Normal&#x27;,&#x27;Yüksek&#x27;:&#x27;High&#x27;,&#x27;Kritik — çalışma durdu&#x27;:&#x27;Critical — work stopped&#x27;,&#x27;Müşteri talep numarası&#x27;:&#x27;Customer request number&#x27;,&#x27;(opsiyonel)&#x27;:&#x27;(optional)&#x27;,&#x27;Talep detayları&#x27;:&#x27;Request details&#x27;,&#x27;Dosyaları buraya sürükleyin veya bilgisayarınızdan seçin&#x27;:&#x27;Drag files here or select from your computer&#x27;,&#x27;Tahmini ilk yanıt: 2 saat içinde&#x27;:&#x27;Estimated first response: within 2 hours&#x27;,&#x27;Talebi oluştur →&#x27;:&#x27;Create request →&#x27;,&#x27;Daha hızlı çözüm için&#x27;:&#x27;For a faster resolution&#x27;,&#x27;İlgili personel veya işlem numarasını ekleyin.&#x27;:&#x27;Include the relevant employee or transaction number.&#x27;,&#x27;Hatanın oluştuğu ekranı ve adımları belirtin.&#x27;:&#x27;Describe the screen and steps where the error occurs.&#x27;,&#x27;Kişisel veri içeren dosyaları maskeleyin.&#x27;:&#x27;Mask files containing personal data.&#x27;,&#x27;Talebiniz oluşturulduğunda sistem kayıt numarasını otomatik üretecek ve tüm güncellemeler e-posta ile bildirilecektir.&#x27;:&#x27;The system will automatically generate a request number and email all updates.&#x27;,&#x27;Açık ve geçmiş destek taleplerinizin tamamı.&#x27;:&#x27;All your open and past support requests.&#x27;,&#x27;Açık talepler · 4&#x27;:&#x27;Open requests · 4&#x27;,&#x27;Oluşturulma: 6 Ağustos 2026, 16:29&#x27;:&#x27;Created: August 6, 2026, 16:29&#x27;,&#x27;RapidSol yöneticisi çalışmanın tamamlanması için aşağıdaki eforu önerdi.&#x27;:&#x27;A RapidSol manager proposed the following effort to complete the work.&#x27;,&#x27;Önerilen efor&#x27;:&#x27;Proposed effort&#x27;,&#x27;6 saat&#x27;:&#x27;6 hours&#x27;,&#x27;Onaya gönderen&#x27;:&#x27;Submitted for approval by&#x27;,&#x27;Reddet / açıklama iste&#x27;:&#x27;Reject / request clarification&#x27;,&#x27;6 saati onayla&#x27;:&#x27;Approve 6 hours&#x27;,&#x27;Yazışmalar&#x27;:&#x27;Conversation&#x27;,&#x27;Dün 16:29&#x27;:&#x27;Yesterday 16:29&#x27;,&#x27;Bugün 10:18&#x27;:&#x27;Today 10:18&#x27;,&#x27;İnceleme tamamlandı. Düzenleme ve test çalışması için toplam 6 saat efor öngörüyoruz. Onayınızdan sonra çalışmaya başlayacağız.&#x27;:&#x27;The review is complete. We estimate 6 hours for configuration and testing. Work will begin after your approval.&#x27;,&#x27;Yanıtınız&#x27;:&#x27;Your reply&#x27;,&#x27;Dosya ekle&#x27;:&#x27;Attach file&#x27;,&#x27;Yanıtı gönder&#x27;:&#x27;Send reply&#x27;,&#x27;Talep bilgileri&#x27;:&#x27;Request information&#x27;,&#x27;Durum&#x27;:&#x27;Status&#x27;,&#x27;Danışman&#x27;:&#x27;Consultant&#x27;,&#x27;Bordro&#x27;:&#x27;Payroll&#x27;,&#x27;Talep geçmişi&#x27;:&#x27;Request history&#x27;,&#x27;6 saat efor onayınıza sunuldu&#x27;:&#x27;6 hours submitted for your approval&#x27;,&#x27;Yönetici incelemesi tamamlandı&#x27;:&#x27;Manager review completed&#x27;,&#x27;Ümit Y. Akın\&#x27;a atandı&#x27;:&#x27;Assigned to Ümit Y. Akın&#x27;,&#x27;Talep oluşturuldu&#x27;:&#x27;Request created&#x27;,&#x27;Bugün 10:05&#x27;:&#x27;Today 10:05&#x27;,&#x27;Bugün 09:54&#x27;:&#x27;Today 09:54&#x27;,&#x27;Mesajınızı yazın…&#x27;:&#x27;Write your message…&#x27;,&#x27;Yazı tipi&#x27;:&#x27;Font&#x27;,&#x27;Kalın&#x27;:&#x27;Bold&#x27;,&#x27;İtalik&#x27;:&#x27;Italic&#x27;,&#x27;Altı çizili&#x27;:&#x27;Underline&#x27;,&#x27;Üstü çizili&#x27;:&#x27;Strikethrough&#x27;,&#x27;Madde işaretli liste&#x27;:&#x27;Bulleted list&#x27;,&#x27;Numaralı liste&#x27;:&#x27;Numbered list&#x27;,&#x27;Bağlantı ekle&#x27;:&#x27;Insert link&#x27;,&#x27;Tablo ekle&#x27;:&#x27;Insert table&#x27;,&#x27;Yatay çizgi&#x27;:&#x27;Horizontal rule&#x27;,&#x27;Çalışma başlatılıyor&#x27;:&#x27;Work is starting&#x27;};const reverse=Object.fromEntries(Object.entries(map).map(([tr,en])=&gt;[en,tr]));const select=document.createElement(&#x27;select&#x27;);select.className=&#x27;rc-language&#x27;;select.setAttribute(&#x27;aria-label&#x27;,&#x27;Dil / Language&#x27;);select.innerHTML=&#x27;&lt;option value=&quot;tr&quot;&gt;TR&lt;/option&gt;&lt;option value=&quot;en&quot;&gt;EN&lt;/option&gt;&#x27;;root.querySelector(&#x27;.rc-account&#x27;).before(select);const translate=lang=&gt;{const dict=lang===&#x27;en&#x27;?map:reverse;const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let node;while(node=walker.nextNode()){const raw=node.nodeValue;const clean=raw.trim();if(dict[clean])node.nodeValue=raw.replace(clean,dict[clean]);}root.querySelectorAll(&#x27;[placeholder],[data-placeholder],[aria-label]&#x27;).forEach(el=&gt;{[&#x27;placeholder&#x27;,&#x27;data-placeholder&#x27;,&#x27;aria-label&#x27;].forEach(attr=&gt;{const value=el.getAttribute(attr);if(value&amp;&amp;dict[value])el.setAttribute(attr,dict[value]);});});document.documentElement.lang=lang===&#x27;en&#x27;?&#x27;en&#x27;:&#x27;tr&#x27;;};select.addEventListener(&#x27;change&#x27;,()=&gt;translate(select.value));})();
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</body>
+</html>

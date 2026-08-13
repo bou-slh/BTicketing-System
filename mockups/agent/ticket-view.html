@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Talep R716555</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "tv.reply": "Yanıtla",
+    "tv.actTransfer": "Aktar",
+    "tv.actAssign": "Ata",
+    "tv.actMore": "Diğer ▾",
+    "tv.priority": "Öncelik",
+    "tv.dept": "Departman",
+    "tv.sla": "SLA Planı",
+    "tv.due": "Son Tarih",
+    "tv.actEffort": "Efor Öner",
+    "tv.effPendingTitle": "6 saat efor kullanıcı onayında",
+    "tv.effNoteLabel": "Not",
+    "tv.effWithdraw": "Geri Çek",
+    "tv.effRevise": "Revize Et",
+    "tv.effApprovedMsg": "Kullanıcı 6 saatlik eforu onayladı — çalışmaya başlayabilirsiniz.",
+    "tv.effRejectedMsg": "Kullanıcı efor önerisini reddetti",
+    "tv.effResend": "Yeni Öneri Gönder",
+    "tv.dlgEffort": "Efor Önerisi Gönder",
+    "tv.effUnit": "saat",
+    "tv.effNotePh": "İsteğe bağlı: kapsam ve varsayımlarınızı yazın…",
+    "tv.effDlgHelp": "Öneri kullanıcı onayına gönderilir; onaylanana kadar çalışmaya başlanmaz (Ayarlar → Talepler → Efor Onayı'ndan değiştirilebilir).",
+    "tv.effSend": "Onaya Gönder",
+    "tv.user": "Kullanıcı",
+    "tv.email": "E-posta",
+    "tv.org": "Şirket",
+    "tv.source": "Kaynak",
+    "tv.sourceWeb": "Web",
+    "tv.topic": "Yardım Konusu",
+    "tv.assigned": "Atanan",
+    "tv.tabThread": "Yazışmalar (4)",
+    "tv.tabTasks": "Görevler (1)",
+    "tv.tabRelated": "İlişkili Talepler (0)",
+    "tv.noteBadge": "İç Not",
+    "tv.taskCol": "Görev",
+    "tv.taskAssigned": "Atanan",
+    "tv.taskDue": "Son Tarih",
+    "tv.relatedEmptyTitle": "İlişkili talep yok",
+    "tv.relatedEmptyText": "Bu talep henüz başka bir taleple bağlantılanmadı.",
+    "tv.linkTicket": "Talep Bağlantıla",
+    "tv.cTabReply": "Yanıt Gönder",
+    "tv.cTabNote": "İç Not",
+    "tv.from": "Kimden",
+    "tv.recipients": "Alıcılar",
+    "tv.canned": "Hazır Yanıt",
+    "tv.cannedPh": "Hazır yanıt seç",
+    "tv.cannedOrig": "Orijinal Mesaj",
+    "tv.cannedLast": "Son Mesaj",
+    "tv.replyPh": "Yanıtınızı yazın…",
+    "tv.attach": "📎 Dosya ekle",
+    "tv.signature": "İmza",
+    "tv.sigNone": "Yok",
+    "tv.sigMine": "İmzam",
+    "tv.sigDept": "Departman İmzası",
+    "tv.statusAfter": "Yanıt sonrası durum",
+    "tv.send": "Yanıtı Gönder",
+    "tv.noteTitle": "Başlık",
+    "tv.noteTitlePh": "Not başlığı (isteğe bağlı)",
+    "tv.notePh": "Yalnızca temsilcilerin göreceği notu yazın…",
+    "tv.addNote": "Not Ekle",
+    "tv.dlgTransfer": "Talebi Aktar",
+    "tv.dlgAssign": "Talebi Ata",
+    "tv.dlgMore": "Diğer İşlemler",
+    "tv.assignee": "Temsilci / Takım",
+    "tv.comment": "Açıklama",
+    "tv.commentPh": "İşlemle ilgili kısa bir açıklama (isteğe bağlı)…",
+    "tv.mOwner": "Sahibi Değiştir",
+    "tv.mMerge": "Birleştir",
+    "tv.mLink": "Bağlantıla",
+    "tv.mRelease": "Serbest Bırak",
+    "tv.mOverdue": "Gecikmiş İşaretle",
+    "tv.mAnswered": "Yanıtlandı İşaretle",
+    "tv.mReferrals": "Yönlendirmeleri Yönet",
+    "tv.mForms": "Formları Yönet",
+    "tv.mCollabs": "Katılımcıları Yönet",
+    "tv.mBan": "E-postayı Engelle",
+    "tv.mDelete": "Talebi Sil",
+  },
+  en: {
+    "tv.reply": "Reply",
+    "tv.actTransfer": "Transfer",
+    "tv.actAssign": "Assign",
+    "tv.actMore": "More ▾",
+    "tv.priority": "Priority",
+    "tv.dept": "Department",
+    "tv.sla": "SLA Plan",
+    "tv.due": "Due Date",
+    "tv.actEffort": "Propose Effort",
+    "tv.effPendingTitle": "6-hour effort awaiting user approval",
+    "tv.effNoteLabel": "Note",
+    "tv.effWithdraw": "Withdraw",
+    "tv.effRevise": "Revise",
+    "tv.effApprovedMsg": "The user approved the 6-hour effort — you can start working.",
+    "tv.effRejectedMsg": "The user rejected the effort proposal",
+    "tv.effResend": "Send New Proposal",
+    "tv.dlgEffort": "Send Effort Proposal",
+    "tv.effUnit": "hours",
+    "tv.effNotePh": "Optional: describe the scope and your assumptions…",
+    "tv.effDlgHelp": "The proposal is sent for user approval; work does not start until approved (changeable under Settings → Tickets → Effort Approval).",
+    "tv.effSend": "Send for Approval",
+    "tv.user": "User",
+    "tv.email": "Email",
+    "tv.org": "Company",
+    "tv.source": "Source",
+    "tv.sourceWeb": "Web",
+    "tv.topic": "Help Topic",
+    "tv.assigned": "Assigned To",
+    "tv.tabThread": "Thread (4)",
+    "tv.tabTasks": "Tasks (1)",
+    "tv.tabRelated": "Related Tickets (0)",
+    "tv.noteBadge": "Internal Note",
+    "tv.taskCol": "Task",
+    "tv.taskAssigned": "Assigned To",
+    "tv.taskDue": "Due Date",
+    "tv.relatedEmptyTitle": "No related tickets",
+    "tv.relatedEmptyText": "This ticket has not been linked to any other ticket yet.",
+    "tv.linkTicket": "Link Ticket",
+    "tv.cTabReply": "Post Reply",
+    "tv.cTabNote": "Internal Note",
+    "tv.from": "From",
+    "tv.recipients": "Recipients",
+    "tv.canned": "Canned Response",
+    "tv.cannedPh": "Select a canned response",
+    "tv.cannedOrig": "Original Message",
+    "tv.cannedLast": "Last Message",
+    "tv.replyPh": "Write your reply…",
+    "tv.attach": "📎 Attach file",
+    "tv.signature": "Signature",
+    "tv.sigNone": "None",
+    "tv.sigMine": "My Signature",
+    "tv.sigDept": "Department Signature",
+    "tv.statusAfter": "Status after reply",
+    "tv.send": "Post Reply",
+    "tv.noteTitle": "Title",
+    "tv.noteTitlePh": "Note title (optional)",
+    "tv.notePh": "Write a note visible to agents only…",
+    "tv.addNote": "Add Note",
+    "tv.dlgTransfer": "Transfer Ticket",
+    "tv.dlgAssign": "Assign Ticket",
+    "tv.dlgMore": "More Actions",
+    "tv.assignee": "Agent / Team",
+    "tv.comment": "Comment",
+    "tv.commentPh": "A short comment about this action (optional)…",
+    "tv.mOwner": "Change Owner",
+    "tv.mMerge": "Merge",
+    "tv.mLink": "Link",
+    "tv.mRelease": "Release",
+    "tv.mOverdue": "Mark Overdue",
+    "tv.mAnswered": "Mark Answered",
+    "tv.mReferrals": "Manage Referrals",
+    "tv.mForms": "Manage Forms",
+    "tv.mCollabs": "Manage Collaborators",
+    "tv.mBan": "Ban Email",
+    "tv.mDelete": "Delete Ticket",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="tickets">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1>R716555 · Yol ücreti hatası hakkında
+        <span class="rd-pill rd-pill-open" style="vertical-align:middle" data-i18n="status.open"></span>
+      </h1>
+      <p><a href="tickets.html" data-i18n="common.back"></a></p>
+    </div>
+    <div class="actions">
+      <a class="rd-btn-primary" href="#reply" data-i18n="tv.reply"></a>
+      <button class="rd-btn" data-i18n="common.edit"></button>
+      <button class="rd-btn" data-dialog-open="dlg-transfer" data-i18n="tv.actTransfer"></button>
+      <button class="rd-btn" data-dialog-open="dlg-assign" data-i18n="tv.actAssign"></button>
+      <button class="rd-btn" data-dialog-open="dlg-effort" data-i18n="tv.actEffort"></button>
+      <button class="rd-btn" data-i18n="common.print"></button>
+      <button class="rd-btn" data-dialog-open="dlg-more" data-i18n="tv.actMore"></button>
+    </div>
+  </div>
+
+  <!-- Info row -->
+  <div class="rd-grid-2" style="margin-bottom:22px">
+    <div class="rd-surface">
+      <div class="rd-surface-body" style="padding:9px 19px">
+        <div class="bo-def">
+          <div class="row"><span data-i18n="common.status"></span><span><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></span></div>
+          <div class="row"><span data-i18n="tv.priority"></span><span data-i18n="priority.normal"></span></div>
+          <div class="row"><span data-i18n="tv.dept"></span><span>Bordro Danışmanlık</span></div>
+          <div class="row"><span data-i18n="common.created"></span><span>6 Ağustos 2026, 16:29</span></div>
+          <div class="row"><span data-i18n="tv.sla"></span><span>Standart (24 saat)</span></div>
+          <div class="row"><span data-i18n="tv.due"></span><span>13 Ağustos 2026, 17:00</span></div>
+          <div class="row"><span data-i18n="effort.label"></span><span>6 saat</span></div>
+          <div class="row"><span data-i18n="effort.state"></span><span><span class="rd-pill rd-pill-wait" data-i18n="status.effortWait"></span></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="rd-surface">
+      <div class="rd-surface-body" style="padding:9px 19px">
+        <div class="bo-def">
+          <div class="row"><span data-i18n="tv.user"></span><span><a href="user-view.html">Bourla Salehi</a></span></div>
+          <div class="row"><span data-i18n="tv.email"></span><span>bourla.salehi@ulasim.com.tr</span></div>
+          <div class="row"><span data-i18n="tv.org"></span><span><a href="org-view.html">Ulaşım A.Ş.</a></span></div>
+          <div class="row"><span data-i18n="tv.source"></span><span data-i18n="tv.sourceWeb"></span></div>
+          <div class="row"><span data-i18n="tv.topic"></span><span>Bordro</span></div>
+          <div class="row"><span data-i18n="tv.assigned"></span><span>Ümit Akın</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Effort proposal state (pending). Alternate states below as comments. -->
+  <div class="bo-toggle-card" style="margin-bottom:22px">
+    <div class="head">
+      <span class="rc-approval-icon" style="width:32px;height:32px;border-radius:9px">◷</span>
+      <div>
+        <b data-i18n="tv.effPendingTitle"></b>
+        <small>Ümit Akın · 10:18 — <span data-i18n="tv.effNoteLabel"></span>: "Düzenleme + test dahil"</small>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:7px">
+        <button class="rd-btn rd-btn-sm" data-i18n="tv.effWithdraw"></button>
+        <button class="rd-btn rd-btn-sm" data-dialog-open="dlg-effort" data-i18n="tv.effRevise"></button>
+      </div>
+    </div>
+  </div>
+  <!-- Approved state variant:
+  <div class="rd-banner rd-banner-success"><span>✓</span><span data-i18n="tv.effApprovedMsg"></span></div>
+  -->
+  <!-- Rejected state variant:
+  <div class="rd-banner rd-banner-warn">
+    <span>✕</span>
+    <span><b data-i18n="tv.effRejectedMsg"></b> — "Efor yüksek görünüyor; kapsamı daraltabilir miyiz?"
+      <button class="rd-btn rd-btn-sm" data-dialog-open="dlg-effort" data-i18n="tv.effResend" style="margin-left:9px"></button></span>
+  </div>
+  -->
+
+  <!-- Tabs -->
+  <div class="rd-tabs" data-tabs data-tabs-scope="tv">
+    <button class="active" data-tab="tv-thread" data-i18n="tv.tabThread"></button>
+    <button data-tab="tv-tasks" data-i18n="tv.tabTasks"></button>
+    <button data-tab="tv-related" data-i18n="tv.tabRelated"></button>
+  </div>
+
+  <!-- Thread -->
+  <div class="rd-tab-panel active" data-tab-group="tv" id="tv-thread">
+    <div class="bo-thread-entry">
+      <div class="head">
+        <div class="rd-avatar">BS</div>
+        <b>Bourla Salehi</b>
+        <span class="rd-muted text-sm">Ulaşım A.Ş.</span>
+        <time>Dün 16:29</time>
+        <button class="rd-btn rd-btn-sm" style="border:0" data-i18n-title="common.more">⋯</button>
+      </div>
+      <div class="body">
+        Temmuz bordrosunda yol ücreti kesintisi beklenenden yüksek görünüyor. İlgili personel
+        numaralarını ve ekran görüntüsünü ekledim. Kontrol edip dönüş yapabilir misiniz?
+        <div class="rd-muted text-sm" style="margin-top:9px">📎 yol-ucreti-kontrol.xlsx · 📎 ekran-goruntusu.png</div>
+      </div>
+    </div>
+
+    <div class="bo-thread-entry is-event">◉ Ümit Akın'a atandı — Bugün 09:54</div>
+
+    <div class="bo-thread-entry is-event">◷ 6 saat efor kullanıcı onayına sunuldu — Bugün 10:18</div>
+
+    <div class="bo-thread-entry is-note">
+      <div class="head">
+        <div class="rd-avatar">MÇ</div>
+        <b>Merve Çetin</b>
+        <span class="rd-pill rd-pill-wait" data-i18n="tv.noteBadge"></span>
+        <time>Bugün 10:05</time>
+        <button class="rd-btn rd-btn-sm" style="border:0" data-i18n-title="common.more">⋯</button>
+      </div>
+      <div class="body">
+        Kesinti parametresi Temmuz güncellemesinde iki kez uygulanmış görünüyor. Ümit,
+        bordro modülündeki 4512 numaralı kayda bakabilir misin?
+      </div>
+    </div>
+
+    <div class="bo-thread-entry">
+      <div class="head">
+        <div class="rd-avatar">ÜA</div>
+        <b>Ümit Akın</b>
+        <span class="rd-muted text-sm">RapidSol</span>
+        <time>Bugün 10:18</time>
+        <button class="rd-btn rd-btn-sm" style="border:0" data-i18n-title="common.more">⋯</button>
+      </div>
+      <div class="body">
+        Merhaba, inceleme tamamlandı. Yol ücreti kesinti parametresi hatalı çoğaltılmış;
+        düzeltme ve test çalışması için toplam 6 saat efor öngörüyoruz. Onayınızdan sonra
+        çalışmaya başlayacağız.
+        <div class="rd-muted text-sm" style="margin-top:9px">📎 efor-detayi.pdf</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tasks -->
+  <div class="rd-tab-panel" data-tab-group="tv" id="tv-tasks">
+    <div class="rd-surface">
+      <table class="rd-table">
+        <thead>
+          <tr>
+            <th data-i18n="tv.taskCol"></th>
+            <th data-i18n="common.status"></th>
+            <th data-i18n="tv.taskAssigned"></th>
+            <th data-i18n="tv.taskDue"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="task-view.html">Bordro kesinti parametresi düzeltme testi</a></td>
+            <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+            <td>Deniz Kaya</td>
+            <td>12 Ağustos 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Related -->
+  <div class="rd-tab-panel" data-tab-group="tv" id="tv-related">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">🔗</div>
+        <h3 data-i18n="tv.relatedEmptyTitle"></h3>
+        <p data-i18n="tv.relatedEmptyText"></p>
+        <button class="rd-btn-primary" data-i18n="tv.linkTicket"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reply composer -->
+  <div class="rd-surface" id="reply" style="margin-top:22px">
+    <div class="rd-surface-body">
+      <div class="rd-tabs" data-tabs data-tabs-scope="composer">
+        <button class="active" data-tab="c-reply" data-i18n="tv.cTabReply"></button>
+        <button data-tab="c-note" data-i18n="tv.cTabNote"></button>
+      </div>
+
+      <div class="rd-tab-panel active" data-tab-group="composer" id="c-reply">
+        <form>
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" data-i18n="tv.from"></label>
+              <select class="rd-control">
+                <option>RapidsolDestek &lt;destek@rapidsol.com.tr&gt;</option>
+                <option>Bordro Danışmanlık &lt;bordro@rapidsol.com.tr&gt;</option>
+              </select>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" data-i18n="tv.recipients"></label>
+              <input class="rd-control" readonly value="Bourla Salehi <bourla.salehi@ulasim.com.tr>">
+            </div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="tv.canned"></label>
+            <select class="rd-control">
+              <option data-i18n="tv.cannedPh"></option>
+              <option data-i18n="tv.cannedOrig"></option>
+              <option data-i18n="tv.cannedLast"></option>
+              <option>Bordro düzeltme bilgilendirmesi</option>
+              <option>Efor onayı hatırlatması</option>
+            </select>
+          </div>
+          <div class="rd-field">
+            <textarea class="rd-control" style="min-height:140px" data-i18n-placeholder="tv.replyPh"></textarea>
+          </div>
+          <div class="rd-field" style="display:flex;flex-wrap:wrap;gap:12px 26px;align-items:center">
+            <label class="rd-btn rd-btn-sm" style="cursor:pointer">
+              <span data-i18n="tv.attach"></span>
+              <input type="file" multiple hidden>
+            </label>
+            <span class="rd-label" style="margin:0" data-i18n="tv.signature"></span>
+            <label class="rd-check"><input type="radio" name="sig" checked><span data-i18n="tv.sigNone"></span></label>
+            <label class="rd-check"><input type="radio" name="sig"><span data-i18n="tv.sigMine"></span></label>
+            <label class="rd-check"><input type="radio" name="sig"><span data-i18n="tv.sigDept"></span></label>
+          </div>
+          <div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
+            <div class="rd-field" style="margin:0">
+              <label class="rd-label" data-i18n="tv.statusAfter"></label>
+              <select class="rd-control" style="width:auto;min-width:180px">
+                <option data-i18n="status.open"></option>
+                <option data-i18n="status.wait"></option>
+                <option data-i18n="status.solved"></option>
+              </select>
+            </div>
+            <button type="submit" class="rd-btn-primary" data-i18n="tv.send"></button>
+          </div>
+        </form>
+      </div>
+
+      <div class="rd-tab-panel" data-tab-group="composer" id="c-note">
+        <form>
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="tv.noteTitle"></label>
+            <input class="rd-control" data-i18n-placeholder="tv.noteTitlePh">
+          </div>
+          <div class="rd-field">
+            <textarea class="rd-control" style="min-height:120px" data-i18n-placeholder="tv.notePh"></textarea>
+            <div class="rd-help" data-i18n="common.notesHelp"></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
+            <div class="rd-field" style="margin:0">
+              <label class="rd-label" data-i18n="common.status"></label>
+              <select class="rd-control" style="width:auto;min-width:180px">
+                <option data-i18n="status.open"></option>
+                <option data-i18n="status.wait"></option>
+                <option data-i18n="status.solved"></option>
+              </select>
+            </div>
+            <button type="submit" class="rd-btn-primary" data-i18n="tv.addNote"></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Transfer dialog -->
+<dialog class="rd-dialog" id="dlg-transfer">
+  <div class="rd-dialog-head">
+    <span data-i18n="tv.dlgTransfer"></span>
+    <button class="close" data-dialog-close>✕</button>
+  </div>
+  <form>
+    <div class="rd-dialog-body">
+      <div class="rd-field">
+        <label class="rd-label" data-i18n="tv.dept"></label>
+        <select class="rd-control">
+          <option>Bordro Danışmanlık</option>
+          <option>İK Danışmanlık</option>
+          <option>Yazılım Destek</option>
+          <option>Muhasebe</option>
+        </select>
+      </div>
+      <div class="rd-field" style="margin-bottom:0">
+        <label class="rd-label" data-i18n="tv.comment"></label>
+        <textarea class="rd-control" style="min-height:90px" data-i18n-placeholder="tv.commentPh"></textarea>
+      </div>
+    </div>
+    <div class="rd-dialog-foot">
+      <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button type="submit" class="rd-btn-primary" data-i18n="tv.actTransfer"></button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Assign dialog -->
+<dialog class="rd-dialog" id="dlg-assign">
+  <div class="rd-dialog-head">
+    <span data-i18n="tv.dlgAssign"></span>
+    <button class="close" data-dialog-close>✕</button>
+  </div>
+  <form>
+    <div class="rd-dialog-body">
+      <div class="rd-field">
+        <label class="rd-label" data-i18n="tv.assignee"></label>
+        <select class="rd-control">
+          <option>Ümit Akın</option>
+          <option>Merve Çetin</option>
+          <option>Deniz Kaya</option>
+          <option>Bordro Ekibi</option>
+          <option>Yazılım Destek Ekibi</option>
+        </select>
+      </div>
+      <div class="rd-field" style="margin-bottom:0">
+        <label class="rd-label" data-i18n="tv.comment"></label>
+        <textarea class="rd-control" style="min-height:90px" data-i18n-placeholder="tv.commentPh"></textarea>
+      </div>
+    </div>
+    <div class="rd-dialog-foot">
+      <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button type="submit" class="rd-btn-primary" data-i18n="tv.actAssign"></button>
+    </div>
+  </form>
+</dialog>
+
+<!-- More-actions dialog -->
+<dialog class="rd-dialog" id="dlg-more" style="width:min(380px,calc(100vw - 40px))">
+  <div class="rd-dialog-head">
+    <span data-i18n="tv.dlgMore"></span>
+    <button class="close" data-dialog-close>✕</button>
+  </div>
+  <div class="rd-dialog-body" style="display:flex;flex-direction:column;gap:2px;padding:10px">
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mOwner"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mMerge"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mLink"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mRelease"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mOverdue"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mAnswered"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mReferrals"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mForms"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mCollabs"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px" data-i18n="tv.mBan"></a>
+    <a href="#" style="padding:9px 12px;border-radius:9px;color:var(--rd-red)" data-i18n="tv.mDelete"></a>
+  </div>
+</dialog>
+
+<!-- Effort proposal dialog -->
+<dialog class="rd-dialog" id="dlg-effort">
+  <form>
+    <div class="rd-dialog-head">
+      <span data-i18n="tv.dlgEffort"></span>
+      <button type="button" class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+      <div class="rd-field">
+        <label class="rd-label" for="ef-hours" data-i18n="effort.label"></label>
+        <div style="display:flex;gap:9px;align-items:center">
+          <input id="ef-hours" type="number" class="rd-control" value="6" min="1" style="max-width:110px">
+          <span class="rd-muted" data-i18n="tv.effUnit"></span>
+        </div>
+      </div>
+      <div class="rd-field">
+        <label class="rd-label" for="ef-note" data-i18n="tv.effNoteLabel"></label>
+        <textarea id="ef-note" class="rd-control" data-i18n-placeholder="tv.effNotePh">Düzenleme + test dahil</textarea>
+      </div>
+      <div class="rd-help" data-i18n="tv.effDlgHelp"></div>
+    </div>
+    <div class="rd-dialog-foot">
+      <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn-primary" data-i18n="tv.effSend"></button>
+    </div>
+  </form>
+</dialog>
+
+</body>
+</html>

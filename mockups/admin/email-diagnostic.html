@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — E-posta Tanılama</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "ed.title": "E-posta Tanılama",
+    "ed.subtitle": "Giden posta ayarlarınızı test etmek için sistemden deneme e-postası gönderin.",
+    "ed.formHead": "Test E-postası Gönder",
+    "ed.success": "Test e-postası kuyruğa alındı. Birkaç dakika içinde gelen kutusunu kontrol edin; ulaşmadıysa SMTP ayarlarını ve sistem kayıtlarını inceleyin.",
+    "ed.from": "Kimden",
+    "ed.fromHelp": "Testin gönderileceği sistem e-posta adresi; o adresin SMTP ayarları kullanılır.",
+    "ed.to": "Kime",
+    "ed.toHelp": "Testin ulaşacağı adres — kendi adresinizi kullanabilirsiniz.",
+    "ed.subject": "Konu",
+    "ed.message": "Mesaj",
+    "ed.messageHelp": "Test e-postasının gövdesine yazılacak metin.",
+    "ed.send": "Gönder",
+  },
+  en: {
+    "ed.title": "Email Diagnostic",
+    "ed.subtitle": "Send a test email from the system to verify your outgoing mail settings.",
+    "ed.formHead": "Send Test Email",
+    "ed.success": "Test email queued. Check the inbox in a few minutes; if it does not arrive, review the SMTP settings and system logs.",
+    "ed.from": "From",
+    "ed.fromHelp": "The system email address the test is sent from; that address's SMTP settings are used.",
+    "ed.to": "To",
+    "ed.toHelp": "The address the test should reach — you can use your own address.",
+    "ed.subject": "Subject",
+    "ed.message": "Message",
+    "ed.messageHelp": "Text written into the body of the test email.",
+    "ed.send": "Send",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="email-diagnostic">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="ed.title"></h1>
+      <p data-i18n="ed.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="rd-surface" style="max-width:640px">
+    <div class="rd-surface-head" data-i18n="ed.formHead"></div>
+    <div class="rd-surface-body">
+
+      <div class="rd-banner rd-banner-success">
+        <span>✓</span>
+        <span data-i18n="ed.success"></span>
+      </div>
+
+      <form>
+        <div class="rd-field">
+          <label class="rd-label" for="ed-from" data-i18n="ed.from"></label>
+          <select id="ed-from" class="rd-control">
+            <option selected>destek@rapidsol.com.tr</option>
+            <option>bordro@rapidsol.com.tr</option>
+            <option>bilgi@rapidsol.com.tr</option>
+          </select>
+          <p class="rd-help" data-i18n="ed.fromHelp"></p>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="ed-to" data-i18n="ed.to"></label>
+          <input id="ed-to" class="rd-control" type="email" value="umit.akin@rapidsol.com.tr">
+          <p class="rd-help" data-i18n="ed.toHelp"></p>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="ed-subject" data-i18n="ed.subject"></label>
+          <input id="ed-subject" class="rd-control" type="text" value="RapidsolDestek test e-postası">
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="ed-message" data-i18n="ed.message"></label>
+          <textarea id="ed-message" class="rd-control" style="min-height:120px">Bu e-posta, RapidsolDestek giden posta ayarlarını doğrulamak için gönderilmiştir. Elinize ulaştıysa SMTP yapılandırması çalışıyor demektir.</textarea>
+          <p class="rd-help" data-i18n="ed.messageHelp"></p>
+        </div>
+        <button class="rd-btn-primary" data-i18n="ed.send"></button>
+      </form>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

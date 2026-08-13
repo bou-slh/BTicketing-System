@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Şablon Seti Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "te.back": "← E-posta Şablonları",
+    "te.subtitle": "Bu setteki her otomatik e-postanın konusunu ve içeriğini düzenleyin. Bir şablon adına tıklayınca düzenleyici açılır.",
+    "te.secHead": "Set Bilgileri",
+    "te.name": "Ad",
+    "te.nameHelp": "Seti tanımlayan kısa ad.",
+    "te.statusLabel": "Durum",
+    "te.statusHelp": "Devre dışı setler departmanlarda seçilemez.",
+    "te.enabled": "Etkin",
+    "te.disabled": "Devre dışı",
+    "te.lang": "Dil",
+    "te.langHelp": "Setin yazıldığı dil.",
+    "te.colTemplate": "Şablon",
+    "te.grpTicketUser": "Talep → Kullanıcı",
+    "te.grpTicketUserHelp": "Talep sahibine ve katılımcılara giden e-postalar.",
+    "te.grpTicketAgent": "Talep → Temsilci",
+    "te.grpTicketAgentHelp": "Temsilcilere giden uyarı e-postaları.",
+    "te.grpTask": "Görev",
+    "te.grpTaskHelp": "Görevlerle ilgili uyarı ve bildirim e-postaları.",
+
+    "te.tNewTicketAutoResp": "Yeni Talep Otomatik Yanıtı",
+    "te.tNewTicketAutoRespD": "Talep açıldığında kullanıcıya gönderilen alındı onayı.",
+    "te.tNewTicketAutoReply": "Yeni Talep Oto-cevap",
+    "te.tNewTicketAutoReplyD": "Yardım konusuna/filtreye bağlı hazır otomatik cevap.",
+    "te.tNewMessageConfirm": "Yeni Mesaj Onayı",
+    "te.tNewMessageConfirmD": "Kullanıcının yeni mesajı alındığında gönderilen onay.",
+    "te.tNewTicketNotice": "Yeni Talep Bildirimi",
+    "te.tNewTicketNoticeD": "Temsilcinin kullanıcı adına açtığı talebin bildirimi.",
+    "te.tOverlimit": "Limit Aşımı Bildirimi",
+    "te.tOverlimitD": "Açık talep sınırına ulaşan kullanıcıya gönderilir.",
+    "te.tResponse": "Yanıt Şablonu",
+    "te.tResponseD": "Temsilci yanıtlarını saran e-posta gövdesi.",
+    "te.tEffortRequest": "Efor Onayı İsteği",
+    "te.tEffortRequestD": "Kullanıcıya efor önerisini ve onay bağlantısını gönderir.",
+    "te.tEffortResponse": "Efor Yanıtı Uyarısı",
+    "te.tEffortResponseD": "Kullanıcının onay/red kararını atanan temsilciye bildirir.",
+    "te.tNewActivityNotice": "Yeni Aktivite Bildirimi",
+    "te.tNewActivityNoticeD": "Talepteki yeni aktivitenin katılımcılara bildirimi.",
+
+    "te.tNewTicketAlert": "Yeni Talep Uyarısı",
+    "te.tNewTicketAlertD": "Yeni talep açıldığında temsilcilere gönderilir.",
+    "te.tNewMessageAlert": "Yeni Mesaj Uyarısı",
+    "te.tNewMessageAlertD": "Kullanıcı yanıt yazdığında gönderilir.",
+    "te.tInternalActivity": "İç Aktivite Uyarısı",
+    "te.tInternalActivityD": "İç not veya temsilci aktivitesi olduğunda gönderilir.",
+    "te.tAssignmentAlert": "Atama Uyarısı",
+    "te.tAssignmentAlertD": "Talep bir temsilciye/takıma atandığında gönderilir.",
+    "te.tTransferAlert": "Aktarım Uyarısı",
+    "te.tTransferAlertD": "Talep başka departmana aktarıldığında gönderilir.",
+    "te.tOverdueAlert": "Gecikme Uyarısı",
+    "te.tOverdueAlertD": "Talep vade süresini aştığında gönderilir.",
+
+    "te.tTaskNewAlert": "Yeni Görev Uyarısı",
+    "te.tTaskNewAlertD": "Yeni görev oluşturulduğunda temsilcilere gönderilir.",
+    "te.tTaskActivityAlert": "Yeni Aktivite Uyarısı",
+    "te.tTaskActivityAlertD": "Görevde yeni aktivite olduğunda temsilcilere gönderilir.",
+    "te.tTaskActivityNotice": "Yeni Aktivite Bildirimi (katılımcı)",
+    "te.tTaskActivityNoticeD": "Görevdeki aktivitenin katılımcılara bildirimi.",
+    "te.tTaskAssignment": "Görev Atama Uyarısı",
+    "te.tTaskAssignmentD": "Görev atandığında gönderilir.",
+    "te.tTaskTransfer": "Görev Aktarım Uyarısı",
+    "te.tTaskTransferD": "Görev başka departmana aktarıldığında gönderilir.",
+    "te.tTaskOverdue": "Görev Gecikme Uyarısı",
+    "te.tTaskOverdueD": "Görev vadesi geçtiğinde gönderilir.",
+
+    "te.dlgTitle": "Şablon Düzenle — Yeni Talep Otomatik Yanıtı",
+    "te.dlgSubject": "Konu",
+    "te.dlgSubjectHelp": "E-postanın konu satırı; değişkenler kullanılabilir.",
+    "te.dlgBody": "İçerik",
+    "te.dlgBodyHelp": "E-postanın gövdesi. Aşağıdaki değişkenler gönderim anında gerçek değerlerle doldurulur.",
+    "te.dlgVars": "Desteklenen Değişkenler",
+  },
+  en: {
+    "te.back": "← Email Templates",
+    "te.subtitle": "Edit the subject and body of every automated email in this set. Click a template name to open the editor.",
+    "te.secHead": "Set Details",
+    "te.name": "Name",
+    "te.nameHelp": "A short name describing the set.",
+    "te.statusLabel": "Status",
+    "te.statusHelp": "Disabled sets cannot be selected on departments.",
+    "te.enabled": "Enabled",
+    "te.disabled": "Disabled",
+    "te.lang": "Language",
+    "te.langHelp": "The language the set is written in.",
+    "te.colTemplate": "Template",
+    "te.grpTicketUser": "Ticket → User",
+    "te.grpTicketUserHelp": "Emails sent to the ticket owner and collaborators.",
+    "te.grpTicketAgent": "Ticket → Agent",
+    "te.grpTicketAgentHelp": "Alert emails sent to agents.",
+    "te.grpTask": "Task",
+    "te.grpTaskHelp": "Alert and notice emails related to tasks.",
+
+    "te.tNewTicketAutoResp": "New Ticket Auto-Response",
+    "te.tNewTicketAutoRespD": "Confirmation sent to the user when a ticket is opened.",
+    "te.tNewTicketAutoReply": "New Ticket Auto-Reply",
+    "te.tNewTicketAutoReplyD": "Canned automatic reply tied to a help topic/filter.",
+    "te.tNewMessageConfirm": "New Message Confirmation",
+    "te.tNewMessageConfirmD": "Confirmation sent when the user's new message is received.",
+    "te.tNewTicketNotice": "New Ticket Notice",
+    "te.tNewTicketNoticeD": "Notice for a ticket an agent opened on the user's behalf.",
+    "te.tOverlimit": "Overlimit Notice",
+    "te.tOverlimitD": "Sent to a user who reached the open-ticket limit.",
+    "te.tResponse": "Response Template",
+    "te.tResponseD": "The email body wrapping agent replies.",
+    "te.tEffortRequest": "Effort Approval Request",
+    "te.tEffortRequestD": "Sends the user the effort proposal and an approval link.",
+    "te.tEffortResponse": "Effort Response Alert",
+    "te.tEffortResponseD": "Notifies the assigned agent of the user's approve/reject decision.",
+    "te.tNewActivityNotice": "New Activity Notice",
+    "te.tNewActivityNoticeD": "Notice of new ticket activity to collaborators.",
+
+    "te.tNewTicketAlert": "New Ticket Alert",
+    "te.tNewTicketAlertD": "Sent to agents when a new ticket is opened.",
+    "te.tNewMessageAlert": "New Message Alert",
+    "te.tNewMessageAlertD": "Sent when the user writes a reply.",
+    "te.tInternalActivity": "Internal Activity Alert",
+    "te.tInternalActivityD": "Sent on internal notes or agent activity.",
+    "te.tAssignmentAlert": "Assignment Alert",
+    "te.tAssignmentAlertD": "Sent when a ticket is assigned to an agent/team.",
+    "te.tTransferAlert": "Transfer Alert",
+    "te.tTransferAlertD": "Sent when a ticket is transferred to another department.",
+    "te.tOverdueAlert": "Overdue Alert",
+    "te.tOverdueAlertD": "Sent when a ticket passes its due date.",
+
+    "te.tTaskNewAlert": "New Task Alert",
+    "te.tTaskNewAlertD": "Sent to agents when a new task is created.",
+    "te.tTaskActivityAlert": "New Activity Alert",
+    "te.tTaskActivityAlertD": "Sent to agents on new task activity.",
+    "te.tTaskActivityNotice": "New Activity Notice (collaborator)",
+    "te.tTaskActivityNoticeD": "Notice of task activity to collaborators.",
+    "te.tTaskAssignment": "Task Assignment Alert",
+    "te.tTaskAssignmentD": "Sent when a task is assigned.",
+    "te.tTaskTransfer": "Task Transfer Alert",
+    "te.tTaskTransferD": "Sent when a task is transferred to another department.",
+    "te.tTaskOverdue": "Task Overdue Alert",
+    "te.tTaskOverdueD": "Sent when a task passes its due date.",
+
+    "te.dlgTitle": "Edit Template — New Ticket Auto-Response",
+    "te.dlgSubject": "Subject",
+    "te.dlgSubjectHelp": "The email's subject line; variables may be used.",
+    "te.dlgBody": "Body",
+    "te.dlgBodyHelp": "The email body. The variables below are filled with real values at send time.",
+    "te.dlgVars": "Supported Variables",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="templates">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <p><a href="templates.html" data-i18n="te.back"></a></p>
+      <h1>Varsayılan (TR)</h1>
+      <p data-i18n="te.subtitle"></p>
+    </div>
+  </div>
+
+  <form>
+    <div class="rd-surface" style="margin-bottom:18px">
+      <div class="rd-surface-head" data-i18n="te.secHead"></div>
+      <div class="rd-surface-body">
+        <div class="rd-grid-3">
+          <div class="rd-field">
+            <label class="rd-label" for="te-name" data-i18n="te.name"></label>
+            <input id="te-name" class="rd-control" type="text" value="Varsayılan (TR)">
+            <p class="rd-help" data-i18n="te.nameHelp"></p>
+          </div>
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="te.statusLabel"></span>
+            <label class="rd-check" style="display:inline-flex;margin-right:18px;margin-top:10px">
+              <input type="radio" name="te-status" checked><span data-i18n="te.enabled"></span>
+            </label>
+            <label class="rd-check" style="display:inline-flex">
+              <input type="radio" name="te-status"><span data-i18n="te.disabled"></span>
+            </label>
+            <p class="rd-help" data-i18n="te.statusHelp"></p>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="te-lang" data-i18n="te.lang"></label>
+            <select id="te-lang" class="rd-control">
+              <option selected>Türkçe</option>
+              <option>English</option>
+            </select>
+            <p class="rd-help" data-i18n="te.langHelp"></p>
+          </div>
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="te-notes" data-i18n="common.notes"></label>
+          <textarea id="te-notes" class="rd-control" style="min-height:70px">Tüm kullanıcı e-postalarının Türkçe ana seti.</textarea>
+          <p class="rd-help" data-i18n="common.notesHelp"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==== Talep → Kullanıcı ==== -->
+    <div class="rd-surface" style="margin-bottom:18px">
+      <div class="rd-surface-head">
+        <span data-i18n="te.grpTicketUser"></span>
+        <small class="rd-muted" data-i18n="te.grpTicketUserHelp"></small>
+      </div>
+      <table class="rd-table">
+        <thead><tr><th data-i18n="te.colTemplate"></th><th data-i18n="common.updated"></th></tr></thead>
+        <tbody>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tNewTicketAutoResp"></a><br><small class="rd-muted" data-i18n="te.tNewTicketAutoRespD"></small></td><td>04.08.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tNewTicketAutoReply"></a><br><small class="rd-muted" data-i18n="te.tNewTicketAutoReplyD"></small></td><td>04.08.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tNewMessageConfirm"></a><br><small class="rd-muted" data-i18n="te.tNewMessageConfirmD"></small></td><td>21.07.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tNewTicketNotice"></a><br><small class="rd-muted" data-i18n="te.tNewTicketNoticeD"></small></td><td>21.07.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tOverlimit"></a><br><small class="rd-muted" data-i18n="te.tOverlimitD"></small></td><td>02.03.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tResponse"></a><br><small class="rd-muted" data-i18n="te.tResponseD"></small></td><td>04.08.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tNewActivityNotice"></a><br><small class="rd-muted" data-i18n="te.tNewActivityNoticeD"></small></td><td>15.06.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tEffortRequest"></a><br><small class="rd-muted" data-i18n="te.tEffortRequestD"></small></td><td>11.08.2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ==== Talep → Temsilci ==== -->
+    <div class="rd-surface" style="margin-bottom:18px">
+      <div class="rd-surface-head">
+        <span data-i18n="te.grpTicketAgent"></span>
+        <small class="rd-muted" data-i18n="te.grpTicketAgentHelp"></small>
+      </div>
+      <table class="rd-table">
+        <thead><tr><th data-i18n="te.colTemplate"></th><th data-i18n="common.updated"></th></tr></thead>
+        <tbody>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tNewTicketAlert"></a><br><small class="rd-muted" data-i18n="te.tNewTicketAlertD"></small></td><td>04.08.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tNewMessageAlert"></a><br><small class="rd-muted" data-i18n="te.tNewMessageAlertD"></small></td><td>04.08.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tInternalActivity"></a><br><small class="rd-muted" data-i18n="te.tInternalActivityD"></small></td><td>21.07.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tAssignmentAlert"></a><br><small class="rd-muted" data-i18n="te.tAssignmentAlertD"></small></td><td>21.07.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tTransferAlert"></a><br><small class="rd-muted" data-i18n="te.tTransferAlertD"></small></td><td>02.03.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tOverdueAlert"></a><br><small class="rd-muted" data-i18n="te.tOverdueAlertD"></small></td><td>02.03.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tEffortResponse"></a><br><small class="rd-muted" data-i18n="te.tEffortResponseD"></small></td><td>11.08.2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ==== Görev ==== -->
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        <span data-i18n="te.grpTask"></span>
+        <small class="rd-muted" data-i18n="te.grpTaskHelp"></small>
+      </div>
+      <table class="rd-table">
+        <thead><tr><th data-i18n="te.colTemplate"></th><th data-i18n="common.updated"></th></tr></thead>
+        <tbody>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tTaskNewAlert"></a><br><small class="rd-muted" data-i18n="te.tTaskNewAlertD"></small></td><td>10.04.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tTaskActivityAlert"></a><br><small class="rd-muted" data-i18n="te.tTaskActivityAlertD"></small></td><td>10.04.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tTaskActivityNotice"></a><br><small class="rd-muted" data-i18n="te.tTaskActivityNoticeD"></small></td><td>10.04.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tTaskAssignment"></a><br><small class="rd-muted" data-i18n="te.tTaskAssignmentD"></small></td><td>10.04.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tTaskTransfer"></a><br><small class="rd-muted" data-i18n="te.tTaskTransferD"></small></td><td>10.04.2026</td></tr>
+          <tr><td><a href="#" data-dialog-open="dlg-editor" data-i18n="te.tTaskOverdue"></a><br><small class="rd-muted" data-i18n="te.tTaskOverdueD"></small></td><td>10.04.2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="rd-btn-primary" data-i18n="common.save"></button>
+      <a class="rd-btn" href="templates.html" data-i18n="common.cancel"></a>
+    </div>
+  </form>
+
+  <!-- Şablon düzenleyici dialogu -->
+  <dialog class="rd-dialog" id="dlg-editor" style="width:min(760px,calc(100vw - 40px))">
+    <form>
+      <div class="rd-dialog-head">
+        <span data-i18n="te.dlgTitle"></span>
+        <button type="button" class="close" data-dialog-close aria-label="Kapat">✕</button>
+      </div>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="te-subject" data-i18n="te.dlgSubject"></label>
+          <input id="te-subject" class="rd-control" type="text" value="Talebiniz alındı [#%{ticket.number}] — %{ticket.subject}">
+          <p class="rd-help" data-i18n="te.dlgSubjectHelp"></p>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="te-body" data-i18n="te.dlgBody"></label>
+          <textarea id="te-body" class="rd-control" style="min-height:230px">Sayın %{user.name},
+
+%{company.name} adına açtığınız "%{ticket.subject}" konulu talebiniz bize ulaştı. Talep numaranız: %{ticket.number}.
+
+Ekibimiz en kısa sürede sizinle iletişime geçecek. Talebinizin durumunu %{ticket.link} adresinden izleyebilirsiniz.
+
+Saygılarımızla,
+%{signature}</textarea>
+          <p class="rd-help" data-i18n="te.dlgBodyHelp"></p>
+        </div>
+        <div class="rd-field mb-0">
+          <span class="rd-label" data-i18n="te.dlgVars"></span>
+          <div style="display:flex;flex-wrap:wrap;gap:7px">
+            <code class="rd-pill rd-pill-teal">%{ticket.number}</code>
+            <code class="rd-pill rd-pill-teal">%{ticket.subject}</code>
+            <code class="rd-pill rd-pill-teal">%{ticket.link}</code>
+            <code class="rd-pill rd-pill-teal">%{user.name}</code>
+            <code class="rd-pill rd-pill-teal">%{company.name}</code>
+            <code class="rd-pill rd-pill-teal">%{agent.name}</code>
+            <code class="rd-pill rd-pill-teal">%{department.name}</code>
+            <code class="rd-pill rd-pill-teal">%{signature}</code>
+          </div>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button class="rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

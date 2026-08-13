@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Filtre Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "fle.back": "← Talep Filtreleri",
+    "fle.sub": "Filtre kurallarını ve eşleşme durumunda uygulanacak eylemleri düzenleyin.",
+    "fle.name": "Ad",
+    "fle.nameHelp": "Filtreyi tanımlayan kısa bir ad.",
+    "fle.order": "Çalışma sırası",
+    "fle.orderHelp": "Küçük sayı önce çalışır.",
+    "fle.status": "Durum",
+    "fle.target": "Hedef kanal",
+    "fle.targetAny": "— Tüm kanallar —",
+    "fle.targetWeb": "Web Formu",
+    "fle.targetApi": "API",
+    "fle.targetEmailAny": "E-posta (tümü)",
+    "fle.grpSysEmails": "Sistem E-postaları",
+    "fle.targetHelp": "Filtre yalnızca bu kanaldan gelen taleplere uygulanır.",
+    "fle.stopOnMatch": "Eşleşince dur",
+    "fle.stopOnMatchHelp": "Bu filtre eşleşirse sıradaki filtreler işlenmez.",
+    "fle.tabRules": "Kurallar",
+    "fle.tabActions": "Eylemler",
+    "fle.tabNotes": "İç Notlar",
+    "fle.matchLabel": "Eşleşme koşulu",
+    "fle.matchAll": "Tüm kurallar eşleşmeli (VE)",
+    "fle.matchAny": "Herhangi bir kural yeterli (VEYA)",
+    "fle.fName": "Ad",
+    "fle.fEmail": "E-posta",
+    "fle.fReplyTo": "Yanıt Adresi",
+    "fle.fSubject": "Konu",
+    "fle.fTopic": "Yardım Konusu",
+    "fle.fOrg": "Şirket",
+    "fle.opEq": "eşittir",
+    "fle.opContains": "içerir",
+    "fle.opStarts": "ile başlar",
+    "fle.opRegex": "regex eşleşir",
+    "fle.valuePh": "Değer…",
+    "fle.addRule": "＋ Kural Ekle",
+    "fle.rulesHelp": "Kurallar talebin gönderen ve içerik bilgileriyle karşılaştırılır.",
+    "fle.aReject": "Talebi Reddet",
+    "fle.aDept": "Departmana Yönlendir",
+    "fle.aPriority": "Öncelik Ata",
+    "fle.aSla": "SLA Ata",
+    "fle.aTeam": "Takım Ata",
+    "fle.aAgent": "Temsilci Ata",
+    "fle.aTopic": "Yardım Konusu Ata",
+    "fle.aStatus": "Durum Ata",
+    "fle.aNoAutoresp": "Otomatik Yanıtı Kapat",
+    "fle.aCanned": "Hazır Yanıt Gönder",
+    "fle.aEmail": "E-posta Gönder",
+    "fle.addAction": "Eylem Ekle",
+    "fle.actionsHelp": "Eylemler sırayla, listedeki dizilişe göre uygulanır.",
+  },
+  en: {
+    "fle.back": "← Ticket Filters",
+    "fle.sub": "Edit the filter's rules and the actions applied when it matches.",
+    "fle.name": "Name",
+    "fle.nameHelp": "A short name describing the filter.",
+    "fle.order": "Execution order",
+    "fle.orderHelp": "Lower numbers run first.",
+    "fle.status": "Status",
+    "fle.target": "Target channel",
+    "fle.targetAny": "— Any channel —",
+    "fle.targetWeb": "Web Form",
+    "fle.targetApi": "API",
+    "fle.targetEmailAny": "Email (any)",
+    "fle.grpSysEmails": "System Emails",
+    "fle.targetHelp": "The filter only applies to requests coming from this channel.",
+    "fle.stopOnMatch": "Stop on match",
+    "fle.stopOnMatchHelp": "If this filter matches, later filters are not processed.",
+    "fle.tabRules": "Rules",
+    "fle.tabActions": "Actions",
+    "fle.tabNotes": "Internal Notes",
+    "fle.matchLabel": "Match condition",
+    "fle.matchAll": "All rules must match (AND)",
+    "fle.matchAny": "Any rule is enough (OR)",
+    "fle.fName": "Name",
+    "fle.fEmail": "Email",
+    "fle.fReplyTo": "Reply-To Address",
+    "fle.fSubject": "Subject",
+    "fle.fTopic": "Help Topic",
+    "fle.fOrg": "Company",
+    "fle.opEq": "equals",
+    "fle.opContains": "contains",
+    "fle.opStarts": "starts with",
+    "fle.opRegex": "matches regex",
+    "fle.valuePh": "Value…",
+    "fle.addRule": "＋ Add Rule",
+    "fle.rulesHelp": "Rules are compared against the request's sender and content data.",
+    "fle.aReject": "Reject Ticket",
+    "fle.aDept": "Route to Department",
+    "fle.aPriority": "Set Priority",
+    "fle.aSla": "Set SLA",
+    "fle.aTeam": "Assign Team",
+    "fle.aAgent": "Assign Agent",
+    "fle.aTopic": "Set Help Topic",
+    "fle.aStatus": "Set Status",
+    "fle.aNoAutoresp": "Disable Auto-Response",
+    "fle.aCanned": "Send Canned Response",
+    "fle.aEmail": "Send Email",
+    "fle.addAction": "Add Action",
+    "fle.actionsHelp": "Actions are applied in order, following the list layout.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="filters">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+<form>
+
+  <div class="bo-page-head">
+    <div>
+      <a href="filters.html" style="font-size:13px" data-i18n="fle.back"></a>
+      <h1>VIP kullanıcı önceliklendirme</h1>
+      <p data-i18n="fle.sub"></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-i18n="common.delete"></button>
+      <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+      <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+    </div>
+  </div>
+
+  <div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-body">
+      <div class="rd-grid-2">
+        <div class="rd-field">
+          <label class="rd-label" for="fle-name" data-i18n="fle.name"></label>
+          <input id="fle-name" class="rd-control" value="VIP kullanıcı önceliklendirme">
+          <div class="rd-help" data-i18n="fle.nameHelp"></div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="fle-order" data-i18n="fle.order"></label>
+          <input id="fle-order" class="rd-control" type="number" value="1" min="1" style="max-width:120px">
+          <div class="rd-help" data-i18n="fle.orderHelp"></div>
+        </div>
+        <div class="rd-field">
+          <span class="rd-label" data-i18n="fle.status"></span>
+          <div style="display:flex;gap:18px;padding:10px 0 2px">
+            <label class="rd-check"><input type="radio" name="fle-status" checked><span data-i18n="common.active"></span></label>
+            <label class="rd-check"><input type="radio" name="fle-status"><span data-i18n="common.disabled"></span></label>
+          </div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="fle-target" data-i18n="fle.target"></label>
+          <select id="fle-target" class="rd-control">
+            <option data-i18n="fle.targetAny"></option>
+            <option data-i18n="fle.targetWeb"></option>
+            <option data-i18n="fle.targetApi"></option>
+            <option selected data-i18n="fle.targetEmailAny"></option>
+            <optgroup data-i18n-label="fle.grpSysEmails" label="Sistem E-postaları">
+              <option>destek@rapidsol.com.tr</option>
+              <option>bordro@rapidsol.com.tr</option>
+            </optgroup>
+          </select>
+          <div class="rd-help" data-i18n="fle.targetHelp"></div>
+        </div>
+      </div>
+      <label class="rd-switch">
+        <input type="checkbox" checked>
+        <span class="track"></span>
+        <span class="rd-switch-copy"><b data-i18n="fle.stopOnMatch"></b><small data-i18n="fle.stopOnMatchHelp"></small></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="rd-tabs" data-tabs>
+    <button type="button" class="active" data-tab="fle-rules" data-i18n="fle.tabRules"></button>
+    <button type="button" data-tab="fle-actions" data-i18n="fle.tabActions"></button>
+    <button type="button" data-tab="fle-notes" data-i18n="fle.tabNotes"></button>
+  </div>
+
+  <!-- ============ Kurallar ============ -->
+  <div class="rd-tab-panel active" id="fle-rules">
+    <div class="rd-surface">
+      <div class="rd-surface-body">
+        <div class="rd-field">
+          <span class="rd-label" data-i18n="fle.matchLabel"></span>
+          <div style="display:flex;gap:18px;padding:6px 0 2px;flex-wrap:wrap">
+            <label class="rd-check"><input type="radio" name="fle-match" checked><span data-i18n="fle.matchAll"></span></label>
+            <label class="rd-check"><input type="radio" name="fle-match"><span data-i18n="fle.matchAny"></span></label>
+          </div>
+          <div class="rd-help" data-i18n="fle.rulesHelp"></div>
+        </div>
+
+        <div class="bo-rule-row">
+          <select class="rd-control">
+            <option data-i18n="fle.fName"></option>
+            <option data-i18n="fle.fEmail"></option>
+            <option data-i18n="fle.fReplyTo"></option>
+            <option data-i18n="fle.fSubject"></option>
+            <option data-i18n="fle.fTopic"></option>
+            <option selected data-i18n="fle.fOrg"></option>
+          </select>
+          <select class="rd-control">
+            <option selected data-i18n="fle.opEq"></option>
+            <option data-i18n="fle.opContains"></option>
+            <option data-i18n="fle.opStarts"></option>
+            <option data-i18n="fle.opRegex"></option>
+          </select>
+          <input class="rd-control" value="Tosyalı Holding" data-i18n-placeholder="fle.valuePh">
+          <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+        </div>
+        <div class="bo-rule-row">
+          <select class="rd-control">
+            <option data-i18n="fle.fName"></option>
+            <option selected data-i18n="fle.fEmail"></option>
+            <option data-i18n="fle.fReplyTo"></option>
+            <option data-i18n="fle.fSubject"></option>
+            <option data-i18n="fle.fTopic"></option>
+            <option data-i18n="fle.fOrg"></option>
+          </select>
+          <select class="rd-control">
+            <option data-i18n="fle.opEq"></option>
+            <option selected data-i18n="fle.opContains"></option>
+            <option data-i18n="fle.opStarts"></option>
+            <option data-i18n="fle.opRegex"></option>
+          </select>
+          <input class="rd-control" value="@tosyali.com" data-i18n-placeholder="fle.valuePh">
+          <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+        </div>
+        <div class="bo-rule-row">
+          <select class="rd-control">
+            <option data-i18n="fle.fName"></option>
+            <option data-i18n="fle.fEmail"></option>
+            <option data-i18n="fle.fReplyTo"></option>
+            <option selected data-i18n="fle.fSubject"></option>
+            <option data-i18n="fle.fTopic"></option>
+            <option data-i18n="fle.fOrg"></option>
+          </select>
+          <select class="rd-control">
+            <option data-i18n="fle.opEq"></option>
+            <option selected data-i18n="fle.opContains"></option>
+            <option data-i18n="fle.opStarts"></option>
+            <option data-i18n="fle.opRegex"></option>
+          </select>
+          <input class="rd-control" value="acil" data-i18n-placeholder="fle.valuePh">
+          <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+        </div>
+
+        <button type="button" class="rd-btn rd-btn-ghost" data-i18n="fle.addRule"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Eylemler ============ -->
+  <div class="rd-tab-panel" id="fle-actions">
+    <div class="rd-surface">
+      <div class="rd-surface-body">
+        <p class="rd-help" style="margin:0 0 14px" data-i18n="fle.actionsHelp"></p>
+
+        <div class="bo-rule-row">
+          <select class="rd-control">
+            <option data-i18n="fle.aReject"></option>
+            <option data-i18n="fle.aDept"></option>
+            <option selected data-i18n="fle.aPriority"></option>
+            <option data-i18n="fle.aSla"></option>
+            <option data-i18n="fle.aTeam"></option>
+            <option data-i18n="fle.aAgent"></option>
+            <option data-i18n="fle.aTopic"></option>
+            <option data-i18n="fle.aStatus"></option>
+            <option data-i18n="fle.aNoAutoresp"></option>
+            <option data-i18n="fle.aCanned"></option>
+            <option data-i18n="fle.aEmail"></option>
+          </select>
+          <select class="rd-control">
+            <option data-i18n="priority.low"></option>
+            <option data-i18n="priority.normal"></option>
+            <option selected data-i18n="priority.high"></option>
+            <option data-i18n="priority.emergency"></option>
+          </select>
+          <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+        </div>
+        <div class="bo-rule-row">
+          <select class="rd-control">
+            <option data-i18n="fle.aReject"></option>
+            <option selected data-i18n="fle.aDept"></option>
+            <option data-i18n="fle.aPriority"></option>
+            <option data-i18n="fle.aSla"></option>
+            <option data-i18n="fle.aTeam"></option>
+            <option data-i18n="fle.aAgent"></option>
+            <option data-i18n="fle.aTopic"></option>
+            <option data-i18n="fle.aStatus"></option>
+            <option data-i18n="fle.aNoAutoresp"></option>
+            <option data-i18n="fle.aCanned"></option>
+            <option data-i18n="fle.aEmail"></option>
+          </select>
+          <select class="rd-control">
+            <option selected>Bordro Yönetimi</option>
+            <option>İnsan Kaynakları</option>
+            <option>Danışmanlık</option>
+            <option>Destek</option>
+          </select>
+          <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+        </div>
+        <div class="bo-rule-row">
+          <select class="rd-control">
+            <option data-i18n="fle.aReject"></option>
+            <option data-i18n="fle.aDept"></option>
+            <option data-i18n="fle.aPriority"></option>
+            <option selected data-i18n="fle.aSla"></option>
+            <option data-i18n="fle.aTeam"></option>
+            <option data-i18n="fle.aAgent"></option>
+            <option data-i18n="fle.aTopic"></option>
+            <option data-i18n="fle.aStatus"></option>
+            <option data-i18n="fle.aNoAutoresp"></option>
+            <option data-i18n="fle.aCanned"></option>
+            <option data-i18n="fle.aEmail"></option>
+          </select>
+          <select class="rd-control">
+            <option>Standart</option>
+            <option selected>VIP</option>
+            <option>Kritik</option>
+          </select>
+          <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+        </div>
+
+        <div class="bo-rule-row" style="margin-top:14px">
+          <select class="rd-control" style="max-width:260px">
+            <option data-i18n="fle.aReject"></option>
+            <option data-i18n="fle.aDept"></option>
+            <option data-i18n="fle.aPriority"></option>
+            <option data-i18n="fle.aSla"></option>
+            <option data-i18n="fle.aTeam"></option>
+            <option data-i18n="fle.aAgent"></option>
+            <option data-i18n="fle.aTopic"></option>
+            <option data-i18n="fle.aStatus"></option>
+            <option data-i18n="fle.aNoAutoresp"></option>
+            <option data-i18n="fle.aCanned"></option>
+            <option data-i18n="fle.aEmail"></option>
+          </select>
+          <button type="button" class="rd-btn rd-btn-ghost" data-i18n="fle.addAction"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ İç Notlar ============ -->
+  <div class="rd-tab-panel" id="fle-notes">
+    <div class="rd-surface">
+      <div class="rd-surface-body" style="max-width:720px">
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="fle-notes-ta" data-i18n="common.notes"></label>
+          <textarea id="fle-notes-ta" class="rd-control">Tosyalı Holding sözleşmesi gereği 8 saatlik VIP SLA uygulanır.</textarea>
+          <div class="rd-help" data-i18n="common.notesHelp"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

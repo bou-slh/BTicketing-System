@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Yol ücreti nasıl hesaplanır?</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "ka.back": "← Bilgi Bankası",
+    "ka.cat": "Bordro",
+    "ka.updated": "Son güncelleme:",
+    "ka.category": "Kategori:",
+    "ka.attachments": "Ekler",
+    "ka.helpful": "Bu makale yardımcı oldu mu?",
+    "ka.related": "İlgili makaleler",
+  },
+  en: {
+    "ka.back": "← Knowledge Base",
+    "ka.cat": "Payroll",
+    "ka.updated": "Last updated:",
+    "ka.category": "Category:",
+    "ka.attachments": "Attachments",
+    "ka.helpful": "Was this article helpful?",
+    "ka.related": "Related articles",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal" data-nav="kb">
+<div id="rd-header"></div>
+
+<main class="rc-main">
+  <div class="rc-detail-title">
+    <a class="rc-back-link" href="kb.html" data-i18n="ka.back"></a>
+    <div>
+      <div style="font-size:12px;color:#d9ebea;margin-bottom:8px">
+        <a href="kb.html" style="color:inherit" data-i18n="nav.kb"></a>
+        <span aria-hidden="true"> » </span>
+        <span data-i18n="ka.cat"></span>
+      </div>
+      <h1>Yol ücreti nasıl hesaplanır?</h1>
+      <p>
+        <span data-i18n="ka.updated"></span> 12 Temmuz 2026
+        <span aria-hidden="true"> · </span>
+        <span data-i18n="ka.category"></span> <span data-i18n="ka.cat"></span>
+      </p>
+    </div>
+  </div>
+
+  <div class="rc-columns">
+    <div class="rc-surface">
+      <div style="padding:24px 26px;font-size:14px;line-height:1.7;color:var(--rd-text-soft)">
+        <p style="margin:0 0 14px">Yol ücreti, personelin işe geliş-gidiş masraflarını karşılamak üzere ödenen bir yan haktır ve bordroda fiili çalışılan gün sayısı üzerinden hesaplanır. Sistem, puantaj döneminde personelin işe geldiği günleri esas alır; yıllık izin, raporlu (istirahatli) ve ücretsiz izinli günler hesaplamaya dahil edilmez.</p>
+        <p style="margin:0 0 14px">Hesaplama formülü şu şekildedir: <b>günlük yol ücreti tutarı × fiili çalışılan gün sayısı</b>. Günlük tutar, şirket parametrelerinde tanımlanır ve personel bazında farklılaştırılabilir. Yarım gün çalışmalarda varsayılan davranış tam gün ödemesidir; isterseniz parametrelerden yarım gün oranı tanımlayabilirsiniz.</p>
+        <p style="margin:0 0 14px">Vergi tarafında, toplu taşıma kartı/bileti olarak sağlanan yol yardımı için Gelir Vergisi Kanunu'nda günlük istisna tutarı uygulanır. 2026 yılı için geçerli günlük istisna tutarını aşan kısım gelir vergisi ve damga vergisi matrahına dahil edilir. Nakit ödenen yol ücretlerinde istisna uygulanmaz; tutarın tamamı SGK primine ve vergiye tabidir.</p>
+        <p style="margin:0">Tanımları görüntülemek ve güncellemek için <b>Bordro → Parametreler → Yol Ücreti</b> ekranını kullanabilirsiniz. Personel bazında farklı tutar veya istisna tanımı gerekiyorsa personel kartındaki "Yan Haklar" sekmesinden düzenleme yapılır. Toplu güncelleme için Excel içe aktarma şablonu desteklenir.</p>
+
+        <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--rd-border-soft)">
+          <b style="display:block;font-weight:500;margin-bottom:10px;font-size:13px" data-i18n="ka.attachments"></b>
+          <span class="rc-attachment">📎 yol-ucreti-hesaplama-ornegi.xlsx</span>
+          <span class="rc-attachment">📎 2026-vergi-istisna-tutarlari.pdf</span>
+        </div>
+
+        <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--rd-border-soft);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <b style="font-weight:500;font-size:13px" data-i18n="ka.helpful"></b>
+          <button class="rd-btn rd-btn-sm" data-i18n="common.yes"></button>
+          <button class="rd-btn rd-btn-sm" data-i18n="common.no"></button>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="rc-surface">
+        <div class="rc-surface-head" data-i18n="ka.related"></div>
+        <a class="rc-kb-cat" href="kb-article.html">
+          <h3>Ek mesai bordroya nasıl yansır?</h3>
+          <p>Bordro · Güncellendi: 28 Haz 2026</p>
+        </a>
+        <a class="rc-kb-cat" href="kb-article.html">
+          <h3>Asgari ücret güncellemesi sonrası kontroller</h3>
+          <p>Bordro · Güncellendi: 5 Oca 2026</p>
+        </a>
+        <a class="rc-kb-cat" href="kb-article.html">
+          <h3>Yıllık izin devri kuralları</h3>
+          <p>İzin Yönetimi · Güncellendi: 3 Tem 2026</p>
+        </a>
+      </div>
+    </aside>
+  </div>
+</main>
+</body>
+</html>

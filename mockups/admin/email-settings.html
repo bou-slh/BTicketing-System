@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — E-posta Ayarları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "es.title": "E-posta Ayarları",
+    "es.subtitle": "Sistem genelinde e-posta davranışı: varsayılan adresler ve şablonlar, gelen posta işleme ve giden posta yöntemi.",
+    "es.idxGeneral": "Genel",
+    "es.idxIncoming": "Gelen",
+    "es.idxOutgoing": "Giden",
+
+    "es.secGeneral": "Genel",
+    "es.defaultTemplate": "Varsayılan şablon seti",
+    "es.defaultTemplateHelp": "Departmanında farklı bir set seçilmemiş tüm e-postalar bu şablonları kullanır.",
+    "es.defaultEmail": "Varsayılan sistem e-postası",
+    "es.defaultEmailHelp": "Giden e-postalarda başka adres belirtilmediğinde kullanılacak adres.",
+    "es.alertEmail": "Uyarı e-postası",
+    "es.alertEmailHelp": "Temsilcilere gönderilen uyarı ve bildirimlerin çıkış adresi.",
+    "es.adminEmail": "Yönetici e-postası",
+    "es.adminEmailHelp": "Sistem hataları ve kritik uyarılar bu adrese gönderilir.",
+    "es.verifyDomain": "Alan adı doğrulama",
+    "es.verifyDomainHelp": "E-posta adresleri kaydedilirken alan adının MX kaydı kontrol edilir.",
+
+    "es.secIncoming": "Gelen",
+    "es.polling": "Posta toplama",
+    "es.pollingHelp": "Sistem, tanımlı posta kutularından düzenli olarak yeni e-posta çeker.",
+    "es.cron": "Otomatik zamanlama (cron)",
+    "es.cronHelp": "Posta toplamayı sunucu zamanlayıcısı tetikler; kapalıysa yalnızca sayfa ziyaretleri tetikler.",
+    "es.stripQuoted": "Alıntılanan yanıtı kırp",
+    "es.stripQuotedHelp": "Yanıt e-postalarındaki eski yazışma alıntıları talebe eklenmez.",
+    "es.separator": "Yanıt ayracı",
+    "es.separatorHelp": "Bu satırın altındaki her şey e-postadan kırpılır.",
+    "es.emailPriority": "E-posta önceliğini kullan",
+    "es.emailPriorityHelp": "Gönderenin e-postada işaretlediği öncelik (örn. \"yüksek önem\") talebe uygulanır.",
+    "es.acceptUnregistered": "Kayıtsız e-postaları kabul et",
+    "es.acceptUnregisteredHelp": "Sistemde kayıtlı olmayan adreslerden gelen e-postalar da talep açabilir.",
+    "es.autoCollabs": "Katılımcıları otomatik ekle",
+    "es.autoCollabsHelp": "E-postanın CC satırındaki adresler talebe katılımcı olarak eklenir.",
+
+    "es.secOutgoing": "Giden",
+    "es.defaultSmtp": "Varsayılan gönderim yöntemi",
+    "es.defaultSmtpHelp": "Kendi SMTP ayarı olmayan adreslerin e-postaları bu yolla gönderilir.",
+    "es.optPhpMail": "PHP mail() — sunucu yerel postası",
+    "es.attachments": "E-posta ekleri",
+    "es.attachmentsHelp": "Dosya ekleri giden e-postalara iliştirilir; kapalıysa yalnızca bağlantı gönderilir.",
+  },
+  en: {
+    "es.title": "Email Settings",
+    "es.subtitle": "System-wide email behavior: default addresses and templates, incoming mail processing and the outgoing mail method.",
+    "es.idxGeneral": "General",
+    "es.idxIncoming": "Incoming",
+    "es.idxOutgoing": "Outgoing",
+
+    "es.secGeneral": "General",
+    "es.defaultTemplate": "Default template set",
+    "es.defaultTemplateHelp": "All emails use these templates unless the department selects a different set.",
+    "es.defaultEmail": "Default system email",
+    "es.defaultEmailHelp": "Address used when no other address is specified on outgoing email.",
+    "es.alertEmail": "Alert email",
+    "es.alertEmailHelp": "The sender address for alerts and notifications sent to agents.",
+    "es.adminEmail": "Admin email",
+    "es.adminEmailHelp": "System errors and critical alerts are sent to this address.",
+    "es.verifyDomain": "Verify email domains",
+    "es.verifyDomainHelp": "The domain's MX record is checked when email addresses are saved.",
+
+    "es.secIncoming": "Incoming",
+    "es.polling": "Email fetching",
+    "es.pollingHelp": "The system regularly pulls new email from the configured mailboxes.",
+    "es.cron": "Automatic scheduling (cron)",
+    "es.cronHelp": "Fetching is triggered by the server scheduler; when off, only page visits trigger it.",
+    "es.stripQuoted": "Strip quoted reply",
+    "es.stripQuotedHelp": "Quoted older correspondence in reply emails is not added to the ticket.",
+    "es.separator": "Reply separator",
+    "es.separatorHelp": "Everything below this line is trimmed from the email.",
+    "es.emailPriority": "Use email priority",
+    "es.emailPriorityHelp": "The priority flagged by the sender (e.g. \"high importance\") is applied to the ticket.",
+    "es.acceptUnregistered": "Accept unregistered emails",
+    "es.acceptUnregisteredHelp": "Emails from addresses not registered in the system can also open tickets.",
+    "es.autoCollabs": "Auto-add collaborators",
+    "es.autoCollabsHelp": "Addresses on the email's CC line are added to the ticket as collaborators.",
+
+    "es.secOutgoing": "Outgoing",
+    "es.defaultSmtp": "Default delivery method",
+    "es.defaultSmtpHelp": "Email from addresses without their own SMTP settings is sent this way.",
+    "es.optPhpMail": "PHP mail() — server local mail",
+    "es.attachments": "Email attachments",
+    "es.attachmentsHelp": "File attachments are included in outgoing email; when off, only a link is sent.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="email-settings">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="es.title"></h1>
+      <p data-i18n="es.subtitle"></p>
+    </div>
+  </div>
+
+  <form>
+    <div class="bo-settings">
+      <nav class="bo-section-index">
+        <a href="#section-general" class="active" data-i18n="es.idxGeneral"></a>
+        <a href="#section-incoming" data-i18n="es.idxIncoming"></a>
+        <a href="#section-outgoing" data-i18n="es.idxOutgoing"></a>
+      </nav>
+
+      <div class="bo-settings-sections">
+
+        <!-- ==== Genel ==== -->
+        <section class="rd-surface bo-section" id="section-general">
+          <div class="rd-surface-head" data-i18n="es.secGeneral"></div>
+          <div class="rd-surface-body">
+            <div class="rd-field">
+              <label class="rd-label" for="es-template" data-i18n="es.defaultTemplate"></label>
+              <select id="es-template" class="rd-control">
+                <option selected>Varsayılan (TR)</option>
+                <option>English Set (EN)</option>
+              </select>
+              <p class="rd-help" data-i18n="es.defaultTemplateHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="es-sysemail" data-i18n="es.defaultEmail"></label>
+              <select id="es-sysemail" class="rd-control">
+                <option selected>destek@rapidsol.com.tr</option>
+                <option>bordro@rapidsol.com.tr</option>
+                <option>bilgi@rapidsol.com.tr</option>
+              </select>
+              <p class="rd-help" data-i18n="es.defaultEmailHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="es-alertemail" data-i18n="es.alertEmail"></label>
+              <select id="es-alertemail" class="rd-control">
+                <option>destek@rapidsol.com.tr</option>
+                <option selected>bilgi@rapidsol.com.tr</option>
+                <option>bordro@rapidsol.com.tr</option>
+              </select>
+              <p class="rd-help" data-i18n="es.alertEmailHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="es-adminemail" data-i18n="es.adminEmail"></label>
+              <input id="es-adminemail" class="rd-control" type="email" value="umit.akin@rapidsol.com.tr">
+              <p class="rd-help" data-i18n="es.adminEmailHelp"></p>
+            </div>
+            <details class="rd-advanced">
+              <summary data-i18n="common.advanced"></summary>
+              <div class="rd-advanced-body">
+                <label class="rd-switch">
+                  <input type="checkbox" checked>
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="es.verifyDomain"></b>
+                    <small data-i18n="es.verifyDomainHelp"></small>
+                  </span>
+                </label>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- ==== Gelen ==== -->
+        <section class="rd-surface bo-section" id="section-incoming">
+          <div class="rd-surface-head" data-i18n="es.secIncoming"></div>
+          <div class="rd-surface-body">
+            <div class="rd-field">
+              <label class="rd-switch">
+                <input type="checkbox" checked>
+                <span class="track"></span>
+                <span class="rd-switch-copy">
+                  <b data-i18n="es.polling"></b>
+                  <small data-i18n="es.pollingHelp"></small>
+                </span>
+              </label>
+            </div>
+            <div class="rd-field">
+              <label class="rd-switch">
+                <input type="checkbox" checked>
+                <span class="track"></span>
+                <span class="rd-switch-copy">
+                  <b data-i18n="es.cron"></b>
+                  <small data-i18n="es.cronHelp"></small>
+                </span>
+              </label>
+            </div>
+            <div class="rd-field">
+              <label class="rd-switch">
+                <input type="checkbox" checked>
+                <span class="track"></span>
+                <span class="rd-switch-copy">
+                  <b data-i18n="es.stripQuoted"></b>
+                  <small data-i18n="es.stripQuotedHelp"></small>
+                </span>
+              </label>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="es-separator" data-i18n="es.separator"></label>
+              <input id="es-separator" class="rd-control" type="text" value="-- lütfen bu satırın üstüne yazın --" style="max-width:360px">
+              <p class="rd-help" data-i18n="es.separatorHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-switch">
+                <input type="checkbox">
+                <span class="track"></span>
+                <span class="rd-switch-copy">
+                  <b data-i18n="es.emailPriority"></b>
+                  <small data-i18n="es.emailPriorityHelp"></small>
+                </span>
+              </label>
+            </div>
+            <div class="rd-field">
+              <label class="rd-switch">
+                <input type="checkbox" checked>
+                <span class="track"></span>
+                <span class="rd-switch-copy">
+                  <b data-i18n="es.acceptUnregistered"></b>
+                  <small data-i18n="es.acceptUnregisteredHelp"></small>
+                </span>
+              </label>
+            </div>
+            <div class="rd-field mb-0">
+              <label class="rd-switch">
+                <input type="checkbox" checked>
+                <span class="track"></span>
+                <span class="rd-switch-copy">
+                  <b data-i18n="es.autoCollabs"></b>
+                  <small data-i18n="es.autoCollabsHelp"></small>
+                </span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==== Giden ==== -->
+        <section class="rd-surface bo-section" id="section-outgoing">
+          <div class="rd-surface-head" data-i18n="es.secOutgoing"></div>
+          <div class="rd-surface-body">
+            <div class="rd-field">
+              <label class="rd-label" for="es-smtp" data-i18n="es.defaultSmtp"></label>
+              <select id="es-smtp" class="rd-control">
+                <option data-i18n="es.optPhpMail"></option>
+                <option selected>destek@rapidsol.com.tr — SMTP</option>
+              </select>
+              <p class="rd-help" data-i18n="es.defaultSmtpHelp"></p>
+            </div>
+            <div class="rd-field mb-0">
+              <label class="rd-switch">
+                <input type="checkbox" checked>
+                <span class="track"></span>
+                <span class="rd-switch-copy">
+                  <b data-i18n="es.attachments"></b>
+                  <small data-i18n="es.attachmentsHelp"></small>
+                </span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <div style="display:flex;gap:10px">
+          <button class="rd-btn-primary" data-i18n="common.save"></button>
+          <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+        </div>
+
+      </div>
+    </div>
+  </form>
+
+</main>
+</body>
+</html>

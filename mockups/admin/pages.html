@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Site Sayfaları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "pg.title": "Site Sayfaları",
+    "pg.sub": "Kullanıcı portalında gösterilen karşılama, çevrimdışı ve teşekkür sayfası içerikleri.",
+    "pg.searchPh": "Sayfa ara…",
+    "pg.new": "＋ Yeni Sayfa",
+    "pg.colType": "Tür",
+    "pg.typeLanding": "Karşılama",
+    "pg.typeOffline": "Çevrimdışı",
+    "pg.typeThanks": "Teşekkür",
+    "pg.typeOther": "Diğer",
+    "pg.showing": "4 sayfadan 1–4 arası gösteriliyor",
+    "pg.bulkTitle": "Toplu işlemler",
+    "pg.bulkHelp": "Seçili sayfalara uygulanır.",
+    "pg.emptyTitle": "Henüz sayfa yok",
+    "pg.emptyText": "Portalda gösterilecek ilk içerik sayfanızı oluşturun.",
+    "pg.dlgTitle": "Site Sayfası",
+    "pg.name": "Ad",
+    "pg.nameHelp": "Sayfayı yönetim panelinde tanımlayan ad.",
+    "pg.type": "Tür",
+    "pg.typeHelp": "Teşekkür sayfaları yardım konularında seçilebilir; karşılama ve çevrimdışı sayfalar sistem ayarlarından atanır.",
+    "pg.status": "Durum",
+    "pg.content": "İçerik",
+    "pg.contentHelp": "%{company.name} ve %{ticket.number} gibi değişkenler kullanılabilir.",
+  },
+  en: {
+    "pg.title": "Site Pages",
+    "pg.sub": "Landing, offline and thank-you page contents shown on the user portal.",
+    "pg.searchPh": "Search pages…",
+    "pg.new": "＋ New Page",
+    "pg.colType": "Type",
+    "pg.typeLanding": "Landing",
+    "pg.typeOffline": "Offline",
+    "pg.typeThanks": "Thank-you",
+    "pg.typeOther": "Other",
+    "pg.showing": "Showing 1–4 of 4 pages",
+    "pg.bulkTitle": "Bulk actions",
+    "pg.bulkHelp": "Applied to the selected pages.",
+    "pg.emptyTitle": "No pages yet",
+    "pg.emptyText": "Create the first content page shown on the portal.",
+    "pg.dlgTitle": "Site Page",
+    "pg.name": "Name",
+    "pg.nameHelp": "Name identifying the page in the admin panel.",
+    "pg.type": "Type",
+    "pg.typeHelp": "Thank-you pages can be picked on help topics; landing and offline pages are assigned in system settings.",
+    "pg.status": "Status",
+    "pg.content": "Content",
+    "pg.contentHelp": "Variables like %{company.name} and %{ticket.number} can be used.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="pages">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="pg.title"></h1>
+      <p data-i18n="pg.sub"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="pg.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-dialog-open="dlg-more"><span data-i18n="common.more"></span> ▾</button>
+    <button class="rd-btn rd-btn-primary" data-dialog-open="dlg-page" data-i18n="pg.new"></button>
+  </div>
+
+  <div class="rd-surface">
+    <table class="rd-table" id="tbl-pages">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-pages" data-i18n-title="common.selectAll"></th>
+          <th class="sortable" data-i18n="common.name"></th>
+          <th data-i18n="pg.colType"></th>
+          <th data-i18n="common.status"></th>
+          <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-page">Hoş Geldiniz</a></td>
+          <td data-i18n="pg.typeLanding"></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td>12 Tem 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-page">Bakım Modu</a></td>
+          <td data-i18n="pg.typeOffline"></td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="common.disabled"></span></td>
+          <td>3 Oca 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-page">Talep Alındı</a></td>
+          <td data-i18n="pg.typeThanks"></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td>4 Ağu 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-page">KVKK Aydınlatma</a></td>
+          <td data-i18n="pg.typeOther"></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td>22 May 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="pg.showing"></span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="pg-empty">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">❐</div>
+        <h3 data-i18n="pg.emptyTitle"></h3>
+        <p data-i18n="pg.emptyText"></p>
+        <button class="rd-btn rd-btn-primary" data-dialog-open="dlg-page" data-i18n="pg.new"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sayfa ekle/düzenle -->
+  <dialog class="rd-dialog" id="dlg-page">
+    <form>
+      <div class="rd-dialog-head"><span data-i18n="pg.dlgTitle"></span><button type="button" class="close" data-dialog-close>✕</button></div>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="pg-name" data-i18n="pg.name"></label>
+          <input id="pg-name" class="rd-control" value="Talep Alındı">
+          <div class="rd-help" data-i18n="pg.nameHelp"></div>
+        </div>
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="pg-type" data-i18n="pg.type"></label>
+            <select id="pg-type" class="rd-control">
+              <option data-i18n="pg.typeLanding"></option>
+              <option data-i18n="pg.typeOffline"></option>
+              <option selected data-i18n="pg.typeThanks"></option>
+              <option data-i18n="pg.typeOther"></option>
+            </select>
+            <div class="rd-help" data-i18n="pg.typeHelp"></div>
+          </div>
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="pg.status"></span>
+            <div style="display:flex;gap:18px;padding:10px 0 2px">
+              <label class="rd-check"><input type="radio" name="pg-status" checked><span data-i18n="common.active"></span></label>
+              <label class="rd-check"><input type="radio" name="pg-status"><span data-i18n="common.disabled"></span></label>
+            </div>
+          </div>
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="pg-content" data-i18n="pg.content"></label>
+          <textarea id="pg-content" class="rd-control" style="min-height:140px">Sayın %{recipient.name},
+
+%{ticket.number} numaralı talebiniz alınmıştır. Danışman ekibimiz en kısa sürede sizinle iletişime geçecektir.</textarea>
+          <div class="rd-help" data-i18n="pg.contentHelp"></div>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span data-i18n="pg.bulkTitle"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <p class="rd-help" style="margin-top:0" data-i18n="pg.bulkHelp"></p>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+        <button class="rd-btn" data-dialog-close data-i18n="common.enable"></button>
+        <button class="rd-btn" data-dialog-close data-i18n="common.disable"></button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-dialog-close data-i18n="common.delete"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

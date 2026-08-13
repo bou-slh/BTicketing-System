@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Denetim Günlükleri</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "al.title": "Denetim Günlükleri",
+    "al.subtitle": "Kim, ne zaman, neyi değiştirdi? Talepler, kullanıcılar, temsilciler ve ayarlar üzerindeki tüm işlemlerin izi.",
+    "al.from": "Başlangıç",
+    "al.to": "Bitiş",
+    "al.type": "Tür",
+    "al.typeAll": "Tümü",
+    "al.typeTicket": "Talep",
+    "al.typeUser": "Kullanıcı",
+    "al.typeAgent": "Temsilci",
+    "al.typeSetting": "Ayar",
+    "al.colTime": "Zaman",
+    "al.colUser": "Kullanıcı",
+    "al.colEvent": "Olay",
+    "al.colObject": "Nesne",
+    "al.colIp": "IP",
+    "al.export": "CSV Dışa Aktar",
+    "al.showing": "1–10 / 1.206 kayıt gösteriliyor",
+  },
+  en: {
+    "al.title": "Audit Logs",
+    "al.subtitle": "Who changed what, and when? A trail of every action on tickets, users, agents and settings.",
+    "al.from": "From",
+    "al.to": "To",
+    "al.type": "Type",
+    "al.typeAll": "All",
+    "al.typeTicket": "Ticket",
+    "al.typeUser": "User",
+    "al.typeAgent": "Agent",
+    "al.typeSetting": "Setting",
+    "al.colTime": "Time",
+    "al.colUser": "User",
+    "al.colEvent": "Event",
+    "al.colObject": "Object",
+    "al.colIp": "IP",
+    "al.export": "Export CSV",
+    "al.showing": "Showing 1–10 of 1,206 entries",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="audit-logs">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="al.title"></h1>
+      <p data-i18n="al.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <label class="rd-label mb-0" for="audit-from" data-i18n="al.from"></label>
+    <input id="audit-from" type="date" class="rd-control" value="2026-08-01">
+    <label class="rd-label mb-0" for="audit-to" data-i18n="al.to"></label>
+    <input id="audit-to" type="date" class="rd-control" value="2026-08-11">
+    <label class="rd-label mb-0" for="audit-type" data-i18n="al.type"></label>
+    <select id="audit-type" class="rd-control">
+      <option data-i18n="al.typeAll"></option>
+      <option data-i18n="al.typeTicket"></option>
+      <option data-i18n="al.typeUser"></option>
+      <option data-i18n="al.typeAgent"></option>
+      <option data-i18n="al.typeSetting"></option>
+    </select>
+    <button class="rd-btn" data-i18n="common.apply"></button>
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="al.export"></button>
+  </div>
+
+  <div class="rd-surface">
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th class="sortable sorted-desc" data-i18n="al.colTime"></th>
+          <th data-i18n="al.colUser"></th>
+          <th data-i18n="al.colEvent"></th>
+          <th data-i18n="al.colObject"></th>
+          <th data-i18n="al.colIp"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>11.08.2026 11:02</td>
+          <td>Bourla Salehi</td>
+          <td>R716555 için 6 saat efor önerisini görüntüledi</td>
+          <td>Talep R716555</td>
+          <td>85.102.44.17</td>
+        </tr>
+        <tr>
+          <td>11.08.2026 10:18</td>
+          <td>Ümit Akın</td>
+          <td>R716555 için 6 saat efor önerdi (kullanıcı onayına gönderildi)</td>
+          <td>Talep R716555</td>
+          <td>10.0.4.31</td>
+        </tr>
+        <tr>
+          <td>11.08.2026 10:18</td>
+          <td>Ümit Akın</td>
+          <td>R716555 durumunu güncelledi (Açık → Efor Onayı Bekliyor)</td>
+          <td>Talep R716555</td>
+          <td>10.0.4.31</td>
+        </tr>
+        <tr>
+          <td>11.08.2026 10:05</td>
+          <td>Deniz Kaya</td>
+          <td>R716555 talebine iç not ekledi</td>
+          <td>Talep R716555</td>
+          <td>10.0.4.35</td>
+        </tr>
+        <tr>
+          <td>11.08.2026 09:54</td>
+          <td>Deniz Kaya</td>
+          <td>R716555 talebini Ümit Akın'a atadı</td>
+          <td>Talep R716555</td>
+          <td>10.0.4.35</td>
+        </tr>
+        <tr>
+          <td>11.08.2026 09:30</td>
+          <td>Sistem Yöneticisi</td>
+          <td>Talep ayarlarını güncelledi: CAPTCHA etkinleştirildi</td>
+          <td>Ayar: Talepler</td>
+          <td>10.0.4.10</td>
+        </tr>
+        <tr>
+          <td>10.08.2026 17:42</td>
+          <td>Merve Çetin</td>
+          <td>Bourla Salehi kullanıcı profilini düzenledi</td>
+          <td>Kullanıcı: Bourla Salehi</td>
+          <td>10.0.4.33</td>
+        </tr>
+        <tr>
+          <td>10.08.2026 16:29</td>
+          <td>Bourla Salehi</td>
+          <td>R716555 talebini oluşturdu (portal)</td>
+          <td>Talep R716555</td>
+          <td>78.186.42.17</td>
+        </tr>
+        <tr>
+          <td>10.08.2026 14:03</td>
+          <td>Sistem Yöneticisi</td>
+          <td>Yeni temsilci hesabı ekledi: Deniz Kaya</td>
+          <td>Temsilci: Deniz Kaya</td>
+          <td>10.0.4.10</td>
+        </tr>
+        <tr>
+          <td>10.08.2026 11:20</td>
+          <td>Ümit Akın</td>
+          <td>R716212 talebini kapattı</td>
+          <td>Talep R716212</td>
+          <td>10.0.4.31</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="al.showing"></span>
+      <div class="pages">
+        <span class="current">1</span>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">…</a>
+        <a href="#">151</a>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

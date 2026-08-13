@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — SSS Makalesi</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "kf.back": "← Bilgi Bankası",
+    "kf.meta": "Bordro · Herkese Açık · Son güncelleme: 5 Ağu 2026",
+    "kf.preview": "Önizle",
+    "kf.category": "Kategori",
+    "kf.categoryHelp": "Makalenin portalda hangi kategori altında listeleneceğini belirler.",
+    "kf.topics": "Yardım Konuları",
+    "kf.topicsHelp": "Makale, seçilen yardım konularıyla açılan taleplerde öneri olarak gösterilir. Çoklu seçim için Ctrl/Cmd kullanın.",
+    "kf.listing": "Listeleme Türü",
+    "kf.featured": "Öne Çıkan",
+    "kf.public": "Herkese Açık",
+    "kf.internal": "Dahili",
+    "kf.listingHelp": "Dahili makaleler yalnızca temsilci panelinde görünür; öne çıkanlar portal ana sayfasında listelenir.",
+    "kf.tabContent": "İçerik",
+    "kf.tabAttach": "Ekler",
+    "kf.question": "Soru",
+    "kf.answer": "Yanıt",
+    "kf.uploadHint": "Dosyaları buraya sürükleyin veya seçmek için tıklayın",
+    "kf.notesPh": "Bu makale hakkında dahili not yazın…",
+  },
+  en: {
+    "kf.back": "← Knowledge Base",
+    "kf.meta": "Payroll · Public · Last updated: 5 Aug 2026",
+    "kf.preview": "Preview",
+    "kf.category": "Category",
+    "kf.categoryHelp": "Determines which category the article is listed under on the portal.",
+    "kf.topics": "Help Topics",
+    "kf.topicsHelp": "The article is suggested on tickets opened with the selected help topics. Use Ctrl/Cmd for multiple selection.",
+    "kf.listing": "Listing Type",
+    "kf.featured": "Featured",
+    "kf.public": "Public",
+    "kf.internal": "Internal",
+    "kf.listingHelp": "Internal articles are visible only in the agent panel; featured ones are listed on the portal home page.",
+    "kf.tabContent": "Content",
+    "kf.tabAttach": "Attachments",
+    "kf.question": "Question",
+    "kf.answer": "Answer",
+    "kf.uploadHint": "Drag files here or click to choose",
+    "kf.notesPh": "Write an internal note about this article…",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="kb">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <a href="kb.html" class="text-sm" data-i18n="kf.back"></a>
+      <h1 style="margin-top:6px">Yol ücreti nasıl hesaplanır?</h1>
+      <p data-i18n="kf.meta"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn rd-btn-ghost" data-i18n="kf.preview"></button>
+      <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+    </div>
+  </div>
+
+  <form>
+    <div class="rd-surface" style="margin-bottom:20px">
+      <div class="rd-surface-body">
+        <div class="rd-grid-3">
+          <div class="rd-field">
+            <label class="rd-label" for="kf-cat" data-i18n="kf.category"></label>
+            <select id="kf-cat" class="rd-control">
+              <option selected>Bordro</option>
+              <option>İzin</option>
+              <option>Vardiya</option>
+              <option>Sistem</option>
+            </select>
+            <div class="rd-help" data-i18n="kf.categoryHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="kf-topics" data-i18n="kf.topics"></label>
+            <select id="kf-topics" class="rd-control" multiple size="3">
+              <option selected>Bordro Hatası</option>
+              <option>İzin İşlemleri</option>
+              <option>Vardiya Değişikliği</option>
+              <option>Sistem Erişimi</option>
+            </select>
+            <div class="rd-help" data-i18n="kf.topicsHelp"></div>
+          </div>
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="kf.listing"></span>
+            <label class="rd-check" style="margin-bottom:7px">
+              <input type="radio" name="kf-listing">
+              <span data-i18n="kf.featured"></span>
+            </label>
+            <label class="rd-check" style="margin-bottom:7px">
+              <input type="radio" name="kf-listing" checked>
+              <span data-i18n="kf.public"></span>
+            </label>
+            <label class="rd-check">
+              <input type="radio" name="kf-listing">
+              <span data-i18n="kf.internal"></span>
+            </label>
+            <div class="rd-help" data-i18n="kf.listingHelp"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tabs" data-tabs>
+      <button type="button" class="active" data-tab="kf-panel-content" data-i18n="kf.tabContent"></button>
+      <button type="button" data-tab="kf-panel-attach" data-i18n="kf.tabAttach"></button>
+      <button type="button" data-tab="kf-panel-notes" data-i18n="common.notes"></button>
+    </div>
+
+    <div class="rd-tab-panel active" id="kf-panel-content">
+      <div class="rd-surface">
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="kf-question" data-i18n="kf.question"></label>
+            <input id="kf-question" class="rd-control" value="Yol ücreti nasıl hesaplanır?">
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="kf-answer" data-i18n="kf.answer"></label>
+            <textarea id="kf-answer" class="rd-control" style="min-height:280px">Yol ücreti, personelin fiili çalışma günü sayısı ile günlük ulaşım bedelinin çarpılmasıyla hesaplanır.
+
+1. Fiili çalışma günü: Puantaj kayıtlarından raporlu, izinli ve resmî tatil günleri düşülür.
+2. Günlük bedel: Şirket sözleşmesinde tanımlı tarifeden alınır; 2026 ikinci yarıyıl tarifesi 1 Temmuz itibarıyla geçerlidir.
+3. Vergi istisnası: Günlük bedelin gelir vergisi istisna tutarını aşan kısmı bordroda brütleştirilerek gösterilir.
+
+Örnek: 21 fiili gün × 88,00 TL = 1.848,00 TL. İstisna üstü tutar varsa "Yol Ücreti (Vergiye Tabi)" kaleminde ayrıca raporlanır.</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tab-panel" id="kf-panel-attach">
+      <div class="rd-surface">
+        <div class="rd-surface-body">
+          <div class="rd-upload" data-i18n="kf.uploadHint"></div>
+          <span class="rc-attachment">📎 yol-ucreti-ornek-hesap.xlsx</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tab-panel" id="kf-panel-notes">
+      <div class="rd-surface">
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <textarea class="rd-control" data-i18n-placeholder="kf.notesPh">2026 tarife değişikliğinde örnek hesap tablosu güncellenmeli. — MÇ</textarea>
+            <div class="rd-help" data-i18n="common.notesHelp"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button type="submit" class="rd-btn-primary" data-i18n="common.save"></button>
+      <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+      <a class="rd-btn rd-btn-ghost" href="kb.html" data-i18n="common.cancel"></a>
+    </div>
+  </form>
+
+</main>
+</body>
+</html>

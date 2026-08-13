@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Form Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "fme.back": "← Formlar",
+    "fme.sub": "Form başlığını, yönergesini ve alanlarını düzenleyin.",
+    "fme.titleLabel": "Başlık",
+    "fme.titleHelp": "Temsilci panelinde ve form listelerinde görünen ad.",
+    "fme.instructions": "Yönerge",
+    "fme.instructionsHelp": "Formun üstünde kullanıcıya gösterilir.",
+    "fme.fieldsHead": "Alanlar",
+    "fme.fieldsHelp": "Sürükleyerek sıralayın. Dahili alanlar yalnızca temsilcilere görünür.",
+    "fme.colLabel": "Etiket",
+    "fme.colType": "Tür",
+    "fme.colVar": "Değişken",
+    "fme.colRequired": "Zorunlu",
+    "fme.colInternal": "Dahili",
+    "fme.tShort": "Kısa Metin",
+    "fme.tLong": "Uzun Metin",
+    "fme.tChoice": "Seçim",
+    "fme.tDate": "Tarih",
+    "fme.tCheckbox": "Onay Kutusu",
+    "fme.tPhone": "Telefon",
+    "fme.tFile": "Dosya",
+    "fme.addField": "＋ Alan Ekle",
+    "fme.cfgTitle": "Alan Ayarları",
+    "fme.cfgHelpText": "Yardım metni",
+    "fme.cfgHelpTextHelp": "Alanın altında kullanıcıya gösterilen açıklama.",
+    "fme.cfgDefault": "Varsayılan değer",
+    "fme.cfgDefaultHelp": "Form açıldığında alan bu değerle dolu gelir.",
+    "fme.cfgValidation": "Doğrulama",
+    "fme.vNone": "— Yok —",
+    "fme.vEmail": "E-posta",
+    "fme.vPhone": "Telefon",
+    "fme.vNumber": "Sayı",
+    "fme.cfgValidationHelp": "Girilen değerin biçimini denetler.",
+    "fme.deleteWarn": "Bu formu silmek, forma şimdiye kadar girilmiş TÜM verileri de kalıcı olarak siler. Devam etmek istiyor musunuz?",
+  },
+  en: {
+    "fme.back": "← Forms",
+    "fme.sub": "Edit the form's title, instructions and fields.",
+    "fme.titleLabel": "Title",
+    "fme.titleHelp": "Name shown in the agent panel and form lists.",
+    "fme.instructions": "Instructions",
+    "fme.instructionsHelp": "Shown to the user above the form.",
+    "fme.fieldsHead": "Fields",
+    "fme.fieldsHelp": "Drag to reorder. Internal fields are visible to agents only.",
+    "fme.colLabel": "Label",
+    "fme.colType": "Type",
+    "fme.colVar": "Variable",
+    "fme.colRequired": "Required",
+    "fme.colInternal": "Internal",
+    "fme.tShort": "Short Text",
+    "fme.tLong": "Long Text",
+    "fme.tChoice": "Choice",
+    "fme.tDate": "Date",
+    "fme.tCheckbox": "Checkbox",
+    "fme.tPhone": "Phone",
+    "fme.tFile": "File",
+    "fme.addField": "＋ Add Field",
+    "fme.cfgTitle": "Field Settings",
+    "fme.cfgHelpText": "Help text",
+    "fme.cfgHelpTextHelp": "Explanation shown to the user below the field.",
+    "fme.cfgDefault": "Default value",
+    "fme.cfgDefaultHelp": "The field is pre-filled with this value when the form opens.",
+    "fme.cfgValidation": "Validation",
+    "fme.vNone": "— None —",
+    "fme.vEmail": "Email",
+    "fme.vPhone": "Phone",
+    "fme.vNumber": "Number",
+    "fme.cfgValidationHelp": "Checks the format of the entered value.",
+    "fme.deleteWarn": "Deleting this form also permanently deletes ALL data ever entered into it. Do you want to continue?",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="forms">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+<form>
+
+  <div class="bo-page-head">
+    <div>
+      <a href="forms.html" style="font-size:13px" data-i18n="fme.back"></a>
+      <h1>Bordro Ek Bilgileri</h1>
+      <p data-i18n="fme.sub"></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-deletedata" data-i18n="common.delete"></button>
+      <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+      <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+    </div>
+  </div>
+
+  <div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-body" style="max-width:720px">
+      <div class="rd-field">
+        <label class="rd-label" for="fme-title" data-i18n="fme.titleLabel"></label>
+        <input id="fme-title" class="rd-control" value="Bordro Ek Bilgileri">
+        <div class="rd-help" data-i18n="fme.titleHelp"></div>
+      </div>
+      <div class="rd-field mb-0">
+        <label class="rd-label" for="fme-instr" data-i18n="fme.instructions"></label>
+        <textarea id="fme-instr" class="rd-control" style="min-height:80px">Bordro talebinizle ilgili ek bilgileri doldurun; personel numarası zorunludur.</textarea>
+        <div class="rd-help" data-i18n="fme.instructionsHelp"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-head"><span data-i18n="fme.fieldsHead"></span></div>
+    <table class="rd-table" id="tbl-fields">
+      <thead>
+        <tr>
+          <th style="width:30px"></th>
+          <th data-i18n="fme.colLabel"></th>
+          <th data-i18n="fme.colType"></th>
+          <th data-i18n="fme.colVar"></th>
+          <th data-i18n="fme.colRequired"></th>
+          <th data-i18n="fme.colInternal"></th>
+          <th style="width:36px"></th>
+          <th style="width:36px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+          <td><input class="rd-control" value="Personel Numarası" style="min-width:170px"></td>
+          <td>
+            <select class="rd-control" style="min-width:130px">
+              <option selected data-i18n="fme.tShort"></option>
+              <option data-i18n="fme.tLong"></option>
+              <option data-i18n="fme.tChoice"></option>
+              <option data-i18n="fme.tDate"></option>
+              <option data-i18n="fme.tCheckbox"></option>
+              <option data-i18n="fme.tPhone"></option>
+              <option data-i18n="fme.tFile"></option>
+            </select>
+          </td>
+          <td><input class="rd-control" value="personel_no" style="min-width:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"></td>
+          <td><input type="checkbox" checked></td>
+          <td><input type="checkbox"></td>
+          <td><button type="button" style="border:0;background:transparent;cursor:pointer;font-size:15px" data-dialog-open="dlg-fieldcfg" data-i18n-title="fme.cfgTitle">⚙</button></td>
+          <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+        </tr>
+        <tr>
+          <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+          <td><input class="rd-control" value="Dönem" style="min-width:170px"></td>
+          <td>
+            <select class="rd-control" style="min-width:130px">
+              <option data-i18n="fme.tShort"></option>
+              <option data-i18n="fme.tLong"></option>
+              <option data-i18n="fme.tChoice"></option>
+              <option selected data-i18n="fme.tDate"></option>
+              <option data-i18n="fme.tCheckbox"></option>
+              <option data-i18n="fme.tPhone"></option>
+              <option data-i18n="fme.tFile"></option>
+            </select>
+          </td>
+          <td><input class="rd-control" value="donem" style="min-width:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"></td>
+          <td><input type="checkbox" checked></td>
+          <td><input type="checkbox"></td>
+          <td><button type="button" style="border:0;background:transparent;cursor:pointer;font-size:15px" data-dialog-open="dlg-fieldcfg" data-i18n-title="fme.cfgTitle">⚙</button></td>
+          <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+        </tr>
+        <tr>
+          <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+          <td><input class="rd-control" value="Modül" style="min-width:170px"></td>
+          <td>
+            <select class="rd-control" style="min-width:130px">
+              <option data-i18n="fme.tShort"></option>
+              <option data-i18n="fme.tLong"></option>
+              <option selected data-i18n="fme.tChoice"></option>
+              <option data-i18n="fme.tDate"></option>
+              <option data-i18n="fme.tCheckbox"></option>
+              <option data-i18n="fme.tPhone"></option>
+              <option data-i18n="fme.tFile"></option>
+            </select>
+          </td>
+          <td><input class="rd-control" value="modul" style="min-width:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox"></td>
+          <td><button type="button" style="border:0;background:transparent;cursor:pointer;font-size:15px" data-dialog-open="dlg-fieldcfg" data-i18n-title="fme.cfgTitle">⚙</button></td>
+          <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+        </tr>
+        <tr>
+          <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+          <td><input class="rd-control" value="Ek Açıklama" style="min-width:170px"></td>
+          <td>
+            <select class="rd-control" style="min-width:130px">
+              <option data-i18n="fme.tShort"></option>
+              <option selected data-i18n="fme.tLong"></option>
+              <option data-i18n="fme.tChoice"></option>
+              <option data-i18n="fme.tDate"></option>
+              <option data-i18n="fme.tCheckbox"></option>
+              <option data-i18n="fme.tPhone"></option>
+              <option data-i18n="fme.tFile"></option>
+            </select>
+          </td>
+          <td><input class="rd-control" value="ek_aciklama" style="min-width:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"></td>
+          <td><input type="checkbox"></td>
+          <td><input type="checkbox" checked></td>
+          <td><button type="button" style="border:0;background:transparent;cursor:pointer;font-size:15px" data-dialog-open="dlg-fieldcfg" data-i18n-title="fme.cfgTitle">⚙</button></td>
+          <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+      <button type="button" class="rd-btn rd-btn-ghost" data-i18n="fme.addField"></button>
+      <div class="rd-help" data-i18n="fme.fieldsHelp"></div>
+    </div>
+  </div>
+
+  <div class="rd-surface">
+    <div class="rd-surface-body" style="max-width:720px">
+      <div class="rd-field mb-0">
+        <label class="rd-label" for="fme-notes" data-i18n="common.notes"></label>
+        <textarea id="fme-notes" class="rd-control" style="min-height:80px">İK ekibinin isteğiyle eklendi; Bordro yardım konularına bağlıdır.</textarea>
+        <div class="rd-help" data-i18n="common.notesHelp"></div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+  <!-- Alan ayarları -->
+  <dialog class="rd-dialog" id="dlg-fieldcfg">
+    <form>
+      <div class="rd-dialog-head"><span data-i18n="fme.cfgTitle"></span><button type="button" class="close" data-dialog-close>✕</button></div>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="cfg-help" data-i18n="fme.cfgHelpText"></label>
+          <input id="cfg-help" class="rd-control" value="Bordronuzun sağ üst köşesindeki 6 haneli numara.">
+          <div class="rd-help" data-i18n="fme.cfgHelpTextHelp"></div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="cfg-default" data-i18n="fme.cfgDefault"></label>
+          <input id="cfg-default" class="rd-control">
+          <div class="rd-help" data-i18n="fme.cfgDefaultHelp"></div>
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="cfg-validation" data-i18n="fme.cfgValidation"></label>
+          <select id="cfg-validation" class="rd-control">
+            <option selected data-i18n="fme.vNone"></option>
+            <option data-i18n="fme.vEmail"></option>
+            <option data-i18n="fme.vPhone"></option>
+            <option data-i18n="fme.vNumber"></option>
+          </select>
+          <div class="rd-help" data-i18n="fme.cfgValidationHelp"></div>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="button" class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.apply"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Veriyle birlikte silme onayı -->
+  <dialog class="rd-dialog" id="dlg-deletedata">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <div class="rd-banner rd-banner-warn"><span>⚠</span><span data-i18n="fme.deleteWarn"></span></div>
+    </div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Giriş</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "lg.title": "Giriş yapın",
+    "lg.sub": "Destek taleplerinizi görüntülemek ve yeni talep oluşturmak için hesabınıza giriş yapın.",
+    "lg.user": "E-posta veya kullanıcı adı",
+    "lg.password": "Parola",
+    "lg.forgot": "Parolamı unuttum",
+    "lg.remember": "Beni hatırla",
+    "lg.submit": "Giriş yap",
+    "lg.noAccount": "Hesabınız yok mu?",
+    "lg.register": "Hesap oluşturun",
+    "lg.agent": "Danışman girişi (RapidSol ekibi)",
+  },
+  en: {
+    "lg.title": "Sign in",
+    "lg.sub": "Sign in to your account to view your support requests and open new ones.",
+    "lg.user": "Email or username",
+    "lg.password": "Password",
+    "lg.forgot": "Forgot my password",
+    "lg.remember": "Remember me",
+    "lg.submit": "Sign in",
+    "lg.noAccount": "Not registered?",
+    "lg.register": "Create an account",
+    "lg.agent": "Agent sign-in (RapidSol team)",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal">
+
+<div style="position:fixed;top:18px;right:18px;z-index:5">
+  <select class="rc-language" data-lang-switch aria-label="Language">
+    <option value="tr">TR</option>
+    <option value="en">EN</option>
+  </select>
+</div>
+
+<div class="rc-auth-wrap">
+  <div class="rc-auth-card">
+    <a class="rc-logo" href="index.html" style="justify-content:center;margin-bottom:20px">
+      <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1 data-i18n="lg.title"></h1>
+    <p data-i18n="lg.sub"></p>
+
+    <div class="rc-form-grid">
+      <div>
+        <label class="rc-label" for="lg-user" data-i18n="lg.user"></label>
+        <input id="lg-user" class="rc-control" type="text" autocomplete="username">
+      </div>
+      <div>
+        <label class="rc-label" for="lg-pass" style="display:flex;align-items:center">
+          <span data-i18n="lg.password"></span>
+          <a href="pwreset.html" style="margin-left:auto;font-weight:400;font-size:12px" data-i18n="lg.forgot"></a>
+        </label>
+        <input id="lg-pass" class="rc-control" type="password" autocomplete="current-password">
+      </div>
+      <label class="rd-check"><input type="checkbox" checked><span data-i18n="lg.remember"></span></label>
+      <a class="rc-button-primary" href="tickets.html" style="justify-content:center" data-i18n="lg.submit"></a>
+    </div>
+
+    <div class="rc-auth-foot">
+      <span data-i18n="lg.noAccount"></span>
+      <a href="register.html" data-i18n="lg.register"></a>
+      <div style="margin-top:10px;font-size:12px">
+        <a href="../agent/login.html" data-i18n="lg.agent"></a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

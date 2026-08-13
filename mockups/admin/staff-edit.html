@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Temsilci Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "se.back": "← Temsilciler",
+    "se.subtitle": "Hesap bilgileri, departman erişimi, izinler ve takım üyelikleri.",
+    "se.tabAccount": "Hesap",
+    "se.tabAccess": "Erişim",
+    "se.tabPermissions": "İzinler",
+    "se.tabTeams": "Takımlar",
+
+    "se.secIdentity": "Kimlik",
+    "se.firstName": "Ad",
+    "se.lastName": "Soyad",
+    "se.email": "E-posta",
+    "se.emailHelp": "Uyarılar ve parola sıfırlama bu adrese gider.",
+    "se.phone": "Telefon",
+    "se.ext": "Dahili",
+    "se.mobile": "Mobil",
+
+    "se.secAuth": "Kimlik Doğrulama",
+    "se.username": "Kullanıcı adı",
+    "se.usernameHelp": "Temsilci paneline girişte kullanılır.",
+    "se.setPassword": "Parola Belirle…",
+    "se.backend": "Doğrulama kaynağı",
+    "se.backendHelp": "Parolanın nerede doğrulanacağı: yerel veritabanı veya kurumsal dizin.",
+    "se.backendLocal": "Yerel (RapidsolDestek)",
+    "se.twofa": "İki adımlı doğrulama (2FA)",
+    "se.twofaState": "Etkin — doğrulayıcı uygulaması",
+    "se.twofaHelp": "Sıfırlanırsa temsilci bir sonraki girişte 2FA'yı yeniden kurar.",
+
+    "se.secStatus": "Durum",
+    "se.locked": "Hesap kilitli",
+    "se.lockedHelp": "Kilitliyken temsilci giriş yapamaz; verileri ve atamaları korunur.",
+    "se.adminFlag": "Yönetici",
+    "se.adminFlagHelp": "Yönetici paneline tam erişim verir: tüm ayarlar, temsilciler ve e-postalar. Dikkatli kullanın.",
+    "se.assignedOnly": "Sadece atananlar",
+    "se.assignedOnlyHelp": "Temsilci yalnızca kendisine atanmış talepleri görür.",
+    "se.vacation": "Tatil modu",
+    "se.vacationHelp": "Tatildeyken yeni atama yapılmaz ve uyarı e-postası gönderilmez.",
+    "se.notesHead": "Notlar",
+
+    "se.secPrimary": "Birincil Erişim",
+    "se.primaryDept": "Birincil departman",
+    "se.primaryDeptHelp": "Temsilcinin ana çalıştığı departman.",
+    "se.primaryRole": "Birincil rol",
+    "se.primaryRoleHelp": "Birincil departmandaki yetkilerini belirleyen rol.",
+    "se.usePrimaryOnAssigned": "Atamalarda birincil rolü kullan",
+    "se.usePrimaryOnAssignedHelp": "Başka departmandan atanan taleplerde de birincil rol geçerli olur.",
+    "se.secExtended": "Ek Erişim",
+    "se.extendedHelp": "Birincil departman dışında erişebildiği departmanlar ve oradaki rolü.",
+    "se.alerts": "Uyarılar",
+    "se.addAccess": "＋ Departman Ekle",
+
+    "se.permNote": "İzinler temsilcinin rolünden devralınır; aşağıdan bu temsilciye özel geçersiz kılabilirsiniz.",
+    "se.grpTickets": "Talepler",
+    "se.grpTicketsHelp": "Talepler üzerindeki kişisel yetkiler.",
+    "se.grpTasks": "Görevler",
+    "se.grpTasksHelp": "Görevler üzerindeki kişisel yetkiler.",
+    "se.grpUsers": "Kullanıcılar",
+    "se.grpUsersHelp": "Kullanıcı kayıtları üzerindeki yetkiler.",
+    "se.grpOrgs": "Şirketler",
+    "se.grpOrgsHelp": "Şirket kayıtları üzerindeki yetkiler.",
+    "se.grpKb": "Bilgi Bankası",
+    "se.grpKbHelp": "SSS ve hazır yanıt yönetimi.",
+    "se.pCreate": "Oluştur",
+    "se.pEdit": "Düzenle",
+    "se.pAssign": "Ata",
+    "se.pTransfer": "Aktar",
+    "se.pReply": "Yanıtla",
+    "se.pEffortPropose": "Efor Öner",
+    "se.pClose": "Kapat",
+    "se.pDelete": "Sil",
+    "se.pManageAccount": "Hesap Yönet",
+    "se.pFaq": "SSS Yönet",
+    "se.pCanned": "Hazır Yanıtlar",
+
+    "se.secTeams": "Takım Üyelikleri",
+    "se.teamsHelp": "Takıma atanan taleplere erişim sağlar; uyarı kutusu işaretliyse takım uyarıları bu temsilciye de gider.",
+    "se.teamAlerts": "Takım uyarılarını al",
+    "se.addTeamPh": "Takım seç…",
+
+    "se.dlgPwTitle": "Parola Belirle",
+    "se.dlgPwNew": "Yeni parola",
+    "se.dlgPwConfirm": "Yeni parola (tekrar)",
+    "se.dlgPwChange": "Bir sonraki girişte parola değişikliği iste",
+    "se.dlgPwHelp": "En az 8 karakter; sistemin parola politikası uygulanır.",
+  },
+  en: {
+    "se.back": "← Agents",
+    "se.subtitle": "Account details, department access, permissions and team memberships.",
+    "se.tabAccount": "Account",
+    "se.tabAccess": "Access",
+    "se.tabPermissions": "Permissions",
+    "se.tabTeams": "Teams",
+
+    "se.secIdentity": "Identity",
+    "se.firstName": "First name",
+    "se.lastName": "Last name",
+    "se.email": "Email",
+    "se.emailHelp": "Alerts and password resets go to this address.",
+    "se.phone": "Phone",
+    "se.ext": "Ext.",
+    "se.mobile": "Mobile",
+
+    "se.secAuth": "Authentication",
+    "se.username": "Username",
+    "se.usernameHelp": "Used to sign in to the agent panel.",
+    "se.setPassword": "Set Password…",
+    "se.backend": "Authentication backend",
+    "se.backendHelp": "Where the password is verified: local database or corporate directory.",
+    "se.backendLocal": "Local (RapidsolDestek)",
+    "se.twofa": "Two-factor authentication (2FA)",
+    "se.twofaState": "Enabled — authenticator app",
+    "se.twofaHelp": "If reset, the agent sets up 2FA again on their next sign-in.",
+
+    "se.secStatus": "Status",
+    "se.locked": "Account locked",
+    "se.lockedHelp": "While locked the agent cannot sign in; their data and assignments are kept.",
+    "se.adminFlag": "Administrator",
+    "se.adminFlagHelp": "Grants full access to the admin panel: all settings, agents and emails. Use with care.",
+    "se.assignedOnly": "Assigned only",
+    "se.assignedOnlyHelp": "The agent only sees tickets assigned to them.",
+    "se.vacation": "Vacation mode",
+    "se.vacationHelp": "While on vacation, no new assignments are made and no alert emails are sent.",
+    "se.notesHead": "Notes",
+
+    "se.secPrimary": "Primary Access",
+    "se.primaryDept": "Primary department",
+    "se.primaryDeptHelp": "The department the agent mainly works in.",
+    "se.primaryRole": "Primary role",
+    "se.primaryRoleHelp": "The role defining their authority in the primary department.",
+    "se.usePrimaryOnAssigned": "Use primary role on assignments",
+    "se.usePrimaryOnAssignedHelp": "The primary role also applies to tickets assigned from other departments.",
+    "se.secExtended": "Extended Access",
+    "se.extendedHelp": "Departments accessible beyond the primary one, and the role held there.",
+    "se.alerts": "Alerts",
+    "se.addAccess": "＋ Add Department",
+
+    "se.permNote": "Permissions are inherited from the agent's role; you can override them for this agent below.",
+    "se.grpTickets": "Tickets",
+    "se.grpTicketsHelp": "Personal authority over tickets.",
+    "se.grpTasks": "Tasks",
+    "se.grpTasksHelp": "Personal authority over tasks.",
+    "se.grpUsers": "Users",
+    "se.grpUsersHelp": "Authority over user records.",
+    "se.grpOrgs": "Companies",
+    "se.grpOrgsHelp": "Authority over company records.",
+    "se.grpKb": "Knowledge Base",
+    "se.grpKbHelp": "FAQ and canned-response management.",
+    "se.pCreate": "Create",
+    "se.pEdit": "Edit",
+    "se.pAssign": "Assign",
+    "se.pTransfer": "Transfer",
+    "se.pReply": "Reply",
+    "se.pEffortPropose": "Propose Effort",
+    "se.pClose": "Close",
+    "se.pDelete": "Delete",
+    "se.pManageAccount": "Manage Account",
+    "se.pFaq": "Manage FAQ",
+    "se.pCanned": "Canned Responses",
+
+    "se.secTeams": "Team Memberships",
+    "se.teamsHelp": "Grants access to tickets assigned to the team; when the alert box is checked, team alerts also go to this agent.",
+    "se.teamAlerts": "Receive team alerts",
+    "se.addTeamPh": "Select team…",
+
+    "se.dlgPwTitle": "Set Password",
+    "se.dlgPwNew": "New password",
+    "se.dlgPwConfirm": "New password (repeat)",
+    "se.dlgPwChange": "Require password change at next sign-in",
+    "se.dlgPwHelp": "At least 8 characters; the system password policy applies.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="staff">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <p><a href="staff.html" data-i18n="se.back"></a></p>
+      <h1>Ümit Akın</h1>
+      <p data-i18n="se.subtitle"></p>
+    </div>
+  </div>
+
+  <form>
+    <div class="rd-tabs" data-tabs data-tabs-scope="main">
+      <button type="button" class="active" data-tab="panel-account" data-i18n="se.tabAccount"></button>
+      <button type="button" data-tab="panel-access" data-i18n="se.tabAccess"></button>
+      <button type="button" data-tab="panel-permissions" data-i18n="se.tabPermissions"></button>
+      <button type="button" data-tab="panel-teams" data-i18n="se.tabTeams"></button>
+    </div>
+
+    <!-- ============ Hesap ============ -->
+    <div class="rd-tab-panel active" id="panel-account" data-tab-group="main">
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="se.secIdentity"></div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="se-first" data-i18n="se.firstName"></label>
+              <input id="se-first" class="rd-control" type="text" value="Ümit">
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="se-last" data-i18n="se.lastName"></label>
+              <input id="se-last" class="rd-control" type="text" value="Akın">
+            </div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="se-email" data-i18n="se.email"></label>
+            <input id="se-email" class="rd-control" type="email" value="umit.akin@rapidsol.com.tr">
+            <p class="rd-help" data-i18n="se.emailHelp"></p>
+          </div>
+          <div class="rd-grid-2">
+            <div class="rd-field mb-0">
+              <label class="rd-label" for="se-phone" data-i18n="se.phone"></label>
+              <div style="display:flex;gap:9px">
+                <input id="se-phone" class="rd-control" type="tel" value="0212 555 24 80">
+                <input class="rd-control" type="text" value="114" style="max-width:90px" data-i18n-placeholder="se.ext" data-i18n-title="se.ext">
+              </div>
+            </div>
+            <div class="rd-field mb-0">
+              <label class="rd-label" for="se-mobile" data-i18n="se.mobile"></label>
+              <input id="se-mobile" class="rd-control" type="tel" value="0532 555 71 09">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="se.secAuth"></div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="se-username" data-i18n="se.username"></label>
+              <div style="display:flex;gap:9px">
+                <input id="se-username" class="rd-control" type="text" value="uakin">
+                <button type="button" class="rd-btn" data-dialog-open="dlg-password" data-i18n="se.setPassword"></button>
+              </div>
+              <p class="rd-help" data-i18n="se.usernameHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="se-backend" data-i18n="se.backend"></label>
+              <select id="se-backend" class="rd-control">
+                <option selected data-i18n="se.backendLocal"></option>
+                <option>LDAP / Active Directory</option>
+              </select>
+              <p class="rd-help" data-i18n="se.backendHelp"></p>
+            </div>
+          </div>
+          <div class="rd-field mb-0">
+            <span class="rd-label" data-i18n="se.twofa"></span>
+            <div style="display:flex;align-items:center;gap:12px">
+              <span class="rd-pill rd-pill-solved" data-i18n="se.twofaState"></span>
+              <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-i18n="common.reset"></button>
+            </div>
+            <p class="rd-help" data-i18n="se.twofaHelp"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="se.secStatus"></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="se.locked"></b>
+                <small data-i18n="se.lockedHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="se.adminFlag"></b>
+                <small data-i18n="se.adminFlagHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="se.assignedOnly"></b>
+                <small data-i18n="se.assignedOnlyHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-switch">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="se.vacation"></b>
+                <small data-i18n="se.vacationHelp"></small>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface">
+        <div class="rd-surface-head" data-i18n="se.notesHead"></div>
+        <div class="rd-surface-body">
+          <div class="rd-field mb-0">
+            <textarea class="rd-control" style="min-height:80px">Bordro ekibinin lideri; SGK entegrasyonu konularında ilk başvurulacak kişi.</textarea>
+            <p class="rd-help" data-i18n="common.notesHelp"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Erişim ============ -->
+    <div class="rd-tab-panel" id="panel-access" data-tab-group="main">
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="se.secPrimary"></div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="se-pdept" data-i18n="se.primaryDept"></label>
+              <select id="se-pdept" class="rd-control">
+                <option>Destek</option>
+                <option selected>Bordro</option>
+                <option>Danışmanlık</option>
+              </select>
+              <p class="rd-help" data-i18n="se.primaryDeptHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="se-prole" data-i18n="se.primaryRole"></label>
+              <select id="se-prole" class="rd-control">
+                <option selected>Yönetici</option>
+                <option>Kıdemli Temsilci</option>
+                <option>Temsilci</option>
+                <option>Salt Okunur</option>
+              </select>
+              <p class="rd-help" data-i18n="se.primaryRoleHelp"></p>
+            </div>
+          </div>
+          <label class="rd-switch">
+            <input type="checkbox" checked>
+            <span class="track"></span>
+            <span class="rd-switch-copy">
+              <b data-i18n="se.usePrimaryOnAssigned"></b>
+              <small data-i18n="se.usePrimaryOnAssignedHelp"></small>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="rd-surface">
+        <div class="rd-surface-head">
+          <span data-i18n="se.secExtended"></span>
+          <small class="rd-muted" data-i18n="se.extendedHelp"></small>
+        </div>
+        <div class="rd-surface-body">
+          <div class="bo-rule-row">
+            <select class="rd-control">
+              <option selected>Destek</option>
+              <option>Danışmanlık</option>
+            </select>
+            <select class="rd-control">
+              <option>Yönetici</option>
+              <option selected>Kıdemli Temsilci</option>
+              <option>Temsilci</option>
+              <option>Salt Okunur</option>
+            </select>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.alerts"></span></label>
+            <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+          </div>
+          <div class="bo-rule-row">
+            <select class="rd-control">
+              <option>Destek</option>
+              <option selected>Danışmanlık</option>
+            </select>
+            <select class="rd-control">
+              <option>Yönetici</option>
+              <option>Kıdemli Temsilci</option>
+              <option>Temsilci</option>
+              <option selected>Salt Okunur</option>
+            </select>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="se.alerts"></span></label>
+            <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+          </div>
+          <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-i18n="se.addAccess"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ İzinler ============ -->
+    <div class="rd-tab-panel" id="panel-permissions" data-tab-group="main">
+      <div class="rd-banner rd-banner-info">
+        <span>ℹ</span>
+        <span data-i18n="se.permNote"></span>
+      </div>
+
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="se.grpTickets"></b>
+            <small data-i18n="se.grpTicketsHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pCreate"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pEdit"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pAssign"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pTransfer"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pReply"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pEffortPropose"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pClose"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pDelete"></span></label>
+        </div>
+      </div>
+
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="se.grpTasks"></b>
+            <small data-i18n="se.grpTasksHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pCreate"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pEdit"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pAssign"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pTransfer"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pReply"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pClose"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="se.pDelete"></span></label>
+        </div>
+      </div>
+
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="se.grpUsers"></b>
+            <small data-i18n="se.grpUsersHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pCreate"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pEdit"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="se.pDelete"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pManageAccount"></span></label>
+        </div>
+      </div>
+
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="se.grpOrgs"></b>
+            <small data-i18n="se.grpOrgsHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pCreate"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pEdit"></span></label>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="se.pDelete"></span></label>
+        </div>
+      </div>
+
+      <div class="bo-toggle-card">
+        <div class="head">
+          <div>
+            <b data-i18n="se.grpKb"></b>
+            <small data-i18n="se.grpKbHelp"></small>
+          </div>
+          <label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label>
+        </div>
+        <div class="recipients">
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pFaq"></span></label>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.pCanned"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Takımlar ============ -->
+    <div class="rd-tab-panel" id="panel-teams" data-tab-group="main">
+      <div class="rd-surface">
+        <div class="rd-surface-head">
+          <span data-i18n="se.secTeams"></span>
+          <small class="rd-muted" data-i18n="se.teamsHelp"></small>
+        </div>
+        <div class="rd-surface-body">
+          <div class="bo-rule-row">
+            <span style="display:inline-flex;align-items:center;gap:10px;flex:1;min-width:180px">
+              <span class="rd-avatar">BE</span> Bordro Ekibi
+            </span>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.teamAlerts"></span></label>
+            <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+          </div>
+          <div class="bo-rule-row">
+            <span style="display:inline-flex;align-items:center;gap:10px;flex:1;min-width:180px">
+              <span class="rd-avatar">VM</span> VIP Masası
+            </span>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="se.teamAlerts"></span></label>
+            <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+          </div>
+          <div style="display:flex;gap:9px;margin-top:14px;max-width:380px">
+            <select class="rd-control">
+              <option selected data-i18n="se.addTeamPh"></option>
+              <option>Entegrasyon</option>
+            </select>
+            <button type="button" class="rd-btn" data-i18n="common.add"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="rd-btn-primary" data-i18n="common.save"></button>
+      <a class="rd-btn" href="staff.html" data-i18n="common.cancel"></a>
+    </div>
+  </form>
+
+  <!-- Parola belirleme dialogu -->
+  <dialog class="rd-dialog" id="dlg-password">
+    <form>
+      <div class="rd-dialog-head">
+        <span data-i18n="se.dlgPwTitle"></span>
+        <button type="button" class="close" data-dialog-close aria-label="Kapat">✕</button>
+      </div>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="se-pw1" data-i18n="se.dlgPwNew"></label>
+          <input id="se-pw1" class="rd-control" type="password">
+          <p class="rd-help" data-i18n="se.dlgPwHelp"></p>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="se-pw2" data-i18n="se.dlgPwConfirm"></label>
+          <input id="se-pw2" class="rd-control" type="password">
+        </div>
+        <label class="rd-check"><input type="checkbox" checked><span data-i18n="se.dlgPwChange"></span></label>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button class="rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

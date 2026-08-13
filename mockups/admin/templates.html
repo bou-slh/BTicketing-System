@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — E-posta Şablonları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "tp.title": "E-posta Şablonları",
+    "tp.subtitle": "Otomatik e-postaların (yanıtlar, uyarılar, bildirimler) içerik setleri. Bir sete tıklayarak içindeki şablonları düzenleyin.",
+    "tp.add": "＋ Yeni Set",
+    "tp.searchPh": "Şablon seti ara…",
+    "tp.colName": "Şablon Seti",
+    "tp.colInUse": "Kullanımda",
+    "tp.colLang": "Dil",
+    "tp.emptyTitle": "Henüz şablon seti yok",
+    "tp.emptyText": "Stok şablonlardan kopyalayarak ilk setinizi oluşturun.",
+    "tp.dlgTitle": "Yeni Şablon Seti",
+    "tp.dlgName": "Ad",
+    "tp.dlgNameHelp": "Seti tanımlayan kısa bir ad, ör. \"Kurumsal (TR)\".",
+    "tp.dlgClone": "Kopyalanacak set",
+    "tp.dlgCloneHelp": "Yeni set bu setin içeriğiyle başlar.",
+    "tp.dlgStock": "Stok Şablonlar",
+    "tp.dlgLang": "Dil",
+    "tp.dlgLangHelp": "Setin yazılacağı dil; kullanıcının diline göre seçilebilir.",
+    "tp.create": "Oluştur",
+  },
+  en: {
+    "tp.title": "Email Templates",
+    "tp.subtitle": "Content sets for automated emails (responses, alerts, notices). Click a set to edit the templates inside it.",
+    "tp.add": "＋ New Set",
+    "tp.searchPh": "Search template sets…",
+    "tp.colName": "Template Set",
+    "tp.colInUse": "In Use",
+    "tp.colLang": "Language",
+    "tp.emptyTitle": "No template sets yet",
+    "tp.emptyText": "Create your first set by copying from the stock templates.",
+    "tp.dlgTitle": "New Template Set",
+    "tp.dlgName": "Name",
+    "tp.dlgNameHelp": "A short name describing the set, e.g. \"Corporate (EN)\".",
+    "tp.dlgClone": "Set to copy",
+    "tp.dlgCloneHelp": "The new set starts with this set's content.",
+    "tp.dlgStock": "Stock Templates",
+    "tp.dlgLang": "Language",
+    "tp.dlgLangHelp": "The language the set is written in; can be chosen per user language.",
+    "tp.create": "Create",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="templates">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="tp.title"></h1>
+      <p data-i18n="tp.subtitle"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn-primary" data-dialog-open="dlg-new-set" data-i18n="tp.add"></button>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="tp.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="common.enable"></button>
+    <button class="rd-btn" data-i18n="common.disable"></button>
+    <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+  </div>
+
+  <div class="rd-surface" id="tbl-templates">
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-templates" data-i18n-title="common.selectAll"></th>
+          <th class="sortable sorted-desc" data-i18n="tp.colName"></th>
+          <th class="sortable" data-i18n="common.status"></th>
+          <th data-i18n="tp.colInUse"></th>
+          <th class="sortable" data-i18n="tp.colLang"></th>
+          <th class="sortable" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="template-edit.html">Varsayılan (TR)</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td>✓</td>
+          <td>Türkçe</td>
+          <td>04.08.2026 16:20</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="template-edit.html">English Set (EN)</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td class="rd-muted">—</td>
+          <td>English</td>
+          <td>18.05.2026 10:02</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="common.showing"></span><span>1–2 / 2</span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="empty-templates">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">❏</div>
+        <h3 data-i18n="tp.emptyTitle"></h3>
+        <p data-i18n="tp.emptyText"></p>
+        <button class="rd-btn-primary" data-dialog-open="dlg-new-set" data-i18n="tp.add"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Yeni set dialogu -->
+  <dialog class="rd-dialog" id="dlg-new-set">
+    <form>
+      <div class="rd-dialog-head">
+        <span data-i18n="tp.dlgTitle"></span>
+        <button type="button" class="close" data-dialog-close aria-label="Kapat">✕</button>
+      </div>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="tp-name" data-i18n="tp.dlgName"></label>
+          <input id="tp-name" class="rd-control" type="text" placeholder="Kurumsal (TR)">
+          <p class="rd-help" data-i18n="tp.dlgNameHelp"></p>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="tp-clone" data-i18n="tp.dlgClone"></label>
+          <select id="tp-clone" class="rd-control">
+            <option selected data-i18n="tp.dlgStock"></option>
+            <option>Varsayılan (TR)</option>
+            <option>English Set (EN)</option>
+          </select>
+          <p class="rd-help" data-i18n="tp.dlgCloneHelp"></p>
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="tp-lang" data-i18n="tp.dlgLang"></label>
+          <select id="tp-lang" class="rd-control">
+            <option selected>Türkçe</option>
+            <option>English</option>
+          </select>
+          <p class="rd-help" data-i18n="tp.dlgLangHelp"></p>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button class="rd-btn-primary" data-i18n="tp.create"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

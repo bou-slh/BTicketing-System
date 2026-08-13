@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Bakım</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "of.title": "Destek sistemi şu anda bakımda",
+    "of.text": "Planlı bakım çalışması nedeniyle destek portalı geçici olarak hizmet dışıdır. Talepleriniz ve verileriniz güvende; çalışma tamamlanır tamamlanmaz yeniden hizmetinizdeyiz.",
+    "of.mail": "Acil konular için bize e-posta gönderebilirsiniz:",
+  },
+  en: {
+    "of.title": "The support system is under maintenance",
+    "of.text": "The support portal is temporarily unavailable due to planned maintenance. Your requests and data are safe; we will be back as soon as the work is complete.",
+    "of.mail": "For urgent matters you can email us:",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal">
+
+<div style="position:fixed;top:18px;right:18px;z-index:5">
+  <select class="rc-language" data-lang-switch aria-label="Language">
+    <option value="tr">TR</option>
+    <option value="en">EN</option>
+  </select>
+</div>
+
+<div class="rc-auth-wrap">
+  <div class="rc-auth-card" style="text-align:center">
+    <a class="rc-logo" href="index.html" style="justify-content:center;margin-bottom:20px">
+      <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <div style="font-size:48px;margin-bottom:14px" aria-hidden="true">🛠</div>
+    <h1 data-i18n="of.title"></h1>
+    <p data-i18n="of.text"></p>
+    <div class="rc-notice">
+      <span data-i18n="of.mail"></span>
+      <a href="mailto:destek@rapidsol.com.tr">destek@rapidsol.com.tr</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

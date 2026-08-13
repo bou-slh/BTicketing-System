@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Sistem Günlükleri</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "sl.title": "Sistem Günlükleri",
+    "sl.subtitle": "Uygulamanın kaydettiği hata, uyarı ve hata ayıklama olayları. Günlükler, Sistem ayarlarındaki temizleme süresine göre otomatik silinir.",
+    "sl.banner": "Günlük düzeyi ve otomatik temizleme süresi Sistem ayarlarından yönetilir:",
+    "sl.bannerLink": "Sistem ayarlarını aç",
+    "sl.from": "Başlangıç",
+    "sl.to": "Bitiş",
+    "sl.level": "Kayıt Düzeyi",
+    "sl.levelAll": "Tümü",
+    "sl.levelError": "HATA",
+    "sl.levelWarn": "UYARI",
+    "sl.levelDebug": "HATA AYIKLAMA",
+    "sl.colTitle": "Başlık",
+    "sl.colType": "Tür",
+    "sl.colDate": "Tarih",
+    "sl.colIp": "IP",
+    "sl.error": "HATA",
+    "sl.warn": "UYARI",
+    "sl.debug": "HATA AYIKLAMA",
+    "sl.deleteSelected": "Seçilenleri Sil",
+    "sl.dlgTitle": "Günlük kayıtlarını sil",
+    "sl.showing": "1–7 / 132 kayıt gösteriliyor",
+  },
+  en: {
+    "sl.title": "System Logs",
+    "sl.subtitle": "Error, warning and debug events recorded by the application. Logs are purged automatically per the retention set in System settings.",
+    "sl.banner": "The log level and automatic purge period are managed in System settings:",
+    "sl.bannerLink": "Open System settings",
+    "sl.from": "From",
+    "sl.to": "To",
+    "sl.level": "Log Level",
+    "sl.levelAll": "All",
+    "sl.levelError": "ERROR",
+    "sl.levelWarn": "WARNING",
+    "sl.levelDebug": "DEBUG",
+    "sl.colTitle": "Title",
+    "sl.colType": "Type",
+    "sl.colDate": "Date",
+    "sl.colIp": "IP",
+    "sl.error": "ERROR",
+    "sl.warn": "WARNING",
+    "sl.debug": "DEBUG",
+    "sl.deleteSelected": "Delete Selected",
+    "sl.dlgTitle": "Delete log entries",
+    "sl.showing": "Showing 1–7 of 132 entries",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="system-logs">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="sl.title"></h1>
+      <p data-i18n="sl.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="rd-banner rd-banner-info">
+    <span aria-hidden="true">ℹ</span>
+    <span>
+      <span data-i18n="sl.banner"></span>
+      <a href="settings-system.html" data-i18n="sl.bannerLink"></a>
+    </span>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <label class="rd-label mb-0" for="log-from" data-i18n="sl.from"></label>
+    <input id="log-from" type="date" class="rd-control" value="2026-08-01">
+    <label class="rd-label mb-0" for="log-to" data-i18n="sl.to"></label>
+    <input id="log-to" type="date" class="rd-control" value="2026-08-11">
+    <label class="rd-label mb-0" for="log-level" data-i18n="sl.level"></label>
+    <select id="log-level" class="rd-control">
+      <option data-i18n="sl.levelAll"></option>
+      <option data-i18n="sl.levelError"></option>
+      <option data-i18n="sl.levelWarn"></option>
+      <option data-i18n="sl.levelDebug"></option>
+    </select>
+    <button class="rd-btn" data-i18n="common.apply"></button>
+    <span class="spacer"></span>
+    <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-purge" data-i18n="sl.deleteSelected"></button>
+  </div>
+
+  <div class="rd-surface">
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all=".rd-surface"></th>
+          <th data-i18n="sl.colTitle"></th>
+          <th data-i18n="sl.colType"></th>
+          <th class="sortable sorted-desc" data-i18n="sl.colDate"></th>
+          <th data-i18n="sl.colIp"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>Posta alınamadı (destek@rapidsol.com.tr): IMAP bağlantı zaman aşımı</td>
+          <td><span class="rd-pill rd-pill-overdue" data-i18n="sl.error"></span></td>
+          <td>11.08.2026 09:12</td>
+          <td>10.0.4.21</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>Posta alınamadı (bordro@rapidsol.com.tr): kimlik doğrulama reddedildi</td>
+          <td><span class="rd-pill rd-pill-overdue" data-i18n="sl.error"></span></td>
+          <td>11.08.2026 08:47</td>
+          <td>10.0.4.21</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>Cron görevi tamamlandı: 4 uyarı e-postası gönderildi</td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="sl.debug"></span></td>
+          <td>11.08.2026 08:45</td>
+          <td>10.0.4.20</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>Başarısız giriş denemesi: 'merve.cetin' kullanıcısı (3. deneme)</td>
+          <td><span class="rd-pill rd-pill-wait" data-i18n="sl.warn"></span></td>
+          <td>10.08.2026 22:31</td>
+          <td>88.243.17.90</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>Cron görevi tamamlandı: gecikmiş talep taraması (2 talep işaretlendi)</td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="sl.debug"></span></td>
+          <td>10.08.2026 22:00</td>
+          <td>10.0.4.20</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>SMTP gönderimi yeniden denendi: geçici sunucu hatası (450)</td>
+          <td><span class="rd-pill rd-pill-wait" data-i18n="sl.warn"></span></td>
+          <td>10.08.2026 18:05</td>
+          <td>10.0.4.22</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>Başarısız giriş denemesi: bilinmeyen kullanıcı 'admin'</td>
+          <td><span class="rd-pill rd-pill-wait" data-i18n="sl.warn"></span></td>
+          <td>10.08.2026 03:12</td>
+          <td>185.220.101.4</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="sl.showing"></span>
+      <div class="pages">
+        <span class="current">1</span>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">…</a>
+        <a href="#">19</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<dialog class="rd-dialog" id="dlg-purge">
+  <div class="rd-dialog-head">
+    <span data-i18n="sl.dlgTitle"></span>
+    <button class="close" data-dialog-close aria-label="Close">✕</button>
+  </div>
+  <div class="rd-dialog-body">
+    <p data-i18n="common.confirmDelete"></p>
+  </div>
+  <div class="rd-dialog-foot">
+    <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+    <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+  </div>
+</dialog>
+</body>
+</html>

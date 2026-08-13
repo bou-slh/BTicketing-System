@@ -1,0 +1,358 @@
+/* RapidsolDestek — agent + admin back-office chrome.
+   Same RapidSol brand as the portal, denser layout:
+   top bar + left sidebar + content area. */
+
+body.backoffice {
+  display: grid;
+  grid-template-rows: 64px 1fr;
+  grid-template-columns: 248px 1fr;
+  grid-template-areas:
+    "topbar topbar"
+    "sidebar main";
+  min-height: 100vh;
+}
+
+/* ---------- Top bar ---------- */
+
+/* The grid children are the #rd-topbar / #rd-sidebar wrapper divs that app.js
+   fills — the named areas must live on them, not on the rendered inner nodes. */
+#rd-topbar {
+  grid-area: topbar;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.bo-topbar {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  gap: 20px;
+  padding: 0 22px;
+  background: var(--rd-surface);
+  border-bottom: 1px solid var(--rd-border);
+}
+.bo-topbar .rc-logo { font-size: 18px; }
+.bo-topbar .rc-logo-mark { width: 26px; height: 26px; }
+.bo-topbar .rc-logo-mark::before, .bo-topbar .rc-logo-mark::after {
+  left: 10px; top: -1px; width: 6px; height: 28px;
+}
+
+.bo-search { flex: 1; max-width: 480px; position: relative; }
+.bo-search input {
+  width: 100%;
+  height: var(--rd-control-h);
+  border: 1px solid var(--rd-control-border);
+  border-radius: 10px;
+  background: var(--rd-surface-2);
+  color: inherit;
+  padding: 0 12px 0 34px;
+  outline: none;
+  font-size: 13px;
+}
+.bo-search input:focus { border-color: var(--rd-primary); box-shadow: 0 0 0 3px rgba(11, 166, 157, 0.13); }
+.bo-search::before {
+  content: "⌕";
+  position: absolute;
+  left: 11px; top: 50%;
+  transform: translateY(-54%);
+  font-size: 17px;
+  color: var(--rd-muted);
+}
+
+.bo-topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+.bo-panel-switch {
+  display: flex;
+  border: 1px solid var(--rd-control-border);
+  border-radius: 9px;
+  overflow: hidden;
+  font-size: 12px;
+}
+.bo-panel-switch a {
+  padding: 7px 11px;
+  color: var(--rd-muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+.bo-panel-switch a.active { background: var(--rd-teal-bg); color: var(--rd-primary-strong); }
+.bo-panel-switch a:hover { text-decoration: none; color: var(--rd-link); }
+
+/* ---------- Sidebar ---------- */
+
+#rd-sidebar { grid-area: sidebar; }
+
+.bo-sidebar {
+  background: var(--rd-surface);
+  border-right: 1px solid var(--rd-border);
+  padding: 18px 12px 30px;
+  overflow-y: auto;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+}
+.bo-nav-group { margin-bottom: 22px; }
+.bo-nav-group > .group-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--rd-muted);
+  padding: 0 10px;
+  margin-bottom: 7px;
+}
+.bo-nav-group a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  color: light-dark(#4d5f63, #b4c4c6);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 1px;
+}
+.bo-nav-group a:hover { background: light-dark(#edf7f5, #1a3033); color: var(--rd-link); text-decoration: none; }
+.bo-nav-group a.active { background: var(--rd-teal-bg); color: light-dark(#087f79, #8de2db); }
+.bo-nav-group a .count {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--rd-muted);
+  background: var(--rd-gray-bg);
+  border-radius: 99px;
+  padding: 1px 7px;
+}
+.bo-nav-group a.active .count { background: light-dark(#cdeeea, #124442); color: inherit; }
+
+/* Sidebar items: fixed-width icon column so every label starts at the same x
+   (scoped to .bo-sidebar — queue trees reuse .bo-nav-group without icons). */
+.bo-sidebar .bo-nav-group a > span:first-child {
+  flex: none;
+  width: 17px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--rd-muted);
+}
+.bo-sidebar .bo-nav-group a.active > span:first-child { color: inherit; }
+
+/* Group titles indent to the same x as item labels (10px pad + 17px icon + 10px gap),
+   with identical metrics in the agent (static) and admin (collapsible) sidebars. */
+.bo-sidebar .bo-nav-group > .group-label {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px 6px 37px;
+  margin-bottom: 2px;
+}
+.bo-sidebar .bo-nav-group { margin-bottom: 14px; }
+
+/* Admin sidebar: collapsible groups (rendered as <details> by app.js) */
+.bo-sidebar details.bo-nav-group { margin-bottom: 10px; }
+.bo-sidebar details.bo-nav-group > summary.group-label {
+  list-style: none;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+.bo-sidebar details.bo-nav-group > summary.group-label::-webkit-details-marker { display: none; }
+.bo-sidebar details.bo-nav-group > summary.group-label::after {
+  content: "▾";
+  margin-left: auto;
+  font-size: 9px;
+  transition: transform 0.15s;
+}
+.bo-sidebar details.bo-nav-group:not([open]) > summary.group-label::after { transform: rotate(-90deg); }
+.bo-sidebar details.bo-nav-group > summary.group-label:hover {
+  background: light-dark(#edf7f5, #1a3033);
+  color: var(--rd-link);
+}
+
+/* ---------- Main area ---------- */
+
+.bo-main {
+  grid-area: main;
+  padding: 26px 30px 60px;
+  max-width: 1240px;
+  width: 100%;
+  margin: 0 auto; /* keep content centered in the wide column on large screens */
+  min-width: 0;
+}
+
+.bo-page-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+.bo-page-head h1 { font-size: 24px; letter-spacing: -0.5px; margin-bottom: 5px; }
+.bo-page-head p { color: var(--rd-muted); font-size: 13px; max-width: 640px; }
+.bo-page-head .actions { margin-left: auto; display: flex; gap: 10px; align-items: center; align-self: center; flex-wrap: wrap; justify-content: flex-end; }
+.bo-page-head .actions .rd-control { width: auto; }
+
+/* Hero variant: bo-page-head layout + portal rc-hero banner visuals (agent/ticket-view).
+   Buttons get glassy white treatment so they read on the teal gradient. */
+.bo-page-head.rc-hero { padding: 24px 26px; }
+.bo-page-head.rc-hero p,
+.bo-page-head.rc-hero a { color: #d9ebea; }
+.bo-page-head.rc-hero a:hover { color: #fff; }
+.bo-page-head.rc-hero .actions { position: relative; z-index: 2; }
+.bo-page-head.rc-hero .rd-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+.bo-page-head.rc-hero .rd-btn:hover { background: rgba(255, 255, 255, 0.22); }
+.bo-page-head.rc-hero .rd-btn-primary { background: #fff; color: #087b75; box-shadow: none; }
+.bo-page-head.rc-hero .rd-btn-primary:hover { background: #eafaf8; }
+.bo-page-head.rc-hero .rd-btn-danger {
+  background: rgba(239, 68, 68, 0.28);
+  border-color: rgba(255, 214, 214, 0.4);
+  color: #ffd6d6;
+}
+.bo-page-head.rc-hero .rd-btn-danger:hover { background: rgba(239, 68, 68, 0.42); }
+.bo-page-head.rc-hero .rd-muted { color: #c7dedd; }
+
+/* Settings layout: sticky section index + sections */
+.bo-settings { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 26px; align-items: start; }
+.bo-section-index { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 2px; }
+.bo-section-index a {
+  padding: 7px 11px;
+  border-left: 2px solid transparent;
+  color: var(--rd-muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 0 8px 8px 0;
+}
+.bo-section-index a:hover { color: var(--rd-link); text-decoration: none; }
+.bo-section-index a.active { border-left-color: var(--rd-primary); color: var(--rd-primary-strong); background: light-dark(#f0faf8, #14292b); }
+
+.bo-settings-sections { display: flex; flex-direction: column; gap: 22px; }
+.bo-section { scroll-margin-top: 84px; }
+.bo-section .rd-surface-body { max-width: 720px; }
+
+/* Toggle-card groups (alert/permission matrices) */
+.bo-toggle-card {
+  border: 1px solid var(--rd-border);
+  border-radius: 13px;
+  padding: 15px 17px;
+  margin-bottom: 12px;
+  background: var(--rd-surface);
+}
+.bo-toggle-card > .head { display: flex; align-items: flex-start; gap: 12px; }
+.bo-toggle-card > .head b { font-size: 13px; font-weight: 500; display: block; }
+.bo-toggle-card > .head small { color: var(--rd-muted); font-size: 12px; display: block; margin-top: 2px; }
+.bo-toggle-card > .head .rd-switch { margin-left: auto; }
+.bo-toggle-card .recipients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 13px;
+  padding-top: 13px;
+  border-top: 1px dashed var(--rd-border);
+}
+
+/* Dense definition rows (detail pages) */
+.bo-def { font-size: 13px; }
+.bo-def .row {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rd-border-soft);
+}
+.bo-def .row:last-child { border-bottom: 0; }
+.bo-def .row > span:first-child { color: var(--rd-muted); }
+
+/* Repeatable builder rows (filter rules, members, access) */
+.bo-rule-row {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  margin-bottom: 9px;
+  flex-wrap: wrap;
+}
+/* dense builder rows: narrower min-width than .rd-list-toolbar is intentional */
+.bo-rule-row .rd-control,
+.bo-rule-row .rc-control { width: auto; flex: 1; min-width: 130px; }
+.bo-rule-row .remove {
+  border: 0; background: transparent;
+  color: var(--rd-red);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 4px;
+}
+
+/* ---------- Live board ---------- */
+
+.lb-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; align-items: start; }
+.lb-col { background: light-dark(#eef4f3, #101c1f); border: 1px solid var(--rd-border); border-radius: 15px; padding: 11px; }
+.lb-col-head { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; padding: 3px 6px 10px; }
+.lb-col-head .count { margin-left: auto; color: var(--rd-muted); font-weight: 500; }
+.lb-card {
+  background: var(--rd-surface);
+  border: 1px solid var(--rd-border);
+  border-radius: 12px;
+  padding: 12px 13px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  animation: lb-in 0.35s ease;
+}
+.lb-card:last-child { margin-bottom: 0; }
+.lb-card .subj { font-weight: 500; font-size: 13px; margin: 4px 0 6px; }
+.lb-card .meta { color: var(--rd-muted); display: flex; gap: 8px; flex-wrap: wrap; }
+.lb-card .actions { display: flex; gap: 6px; margin-top: 10px; }
+.lb-sla {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 7px;
+  padding: 2px 7px;
+  background: var(--rd-green-bg);
+  color: var(--rd-green);
+  float: right;
+}
+.lb-sla.warn { background: var(--rd-amber-bg); color: var(--rd-amber); }
+.lb-sla.danger { background: var(--rd-red-bg); color: var(--rd-red); }
+@keyframes lb-in { from { opacity: 0; transform: translateY(-7px); } to { opacity: 1; transform: none; } }
+
+.lb-ticker { display: flex; flex-direction: column-reverse; gap: 0; max-height: 260px; overflow: hidden; }
+.lb-ticker .item {
+  display: flex; gap: 9px; align-items: center;
+  font-size: 12px;
+  padding: 9px 4px;
+  border-bottom: 1px solid var(--rd-border-soft);
+  animation: lb-in 0.4s ease;
+}
+.lb-ticker .item time { margin-left: auto; color: var(--rd-muted); font-size: 11px; }
+
+/* ---------- Thread entries (agent ticket view) ---------- */
+
+.bo-thread-entry { border: 1px solid var(--rd-border); border-radius: 13px; margin-bottom: 13px; overflow: hidden; }
+.bo-thread-entry > .head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 15px;
+  font-size: 12px;
+  background: var(--rd-surface-2);
+  border-bottom: 1px solid var(--rd-border-soft);
+}
+.bo-thread-entry > .head time { margin-left: auto; color: var(--rd-muted); }
+.bo-thread-entry > .body { padding: 15px; font-size: 13px; line-height: 1.6; color: var(--rd-text-soft); }
+.bo-thread-entry.is-note { border-color: light-dark(#ead28d, #695a2d); }
+.bo-thread-entry.is-note > .head { background: light-dark(#fff9e9, #2b2719); }
+.bo-thread-entry.is-event {
+  border: 0; border-radius: 0;
+  font-size: 12px; color: var(--rd-muted);
+  padding: 2px 6px 14px; margin: 0;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 980px) {
+  body.backoffice { grid-template-columns: 1fr; grid-template-areas: "topbar" "main"; }
+  #rd-sidebar { display: none; }
+  .bo-settings { grid-template-columns: 1fr; }
+  .bo-section-index { position: static; flex-direction: row; flex-wrap: wrap; }
+  .lb-board { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .lb-board { grid-template-columns: 1fr; }
+  .bo-main { padding: 18px 14px 40px; }
+}

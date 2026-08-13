@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Liste Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "lse.back": "← Listeler",
+    "lse.sub": "Liste tanımını, öğelerini ve öğe özelliklerini düzenleyin.",
+    "lse.tabDef": "Tanım",
+    "lse.tabItems": "Öğeler",
+    "lse.tabProps": "Özellikler",
+    "lse.name": "Ad",
+    "lse.nameHelp": "Tekil ad; alan etiketlerinde kullanılır.",
+    "lse.plural": "Çoğul ad",
+    "lse.pluralHelp": "Liste sayfalarında ve başlıklarda kullanılır.",
+    "lse.sort": "Sıralama",
+    "lse.sortAlpha": "Alfabetik",
+    "lse.sortAlphaDesc": "Alfabetik (Z→A)",
+    "lse.sortManual": "Manuel",
+    "lse.sortHelp": "Öğelerin seçim alanında görüntülenme sırası.",
+    "lse.itemsHead": "Liste Öğeleri",
+    "lse.itemsHelp": "Kısaltma, raporlarda ve API'de kullanılan kısa koddur.",
+    "lse.colValue": "Değer",
+    "lse.colAbbrev": "Kısaltma",
+    "lse.colOrder": "Sıra",
+    "lse.colEnabled": "Etkin",
+    "lse.addPh": "Yeni öğe değeri…",
+    "lse.addItem": "＋ Öğe Ekle",
+    "lse.importLabel": "Öğeler (her satıra bir tane)",
+    "lse.importPh": "Her satıra bir öğe yazın",
+    "lse.importHelp": "Değer ve kısaltmayı virgülle ayırabilirsiniz: Bordro, BRD",
+    "lse.propsHead": "Öğe Özellikleri",
+    "lse.propsHelp": "Her liste öğesine eklenen ek alanlar; öğe düzenlenirken doldurulur.",
+    "lse.colLabel": "Etiket",
+    "lse.colType": "Tür",
+    "lse.colVar": "Değişken",
+    "lse.colRequired": "Zorunlu",
+    "lse.colInternal": "Dahili",
+    "lse.tShort": "Kısa Metin",
+    "lse.tLong": "Uzun Metin",
+    "lse.tChoice": "Seçim",
+    "lse.tDate": "Tarih",
+    "lse.tCheckbox": "Onay Kutusu",
+    "lse.addField": "＋ Alan Ekle",
+    "lse.cfgTitle": "Alan Ayarları",
+    "lse.cfgHelpText": "Yardım metni",
+    "lse.cfgDefault": "Varsayılan değer",
+    "lse.cfgValidation": "Doğrulama",
+    "lse.vNone": "— Yok —",
+    "lse.vEmail": "E-posta",
+    "lse.vPhone": "Telefon",
+    "lse.vNumber": "Sayı",
+  },
+  en: {
+    "lse.back": "← Lists",
+    "lse.sub": "Edit the list definition, its items and item properties.",
+    "lse.tabDef": "Definition",
+    "lse.tabItems": "Items",
+    "lse.tabProps": "Properties",
+    "lse.name": "Name",
+    "lse.nameHelp": "Singular name; used on field labels.",
+    "lse.plural": "Plural name",
+    "lse.pluralHelp": "Used on list pages and headings.",
+    "lse.sort": "Sort order",
+    "lse.sortAlpha": "Alphabetical",
+    "lse.sortAlphaDesc": "Alphabetical (Z→A)",
+    "lse.sortManual": "Manual",
+    "lse.sortHelp": "The order items appear in choice fields.",
+    "lse.itemsHead": "List Items",
+    "lse.itemsHelp": "The abbreviation is a short code used in reports and the API.",
+    "lse.colValue": "Value",
+    "lse.colAbbrev": "Abbreviation",
+    "lse.colOrder": "Order",
+    "lse.colEnabled": "Enabled",
+    "lse.addPh": "New item value…",
+    "lse.addItem": "＋ Add Item",
+    "lse.importLabel": "Items (one per line)",
+    "lse.importPh": "Type one item per line",
+    "lse.importHelp": "You can separate value and abbreviation with a comma: Bordro, BRD",
+    "lse.propsHead": "Item Properties",
+    "lse.propsHelp": "Extra fields attached to every list item; filled while editing an item.",
+    "lse.colLabel": "Label",
+    "lse.colType": "Type",
+    "lse.colVar": "Variable",
+    "lse.colRequired": "Required",
+    "lse.colInternal": "Internal",
+    "lse.tShort": "Short Text",
+    "lse.tLong": "Long Text",
+    "lse.tChoice": "Choice",
+    "lse.tDate": "Date",
+    "lse.tCheckbox": "Checkbox",
+    "lse.addField": "＋ Add Field",
+    "lse.cfgTitle": "Field Settings",
+    "lse.cfgHelpText": "Help text",
+    "lse.cfgDefault": "Default value",
+    "lse.cfgValidation": "Validation",
+    "lse.vNone": "— None —",
+    "lse.vEmail": "Email",
+    "lse.vPhone": "Phone",
+    "lse.vNumber": "Number",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="lists">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+<form>
+
+  <div class="bo-page-head">
+    <div>
+      <a href="lists.html" style="font-size:13px" data-i18n="lse.back"></a>
+      <h1>Modüller</h1>
+      <p data-i18n="lse.sub"></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-i18n="common.delete"></button>
+      <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+      <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+    </div>
+  </div>
+
+  <div class="rd-tabs" data-tabs>
+    <button type="button" class="active" data-tab="lse-def" data-i18n="lse.tabDef"></button>
+    <button type="button" data-tab="lse-items" data-i18n="lse.tabItems"></button>
+    <button type="button" data-tab="lse-props" data-i18n="lse.tabProps"></button>
+  </div>
+
+  <!-- ============ Tanım ============ -->
+  <div class="rd-tab-panel active" id="lse-def">
+    <div class="rd-surface">
+      <div class="rd-surface-body" style="max-width:720px">
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="lse-name" data-i18n="lse.name"></label>
+            <input id="lse-name" class="rd-control" value="Modül">
+            <div class="rd-help" data-i18n="lse.nameHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="lse-plural" data-i18n="lse.plural"></label>
+            <input id="lse-plural" class="rd-control" value="Modüller">
+            <div class="rd-help" data-i18n="lse.pluralHelp"></div>
+          </div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="lse-sort" data-i18n="lse.sort"></label>
+          <select id="lse-sort" class="rd-control" style="max-width:240px">
+            <option data-i18n="lse.sortAlpha"></option>
+            <option data-i18n="lse.sortAlphaDesc"></option>
+            <option selected data-i18n="lse.sortManual"></option>
+          </select>
+          <div class="rd-help" data-i18n="lse.sortHelp"></div>
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="lse-notes" data-i18n="common.notes"></label>
+          <textarea id="lse-notes" class="rd-control" style="min-height:80px">Bordro Ek Bilgileri formundaki "Modül" seçim alanını besler.</textarea>
+          <div class="rd-help" data-i18n="common.notesHelp"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Öğeler ============ -->
+  <div class="rd-tab-panel" id="lse-items">
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        <span data-i18n="lse.itemsHead"></span>
+        <span class="spacer"></span>
+        <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-import" data-i18n="common.import"></button>
+      </div>
+      <table class="rd-table" id="tbl-items">
+        <thead>
+          <tr>
+            <th data-i18n="lse.colValue"></th>
+            <th data-i18n="lse.colAbbrev"></th>
+            <th class="num" data-i18n="lse.colOrder"></th>
+            <th data-i18n="lse.colEnabled"></th>
+            <th style="width:36px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input class="rd-control" value="Bordro" style="min-width:160px"></td>
+            <td><input class="rd-control" value="BRD" style="width:100px"></td>
+            <td class="num"><input class="rd-control" type="number" value="1" style="width:76px"></td>
+            <td><label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label></td>
+            <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+          </tr>
+          <tr>
+            <td><input class="rd-control" value="İzin" style="min-width:160px"></td>
+            <td><input class="rd-control" value="IZN" style="width:100px"></td>
+            <td class="num"><input class="rd-control" type="number" value="2" style="width:76px"></td>
+            <td><label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label></td>
+            <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+          </tr>
+          <tr>
+            <td><input class="rd-control" value="Vardiya" style="min-width:160px"></td>
+            <td><input class="rd-control" value="VRD" style="width:100px"></td>
+            <td class="num"><input class="rd-control" type="number" value="3" style="width:76px"></td>
+            <td><label class="rd-switch"><input type="checkbox" checked><span class="track"></span></label></td>
+            <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+          </tr>
+          <tr>
+            <td><input class="rd-control" value="Raporlama" style="min-width:160px"></td>
+            <td><input class="rd-control" value="RPR" style="width:100px"></td>
+            <td class="num"><input class="rd-control" type="number" value="4" style="width:76px"></td>
+            <td><label class="rd-switch"><input type="checkbox"><span class="track"></span></label></td>
+            <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input class="rd-control" data-i18n-placeholder="lse.addPh" style="max-width:260px">
+          <button type="button" class="rd-btn" data-i18n="lse.addItem"></button>
+        </div>
+        <div class="rd-help" data-i18n="lse.itemsHelp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Özellikler ============ -->
+  <div class="rd-tab-panel" id="lse-props">
+    <div class="rd-surface">
+      <div class="rd-surface-head"><span data-i18n="lse.propsHead"></span></div>
+      <table class="rd-table" id="tbl-props">
+        <thead>
+          <tr>
+            <th style="width:30px"></th>
+            <th data-i18n="lse.colLabel"></th>
+            <th data-i18n="lse.colType"></th>
+            <th data-i18n="lse.colVar"></th>
+            <th data-i18n="lse.colRequired"></th>
+            <th data-i18n="lse.colInternal"></th>
+            <th style="width:36px"></th>
+            <th style="width:36px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+            <td><input class="rd-control" value="Açıklama" style="min-width:160px"></td>
+            <td>
+              <select class="rd-control" style="min-width:130px">
+                <option selected data-i18n="lse.tShort"></option>
+                <option data-i18n="lse.tLong"></option>
+                <option data-i18n="lse.tChoice"></option>
+                <option data-i18n="lse.tDate"></option>
+                <option data-i18n="lse.tCheckbox"></option>
+              </select>
+            </td>
+            <td><input class="rd-control" value="aciklama" style="min-width:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><button type="button" style="border:0;background:transparent;cursor:pointer;font-size:15px" data-dialog-open="dlg-fieldcfg" data-i18n-title="lse.cfgTitle">⚙</button></td>
+            <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+          </tr>
+          <tr>
+            <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+            <td><input class="rd-control" value="Sorumlu Ekip" style="min-width:160px"></td>
+            <td>
+              <select class="rd-control" style="min-width:130px">
+                <option data-i18n="lse.tShort"></option>
+                <option data-i18n="lse.tLong"></option>
+                <option selected data-i18n="lse.tChoice"></option>
+                <option data-i18n="lse.tDate"></option>
+                <option data-i18n="lse.tCheckbox"></option>
+              </select>
+            </td>
+            <td><input class="rd-control" value="sorumlu_ekip" style="min-width:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox" checked></td>
+            <td><button type="button" style="border:0;background:transparent;cursor:pointer;font-size:15px" data-dialog-open="dlg-fieldcfg" data-i18n-title="lse.cfgTitle">⚙</button></td>
+            <td><button type="button" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+        <button type="button" class="rd-btn rd-btn-ghost" data-i18n="lse.addField"></button>
+        <div class="rd-help" data-i18n="lse.propsHelp"></div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+  <!-- İçe aktar -->
+  <dialog class="rd-dialog" id="dlg-import">
+    <form>
+      <div class="rd-dialog-head"><span data-i18n="common.import"></span><button type="button" class="close" data-dialog-close>✕</button></div>
+      <div class="rd-dialog-body">
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="lse-import-ta" data-i18n="lse.importLabel"></label>
+          <textarea id="lse-import-ta" class="rd-control" data-i18n-placeholder="lse.importPh" style="min-height:130px"></textarea>
+          <div class="rd-help" data-i18n="lse.importHelp"></div>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="button" class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.import"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Alan ayarları -->
+  <dialog class="rd-dialog" id="dlg-fieldcfg">
+    <form>
+      <div class="rd-dialog-head"><span data-i18n="lse.cfgTitle"></span><button type="button" class="close" data-dialog-close>✕</button></div>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="lse-cfg-help" data-i18n="lse.cfgHelpText"></label>
+          <input id="lse-cfg-help" class="rd-control">
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="lse-cfg-default" data-i18n="lse.cfgDefault"></label>
+          <input id="lse-cfg-default" class="rd-control">
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="lse-cfg-validation" data-i18n="lse.cfgValidation"></label>
+          <select id="lse-cfg-validation" class="rd-control">
+            <option selected data-i18n="lse.vNone"></option>
+            <option data-i18n="lse.vEmail"></option>
+            <option data-i18n="lse.vPhone"></option>
+            <option data-i18n="lse.vNumber"></option>
+          </select>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="button" class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.apply"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

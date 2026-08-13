@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Hazır Yanıtlar</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "cn.title": "Hazır Yanıtlar",
+    "cn.subtitle": "Yanıt penceresinden tek tıkla eklenebilen şablon metinleri yönetin.",
+    "cn.searchPh": "Hazır yanıt ara…",
+    "cn.new": "＋ Yeni Yanıt",
+    "cn.colTitle": "Başlık",
+    "cn.colDept": "Departman",
+    "cn.dlgTitle": "Yeni Hazır Yanıt",
+    "cn.fTitle": "Başlık",
+    "cn.fTitlePh": "Örn. Ek bilgi talebi",
+    "cn.fDept": "Departman",
+    "cn.fDeptAll": "Tüm departmanlar",
+    "cn.fDeptHelp": "Bir departman seçilirse yanıt yalnızca o departmandaki temsilcilere önerilir.",
+    "cn.fBody": "İçerik",
+    "cn.fBodyPh": "Şablon metnini yazın…",
+    "cn.fBodyHelp": "Değişkenler desteklenir: %{ticket.number}, %{user.name}, %{agent.name}…",
+  },
+  en: {
+    "cn.title": "Canned Responses",
+    "cn.subtitle": "Manage template texts that can be inserted into replies with one click.",
+    "cn.searchPh": "Search canned responses…",
+    "cn.new": "＋ New Response",
+    "cn.colTitle": "Title",
+    "cn.colDept": "Department",
+    "cn.dlgTitle": "New Canned Response",
+    "cn.fTitle": "Title",
+    "cn.fTitlePh": "E.g. Request for more information",
+    "cn.fDept": "Department",
+    "cn.fDeptAll": "All departments",
+    "cn.fDeptHelp": "If a department is selected, the response is suggested only to agents in that department.",
+    "cn.fBody": "Content",
+    "cn.fBodyPh": "Write the template text…",
+    "cn.fBodyHelp": "Variables are supported: %{ticket.number}, %{user.name}, %{agent.name}…",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="canned">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="cn.title"></h1>
+      <p data-i18n="cn.subtitle"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn-primary" data-dialog-open="dlg-canned" data-i18n="cn.new"></button>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="cn.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="common.disable"></button>
+    <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+  </div>
+
+  <div class="rd-surface">
+    <div style="overflow-x:auto">
+      <table class="rd-table" id="tbl-canned">
+        <thead>
+          <tr>
+            <th class="col-check"><input type="checkbox" data-check-all="#tbl-canned" aria-label="Tümünü seç"></th>
+            <th class="sortable" data-i18n="cn.colTitle"></th>
+            <th data-i18n="common.status"></th>
+            <th class="sortable" data-i18n="cn.colDept"></th>
+            <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a data-dialog-open="dlg-canned" href="#">Efor onayı isteği</a></td>
+            <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+            <td>Bordro</td>
+            <td>8 Ağu 2026</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a data-dialog-open="dlg-canned" href="#">Ek bilgi talebi</a></td>
+            <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+            <td>Genel</td>
+            <td>6 Ağu 2026</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a data-dialog-open="dlg-canned" href="#">Uzaktan bağlantı yönergesi</a></td>
+            <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+            <td>Teknik Destek</td>
+            <td>30 Tem 2026</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a data-dialog-open="dlg-canned" href="#">Bordro dönemi kapanış bilgilendirmesi</a></td>
+            <td><span class="rd-pill rd-pill-closed" data-i18n="common.disabled"></span></td>
+            <td>Bordro</td>
+            <td>22 Tem 2026</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a data-dialog-open="dlg-canned" href="#">Talep kapanış teşekkürü</a></td>
+            <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+            <td>Genel</td>
+            <td>15 Tem 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rd-pagination">
+      <span><span data-i18n="common.showing"></span> 1–5 / 5</span>
+      <div class="pages">
+        <span class="current">1</span>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-canned">
+    <div class="rd-dialog-head">
+      <span data-i18n="cn.dlgTitle"></span>
+      <button class="close" data-dialog-close aria-label="Kapat">✕</button>
+    </div>
+    <form>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="cn-title" data-i18n="cn.fTitle"></label>
+          <input id="cn-title" class="rd-control" data-i18n-placeholder="cn.fTitlePh" required>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="cn-dept" data-i18n="cn.fDept"></label>
+          <select id="cn-dept" class="rd-control">
+            <option data-i18n="cn.fDeptAll"></option>
+            <option>Bordro</option>
+            <option>İK</option>
+            <option>Teknik Destek</option>
+            <option>Vardiya Planlama</option>
+          </select>
+          <div class="rd-help" data-i18n="cn.fDeptHelp"></div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="cn-body" data-i18n="cn.fBody"></label>
+          <textarea id="cn-body" class="rd-control" style="min-height:150px" data-i18n-placeholder="cn.fBodyPh"></textarea>
+          <div class="rd-help" data-i18n="cn.fBodyHelp"></div>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="submit" class="rd-btn-primary" data-i18n="common.save"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

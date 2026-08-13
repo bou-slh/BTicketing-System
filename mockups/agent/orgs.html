@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Şirketler</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "og.title": "Şirketler",
+    "og.subtitle": "Kullanıcı hesaplarının bağlı olduğu şirket kayıtlarını yönetin.",
+    "og.searchPh": "Şirket ara…",
+    "og.add": "＋ Şirket Ekle",
+    "og.colName": "Şirket",
+    "og.colSector": "Sektör",
+    "og.colUsers": "Kullanıcı Sayısı",
+    "og.colOpen": "Açık Talep",
+    "og.colManager": "Hesap Yöneticisi",
+    "og.dlgTitle": "Yeni Şirket",
+    "og.fName": "Şirket Adı",
+    "og.fDomain": "E-posta alan adı",
+    "og.fDomainHelp": "Bu alan adıyla kaydolan kullanıcılar şirkete otomatik bağlanabilir (şirket detayından açılır).",
+    "og.fSector": "Sektör",
+    "og.fManager": "Hesap Yöneticisi",
+  },
+  en: {
+    "og.title": "Companies",
+    "og.subtitle": "Manage the company records that user accounts belong to.",
+    "og.searchPh": "Search companies…",
+    "og.add": "＋ Add Company",
+    "og.colName": "Company",
+    "og.colSector": "Industry",
+    "og.colUsers": "Users",
+    "og.colOpen": "Open Tickets",
+    "og.colManager": "Account Manager",
+    "og.dlgTitle": "New Company",
+    "og.fName": "Company Name",
+    "og.fDomain": "Email domain",
+    "og.fDomainHelp": "Users signing up with this domain can be linked to the company automatically (enabled from the company page).",
+    "og.fSector": "Industry",
+    "og.fManager": "Account Manager",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="orgs">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="og.title"></h1>
+      <p data-i18n="og.subtitle"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn-primary" data-dialog-open="dlg-addorg" data-i18n="og.add"></button>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="og.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn rd-btn-ghost" data-i18n="common.export"></button>
+  </div>
+
+  <div class="rd-surface">
+    <div style="overflow-x:auto">
+      <table class="rd-table" id="tbl-orgs">
+        <thead>
+          <tr>
+            <th class="col-check"><input type="checkbox" data-check-all="#tbl-orgs" aria-label="Tümünü seç"></th>
+            <th class="sortable sorted-desc" data-i18n="og.colName"></th>
+            <th class="sortable" data-i18n="og.colSector"></th>
+            <th class="num sortable" data-i18n="og.colUsers"></th>
+            <th class="num sortable" data-i18n="og.colOpen"></th>
+            <th class="sortable" data-i18n="og.colManager"></th>
+            <th class="sortable" data-i18n="common.updated"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>
+              <a href="org-view.html" style="display:inline-flex;align-items:center;gap:10px">
+                <span class="rd-avatar">U</span> Ulaşım A.Ş.
+              </a>
+            </td>
+            <td>Toplu taşıma</td>
+            <td class="num">14</td>
+            <td class="num">3</td>
+            <td>Ümit Akın</td>
+            <td>Bugün 09:12</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>
+              <a href="org-view.html" style="display:inline-flex;align-items:center;gap:10px">
+                <span class="rd-avatar">T</span> Tosyalı Holding
+              </a>
+            </td>
+            <td>Çelik üretim</td>
+            <td class="num">22</td>
+            <td class="num">1</td>
+            <td>Merve Çetin</td>
+            <td>8 Ağu 2026</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>
+              <a href="org-view.html" style="display:inline-flex;align-items:center;gap:10px">
+                <span class="rd-avatar">K</span> Konecta
+              </a>
+            </td>
+            <td>Çağrı merkezi</td>
+            <td class="num">9</td>
+            <td class="num">2</td>
+            <td>Deniz Kaya</td>
+            <td>6 Ağu 2026</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>
+              <a href="org-view.html" style="display:inline-flex;align-items:center;gap:10px">
+                <span class="rd-avatar">R</span> RapidSol
+              </a>
+            </td>
+            <td>İK danışmanlık</td>
+            <td class="num">6</td>
+            <td class="num">4</td>
+            <td>Ümit Akın</td>
+            <td>Dün 17:05</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rd-pagination">
+      <span><span data-i18n="common.showing"></span> 1–4 / 4</span>
+      <div class="pages">
+        <span class="current">1</span>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-addorg">
+    <div class="rd-dialog-head">
+      <span data-i18n="og.dlgTitle"></span>
+      <button class="close" data-dialog-close aria-label="Kapat">✕</button>
+    </div>
+    <form>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="ao-name" data-i18n="og.fName"></label>
+          <input id="ao-name" class="rd-control" required>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="ao-domain" data-i18n="og.fDomain"></label>
+          <input id="ao-domain" class="rd-control" placeholder="@sirket.com.tr">
+          <div class="rd-help" data-i18n="og.fDomainHelp"></div>
+        </div>
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="ao-sector" data-i18n="og.fSector"></label>
+            <input id="ao-sector" class="rd-control">
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="ao-manager" data-i18n="og.fManager"></label>
+            <select id="ao-manager" class="rd-control">
+              <option>Ümit Akın</option>
+              <option>Merve Çetin</option>
+              <option>Deniz Kaya</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="submit" class="rd-btn-primary" data-i18n="common.add"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

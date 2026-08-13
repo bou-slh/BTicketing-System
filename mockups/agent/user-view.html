@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Kullanıcı: Bourla Salehi</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "uv.back": "← Kullanıcılar",
+    "uv.manage": "Hesabı Yönet",
+    "uv.pwReset": "Parola Sıfırlama Gönder",
+    "uv.profile": "Profil",
+    "uv.email": "E-posta",
+    "uv.phone": "Telefon",
+    "uv.address": "Adres",
+    "uv.org": "Şirket",
+    "uv.reg": "Kayıt tarihi",
+    "uv.tz": "Zaman dilimi",
+    "uv.stActive": "Aktif",
+    "uv.inherited": "Şirketten",
+    "uv.override": "Geçersiz kıl",
+    "uv.inheritHelp": "“Şirketten” rozetli alanlar şirket profilinden devralınır ve şirket bilgileri değiştiğinde otomatik eşitlenir. “Geçersiz kıl” ile bu kullanıcıya özel bir değer tanımlayabilirsiniz.",
+    "uv.account": "Hesap",
+    "uv.loginMethod": "Giriş yöntemi",
+    "uv.loginEmail": "E-posta + parola",
+    "uv.lastLogin": "Son giriş",
+    "uv.twofa": "2FA durumu",
+    "uv.twofaOn": "Etkin",
+    "uv.tabTickets": "Talepler",
+    "uv.tabNotes": "Notlar",
+    "uv.colNo": "Talep No",
+    "uv.colSubject": "Konu",
+    "uv.notePh": "Bu kullanıcı hakkında bir not yazın…",
+    "uv.addNote": "Notu Ekle",
+    "uv.noteBadge": "İç Not",
+  },
+  en: {
+    "uv.back": "← Users",
+    "uv.manage": "Manage Account",
+    "uv.pwReset": "Send Password Reset",
+    "uv.profile": "Profile",
+    "uv.email": "Email",
+    "uv.phone": "Phone",
+    "uv.address": "Address",
+    "uv.org": "Company",
+    "uv.reg": "Registered",
+    "uv.tz": "Time zone",
+    "uv.stActive": "Active",
+    "uv.inherited": "From company",
+    "uv.override": "Override",
+    "uv.inheritHelp": "Fields with the “From company” badge are inherited from the company profile and kept in sync automatically when company details change. Use “Override” to set a user-specific value.",
+    "uv.account": "Account",
+    "uv.loginMethod": "Sign-in method",
+    "uv.loginEmail": "Email + password",
+    "uv.lastLogin": "Last sign-in",
+    "uv.twofa": "2FA status",
+    "uv.twofaOn": "Enabled",
+    "uv.tabTickets": "Tickets",
+    "uv.tabNotes": "Notes",
+    "uv.colNo": "Ticket #",
+    "uv.colSubject": "Subject",
+    "uv.notePh": "Write a note about this user…",
+    "uv.addNote": "Add Note",
+    "uv.noteBadge": "Internal Note",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="users">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <a href="users.html" class="text-sm" data-i18n="uv.back"></a>
+      <h1 style="margin-top:6px;display:flex;align-items:center;gap:12px">
+        <span class="rd-avatar">BS</span> Bourla Salehi
+      </h1>
+      <p>bourla.salehi@rapidsol.com.tr · RapidSol</p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn" data-i18n="common.edit"></button>
+      <button class="rd-btn" data-i18n="uv.manage"></button>
+      <button class="rd-btn rd-btn-ghost" data-i18n="uv.pwReset"></button>
+      <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+    </div>
+  </div>
+
+  <div class="rd-grid-2" style="margin-bottom:20px">
+    <div class="rd-surface">
+      <div class="rd-surface-head" data-i18n="uv.profile"></div>
+      <div class="rd-surface-body">
+        <div class="bo-def">
+          <div class="row">
+            <span data-i18n="uv.email"></span>
+            <span>bourla.salehi@rapidsol.com.tr</span>
+          </div>
+          <div class="row">
+            <span data-i18n="uv.phone"></span>
+            <span>+90 212 555 0180
+              <span class="rd-badge-inherited" data-i18n="uv.inherited"></span>
+              <button class="rd-btn rd-btn-sm rd-btn-ghost" data-i18n="uv.override"></button>
+            </span>
+          </div>
+          <div class="row">
+            <span data-i18n="uv.address"></span>
+            <span>Maslak Mah. Büyükdere Cad. No: 12, Sarıyer / İstanbul
+              <span class="rd-badge-inherited" data-i18n="uv.inherited"></span>
+              <button class="rd-btn rd-btn-sm rd-btn-ghost" data-i18n="uv.override"></button>
+            </span>
+          </div>
+          <div class="row">
+            <span data-i18n="uv.org"></span>
+            <span><a href="org-view.html">RapidSol</a></span>
+          </div>
+          <div class="row">
+            <span data-i18n="common.status"></span>
+            <span><span class="rd-pill rd-pill-solved" data-i18n="uv.stActive"></span></span>
+          </div>
+          <div class="row">
+            <span data-i18n="uv.reg"></span>
+            <span>12 Ocak 2025</span>
+          </div>
+          <div class="row">
+            <span data-i18n="uv.tz"></span>
+            <span>Europe/Istanbul (GMT+3)</span>
+          </div>
+        </div>
+        <div class="rd-help" style="margin-top:12px" data-i18n="uv.inheritHelp"></div>
+      </div>
+    </div>
+
+    <div class="rd-surface">
+      <div class="rd-surface-head" data-i18n="uv.account"></div>
+      <div class="rd-surface-body">
+        <div class="bo-def">
+          <div class="row">
+            <span data-i18n="uv.loginMethod"></span>
+            <span data-i18n="uv.loginEmail"></span>
+          </div>
+          <div class="row">
+            <span data-i18n="uv.lastLogin"></span>
+            <span>Bugün 09:12 · 88.243.15.60</span>
+          </div>
+          <div class="row">
+            <span data-i18n="uv.twofa"></span>
+            <span><span class="rd-pill rd-pill-solved" data-i18n="uv.twofaOn"></span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-tabs" data-tabs>
+    <button class="active" data-tab="uv-panel-tickets"><span data-i18n="uv.tabTickets"></span> · 3</button>
+    <button data-tab="uv-panel-notes"><span data-i18n="uv.tabNotes"></span> · 1</button>
+  </div>
+
+  <div class="rd-tab-panel active" id="uv-panel-tickets">
+    <div class="rd-surface">
+      <div style="overflow-x:auto">
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th data-i18n="uv.colNo"></th>
+              <th data-i18n="uv.colSubject"></th>
+              <th data-i18n="common.status"></th>
+              <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="ticket-view.html">R716555</a></td>
+              <td><a href="ticket-view.html">Yol ücreti hatası hakkında</a></td>
+              <td><span class="rd-pill rd-pill-wait" data-i18n="status.wait"></span></td>
+              <td>Bugün 10:18</td>
+            </tr>
+            <tr>
+              <td><a href="ticket-view.html">R716412</a></td>
+              <td><a href="ticket-view.html">İzin bakiyesi raporu talebi</a></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="status.solved"></span></td>
+              <td>5 Ağu 2026</td>
+            </tr>
+            <tr>
+              <td><a href="ticket-view.html">R716288</a></td>
+              <td><a href="ticket-view.html">Vardiya planı yükleme hatası</a></td>
+              <td><span class="rd-pill rd-pill-closed" data-i18n="status.closed"></span></td>
+              <td>28 Tem 2026</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-tab-panel" id="uv-panel-notes">
+    <div class="bo-thread-entry is-note">
+      <div class="head">
+        <div class="rd-avatar">MÇ</div>
+        <b>Merve Çetin</b>
+        <span class="rd-pill rd-pill-wait" data-i18n="uv.noteBadge"></span>
+        <time>4 Ağu 2026 11:05</time>
+      </div>
+      <div class="body">
+        Kullanıcı telefonla arandı; bordro entegrasyonu projesi için tek yetkili iletişim
+        kişisi olduğu teyit edildi. Acil konularda önce e-posta, sonra telefon tercih ediyor.
+      </div>
+    </div>
+    <div class="rd-surface">
+      <form class="rd-surface-body">
+        <div class="rd-field">
+          <textarea class="rd-control" data-i18n-placeholder="uv.notePh"></textarea>
+          <div class="rd-help" data-i18n="common.notesHelp"></div>
+        </div>
+        <button type="submit" class="rd-btn-primary" data-i18n="uv.addNote"></button>
+      </form>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

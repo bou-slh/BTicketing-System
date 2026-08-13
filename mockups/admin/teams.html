@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Takımlar</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "tm.title": "Takımlar",
+    "tm.subtitle": "Departmanlardan bağımsız çalışma grupları; talepler doğrudan takıma atanabilir. Bir takıma tıklayarak düzenleyin.",
+    "tm.add": "＋ Yeni Takım",
+    "tm.searchPh": "Takım ara…",
+    "tm.colName": "Takım Adı",
+    "tm.colMembers": "Üye Sayısı",
+    "tm.colLead": "Takım Lideri",
+    "tm.emptyTitle": "Henüz takım yok",
+    "tm.emptyText": "Talepleri birlikte üstlenecek ilk takımınızı oluşturun.",
+    "tm.dlgTitle": "Takım Düzenle — Bordro Ekibi",
+    "tm.dlgName": "Ad",
+    "tm.dlgNameHelp": "Atama listelerinde görünen takım adı.",
+    "tm.dlgStatus": "Durum",
+    "tm.dlgStatusHelp": "Devre dışı takımlara yeni talep atanamaz.",
+    "tm.dlgActive": "Etkin",
+    "tm.dlgDisabled": "Devre dışı",
+    "tm.dlgLead": "Takım lideri",
+    "tm.dlgLeadHelp": "İsteğe bağlı; lider, takım uyarılarında ayrıca vurgulanır.",
+    "tm.dlgNoAlerts": "Atama uyarılarını kapat",
+    "tm.dlgNoAlertsHelp": "Takıma talep atandığında üyelere e-posta uyarısı gönderilmez.",
+    "tm.dlgNotes": "Notlar",
+    "tm.dlgMembers": "Üyeler",
+    "tm.dlgMembersHelp": "Uyarı kutusu işaretli üyeler takım uyarılarını alır.",
+    "tm.memberAlerts": "Uyarılar",
+    "tm.addMemberPh": "Temsilci seç…",
+  },
+  en: {
+    "tm.title": "Teams",
+    "tm.subtitle": "Working groups independent of departments; tickets can be assigned directly to a team. Click a team to edit it.",
+    "tm.add": "＋ New Team",
+    "tm.searchPh": "Search teams…",
+    "tm.colName": "Team Name",
+    "tm.colMembers": "Members",
+    "tm.colLead": "Team Lead",
+    "tm.emptyTitle": "No teams yet",
+    "tm.emptyText": "Create your first team to take on tickets together.",
+    "tm.dlgTitle": "Edit Team — Bordro Ekibi",
+    "tm.dlgName": "Name",
+    "tm.dlgNameHelp": "The team name shown in assignment lists.",
+    "tm.dlgStatus": "Status",
+    "tm.dlgStatusHelp": "New tickets cannot be assigned to disabled teams.",
+    "tm.dlgActive": "Active",
+    "tm.dlgDisabled": "Disabled",
+    "tm.dlgLead": "Team lead",
+    "tm.dlgLeadHelp": "Optional; the lead is additionally highlighted in team alerts.",
+    "tm.dlgNoAlerts": "Disable assignment alerts",
+    "tm.dlgNoAlertsHelp": "No email alert is sent to members when a ticket is assigned to the team.",
+    "tm.dlgNotes": "Notes",
+    "tm.dlgMembers": "Members",
+    "tm.dlgMembersHelp": "Members with the alert box checked receive team alerts.",
+    "tm.memberAlerts": "Alerts",
+    "tm.addMemberPh": "Select agent…",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="teams">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="tm.title"></h1>
+      <p data-i18n="tm.subtitle"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn-primary" data-dialog-open="dlg-team" data-i18n="tm.add"></button>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="tm.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="common.enable"></button>
+    <button class="rd-btn" data-i18n="common.disable"></button>
+    <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+  </div>
+
+  <div class="rd-surface" id="tbl-teams">
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-teams" data-i18n-title="common.selectAll"></th>
+          <th class="sortable sorted-desc" data-i18n="tm.colName"></th>
+          <th class="sortable" data-i18n="common.status"></th>
+          <th class="num" data-i18n="tm.colMembers"></th>
+          <th class="sortable" data-i18n="tm.colLead"></th>
+          <th class="sortable" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-team">Bordro Ekibi</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td class="num">4</td>
+          <td>Ümit Akın</td>
+          <td>06.08.2026 11:34</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-team">VIP Masası</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td class="num">3</td>
+          <td>Merve Çetin</td>
+          <td>22.07.2026 09:15</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-team">Entegrasyon</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td class="num">2</td>
+          <td>Deniz Kaya</td>
+          <td>03.06.2026 14:48</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="common.showing"></span><span>1–3 / 3</span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="empty-teams">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">◎</div>
+        <h3 data-i18n="tm.emptyTitle"></h3>
+        <p data-i18n="tm.emptyText"></p>
+        <button class="rd-btn-primary" data-dialog-open="dlg-team" data-i18n="tm.add"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Takım düzenleme dialogu -->
+  <dialog class="rd-dialog" id="dlg-team" style="width:min(640px,calc(100vw - 40px))">
+    <form>
+      <div class="rd-dialog-head">
+        <span data-i18n="tm.dlgTitle"></span>
+        <button type="button" class="close" data-dialog-close aria-label="Kapat">✕</button>
+      </div>
+      <div class="rd-dialog-body">
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="tm-name" data-i18n="tm.dlgName"></label>
+            <input id="tm-name" class="rd-control" type="text" value="Bordro Ekibi">
+            <p class="rd-help" data-i18n="tm.dlgNameHelp"></p>
+          </div>
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="tm.dlgStatus"></span>
+            <label class="rd-check" style="display:inline-flex;margin-right:18px;margin-top:10px">
+              <input type="radio" name="tm-status" checked><span data-i18n="tm.dlgActive"></span>
+            </label>
+            <label class="rd-check" style="display:inline-flex">
+              <input type="radio" name="tm-status"><span data-i18n="tm.dlgDisabled"></span>
+            </label>
+            <p class="rd-help" data-i18n="tm.dlgStatusHelp"></p>
+          </div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="tm-lead" data-i18n="tm.dlgLead"></label>
+          <select id="tm-lead" class="rd-control">
+            <option selected>Ümit Akın</option>
+            <option>Merve Çetin</option>
+            <option>Deniz Kaya</option>
+            <option>Zeynep Arslan</option>
+          </select>
+          <p class="rd-help" data-i18n="tm.dlgLeadHelp"></p>
+        </div>
+        <div class="rd-field">
+          <label class="rd-switch">
+            <input type="checkbox">
+            <span class="track"></span>
+            <span class="rd-switch-copy">
+              <b data-i18n="tm.dlgNoAlerts"></b>
+              <small data-i18n="tm.dlgNoAlertsHelp"></small>
+            </span>
+          </label>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="tm-notes" data-i18n="tm.dlgNotes"></label>
+          <textarea id="tm-notes" class="rd-control" style="min-height:70px">Bordro dönem kapanışlarında öncelikli müdahale ekibi.</textarea>
+          <p class="rd-help" data-i18n="common.notesHelp"></p>
+        </div>
+
+        <span class="rd-label" data-i18n="tm.dlgMembers"></span>
+        <p class="rd-help" style="margin:0 0 10px" data-i18n="tm.dlgMembersHelp"></p>
+        <div class="bo-rule-row">
+          <span style="display:inline-flex;align-items:center;gap:10px;flex:1;min-width:170px">
+            <span class="rd-avatar">ÜA</span> Ümit Akın
+          </span>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="tm.memberAlerts"></span></label>
+          <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+        </div>
+        <div class="bo-rule-row">
+          <span style="display:inline-flex;align-items:center;gap:10px;flex:1;min-width:170px">
+            <span class="rd-avatar">MÇ</span> Merve Çetin
+          </span>
+          <label class="rd-check"><input type="checkbox" checked><span data-i18n="tm.memberAlerts"></span></label>
+          <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+        </div>
+        <div class="bo-rule-row">
+          <span style="display:inline-flex;align-items:center;gap:10px;flex:1;min-width:170px">
+            <span class="rd-avatar">DK</span> Deniz Kaya
+          </span>
+          <label class="rd-check"><input type="checkbox"><span data-i18n="tm.memberAlerts"></span></label>
+          <button type="button" class="remove" data-i18n-title="common.delete">✕</button>
+        </div>
+        <div style="display:flex;gap:9px;margin-top:12px;max-width:360px">
+          <select class="rd-control">
+            <option selected data-i18n="tm.addMemberPh"></option>
+            <option>Zeynep Arslan</option>
+          </select>
+          <button type="button" class="rd-btn" data-i18n="common.add"></button>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button class="rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

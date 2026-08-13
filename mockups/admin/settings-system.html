@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Sistem Ayarları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "ss.title": "Sistem Ayarları",
+    "ss.subtitle": "Yardım masasının genel davranışı: durum, adres, tarih-saat, diller ve ek dosya politikası.",
+    "ss.secGeneral": "Genel",
+    "ss.secDatetime": "Tarih ve Saat",
+    "ss.secLang": "Diller",
+    "ss.secAttach": "Ekler",
+
+    "ss.online": "Yardım masası çevrimiçi",
+    "ss.onlineHelp": "Kapatıldığında kullanıcı portalı çevrimdışı sayfasını gösterir; temsilciler çalışmaya devam eder.",
+    "ss.url": "Yardım masası adresi (URL)",
+    "ss.urlHelp": "E-postalardaki bağlantılar bu adresle oluşturulur.",
+    "ss.name": "Yardım masası adı / başlığı",
+    "ss.nameHelp": "Tarayıcı sekmesinde ve giden e-postaların gönderen adında görünür.",
+    "ss.defaultDept": "Varsayılan departman",
+    "ss.defaultDeptHelp": "Başka bir kural eşleşmezse yeni talepler bu departmana düşer.",
+    "ss.forceHttps": "HTTPS zorla",
+    "ss.forceHttpsHelp": "Tüm HTTP istekleri güvenli HTTPS adresine yönlendirilir.",
+    "ss.collision": "Çakışma önleme süresi (dakika)",
+    "ss.collisionHelp": "Bir temsilci yanıt yazarken talep bu süre boyunca diğer temsilcilere kilitlenir.",
+    "ss.pageSize": "Sayfa boyutu",
+    "ss.pageSizeHelp": "Listelerde sayfa başına gösterilecek varsayılan kayıt sayısı.",
+    "ss.logLevel": "Günlük düzeyi",
+    "ss.logLevelHelp": "Sistem günlüğüne hangi ayrıntı düzeyinde kayıt yazılacağı.",
+    "ss.logNone": "Kapalı",
+    "ss.logError": "Yalnızca hatalar",
+    "ss.logWarn": "Hatalar ve uyarılar",
+    "ss.logDebug": "Hata ayıklama (tümü)",
+    "ss.logPurge": "Günlük temizleme",
+    "ss.logPurgeHelp": "Bu süreden eski günlük kayıtları otomatik silinir.",
+    "ss.purgeNever": "Asla",
+    "ss.purge1m": "1 ay sonra",
+    "ss.purge3m": "3 ay sonra",
+    "ss.purge6m": "6 ay sonra",
+    "ss.purge12m": "12 ay sonra",
+    "ss.avatars": "Avatarları göster",
+    "ss.avatarsHelp": "Yazışmalarda kullanıcı ve temsilci avatarları görünür.",
+    "ss.richtext": "Zengin metin (biçimlendirme)",
+    "ss.richtextHelp": "Yanıt kutularında kalın, liste, bağlantı gibi biçimlendirme araçları sunulur.",
+    "ss.iframeList": "iFrame izin listesi",
+    "ss.iframeListHelp": "Portalın iframe içinde gösterilebileceği alan adları (virgülle ayırın).",
+    "ss.embedList": "Gömülü alan adı listesi",
+    "ss.embedListHelp": "Yazışmalarda gömülü içeriğine (video vb.) izin verilen alan adları.",
+    "ss.acl": "Erişim denetimi (ACL) IP listesi",
+    "ss.aclHelp": "Yalnızca bu IP adreslerinden panele girilebilir. Boşsa sınırlama yoktur.",
+    "ss.aclBackend": "ACL uygulanacak panel",
+    "ss.aclBackendHelp": "IP sınırlamasının hangi panelleri kapsayacağı.",
+    "ss.aclAdmin": "Yalnızca Yönetim",
+    "ss.aclStaff": "Temsilci + Yönetim",
+    "ss.aclAll": "Tüm paneller",
+
+    "ss.locale": "Yerel ayar",
+    "ss.localeHelp": "Sayı, para ve tarih biçimlerinin temel alacağı bölge.",
+    "ss.timezone": "Zaman dilimi",
+    "ss.timezoneHelp": "Tüm tarih ve saatler bu dilime göre gösterilir.",
+    "ss.timeFormatMode": "Saat ve tarih biçimi",
+    "ss.timeFormatModeHelp": "Yerel varsayılan çoğu kurulum için yeterlidir; Gelişmiş seçilirse aşağıdaki kalıplar kullanılır.",
+    "ss.fmtLocale": "Yerel varsayılan",
+    "ss.fmt24": "24 saat",
+    "ss.fmtAdvanced": "Gelişmiş (özel kalıplar)",
+    "ss.timeFormat": "Saat biçimi",
+    "ss.timeFormatHelp": "Örnek: HH:mm → 16:29",
+    "ss.dateFormat": "Tarih biçimi",
+    "ss.dateFormatHelp": "Örnek: d MMMM y → 6 Ağustos 2026",
+    "ss.datetimeFormat": "Tarih-saat biçimi",
+    "ss.datetimeFormatHelp": "Örnek: d MMM y HH:mm → 6 Ağu 2026 16:29",
+    "ss.dayFormat": "Gün biçimi",
+    "ss.dayFormatHelp": "Örnek: EEEE, d MMMM → Perşembe, 6 Ağustos",
+    "ss.defaultSchedule": "Varsayılan takvim",
+    "ss.defaultScheduleHelp": "SLA sürelerinin hangi çalışma saatlerine göre işleyeceği.",
+    "ss.manageSchedules": "Takvimleri yönet →",
+
+    "ss.primaryLang": "Birincil dil",
+    "ss.primaryLangHelp": "Arayüzün ve giden e-postaların varsayılan dili.",
+    "ss.secondaryLangs": "İkincil diller",
+    "ss.secondaryLangsHelp": "Kullanıcılar ve temsilciler bu diller arasından tercih yapabilir.",
+    "ss.addLang": "Dil ekle",
+    "ss.remove": "Kaldır",
+
+    "ss.storage": "Depolama arka ucu",
+    "ss.storageHelp": "Ek dosyalarının nerede saklanacağı. Değişiklik yalnızca yeni ekleri etkiler.",
+    "ss.storageDb": "Veritabanı",
+    "ss.storageDisk": "Disk (dosya sistemi)",
+    "ss.storageS3": "S3 uyumlu bulut",
+    "ss.maxSize": "En büyük dosya boyutu",
+    "ss.maxSizeHelp": "Tek bir ek dosyası için üst sınır. Sunucu limitleri de geçerlidir.",
+    "ss.authRequired": "Görüntüleme için giriş zorunlu",
+    "ss.authRequiredHelp": "Ek dosyalarını yalnızca oturum açmış kullanıcılar indirebilir.",
+  },
+  en: {
+    "ss.title": "System Settings",
+    "ss.subtitle": "Overall help desk behavior: status, address, date-time, languages and the attachment policy.",
+    "ss.secGeneral": "General",
+    "ss.secDatetime": "Date and Time",
+    "ss.secLang": "Languages",
+    "ss.secAttach": "Attachments",
+
+    "ss.online": "Help desk online",
+    "ss.onlineHelp": "When turned off, the user portal shows the offline page; agents keep working.",
+    "ss.url": "Help desk URL",
+    "ss.urlHelp": "Links in emails are built from this address.",
+    "ss.name": "Help desk name / title",
+    "ss.nameHelp": "Shown in the browser tab and as the sender name of outgoing email.",
+    "ss.defaultDept": "Default department",
+    "ss.defaultDeptHelp": "New tickets land in this department when no other rule matches.",
+    "ss.forceHttps": "Force HTTPS",
+    "ss.forceHttpsHelp": "All HTTP requests are redirected to the secure HTTPS address.",
+    "ss.collision": "Collision avoidance (minutes)",
+    "ss.collisionHelp": "While an agent is composing a reply, the ticket stays locked for others for this long.",
+    "ss.pageSize": "Page size",
+    "ss.pageSizeHelp": "Default number of records shown per page in lists.",
+    "ss.logLevel": "Log level",
+    "ss.logLevelHelp": "How much detail gets written to the system log.",
+    "ss.logNone": "Off",
+    "ss.logError": "Errors only",
+    "ss.logWarn": "Errors and warnings",
+    "ss.logDebug": "Debug (everything)",
+    "ss.logPurge": "Log purge",
+    "ss.logPurgeHelp": "Log entries older than this are deleted automatically.",
+    "ss.purgeNever": "Never",
+    "ss.purge1m": "After 1 month",
+    "ss.purge3m": "After 3 months",
+    "ss.purge6m": "After 6 months",
+    "ss.purge12m": "After 12 months",
+    "ss.avatars": "Show avatars",
+    "ss.avatarsHelp": "User and agent avatars appear on conversation threads.",
+    "ss.richtext": "Rich text (formatting)",
+    "ss.richtextHelp": "Reply boxes offer formatting tools such as bold, lists and links.",
+    "ss.iframeList": "iFrame allowlist",
+    "ss.iframeListHelp": "Domains allowed to embed the portal in an iframe (comma separated).",
+    "ss.embedList": "Embedded domain allowlist",
+    "ss.embedListHelp": "Domains whose embedded content (videos etc.) is allowed in threads.",
+    "ss.acl": "Access control (ACL) IP list",
+    "ss.aclHelp": "Panels may only be accessed from these IP addresses. Empty means no restriction.",
+    "ss.aclBackend": "Apply ACL to",
+    "ss.aclBackendHelp": "Which panels the IP restriction covers.",
+    "ss.aclAdmin": "Admin only",
+    "ss.aclStaff": "Agent + Admin",
+    "ss.aclAll": "All panels",
+
+    "ss.locale": "Locale",
+    "ss.localeHelp": "The region used for number, currency and date formats.",
+    "ss.timezone": "Time zone",
+    "ss.timezoneHelp": "All dates and times are displayed in this zone.",
+    "ss.timeFormatMode": "Time and date format",
+    "ss.timeFormatModeHelp": "Locale default suits most installations; choosing Advanced uses the patterns below.",
+    "ss.fmtLocale": "Locale default",
+    "ss.fmt24": "24 hour",
+    "ss.fmtAdvanced": "Advanced (custom patterns)",
+    "ss.timeFormat": "Time format",
+    "ss.timeFormatHelp": "Example: HH:mm → 16:29",
+    "ss.dateFormat": "Date format",
+    "ss.dateFormatHelp": "Example: d MMMM y → 6 August 2026",
+    "ss.datetimeFormat": "Date-time format",
+    "ss.datetimeFormatHelp": "Example: d MMM y HH:mm → 6 Aug 2026 16:29",
+    "ss.dayFormat": "Day format",
+    "ss.dayFormatHelp": "Example: EEEE, d MMMM → Thursday, 6 August",
+    "ss.defaultSchedule": "Default schedule",
+    "ss.defaultScheduleHelp": "The business hours SLA timers count against.",
+    "ss.manageSchedules": "Manage schedules →",
+
+    "ss.primaryLang": "Primary language",
+    "ss.primaryLangHelp": "Default language of the interface and outgoing email.",
+    "ss.secondaryLangs": "Secondary languages",
+    "ss.secondaryLangsHelp": "Users and agents can choose among these languages.",
+    "ss.addLang": "Add language",
+    "ss.remove": "Remove",
+
+    "ss.storage": "Storage backend",
+    "ss.storageHelp": "Where attachment files are stored. Changing this affects new attachments only.",
+    "ss.storageDb": "Database",
+    "ss.storageDisk": "Disk (file system)",
+    "ss.storageS3": "S3-compatible cloud",
+    "ss.maxSize": "Maximum file size",
+    "ss.maxSizeHelp": "Upper limit for a single attachment. Server limits also apply.",
+    "ss.authRequired": "Sign-in required to view",
+    "ss.authRequiredHelp": "Only signed-in users can download attachments.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="settings-system">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="ss.title"></h1>
+      <p data-i18n="ss.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+      <a href="#sec-general" class="active" data-i18n="ss.secGeneral"></a>
+      <a href="#sec-datetime" data-i18n="ss.secDatetime"></a>
+      <a href="#sec-lang" data-i18n="ss.secLang"></a>
+      <a href="#sec-attach" data-i18n="ss.secAttach"></a>
+    </nav>
+
+    <form class="bo-settings-sections">
+
+      <section class="rd-surface bo-section" id="sec-general">
+        <div class="rd-surface-head"><span data-i18n="ss.secGeneral"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="ss.online"></b>
+                <small data-i18n="ss.onlineHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="sys-url" data-i18n="ss.url"></label>
+            <input id="sys-url" class="rd-control" type="url" value="https://destek.rapidsol.com.tr/">
+            <div class="rd-help" data-i18n="ss.urlHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="sys-name" data-i18n="ss.name"></label>
+            <input id="sys-name" class="rd-control" value="RapidsolDestek">
+            <div class="rd-help" data-i18n="ss.nameHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="sys-dept" data-i18n="ss.defaultDept"></label>
+            <select id="sys-dept" class="rd-control">
+              <option selected>Destek</option>
+              <option>Bordro</option>
+              <option>İK Danışmanlık</option>
+            </select>
+            <div class="rd-help" data-i18n="ss.defaultDeptHelp"></div>
+          </div>
+
+          <details class="rd-advanced">
+            <summary data-i18n="common.advanced"></summary>
+            <div class="rd-advanced-body">
+              <div class="rd-field">
+                <label class="rd-switch">
+                  <input type="checkbox" checked>
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="ss.forceHttps"></b>
+                    <small data-i18n="ss.forceHttpsHelp"></small>
+                  </span>
+                </label>
+              </div>
+              <div class="rd-grid-2">
+                <div class="rd-field">
+                  <label class="rd-label" for="sys-collision" data-i18n="ss.collision"></label>
+                  <input id="sys-collision" class="rd-control" type="number" min="1" value="3">
+                  <div class="rd-help" data-i18n="ss.collisionHelp"></div>
+                </div>
+                <div class="rd-field">
+                  <label class="rd-label" for="sys-pagesize" data-i18n="ss.pageSize"></label>
+                  <select id="sys-pagesize" class="rd-control">
+                    <option>10</option>
+                    <option selected>25</option>
+                    <option>50</option>
+                    <option>100</option>
+                  </select>
+                  <div class="rd-help" data-i18n="ss.pageSizeHelp"></div>
+                </div>
+              </div>
+              <div class="rd-grid-2">
+                <div class="rd-field">
+                  <label class="rd-label" for="sys-loglevel" data-i18n="ss.logLevel"></label>
+                  <select id="sys-loglevel" class="rd-control">
+                    <option data-i18n="ss.logNone"></option>
+                    <option data-i18n="ss.logError"></option>
+                    <option selected data-i18n="ss.logWarn"></option>
+                    <option data-i18n="ss.logDebug"></option>
+                  </select>
+                  <div class="rd-help" data-i18n="ss.logLevelHelp"></div>
+                </div>
+                <div class="rd-field">
+                  <label class="rd-label" for="sys-logpurge" data-i18n="ss.logPurge"></label>
+                  <select id="sys-logpurge" class="rd-control">
+                    <option data-i18n="ss.purgeNever"></option>
+                    <option data-i18n="ss.purge1m"></option>
+                    <option selected data-i18n="ss.purge3m"></option>
+                    <option data-i18n="ss.purge6m"></option>
+                    <option data-i18n="ss.purge12m"></option>
+                  </select>
+                  <div class="rd-help" data-i18n="ss.logPurgeHelp"></div>
+                </div>
+              </div>
+              <div class="rd-field">
+                <label class="rd-switch">
+                  <input type="checkbox" checked>
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="ss.avatars"></b>
+                    <small data-i18n="ss.avatarsHelp"></small>
+                  </span>
+                </label>
+              </div>
+              <div class="rd-field">
+                <label class="rd-switch">
+                  <input type="checkbox" checked>
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="ss.richtext"></b>
+                    <small data-i18n="ss.richtextHelp"></small>
+                  </span>
+                </label>
+              </div>
+              <div class="rd-field">
+                <label class="rd-label" for="sys-iframe" data-i18n="ss.iframeList"></label>
+                <input id="sys-iframe" class="rd-control" placeholder="https://intranet.rapidsol.com.tr">
+                <div class="rd-help" data-i18n="ss.iframeListHelp"></div>
+              </div>
+              <div class="rd-field">
+                <label class="rd-label" for="sys-embed" data-i18n="ss.embedList"></label>
+                <input id="sys-embed" class="rd-control" placeholder="youtube.com, vimeo.com">
+                <div class="rd-help" data-i18n="ss.embedListHelp"></div>
+              </div>
+              <div class="rd-field">
+                <label class="rd-label" for="sys-acl" data-i18n="ss.acl"></label>
+                <input id="sys-acl" class="rd-control" placeholder="10.0.4.0/24, 88.243.17.90">
+                <div class="rd-help" data-i18n="ss.aclHelp"></div>
+              </div>
+              <div class="rd-field mb-0">
+                <label class="rd-label" for="sys-acl-backend" data-i18n="ss.aclBackend"></label>
+                <select id="sys-acl-backend" class="rd-control">
+                  <option selected data-i18n="ss.aclAdmin"></option>
+                  <option data-i18n="ss.aclStaff"></option>
+                  <option data-i18n="ss.aclAll"></option>
+                </select>
+                <div class="rd-help" data-i18n="ss.aclBackendHelp"></div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-datetime">
+        <div class="rd-surface-head"><span data-i18n="ss.secDatetime"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="dt-locale" data-i18n="ss.locale"></label>
+            <select id="dt-locale" class="rd-control">
+              <option selected>Türkçe (Türkiye)</option>
+              <option>English (United States)</option>
+              <option>English (United Kingdom)</option>
+            </select>
+            <div class="rd-help" data-i18n="ss.localeHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="dt-tz" data-i18n="ss.timezone"></label>
+            <select id="dt-tz" class="rd-control">
+              <option selected>Europe/Istanbul (+03:00)</option>
+              <option>UTC (+00:00)</option>
+              <option>Europe/Berlin (+02:00)</option>
+            </select>
+            <div class="rd-help" data-i18n="ss.timezoneHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="dt-mode" data-i18n="ss.timeFormatMode"></label>
+            <select id="dt-mode" class="rd-control">
+              <option selected data-i18n="ss.fmtLocale"></option>
+              <option data-i18n="ss.fmt24"></option>
+              <option data-i18n="ss.fmtAdvanced"></option>
+            </select>
+            <div class="rd-help" data-i18n="ss.timeFormatModeHelp"></div>
+          </div>
+
+          <details class="rd-advanced">
+            <summary data-i18n="common.advanced"></summary>
+            <div class="rd-advanced-body">
+              <div class="rd-grid-2">
+                <div class="rd-field">
+                  <label class="rd-label" for="dt-time" data-i18n="ss.timeFormat"></label>
+                  <input id="dt-time" class="rd-control" value="HH:mm">
+                  <div class="rd-help" data-i18n="ss.timeFormatHelp"></div>
+                </div>
+                <div class="rd-field">
+                  <label class="rd-label" for="dt-date" data-i18n="ss.dateFormat"></label>
+                  <input id="dt-date" class="rd-control" value="d MMMM y">
+                  <div class="rd-help" data-i18n="ss.dateFormatHelp"></div>
+                </div>
+                <div class="rd-field">
+                  <label class="rd-label" for="dt-datetime" data-i18n="ss.datetimeFormat"></label>
+                  <input id="dt-datetime" class="rd-control" value="d MMM y HH:mm">
+                  <div class="rd-help" data-i18n="ss.datetimeFormatHelp"></div>
+                </div>
+                <div class="rd-field">
+                  <label class="rd-label" for="dt-day" data-i18n="ss.dayFormat"></label>
+                  <input id="dt-day" class="rd-control" value="EEEE, d MMMM">
+                  <div class="rd-help" data-i18n="ss.dayFormatHelp"></div>
+                </div>
+              </div>
+              <div class="rd-field mb-0">
+                <label class="rd-label" for="dt-schedule" data-i18n="ss.defaultSchedule"></label>
+                <select id="dt-schedule" class="rd-control">
+                  <option>7/24</option>
+                  <option selected>Mesai Saatleri (09:00–18:00)</option>
+                </select>
+                <div class="rd-help" data-i18n="ss.defaultScheduleHelp"></div>
+                <a class="rd-btn rd-btn-ghost rd-btn-sm" style="margin-top:7px" href="schedules.html" data-i18n="ss.manageSchedules"></a>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-lang">
+        <div class="rd-surface-head"><span data-i18n="ss.secLang"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="lang-primary" data-i18n="ss.primaryLang"></label>
+            <select id="lang-primary" class="rd-control">
+              <option selected>Türkçe</option>
+              <option>English (United States)</option>
+            </select>
+            <div class="rd-help" data-i18n="ss.primaryLangHelp"></div>
+          </div>
+          <div class="rd-field mb-0">
+            <span class="rd-label" data-i18n="ss.secondaryLangs"></span>
+            <div style="border:1px solid var(--rd-border);border-radius:11px;padding:6px 13px;margin-bottom:10px">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 0">
+                <span>English (United States)</span>
+                <span class="rd-pill rd-pill-teal">en</span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="margin-left:auto;color:var(--rd-red)" data-i18n-title="ss.remove" title="">✕</button>
+              </div>
+            </div>
+            <div class="bo-rule-row" style="margin-bottom:0">
+              <select class="rd-control">
+                <option>Deutsch</option>
+                <option>Français</option>
+                <option>العربية</option>
+              </select>
+              <button type="button" class="rd-btn" data-i18n="ss.addLang"></button>
+            </div>
+            <div class="rd-help" data-i18n="ss.secondaryLangsHelp"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-attach">
+        <div class="rd-surface-head"><span data-i18n="ss.secAttach"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="att-storage" data-i18n="ss.storage"></label>
+            <select id="att-storage" class="rd-control">
+              <option selected data-i18n="ss.storageDb"></option>
+              <option data-i18n="ss.storageDisk"></option>
+              <option data-i18n="ss.storageS3"></option>
+            </select>
+            <div class="rd-help" data-i18n="ss.storageHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="att-max" data-i18n="ss.maxSize"></label>
+            <select id="att-max" class="rd-control">
+              <option>1 MB</option>
+              <option>8 MB</option>
+              <option selected>16 MB</option>
+              <option>64 MB</option>
+            </select>
+            <div class="rd-help" data-i18n="ss.maxSizeHelp"></div>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="ss.authRequired"></b>
+                <small data-i18n="ss.authRequiredHelp"></small>
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+      </div>
+    </form>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Kuyruk Oluşturucu</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "qb.title": "Kuyruk Oluşturucu",
+    "qb.subtitle": "Temsilci panelinde görünen talep listelerini tanımlayın: hangi talepler, hangi sütunlarla, hangi sırayla.",
+    "qb.name": "Kuyruk adı",
+    "qb.nameHelp": "Temsilci panelindeki kuyruk listesinde görünen ad.",
+    "qb.parent": "Üst kuyruk",
+    "qb.parentHelp": "Alt kuyruklar üst kuyruğun kriterlerini devralır ve daraltır.",
+    "qb.parentTop": "— Üst düzey —",
+
+    "qb.tabCriteria": "Kriterler",
+    "qb.tabColumns": "Sütunlar",
+    "qb.tabSort": "Sıralama",
+    "qb.tabConditions": "Koşullar",
+    "qb.tabExport": "Dışa Aktarma",
+    "qb.tabPreview": "Önizleme",
+
+    "qb.criteriaHelp": "Tüm kriterleri karşılayan talepler bu kuyrukta listelenir.",
+    "qb.addCriterion": "Kriter ekle",
+    "qb.quickFilter": "Hızlı filtre alanı",
+    "qb.quickFilterHelp": "Temsilciler kuyruğu bu alana göre tek tıkla daraltabilir.",
+    "qb.qfNone": "Yok",
+
+    "qb.fStatus": "Durum",
+    "qb.fPriority": "Öncelik",
+    "qb.fDept": "Departman",
+    "qb.fSlaRemaining": "SLA kalan süre",
+    "qb.fOrgTag": "Şirket etiketi",
+    "qb.fAssignee": "Atanan",
+    "qb.opIs": "şudur",
+    "qb.opIsNot": "değildir",
+    "qb.opLt": "küçüktür",
+    "qb.opGt": "büyüktür",
+    "qb.opContains": "içerir",
+
+    "qb.colHeading": "Başlık",
+    "qb.colWidth": "Genişlik",
+    "qb.columnsHelp": "Sütunları ⋮⋮ tutamacıyla sürükleyerek sıralayın. Başlık, listede görünen etikettir.",
+    "qb.addColumn": "Sütun ekle",
+
+    "qb.inheritSort": "Sıralamayı üst kuyruktan devral",
+    "qb.inheritSortHelp": "Kapalıysa aşağıdaki sıralama kuralları kullanılır.",
+    "qb.sortHelp": "Talepler ilk kurala göre, eşitlikte sonraki kurala göre sıralanır.",
+    "qb.dirAsc": "Artan",
+    "qb.dirDesc": "Azalan",
+    "qb.addSort": "Sıralama ekle",
+
+    "qb.conditionsHelp": "Koşullar satırın görünümünü değiştirir; hangi taleplerin listeleneceğini etkilemez.",
+    "qb.then": "→",
+    "qb.actHighlightRed": "Satırı kırmızı vurgula",
+    "qb.actHighlightAmber": "Satırı sarı vurgula",
+    "qb.actBold": "Satırı kalın göster",
+    "qb.addCondition": "Koşul ekle",
+
+    "qb.exportHelp": "CSV dışa aktarımına dahil edilecek alanları seçin.",
+    "qb.xTicket": "Talep No",
+    "qb.xSubject": "Konu",
+    "qb.xStatus": "Durum",
+    "qb.xPriority": "Öncelik",
+    "qb.xDept": "Departman",
+    "qb.xUser": "Kullanıcı",
+    "qb.xOrg": "Şirket",
+    "qb.xAssignee": "Atanan",
+    "qb.xCreated": "Oluşturulma",
+    "qb.xUpdated": "Son Güncelleme",
+    "qb.xSla": "SLA Kalan",
+
+    "qb.previewHelp": "Geçerli kriter ve sütunlarla kuyruğun örnek görünümü.",
+    "qb.pvTicket": "Talep No",
+    "qb.pvSubject": "Konu",
+    "qb.pvUser": "Kullanıcı",
+    "qb.pvSla": "SLA Kalan",
+    "qb.pvAssignee": "Atanan",
+  },
+  en: {
+    "qb.title": "Queue Builder",
+    "qb.subtitle": "Define the ticket lists agents see: which tickets, with which columns, in which order.",
+    "qb.name": "Queue name",
+    "qb.nameHelp": "The name shown in the agent panel's queue list.",
+    "qb.parent": "Parent queue",
+    "qb.parentHelp": "Sub-queues inherit and narrow the parent queue's criteria.",
+    "qb.parentTop": "— Top level —",
+
+    "qb.tabCriteria": "Criteria",
+    "qb.tabColumns": "Columns",
+    "qb.tabSort": "Sort",
+    "qb.tabConditions": "Conditions",
+    "qb.tabExport": "Export",
+    "qb.tabPreview": "Preview",
+
+    "qb.criteriaHelp": "Tickets matching all criteria are listed in this queue.",
+    "qb.addCriterion": "Add criterion",
+    "qb.quickFilter": "Quick filter field",
+    "qb.quickFilterHelp": "Agents can narrow the queue by this field with one click.",
+    "qb.qfNone": "None",
+
+    "qb.fStatus": "Status",
+    "qb.fPriority": "Priority",
+    "qb.fDept": "Department",
+    "qb.fSlaRemaining": "SLA time remaining",
+    "qb.fOrgTag": "Company tag",
+    "qb.fAssignee": "Assignee",
+    "qb.opIs": "is",
+    "qb.opIsNot": "is not",
+    "qb.opLt": "less than",
+    "qb.opGt": "greater than",
+    "qb.opContains": "contains",
+
+    "qb.colHeading": "Heading",
+    "qb.colWidth": "Width",
+    "qb.columnsHelp": "Drag columns by the ⋮⋮ handle to reorder. The heading is the label shown in the list.",
+    "qb.addColumn": "Add column",
+
+    "qb.inheritSort": "Inherit sorting from parent queue",
+    "qb.inheritSortHelp": "When off, the sort rules below are used.",
+    "qb.sortHelp": "Tickets sort by the first rule; ties fall through to the next rule.",
+    "qb.dirAsc": "Ascending",
+    "qb.dirDesc": "Descending",
+    "qb.addSort": "Add sort rule",
+
+    "qb.conditionsHelp": "Conditions change how a row looks; they do not affect which tickets are listed.",
+    "qb.then": "→",
+    "qb.actHighlightRed": "Highlight row red",
+    "qb.actHighlightAmber": "Highlight row amber",
+    "qb.actBold": "Show row bold",
+    "qb.addCondition": "Add condition",
+
+    "qb.exportHelp": "Choose the fields included in CSV exports.",
+    "qb.xTicket": "Ticket #",
+    "qb.xSubject": "Subject",
+    "qb.xStatus": "Status",
+    "qb.xPriority": "Priority",
+    "qb.xDept": "Department",
+    "qb.xUser": "User",
+    "qb.xOrg": "Company",
+    "qb.xAssignee": "Assignee",
+    "qb.xCreated": "Created",
+    "qb.xUpdated": "Last Updated",
+    "qb.xSla": "SLA Remaining",
+
+    "qb.previewHelp": "A sample view of the queue with the current criteria and columns.",
+    "qb.pvTicket": "Ticket #",
+    "qb.pvSubject": "Subject",
+    "qb.pvUser": "User",
+    "qb.pvSla": "SLA Remaining",
+    "qb.pvAssignee": "Assignee",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="queues">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="qb.title"></h1>
+      <p data-i18n="qb.subtitle"></p>
+    </div>
+  </div>
+
+  <form>
+    <div class="rd-surface" style="margin-bottom:20px">
+      <div class="rd-surface-body">
+        <div class="rd-grid-2">
+          <div class="rd-field mb-0">
+            <label class="rd-label" for="q-name" data-i18n="qb.name"></label>
+            <input id="q-name" class="rd-control" value="SLA Riskli VIP">
+            <div class="rd-help" data-i18n="qb.nameHelp"></div>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-label" for="q-parent" data-i18n="qb.parent"></label>
+            <select id="q-parent" class="rd-control">
+              <option data-i18n="qb.parentTop"></option>
+              <option selected>Açık</option>
+              <option>Kapalı</option>
+            </select>
+            <div class="rd-help" data-i18n="qb.parentHelp"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tabs" data-tabs data-tabs-scope="qb">
+      <button type="button" class="active" data-tab="qb-criteria" data-i18n="qb.tabCriteria"></button>
+      <button type="button" data-tab="qb-columns" data-i18n="qb.tabColumns"></button>
+      <button type="button" data-tab="qb-sort" data-i18n="qb.tabSort"></button>
+      <button type="button" data-tab="qb-conditions" data-i18n="qb.tabConditions"></button>
+      <button type="button" data-tab="qb-export" data-i18n="qb.tabExport"></button>
+      <button type="button" data-tab="qb-preview" data-i18n="qb.tabPreview"></button>
+    </div>
+
+    <div class="rd-tab-panel active" id="qb-criteria" data-tab-group="qb">
+      <div class="rd-surface">
+        <div class="rd-surface-body">
+          <p class="rd-help" style="margin:0 0 14px" data-i18n="qb.criteriaHelp"></p>
+          <div class="bo-rule-row">
+            <select class="rd-control">
+              <option selected data-i18n="qb.fStatus"></option>
+              <option data-i18n="qb.fPriority"></option>
+              <option data-i18n="qb.fDept"></option>
+              <option data-i18n="qb.fSlaRemaining"></option>
+              <option data-i18n="qb.fOrgTag"></option>
+              <option data-i18n="qb.fAssignee"></option>
+            </select>
+            <select class="rd-control">
+              <option selected data-i18n="qb.opIs"></option>
+              <option data-i18n="qb.opIsNot"></option>
+              <option data-i18n="qb.opLt"></option>
+              <option data-i18n="qb.opGt"></option>
+              <option data-i18n="qb.opContains"></option>
+            </select>
+            <select class="rd-control">
+              <option selected data-i18n="status.open"></option>
+              <option data-i18n="status.wait"></option>
+              <option data-i18n="status.closed"></option>
+            </select>
+            <button type="button" class="remove" aria-label="Remove">✕</button>
+          </div>
+          <div class="bo-rule-row">
+            <select class="rd-control">
+              <option data-i18n="qb.fStatus"></option>
+              <option data-i18n="qb.fPriority"></option>
+              <option data-i18n="qb.fDept"></option>
+              <option selected data-i18n="qb.fSlaRemaining"></option>
+              <option data-i18n="qb.fOrgTag"></option>
+              <option data-i18n="qb.fAssignee"></option>
+            </select>
+            <select class="rd-control">
+              <option data-i18n="qb.opIs"></option>
+              <option data-i18n="qb.opIsNot"></option>
+              <option selected data-i18n="qb.opLt"></option>
+              <option data-i18n="qb.opGt"></option>
+              <option data-i18n="qb.opContains"></option>
+            </select>
+            <input class="rd-control" value="2 saat">
+            <button type="button" class="remove" aria-label="Remove">✕</button>
+          </div>
+          <div class="bo-rule-row">
+            <select class="rd-control">
+              <option data-i18n="qb.fStatus"></option>
+              <option data-i18n="qb.fPriority"></option>
+              <option data-i18n="qb.fDept"></option>
+              <option data-i18n="qb.fSlaRemaining"></option>
+              <option selected data-i18n="qb.fOrgTag"></option>
+              <option data-i18n="qb.fAssignee"></option>
+            </select>
+            <select class="rd-control">
+              <option selected data-i18n="qb.opIs"></option>
+              <option data-i18n="qb.opIsNot"></option>
+              <option data-i18n="qb.opLt"></option>
+              <option data-i18n="qb.opGt"></option>
+              <option data-i18n="qb.opContains"></option>
+            </select>
+            <input class="rd-control" value="VIP">
+            <button type="button" class="remove" aria-label="Remove">✕</button>
+          </div>
+          <button type="button" class="rd-btn rd-btn-sm" style="margin-bottom:18px" data-i18n="qb.addCriterion"></button>
+
+          <div class="rd-field mb-0">
+            <label class="rd-label" for="q-quickfilter" data-i18n="qb.quickFilter"></label>
+            <select id="q-quickfilter" class="rd-control" style="max-width:280px">
+              <option data-i18n="qb.qfNone"></option>
+              <option selected data-i18n="qb.fStatus"></option>
+              <option data-i18n="qb.fPriority"></option>
+              <option data-i18n="qb.fDept"></option>
+              <option data-i18n="qb.fAssignee"></option>
+            </select>
+            <div class="rd-help" data-i18n="qb.quickFilterHelp"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tab-panel" id="qb-columns" data-tab-group="qb">
+      <div class="rd-surface">
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th style="width:34px"></th>
+              <th data-i18n="qb.colHeading"></th>
+              <th style="width:120px" data-i18n="qb.colWidth"></th>
+              <th style="width:50px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+              <td><input class="rd-control" value="Talep No"></td>
+              <td><input class="rd-control" value="100"></td>
+              <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+            </tr>
+            <tr>
+              <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+              <td><input class="rd-control" value="Son Güncelleme"></td>
+              <td><input class="rd-control" value="130"></td>
+              <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+            </tr>
+            <tr>
+              <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+              <td><input class="rd-control" value="Konu"></td>
+              <td><input class="rd-control" value="auto"></td>
+              <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+            </tr>
+            <tr>
+              <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+              <td><input class="rd-control" value="Kullanıcı"></td>
+              <td><input class="rd-control" value="160"></td>
+              <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+            </tr>
+            <tr>
+              <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+              <td><input class="rd-control" value="SLA Kalan"></td>
+              <td><input class="rd-control" value="110"></td>
+              <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+            </tr>
+            <tr>
+              <td class="rd-muted" style="cursor:grab">⋮⋮</td>
+              <td><input class="rd-control" value="Atanan"></td>
+              <td><input class="rd-control" value="140"></td>
+              <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)">✕</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="rd-surface-body" style="padding-top:12px">
+          <button type="button" class="rd-btn rd-btn-sm" data-i18n="qb.addColumn"></button>
+          <div class="rd-help" style="margin-top:10px" data-i18n="qb.columnsHelp"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tab-panel" id="qb-sort" data-tab-group="qb">
+      <div class="rd-surface">
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="qb.inheritSort"></b>
+                <small data-i18n="qb.inheritSortHelp"></small>
+              </span>
+            </label>
+          </div>
+          <p class="rd-help" style="margin:0 0 14px" data-i18n="qb.sortHelp"></p>
+          <div class="bo-rule-row">
+            <select class="rd-control">
+              <option selected data-i18n="qb.fSlaRemaining"></option>
+              <option data-i18n="qb.fPriority"></option>
+              <option data-i18n="qb.fStatus"></option>
+              <option data-i18n="qb.xUpdated"></option>
+            </select>
+            <select class="rd-control">
+              <option selected data-i18n="qb.dirAsc"></option>
+              <option data-i18n="qb.dirDesc"></option>
+            </select>
+            <button type="button" class="remove" aria-label="Remove">✕</button>
+          </div>
+          <div class="bo-rule-row">
+            <select class="rd-control">
+              <option data-i18n="qb.fSlaRemaining"></option>
+              <option selected data-i18n="qb.fPriority"></option>
+              <option data-i18n="qb.fStatus"></option>
+              <option data-i18n="qb.xUpdated"></option>
+            </select>
+            <select class="rd-control">
+              <option data-i18n="qb.dirAsc"></option>
+              <option selected data-i18n="qb.dirDesc"></option>
+            </select>
+            <button type="button" class="remove" aria-label="Remove">✕</button>
+          </div>
+          <button type="button" class="rd-btn rd-btn-sm" data-i18n="qb.addSort"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tab-panel" id="qb-conditions" data-tab-group="qb">
+      <div class="rd-surface">
+        <div class="rd-surface-body">
+          <p class="rd-help" style="margin:0 0 14px" data-i18n="qb.conditionsHelp"></p>
+          <div class="bo-rule-row">
+            <select class="rd-control">
+              <option selected data-i18n="qb.fSlaRemaining"></option>
+              <option data-i18n="qb.fPriority"></option>
+              <option data-i18n="qb.fStatus"></option>
+            </select>
+            <select class="rd-control">
+              <option selected data-i18n="qb.opLt"></option>
+              <option data-i18n="qb.opGt"></option>
+              <option data-i18n="qb.opIs"></option>
+            </select>
+            <input class="rd-control" value="2 saat">
+            <span class="rd-muted" data-i18n="qb.then"></span>
+            <select class="rd-control">
+              <option selected data-i18n="qb.actHighlightRed"></option>
+              <option data-i18n="qb.actHighlightAmber"></option>
+              <option data-i18n="qb.actBold"></option>
+            </select>
+            <button type="button" class="remove" aria-label="Remove">✕</button>
+          </div>
+          <button type="button" class="rd-btn rd-btn-sm" data-i18n="qb.addCondition"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tab-panel" id="qb-export" data-tab-group="qb">
+      <div class="rd-surface">
+        <div class="rd-surface-body">
+          <p class="rd-help" style="margin:0 0 14px" data-i18n="qb.exportHelp"></p>
+          <div class="rd-grid-3">
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="qb.xTicket"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="qb.xSubject"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="qb.xStatus"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="qb.xPriority"></span></label>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="qb.xDept"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="qb.xUser"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="qb.xOrg"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="qb.xAssignee"></span></label>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="qb.xCreated"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="qb.xUpdated"></span></label>
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="qb.xSla"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-tab-panel" id="qb-preview" data-tab-group="qb">
+      <div class="rd-surface">
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th data-i18n="qb.pvTicket"></th>
+              <th data-i18n="qb.pvSubject"></th>
+              <th data-i18n="qb.pvUser"></th>
+              <th data-i18n="qb.pvSla"></th>
+              <th data-i18n="qb.pvAssignee"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>R716555</td>
+              <td>Yol ücreti hatası hakkında</td>
+              <td>Bourla Salehi · Ulaşım A.Ş.</td>
+              <td><span class="lb-sla danger" style="float:none">0s 45dk</span></td>
+              <td>Ümit Akın</td>
+            </tr>
+            <tr>
+              <td>R716580</td>
+              <td>Bordro fark hesaplama talebi</td>
+              <td>Merve Çetin · Tosyalı Holding</td>
+              <td><span class="lb-sla warn" style="float:none">1s 20dk</span></td>
+              <td>Deniz Kaya</td>
+            </tr>
+            <tr>
+              <td>R716592</td>
+              <td>İzin devri kural sorusu</td>
+              <td>Deniz Kaya · Konecta</td>
+              <td><span class="lb-sla" style="float:none">1s 50dk</span></td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="rd-surface-body" style="padding-top:12px">
+          <div class="rd-help" data-i18n="qb.previewHelp"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
+      <button type="button" class="rd-btn" data-i18n="common.cancel"></button>
+      <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+    </div>
+  </form>
+</main>
+</body>
+</html>

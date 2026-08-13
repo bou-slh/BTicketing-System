@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Şirket Ayarları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "sc.title": "Şirket Ayarları",
+    "sc.subtitle": "Şirket kimliği, portal sayfaları ve logolar. Buradaki bilgiler kullanıcı portalında ve e-posta şablonlarında görünür.",
+    "sc.secBasic": "Temel Bilgiler",
+    "sc.secPages": "Site Sayfaları",
+    "sc.secLogos": "Logolar",
+    "sc.secBackdrop": "Giriş Arka Planı",
+    "sc.name": "Şirket adı",
+    "sc.nameHelp": "E-posta imzalarında ve portal alt bilgisinde görünen resmi ad.",
+    "sc.website": "Web sitesi",
+    "sc.websiteHelp": "Portal alt bilgisindeki şirket bağlantısı.",
+    "sc.phone": "Telefon",
+    "sc.phoneHelp": "Kullanıcılara gösterilen destek telefonu.",
+    "sc.address": "Adres",
+    "sc.addressHelp": "E-posta şablonlarında %{company.address} değişkeniyle kullanılabilir.",
+    "sc.landing": "Karşılama sayfası",
+    "sc.landingHelp": "Kullanıcı portalının ana sayfasında gösterilen içerik.",
+    "sc.offline": "Çevrimdışı sayfası",
+    "sc.offlineHelp": "Yardım masası kapalıyken kullanıcılara gösterilen sayfa.",
+    "sc.thanks": "Teşekkür sayfası",
+    "sc.thanksHelp": "Yeni talep oluşturulduktan sonra gösterilen onay sayfası.",
+    "sc.managePages": "Sayfa içeriklerini düzenle →",
+    "sc.clientLogo": "Portal logosu",
+    "sc.clientLogoHelp": "Kullanıcı portalının üst bilgisinde görünen logo.",
+    "sc.staffLogo": "Panel logosu",
+    "sc.staffLogoHelp": "Temsilci ve yönetim panellerinin üst bilgisinde görünen logo.",
+    "sc.logoDefault": "Varsayılan RapidSol logosu",
+    "sc.logoCustom": "Özel logo yükle",
+    "sc.upload": "Dosyayı buraya sürükleyin veya seçmek için tıklayın (PNG/SVG, en fazla 2 MB)",
+    "sc.current": "Geçerli",
+    "sc.backdrop": "Giriş arka plan görseli",
+    "sc.backdropHelp": "Temsilci giriş sayfasının arka planında gösterilir. Boş bırakılırsa marka degradesi kullanılır.",
+  },
+  en: {
+    "sc.title": "Company Settings",
+    "sc.subtitle": "Company identity, portal pages and logos. This information appears on the user portal and in email templates.",
+    "sc.secBasic": "Basic Information",
+    "sc.secPages": "Site Pages",
+    "sc.secLogos": "Logos",
+    "sc.secBackdrop": "Login Backdrop",
+    "sc.name": "Company name",
+    "sc.nameHelp": "The official name shown in email signatures and the portal footer.",
+    "sc.website": "Website",
+    "sc.websiteHelp": "The company link in the portal footer.",
+    "sc.phone": "Phone",
+    "sc.phoneHelp": "The support phone number shown to users.",
+    "sc.address": "Address",
+    "sc.addressHelp": "Available in email templates via the %{company.address} variable.",
+    "sc.landing": "Landing page",
+    "sc.landingHelp": "The content shown on the user portal home page.",
+    "sc.offline": "Offline page",
+    "sc.offlineHelp": "The page shown to users while the help desk is offline.",
+    "sc.thanks": "Thank-you page",
+    "sc.thanksHelp": "The confirmation page shown after a new request is created.",
+    "sc.managePages": "Edit page contents →",
+    "sc.clientLogo": "Portal logo",
+    "sc.clientLogoHelp": "The logo shown in the user portal header.",
+    "sc.staffLogo": "Panel logo",
+    "sc.staffLogoHelp": "The logo shown in the agent and admin panel headers.",
+    "sc.logoDefault": "Default RapidSol logo",
+    "sc.logoCustom": "Upload a custom logo",
+    "sc.upload": "Drag a file here or click to browse (PNG/SVG, max 2 MB)",
+    "sc.current": "Current",
+    "sc.backdrop": "Login backdrop image",
+    "sc.backdropHelp": "Shown behind the agent sign-in page. If left empty, the brand gradient is used.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="settings-company">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="sc.title"></h1>
+      <p data-i18n="sc.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+      <a href="#sec-basic" class="active" data-i18n="sc.secBasic"></a>
+      <a href="#sec-pages" data-i18n="sc.secPages"></a>
+      <a href="#sec-logos" data-i18n="sc.secLogos"></a>
+      <a href="#sec-backdrop" data-i18n="sc.secBackdrop"></a>
+    </nav>
+
+    <form class="bo-settings-sections">
+
+      <section class="rd-surface bo-section" id="sec-basic">
+        <div class="rd-surface-head"><span data-i18n="sc.secBasic"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="co-name" data-i18n="sc.name"></label>
+            <input id="co-name" class="rd-control" value="Rapidsol Bilişim ve Danışmanlık A.Ş.">
+            <div class="rd-help" data-i18n="sc.nameHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="co-web" data-i18n="sc.website"></label>
+            <input id="co-web" class="rd-control" type="url" value="https://www.rapidsol.com.tr">
+            <div class="rd-help" data-i18n="sc.websiteHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="co-phone" data-i18n="sc.phone"></label>
+            <input id="co-phone" class="rd-control" value="+90 212 555 24 24">
+            <div class="rd-help" data-i18n="sc.phoneHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="co-address" data-i18n="sc.address"></label>
+            <textarea id="co-address" class="rd-control">Maslak Mah. Büyükdere Cad. No:245 K:11
+Sarıyer / İstanbul</textarea>
+            <div class="rd-help" data-i18n="sc.addressHelp"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-pages">
+        <div class="rd-surface-head">
+          <span data-i18n="sc.secPages"></span>
+          <span class="spacer"></span>
+          <a class="rd-btn rd-btn-ghost rd-btn-sm" href="pages.html" data-i18n="sc.managePages"></a>
+        </div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="co-landing" data-i18n="sc.landing"></label>
+            <select id="co-landing" class="rd-control">
+              <option selected>Karşılama — Hoş geldiniz (varsayılan)</option>
+              <option>Karşılama — Bordro dönemi duyurusu</option>
+            </select>
+            <div class="rd-help" data-i18n="sc.landingHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="co-offline" data-i18n="sc.offline"></label>
+            <select id="co-offline" class="rd-control">
+              <option selected>Çevrimdışı — Bakım bildirimi (varsayılan)</option>
+              <option>Çevrimdışı — Hafta sonu mesajı</option>
+            </select>
+            <div class="rd-help" data-i18n="sc.offlineHelp"></div>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-label" for="co-thanks" data-i18n="sc.thanks"></label>
+            <select id="co-thanks" class="rd-control">
+              <option selected>Teşekkürler — Talebiniz alındı (varsayılan)</option>
+              <option>Teşekkürler — SLA bilgilendirmeli</option>
+            </select>
+            <div class="rd-help" data-i18n="sc.thanksHelp"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-logos">
+        <div class="rd-surface-head"><span data-i18n="sc.secLogos"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="sc.clientLogo"></span>
+            <div style="border:1px solid var(--rd-border);border-radius:11px;padding:18px;display:flex;align-items:center;gap:12px;margin-bottom:10px">
+              <span class="rc-logo"><span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span></span>
+              <span class="rd-pill rd-pill-teal" data-i18n="sc.current"></span>
+            </div>
+            <label class="rd-check" style="margin-bottom:7px">
+              <input type="radio" name="client-logo" checked>
+              <span data-i18n="sc.logoDefault"></span>
+            </label>
+            <label class="rd-check" style="margin-bottom:10px">
+              <input type="radio" name="client-logo">
+              <span data-i18n="sc.logoCustom"></span>
+            </label>
+            <div class="rd-upload" data-i18n="sc.upload"></div>
+            <div class="rd-help" data-i18n="sc.clientLogoHelp"></div>
+          </div>
+
+          <div class="rd-field mb-0">
+            <span class="rd-label" data-i18n="sc.staffLogo"></span>
+            <div style="border:1px solid var(--rd-border);border-radius:11px;padding:18px;display:flex;align-items:center;gap:12px;margin-bottom:10px">
+              <span class="rc-logo"><span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span></span>
+              <span class="rd-pill rd-pill-teal" data-i18n="sc.current"></span>
+            </div>
+            <label class="rd-check" style="margin-bottom:7px">
+              <input type="radio" name="staff-logo" checked>
+              <span data-i18n="sc.logoDefault"></span>
+            </label>
+            <label class="rd-check" style="margin-bottom:10px">
+              <input type="radio" name="staff-logo">
+              <span data-i18n="sc.logoCustom"></span>
+            </label>
+            <div class="rd-upload" data-i18n="sc.upload"></div>
+            <div class="rd-help" data-i18n="sc.staffLogoHelp"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-backdrop">
+        <div class="rd-surface-head"><span data-i18n="sc.secBackdrop"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field mb-0">
+            <span class="rd-label" data-i18n="sc.backdrop"></span>
+            <div style="background:var(--rd-hero-gradient);border-radius:11px;height:120px;margin-bottom:10px"></div>
+            <div class="rd-upload" data-i18n="sc.upload"></div>
+            <div class="rd-help" data-i18n="sc.backdropHelp"></div>
+          </div>
+        </div>
+      </section>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+      </div>
+    </form>
+  </div>
+</main>
+</body>
+</html>

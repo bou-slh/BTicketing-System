@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — E-posta Adresleri</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "em.title": "E-posta Adresleri",
+    "em.subtitle": "Sistemin talep aldığı ve yanıt gönderdiği posta kutuları. Bir adrese tıklayarak hesap, gelen posta ve SMTP ayarlarını düzenleyin.",
+    "em.add": "＋ Yeni E-posta",
+    "em.searchPh": "E-posta adresi ara…",
+    "em.colEmail": "E-posta",
+    "em.colPriority": "Öncelik",
+    "em.colDept": "Departman",
+    "em.emptyTitle": "Henüz e-posta adresi yok",
+    "em.emptyText": "E-posta üzerinden talep alabilmek için ilk sistem adresinizi ekleyin.",
+  },
+  en: {
+    "em.title": "Email Addresses",
+    "em.subtitle": "Mailboxes the system receives requests from and sends replies with. Click an address to edit its account, incoming mail and SMTP settings.",
+    "em.add": "＋ New Email",
+    "em.searchPh": "Search email addresses…",
+    "em.colEmail": "Email",
+    "em.colPriority": "Priority",
+    "em.colDept": "Department",
+    "em.emptyTitle": "No email addresses yet",
+    "em.emptyText": "Add your first system address to start receiving requests by email.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="emails">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="em.title"></h1>
+      <p data-i18n="em.subtitle"></p>
+    </div>
+    <div class="actions">
+      <a class="rd-btn-primary" href="email-edit.html" data-i18n="em.add"></a>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="em.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="common.enable"></button>
+    <button class="rd-btn" data-i18n="common.disable"></button>
+    <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+  </div>
+
+  <div class="rd-surface" id="tbl-emails">
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-emails" data-i18n-title="common.selectAll"></th>
+          <th class="sortable sorted-desc" data-i18n="em.colEmail"></th>
+          <th class="sortable" data-i18n="em.colPriority"></th>
+          <th class="sortable" data-i18n="em.colDept"></th>
+          <th class="sortable" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="email-edit.html">destek@rapidsol.com.tr</a><br><small class="rd-muted">RapidSol Destek</small></td>
+          <td data-i18n="priority.normal"></td>
+          <td>Destek</td>
+          <td>05.08.2026 14:12</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="email-edit.html">bordro@rapidsol.com.tr</a><br><small class="rd-muted">RapidSol Bordro</small></td>
+          <td data-i18n="priority.high"></td>
+          <td>Bordro</td>
+          <td>29.07.2026 09:40</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="email-edit.html">bilgi@rapidsol.com.tr</a><br><small class="rd-muted">RapidSol Bilgi</small></td>
+          <td data-i18n="priority.low"></td>
+          <td>Danışmanlık</td>
+          <td>14.06.2026 11:05</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="common.showing"></span><span>1–3 / 3</span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden; shown when the list has no rows) -->
+  <div class="rd-tab-panel" id="empty-emails">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">✉</div>
+        <h3 data-i18n="em.emptyTitle"></h3>
+        <p data-i18n="em.emptyText"></p>
+        <a class="rd-btn-primary" href="email-edit.html" data-i18n="em.add"></a>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — API Anahtarları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "ak.title": "API Anahtarları",
+    "ak.sub": "Dış sistemlerin talep oluşturması ve uzak cron çağrıları için erişim anahtarları.",
+    "ak.searchPh": "IP veya anahtar ara…",
+    "ak.new": "＋ Yeni Anahtar",
+    "ak.colKey": "API Anahtarı",
+    "ak.colIp": "IP Adresi",
+    "ak.colServices": "Servisler",
+    "ak.svcTickets": "Talep Oluşturma",
+    "ak.svcCron": "Cron",
+    "ak.showing": "4 anahtardan 1–4 arası gösteriliyor",
+    "ak.bulkTitle": "Toplu işlemler",
+    "ak.bulkHelp": "Seçili anahtarlara uygulanır.",
+    "ak.emptyTitle": "Henüz API anahtarı yok",
+    "ak.emptyText": "Dış sistemleri bağlamak için ilk API anahtarınızı oluşturun.",
+    "ak.dlgTitle": "Yeni API Anahtarı",
+    "ak.key": "API anahtarı",
+    "ak.keyHelp": "Anahtar otomatik oluşturulur; kaydettikten sonra bu değeri dış sisteme kopyalayın.",
+    "ak.ip": "IP adresi",
+    "ak.ipHelp": "Zorunlu. Anahtar yalnızca bu IP adresinden gelen isteklerde geçerlidir.",
+    "ak.status": "Durum",
+    "ak.perms": "İzinler",
+    "ak.permTickets": "Talep oluşturabilir (XML/JSON API)",
+    "ak.permCron": "Cron çalıştırabilir (uzak tetikleme)",
+  },
+  en: {
+    "ak.title": "API Keys",
+    "ak.sub": "Access keys for external systems to create requests and trigger remote cron calls.",
+    "ak.searchPh": "Search by IP or key…",
+    "ak.new": "＋ New Key",
+    "ak.colKey": "API Key",
+    "ak.colIp": "IP Address",
+    "ak.colServices": "Services",
+    "ak.svcTickets": "Ticket Creation",
+    "ak.svcCron": "Cron",
+    "ak.showing": "Showing 1–4 of 4 keys",
+    "ak.bulkTitle": "Bulk actions",
+    "ak.bulkHelp": "Applied to the selected keys.",
+    "ak.emptyTitle": "No API keys yet",
+    "ak.emptyText": "Create your first API key to connect external systems.",
+    "ak.dlgTitle": "New API Key",
+    "ak.key": "API key",
+    "ak.keyHelp": "The key is generated automatically; copy it into the external system after saving.",
+    "ak.ip": "IP address",
+    "ak.ipHelp": "Required. The key is only valid for requests coming from this IP address.",
+    "ak.status": "Status",
+    "ak.perms": "Permissions",
+    "ak.permTickets": "Can create tickets (XML/JSON API)",
+    "ak.permCron": "Can execute cron (remote trigger)",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="apikeys">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="ak.title"></h1>
+      <p data-i18n="ak.sub"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="ak.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-dialog-open="dlg-more"><span data-i18n="common.more"></span> ▾</button>
+    <button class="rd-btn rd-btn-primary" data-dialog-open="dlg-key" data-i18n="ak.new"></button>
+  </div>
+
+  <div class="rd-surface">
+    <table class="rd-table" id="tbl-keys">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-keys" data-i18n-title="common.selectAll"></th>
+          <th data-i18n="ak.colKey"></th>
+          <th class="sortable" data-i18n="ak.colIp"></th>
+          <th data-i18n="common.status"></th>
+          <th data-i18n="ak.colServices"></th>
+          <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-key" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">7A3F09B2…D41C</a></td>
+          <td>185.34.12.10</td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td>
+            <span class="rd-pill rd-pill-teal" data-i18n="ak.svcTickets"></span>
+            <span class="rd-pill rd-pill-open" data-i18n="ak.svcCron"></span>
+          </td>
+          <td>4 Ağu 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-key" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">C9E1F274…8B63</a></td>
+          <td>10.0.4.22</td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td><span class="rd-pill rd-pill-open" data-i18n="ak.svcCron"></span></td>
+          <td>12 Tem 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-key" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">4E88AD10…F2A7</a></td>
+          <td>78.186.44.9</td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="common.disabled"></span></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="ak.svcTickets"></span></td>
+          <td>2 Haz 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-key" style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">B05C77E9…13AD</a></td>
+          <td>213.14.77.3</td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="ak.svcTickets"></span></td>
+          <td>15 Şub 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="ak.showing"></span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="ak-empty">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">⚿</div>
+        <h3 data-i18n="ak.emptyTitle"></h3>
+        <p data-i18n="ak.emptyText"></p>
+        <button class="rd-btn rd-btn-primary" data-dialog-open="dlg-key" data-i18n="ak.new"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anahtar ekle/düzenle -->
+  <dialog class="rd-dialog" id="dlg-key">
+    <form>
+      <div class="rd-dialog-head"><span data-i18n="ak.dlgTitle"></span><button type="button" class="close" data-dialog-close>✕</button></div>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="ak-key" data-i18n="ak.key"></label>
+          <input id="ak-key" class="rd-control" value="C9E1F274A08B4D63917E5A20FB36C8D1" readonly style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--rd-gray-bg)">
+          <div class="rd-help" data-i18n="ak.keyHelp"></div>
+        </div>
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="ak-ip" data-i18n="ak.ip"></label>
+            <input id="ak-ip" class="rd-control" value="10.0.4.22" required>
+            <div class="rd-help" data-i18n="ak.ipHelp"></div>
+          </div>
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="ak.status"></span>
+            <div style="display:flex;gap:18px;padding:10px 0 2px">
+              <label class="rd-check"><input type="radio" name="ak-status" checked><span data-i18n="common.active"></span></label>
+              <label class="rd-check"><input type="radio" name="ak-status"><span data-i18n="common.disabled"></span></label>
+            </div>
+          </div>
+        </div>
+        <div class="rd-field">
+          <span class="rd-label" data-i18n="ak.perms"></span>
+          <div style="display:flex;flex-direction:column;gap:9px;padding-top:4px">
+            <label class="rd-check"><input type="checkbox" checked><span data-i18n="ak.permTickets"></span></label>
+            <label class="rd-check"><input type="checkbox"><span data-i18n="ak.permCron"></span></label>
+          </div>
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="ak-notes" data-i18n="common.notes"></label>
+          <textarea id="ak-notes" class="rd-control" style="min-height:70px">Tosyalı Holding SAP entegrasyonu için üretildi.</textarea>
+          <div class="rd-help" data-i18n="common.notesHelp"></div>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span data-i18n="ak.bulkTitle"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <p class="rd-help" style="margin-top:0" data-i18n="ak.bulkHelp"></p>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+        <button class="rd-btn" data-dialog-close data-i18n="common.enable"></button>
+        <button class="rd-btn" data-dialog-close data-i18n="common.disable"></button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-dialog-close data-i18n="common.delete"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

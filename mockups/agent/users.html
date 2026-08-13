@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Kullanıcılar</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "us.title": "Kullanıcılar",
+    "us.subtitle": "Tüm kullanıcı hesaplarını görüntüleyin, şirketlere bağlayın ve yönetin.",
+    "us.searchPh": "Ad veya e-posta ile ara…",
+    "us.add": "＋ Kullanıcı Ekle",
+    "us.tabAll": "Tümü",
+    "us.tabArchive": "Arşiv",
+    "us.colEmail": "E-posta",
+    "us.colOrg": "Şirket",
+    "us.colReg": "Kayıt",
+    "us.stActive": "Aktif",
+    "us.stGuest": "Misafir",
+    "us.stLocked": "Kilitli",
+    "us.emptyTitle": "Arşivlenmiş kullanıcı yok",
+    "us.emptyText": "Arşivlenen hesaplar burada listelenir; dilediğinizde geri alabilirsiniz.",
+    "us.moreTitle": "Toplu İşlemler",
+    "us.moreHelp": "Seçili kullanıcı kayıtlarına uygulanır.",
+    "us.mAddOrg": "Şirkete Ekle",
+    "us.mPwReset": "Parola Sıfırlama Gönder",
+    "us.mRegister": "Kaydet",
+    "us.mLock": "Kilitle",
+    "us.mUnlock": "Kilidi Aç",
+    "us.dlgAddTitle": "Yeni Kullanıcı",
+    "us.fName": "Ad Soyad",
+    "us.fEmail": "E-posta",
+    "us.fOrg": "Şirket",
+    "us.fOrgNone": "— Şirket seçilmedi —",
+    "us.fOrgHelp": "E-posta alan adı bir şirketin alan adıyla eşleşirse kullanıcı otomatik olarak o şirkete bağlanır.",
+  },
+  en: {
+    "us.title": "Users",
+    "us.subtitle": "View, link to companies and manage all user accounts.",
+    "us.searchPh": "Search by name or email…",
+    "us.add": "＋ Add User",
+    "us.tabAll": "All",
+    "us.tabArchive": "Archive",
+    "us.colEmail": "Email",
+    "us.colOrg": "Company",
+    "us.colReg": "Registered",
+    "us.stActive": "Active",
+    "us.stGuest": "Guest",
+    "us.stLocked": "Locked",
+    "us.emptyTitle": "No archived users",
+    "us.emptyText": "Archived accounts are listed here; you can restore them at any time.",
+    "us.moreTitle": "Bulk Actions",
+    "us.moreHelp": "Applied to the selected user records.",
+    "us.mAddOrg": "Add to Company",
+    "us.mPwReset": "Send Password Reset",
+    "us.mRegister": "Register",
+    "us.mLock": "Lock",
+    "us.mUnlock": "Unlock",
+    "us.dlgAddTitle": "New User",
+    "us.fName": "Full Name",
+    "us.fEmail": "Email",
+    "us.fOrg": "Company",
+    "us.fOrgNone": "— No company selected —",
+    "us.fOrgHelp": "If the email domain matches a company's domain, the user is linked to that company automatically.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="users">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="us.title"></h1>
+      <p data-i18n="us.subtitle"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn-primary" data-dialog-open="dlg-adduser" data-i18n="us.add"></button>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="us.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn rd-btn-ghost" data-i18n="common.import"></button>
+    <button class="rd-btn" data-dialog-open="dlg-more"><span data-i18n="common.more"></span> ▾</button>
+  </div>
+
+  <div class="rd-tabs" data-tabs>
+    <button class="active" data-tab="us-panel-all"><span data-i18n="us.tabAll"></span> · 7</button>
+    <button data-tab="us-panel-archive"><span data-i18n="us.tabArchive"></span> · 0</button>
+  </div>
+
+  <div class="rd-tab-panel active" id="us-panel-all">
+    <div class="rd-surface">
+      <div style="overflow-x:auto">
+        <table class="rd-table" id="tbl-users">
+          <thead>
+            <tr>
+              <th class="col-check"><input type="checkbox" data-check-all="#tbl-users" aria-label="Tümünü seç"></th>
+              <th class="sortable" data-i18n="common.name"></th>
+              <th class="sortable" data-i18n="us.colEmail"></th>
+              <th class="sortable" data-i18n="us.colOrg"></th>
+              <th data-i18n="common.status"></th>
+              <th class="sortable" data-i18n="us.colReg"></th>
+              <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><a href="user-view.html">Bourla Salehi</a></td>
+              <td>bourla.salehi@rapidsol.com.tr</td>
+              <td><a href="org-view.html">RapidSol</a></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="us.stActive"></span></td>
+              <td>12 Oca 2025</td>
+              <td>Bugün 09:12</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><a href="user-view.html">Ayşe Yıldırım</a></td>
+              <td>ayse.yildirim@ulasim.com.tr</td>
+              <td><a href="org-view.html">Ulaşım A.Ş.</a></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="us.stActive"></span></td>
+              <td>3 Mar 2025</td>
+              <td>Dün 16:40</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><a href="user-view.html">Mehmet Demir</a></td>
+              <td>mehmet.demir@tosyali.com.tr</td>
+              <td><a href="org-view.html">Tosyalı Holding</a></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="us.stActive"></span></td>
+              <td>18 Nis 2025</td>
+              <td>8 Ağu 2026</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><a href="user-view.html">Elif Şahin</a></td>
+              <td>elif.sahin@konecta.com</td>
+              <td><a href="org-view.html">Konecta</a></td>
+              <td><span class="rd-pill rd-pill-closed" data-i18n="us.stGuest"></span></td>
+              <td>22 May 2026</td>
+              <td>7 Ağu 2026</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><a href="user-view.html">Burak Öztürk</a></td>
+              <td>burak.ozturk@ulasim.com.tr</td>
+              <td><a href="org-view.html">Ulaşım A.Ş.</a></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="us.stActive"></span></td>
+              <td>9 Haz 2025</td>
+              <td>6 Ağu 2026</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><a href="user-view.html">Zeynep Arslan</a></td>
+              <td>zeynep.arslan@tosyali.com.tr</td>
+              <td><a href="org-view.html">Tosyalı Holding</a></td>
+              <td><span class="rd-pill rd-pill-overdue" data-i18n="us.stLocked"></span></td>
+              <td>30 Eki 2025</td>
+              <td>1 Ağu 2026</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td><a href="user-view.html">Can Koç</a></td>
+              <td>can.koc@rapidsol.com.tr</td>
+              <td><a href="org-view.html">RapidSol</a></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="us.stActive"></span></td>
+              <td>14 Şub 2026</td>
+              <td>Bugün 08:30</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rd-pagination">
+        <span><span data-i18n="common.showing"></span> 1–7 / 51</span>
+        <div class="pages">
+          <span class="current">1</span>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">›</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-tab-panel" id="us-panel-archive">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">◔</div>
+        <h3 data-i18n="us.emptyTitle"></h3>
+        <p data-i18n="us.emptyText"></p>
+        <button class="rd-btn-primary" data-dialog-open="dlg-adduser" data-i18n="us.add"></button>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head">
+      <span data-i18n="us.moreTitle"></span>
+      <button class="close" data-dialog-close aria-label="Kapat">✕</button>
+    </div>
+    <div class="rd-dialog-body">
+      <div class="rd-help" style="margin:0 0 12px" data-i18n="us.moreHelp"></div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="rd-btn" style="justify-content:flex-start" data-dialog-close data-i18n="us.mAddOrg"></button>
+        <button class="rd-btn" style="justify-content:flex-start" data-dialog-close data-i18n="us.mPwReset"></button>
+        <button class="rd-btn" style="justify-content:flex-start" data-dialog-close data-i18n="us.mRegister"></button>
+        <button class="rd-btn" style="justify-content:flex-start" data-dialog-close data-i18n="us.mLock"></button>
+        <button class="rd-btn" style="justify-content:flex-start" data-dialog-close data-i18n="us.mUnlock"></button>
+        <button class="rd-btn rd-btn-danger" style="justify-content:flex-start" data-dialog-close data-i18n="common.delete"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-adduser">
+    <div class="rd-dialog-head">
+      <span data-i18n="us.dlgAddTitle"></span>
+      <button class="close" data-dialog-close aria-label="Kapat">✕</button>
+    </div>
+    <form>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="au-name" data-i18n="us.fName"></label>
+          <input id="au-name" class="rd-control" required>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="au-email" data-i18n="us.fEmail"></label>
+          <input id="au-email" type="email" class="rd-control" required>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="au-org" data-i18n="us.fOrg"></label>
+          <select id="au-org" class="rd-control">
+            <option data-i18n="us.fOrgNone"></option>
+            <option>Ulaşım A.Ş.</option>
+            <option>Tosyalı Holding</option>
+            <option>Konecta</option>
+            <option>RapidSol</option>
+          </select>
+          <div class="rd-help" data-i18n="us.fOrgHelp"></div>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="submit" class="rd-btn-primary" data-i18n="common.add"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

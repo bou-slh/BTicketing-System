@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Parola Sıfırlama</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "pw.step1cap": "Adım 1 / 3 — Bağlantı isteyin",
+    "pw.step2cap": "Adım 2 / 3 — E-postanızı kontrol edin",
+    "pw.step3cap": "Adım 3 / 3 — Yeni parola belirleyin",
+    "pw.title1": "Parolanızı mı unuttunuz?",
+    "pw.sub1": "Kayıtlı e-posta adresinizi girin; size bir sıfırlama bağlantısı gönderelim.",
+    "pw.email": "E-posta",
+    "pw.send": "Sıfırlama bağlantısı gönder",
+    "pw.backLogin": "← Girişe dön",
+    "pw.title2": "E-posta gönderildi",
+    "pw.sub2": "Sıfırlama bağlantısı e-posta adresinize gönderildi. Gelen kutunuzu ve gereksiz (spam) klasörünü kontrol edin. Bağlantı 1 saat boyunca geçerlidir.",
+    "pw.title3": "Yeni parola belirleyin",
+    "pw.sub3": "Hesabınız için yeni bir parola oluşturun. Kaydettikten sonra tekrar giriş yapmanız istenecektir.",
+    "pw.new": "Yeni parola",
+    "pw.new2": "Yeni parola (tekrar)",
+    "pw.passHelp": "En az 8 karakter; harf ve rakam içermelidir.",
+    "pw.save": "Parolayı güncelle",
+  },
+  en: {
+    "pw.step1cap": "Step 1 / 3 — Request a link",
+    "pw.step2cap": "Step 2 / 3 — Check your email",
+    "pw.step3cap": "Step 3 / 3 — Set a new password",
+    "pw.title1": "Forgot your password?",
+    "pw.sub1": "Enter your registered email address and we will send you a reset link.",
+    "pw.email": "Email",
+    "pw.send": "Send reset link",
+    "pw.backLogin": "← Back to sign in",
+    "pw.title2": "Email sent",
+    "pw.sub2": "The reset link has been sent to your email address. Check your inbox and your spam folder. The link is valid for 1 hour.",
+    "pw.title3": "Set a new password",
+    "pw.sub3": "Create a new password for your account. You will be asked to sign in again after saving.",
+    "pw.new": "New password",
+    "pw.new2": "New password (repeat)",
+    "pw.passHelp": "At least 8 characters; must contain letters and digits.",
+    "pw.save": "Update password",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal">
+
+<div style="position:fixed;top:18px;right:18px;z-index:5">
+  <select class="rc-language" data-lang-switch aria-label="Language">
+    <option value="tr">TR</option>
+    <option value="en">EN</option>
+  </select>
+</div>
+
+<div class="rc-auth-wrap">
+  <div style="display:grid;gap:26px;width:min(420px,100%)">
+
+    <a class="rc-logo" href="index.html" style="justify-content:center">
+      <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+
+    <!-- Step 1: request a reset link -->
+    <div>
+      <div style="font-size:12px;color:var(--rd-muted);margin:0 4px 8px" data-i18n="pw.step1cap"></div>
+      <div class="rc-auth-card" style="width:100%">
+        <h1 data-i18n="pw.title1"></h1>
+        <p data-i18n="pw.sub1"></p>
+        <form class="rc-form-grid">
+          <div>
+            <label class="rc-label" for="pw-email" data-i18n="pw.email"></label>
+            <input id="pw-email" class="rc-control" type="email" autocomplete="email">
+          </div>
+          <button class="rc-button-primary" style="justify-content:center" data-i18n="pw.send"></button>
+        </form>
+        <div class="rc-auth-foot">
+          <a href="login.html" data-i18n="pw.backLogin"></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: confirmation notice -->
+    <div>
+      <div style="font-size:12px;color:var(--rd-muted);margin:0 4px 8px" data-i18n="pw.step2cap"></div>
+      <div class="rc-auth-card" style="width:100%;text-align:center">
+        <div style="font-size:40px;margin-bottom:12px" aria-hidden="true">✉</div>
+        <h1 data-i18n="pw.title2"></h1>
+        <p data-i18n="pw.sub2"></p>
+      </div>
+    </div>
+
+    <!-- Step 3: set a new password -->
+    <div>
+      <div style="font-size:12px;color:var(--rd-muted);margin:0 4px 8px" data-i18n="pw.step3cap"></div>
+      <div class="rc-auth-card" style="width:100%">
+        <h1 data-i18n="pw.title3"></h1>
+        <p data-i18n="pw.sub3"></p>
+        <form class="rc-form-grid">
+          <div>
+            <label class="rc-label" for="pw-new" data-i18n="pw.new"></label>
+            <input id="pw-new" class="rc-control" type="password" autocomplete="new-password">
+          </div>
+          <div>
+            <label class="rc-label" for="pw-new2" data-i18n="pw.new2"></label>
+            <input id="pw-new2" class="rc-control" type="password" autocomplete="new-password">
+            <div class="rd-help" data-i18n="pw.passHelp"></div>
+          </div>
+          <button class="rc-button-primary" style="justify-content:center" data-i18n="pw.save"></button>
+        </form>
+        <div class="rc-auth-foot">
+          <a href="login.html" data-i18n="pw.backLogin"></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

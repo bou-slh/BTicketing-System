@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Çalışma Takvimleri</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "sch.title": "Çalışma Takvimleri",
+    "sch.sub": "SLA süreleri ve otomatik işlemler için çalışma saatleri ile tatil takvimleri.",
+    "sch.searchPh": "Takvim ara…",
+    "sch.new": "＋ Yeni Takvim",
+    "sch.colType": "Tür",
+    "sch.typeBusiness": "Çalışma Saatleri",
+    "sch.typeHoliday": "Tatil",
+    "sch.showing": "4 takvimden 1–4 arası gösteriliyor",
+    "sch.bulkTitle": "Toplu işlemler",
+    "sch.bulkHelp": "Seçili takvimlere uygulanır.",
+    "sch.emptyTitle": "Henüz takvim yok",
+    "sch.emptyText": "SLA sürelerinin işleyeceği ilk çalışma takvimini oluşturun.",
+  },
+  en: {
+    "sch.title": "Schedules",
+    "sch.sub": "Business-hour and holiday schedules used by SLA timers and automation.",
+    "sch.searchPh": "Search schedules…",
+    "sch.new": "＋ New Schedule",
+    "sch.colType": "Type",
+    "sch.typeBusiness": "Business Hours",
+    "sch.typeHoliday": "Holidays",
+    "sch.showing": "Showing 1–4 of 4 schedules",
+    "sch.bulkTitle": "Bulk actions",
+    "sch.bulkHelp": "Applied to the selected schedules.",
+    "sch.emptyTitle": "No schedules yet",
+    "sch.emptyText": "Create the first working schedule your SLA timers will follow.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="schedules">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="sch.title"></h1>
+      <p data-i18n="sch.sub"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="sch.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-dialog-open="dlg-more"><span data-i18n="common.more"></span> ▾</button>
+    <a class="rd-btn rd-btn-primary" href="schedule-edit.html" data-i18n="sch.new"></a>
+  </div>
+
+  <div class="rd-surface">
+    <table class="rd-table" id="tbl-schedules">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-schedules" data-i18n-title="common.selectAll"></th>
+          <th class="sortable" data-i18n="common.name"></th>
+          <th data-i18n="sch.colType"></th>
+          <th class="sortable" data-i18n="common.created"></th>
+          <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="schedule-edit.html">Hafta içi 09-18</a></td>
+          <td data-i18n="sch.typeBusiness"></td>
+          <td>3 Oca 2026</td>
+          <td>4 Ağu 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="schedule-edit.html">7/24</a></td>
+          <td data-i18n="sch.typeBusiness"></td>
+          <td>3 Oca 2026</td>
+          <td>12 Mar 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="schedule-edit.html">Resmi Tatiller 2026</a></td>
+          <td data-i18n="sch.typeHoliday"></td>
+          <td>5 Oca 2026</td>
+          <td>2 Haz 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="schedule-edit.html">Cumartesi Yarım Gün</a></td>
+          <td data-i18n="sch.typeBusiness"></td>
+          <td>9 Şub 2026</td>
+          <td>9 Şub 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="sch.showing"></span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="sch-empty">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">▦</div>
+        <h3 data-i18n="sch.emptyTitle"></h3>
+        <p data-i18n="sch.emptyText"></p>
+        <a class="rd-btn rd-btn-primary" href="schedule-edit.html" data-i18n="sch.new"></a>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span data-i18n="sch.bulkTitle"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <p class="rd-help" style="margin-top:0" data-i18n="sch.bulkHelp"></p>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+        <button class="rd-btn" data-dialog-close data-i18n="common.enable"></button>
+        <button class="rd-btn" data-dialog-close data-i18n="common.disable"></button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-dialog-close data-i18n="common.delete"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

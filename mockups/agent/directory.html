@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Ekip Rehberi</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "dr.title": "Ekip Rehberi",
+    "dr.subtitle": "RapidSol temsilcilerinin iletişim bilgileri ve anlık durumu.",
+    "dr.searchPh": "Temsilci ara…",
+    "dr.allDepts": "Tüm Departmanlar",
+    "dr.colDept": "Departman",
+    "dr.colEmail": "E-posta",
+    "dr.colPhone": "Telefon",
+    "dr.colExt": "Dahili",
+    "dr.online": "Çevrimiçi",
+    "dr.away": "Uzakta",
+    "dr.offline": "Çevrimdışı",
+  },
+  en: {
+    "dr.title": "Team Directory",
+    "dr.subtitle": "Contact details and live status of RapidSol agents.",
+    "dr.searchPh": "Search agents…",
+    "dr.allDepts": "All Departments",
+    "dr.colDept": "Department",
+    "dr.colEmail": "Email",
+    "dr.colPhone": "Phone",
+    "dr.colExt": "Ext.",
+    "dr.online": "Online",
+    "dr.away": "Away",
+    "dr.offline": "Offline",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="directory">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="dr.title"></h1>
+      <p data-i18n="dr.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="dr.searchPh">
+    <select class="rd-control">
+      <option data-i18n="dr.allDepts"></option>
+      <option>Bordro</option>
+      <option>İK</option>
+      <option>Teknik Destek</option>
+      <option>Vardiya Planlama</option>
+      <option>Genel</option>
+    </select>
+  </div>
+
+  <div class="rd-surface">
+    <div style="overflow-x:auto">
+      <table class="rd-table">
+        <thead>
+          <tr>
+            <th class="sortable sorted-desc" data-i18n="common.name"></th>
+            <th class="sortable" data-i18n="dr.colDept"></th>
+            <th data-i18n="dr.colEmail"></th>
+            <th data-i18n="dr.colPhone"></th>
+            <th data-i18n="dr.colExt"></th>
+            <th data-i18n="common.status"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="display:flex;align-items:center;gap:10px">
+              <span class="rd-avatar online">ÜA</span> Ümit Yaşar Akın
+            </td>
+            <td>Bordro</td>
+            <td>umit.akin@rapidsol.com.tr</td>
+            <td>+90 212 555 0101</td>
+            <td>101</td>
+            <td><span class="rd-pill rd-pill-solved" data-i18n="dr.online"></span></td>
+          </tr>
+          <tr>
+            <td style="display:flex;align-items:center;gap:10px">
+              <span class="rd-avatar online">MÇ</span> Merve Çetin
+            </td>
+            <td>İK</td>
+            <td>merve.cetin@rapidsol.com.tr</td>
+            <td>+90 212 555 0102</td>
+            <td>102</td>
+            <td><span class="rd-pill rd-pill-solved" data-i18n="dr.online"></span></td>
+          </tr>
+          <tr>
+            <td style="display:flex;align-items:center;gap:10px">
+              <span class="rd-avatar away">DK</span> Deniz Kaya
+            </td>
+            <td>Teknik Destek</td>
+            <td>deniz.kaya@rapidsol.com.tr</td>
+            <td>+90 212 555 0103</td>
+            <td>103</td>
+            <td><span class="rd-pill rd-pill-wait" data-i18n="dr.away"></span></td>
+          </tr>
+          <tr>
+            <td style="display:flex;align-items:center;gap:10px">
+              <span class="rd-avatar online">SA</span> Selin Aydın
+            </td>
+            <td>Bordro</td>
+            <td>selin.aydin@rapidsol.com.tr</td>
+            <td>+90 212 555 0104</td>
+            <td>104</td>
+            <td><span class="rd-pill rd-pill-solved" data-i18n="dr.online"></span></td>
+          </tr>
+          <tr>
+            <td style="display:flex;align-items:center;gap:10px">
+              <span class="rd-avatar away">KY</span> Kerem Yılmaz
+            </td>
+            <td>Vardiya Planlama</td>
+            <td>kerem.yilmaz@rapidsol.com.tr</td>
+            <td>+90 212 555 0105</td>
+            <td>105</td>
+            <td><span class="rd-pill rd-pill-wait" data-i18n="dr.away"></span></td>
+          </tr>
+          <tr>
+            <td style="display:flex;align-items:center;gap:10px">
+              <span class="rd-avatar">AD</span> Aslı Doğan
+            </td>
+            <td>Genel</td>
+            <td>asli.dogan@rapidsol.com.tr</td>
+            <td>+90 212 555 0106</td>
+            <td>106</td>
+            <td><span class="rd-pill rd-pill-closed" data-i18n="dr.offline"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

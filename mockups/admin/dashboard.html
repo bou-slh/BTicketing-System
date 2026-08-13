@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Panel</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "db.title": "Panel",
+    "db.subtitle": "Tüm ekiplerin talep hacmine ve yanıt performansına genel bakış.",
+    "db.range30": "Son 30 gün",
+    "db.rangeQ": "Bu çeyrek",
+    "db.rangeY": "Bu yıl",
+    "db.startDate": "Başlangıç tarihi",
+    "db.statOpened": "Açılan",
+    "db.statSolved": "Çözülen",
+    "db.statFirstResp": "Ort. İlk Yanıt",
+    "db.statFirstRespVal": "1s 42d",
+    "db.statSla": "SLA Uyumu",
+    "db.statOpenedNote": "geçen döneme göre +%12",
+    "db.statSolvedNote": "geçen döneme göre +%9",
+    "db.statFirstRespNote": "hedef: 2 saat",
+    "db.statSlaNote": "hedef: %90",
+    "db.activity": "Talep Aktivitesi",
+    "db.legendOpened": "Açılan",
+    "db.legendClosed": "Çözülen",
+    "db.stats": "İstatistikler",
+    "db.tabDept": "Departman",
+    "db.tabTopic": "Konu",
+    "db.tabAgent": "Temsilci",
+    "db.colOpened": "Açılan",
+    "db.colAssigned": "Atanan",
+    "db.colOverdue": "Geciken",
+    "db.colClosed": "Kapatılan",
+    "db.colReopened": "Yeniden Açılan",
+    "db.colService": "Servis Süresi",
+    "db.colResponse": "Yanıt Süresi",
+    "db.mo1": "Oca", "db.mo2": "Şub", "db.mo3": "Mar", "db.mo4": "Nis",
+    "db.mo5": "May", "db.mo6": "Haz", "db.mo7": "Tem", "db.mo8": "Ağu",
+  },
+  en: {
+    "db.title": "Dashboard",
+    "db.subtitle": "Overview of ticket volume and response performance across all teams.",
+    "db.range30": "Last 30 days",
+    "db.rangeQ": "This quarter",
+    "db.rangeY": "This year",
+    "db.startDate": "Start date",
+    "db.statOpened": "Opened",
+    "db.statSolved": "Resolved",
+    "db.statFirstResp": "Avg. First Response",
+    "db.statFirstRespVal": "1h 42m",
+    "db.statSla": "SLA Compliance",
+    "db.statOpenedNote": "+12% vs previous period",
+    "db.statSolvedNote": "+9% vs previous period",
+    "db.statFirstRespNote": "target: 2 hours",
+    "db.statSlaNote": "target: 90%",
+    "db.activity": "Ticket Activity",
+    "db.legendOpened": "Opened",
+    "db.legendClosed": "Resolved",
+    "db.stats": "Statistics",
+    "db.tabDept": "Department",
+    "db.tabTopic": "Topic",
+    "db.tabAgent": "Agent",
+    "db.colOpened": "Opened",
+    "db.colAssigned": "Assigned",
+    "db.colOverdue": "Overdue",
+    "db.colClosed": "Closed",
+    "db.colReopened": "Reopened",
+    "db.colService": "Service Time",
+    "db.colResponse": "Response Time",
+    "db.mo1": "Jan", "db.mo2": "Feb", "db.mo3": "Mar", "db.mo4": "Apr",
+    "db.mo5": "May", "db.mo6": "Jun", "db.mo7": "Jul", "db.mo8": "Aug",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="dashboard">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="db.title"></h1>
+      <p data-i18n="db.subtitle"></p>
+    </div>
+    <form class="actions" style="flex-wrap:wrap">
+      <input type="date" class="rd-control" value="2026-07-12" data-i18n-title="db.startDate">
+      <select class="rd-control">
+        <option data-i18n="db.range30" selected></option>
+        <option data-i18n="db.rangeQ"></option>
+        <option data-i18n="db.rangeY"></option>
+      </select>
+      <button type="submit" class="rd-btn-primary" data-i18n="common.apply"></button>
+    </form>
+  </div>
+
+  <div class="rd-grid-4" style="margin-bottom:20px">
+    <div class="rd-stat">
+      <div class="rd-stat-label" data-i18n="db.statOpened"></div>
+      <div class="rd-stat-value">128</div>
+      <div class="rd-stat-note" data-i18n="db.statOpenedNote"></div>
+    </div>
+    <div class="rd-stat">
+      <div class="rd-stat-label" data-i18n="db.statSolved"></div>
+      <div class="rd-stat-value">117</div>
+      <div class="rd-stat-note" data-i18n="db.statSolvedNote"></div>
+    </div>
+    <div class="rd-stat">
+      <div class="rd-stat-label" data-i18n="db.statFirstResp"></div>
+      <div class="rd-stat-value" data-i18n="db.statFirstRespVal"></div>
+      <div class="rd-stat-note" data-i18n="db.statFirstRespNote"></div>
+    </div>
+    <div class="rd-stat">
+      <div class="rd-stat-label" data-i18n="db.statSla"></div>
+      <div class="rd-stat-value">%94</div>
+      <div class="rd-stat-note" data-i18n="db.statSlaNote"></div>
+    </div>
+  </div>
+
+  <div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-head">
+      <span data-i18n="db.activity"></span>
+      <span class="spacer"></span>
+      <span class="text-sm rd-muted" style="display:inline-flex;align-items:center;gap:6px">
+        <span style="width:11px;height:11px;border-radius:3px;background:var(--rd-primary);display:inline-block"></span>
+        <span data-i18n="db.legendOpened"></span>
+      </span>
+      <span class="text-sm rd-muted" style="display:inline-flex;align-items:center;gap:6px">
+        <span style="width:16px;border-top:2px dashed var(--rd-muted);display:inline-block"></span>
+        <span data-i18n="db.legendClosed"></span>
+      </span>
+    </div>
+    <div class="rd-surface-body" style="overflow-x:auto">
+      <svg viewBox="0 0 700 220" width="100%" style="min-width:560px;display:block" role="img" aria-label="Talep aktivitesi grafiği">
+        <!-- gridlines -->
+        <line x1="44" y1="30"  x2="688" y2="30"  stroke="var(--rd-border-soft)"/>
+        <line x1="44" y1="80"  x2="688" y2="80"  stroke="var(--rd-border-soft)"/>
+        <line x1="44" y1="130" x2="688" y2="130" stroke="var(--rd-border-soft)"/>
+        <line x1="44" y1="180" x2="688" y2="180" stroke="var(--rd-border)"/>
+        <!-- y labels -->
+        <text x="36" y="34"  text-anchor="end" font-size="11" fill="var(--rd-muted)">150</text>
+        <text x="36" y="84"  text-anchor="end" font-size="11" fill="var(--rd-muted)">100</text>
+        <text x="36" y="134" text-anchor="end" font-size="11" fill="var(--rd-muted)">50</text>
+        <text x="36" y="184" text-anchor="end" font-size="11" fill="var(--rd-muted)">0</text>
+        <!-- series: resolved (muted reference, dashed) -->
+        <polyline fill="none" stroke="var(--rd-muted)" stroke-width="2" stroke-dasharray="5 4"
+          stroke-linecap="round" stroke-linejoin="round"
+          points="60,122 148,110 236,120 324,92 412,100 500,75 588,82 676,63"/>
+        <!-- series: opened (brand) -->
+        <polyline fill="none" stroke="var(--rd-primary)" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          points="60,118 148,102 236,125 324,84 412,96 500,62 588,78 676,52"/>
+        <!-- dots: resolved -->
+        <g fill="var(--rd-muted)" stroke="var(--rd-surface)" stroke-width="1.5">
+          <circle cx="60" cy="122" r="3"/><circle cx="148" cy="110" r="3"/>
+          <circle cx="236" cy="120" r="3"/><circle cx="324" cy="92" r="3"/>
+          <circle cx="412" cy="100" r="3"/><circle cx="500" cy="75" r="3"/>
+          <circle cx="588" cy="82" r="3"/><circle cx="676" cy="63" r="3"/>
+        </g>
+        <!-- dots: opened -->
+        <g fill="var(--rd-primary)" stroke="var(--rd-surface)" stroke-width="1.5">
+          <circle cx="60" cy="118" r="3.5"/><circle cx="148" cy="102" r="3.5"/>
+          <circle cx="236" cy="125" r="3.5"/><circle cx="324" cy="84" r="3.5"/>
+          <circle cx="412" cy="96" r="3.5"/><circle cx="500" cy="62" r="3.5"/>
+          <circle cx="588" cy="78" r="3.5"/><circle cx="676" cy="52" r="3.5"/>
+        </g>
+        <!-- x labels -->
+        <g font-size="11" fill="var(--rd-muted)" text-anchor="middle">
+          <text x="60"  y="205" data-i18n="db.mo1"></text>
+          <text x="148" y="205" data-i18n="db.mo2"></text>
+          <text x="236" y="205" data-i18n="db.mo3"></text>
+          <text x="324" y="205" data-i18n="db.mo4"></text>
+          <text x="412" y="205" data-i18n="db.mo5"></text>
+          <text x="500" y="205" data-i18n="db.mo6"></text>
+          <text x="588" y="205" data-i18n="db.mo7"></text>
+          <text x="676" y="205" data-i18n="db.mo8"></text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div class="rd-surface">
+    <div class="rd-surface-head">
+      <span data-i18n="db.stats"></span>
+      <span class="spacer"></span>
+      <button class="rd-btn rd-btn-sm rd-btn-ghost" data-i18n="common.export"></button>
+    </div>
+    <div class="rd-surface-body">
+      <div class="rd-tabs" data-tabs>
+        <button class="active" data-tab="db-panel-dept" data-i18n="db.tabDept"></button>
+        <button data-tab="db-panel-topic" data-i18n="db.tabTopic"></button>
+        <button data-tab="db-panel-agent" data-i18n="db.tabAgent"></button>
+      </div>
+
+      <div class="rd-tab-panel active" id="db-panel-dept" style="overflow-x:auto">
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th data-i18n="db.tabDept"></th>
+              <th class="num sortable sorted-desc" data-i18n="db.colOpened"></th>
+              <th class="num sortable" data-i18n="db.colAssigned"></th>
+              <th class="num sortable" data-i18n="db.colOverdue"></th>
+              <th class="num sortable" data-i18n="db.colClosed"></th>
+              <th class="num sortable" data-i18n="db.colReopened"></th>
+              <th class="num" data-i18n="db.colService"></th>
+              <th class="num" data-i18n="db.colResponse"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Bordro</td><td class="num">54</td><td class="num">50</td><td class="num">4</td><td class="num">49</td><td class="num">2</td><td class="num">6,4 sa</td><td class="num">1,3 sa</td></tr>
+            <tr><td>İK</td><td class="num">31</td><td class="num">29</td><td class="num">2</td><td class="num">28</td><td class="num">1</td><td class="num">5,1 sa</td><td class="num">1,8 sa</td></tr>
+            <tr><td>Teknik Destek</td><td class="num">24</td><td class="num">23</td><td class="num">1</td><td class="num">22</td><td class="num">0</td><td class="num">8,7 sa</td><td class="num">1,1 sa</td></tr>
+            <tr><td>Vardiya Planlama</td><td class="num">12</td><td class="num">11</td><td class="num">1</td><td class="num">11</td><td class="num">1</td><td class="num">4,2 sa</td><td class="num">2,0 sa</td></tr>
+            <tr><td>Genel</td><td class="num">7</td><td class="num">6</td><td class="num">0</td><td class="num">7</td><td class="num">0</td><td class="num">3,0 sa</td><td class="num">2,4 sa</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rd-tab-panel" id="db-panel-topic" style="overflow-x:auto">
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th data-i18n="db.tabTopic"></th>
+              <th class="num sortable sorted-desc" data-i18n="db.colOpened"></th>
+              <th class="num sortable" data-i18n="db.colAssigned"></th>
+              <th class="num sortable" data-i18n="db.colOverdue"></th>
+              <th class="num sortable" data-i18n="db.colClosed"></th>
+              <th class="num sortable" data-i18n="db.colReopened"></th>
+              <th class="num" data-i18n="db.colService"></th>
+              <th class="num" data-i18n="db.colResponse"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Bordro Hatası</td><td class="num">42</td><td class="num">40</td><td class="num">3</td><td class="num">38</td><td class="num">2</td><td class="num">6,8 sa</td><td class="num">1,2 sa</td></tr>
+            <tr><td>İzin İşlemleri</td><td class="num">27</td><td class="num">25</td><td class="num">2</td><td class="num">25</td><td class="num">1</td><td class="num">4,9 sa</td><td class="num">1,7 sa</td></tr>
+            <tr><td>Vardiya Değişikliği</td><td class="num">19</td><td class="num">18</td><td class="num">1</td><td class="num">18</td><td class="num">0</td><td class="num">4,4 sa</td><td class="num">2,1 sa</td></tr>
+            <tr><td>Sistem Erişimi</td><td class="num">16</td><td class="num">15</td><td class="num">1</td><td class="num">15</td><td class="num">0</td><td class="num">7,5 sa</td><td class="num">0,9 sa</td></tr>
+            <tr><td>Rapor Talebi</td><td class="num">14</td><td class="num">13</td><td class="num">1</td><td class="num">13</td><td class="num">1</td><td class="num">5,6 sa</td><td class="num">1,9 sa</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rd-tab-panel" id="db-panel-agent" style="overflow-x:auto">
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th data-i18n="db.tabAgent"></th>
+              <th class="num sortable sorted-desc" data-i18n="db.colOpened"></th>
+              <th class="num sortable" data-i18n="db.colAssigned"></th>
+              <th class="num sortable" data-i18n="db.colOverdue"></th>
+              <th class="num sortable" data-i18n="db.colClosed"></th>
+              <th class="num sortable" data-i18n="db.colReopened"></th>
+              <th class="num" data-i18n="db.colService"></th>
+              <th class="num" data-i18n="db.colResponse"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Ümit Yaşar Akın</td><td class="num">38</td><td class="num">36</td><td class="num">2</td><td class="num">35</td><td class="num">1</td><td class="num">5,9 sa</td><td class="num">1,1 sa</td></tr>
+            <tr><td>Merve Çetin</td><td class="num">29</td><td class="num">28</td><td class="num">2</td><td class="num">27</td><td class="num">1</td><td class="num">5,4 sa</td><td class="num">1,6 sa</td></tr>
+            <tr><td>Deniz Kaya</td><td class="num">25</td><td class="num">24</td><td class="num">2</td><td class="num">23</td><td class="num">1</td><td class="num">7,8 sa</td><td class="num">1,3 sa</td></tr>
+            <tr><td>Selin Aydın</td><td class="num">21</td><td class="num">20</td><td class="num">1</td><td class="num">19</td><td class="num">0</td><td class="num">4,7 sa</td><td class="num">1,9 sa</td></tr>
+            <tr><td>Kerem Yılmaz</td><td class="num">15</td><td class="num">14</td><td class="num">1</td><td class="num">13</td><td class="num">1</td><td class="num">4,1 sa</td><td class="num">2,2 sa</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

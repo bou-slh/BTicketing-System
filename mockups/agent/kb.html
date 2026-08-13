@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Bilgi Bankası (SSS)</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "kb.title": "Bilgi Bankası (SSS)",
+    "kb.subtitle": "Kullanıcı portalında ve talep formlarında gösterilen makaleleri yönetin.",
+    "kb.allCats": "Tüm Kategoriler",
+    "kb.searchPh": "Makale ara…",
+    "kb.newArticle": "＋ Yeni Makale",
+    "kb.manageCats": "Kategorileri Yönet",
+    "kb.articles": "makale",
+    "kb.public": "Herkese Açık",
+    "kb.internal": "Dahili",
+    "kb.newCatPh": "Yeni kategori adı…",
+    "kb.catsHelp": "Kategoriler portalda gruplama, temsilci panelinde filtreleme için kullanılır.",
+  },
+  en: {
+    "kb.title": "Knowledge Base (FAQ)",
+    "kb.subtitle": "Manage the articles shown on the user portal and ticket forms.",
+    "kb.allCats": "All Categories",
+    "kb.searchPh": "Search articles…",
+    "kb.newArticle": "＋ New Article",
+    "kb.manageCats": "Manage Categories",
+    "kb.articles": "articles",
+    "kb.public": "Public",
+    "kb.internal": "Internal",
+    "kb.newCatPh": "New category name…",
+    "kb.catsHelp": "Categories are used for grouping on the portal and filtering in the agent panel.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+<style>
+.kb-article-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rd-border-soft);
+  font-size: 13px;
+}
+.kb-article-row:last-child { border-bottom: 0; }
+</style>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="kb">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="kb.title"></h1>
+      <p data-i18n="kb.subtitle"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn" data-dialog-open="dlg-cats" data-i18n="kb.manageCats"></button>
+      <a class="rd-btn-primary" href="kb-faq.html" data-i18n="kb.newArticle"></a>
+    </div>
+  </div>
+
+  <div class="rd-tabs" data-tabs>
+    <button class="active" data-i18n="kb.allCats"></button>
+    <button>Bordro · 12</button>
+    <button>İzin · 8</button>
+    <button>Vardiya · 5</button>
+    <button>Sistem · 9</button>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="kb.searchPh">
+  </div>
+
+  <div class="rd-grid-2">
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        Bordro
+        <span class="spacer"></span>
+        <span class="text-sm rd-muted">12 <span data-i18n="kb.articles"></span></span>
+      </div>
+      <div class="rd-surface-body">
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Yol ücreti nasıl hesaplanır?</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Ek mesai bordroya nasıl yansır?</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Bordro kesinti kalemleri rehberi</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        İzin
+        <span class="spacer"></span>
+        <span class="text-sm rd-muted">8 <span data-i18n="kb.articles"></span></span>
+      </div>
+      <div class="rd-surface-body">
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Yıllık izin devri nasıl yapılır?</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Mazeret izni girişi</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">İzin bakiyesi raporu alma</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        Vardiya
+        <span class="spacer"></span>
+        <span class="text-sm rd-muted">5 <span data-i18n="kb.articles"></span></span>
+      </div>
+      <div class="rd-surface-body">
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Vardiya planı yükleme adımları</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Gece vardiyası katsayısı ayarı</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Vardiya değişim talepleri</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-surface">
+      <div class="rd-surface-head">
+        Sistem
+        <span class="spacer"></span>
+        <span class="text-sm rd-muted">9 <span data-i18n="kb.articles"></span></span>
+      </div>
+      <div class="rd-surface-body">
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Parola sıfırlama işlemi</a>
+          <span class="rd-pill rd-pill-teal" data-i18n="kb.public"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">Toplu personel içe aktarma</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+        <div class="kb-article-row">
+          <a href="kb-faq.html">API erişim anahtarları</a>
+          <span class="rd-pill rd-pill-closed" data-i18n="kb.internal"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-cats">
+    <div class="rd-dialog-head">
+      <span data-i18n="kb.manageCats"></span>
+      <button class="close" data-dialog-close aria-label="Kapat">✕</button>
+    </div>
+    <form>
+      <div class="rd-dialog-body">
+        <div class="rd-help" style="margin:0 0 12px" data-i18n="kb.catsHelp"></div>
+        <div class="kb-article-row"><span>Bordro</span><span class="text-sm rd-muted">12</span></div>
+        <div class="kb-article-row"><span>İzin</span><span class="text-sm rd-muted">8</span></div>
+        <div class="kb-article-row"><span>Vardiya</span><span class="text-sm rd-muted">5</span></div>
+        <div class="kb-article-row"><span>Sistem</span><span class="text-sm rd-muted">9</span></div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <input class="rd-control" data-i18n-placeholder="kb.newCatPh">
+          <button type="submit" class="rd-btn-primary" data-i18n="common.add"></button>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.close"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

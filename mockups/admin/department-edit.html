@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Departman Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "de.back": "← Departmanlar",
+    "de.subtitle": "Departman bilgileri, giden e-posta, otomatik yanıtlar, uyarılar, imza ve üye erişimi.",
+    "de.tabSettings": "Ayarlar",
+    "de.tabAccess": "Erişim",
+
+    "de.secGeneral": "Genel",
+    "de.parent": "Üst departman",
+    "de.parentHelp": "Bu departman seçilen departmanın altında yer alır.",
+    "de.noParent": "— Yok (ana departman) —",
+    "de.name": "Ad",
+    "de.nameHelp": "Talep yönlendirme ve raporlarda görünen ad.",
+    "de.statusLabel": "Durum",
+    "de.statusHelp": "Devre dışı/arşivli departmanlara yeni talep yönlendirilemez.",
+    "de.stActive": "Etkin",
+    "de.stDisabled": "Devre Dışı",
+    "de.stArchived": "Arşivlenmiş",
+    "de.visibility": "Görünürlük",
+    "de.visibilityHelp": "Özel departmanlar kullanıcı portalında ve imzalarda gizlenir.",
+    "de.visPublic": "Herkese Açık",
+    "de.visPrivate": "Özel",
+    "de.sla": "SLA planı",
+    "de.slaHelp": "Bu departmandaki taleplere uygulanan vade planı.",
+    "de.sysDefault": "Sistem Varsayılanı",
+    "de.schedule": "Çalışma takvimi",
+    "de.scheduleHelp": "SLA süreleri bu takvimin mesai saatlerine göre işler.",
+    "de.manager": "Yönetici",
+    "de.managerHelp": "Departmandan sorumlu temsilci; yönetici uyarılarını alır.",
+    "de.noManager": "— Yok —",
+    "de.assignMode": "Atama modu",
+    "de.assignModeHelp": "Bu departmandaki talepler kimlere atanabilir?",
+    "de.amAll": "Tüm temsilciler",
+    "de.amMembers": "Yalnızca departman üyeleri",
+    "de.amPrimary": "Yalnızca birincil üyeler",
+    "de.disableClaim": "Yanıtta üstlenmeyi kapat",
+    "de.disableClaimHelp": "Temsilci yanıt verdiğinde sahipsiz talep otomatik olarak üzerine atanmaz.",
+    "de.disableReopenAssign": "Yeniden açılınca otomatik atamayı kapat",
+    "de.disableReopenAssignHelp": "Yeniden açılan talep, son atanan temsilciye otomatik verilmez.",
+
+    "de.secEmail": "Giden E-posta",
+    "de.outEmail": "E-posta adresi",
+    "de.outEmailHelp": "Bu departmanın yanıtları bu adresten gönderilir.",
+    "de.templateSet": "Şablon seti",
+    "de.templateSetHelp": "Bu departmanın otomatik e-postalarında kullanılacak set.",
+
+    "de.secAutoresp": "Otomatik Yanıt",
+    "de.arNewTicket": "Yeni talep otomatik yanıtını kapat",
+    "de.arNewTicketHelp": "Bu departmanda açılan taleplere \"talebiniz alındı\" e-postası gönderilmez.",
+    "de.arNewMessage": "Yeni mesaj onayını kapat",
+    "de.arNewMessageHelp": "Kullanıcının yeni mesajına alındı onayı gönderilmez.",
+    "de.arEmail": "Oto-yanıt e-postası",
+    "de.arEmailHelp": "Otomatik yanıtların gönderileceği adres.",
+
+    "de.secAlerts": "Uyarılar",
+    "de.alertGroup": "Uyarı alıcı grubu",
+    "de.alertGroupHelp": "Departmana gelen yeni talep uyarılarının gideceği grup.",
+    "de.agAll": "Tüm departman üyeleri",
+    "de.agManager": "Yalnızca yönetici",
+    "de.agMembersPrimary": "Üyeler + birincil üyeler",
+
+    "de.secSignature": "İmza",
+    "de.signatureHelp": "Yanıt e-postalarında %{signature} değişkeninin yerine geçer.",
+
+    "de.secMembers": "Departman Üyeleri",
+    "de.membersHelp": "Üyeler bu departmanın taleplerine erişir; rol, buradaki yetkilerini belirler.",
+    "de.colAgent": "Ad",
+    "de.colRole": "Rol",
+    "de.colAlerts": "Uyarılar",
+    "de.primaryBadge": "Birincil",
+    "de.addAgentPh": "Temsilci seç…",
+  },
+  en: {
+    "de.back": "← Departments",
+    "de.subtitle": "Department details, outgoing email, auto-responses, alerts, signature and member access.",
+    "de.tabSettings": "Settings",
+    "de.tabAccess": "Access",
+
+    "de.secGeneral": "General",
+    "de.parent": "Parent department",
+    "de.parentHelp": "This department sits under the selected department.",
+    "de.noParent": "— None (top-level) —",
+    "de.name": "Name",
+    "de.nameHelp": "The name shown in ticket routing and reports.",
+    "de.statusLabel": "Status",
+    "de.statusHelp": "New tickets cannot be routed to disabled/archived departments.",
+    "de.stActive": "Active",
+    "de.stDisabled": "Disabled",
+    "de.stArchived": "Archived",
+    "de.visibility": "Visibility",
+    "de.visibilityHelp": "Private departments are hidden on the user portal and in signatures.",
+    "de.visPublic": "Public",
+    "de.visPrivate": "Private",
+    "de.sla": "SLA plan",
+    "de.slaHelp": "The due-date plan applied to tickets in this department.",
+    "de.sysDefault": "System Default",
+    "de.schedule": "Schedule",
+    "de.scheduleHelp": "SLA timers run according to this schedule's business hours.",
+    "de.manager": "Manager",
+    "de.managerHelp": "The agent responsible for the department; receives manager alerts.",
+    "de.noManager": "— None —",
+    "de.assignMode": "Assignment mode",
+    "de.assignModeHelp": "Who can tickets in this department be assigned to?",
+    "de.amAll": "All agents",
+    "de.amMembers": "Department members only",
+    "de.amPrimary": "Primary members only",
+    "de.disableClaim": "Disable claim on reply",
+    "de.disableClaimHelp": "An unassigned ticket is not auto-assigned to the agent who replies.",
+    "de.disableReopenAssign": "Disable auto-assignment on reopen",
+    "de.disableReopenAssignHelp": "A reopened ticket is not automatically given to the last assigned agent.",
+
+    "de.secEmail": "Outgoing Email",
+    "de.outEmail": "Email address",
+    "de.outEmailHelp": "This department's replies are sent from this address.",
+    "de.templateSet": "Template set",
+    "de.templateSetHelp": "The set used for this department's automated emails.",
+
+    "de.secAutoresp": "Auto-Response",
+    "de.arNewTicket": "Disable new-ticket auto-response",
+    "de.arNewTicketHelp": "No \"we received your request\" email is sent for tickets opened in this department.",
+    "de.arNewMessage": "Disable new-message confirmation",
+    "de.arNewMessageHelp": "No receipt confirmation is sent for the user's new message.",
+    "de.arEmail": "Auto-response email",
+    "de.arEmailHelp": "The address automatic responses are sent from.",
+
+    "de.secAlerts": "Alerts",
+    "de.alertGroup": "Alert recipient group",
+    "de.alertGroupHelp": "The group that new-ticket alerts for this department go to.",
+    "de.agAll": "All department members",
+    "de.agManager": "Manager only",
+    "de.agMembersPrimary": "Members + primary members",
+
+    "de.secSignature": "Signature",
+    "de.signatureHelp": "Replaces the %{signature} variable in reply emails.",
+
+    "de.secMembers": "Department Members",
+    "de.membersHelp": "Members can access this department's tickets; the role defines their authority here.",
+    "de.colAgent": "Name",
+    "de.colRole": "Role",
+    "de.colAlerts": "Alerts",
+    "de.primaryBadge": "Primary",
+    "de.addAgentPh": "Select agent…",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="departments">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <p><a href="departments.html" data-i18n="de.back"></a></p>
+      <h1>Destek / Bordro</h1>
+      <p data-i18n="de.subtitle"></p>
+    </div>
+  </div>
+
+  <form>
+    <div class="rd-tabs" data-tabs data-tabs-scope="main">
+      <button type="button" class="active" data-tab="panel-settings" data-i18n="de.tabSettings"></button>
+      <button type="button" data-tab="panel-access" data-i18n="de.tabAccess"></button>
+    </div>
+
+    <!-- ============ Ayarlar ============ -->
+    <div class="rd-tab-panel active" id="panel-settings" data-tab-group="main">
+
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="de.secGeneral"></div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="de-parent" data-i18n="de.parent"></label>
+              <select id="de-parent" class="rd-control">
+                <option data-i18n="de.noParent"></option>
+                <option selected>Destek</option>
+                <option>Danışmanlık</option>
+              </select>
+              <p class="rd-help" data-i18n="de.parentHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="de-name" data-i18n="de.name"></label>
+              <input id="de-name" class="rd-control" type="text" value="Bordro">
+              <p class="rd-help" data-i18n="de.nameHelp"></p>
+            </div>
+          </div>
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="de-status" data-i18n="de.statusLabel"></label>
+              <select id="de-status" class="rd-control">
+                <option selected data-i18n="de.stActive"></option>
+                <option data-i18n="de.stDisabled"></option>
+                <option data-i18n="de.stArchived"></option>
+              </select>
+              <p class="rd-help" data-i18n="de.statusHelp"></p>
+            </div>
+            <div class="rd-field">
+              <span class="rd-label" data-i18n="de.visibility"></span>
+              <label class="rd-check" style="display:inline-flex;margin-right:18px;margin-top:10px">
+                <input type="radio" name="de-vis" checked><span data-i18n="de.visPublic"></span>
+              </label>
+              <label class="rd-check" style="display:inline-flex">
+                <input type="radio" name="de-vis"><span data-i18n="de.visPrivate"></span>
+              </label>
+              <p class="rd-help" data-i18n="de.visibilityHelp"></p>
+            </div>
+          </div>
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="de-sla" data-i18n="de.sla"></label>
+              <select id="de-sla" class="rd-control">
+                <option data-i18n="de.sysDefault"></option>
+                <option selected>Standart — 8 saat</option>
+                <option>VIP — 2 saat</option>
+              </select>
+              <p class="rd-help" data-i18n="de.slaHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="de-schedule" data-i18n="de.schedule"></label>
+              <select id="de-schedule" class="rd-control">
+                <option data-i18n="de.sysDefault"></option>
+                <option selected>Hafta içi 09:00–18:00</option>
+                <option>7/24</option>
+              </select>
+              <p class="rd-help" data-i18n="de.scheduleHelp"></p>
+            </div>
+          </div>
+          <div class="rd-grid-2">
+            <div class="rd-field mb-0">
+              <label class="rd-label" for="de-manager" data-i18n="de.manager"></label>
+              <select id="de-manager" class="rd-control">
+                <option data-i18n="de.noManager"></option>
+                <option selected>Ümit Akın</option>
+                <option>Merve Çetin</option>
+                <option>Deniz Kaya</option>
+              </select>
+              <p class="rd-help" data-i18n="de.managerHelp"></p>
+            </div>
+            <div class="rd-field mb-0">
+              <label class="rd-label" for="de-assign" data-i18n="de.assignMode"></label>
+              <select id="de-assign" class="rd-control">
+                <option data-i18n="de.amAll"></option>
+                <option selected data-i18n="de.amMembers"></option>
+                <option data-i18n="de.amPrimary"></option>
+              </select>
+              <p class="rd-help" data-i18n="de.assignModeHelp"></p>
+            </div>
+          </div>
+          <details class="rd-advanced">
+            <summary data-i18n="common.advanced"></summary>
+            <div class="rd-advanced-body">
+              <div class="rd-field">
+                <label class="rd-switch">
+                  <input type="checkbox">
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="de.disableClaim"></b>
+                    <small data-i18n="de.disableClaimHelp"></small>
+                  </span>
+                </label>
+              </div>
+              <div class="rd-field mb-0">
+                <label class="rd-switch">
+                  <input type="checkbox">
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="de.disableReopenAssign"></b>
+                    <small data-i18n="de.disableReopenAssignHelp"></small>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="de.secEmail"></div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-2">
+            <div class="rd-field mb-0">
+              <label class="rd-label" for="de-email" data-i18n="de.outEmail"></label>
+              <select id="de-email" class="rd-control">
+                <option data-i18n="de.sysDefault"></option>
+                <option selected>bordro@rapidsol.com.tr</option>
+                <option>destek@rapidsol.com.tr</option>
+                <option>bilgi@rapidsol.com.tr</option>
+              </select>
+              <p class="rd-help" data-i18n="de.outEmailHelp"></p>
+            </div>
+            <div class="rd-field mb-0">
+              <label class="rd-label" for="de-template" data-i18n="de.templateSet"></label>
+              <select id="de-template" class="rd-control">
+                <option data-i18n="de.sysDefault"></option>
+                <option selected>Varsayılan (TR)</option>
+                <option>English Set (EN)</option>
+              </select>
+              <p class="rd-help" data-i18n="de.templateSetHelp"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="de.secAutoresp"></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="de.arNewTicket"></b>
+                <small data-i18n="de.arNewTicketHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="de.arNewMessage"></b>
+                <small data-i18n="de.arNewMessageHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field mb-0" style="max-width:380px">
+            <label class="rd-label" for="de-ar-email" data-i18n="de.arEmail"></label>
+            <select id="de-ar-email" class="rd-control">
+              <option data-i18n="de.sysDefault"></option>
+              <option selected>bordro@rapidsol.com.tr</option>
+              <option>destek@rapidsol.com.tr</option>
+            </select>
+            <p class="rd-help" data-i18n="de.arEmailHelp"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="de.secAlerts"></div>
+        <div class="rd-surface-body">
+          <div class="rd-field mb-0" style="max-width:380px">
+            <label class="rd-label" for="de-alert-group" data-i18n="de.alertGroup"></label>
+            <select id="de-alert-group" class="rd-control">
+              <option selected data-i18n="de.agAll"></option>
+              <option data-i18n="de.agManager"></option>
+              <option data-i18n="de.agMembersPrimary"></option>
+            </select>
+            <p class="rd-help" data-i18n="de.alertGroupHelp"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface">
+        <div class="rd-surface-head" data-i18n="de.secSignature"></div>
+        <div class="rd-surface-body">
+          <div class="rd-field mb-0">
+            <textarea class="rd-control" style="min-height:90px">RapidSol Bordro Ekibi
+bordro@rapidsol.com.tr · 0212 555 24 80</textarea>
+            <p class="rd-help" data-i18n="de.signatureHelp"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Erişim ============ -->
+    <div class="rd-tab-panel" id="panel-access" data-tab-group="main">
+      <div class="rd-surface">
+        <div class="rd-surface-head">
+          <span data-i18n="de.secMembers"></span>
+          <small class="rd-muted" data-i18n="de.membersHelp"></small>
+          <span class="spacer"></span>
+          <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-i18n="common.export"></button>
+        </div>
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th data-i18n="de.colAgent"></th>
+              <th data-i18n="de.colRole"></th>
+              <th data-i18n="de.colAlerts"></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span style="display:inline-flex;align-items:center;gap:10px">
+                  <span class="rd-avatar">ÜA</span> Ümit Akın
+                  <span class="rd-badge-inherited" data-i18n="de.primaryBadge"></span>
+                </span>
+              </td>
+              <td>
+                <select class="rd-control" style="max-width:200px">
+                  <option selected>Yönetici</option>
+                  <option>Kıdemli Temsilci</option>
+                  <option>Temsilci</option>
+                  <option>Salt Okunur</option>
+                </select>
+              </td>
+              <td><label class="rd-check"><input type="checkbox" checked><span data-i18n="de.colAlerts"></span></label></td>
+              <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-i18n-title="common.delete">✕</button></td>
+            </tr>
+            <tr>
+              <td>
+                <span style="display:inline-flex;align-items:center;gap:10px">
+                  <span class="rd-avatar">DK</span> Deniz Kaya
+                </span>
+              </td>
+              <td>
+                <select class="rd-control" style="max-width:200px">
+                  <option>Yönetici</option>
+                  <option>Kıdemli Temsilci</option>
+                  <option selected>Temsilci</option>
+                  <option>Salt Okunur</option>
+                </select>
+              </td>
+              <td><label class="rd-check"><input type="checkbox"><span data-i18n="de.colAlerts"></span></label></td>
+              <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-i18n-title="common.delete">✕</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+          <div style="display:flex;gap:9px;max-width:380px">
+            <select class="rd-control">
+              <option selected data-i18n="de.addAgentPh"></option>
+              <option>Merve Çetin</option>
+              <option>Zeynep Arslan</option>
+            </select>
+            <button type="button" class="rd-btn" data-i18n="common.add"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="rd-btn-primary" data-i18n="common.save"></button>
+      <a class="rd-btn" href="departments.html" data-i18n="common.cancel"></a>
+    </div>
+  </form>
+
+</main>
+</body>
+</html>

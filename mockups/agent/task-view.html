@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Görev T-2041</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "tav.back": "← Görevler",
+    "tav.close": "Kapat",
+    "tav.assign": "Ata",
+    "tav.transfer": "Aktar",
+    "tav.info": "Görev Bilgileri",
+    "tav.due": "Son Tarih",
+    "tav.dept": "Departman",
+    "tav.assignee": "Atanan",
+    "tav.ticket": "İlgili Talep",
+    "tav.thread": "Yazışmalar",
+    "tav.noteBadge": "İç Not",
+    "tav.addNote": "Not Ekle",
+    "tav.notePh": "Yalnızca temsilcilerin göreceği bir not yazın…",
+    "tav.addNoteBtn": "Notu Ekle",
+  },
+  en: {
+    "tav.back": "← Tasks",
+    "tav.close": "Close",
+    "tav.assign": "Assign",
+    "tav.transfer": "Transfer",
+    "tav.info": "Task Details",
+    "tav.due": "Due Date",
+    "tav.dept": "Department",
+    "tav.assignee": "Assigned To",
+    "tav.ticket": "Related Ticket",
+    "tav.thread": "Thread",
+    "tav.noteBadge": "Internal Note",
+    "tav.addNote": "Add Note",
+    "tav.notePh": "Write a note visible to agents only…",
+    "tav.addNoteBtn": "Add Note",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="tasks">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <a href="tasks.html" class="text-sm" data-i18n="tav.back"></a>
+      <h1 style="margin-top:6px">T-2041 · Bordro parametre güncellemesi
+        <span class="rd-pill rd-pill-open" style="vertical-align:middle;margin-left:8px" data-i18n="status.open"></span>
+      </h1>
+      <p>Oluşturulma: 7 Ağustos 2026 14:20 · Ümit Y. Akın</p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn" data-i18n="tav.close"></button>
+      <button class="rd-btn" data-i18n="tav.assign"></button>
+      <button class="rd-btn" data-i18n="tav.transfer"></button>
+      <button class="rd-btn rd-btn-ghost" data-i18n="common.edit"></button>
+      <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+    </div>
+  </div>
+
+  <div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-head" data-i18n="tav.info"></div>
+    <div class="rd-surface-body">
+      <div class="rd-grid-2">
+        <div class="bo-def">
+          <div class="row">
+            <span data-i18n="common.status"></span>
+            <span><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></span>
+          </div>
+          <div class="row">
+            <span data-i18n="common.created"></span>
+            <span>7 Ağustos 2026 14:20</span>
+          </div>
+          <div class="row">
+            <span data-i18n="tav.due"></span>
+            <span>15 Ağustos 2026</span>
+          </div>
+        </div>
+        <div class="bo-def">
+          <div class="row">
+            <span data-i18n="tav.dept"></span>
+            <span>Bordro</span>
+          </div>
+          <div class="row">
+            <span data-i18n="tav.assignee"></span>
+            <span>Ümit Y. Akın</span>
+          </div>
+          <div class="row">
+            <span data-i18n="tav.ticket"></span>
+            <span><a href="ticket-view.html">R716555 · Yol ücreti hatası hakkında</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="margin-bottom:12px" data-i18n="tav.thread"></h2>
+
+  <div class="bo-thread-entry">
+    <div class="head">
+      <div class="rd-avatar">ÜA</div>
+      <b>Ümit Yaşar Akın</b>
+      <time>7 Ağu 14:22</time>
+    </div>
+    <div class="body">
+      Temmuz dönemi yol ücreti katsayısı 2026 ikinci yarıyıl tarifesine göre güncellenecek.
+      Parametre tablosundaki mevcut değerleri yedekledim; test ortamında yeni katsayıyla
+      örnek bordro çalıştırıp sonucu bu göreve ekleyeceğim.
+    </div>
+  </div>
+
+  <div class="bo-thread-entry is-note">
+    <div class="head">
+      <div class="rd-avatar">MÇ</div>
+      <b>Merve Çetin</b>
+      <span class="rd-pill rd-pill-wait" data-i18n="tav.noteBadge"></span>
+      <time>10 Ağu 09:47</time>
+    </div>
+    <div class="body">
+      Kullanıcı tarafı efor onayını verdi (6 saat). Canlıya geçişten önce Ulaşım A.Ş.
+      İK ekibine bilgilendirme e-postası gitmesi gerekiyor — şablonu hazır yanıtlardan
+      kullanabiliriz.
+    </div>
+  </div>
+
+  <div class="rd-surface" style="margin-top:20px">
+    <div class="rd-surface-head" data-i18n="tav.addNote"></div>
+    <form class="rd-surface-body">
+      <div class="rd-field">
+        <textarea class="rd-control" data-i18n-placeholder="tav.notePh"></textarea>
+        <div class="rd-help" data-i18n="common.notesHelp"></div>
+      </div>
+      <button type="submit" class="rd-btn-primary" data-i18n="tav.addNoteBtn"></button>
+    </form>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Yeni Talep</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "open.title": "Yeni destek talebi",
+    "open.sub": "Doğru ekibe hızlıca yönlendirebilmemiz için aşağıdaki bilgileri doldurun.",
+    "open.step1": "Konu",
+    "open.step2": "Detaylar",
+    "open.step3": "Ekler",
+    "open.customer": "Müşteri",
+    "open.topic": "Yardım konusu",
+    "open.topicHelp": "Konu seçimi talebi doğru ekibe yönlendirir.",
+    "open.topicSelect": "Konu seçin",
+    "open.topicChange": "Yeni düzenleme",
+    "open.topicBug": "Hata / sorun",
+    "open.topicConsult": "Danışmanlık",
+    "open.topicLegal": "Yasal değişiklik",
+    "open.summary": "Talep özeti",
+    "open.summaryPh": "Örn. Temmuz bordrosunda yol ücreti farkı oluşuyor",
+    "open.priority": "Öncelik",
+    "open.prNormal": "Normal",
+    "open.prHigh": "Yüksek",
+    "open.prCritical": "Kritik — çalışma durdu",
+    "open.reference": "İlgili kayıt / referans",
+    "open.referencePh": "Personel no, işlem no veya modül adı (isteğe bağlı)",
+    "open.details": "Talep detayları",
+    "open.detailsPh": "Sorunu, beklediğiniz sonucu ve varsa örnek personel/işlem numarasını paylaşın…",
+    "open.upload": "Dosyaları buraya sürükleyin veya bilgisayarınızdan seçin",
+    "open.eta": "Tahmini ilk yanıt: 2 saat içinde",
+    "open.submit": "Talebi oluştur →",
+    "open.tipsTitle": "Daha hızlı çözüm için",
+    "open.tip1": "İlgili personel veya işlem numarasını ekleyin.",
+    "open.tip2": "Hatanın oluştuğu ekranı ve adımları belirtin.",
+    "open.tip3": "Kişisel veri içeren dosyaları maskeleyin.",
+    "open.notice": "Talebiniz oluşturulduğunda sistem kayıt numarasını otomatik üretecek ve tüm güncellemeler e-posta ile bildirilecektir.",
+  },
+  en: {
+    "open.title": "New support request",
+    "open.sub": "Fill in the details below so we can route your request to the right team quickly.",
+    "open.step1": "Topic",
+    "open.step2": "Details",
+    "open.step3": "Attachments",
+    "open.customer": "Customer",
+    "open.topic": "Help topic",
+    "open.topicHelp": "Choosing a topic routes the request to the right team.",
+    "open.topicSelect": "Select a topic",
+    "open.topicChange": "New adjustment",
+    "open.topicBug": "Bug / issue",
+    "open.topicConsult": "Consulting",
+    "open.topicLegal": "Legal change",
+    "open.summary": "Request summary",
+    "open.summaryPh": "E.g. Commute allowance differs on the July payroll",
+    "open.priority": "Priority",
+    "open.prNormal": "Normal",
+    "open.prHigh": "High",
+    "open.prCritical": "Critical — work stopped",
+    "open.reference": "Related record / reference",
+    "open.referencePh": "Employee no, transaction no or module name (optional)",
+    "open.details": "Request details",
+    "open.detailsPh": "Describe the problem, the outcome you expect and any sample employee/transaction numbers…",
+    "open.upload": "Drag files here or choose from your computer",
+    "open.eta": "Estimated first response: within 2 hours",
+    "open.submit": "Create request →",
+    "open.tipsTitle": "For a faster resolution",
+    "open.tip1": "Include the related employee or transaction number.",
+    "open.tip2": "Mention the screen where the error occurs and the steps.",
+    "open.tip3": "Mask files containing personal data.",
+    "open.notice": "When your request is created the system will generate a tracking number automatically and every update will be emailed to you.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal" data-nav="new">
+<div id="rd-header"></div>
+
+<main class="rc-main">
+  <div class="rc-heading">
+    <div>
+      <h1 data-i18n="open.title"></h1>
+      <p data-i18n="open.sub"></p>
+    </div>
+  </div>
+
+  <div class="rc-form-layout">
+    <form class="rc-form">
+      <div class="rc-form-grid">
+        <div class="rc-form-step"><span class="rc-step-icon">1</span><span data-i18n="open.step1"></span></div>
+
+        <div>
+          <label class="rc-label" for="rc-company" data-i18n="open.customer"></label>
+          <input id="rc-company" class="rc-control" value="RapidSol" readonly>
+        </div>
+        <div>
+          <label class="rc-label" for="rc-topic" data-i18n="open.topic"></label>
+          <select id="rc-topic" class="rc-control">
+            <option value="" data-i18n="open.topicSelect"></option>
+            <option data-i18n="open.topicChange"></option>
+            <option data-i18n="open.topicBug"></option>
+            <option data-i18n="open.topicConsult"></option>
+            <option data-i18n="open.topicLegal"></option>
+          </select>
+          <div class="rd-help" data-i18n="open.topicHelp"></div>
+        </div>
+        <div>
+          <label class="rc-label" for="rc-summary" data-i18n="open.summary"></label>
+          <input id="rc-summary" class="rc-control" data-i18n-placeholder="open.summaryPh">
+        </div>
+
+        <div class="rc-form-step"><span class="rc-step-icon">2</span><span data-i18n="open.step2"></span></div>
+
+        <div>
+          <label class="rc-label" for="rc-priority" data-i18n="open.priority"></label>
+          <select id="rc-priority" class="rc-control">
+            <option data-i18n="open.prNormal"></option>
+            <option data-i18n="open.prHigh"></option>
+            <option data-i18n="open.prCritical"></option>
+          </select>
+        </div>
+        <div>
+          <label class="rc-label" for="rc-reference" data-i18n="open.reference"></label>
+          <input id="rc-reference" class="rc-control" data-i18n-placeholder="open.referencePh">
+        </div>
+        <div>
+          <label class="rc-label" for="rc-details" data-i18n="open.details"></label>
+          <textarea id="rc-details" class="rc-control" data-i18n-placeholder="open.detailsPh"></textarea>
+        </div>
+
+        <div class="rc-form-step"><span class="rc-step-icon">3</span><span data-i18n="open.step3"></span></div>
+
+        <label class="rc-upload" for="rc-new-files">
+          <span data-i18n="open.upload"></span>
+          <input id="rc-new-files" type="file" multiple hidden>
+        </label>
+      </div>
+
+      <div class="rc-form-footer">
+        <small data-i18n="open.eta"></small>
+        <button class="rc-button-primary" data-i18n="open.submit"></button>
+      </div>
+    </form>
+
+    <aside class="rc-surface">
+      <div class="rc-aside-block">
+        <h3 data-i18n="open.tipsTitle"></h3>
+        <div class="rc-aside-tip"><span>✓</span><div data-i18n="open.tip1"></div></div>
+        <div class="rc-aside-tip"><span>✓</span><div data-i18n="open.tip2"></div></div>
+        <div class="rc-aside-tip"><span>✓</span><div data-i18n="open.tip3"></div></div>
+        <div class="rc-notice" data-i18n="open.notice"></div>
+      </div>
+    </aside>
+  </div>
+</main>
+</body>
+</html>

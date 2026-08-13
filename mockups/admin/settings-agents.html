@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Temsilci Ayarları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "sa.title": "Temsilci Ayarları",
+    "sa.subtitle": "Temsilcilerin görünümü, kimlik doğrulama kuralları ve temsilcilere gönderilen şablon içerikleri.",
+    "sa.secGeneral": "Genel",
+    "sa.secAuth": "Kimlik Doğrulama",
+    "sa.secTemplates": "Şablonlar",
+
+    "sa.nameFormat": "Ad biçimi",
+    "sa.nameFormatHelp": "Temsilci adlarının kullanıcılara ve listelerde nasıl görüneceği.",
+    "sa.nfFull": "Ad Soyad",
+    "sa.nfLastFirst": "Soyad, Ad",
+    "sa.nfShort": "Ad S.",
+    "sa.nfUsername": "Kullanıcı adı",
+    "sa.masking": "Kimlik maskeleme",
+    "sa.maskingHelp": "Kullanıcı temsilci adını görmez; bunun yerine departman veya takma ad gösterilir.",
+    "sa.avatarSource": "Avatar kaynağı",
+    "sa.avatarSourceHelp": "Yazışmalarda temsilci avatarlarının nereden üretileceği.",
+    "sa.avInitials": "Baş harfler (yerel)",
+    "sa.avGravatar": "Gravatar",
+    "sa.blockCollab": "Temsilci katılımcıları engelle",
+    "sa.blockCollabHelp": "Temsilci e-posta adresleri taleplere katılımcı olarak eklenemez; iç yazışma karışıklığını önler.",
+
+    "sa.pwPolicy": "Parola politikası",
+    "sa.pwPolicyHelp": "Temsilci parolalarının karşılaması gereken asgari kurallar.",
+    "sa.pwNone": "Yok",
+    "sa.pwBasic": "Temel — en az 8 karakter",
+    "sa.pwStrong": "Güçlü — harf, rakam ve simge",
+    "sa.pwReset": "Parola sıfırlamaya izin ver",
+    "sa.pwResetHelp": "Temsilciler 'parolamı unuttum' bağlantısıyla e-posta üzerinden sıfırlama yapabilir.",
+    "sa.resetWindow": "Sıfırlama penceresi (dakika)",
+    "sa.resetWindowHelp": "Sıfırlama bağlantısının geçerli kalacağı süre.",
+    "sa.twofa": "2FA zorunlu",
+    "sa.twofaHelp": "Tüm temsilciler girişte ikinci doğrulama adımı (e-posta kodu) kullanmak zorundadır.",
+    "sa.maxAttempts": "En fazla giriş denemesi",
+    "sa.maxAttemptsHelp": "Bu sayıda hatalı denemeden sonra hesap geçici olarak kilitlenir.",
+    "sa.lockDuration": "Kilit süresi",
+    "sa.lockDurationHelp": "Kilitlenen hesabın yeniden denemeden önce bekleyeceği süre.",
+    "sa.sessionTimeout": "Oturum zaman aşımı (dakika)",
+    "sa.sessionTimeoutHelp": "Bu süre boyunca işlem yapılmayan oturum kapatılır. 0 = sınırsız.",
+    "sa.ipBinding": "Oturumu IP'ye bağla",
+    "sa.ipBindingHelp": "Oturum yalnızca açıldığı IP adresinden kullanılabilir; çalıntı çerezleri etkisiz kılar.",
+    "sa.min15": "15 dakika",
+    "sa.min30": "30 dakika",
+    "sa.hour1": "1 saat",
+
+    "sa.tplHelp": "Temsilcilere gönderilen sistem içeriklerini iki dilde düzenleyin.",
+    "sa.tplWelcome": "Hoş Geldin E-postası",
+    "sa.tplWelcomeHelp": "Yeni temsilci hesabı açıldığında gönderilir.",
+    "sa.tplBanner": "Giriş Bandosu",
+    "sa.tplBannerHelp": "Temsilci giriş sayfasında gösterilen duyuru metni.",
+    "sa.tplPwreset": "Parola Sıfırlama",
+    "sa.tplPwresetHelp": "Parola sıfırlama bağlantısını içeren e-posta.",
+    "sa.tpl2fa": "2FA E-postası",
+    "sa.tpl2faHelp": "Giriş doğrulama kodunu içeren e-posta.",
+    "sa.dlgTitle": "Şablonu düzenle",
+    "sa.dlgName": "Ad",
+    "sa.dlgContent": "İçerik",
+    "sa.dlgContentHelp": "%{staff.name}, %{link} gibi değişkenler gönderim sırasında doldurulur.",
+  },
+  en: {
+    "sa.title": "Agent Settings",
+    "sa.subtitle": "How agents appear, authentication rules, and the template content sent to agents.",
+    "sa.secGeneral": "General",
+    "sa.secAuth": "Authentication",
+    "sa.secTemplates": "Templates",
+
+    "sa.nameFormat": "Name format",
+    "sa.nameFormatHelp": "How agent names appear to users and in lists.",
+    "sa.nfFull": "First Last",
+    "sa.nfLastFirst": "Last, First",
+    "sa.nfShort": "First L.",
+    "sa.nfUsername": "Username",
+    "sa.masking": "Identity masking",
+    "sa.maskingHelp": "Users do not see the agent's real name; the department or an alias is shown instead.",
+    "sa.avatarSource": "Avatar source",
+    "sa.avatarSourceHelp": "Where agent avatars on threads are generated from.",
+    "sa.avInitials": "Initials (local)",
+    "sa.avGravatar": "Gravatar",
+    "sa.blockCollab": "Block agent participants",
+    "sa.blockCollabHelp": "Agent email addresses cannot be added to tickets as participants; avoids internal-mail loops.",
+
+    "sa.pwPolicy": "Password policy",
+    "sa.pwPolicyHelp": "Minimum rules agent passwords must satisfy.",
+    "sa.pwNone": "None",
+    "sa.pwBasic": "Basic — at least 8 characters",
+    "sa.pwStrong": "Strong — letters, digits and symbols",
+    "sa.pwReset": "Allow password resets",
+    "sa.pwResetHelp": "Agents can reset via email using the 'forgot my password' link.",
+    "sa.resetWindow": "Reset window (minutes)",
+    "sa.resetWindowHelp": "How long the reset link stays valid.",
+    "sa.twofa": "Require 2FA",
+    "sa.twofaHelp": "All agents must use a second verification step (email code) at sign-in.",
+    "sa.maxAttempts": "Maximum login attempts",
+    "sa.maxAttemptsHelp": "After this many failed attempts the account is locked temporarily.",
+    "sa.lockDuration": "Lockout duration",
+    "sa.lockDurationHelp": "How long a locked account waits before retrying.",
+    "sa.sessionTimeout": "Session timeout (minutes)",
+    "sa.sessionTimeoutHelp": "Idle sessions are signed out after this long. 0 = unlimited.",
+    "sa.ipBinding": "Bind session to IP",
+    "sa.ipBindingHelp": "A session only works from the IP it was opened on; neutralizes stolen cookies.",
+    "sa.min15": "15 minutes",
+    "sa.min30": "30 minutes",
+    "sa.hour1": "1 hour",
+
+    "sa.tplHelp": "Edit the system content sent to agents, in both languages.",
+    "sa.tplWelcome": "Welcome Email",
+    "sa.tplWelcomeHelp": "Sent when a new agent account is created.",
+    "sa.tplBanner": "Sign-in Banner",
+    "sa.tplBannerHelp": "The announcement text shown on the agent sign-in page.",
+    "sa.tplPwreset": "Password Reset",
+    "sa.tplPwresetHelp": "The email containing the password reset link.",
+    "sa.tpl2fa": "2FA Email",
+    "sa.tpl2faHelp": "The email containing the sign-in verification code.",
+    "sa.dlgTitle": "Edit template",
+    "sa.dlgName": "Name",
+    "sa.dlgContent": "Content",
+    "sa.dlgContentHelp": "Variables such as %{staff.name} and %{link} are filled in at send time.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="settings-agents">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main">
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="sa.title"></h1>
+      <p data-i18n="sa.subtitle"></p>
+    </div>
+  </div>
+
+  <div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+      <a href="#sec-general" class="active" data-i18n="sa.secGeneral"></a>
+      <a href="#sec-auth" data-i18n="sa.secAuth"></a>
+      <a href="#sec-templates" data-i18n="sa.secTemplates"></a>
+    </nav>
+
+    <form class="bo-settings-sections">
+
+      <section class="rd-surface bo-section" id="sec-general">
+        <div class="rd-surface-head"><span data-i18n="sa.secGeneral"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="ag-nameformat" data-i18n="sa.nameFormat"></label>
+            <select id="ag-nameformat" class="rd-control" style="max-width:340px">
+              <option selected data-i18n="sa.nfFull"></option>
+              <option data-i18n="sa.nfLastFirst"></option>
+              <option data-i18n="sa.nfShort"></option>
+              <option data-i18n="sa.nfUsername"></option>
+            </select>
+            <div class="rd-help" data-i18n="sa.nameFormatHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="sa.masking"></b>
+                <small data-i18n="sa.maskingHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="ag-avatar" data-i18n="sa.avatarSource"></label>
+            <select id="ag-avatar" class="rd-control" style="max-width:340px">
+              <option selected data-i18n="sa.avInitials"></option>
+              <option data-i18n="sa.avGravatar"></option>
+            </select>
+            <div class="rd-help" data-i18n="sa.avatarSourceHelp"></div>
+          </div>
+          <div class="rd-field mb-0">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="sa.blockCollab"></b>
+                <small data-i18n="sa.blockCollabHelp"></small>
+              </span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-auth">
+        <div class="rd-surface-head"><span data-i18n="sa.secAuth"></span></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <label class="rd-label" for="ag-pwpolicy" data-i18n="sa.pwPolicy"></label>
+            <select id="ag-pwpolicy" class="rd-control" style="max-width:340px">
+              <option data-i18n="sa.pwNone"></option>
+              <option data-i18n="sa.pwBasic"></option>
+              <option selected data-i18n="sa.pwStrong"></option>
+            </select>
+            <div class="rd-help" data-i18n="sa.pwPolicyHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="sa.pwReset"></b>
+                <small data-i18n="sa.pwResetHelp"></small>
+              </span>
+            </label>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="ag-resetwindow" data-i18n="sa.resetWindow"></label>
+            <input id="ag-resetwindow" class="rd-control" type="number" min="5" value="30" style="max-width:220px">
+            <div class="rd-help" data-i18n="sa.resetWindowHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-switch">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy">
+                <b data-i18n="sa.twofa"></b>
+                <small data-i18n="sa.twofaHelp"></small>
+              </span>
+            </label>
+          </div>
+
+          <details class="rd-advanced">
+            <summary data-i18n="common.advanced"></summary>
+            <div class="rd-advanced-body">
+              <div class="rd-grid-2">
+                <div class="rd-field">
+                  <label class="rd-label" for="ag-maxattempts" data-i18n="sa.maxAttempts"></label>
+                  <select id="ag-maxattempts" class="rd-control">
+                    <option>3</option>
+                    <option selected>5</option>
+                    <option>10</option>
+                  </select>
+                  <div class="rd-help" data-i18n="sa.maxAttemptsHelp"></div>
+                </div>
+                <div class="rd-field">
+                  <label class="rd-label" for="ag-lockduration" data-i18n="sa.lockDuration"></label>
+                  <select id="ag-lockduration" class="rd-control">
+                    <option data-i18n="sa.min15"></option>
+                    <option selected data-i18n="sa.min30"></option>
+                    <option data-i18n="sa.hour1"></option>
+                  </select>
+                  <div class="rd-help" data-i18n="sa.lockDurationHelp"></div>
+                </div>
+              </div>
+              <div class="rd-field">
+                <label class="rd-label" for="ag-session" data-i18n="sa.sessionTimeout"></label>
+                <input id="ag-session" class="rd-control" type="number" min="0" value="120" style="max-width:220px">
+                <div class="rd-help" data-i18n="sa.sessionTimeoutHelp"></div>
+              </div>
+              <div class="rd-field mb-0">
+                <label class="rd-switch">
+                  <input type="checkbox">
+                  <span class="track"></span>
+                  <span class="rd-switch-copy">
+                    <b data-i18n="sa.ipBinding"></b>
+                    <small data-i18n="sa.ipBindingHelp"></small>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="rd-surface bo-section" id="sec-templates">
+        <div class="rd-surface-head"><span data-i18n="sa.secTemplates"></span></div>
+        <div class="rd-surface-body">
+          <p class="rd-help" style="margin:0 0 12px" data-i18n="sa.tplHelp"></p>
+          <div class="bo-def">
+            <div class="row">
+              <span data-i18n="sa.tplWelcome"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="sa.tplWelcomeHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+            <div class="row">
+              <span data-i18n="sa.tplBanner"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="sa.tplBannerHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+            <div class="row">
+              <span data-i18n="sa.tplPwreset"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="sa.tplPwresetHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+            <div class="row">
+              <span data-i18n="sa.tpl2fa"></span>
+              <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                <span class="rd-help" style="margin:0" data-i18n="sa.tpl2faHelp"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl" data-i18n="common.edit"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<dialog class="rd-dialog" id="dlg-tpl">
+  <div class="rd-dialog-head">
+    <span data-i18n="sa.dlgTitle"></span>
+    <button class="close" data-dialog-close aria-label="Close">✕</button>
+  </div>
+  <div class="rd-dialog-body">
+    <div class="rd-field">
+      <label class="rd-label" for="tpl-name" data-i18n="sa.dlgName"></label>
+      <input id="tpl-name" class="rd-control" value="Hoş Geldin E-postası">
+    </div>
+    <div class="rd-field mb-0">
+      <span class="rd-label" data-i18n="sa.dlgContent"></span>
+      <div class="rd-tabs" data-tabs data-tabs-scope="tpl" style="margin-bottom:12px">
+        <button type="button" class="active" data-tab="tpl-tr">Türkçe</button>
+        <button type="button" data-tab="tpl-en">English</button>
+      </div>
+      <div class="rd-tab-panel active" id="tpl-tr" data-tab-group="tpl">
+        <textarea class="rd-control">Merhaba %{staff.name},
+
+RapidsolDestek temsilci hesabınız oluşturuldu. Giriş bilgilerinizi belirlemek için bağlantıya tıklayın: %{link}</textarea>
+      </div>
+      <div class="rd-tab-panel" id="tpl-en" data-tab-group="tpl">
+        <textarea class="rd-control">Hello %{staff.name},
+
+Your RapidsolDestek agent account has been created. Click the link to set your credentials: %{link}</textarea>
+      </div>
+      <div class="rd-help" data-i18n="sa.dlgContentHelp"></div>
+    </div>
+  </div>
+  <div class="rd-dialog-foot">
+    <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+    <button class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+  </div>
+</dialog>
+</body>
+</html>

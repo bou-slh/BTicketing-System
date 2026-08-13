@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: rapidsoldestek
+      POSTGRES_USER: rapidsol
+      POSTGRES_PASSWORD: rapidsol-dev  # dev only; overridden outside local
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rapidsol -d rapidsoldestek"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  web:
+    build:
+      context: .
+      dockerfile: src/RapidsolDestek.Web/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Default: Host=db;Database=rapidsoldestek;Username=rapidsol;Password=rapidsol-dev
+    ports:
+      - "8080:8080"
+
+volumes:
+  dbdata:

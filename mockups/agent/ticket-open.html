@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Yeni Talep Aç</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "to.title": "Yeni Talep Aç",
+    "to.sub": "Kullanıcı adına yeni bir destek talebi oluşturun.",
+    "to.secUser": "Kullanıcı",
+    "to.secInfo": "Talep Bilgileri",
+    "to.secSubject": "Konu ve Detaylar",
+    "to.secFirst": "İlk yanıt ve iç not",
+    "to.userSearch": "Kullanıcı ara",
+    "to.userSearchPh": "Ad, e-posta veya telefon ile arayın…",
+    "to.newUser": "＋ Yeni Kullanıcı",
+    "to.cc": "CC katılımcılar",
+    "to.ccPh": "E-posta adreslerini virgülle ayırarak ekleyin…",
+    "to.notify": "Bildirim",
+    "to.notifyAll": "Tümüne bildirim gönder",
+    "to.notifyUser": "Sadece kullanıcıya",
+    "to.notifyNone": "Bildirim gönderme",
+    "to.source": "Kaynak",
+    "to.srcPhone": "Telefon",
+    "to.srcEmail": "E-posta",
+    "to.srcWeb": "Web",
+    "to.srcOther": "Diğer",
+    "to.topic": "Yardım Konusu",
+    "to.dept": "Departman",
+    "to.sla": "SLA Planı",
+    "to.due": "Son Tarih",
+    "to.assign": "Ata",
+    "to.select": "— Seçin —",
+    "to.summary": "Talep özeti",
+    "to.summaryPh": "Sorunu tek cümleyle özetleyin…",
+    "to.priority": "Öncelik",
+    "to.details": "Detaylar",
+    "to.detailsPh": "Sorunun ayrıntılarını yazın…",
+    "to.upload": "Dosyaları buraya sürükleyin veya seçmek için tıklayın",
+    "to.canned": "Hazır Yanıt",
+    "to.cannedPh": "Hazır yanıt seç",
+    "to.replyLabel": "İlk yanıt",
+    "to.replyPh": "Kullanıcıya gönderilecek ilk yanıtı yazın (isteğe bağlı)…",
+    "to.signature": "İmza",
+    "to.sigNone": "Yok",
+    "to.sigMine": "İmzam",
+    "to.sigDept": "Departman İmzası",
+    "to.note": "İç not",
+    "to.notePh": "Yalnızca temsilcilerin göreceği bir not ekleyin (isteğe bağlı)…",
+    "to.open": "Talebi Aç",
+  },
+  en: {
+    "to.title": "Open New Ticket",
+    "to.sub": "Create a new support ticket on behalf of a user.",
+    "to.secUser": "User",
+    "to.secInfo": "Ticket Information",
+    "to.secSubject": "Subject and Details",
+    "to.secFirst": "First response and internal note",
+    "to.userSearch": "Search user",
+    "to.userSearchPh": "Search by name, email or phone…",
+    "to.newUser": "＋ New User",
+    "to.cc": "CC collaborators",
+    "to.ccPh": "Add email addresses separated by commas…",
+    "to.notify": "Notification",
+    "to.notifyAll": "Notify everyone",
+    "to.notifyUser": "User only",
+    "to.notifyNone": "Do not notify",
+    "to.source": "Source",
+    "to.srcPhone": "Phone",
+    "to.srcEmail": "Email",
+    "to.srcWeb": "Web",
+    "to.srcOther": "Other",
+    "to.topic": "Help Topic",
+    "to.dept": "Department",
+    "to.sla": "SLA Plan",
+    "to.due": "Due Date",
+    "to.assign": "Assign To",
+    "to.select": "— Select —",
+    "to.summary": "Issue summary",
+    "to.summaryPh": "Summarize the issue in one sentence…",
+    "to.priority": "Priority",
+    "to.details": "Details",
+    "to.detailsPh": "Describe the issue in detail…",
+    "to.upload": "Drag files here or click to choose",
+    "to.canned": "Canned Response",
+    "to.cannedPh": "Select a canned response",
+    "to.replyLabel": "First response",
+    "to.replyPh": "Write the first response to send to the user (optional)…",
+    "to.signature": "Signature",
+    "to.sigNone": "None",
+    "to.sigMine": "My Signature",
+    "to.sigDept": "Department Signature",
+    "to.note": "Internal note",
+    "to.notePh": "Add a note visible to agents only (optional)…",
+    "to.open": "Open Ticket",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="tickets">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main" style="max-width:880px">
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="to.title"></h1>
+      <p data-i18n="to.sub"></p>
+    </div>
+  </div>
+
+  <form style="display:flex;flex-direction:column;gap:20px">
+
+    <!-- 1. User -->
+    <div class="rd-surface">
+      <div class="rd-surface-head" data-i18n="to.secUser"></div>
+      <div class="rd-surface-body">
+        <div class="rd-field">
+          <label class="rd-label" data-i18n="to.userSearch"></label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <input class="rd-control" style="flex:1;min-width:220px" data-i18n-placeholder="to.userSearchPh" value="Bourla Salehi — bourla.salehi@ulasim.com.tr">
+            <button type="button" class="rd-btn rd-btn-ghost" data-i18n="to.newUser"></button>
+          </div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" data-i18n="to.cc"></label>
+          <input class="rd-control" data-i18n-placeholder="to.ccPh" value="ik@ulasim.com.tr">
+        </div>
+        <div class="rd-field" style="margin-bottom:0">
+          <span class="rd-label" data-i18n="to.notify"></span>
+          <div style="display:flex;flex-wrap:wrap;gap:9px 22px">
+            <label class="rd-check"><input type="radio" name="notify" checked><span data-i18n="to.notifyAll"></span></label>
+            <label class="rd-check"><input type="radio" name="notify"><span data-i18n="to.notifyUser"></span></label>
+            <label class="rd-check"><input type="radio" name="notify"><span data-i18n="to.notifyNone"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Ticket info -->
+    <div class="rd-surface">
+      <div class="rd-surface-head" data-i18n="to.secInfo"></div>
+      <div class="rd-surface-body">
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="to.source"></label>
+            <select class="rd-control">
+              <option data-i18n="to.srcPhone"></option>
+              <option data-i18n="to.srcEmail"></option>
+              <option data-i18n="to.srcWeb"></option>
+              <option data-i18n="to.srcOther"></option>
+            </select>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="to.topic"></label>
+            <select class="rd-control">
+              <option data-i18n="to.select"></option>
+              <option selected>Bordro</option>
+              <option>İzin Yönetimi</option>
+              <option>Vardiya Planlama</option>
+              <option>Yazılım Hatası</option>
+            </select>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="to.dept"></label>
+            <select class="rd-control">
+              <option selected>Bordro Danışmanlık</option>
+              <option>İK Danışmanlık</option>
+              <option>Yazılım Destek</option>
+              <option>Muhasebe</option>
+            </select>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="to.sla"></label>
+            <select class="rd-control">
+              <option selected>Standart (24 saat)</option>
+              <option>Öncelikli (8 saat)</option>
+              <option>VIP (4 saat)</option>
+            </select>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="to.due"></label>
+            <input class="rd-control" type="date" value="2026-08-13">
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="to.assign"></label>
+            <select class="rd-control">
+              <option data-i18n="to.select"></option>
+              <optgroup label="Temsilciler">
+                <option>Ümit Akın</option>
+                <option>Merve Çetin</option>
+                <option>Deniz Kaya</option>
+              </optgroup>
+              <optgroup label="Takımlar">
+                <option>Bordro Ekibi</option>
+                <option>Yazılım Destek Ekibi</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Subject + details -->
+    <div class="rd-surface">
+      <div class="rd-surface-head" data-i18n="to.secSubject"></div>
+      <div class="rd-surface-body">
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="to.summary"></label>
+            <input class="rd-control" data-i18n-placeholder="to.summaryPh">
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" data-i18n="to.priority"></label>
+            <select class="rd-control">
+              <option data-i18n="priority.low"></option>
+              <option selected data-i18n="priority.normal"></option>
+              <option data-i18n="priority.high"></option>
+              <option data-i18n="priority.emergency"></option>
+            </select>
+          </div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" data-i18n="to.details"></label>
+          <textarea class="rd-control" style="min-height:140px" data-i18n-placeholder="to.detailsPh"></textarea>
+        </div>
+        <label class="rd-upload" style="display:block;margin-bottom:0">
+          <span data-i18n="to.upload"></span>
+          <input type="file" multiple hidden>
+        </label>
+
+        <!-- 4. First response + note (advanced) -->
+        <details class="rd-advanced">
+          <summary data-i18n="to.secFirst"></summary>
+          <div class="rd-advanced-body">
+            <div class="rd-field">
+              <label class="rd-label" data-i18n="to.canned"></label>
+              <select class="rd-control">
+                <option data-i18n="to.cannedPh"></option>
+                <option>Bordro düzeltme bilgilendirmesi</option>
+                <option>Efor onayı hatırlatması</option>
+              </select>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" data-i18n="to.replyLabel"></label>
+              <textarea class="rd-control" data-i18n-placeholder="to.replyPh"></textarea>
+            </div>
+            <div class="rd-field">
+              <span class="rd-label" data-i18n="to.signature"></span>
+              <div style="display:flex;flex-wrap:wrap;gap:9px 22px">
+                <label class="rd-check"><input type="radio" name="sig" checked><span data-i18n="to.sigNone"></span></label>
+                <label class="rd-check"><input type="radio" name="sig"><span data-i18n="to.sigMine"></span></label>
+                <label class="rd-check"><input type="radio" name="sig"><span data-i18n="to.sigDept"></span></label>
+              </div>
+            </div>
+            <div class="rd-field" style="margin-bottom:0">
+              <label class="rd-label" data-i18n="to.note"></label>
+              <textarea class="rd-control" data-i18n-placeholder="to.notePh"></textarea>
+              <div class="rd-help" data-i18n="common.notesHelp"></div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="display:flex;gap:10px;align-items:center">
+      <button type="submit" class="rd-btn-primary" data-i18n="to.open"></button>
+      <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+      <a class="rd-btn rd-btn-ghost" href="tickets.html" data-i18n="common.cancel"></a>
+    </div>
+  </form>
+</main>
+
+</body>
+</html>

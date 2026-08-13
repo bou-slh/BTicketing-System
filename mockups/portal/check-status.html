@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Talep Durumu</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "cs.title": "Talep durumu sorgula",
+    "cs.sub": "E-posta adresinizi ve talep numaranızı girin; talebinize özel bir erişim bağlantısını e-posta ile gönderelim.",
+    "cs.email": "E-posta",
+    "cs.ticket": "Talep numarası",
+    "cs.ticketPh": "Örn. R716555",
+    "cs.ticketHelp": "Talep numarası, talebiniz oluşturulduğunda gönderilen e-postada yer alır.",
+    "cs.submit": "Erişim bağlantısı gönder",
+    "cs.note": "Bağlantı yalnızca talebi oluşturan e-posta adresine gönderilir ve 1 saat geçerlidir.",
+    "cs.haveAccount": "Hesabınız var mı?",
+    "cs.signin": "Giriş yapın",
+  },
+  en: {
+    "cs.title": "Check request status",
+    "cs.sub": "Enter your email address and request number and we will email you an access link for your request.",
+    "cs.email": "Email",
+    "cs.ticket": "Request number",
+    "cs.ticketPh": "e.g. R716555",
+    "cs.ticketHelp": "You can find the request number in the email sent when your request was created.",
+    "cs.submit": "Send access link",
+    "cs.note": "The link is only sent to the email address that opened the request and is valid for 1 hour.",
+    "cs.haveAccount": "Have an account?",
+    "cs.signin": "Sign in",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="portal" data-panel="portal" data-nav="tickets">
+<div id="rd-header"></div>
+
+<main class="rc-main">
+  <div class="rc-auth-card" style="margin:40px auto">
+    <h1 data-i18n="cs.title"></h1>
+    <p data-i18n="cs.sub"></p>
+
+    <form class="rc-form-grid">
+      <div>
+        <label class="rc-label" for="cs-email" data-i18n="cs.email"></label>
+        <input id="cs-email" class="rc-control" type="email" autocomplete="email">
+      </div>
+      <div>
+        <label class="rc-label" for="cs-ticket" data-i18n="cs.ticket"></label>
+        <input id="cs-ticket" class="rc-control" type="text" data-i18n-placeholder="cs.ticketPh">
+        <div class="rd-help" data-i18n="cs.ticketHelp"></div>
+      </div>
+      <button class="rc-button-primary" style="justify-content:center" data-i18n="cs.submit"></button>
+      <div class="rc-notice" data-i18n="cs.note"></div>
+    </form>
+
+    <div class="rc-auth-foot">
+      <span data-i18n="cs.haveAccount"></span>
+      <a href="login.html" data-i18n="cs.signin"></a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

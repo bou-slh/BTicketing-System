@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — E-posta Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "ee.back": "← E-posta Adresleri",
+    "ee.subtitle": "Bu posta kutusunun hesap bilgilerini, gelen posta getirme ve giden SMTP ayarlarını yönetin.",
+    "ee.tabAccount": "Hesap",
+    "ee.tabIncoming": "Gelen Posta",
+    "ee.tabOutgoing": "Giden Posta (SMTP)",
+
+    "ee.secIdentity": "Kimlik",
+    "ee.email": "E-posta adresi",
+    "ee.emailHelp": "Sistemin bu kutu üzerinden alıp göndereceği tam adres.",
+    "ee.fromName": "Görünen ad",
+    "ee.fromNameHelp": "Giden e-postalarda \"Kimden\" satırında görünen ad.",
+    "ee.secNewTicket": "Yeni Talep Ayarları",
+    "ee.newTicketHelp": "Bu adrese gelen e-postalardan açılan taleplere uygulanır.",
+    "ee.dept": "Departman",
+    "ee.deptHelp": "Bu kutudan açılan talepler hangi departmana düşsün?",
+    "ee.priority": "Öncelik",
+    "ee.priorityHelp": "Talep açılırken atanacak öncelik.",
+    "ee.topic": "Yardım konusu",
+    "ee.topicHelp": "Talep açılırken atanacak yardım konusu.",
+    "ee.sysDefault": "Sistem Varsayılanı",
+    "ee.noAutoResp": "Otomatik yanıtı kapat",
+    "ee.noAutoRespHelp": "Bu adresten açılan talepler için \"talebiniz alındı\" e-postası gönderilmez.",
+    "ee.notesHead": "İç Notlar",
+
+    "ee.secServer": "Sunucu Bağlantısı",
+    "ee.host": "Sunucu (host)",
+    "ee.hostHelp": "Gelen posta sunucusunun adresi.",
+    "ee.port": "Port",
+    "ee.portInHelp": "IMAP için genellikle 993, POP3 için 995.",
+    "ee.folder": "Klasör",
+    "ee.folderHelp": "Yeni e-postaların okunacağı posta klasörü.",
+    "ee.protocol": "Protokol",
+    "ee.protocolHelp": "IMAP klasör desteği sunar; POP3 yalnızca gelen kutusunu okur.",
+    "ee.auth": "Kimlik doğrulama",
+    "ee.authHelp": "Sunucuya bağlanırken kullanılacak doğrulama yöntemi.",
+    "ee.authBasic": "Temel (kullanıcı adı + parola)",
+    "ee.configure": "Yapılandır…",
+    "ee.secFetch": "Getirme",
+    "ee.fetchEnabled": "Getirme durumu",
+    "ee.fetchEnabledHelp": "Kapalıyken bu kutudan yeni e-posta alınmaz.",
+    "ee.enabled": "Etkin",
+    "ee.disabled": "Devre dışı",
+    "ee.freq": "Sıklık (dk)",
+    "ee.freqHelp": "Yeni e-postalar kaç dakikada bir kontrol edilsin?",
+    "ee.maxFetch": "Maks. e-posta / getirme",
+    "ee.maxFetchHelp": "Tek seferde en fazla kaç e-posta işlensin?",
+    "ee.afterFetch": "Getirme sonrası",
+    "ee.afterFetchHelp": "İşlenen e-postalara sunucuda ne yapılsın?",
+    "ee.optArchive": "Arşiv klasörüne taşı",
+    "ee.optDelete": "Sunucudan sil",
+    "ee.optLeave": "Olduğu gibi bırak",
+    "ee.archiveFolder": "Arşiv klasörü",
+    "ee.archiveFolderHelp": "\"Arşiv klasörüne taşı\" seçiliyken kullanılacak klasör.",
+
+    "ee.smtpEnabled": "SMTP durumu",
+    "ee.smtpEnabledHelp": "Kapalıyken bu adresin e-postaları sistemin varsayılan yöntemiyle gönderilir.",
+    "ee.portOutHelp": "Genellikle 587 (STARTTLS) veya 465 (SSL).",
+    "ee.spoofing": "Başlık sahteciliğine izin ver",
+    "ee.spoofingHelp": "Dikkat: \"Kimden\" başlığının bu adresten farklı olmasına izin verir. Alıcı sunucular bu e-postaları spam olarak işaretleyebilir — yalnızca ne yaptığınızı biliyorsanız açın.",
+
+    "ee.dlgAuthTitle": "Kimlik Doğrulama Yapılandırması",
+    "ee.dlgTabBasic": "Temel",
+    "ee.username": "Kullanıcı adı",
+    "ee.password": "Parola",
+    "ee.clientId": "İstemci kimliği (Client ID)",
+    "ee.clientSecret": "İstemci sırrı (Client Secret)",
+    "ee.oauthHelp": "Sağlayıcınızın (ör. Microsoft 365, Google) uygulama kaydından alınan OAuth2 bilgileri.",
+  },
+  en: {
+    "ee.back": "← Email Addresses",
+    "ee.subtitle": "Manage this mailbox's account details, incoming mail fetching and outgoing SMTP settings.",
+    "ee.tabAccount": "Account",
+    "ee.tabIncoming": "Incoming Mail",
+    "ee.tabOutgoing": "Outgoing Mail (SMTP)",
+
+    "ee.secIdentity": "Identity",
+    "ee.email": "Email address",
+    "ee.emailHelp": "The full address the system receives and sends through this mailbox.",
+    "ee.fromName": "Display name",
+    "ee.fromNameHelp": "The name shown on the \"From\" line of outgoing emails.",
+    "ee.secNewTicket": "New Ticket Settings",
+    "ee.newTicketHelp": "Applied to tickets opened from emails arriving at this address.",
+    "ee.dept": "Department",
+    "ee.deptHelp": "Which department should tickets from this mailbox go to?",
+    "ee.priority": "Priority",
+    "ee.priorityHelp": "Priority assigned when the ticket is created.",
+    "ee.topic": "Help topic",
+    "ee.topicHelp": "Help topic assigned when the ticket is created.",
+    "ee.sysDefault": "System Default",
+    "ee.noAutoResp": "Disable auto-response",
+    "ee.noAutoRespHelp": "No \"we received your request\" email is sent for tickets opened from this address.",
+    "ee.notesHead": "Internal Notes",
+
+    "ee.secServer": "Server Connection",
+    "ee.host": "Server (host)",
+    "ee.hostHelp": "Address of the incoming mail server.",
+    "ee.port": "Port",
+    "ee.portInHelp": "Usually 993 for IMAP, 995 for POP3.",
+    "ee.folder": "Folder",
+    "ee.folderHelp": "The mail folder new emails are read from.",
+    "ee.protocol": "Protocol",
+    "ee.protocolHelp": "IMAP supports folders; POP3 only reads the inbox.",
+    "ee.auth": "Authentication",
+    "ee.authHelp": "How to authenticate when connecting to the server.",
+    "ee.authBasic": "Basic (username + password)",
+    "ee.configure": "Configure…",
+    "ee.secFetch": "Fetching",
+    "ee.fetchEnabled": "Fetch status",
+    "ee.fetchEnabledHelp": "When off, no new email is retrieved from this mailbox.",
+    "ee.enabled": "Enabled",
+    "ee.disabled": "Disabled",
+    "ee.freq": "Frequency (min)",
+    "ee.freqHelp": "How often should new email be checked?",
+    "ee.maxFetch": "Max emails / fetch",
+    "ee.maxFetchHelp": "At most how many emails should be processed per run?",
+    "ee.afterFetch": "After fetching",
+    "ee.afterFetchHelp": "What should happen to processed emails on the server?",
+    "ee.optArchive": "Move to archive folder",
+    "ee.optDelete": "Delete from server",
+    "ee.optLeave": "Leave as is",
+    "ee.archiveFolder": "Archive folder",
+    "ee.archiveFolderHelp": "Folder used when \"Move to archive folder\" is selected.",
+
+    "ee.smtpEnabled": "SMTP status",
+    "ee.smtpEnabledHelp": "When off, this address's email is sent via the system's default method.",
+    "ee.portOutHelp": "Usually 587 (STARTTLS) or 465 (SSL).",
+    "ee.spoofing": "Allow header spoofing",
+    "ee.spoofingHelp": "Warning: allows the \"From\" header to differ from this address. Receiving servers may flag these emails as spam — enable only if you know what you are doing.",
+
+    "ee.dlgAuthTitle": "Authentication Configuration",
+    "ee.dlgTabBasic": "Basic",
+    "ee.username": "Username",
+    "ee.password": "Password",
+    "ee.clientId": "Client ID",
+    "ee.clientSecret": "Client Secret",
+    "ee.oauthHelp": "OAuth2 credentials from your provider's (e.g. Microsoft 365, Google) app registration.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="emails">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <p><a href="emails.html" data-i18n="ee.back"></a></p>
+      <h1>destek@rapidsol.com.tr</h1>
+      <p data-i18n="ee.subtitle"></p>
+    </div>
+  </div>
+
+  <form>
+    <div class="rd-tabs" data-tabs data-tabs-scope="main">
+      <button type="button" class="active" data-tab="panel-account" data-i18n="ee.tabAccount"></button>
+      <button type="button" data-tab="panel-incoming" data-i18n="ee.tabIncoming"></button>
+      <button type="button" data-tab="panel-outgoing" data-i18n="ee.tabOutgoing"></button>
+    </div>
+
+    <!-- ============ Hesap ============ -->
+    <div class="rd-tab-panel active" id="panel-account" data-tab-group="main">
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="ee.secIdentity"></div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="ee-email" data-i18n="ee.email"></label>
+              <input id="ee-email" class="rd-control" type="email" value="destek@rapidsol.com.tr">
+              <p class="rd-help" data-i18n="ee.emailHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="ee-name" data-i18n="ee.fromName"></label>
+              <input id="ee-name" class="rd-control" type="text" value="RapidSol Destek">
+              <p class="rd-help" data-i18n="ee.fromNameHelp"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head">
+          <span data-i18n="ee.secNewTicket"></span>
+          <small class="rd-muted" data-i18n="ee.newTicketHelp"></small>
+        </div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-3">
+            <div class="rd-field">
+              <label class="rd-label" for="ee-dept" data-i18n="ee.dept"></label>
+              <select id="ee-dept" class="rd-control">
+                <option selected data-i18n="ee.sysDefault"></option>
+                <option>Destek</option>
+                <option>Bordro</option>
+                <option>Danışmanlık</option>
+              </select>
+              <p class="rd-help" data-i18n="ee.deptHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="ee-priority" data-i18n="ee.priority"></label>
+              <select id="ee-priority" class="rd-control">
+                <option selected data-i18n="ee.sysDefault"></option>
+                <option data-i18n="priority.low"></option>
+                <option data-i18n="priority.normal"></option>
+                <option data-i18n="priority.high"></option>
+                <option data-i18n="priority.emergency"></option>
+              </select>
+              <p class="rd-help" data-i18n="ee.priorityHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="ee-topic" data-i18n="ee.topic"></label>
+              <select id="ee-topic" class="rd-control">
+                <option selected data-i18n="ee.sysDefault"></option>
+                <option>Bordro Hatası</option>
+                <option>İzin İşlemleri</option>
+                <option>Vardiya Planlama</option>
+                <option>Genel Destek</option>
+              </select>
+              <p class="rd-help" data-i18n="ee.topicHelp"></p>
+            </div>
+          </div>
+          <label class="rd-switch" style="margin-top:6px">
+            <input type="checkbox">
+            <span class="track"></span>
+            <span class="rd-switch-copy">
+              <b data-i18n="ee.noAutoResp"></b>
+              <small data-i18n="ee.noAutoRespHelp"></small>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="rd-surface">
+        <div class="rd-surface-head" data-i18n="ee.notesHead"></div>
+        <div class="rd-surface-body">
+          <div class="rd-field mb-0">
+            <textarea class="rd-control">Kullanıcı taleplerinin ana giriş kutusu. Değişiklik yapmadan önce Ümit'e haber verin.</textarea>
+            <p class="rd-help" data-i18n="common.notesHelp"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Gelen Posta ============ -->
+    <div class="rd-tab-panel" id="panel-incoming" data-tab-group="main">
+      <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head" data-i18n="ee.secServer"></div>
+        <div class="rd-surface-body">
+          <div class="rd-grid-3">
+            <div class="rd-field">
+              <label class="rd-label" for="ee-in-host" data-i18n="ee.host"></label>
+              <input id="ee-in-host" class="rd-control" type="text" value="imap.rapidsol.com.tr">
+              <p class="rd-help" data-i18n="ee.hostHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="ee-in-port" data-i18n="ee.port"></label>
+              <input id="ee-in-port" class="rd-control" type="number" value="993">
+              <p class="rd-help" data-i18n="ee.portInHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="ee-in-folder" data-i18n="ee.folder"></label>
+              <input id="ee-in-folder" class="rd-control" type="text" value="INBOX">
+              <p class="rd-help" data-i18n="ee.folderHelp"></p>
+            </div>
+          </div>
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="ee-in-protocol" data-i18n="ee.protocol"></label>
+              <select id="ee-in-protocol" class="rd-control">
+                <option selected>IMAP</option>
+                <option>POP3</option>
+              </select>
+              <p class="rd-help" data-i18n="ee.protocolHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="ee-in-auth" data-i18n="ee.auth"></label>
+              <div style="display:flex;gap:9px">
+                <select id="ee-in-auth" class="rd-control">
+                  <option data-i18n="ee.authBasic"></option>
+                  <option selected>OAuth2</option>
+                </select>
+                <button type="button" class="rd-btn" data-dialog-open="dlg-auth" data-i18n="ee.configure"></button>
+              </div>
+              <p class="rd-help" data-i18n="ee.authHelp"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rd-surface">
+        <div class="rd-surface-head" data-i18n="ee.secFetch"></div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="ee.fetchEnabled"></span>
+            <label class="rd-check" style="display:inline-flex;margin-right:18px">
+              <input type="radio" name="ee-fetch" checked><span data-i18n="ee.enabled"></span>
+            </label>
+            <label class="rd-check" style="display:inline-flex">
+              <input type="radio" name="ee-fetch"><span data-i18n="ee.disabled"></span>
+            </label>
+            <p class="rd-help" data-i18n="ee.fetchEnabledHelp"></p>
+          </div>
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="ee-freq" data-i18n="ee.freq"></label>
+              <input id="ee-freq" class="rd-control" type="number" value="5">
+              <p class="rd-help" data-i18n="ee.freqHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="ee-max" data-i18n="ee.maxFetch"></label>
+              <input id="ee-max" class="rd-control" type="number" value="30">
+              <p class="rd-help" data-i18n="ee.maxFetchHelp"></p>
+            </div>
+          </div>
+          <div class="rd-grid-2">
+            <div class="rd-field mb-0">
+              <label class="rd-label" for="ee-after" data-i18n="ee.afterFetch"></label>
+              <select id="ee-after" class="rd-control">
+                <option selected data-i18n="ee.optArchive"></option>
+                <option data-i18n="ee.optDelete"></option>
+                <option data-i18n="ee.optLeave"></option>
+              </select>
+              <p class="rd-help" data-i18n="ee.afterFetchHelp"></p>
+            </div>
+            <div class="rd-field mb-0">
+              <label class="rd-label" for="ee-archive" data-i18n="ee.archiveFolder"></label>
+              <input id="ee-archive" class="rd-control" type="text" value="Arsiv/Islenen">
+              <p class="rd-help" data-i18n="ee.archiveFolderHelp"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Giden Posta (SMTP) ============ -->
+    <div class="rd-tab-panel" id="panel-outgoing" data-tab-group="main">
+      <div class="rd-surface">
+        <div class="rd-surface-head">SMTP</div>
+        <div class="rd-surface-body">
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="ee.smtpEnabled"></span>
+            <label class="rd-check" style="display:inline-flex;margin-right:18px">
+              <input type="radio" name="ee-smtp" checked><span data-i18n="ee.enabled"></span>
+            </label>
+            <label class="rd-check" style="display:inline-flex">
+              <input type="radio" name="ee-smtp"><span data-i18n="ee.disabled"></span>
+            </label>
+            <p class="rd-help" data-i18n="ee.smtpEnabledHelp"></p>
+          </div>
+          <div class="rd-grid-2">
+            <div class="rd-field">
+              <label class="rd-label" for="ee-out-host" data-i18n="ee.host"></label>
+              <input id="ee-out-host" class="rd-control" type="text" value="smtp.rapidsol.com.tr">
+              <p class="rd-help" data-i18n="ee.hostHelp"></p>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="ee-out-port" data-i18n="ee.port"></label>
+              <input id="ee-out-port" class="rd-control" type="number" value="587">
+              <p class="rd-help" data-i18n="ee.portOutHelp"></p>
+            </div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="ee-out-auth" data-i18n="ee.auth"></label>
+            <div style="display:flex;gap:9px;max-width:420px">
+              <select id="ee-out-auth" class="rd-control">
+                <option data-i18n="ee.authBasic"></option>
+                <option selected>OAuth2</option>
+              </select>
+              <button type="button" class="rd-btn" data-dialog-open="dlg-auth" data-i18n="ee.configure"></button>
+            </div>
+            <p class="rd-help" data-i18n="ee.authHelp"></p>
+          </div>
+
+          <details class="rd-advanced">
+            <summary data-i18n="common.advanced"></summary>
+            <div class="rd-advanced-body">
+              <label class="rd-switch">
+                <input type="checkbox">
+                <span class="track"></span>
+                <span class="rd-switch-copy">
+                  <b data-i18n="ee.spoofing"></b>
+                  <small data-i18n="ee.spoofingHelp"></small>
+                </span>
+              </label>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="rd-btn-primary" data-i18n="common.save"></button>
+      <a class="rd-btn" href="emails.html" data-i18n="common.cancel"></a>
+    </div>
+  </form>
+
+  <!-- Kimlik doğrulama dialogu -->
+  <dialog class="rd-dialog" id="dlg-auth">
+    <div class="rd-dialog-head">
+      <span data-i18n="ee.dlgAuthTitle"></span>
+      <button class="close" data-dialog-close aria-label="Kapat">✕</button>
+    </div>
+    <div class="rd-dialog-body">
+      <div class="rd-tabs" data-tabs data-tabs-scope="auth">
+        <button type="button" class="active" data-tab="auth-basic" data-i18n="ee.dlgTabBasic"></button>
+        <button type="button" data-tab="auth-oauth">OAuth2</button>
+      </div>
+      <div class="rd-tab-panel active" id="auth-basic" data-tab-group="auth">
+        <div class="rd-field">
+          <label class="rd-label" for="auth-user" data-i18n="ee.username"></label>
+          <input id="auth-user" class="rd-control" type="text" value="destek@rapidsol.com.tr">
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="auth-pass" data-i18n="ee.password"></label>
+          <input id="auth-pass" class="rd-control" type="password" value="••••••••••">
+        </div>
+      </div>
+      <div class="rd-tab-panel" id="auth-oauth" data-tab-group="auth">
+        <div class="rd-field">
+          <label class="rd-label" for="auth-client-id" data-i18n="ee.clientId"></label>
+          <input id="auth-client-id" class="rd-control" type="text" value="8f42c1aa-destek-oauth">
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="auth-client-secret" data-i18n="ee.clientSecret"></label>
+          <input id="auth-client-secret" class="rd-control" type="password" value="••••••••••••••••">
+        </div>
+        <p class="rd-help" data-i18n="ee.oauthHelp"></p>
+      </div>
+    </div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

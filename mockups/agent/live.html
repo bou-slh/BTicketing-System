@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Canlı İzleme</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "lv.title": "Canlı İzleme",
+    "lv.sub": "Gelen talepler gerçek zamanlı izleniyor",
+    "lv.pause": "Duraklat",
+    "lv.autoNote": "6 saniyede bir yenilenir",
+    "lv.colNew": "Yeni",
+    "lv.colUnassigned": "Atanmamış",
+    "lv.colWaiting": "Yanıt Bekleyen",
+    "lv.colSla": "SLA Riskli",
+    "lv.colEffort": "Efor Onayında",
+    "lv.claim": "Üstlen",
+    "lv.open": "Aç",
+    "lv.feed": "Canlı Akış",
+    "lv.team": "Ekip Durumu",
+  },
+  en: {
+    "lv.title": "Live Board",
+    "lv.sub": "Incoming tickets are monitored in real time",
+    "lv.pause": "Pause",
+    "lv.autoNote": "Refreshes every 6 seconds",
+    "lv.colNew": "New",
+    "lv.colUnassigned": "Unassigned",
+    "lv.colWaiting": "Awaiting Reply",
+    "lv.colSla": "SLA Risk",
+    "lv.colEffort": "Effort Approval",
+    "lv.claim": "Claim",
+    "lv.open": "Open",
+    "lv.feed": "Live Feed",
+    "lv.team": "Team Status",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="live">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+
+<main class="bo-main" style="max-width:1400px">
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1><span class="rd-live-dot" style="vertical-align:middle;margin-right:8px"></span><span data-i18n="lv.title"></span></h1>
+      <p data-i18n="lv.sub"></p>
+    </div>
+    <div class="actions">
+      <span class="rd-muted text-sm" data-i18n="lv.autoNote"></span>
+      <button class="rd-btn rd-btn-ghost" id="lv-pause" data-i18n="lv.pause"></button>
+    </div>
+  </div>
+
+  <div class="lb-board" style="margin-bottom:22px">
+    <!-- Yeni -->
+    <div class="lb-col">
+      <div class="lb-col-head"><span data-i18n="lv.colNew"></span><span class="count">3</span></div>
+      <div class="lb-card">
+        <span class="lb-sla">58:00</span>
+        <a href="ticket-view.html">R716562</a>
+        <div class="subj">Ağustos avans bordrosu hatası</div>
+        <div class="meta"><span>Konecta</span>·<span>Bordro</span>·<span>2 dk önce</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla">47:21</span>
+        <a href="ticket-view.html">R716563</a>
+        <div class="subj">İzin bakiyesi görünmüyor</div>
+        <div class="meta"><span>Tosyalı Holding</span>·<span>İzin Yönetimi</span>·<span>9 dk önce</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla">31:05</span>
+        <a href="ticket-view.html">R716564</a>
+        <div class="subj">Yeni personel kaydı açılmıyor</div>
+        <div class="meta"><span>RapidSol</span>·<span>Yazılım Hatası</span>·<span>16 dk önce</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atanmamış -->
+    <div class="lb-col">
+      <div class="lb-col-head"><span data-i18n="lv.colUnassigned"></span><span class="count">4</span></div>
+      <div class="lb-card">
+        <span class="lb-sla">39:44</span>
+        <a href="ticket-view.html">R716561</a>
+        <div class="subj">AGİ tutarı güncellemesi</div>
+        <div class="meta"><span>RapidSol</span>·<span>Bordro</span>·<span>31 dk önce</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla warn">12:37</span>
+        <a href="ticket-view.html">R716528</a>
+        <div class="subj">Personel işe giriş bildirgesi gecikmesi</div>
+        <div class="meta"><span>Konecta</span>·<span>İK</span>·<span>1 sa önce</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla">26:50</span>
+        <a href="ticket-view.html">R716557</a>
+        <div class="subj">Puantaj raporu dışa aktarma</div>
+        <div class="meta"><span>Ulaşım A.Ş.</span>·<span>Vardiya</span>·<span>42 dk önce</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla">21:12</span>
+        <a href="ticket-view.html">R716552</a>
+        <div class="subj">BES kesinti listesi talebi</div>
+        <div class="meta"><span>Tosyalı Holding</span>·<span>Bordro</span>·<span>55 dk önce</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Yanıt Bekleyen -->
+    <div class="lb-col">
+      <div class="lb-col-head"><span data-i18n="lv.colWaiting"></span><span class="count">5</span></div>
+      <div class="lb-card">
+        <span class="lb-sla">44:30</span>
+        <a href="ticket-view.html">R716555</a>
+        <div class="subj">Yol ücreti hatası hakkında</div>
+        <div class="meta"><span>Ulaşım A.Ş.</span>·<span>Bordro</span>·<span>Ümit Akın</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla">36:19</span>
+        <a href="ticket-view.html">R716560</a>
+        <div class="subj">Temmuz bordrosunda SGK kesintisi farkı</div>
+        <div class="meta"><span>Konecta</span>·<span>Bordro</span>·<span>Merve Çetin</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla warn">14:55</span>
+        <a href="ticket-view.html">R716548</a>
+        <div class="subj">Yıllık izin devri hesaplama sorusu</div>
+        <div class="meta"><span>Tosyalı Holding</span>·<span>İzin</span>·<span>Deniz Kaya</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla">28:02</span>
+        <a href="ticket-view.html">R716544</a>
+        <div class="subj">Fazla mesai onay akışı çalışmıyor</div>
+        <div class="meta"><span>Ulaşım A.Ş.</span>·<span>Vardiya</span>·<span>Ümit Akın</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla">51:40</span>
+        <a href="ticket-view.html">R716532</a>
+        <div class="subj">Kıdem tazminatı raporu talebi</div>
+        <div class="meta"><span>Tosyalı Holding</span>·<span>Bordro</span>·<span>Merve Çetin</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLA Riskli -->
+    <div class="lb-col">
+      <div class="lb-col-head"><span data-i18n="lv.colSla"></span><span class="count">2</span></div>
+      <div class="lb-card">
+        <span class="lb-sla danger">04:12</span>
+        <a href="ticket-view.html">R716539</a>
+        <div class="subj">Vardiya planı içe aktarma hatası</div>
+        <div class="meta"><span>Ulaşım A.Ş.</span>·<span>Vardiya</span>·<span>Deniz Kaya</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="lb-sla danger">07:48</span>
+        <a href="ticket-view.html">R716536</a>
+        <div class="subj">Maaş ödeme dosyası bankaya gitmedi</div>
+        <div class="meta"><span>Konecta</span>·<span>Bordro</span>·<span>—</span></div>
+        <div class="actions">
+          <button class="rd-btn rd-btn-sm" data-i18n="lv.claim"></button>
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Efor Onayında -->
+    <div class="lb-col">
+      <div class="lb-col-head"><span data-i18n="lv.colEffort"></span><span class="count">2</span></div>
+      <div class="lb-card">
+        <span class="rd-pill rd-pill-wait" style="float:right" data-i18n-title="status.effortWait">6s</span>
+        <a href="ticket-view.html">R716555</a>
+        <div class="subj">Yol ücreti hatası hakkında</div>
+        <div class="meta"><span>Ulaşım A.Ş.</span>·<span>Bordro</span>·<span>1 sa önce</span></div>
+        <div class="actions">
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+      <div class="lb-card">
+        <span class="rd-pill rd-pill-wait" style="float:right" data-i18n-title="status.effortWait">3s</span>
+        <a href="ticket-view.html">R716549</a>
+        <div class="subj">Ek mesai parametre düzenlemesi</div>
+        <div class="meta"><span>Tosyalı Holding</span>·<span>Bordro</span>·<span>3 sa önce</span></div>
+        <div class="actions">
+          <a class="rd-btn rd-btn-sm rd-btn-ghost" href="ticket-view.html" data-i18n="lv.open"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-grid-2">
+    <!-- Live feed -->
+    <div class="rd-surface">
+      <div class="rd-surface-head" data-i18n="lv.feed"></div>
+      <div class="rd-surface-body" style="padding-top:6px;padding-bottom:6px">
+        <div class="lb-ticker" id="lv-ticker">
+          <div class="item"><span>🟢</span><span>R716552 yeni talep açıldı — Tosyalı Holding</span><time>18 dk önce</time></div>
+          <div class="item"><span>👤</span><span>R716548 Deniz Kaya'ya atandı</span><time>14 dk önce</time></div>
+          <div class="item"><span>💬</span><span>R716560 kullanıcı yanıtı geldi — Konecta</span><time>11 dk önce</time></div>
+          <div class="item"><span>⏱</span><span>R716539 SLA riskine girdi — Ulaşım A.Ş.</span><time>8 dk önce</time></div>
+          <div class="item"><span>✅</span><span>R716532 çözüldü olarak işaretlendi</span><time>5 dk önce</time></div>
+          <div class="item"><span>🟢</span><span>R716562 yeni talep açıldı — Konecta</span><time>2 dk önce</time></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team status -->
+    <div class="rd-surface">
+      <div class="rd-surface-head" data-i18n="lv.team"></div>
+      <div class="rd-surface-body" style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="rd-avatar online">ÜA</div>
+          <b style="font-size:13px">Ümit Akın</b>
+          <span class="rd-muted text-sm" style="margin-left:auto">3 açık talep</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="rd-avatar online">MÇ</div>
+          <b style="font-size:13px">Merve Çetin</b>
+          <span class="rd-muted text-sm" style="margin-left:auto">5 açık talep</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="rd-avatar away">DK</div>
+          <b style="font-size:13px">Deniz Kaya</b>
+          <span class="rd-muted text-sm" style="margin-left:auto">2 açık talep</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  var paused = false;
+  var events = [
+    ["🟢", "R716565 yeni talep açıldı — Ulaşım A.Ş."],
+    ["💬", "R716555 kullanıcı yanıtı geldi — Ulaşım A.Ş."],
+    ["👤", "R716561 Merve Çetin'e atandı"],
+    ["⏱", "R716528 SLA riskine girdi — Konecta"],
+    ["✅", "R716544 çözüldü olarak işaretlendi"],
+    ["🟢", "R716566 yeni talep açıldı — RapidSol"],
+    ["◷", "R716555 için 6 saat efor onaya sunuldu — Ulaşım A.Ş."],
+    ["✓", "Bourla Salehi R716549 eforunu onayladı"]
+  ];
+  var i = 0;
+  function tick() {
+    if (paused) return;
+    var ev = events[i++ % events.length];
+    var item = document.createElement("div");
+    item.className = "item";
+    item.innerHTML = "<span>" + ev[0] + "</span><span>" + ev[1] + "</span><time>şimdi</time>";
+    var ticker = document.getElementById("lv-ticker");
+    ticker.appendChild(item); /* column-reverse: appended item shows on top */
+    while (ticker.children.length > 8) ticker.removeChild(ticker.firstChild);
+    document.querySelectorAll(".lb-sla").forEach(function (chip) {
+      var m = chip.textContent.match(/^(\d+):(\d{2})$/);
+      if (!m) return;
+      var s = Math.max(0, +m[1] * 60 + +m[2] - 6);
+      chip.textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+      if (s < 300) chip.classList.add(s < 60 ? "danger" : "warn");
+    });
+  }
+  setInterval(tick, 6000);
+  document.getElementById("lv-pause").addEventListener("click", function () {
+    paused = !paused;
+    this.style.opacity = paused ? "0.5" : "";
+  });
+})();
+</script>
+</body>
+</html>

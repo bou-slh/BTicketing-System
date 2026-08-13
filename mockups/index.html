@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Mockup Galerisi</title>
+<link rel="stylesheet" href="assets/css/base.css">
+<style>
+  body { padding: 40px 24px 80px; }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  .hero-mini {
+    background: var(--rd-hero-gradient); color: #fff;
+    border-radius: 20px; padding: 30px; margin-bottom: 30px;
+    position: relative; overflow: hidden;
+  }
+  .hero-mini::after {
+    content: ""; position: absolute; width: 230px; height: 230px;
+    border: 44px solid rgba(255,255,255,.06); border-radius: 50%;
+    right: -70px; top: -105px;
+  }
+  .hero-mini h1 { color: #fff; margin-bottom: 8px; }
+  .hero-mini p { color: #d9ebea; max-width: 640px; }
+  section { margin-bottom: 34px; }
+  section > h2 { margin-bottom: 6px; }
+  section > p { color: var(--rd-muted); font-size: 13px; margin-bottom: 16px; }
+  .pages { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .pages a {
+    display: block; padding: 13px 15px;
+    background: var(--rd-surface); border: 1px solid var(--rd-border);
+    border-radius: 13px; color: inherit; font-size: 13px;
+  }
+  .pages a:hover { border-color: var(--rd-primary); text-decoration: none; }
+  .pages a b { display: block; font-weight: 500; margin-bottom: 3px; }
+  .pages a small { color: var(--rd-muted); font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero-mini">
+    <h1>RapidsolDestek — Mockup Galerisi</h1>
+    <p>Rapidsol'un yerel yardım masası sisteminin tüm sayfa taslakları. Üç bölüm: Kullanıcı Portalı, Temsilci Paneli ve Yönetici Paneli. Her sayfada sağ üstten TR/EN dili değiştirilebilir.</p>
+  </div>
+
+  <section>
+    <h2>Kullanıcı Portalı</h2>
+    <p>Tasarım kaynağı: RapidSol müşteri prototipi (design/prototype-unescaped.html).</p>
+    <div class="pages">
+      <a href="portal/index.html"><b>Ana Sayfa</b><small>portal/index.html</small></a>
+      <a href="portal/open.html"><b>Yeni Talep</b><small>portal/open.html</small></a>
+      <a href="portal/tickets.html"><b>Taleplerim</b><small>portal/tickets.html</small></a>
+      <a href="portal/ticket-view.html"><b>Talep Detayı</b><small>portal/ticket-view.html</small></a>
+      <a href="portal/check-status.html"><b>Talep Durumu Sorgula</b><small>portal/check-status.html</small></a>
+      <a href="portal/login.html"><b>Giriş</b><small>portal/login.html</small></a>
+      <a href="portal/register.html"><b>Kayıt Ol</b><small>portal/register.html</small></a>
+      <a href="portal/profile.html"><b>Profilim</b><small>portal/profile.html</small></a>
+      <a href="portal/pwreset.html"><b>Parola Sıfırlama</b><small>portal/pwreset.html</small></a>
+      <a href="portal/kb.html"><b>Bilgi Bankası</b><small>portal/kb.html</small></a>
+      <a href="portal/kb-article.html"><b>Bilgi Bankası Makalesi</b><small>portal/kb-article.html</small></a>
+      <a href="portal/offline.html"><b>Sistem Çevrimdışı</b><small>portal/offline.html</small></a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Temsilci Paneli</h2>
+    <p>Talep yönetimi, Canlı İzleme, Şirketler (kullanıcı verisi senkronizasyonu), görevler ve bilgi bankası.</p>
+    <div class="pages">
+      <a href="agent/dashboard.html"><b>Panom (Kişisel)</b><small>agent/dashboard.html</small></a>
+      <a href="agent/live.html"><b>Canlı İzleme</b><small>agent/live.html</small></a>
+      <a href="agent/tickets.html"><b>Talepler (Kuyruk)</b><small>agent/tickets.html</small></a>
+      <a href="agent/ticket-view.html"><b>Talep Detayı</b><small>agent/ticket-view.html</small></a>
+      <a href="agent/ticket-open.html"><b>Yeni Talep (Temsilci)</b><small>agent/ticket-open.html</small></a>
+      <a href="agent/tasks.html"><b>Görevler</b><small>agent/tasks.html</small></a>
+      <a href="agent/task-view.html"><b>Görev Detayı</b><small>agent/task-view.html</small></a>
+      <a href="agent/users.html"><b>Kullanıcılar</b><small>agent/users.html</small></a>
+      <a href="agent/user-view.html"><b>Kullanıcı Detayı</b><small>agent/user-view.html</small></a>
+      <a href="agent/orgs.html"><b>Şirketler</b><small>agent/orgs.html</small></a>
+      <a href="agent/org-view.html"><b>Şirket Detayı</b><small>agent/org-view.html</small></a>
+      <a href="agent/kb.html"><b>Bilgi Bankası (SSS)</b><small>agent/kb.html</small></a>
+      <a href="agent/kb-faq.html"><b>SSS Makalesi</b><small>agent/kb-faq.html</small></a>
+      <a href="agent/canned.html"><b>Hazır Yanıtlar</b><small>agent/canned.html</small></a>
+      <a href="agent/directory.html"><b>Ekip Rehberi</b><small>agent/directory.html</small></a>
+      <a href="agent/profile.html"><b>Profilim</b><small>agent/profile.html</small></a>
+      <a href="agent/login.html"><b>Temsilci Girişi</b><small>agent/login.html</small></a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Yönetici Paneli</h2>
+    <p>osTicket'taki her ayar ve öznitelik — sadeleştirilmiş, katmanlı bir düzende.</p>
+    <div class="pages">
+      <a href="admin/dashboard.html"><b>Panel (Genel İstatistikler)</b><small>admin/dashboard.html</small></a>
+      <a href="admin/system-info.html"><b>Sistem Bilgisi</b><small>admin/system-info.html</small></a>
+      <a href="admin/system-logs.html"><b>Sistem Kayıtları</b><small>admin/system-logs.html</small></a>
+      <a href="admin/audit-logs.html"><b>Denetim Kayıtları</b><small>admin/audit-logs.html</small></a>
+      <a href="admin/settings-company.html"><b>Ayarlar · Şirket</b><small>admin/settings-company.html</small></a>
+      <a href="admin/settings-system.html"><b>Ayarlar · Sistem</b><small>admin/settings-system.html</small></a>
+      <a href="admin/settings-tickets.html"><b>Ayarlar · Talepler</b><small>admin/settings-tickets.html</small></a>
+      <a href="admin/settings-tasks.html"><b>Ayarlar · Görevler</b><small>admin/settings-tasks.html</small></a>
+      <a href="admin/settings-agents.html"><b>Ayarlar · Temsilciler</b><small>admin/settings-agents.html</small></a>
+      <a href="admin/settings-users.html"><b>Ayarlar · Kullanıcılar</b><small>admin/settings-users.html</small></a>
+      <a href="admin/settings-kb.html"><b>Ayarlar · Bilgi Bankası</b><small>admin/settings-kb.html</small></a>
+      <a href="admin/queues.html"><b>Kuyruk Oluşturucu</b><small>admin/queues.html</small></a>
+      <a href="admin/helptopics.html"><b>Yardım Konuları</b><small>admin/helptopics.html</small></a>
+      <a href="admin/helptopic-edit.html"><b>Yardım Konusu Düzenle</b><small>admin/helptopic-edit.html</small></a>
+      <a href="admin/filters.html"><b>Talep Filtreleri</b><small>admin/filters.html</small></a>
+      <a href="admin/filter-edit.html"><b>Filtre Düzenle</b><small>admin/filter-edit.html</small></a>
+      <a href="admin/slas.html"><b>SLA Planları</b><small>admin/slas.html</small></a>
+      <a href="admin/schedules.html"><b>Çalışma Takvimleri</b><small>admin/schedules.html</small></a>
+      <a href="admin/schedule-edit.html"><b>Takvim Düzenle</b><small>admin/schedule-edit.html</small></a>
+      <a href="admin/forms.html"><b>Formlar</b><small>admin/forms.html</small></a>
+      <a href="admin/form-edit.html"><b>Form Düzenle</b><small>admin/form-edit.html</small></a>
+      <a href="admin/lists.html"><b>Listeler</b><small>admin/lists.html</small></a>
+      <a href="admin/list-edit.html"><b>Liste Düzenle</b><small>admin/list-edit.html</small></a>
+      <a href="admin/pages.html"><b>Site Sayfaları</b><small>admin/pages.html</small></a>
+      <a href="admin/apikeys.html"><b>API Anahtarları</b><small>admin/apikeys.html</small></a>
+      <a href="admin/plugins.html"><b>Eklentiler</b><small>admin/plugins.html</small></a>
+      <a href="admin/emails.html"><b>E-posta Adresleri</b><small>admin/emails.html</small></a>
+      <a href="admin/email-edit.html"><b>E-posta Düzenle</b><small>admin/email-edit.html</small></a>
+      <a href="admin/email-settings.html"><b>E-posta Ayarları</b><small>admin/email-settings.html</small></a>
+      <a href="admin/templates.html"><b>E-posta Şablonları</b><small>admin/templates.html</small></a>
+      <a href="admin/template-edit.html"><b>Şablon Düzenle</b><small>admin/template-edit.html</small></a>
+      <a href="admin/banlist.html"><b>Engel Listesi</b><small>admin/banlist.html</small></a>
+      <a href="admin/email-diagnostic.html"><b>E-posta Tanılama</b><small>admin/email-diagnostic.html</small></a>
+      <a href="admin/staff.html"><b>Temsilciler</b><small>admin/staff.html</small></a>
+      <a href="admin/staff-edit.html"><b>Temsilci Düzenle</b><small>admin/staff-edit.html</small></a>
+      <a href="admin/teams.html"><b>Takımlar</b><small>admin/teams.html</small></a>
+      <a href="admin/roles.html"><b>Roller</b><small>admin/roles.html</small></a>
+      <a href="admin/role-edit.html"><b>Rol Düzenle (İzin Matrisi)</b><small>admin/role-edit.html</small></a>
+      <a href="admin/departments.html"><b>Departmanlar</b><small>admin/departments.html</small></a>
+      <a href="admin/department-edit.html"><b>Departman Düzenle</b><small>admin/department-edit.html</small></a>
+      <a href="admin/login.html"><b>Yönetici Girişi</b><small>admin/login.html</small></a>
+    </div>
+  </section>
+</div>
+</body>
+</html>

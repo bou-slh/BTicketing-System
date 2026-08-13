@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Temsilciler</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "sf.title": "Temsilciler",
+    "sf.subtitle": "Yardım masasında çalışan ekip üyeleri. Bir temsilciye tıklayarak hesabını, erişimini, izinlerini ve takımlarını düzenleyin.",
+    "sf.add": "＋ Yeni Temsilci",
+    "sf.searchPh": "Temsilci ara…",
+    "sf.fltDeptAll": "Departman: Tümü",
+    "sf.fltTeamAll": "Takım: Tümü",
+    "sf.colName": "Ad",
+    "sf.colUsername": "Kullanıcı Adı",
+    "sf.colDept": "Departman",
+    "sf.colRole": "Rol",
+    "sf.colLastLogin": "Son Giriş",
+    "sf.stActive": "Aktif",
+    "sf.stLocked": "Kilitli",
+    "sf.stVacation": "Tatilde",
+    "sf.lock": "Kilitle",
+    "sf.emptyTitle": "Filtreye uyan temsilci yok",
+    "sf.emptyText": "Filtreleri değiştirin veya yeni bir temsilci ekleyin.",
+  },
+  en: {
+    "sf.title": "Agents",
+    "sf.subtitle": "Team members working the helpdesk. Click an agent to edit their account, access, permissions and teams.",
+    "sf.add": "＋ New Agent",
+    "sf.searchPh": "Search agents…",
+    "sf.fltDeptAll": "Department: All",
+    "sf.fltTeamAll": "Team: All",
+    "sf.colName": "Name",
+    "sf.colUsername": "Username",
+    "sf.colDept": "Department",
+    "sf.colRole": "Role",
+    "sf.colLastLogin": "Last Login",
+    "sf.stActive": "Active",
+    "sf.stLocked": "Locked",
+    "sf.stVacation": "On Vacation",
+    "sf.lock": "Lock",
+    "sf.emptyTitle": "No agents match the filter",
+    "sf.emptyText": "Change the filters or add a new agent.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="staff">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="sf.title"></h1>
+      <p data-i18n="sf.subtitle"></p>
+    </div>
+    <div class="actions">
+      <a class="rd-btn-primary" href="staff-edit.html" data-i18n="sf.add"></a>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="sf.searchPh">
+    <select class="rd-control">
+      <option selected data-i18n="sf.fltDeptAll"></option>
+      <option>Destek</option>
+      <option>Bordro</option>
+      <option>Danışmanlık</option>
+    </select>
+    <select class="rd-control">
+      <option selected data-i18n="sf.fltTeamAll"></option>
+      <option>Bordro Ekibi</option>
+      <option>VIP Masası</option>
+      <option>Entegrasyon</option>
+    </select>
+    <button class="rd-btn" data-i18n="common.apply"></button>
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="common.enable"></button>
+    <button class="rd-btn" data-i18n="sf.lock"></button>
+    <button class="rd-btn" data-i18n="common.export"></button>
+    <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+  </div>
+
+  <div class="rd-surface" id="tbl-staff">
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-staff" data-i18n-title="common.selectAll"></th>
+          <th class="sortable sorted-desc" data-i18n="sf.colName"></th>
+          <th class="sortable" data-i18n="sf.colUsername"></th>
+          <th class="sortable" data-i18n="common.status"></th>
+          <th class="sortable" data-i18n="sf.colDept"></th>
+          <th class="sortable" data-i18n="sf.colRole"></th>
+          <th class="sortable" data-i18n="sf.colLastLogin"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>
+            <span style="display:inline-flex;align-items:center;gap:10px">
+              <span class="rd-avatar">ÜA</span>
+              <a href="staff-edit.html">Ümit Akın</a>
+            </span>
+          </td>
+          <td>uakin</td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="sf.stActive"></span></td>
+          <td>Bordro</td>
+          <td>Yönetici</td>
+          <td>11.08.2026 09:12</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>
+            <span style="display:inline-flex;align-items:center;gap:10px">
+              <span class="rd-avatar">MÇ</span>
+              <a href="staff-edit.html">Merve Çetin</a>
+            </span>
+          </td>
+          <td>mcetin</td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="sf.stActive"></span></td>
+          <td>Destek</td>
+          <td>Kıdemli Temsilci</td>
+          <td>11.08.2026 08:47</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>
+            <span style="display:inline-flex;align-items:center;gap:10px">
+              <span class="rd-avatar">DK</span>
+              <a href="staff-edit.html">Deniz Kaya</a>
+            </span>
+          </td>
+          <td>dkaya</td>
+          <td><span class="rd-pill rd-pill-overdue" data-i18n="sf.stLocked"></span></td>
+          <td>Destek</td>
+          <td>Temsilci</td>
+          <td>03.08.2026 15:31</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td>
+            <span style="display:inline-flex;align-items:center;gap:10px">
+              <span class="rd-avatar">ZA</span>
+              <a href="staff-edit.html">Zeynep Arslan</a>
+            </span>
+          </td>
+          <td>zarslan</td>
+          <td><span class="rd-pill rd-pill-wait" data-i18n="sf.stVacation"></span></td>
+          <td>Danışmanlık</td>
+          <td>Temsilci</td>
+          <td>10.08.2026 17:03</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="common.showing"></span><span>1–4 / 4</span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="empty-staff">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">◍</div>
+        <h3 data-i18n="sf.emptyTitle"></h3>
+        <p data-i18n="sf.emptyText"></p>
+        <a class="rd-btn-primary" href="staff-edit.html" data-i18n="sf.add"></a>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

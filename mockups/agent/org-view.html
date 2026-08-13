@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Şirket: Ulaşım A.Ş.</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "ov.back": "← Şirketler",
+    "ov.meta": "Toplu taşıma · 14 kullanıcı · 3 açık talep",
+    "ov.manageForms": "Formları Yönet",
+    "ov.syncBanner": "Şirket bilgileri güncellendi — 14 kullanıcı kaydıyla senkronize edildi.",
+    "ov.profile": "Şirket Profili",
+    "ov.name": "Ad",
+    "ov.domains": "E-posta alan adları",
+    "ov.phone": "Telefon",
+    "ov.address": "Adres",
+    "ov.manager": "Hesap Yöneticisi",
+    "ov.sla": "SLA Planı",
+    "ov.tz": "Zaman dilimi",
+    "ov.autoMatch": "Otomatik Eşleştirme",
+    "ov.sw1": "Alan adı eşleşen yeni kullanıcıları bu şirkete bağla",
+    "ov.sw1Help": "@ulasim.com.tr adresiyle kaydolan her yeni kullanıcı, elle işlem gerekmeden bu şirketin altına eklenir.",
+    "ov.sw2": "Şirket alanlarını (adres, telefon, SLA) kullanıcı profillerine aktar",
+    "ov.sw2Help": "Şirket profilinde yapılan değişiklikler, geçersiz kılınmamış tüm kullanıcı alanlarına otomatik yansıtılır.",
+    "ov.lastSync": "Son senkronizasyon: bugün 09:12 · 14 kullanıcı",
+    "ov.tabUsers": "Kullanıcılar",
+    "ov.tabTickets": "Talepler",
+    "ov.tabNotes": "Notlar",
+    "ov.colEmail": "E-posta",
+    "ov.colPhone": "Telefon",
+    "ov.colNo": "Talep No",
+    "ov.colSubject": "Konu",
+    "ov.stActive": "Aktif",
+    "ov.stGuest": "Misafir",
+    "ov.inherited": "Şirketten",
+    "ov.noteBadge": "İç Not",
+    "ov.notePh": "Bu şirket hakkında bir not yazın…",
+    "ov.addNote": "Notu Ekle",
+  },
+  en: {
+    "ov.back": "← Companies",
+    "ov.meta": "Public transit · 14 users · 3 open tickets",
+    "ov.manageForms": "Manage Forms",
+    "ov.syncBanner": "Company details updated — synced to 14 user records.",
+    "ov.profile": "Company Profile",
+    "ov.name": "Name",
+    "ov.domains": "Email domains",
+    "ov.phone": "Phone",
+    "ov.address": "Address",
+    "ov.manager": "Account Manager",
+    "ov.sla": "SLA Plan",
+    "ov.tz": "Time zone",
+    "ov.autoMatch": "Auto-matching",
+    "ov.sw1": "Link new users with a matching email domain to this company",
+    "ov.sw1Help": "Every new user signing up with an @ulasim.com.tr address is added under this company without manual work.",
+    "ov.sw2": "Push company fields (address, phone, SLA) to user profiles",
+    "ov.sw2Help": "Changes made on the company profile are propagated automatically to all user fields that are not overridden.",
+    "ov.lastSync": "Last sync: today 09:12 · 14 users",
+    "ov.tabUsers": "Users",
+    "ov.tabTickets": "Tickets",
+    "ov.tabNotes": "Notes",
+    "ov.colEmail": "Email",
+    "ov.colPhone": "Phone",
+    "ov.colNo": "Ticket #",
+    "ov.colSubject": "Subject",
+    "ov.stActive": "Active",
+    "ov.stGuest": "Guest",
+    "ov.inherited": "From company",
+    "ov.noteBadge": "Internal Note",
+    "ov.notePh": "Write a note about this company…",
+    "ov.addNote": "Add Note",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="orgs">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <a href="orgs.html" class="text-sm" data-i18n="ov.back"></a>
+      <h1 style="margin-top:6px;display:flex;align-items:center;gap:12px">
+        <span class="rd-avatar">U</span> Ulaşım A.Ş.
+      </h1>
+      <p data-i18n="ov.meta"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn" data-i18n="common.edit"></button>
+      <button class="rd-btn" data-i18n="ov.manageForms"></button>
+      <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+    </div>
+  </div>
+
+  <div class="rd-banner rd-banner-success" id="sync-banner" style="display:none">
+    <span aria-hidden="true">✓</span>
+    <span data-i18n="ov.syncBanner"></span>
+  </div>
+
+  <div class="rd-grid-2" style="margin-bottom:20px">
+    <div class="rd-surface">
+      <div class="rd-surface-head" data-i18n="ov.profile"></div>
+      <div class="rd-surface-body">
+        <div class="bo-def">
+          <div class="row">
+            <span data-i18n="ov.name"></span>
+            <span>Ulaşım A.Ş.</span>
+          </div>
+          <div class="row">
+            <span data-i18n="ov.domains"></span>
+            <span><span class="rd-pill rd-pill-teal">@ulasim.com.tr</span></span>
+          </div>
+          <div class="row">
+            <span data-i18n="ov.phone"></span>
+            <span>+90 212 555 0142</span>
+          </div>
+          <div class="row">
+            <span data-i18n="ov.address"></span>
+            <span>Esentepe Mah. Kore Şehitleri Cad. No: 34, Şişli / İstanbul</span>
+          </div>
+          <div class="row">
+            <span data-i18n="ov.manager"></span>
+            <span>Ümit Akın</span>
+          </div>
+          <div class="row">
+            <span data-i18n="ov.sla"></span>
+            <span>Kurumsal (8 saat)</span>
+          </div>
+          <div class="row">
+            <span data-i18n="ov.tz"></span>
+            <span>Europe/Istanbul (GMT+3)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rd-surface" id="sync-card">
+      <div class="rd-surface-head" data-i18n="ov.autoMatch"></div>
+      <div class="rd-surface-body">
+        <div class="rd-field">
+          <label class="rd-switch">
+            <input type="checkbox" checked>
+            <span class="track"></span>
+            <span class="rd-switch-copy">
+              <b data-i18n="ov.sw1"></b>
+              <small data-i18n="ov.sw1Help"></small>
+            </span>
+          </label>
+        </div>
+        <div class="rd-field">
+          <label class="rd-switch">
+            <input type="checkbox" checked>
+            <span class="track"></span>
+            <span class="rd-switch-copy">
+              <b data-i18n="ov.sw2"></b>
+              <small data-i18n="ov.sw2Help"></small>
+            </span>
+          </label>
+        </div>
+        <div class="rd-help" style="border-top:1px dashed var(--rd-border);padding-top:11px" data-i18n="ov.lastSync"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-tabs" data-tabs>
+    <button class="active" data-tab="ov-panel-users"><span data-i18n="ov.tabUsers"></span> · 14</button>
+    <button data-tab="ov-panel-tickets"><span data-i18n="ov.tabTickets"></span> · 3</button>
+    <button data-tab="ov-panel-notes"><span data-i18n="ov.tabNotes"></span> · 1</button>
+  </div>
+
+  <div class="rd-tab-panel active" id="ov-panel-users">
+    <div class="rd-surface">
+      <div style="overflow-x:auto">
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th class="sortable sorted-desc" data-i18n="common.name"></th>
+              <th class="sortable" data-i18n="ov.colEmail"></th>
+              <th data-i18n="ov.colPhone"></th>
+              <th data-i18n="common.status"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="user-view.html">Ayşe Yıldırım</a></td>
+              <td>ayse.yildirim@ulasim.com.tr</td>
+              <td>+90 212 555 0142 <span class="rd-badge-inherited" data-i18n="ov.inherited"></span></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="ov.stActive"></span></td>
+            </tr>
+            <tr>
+              <td><a href="user-view.html">Burak Öztürk</a></td>
+              <td>burak.ozturk@ulasim.com.tr</td>
+              <td>+90 532 555 0217</td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="ov.stActive"></span></td>
+            </tr>
+            <tr>
+              <td><a href="user-view.html">Hakan Sarı</a></td>
+              <td>hakan.sari@ulasim.com.tr</td>
+              <td>+90 212 555 0142 <span class="rd-badge-inherited" data-i18n="ov.inherited"></span></td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="ov.stActive"></span></td>
+            </tr>
+            <tr>
+              <td><a href="user-view.html">Pelin Ak</a></td>
+              <td>pelin.ak@ulasim.com.tr</td>
+              <td>+90 212 555 0142 <span class="rd-badge-inherited" data-i18n="ov.inherited"></span></td>
+              <td><span class="rd-pill rd-pill-closed" data-i18n="ov.stGuest"></span></td>
+            </tr>
+            <tr>
+              <td><a href="user-view.html">Murat Eren</a></td>
+              <td>murat.eren@ulasim.com.tr</td>
+              <td>+90 533 555 0468</td>
+              <td><span class="rd-pill rd-pill-solved" data-i18n="ov.stActive"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rd-pagination">
+        <span><span data-i18n="common.showing"></span> 1–5 / 14</span>
+        <div class="pages">
+          <span class="current">1</span>
+          <a href="#">2</a>
+          <a href="#">3</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-tab-panel" id="ov-panel-tickets">
+    <div class="rd-surface">
+      <div style="overflow-x:auto">
+        <table class="rd-table">
+          <thead>
+            <tr>
+              <th data-i18n="ov.colNo"></th>
+              <th data-i18n="ov.colSubject"></th>
+              <th data-i18n="common.status"></th>
+              <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="ticket-view.html">R716540</a></td>
+              <td><a href="ticket-view.html">SGK bildirge hatası</a></td>
+              <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+              <td>Bugün 08:55</td>
+            </tr>
+            <tr>
+              <td><a href="ticket-view.html">R716512</a></td>
+              <td><a href="ticket-view.html">Vardiya şablonu içe aktarma sorunu</a></td>
+              <td><span class="rd-pill rd-pill-wait" data-i18n="status.wait"></span></td>
+              <td>Dün 15:32</td>
+            </tr>
+            <tr>
+              <td><a href="ticket-view.html">R716455</a></td>
+              <td><a href="ticket-view.html">İzin devri düzeltme talebi</a></td>
+              <td><span class="rd-pill rd-pill-open" data-i18n="status.open"></span></td>
+              <td>7 Ağu 2026</td>
+            </tr>
+            <tr>
+              <td><a href="ticket-view.html">R716301</a></td>
+              <td><a href="ticket-view.html">Aylık bordro raporu gecikmesi</a></td>
+              <td><span class="rd-pill rd-pill-closed" data-i18n="status.closed"></span></td>
+              <td>30 Tem 2026</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="rd-tab-panel" id="ov-panel-notes">
+    <div class="bo-thread-entry is-note">
+      <div class="head">
+        <div class="rd-avatar">ÜA</div>
+        <b>Ümit Yaşar Akın</b>
+        <span class="rd-pill rd-pill-wait" data-i18n="ov.noteBadge"></span>
+        <time>1 Ağu 2026 10:30</time>
+      </div>
+      <div class="body">
+        Sözleşme yenilemesi Eylül başında. İK direktörü Ayşe Yıldırım tüm bordro
+        taleplerinin tek onay noktası; kritik değişikliklerde önce onu bilgilendirin.
+      </div>
+    </div>
+    <div class="rd-surface">
+      <form class="rd-surface-body">
+        <div class="rd-field">
+          <textarea class="rd-control" data-i18n-placeholder="ov.notePh"></textarea>
+          <div class="rd-help" data-i18n="common.notesHelp"></div>
+        </div>
+        <button type="submit" class="rd-btn-primary" data-i18n="ov.addNote"></button>
+      </form>
+    </div>
+  </div>
+
+</main>
+<script>
+document.addEventListener("change", function (e) {
+  if (e.target.type === "checkbox" && e.target.closest("#sync-card")) {
+    document.getElementById("sync-banner").style.display = "flex";
+  }
+});
+</script>
+</body>
+</html>

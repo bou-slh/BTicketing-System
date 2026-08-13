@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Görevler</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "ta.title": "Görevler",
+    "ta.subtitle": "Taleplere bağlı veya bağımsız iç iş kalemlerini takip edin.",
+    "ta.qOpen": "Açık",
+    "ta.qMine": "Görevlerim",
+    "ta.qOverdue": "Gecikmiş",
+    "ta.qDone": "Tamamlanan",
+    "ta.searchPh": "Görev ara…",
+    "ta.assign": "Ata",
+    "ta.transfer": "Aktar",
+    "ta.new": "＋ Yeni Görev",
+    "ta.colNo": "Görev No",
+    "ta.colDate": "Tarih",
+    "ta.colTitle": "Başlık",
+    "ta.colTicket": "İlgili Talep",
+    "ta.colDept": "Departman",
+    "ta.colAssignee": "Atanan",
+    "ta.dlgTitle": "Yeni Görev",
+    "ta.fTitle": "Başlık",
+    "ta.fTitlePh": "Görevi kısaca tanımlayın…",
+    "ta.fDept": "Departman",
+    "ta.fAssignee": "Atanan",
+    "ta.fDue": "Son Tarih",
+    "ta.fDesc": "Açıklama",
+    "ta.fDescPh": "Görevin detaylarını yazın…",
+    "ta.fDescHelp": "Açıklama görev yazışmalarının ilk kaydı olarak eklenir.",
+    "ta.create": "Görevi Oluştur",
+  },
+  en: {
+    "ta.title": "Tasks",
+    "ta.subtitle": "Track internal work items attached to tickets or standalone.",
+    "ta.qOpen": "Open",
+    "ta.qMine": "My Tasks",
+    "ta.qOverdue": "Overdue",
+    "ta.qDone": "Completed",
+    "ta.searchPh": "Search tasks…",
+    "ta.assign": "Assign",
+    "ta.transfer": "Transfer",
+    "ta.new": "＋ New Task",
+    "ta.colNo": "Task #",
+    "ta.colDate": "Date",
+    "ta.colTitle": "Title",
+    "ta.colTicket": "Related Ticket",
+    "ta.colDept": "Department",
+    "ta.colAssignee": "Assigned To",
+    "ta.dlgTitle": "New Task",
+    "ta.fTitle": "Title",
+    "ta.fTitlePh": "Describe the task briefly…",
+    "ta.fDept": "Department",
+    "ta.fAssignee": "Assigned To",
+    "ta.fDue": "Due Date",
+    "ta.fDesc": "Description",
+    "ta.fDescPh": "Write the task details…",
+    "ta.fDescHelp": "The description is added as the first entry of the task thread.",
+    "ta.create": "Create Task",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="agent" data-nav="tasks">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head rc-hero">
+    <div>
+      <h1 data-i18n="ta.title"></h1>
+      <p data-i18n="ta.subtitle"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn-primary" data-dialog-open="dlg-newtask" data-i18n="ta.new"></button>
+    </div>
+  </div>
+
+  <div class="rd-tabs" data-tabs>
+    <button><span data-i18n="ta.qOpen"></span> · 7</button>
+    <button class="active"><span data-i18n="ta.qMine"></span> · 6</button>
+    <button><span data-i18n="ta.qOverdue"></span> · 2</button>
+    <button><span data-i18n="ta.qDone"></span> · 41</button>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="ta.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="ta.assign"></button>
+    <button class="rd-btn" data-i18n="ta.transfer"></button>
+    <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+  </div>
+
+  <div class="rd-surface">
+    <div style="overflow-x:auto">
+      <table class="rd-table" id="tbl-tasks">
+        <thead>
+          <tr>
+            <th class="col-check"><input type="checkbox" data-check-all="#tbl-tasks" aria-label="Tümünü seç"></th>
+            <th class="sortable" data-i18n="ta.colNo"></th>
+            <th class="sortable sorted-desc" data-i18n="ta.colDate"></th>
+            <th class="sortable" data-i18n="ta.colTitle"></th>
+            <th data-i18n="ta.colTicket"></th>
+            <th class="sortable" data-i18n="ta.colDept"></th>
+            <th class="sortable" data-i18n="ta.colAssignee"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2041</a></td>
+            <td>11 Ağu 2026</td>
+            <td><a href="task-view.html">Bordro parametre güncellemesi</a></td>
+            <td><a href="ticket-view.html">R716555</a></td>
+            <td>Bordro</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2040</a></td>
+            <td>10 Ağu 2026</td>
+            <td><a href="task-view.html">SGK bildirge kontrolü</a></td>
+            <td><a href="ticket-view.html">R716540</a></td>
+            <td>Bordro</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2039</a></td>
+            <td>9 Ağu 2026</td>
+            <td><a href="task-view.html">Vardiya şablonu içe aktarma</a></td>
+            <td><a href="ticket-view.html">R716512</a></td>
+            <td>Vardiya Planlama</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2036</a></td>
+            <td>8 Ağu 2026</td>
+            <td><a href="task-view.html">Test ortamı yenileme</a></td>
+            <td><a href="ticket-view.html">R716498</a></td>
+            <td>Teknik Destek</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2035</a></td>
+            <td>7 Ağu 2026</td>
+            <td><a href="task-view.html">İzin devri düzeltmesi</a></td>
+            <td><a href="ticket-view.html">R716455</a></td>
+            <td>İK</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="task-view.html">T-2033</a></td>
+            <td>5 Ağu 2026</td>
+            <td><a href="task-view.html">Yıl sonu rapor taslağı</a></td>
+            <td><a href="ticket-view.html">R716410</a></td>
+            <td>Bordro</td>
+            <td>Ümit Y. Akın</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rd-pagination">
+      <span><span data-i18n="common.showing"></span> 1–6 / 53</span>
+      <div class="pages">
+        <span class="current">1</span>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">›</a>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="rd-dialog" id="dlg-newtask">
+    <div class="rd-dialog-head">
+      <span data-i18n="ta.dlgTitle"></span>
+      <button class="close" data-dialog-close aria-label="Kapat">✕</button>
+    </div>
+    <form>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="nt-title" data-i18n="ta.fTitle"></label>
+          <input id="nt-title" class="rd-control" data-i18n-placeholder="ta.fTitlePh" required>
+        </div>
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="nt-dept" data-i18n="ta.fDept"></label>
+            <select id="nt-dept" class="rd-control">
+              <option>Bordro</option>
+              <option>İK</option>
+              <option>Teknik Destek</option>
+              <option>Vardiya Planlama</option>
+            </select>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="nt-assignee" data-i18n="ta.fAssignee"></label>
+            <select id="nt-assignee" class="rd-control">
+              <option>Ümit Y. Akın</option>
+              <option>Merve Çetin</option>
+              <option>Deniz Kaya</option>
+              <option>Selin Aydın</option>
+            </select>
+          </div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="nt-due" data-i18n="ta.fDue"></label>
+          <input id="nt-due" type="date" class="rd-control" value="2026-08-18">
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="nt-desc" data-i18n="ta.fDesc"></label>
+          <textarea id="nt-desc" class="rd-control" data-i18n-placeholder="ta.fDescPh"></textarea>
+          <div class="rd-help" data-i18n="ta.fDescHelp"></div>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="submit" class="rd-btn-primary" data-i18n="ta.create"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

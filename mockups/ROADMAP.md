@@ -1,0 +1,302 @@
+# RapidsolDestek — Product Roadmap
+
+Timeline-free, dependency-ordered roadmap for building the real RapidsolDestek helpdesk in C#/ASP.NET Core.
+The mockups in this folder (70 TR/EN pages: portal 12, agent 17, admin 41) are the **binding spec**: the shipped
+product must look and behave exactly like them, and **every component visible in a mockup must work** — including
+every control that is currently dead in the static HTML. osTicket (`/Users/rapidsolbilisim/os/osTicket`) is the
+domain-model reference; §3 tracks feature parity with it subsystem by subsystem. No osTicket code is reused (GPLv2).
+
+---
+
+## 1. Charter & definition of done
+
+- **Stack**: .NET 10 · ASP.NET Core MVC with Razor areas `Portal` / `Agent` / `Admin` · EF Core + PostgreSQL ·
+  Hangfire (background jobs) · SignalR (live board) · MailKit/MimeKit (email) · xUnit + Playwright.
+- **Spec rule**: mockups are spec v1.0 after Stage S0 freezes them. Deviations require sign-off.
+- **Definition of done — per page**: its §6 parity checklist is fully green. Every listed component functions,
+  in TR **and** EN, in light **and** dark theme, with the page's empty state reachable. "It renders correctly"
+  is never done.
+- **Definition of done — per stage**: the stage's exit gate (§5) passes, `/verify` (build + tests + i18n audit +
+  Playwright smoke) is green, and the visual differ accepts the stage's pages against their mockup twins.
+- **Scope**: full scope, single launch. The admin **builders** (queue builder, form designer, list editor,
+  filter rule editor) are **in v1** — no deferred-to-v2 components anywhere.
+
+## 2. Canonical domain data
+
+Single source of truth for sample/seed data. It serves twice: (a) the S0 mockup consistency pass edits every
+mockup page to conform, (b) S3 seeds the database with exactly this canon. Authority pages win conflicts.
+
+| Domain | Canon (authority page) | Currently conflicting pages to conform |
+|---|---|---|
+| Departments | **Destek**, **Bordro** (child of Destek), **Danışmanlık** (`admin/departments.html`) | `admin/settings-system.html` ("İK Danışmanlık"), `admin/helptopics.html` + `helptopic-edit.html` ("Bordro Yönetimi", "İnsan Kaynakları"), `admin/dashboard.html` stats (5 invented depts), `admin/department-edit.html` parent select |
+| Agents | **Ümit Yaşar Akın, Merve Çetin, Deniz Kaya, Selin Aydın, Kerem Yılmaz** (`agent/directory.html`); display name always full form, short forms only where space demands one rule ("Ümit Y. Akın") | "Ümit Akın" spellings (~8 files); `admin/staff.html` phantom "zarslan"; dashboard-only agents get real staff rows |
+| SLA plans | **Standart (48h grace), VIP, Kritik, Dahili Talepler (72h)** (`admin/slas.html`) | `admin/department-edit.html` ("Standart — 8 saat"), `admin/settings-tickets.html` ("Standart — 4 saat", invented "Bordro Dönemi") |
+| Schedules | **Hafta içi 09:00–18:00**, **7/24**, **Resmi Tatiller 2026**, **Cumartesi Yarım Gün** (`admin/schedules.html`) | spelling variants in `admin/department-edit.html`, `admin/settings-system.html` |
+| Statuses | Global enum in `assets/js/i18n-tr.js`: `open, wait, test, solved, closed, overdue, new, effortWait, effortApproved, effortRejected` | portal-local inventions `replyWait`, `testing`, `inProgress` (`portal/index.html`, `portal/tickets.html`) map onto the global enum |
+| Hero end-user | **Bourla Salehi · bourla.salehi@rapidsol.com.tr · org RapidSol** | `agent/tickets.html`/`ticket-view.html` (@ulasim.com.tr identity), `portal/profile.html` (b.salehi@) |
+| Portal ownership | A portal user sees only their own org's tickets | `portal/tickets.html` currently mixes 4 companies for one user |
+| Ticket numbering | One scheme, `R` + 6 digits (R7165xx family) across all panels | portal-only R794094/R11xxxx numbers renumbered into the family |
+| Hero ticket | **R716555** "Yol ücreti hatası hakkında" (Ulaşım A.Ş., 6h effort pending) — already consistent across 7 pages; stays the golden-path story | keep; align its status (`open` + pending effort) on `agent/dashboard.html` (`effortWait`) and `agent/user-view.html` (`wait`) |
+| Companies | Ulaşım A.Ş., Tosyalı Holding, Konecta, RapidSol (consistent today) | counts on `agent/orgs.html` vs visible rows reconciled |
+| Emails | destek@ / bordro@ / bilgi@rapidsol.com.tr (consistent today) | — |
+| Templates | Sets: Varsayılan (TR), English Set (EN) (consistent today) | — |
+| Cross-page integrity | Assignees, statuses, org ticket lists, task links, tile counts, relative dates agree between every pair of pages that show the same entity | audited conflicts C1–C14: tickets↔live assignees, tickets↔users rosters, org-view ticket lists, ticket-view↔tasks task mismatch, sidebar/tile counts, "Bugün/Dün" date logic |
+
+## 3. osTicket parity matrix
+
+Every osTicket subsystem (from `include/class.*.php` + `scp/*.php`) appears below — nothing is silently missing.
+Levels: **full** (equivalent capability), **adapted** (capability kept, mechanism modernized), **replaced**
+(different mechanism, same job), **dropped** (deliberately out, stated reason).
+
+| osTicket subsystem | RapidsolDestek module | Mockup page(s) | Parity |
+|---|---|---|---|
+| ticket, thread, thread_actions | TicketService + ThreadEntry (reply/note/event) | agent/tickets, ticket-view, ticket-open; portal/tickets, ticket-view, open | full |
+| collaborator | Ticket collaborators (CC) | CC field on agent/ticket-open, recipients row on ticket-view | full |
+| lock | Concurrent-edit lock on composers/edit forms | (implied by composers) | full |
+| draft | Autosaved composer drafts | (implied by composers) | full |
+| task | TaskItem + task threads | agent/tasks, task-view; admin/settings-tasks | full |
+| user, organization | User + Organization (+ domain auto-link, field inheritance/override) | agent/users, user-view, orgs, org-view; admin/settings-users | full |
+| staff, team, role, dept | Staff + Team + Role(permission matrix) + Department | admin/staff(-edit), teams, roles(role-edit), departments(-edit); agent/directory | full |
+| topic (help topics) | HelpTopic (routing: dept/priority/SLA/form) | admin/helptopics(-edit) | full |
+| sla | SlaPlan | admin/slas | full |
+| schedule, businesshours | Schedule + holiday entries + diagnostic | admin/schedules, schedule-edit | full |
+| filter, filter_action | Mail/ticket filters with actions | admin/filters, filter-edit | full (builder in v1) |
+| queue (custom queues) | SavedQueue + queue builder (criteria/columns/sort/preview) | admin/queues; agent/tickets queue tree + advanced search | full (builder in v1) |
+| dynamic_forms, forms | Form designer (custom fields on ticket/task/user/org) | admin/forms, form-edit | full (builder in v1) |
+| list (custom lists) | List editor (+ system lists protected) | admin/lists, list-edit | full (builder in v1) |
+| faq, category, knowledgebase | KB: categories, articles, portal search, helpful votes | portal/kb, kb-article; agent/kb, kb-faq; admin/settings-kb | full |
+| canned | Canned responses + variable expansion + composer insert | agent/canned; selects in ticket-view/ticket-open | full |
+| email, mailfetch, mailer | EmailAccount (IMAP/SMTP + OAuth2), inbound pipeline, outbound queue | admin/emails, email-edit, email-settings | full |
+| template (email templates) | EmailTemplate sets, per-template editor, variable pills | admin/templates, template-edit | full |
+| banlist | Banlist | admin/banlist | full |
+| emailtest | Email diagnostic (real send, pending/success/failure states) | admin/email-diagnostic | full |
+| config/settings | Typed Setting sections consumed by the engine | admin/settings-* (7 pages) | full |
+| log, audit | System logs + AuditEvent on every mutation (EF interceptor) | admin/system-logs, audit-logs | full |
+| api, apikeys, dispatcher | REST API + ApiKey (create/regenerate/copy, IP restriction) | admin/apikeys | adapted (JSON REST, no XML) |
+| plugin, app | Feature flags + integration toggles | admin/plugins | replaced (no PHP-style plugin runtime; the page manages built-in feature modules) |
+| 2fa | TOTP 2FA (mandatory for admins) | 2FA blocks on all three logins | full |
+| auth, oauth2, passwd, usersession | ASP.NET Core Identity: Customer + Staff principals, lockout, pwreset, sessions | portal/login, register, pwreset; agent/login; admin/login | adapted |
+| search | Postgres full-text (`tsvector`) topbar + list search | topbar search, list search boxes | replaced |
+| export, pdf | CSV export on lists + print views (browser print CSS) | "Dışa Aktar" buttons, "Yazdır" on ticket-view | adapted |
+| cron/autocron | Hangfire recurring jobs (mail fetch, SLA/overdue sweep, retention) | (invisible; drives live board + overdue statuses) | replaced |
+| i18n, translation | resx + culture middleware, TR default, EN cookie switcher | TR/EN switch on every page | adapted |
+| sequence | Ticket/task numbering sequences | admin/settings-tickets `dlg-seq`, settings-tasks | full |
+| import | CSV import for users | "İçe Aktar" on agent/users; `dlg-import` on admin/list-edit | full |
+| captcha | Rate limiting + optional captcha on guest/register endpoints | (invisible; portal/register, check-status) | adapted |
+| avatar | Initials avatars (local generation, per mockup style) | avatars throughout | adapted |
+| company (site pages) | SitePage (landing/offline/thanks) + company settings | admin/pages, settings-company | full |
+| pagenate | Server-side pagination on every list | all `.rd-pagination` bars | full |
+| **(no osTicket counterpart)** | **EffortProposalService** — Efor Onayı state machine `none→pending→approved/rejected→(revise→pending)` | effort card portal/ticket-view; effort dialog + banners agent/ticket-view; settings-tickets effort section; 2 email templates | product-original |
+| **(no osTicket counterpart)** | **Live board** — SignalR real-time kanban + ticker + SLA countdown | agent/live | product-original |
+
+Deliberately dropped: osTicket's PHP plugin marketplace, XML API payloads, osTicket's attachment-in-database
+default (files go behind `IFileStore`, filesystem/S3-compatible).
+
+## 4. Cross-cutting component behavior specs
+
+Written once here; every page checklist in §6 references them. Each spec exists because the audit found the
+pattern dead in the mockups.
+
+- **B1 List engine** (~19 admin + 8 agent/portal list pages): server-driven sort on every `th.sortable`
+  (direction indicator moves), live search box, filter dropdowns as the existing `details.rd-filter` chip
+  component (adopt it on admin lists — it is currently used on exactly one page), real pagination,
+  row-checkbox selection with header select-all (incl. reverse sync + `:disabled` rows skipped), a
+  "N seçildi" bulk bar whose actions (Ata/Birleştir/Sil/Etkinleştir/…) actually operate on the selection,
+  CSV export, and a reachable empty state (currently unreachable hidden panels on 16 admin pages).
+- **B2 Dialogs**: every dialog is parameterized by the row that opened it (today one hardcoded dialog is
+  shared by 21 template rows, 6 user-template rows, 4 SLA rows, 4 site pages, 4 API keys, 3 ban rows,
+  3 teams, all field-config rows). Submit = validate → save → close → toast, fixing the audited pattern
+  where `data-dialog-close` on a submit button swallows the save. Backdrop click + ESC close, focus trap,
+  focus return.
+- **B3 Forms & gating**: server + client validation, dirty-state guard, password-match checks; a
+  `.rd-switch` gates its dependent fields (disable/reveal) — ~140 admin switches incl. the Efor Onayı
+  section, alert `bo-toggle-card` masters, email-edit protocol radios, KB master switch; permission
+  matrices (role-edit 42 boxes, staff-edit 39) get master↔children with indeterminate state; auth-backend
+  and format selects reveal their dependent inputs.
+- **B4 Builders** (v1): repeatable rows — every "＋ Add …" (~18) appends a row, every `✕` (~45) removes one;
+  drag-reorder via the `⋮⋮` handles (queue columns, form fields, list items — mockup help text already
+  promises it); queue builder's Preview tab reflects the configured criteria/columns/sort live; filter
+  editor shows a "N tickets would match" preview.
+- **B5 Composers**: replies/notes append to the thread (agent/ticket-view, task-view, user-view, org-view,
+  portal/ticket-view); canned-response select inserts expanded text into the editor; template variable
+  pills are click-to-insert at cursor; attach controls list chosen files (the empty `.rc-file-name` span
+  and the input-less `.rd-upload` drop zone get wired); signature radios preview; after-reply status select
+  applies.
+- **B6 Auth & session**: real `<form>` logins (all three logins are currently `<a>` navigations that ignore
+  credentials), TOTP 2FA (mandatory for admin), lockout policy, logout in the account menu (no logout
+  exists anywhere in the mockups today), staff pwreset flow (osTicket has `scp/pwreset.php`; mockups lack
+  agent/admin pwreset pages — S0 adds them), portal register/pwreset as real multi-step flows (pwreset
+  mockup currently shows all 3 steps stacked), remember-me, invalid-credential error states.
+- **B7 Live board**: SignalR hub pushes column membership, ticker events and SLA countdowns from domain
+  events; cards drag between the 5 columns with permission checks; "Üstlen" claims and moves the card;
+  SLA chips can leave warn/danger when rescued; pause stops updates visibly.
+- **B8 Effort loop (flagship)**: agent proposes/revises/withdraws (dialog exists) → portal user sees the
+  effort card → **Onayla** (one click) or **Reddet** (dialog, mandatory note) → status transition + thread
+  event + banner variant on both panels (approved/rejected banner variants already exist in the mockup as
+  HTML comments) → emails via the two effort templates → settings gates (enable, block-work-until-approved,
+  mandatory reject note, reminder days, auto-approve threshold, revision limit).
+- **B9 Shell**: topbar global search (searches tickets/users/orgs/settings, currently decorative), account
+  menu on the avatar (profile + logout), sidebar counts fed by real queries (hardcoded "8"/"3" today),
+  settings section rail with scroll-spy (click-highlight exists, scroll desyncs today), panel switcher
+  respecting permissions.
+- **B10 Observability & polish**: audit trail on every mutation with drill-down from audit-logs rows;
+  data-driven dashboard charts with hover tooltips (admin SVG chart is hardcoded; date-range apply must
+  re-render); email diagnostic with pending/success/failure states (success banner is currently always
+  visible); schedule diagnostic answers its date question; "Yazdır" = print CSS; toasts with
+  success/error variants; a11y (dialog focus, tab roles/aria-selected, aria-live on toasts/ticker);
+  dark/light via `light-dark()` kept working in ported CSS.
+
+## 5. Stages S0–S9 (dependency order, exit gates, no dates)
+
+- **S0 — Spec freeze & mockup consistency pass.** Apply §2 canon to every mockup page's sample data; fix
+  mockup defects that make the spec lie: dead tab bars on `agent/tasks.html` + `agent/kb.html` (missing
+  `data-tab`/panels), decoy language selects on both profile pages (wire to `data-lang-switch`), orphaned
+  `portal/profile.html` + `portal/check-status.html` (link from portal header), missing file input in
+  `agent/kb-faq.html` upload zone, `admin/email-diagnostic.html` always-on success banner, add agent/admin
+  pwreset mockups, normalize `data-check-all` selector convention. Tag `spec-v1.0`.
+  *Gate*: cross-page grep/diff pass shows zero canon violations; gallery links resolve; PM sign-off.
+- **S1 — Bootstrap** *(starts today)*. Git repo at `RapidsolDestek/` (mockups tracked), solution skeleton
+  (`src/Web` with 3 areas, `src/Domain`, `src/Infrastructure`, `tests/Tests`, `tests/E2E`), Docker compose
+  (app + PostgreSQL), CI (build+test on PR), CLAUDE.md; AI tooling: `page-porter` agent, `/port-page`,
+  `/add-entity`, `/add-setting`, `/verify` skills, format/i18n hooks.
+  *Gate*: `dotnet build` + `docker compose config` green; `/port-page` demo runs end-to-end on a throwaway branch.
+- **S2 — Chrome, i18n, auth foundation.** `_PortalLayout` + `_BackofficeLayout` replicating the injected
+  chrome (nav highlighting from routes); i18n-js→resx converter + culture middleware (TR default, EN cookie);
+  Identity with separate Customer/Staff principals and cookies; B6 complete (2FA, lockout, logout, pwreset).
+  *Gate*: all 6 auth pages functional; chrome pixel-matches mockups in TR/EN, light/dark.
+- **S3 — Domain model + seed.** Entity sweep using §3 as the checklist (Ticket, ThreadEntry, TaskItem, User,
+  Organization, Staff, Team, Role, Department, HelpTopic, SlaPlan, Schedule, Filter+Actions, SavedQueue,
+  FormDefinition/Field, ListDefinition/Item, KbCategory, FaqArticle, CannedResponse, EmailAccount,
+  EmailTemplate, Attachment, AuditEvent, Setting, ApiKey, BanlistEntry, SitePage, EffortProposal(+revisions),
+  Sequence); EF interceptor writing AuditEvents; seed = §2 canon exactly.
+  *Gate*: schema review vs osTicket reference; seeded R716555 renders in a real-chrome queue.
+- **S4 — Core services.** TicketService (create/route/transition with permission checks), thread with
+  collaborators/drafts/locks/sanitization, assignment+claim, queue engine (SavedQueue eval + `tsvector`
+  search), canned+variables, **EffortProposalService** (B8 state machine + guards + domain events),
+  `IFileStore`. *Gate*: service test suite green incl. full effort lifecycle and revision loops.
+- **S5 — Portal area** (12 pages, checklists §6.1). *Gate*: portal E2E — register → open → reply → effort
+  approve + reject paths; visual diff accepted.
+- **S6 — Agent area** (17 pages, §6.2; B1 on lists, B5 composers, B7 live board). *Gate*: golden path E2E
+  (portal open → agent proposes 6h → portal approves → agent resolves); live board updates <1s across two
+  browsers.
+- **S7 — Admin area** (41 pages, §6.3; B1–B4 everywhere, builders, settings actually consumed by the engine).
+  *Gate*: every setting round-trips (flip block-work-until-approved → S4 guard flips); builder-created
+  queue/form/list/filter demonstrably affects the agent panel.
+- **S8 — Email subsystem.** Outbound: Razor template rendering with variables, event→template map (incl.
+  effort request/response), MailKit SMTP, Hangfire send queue with retry, per-department from-addresses.
+  Inbound: Hangfire IMAP poll, MimeKit parse, reply-token threading, help-topic routing, attachments,
+  banlist + loop/bounce protection. *Gate*: staging round trip — mail → ticket → agent reply → customer
+  mail → customer reply → thread appends.
+- **S9 — Hardening & launch.** Security review + authz matrix tests (every role × endpoint), rate limiting,
+  CSRF/headers, dependency scan; KVKK (data inventory, retention jobs, consent texts); performance (index
+  audit, slow-query profiling, load test lists+search); backups/monitoring/health checks; data migration
+  (if a legacy source is confirmed) with dry-run reconciliation; UAT rounds; production cutover + hypercare.
+  *Gate*: security review clean, UAT signed, backup/restore drill done, rollback documented.
+
+Golden-path E2E runs in CI nightly from S6 onward.
+
+## 6. Page-by-page parity checklists
+
+Legend: each `[ ]` is a component that must work per the referenced B-spec. Working links/tabs/dialogs already
+proven in the mockups are not repeated — the lists below name what is dead today plus the page's core dynamic
+behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
+
+### 6.1 Portal (12 pages)
+
+- [ ] **login.html** — real form + validation, remember-me, error state, 2FA (B6)
+- [ ] **register.html** — real registration, password match/strength, consent (KVKK), multi-step per design (B6)
+- [ ] **pwreset.html** — 3 steps as an actual flow (request → code → new password) (B6)
+- [ ] **offline.html** — served by real maintenance-mode switch (settings-system)
+- [ ] **index.html** — live tile counts, KB mini-search works, recent tickets from data, account menu + logout (B9)
+- [ ] **open.html** — help-topic → dynamic form fields (form designer output), file list on attach, validation, creates a real ticket (B3/B5)
+- [ ] **tickets.html** — real list: tabs from data, search + topic filter work, deep links `ticket-view?id=` (B1)
+- [ ] **ticket-view.html** — thread from data; **effort card Onayla/Reddet** (B8); reply composer appends + attach file list (B5)
+- [ ] **check-status.html** — guest lookup (ticket# + email) renders a result/failure state
+- [ ] **kb.html** — search actually searches, category filter, article counts (B1)
+- [ ] **kb-article.html** — helpful yes/no vote with thank-you state; attachments downloadable
+- [ ] **profile.html** — saves; language select actually switches culture; password change validated (B3)
+- [ ] *(portal header everywhere)* — profile + check-status reachable, logout (B9)
+
+### 6.2 Agent (17 pages)
+
+- [ ] **login.html** — real form, 2FA, lockout, forgot-password → staff pwreset (B6)
+- [ ] **dashboard.html** — live stat tiles, tables from data with row deep-links, topbar search (B9)
+- [ ] **live.html** — SignalR board: real column membership, drag between columns, Üstlen/claim, ticker from
+      domain events, recoverable SLA countdown, pause (B7)
+- [ ] **tickets.html** — queue tree filters for real (counts live, active state moves); B1 full list engine;
+      advanced-search dialog: rule rows add/remove, column picker, sort, **save as queue**; export CSV; bulk bar
+- [ ] **ticket-view.html** — all header actions incl. Yazdır (print CSS) and Düzenle; effort propose/revise/
+      withdraw + 3 banner states + thread events (B8); reply/note composers append; canned insert; signature
+      preview; after-reply status; attach list; Diğer menu actions (merge/link/release/ban/delete…) implemented;
+      thread ⋯ menus; related-tickets link dialog (B2/B5)
+- [ ] **ticket-open.html** — user autocomplete + inline "Yeni Kullanıcı"; topic→dept/SLA/form cascading;
+      attach list; creates ticket on behalf of user (B3/B5)
+- [ ] **tasks.html** — tab bar (fixed in S0) filters from data; B1 engine; new-task dialog creates
+- [ ] **task-view.html** — header actions (Kapat/Ata/Aktar/Düzenle/Sil) via dialogs; note composer appends (B2/B5)
+- [ ] **users.html** — B1 engine; add-user dialog creates; "Diğer" bulk menu actions real; CSV import
+- [ ] **user-view.html** — header actions; "Geçersiz kıl" inline override of inherited fields; tabs from data;
+      note composer (B3/B5)
+- [ ] **orgs.html** — B1 engine; add-org dialog creates; export
+- [ ] **org-view.html** — header actions; sync switches persist + banner reflects actual sync; tabs from data;
+      note composer
+- [ ] **kb.html** — category tabs (fixed in S0) filter; search; manage-categories dialog CRUD
+- [ ] **kb-faq.html** — saves; attachments upload with file list (input added in S0); preview; delete (B2/B5)
+- [ ] **canned.html** — B1 engine; per-row edit dialog prefilled (B2); create/disable/delete
+- [ ] **directory.html** — search + department filter work; mailto/tel links; presence from real sessions
+- [ ] **profile.html** — saves; 2FA setup ("Yapılandır"); vacation switch has effect (assignment guard);
+      signature editor; language select switches culture
+
+### 6.3 Admin (41 pages)
+
+Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty state), every dialog B2
+(parameterized + correct submit), every settings page B3 (gating) + B9 scroll-spy, builders B4.
+
+- [ ] **login.html** — real form, mandatory 2FA, forgot-password (page added in S0) (B6)
+- [ ] **dashboard.html** — date range re-renders data-driven charts with tooltips; export; 3 stats tables sortable (B10)
+- [ ] **system-info.html** — real server/PHP→.NET runtime/db info; update check
+- [ ] **system-logs.html** — filters + Apply work; purge deletes; row detail dialog (B1/B2)
+- [ ] **audit-logs.html** — filters/export/pagination; rows drill down to the audited object (B10)
+- [ ] **settings-company.html** — logo file uploads with preview (B3); page selects live from SitePages
+- [ ] **settings-system.html** — language add/remove rows (B4); attachment storage settings consumed; maintenance mode drives portal/offline
+- [ ] **settings-tickets.html** — all 40 switches gate for real, effort section drives B8 guards; sequence dialog CRUD (B3/B4)
+- [ ] **settings-tasks.html** — same pattern as tickets (B3/B4)
+- [ ] **settings-agents.html** — template Edit dialogs per-row prefilled (B2); lockout policy consumed by B6
+- [ ] **settings-users.html** — 6 template dialogs prefilled (B2); registration mode consumed by portal
+- [ ] **settings-kb.html** — master switch gates portal KB visibility (B3)
+- [ ] **email-settings.html** — 16 switches gate; footer button order normalized (S0)
+- [ ] **emails.html / email-edit.html** — account CRUD; IMAP/SMTP config with per-protocol dialogs (B2), protocol
+      radios gate fields (B3), OAuth2 tabs, **Test connection**
+- [ ] **email-diagnostic.html** — real send with pending/success/failure states (B10)
+- [ ] **templates.html / template-edit.html** — set CRUD (create dialog closes properly); 21 templates each
+      open their own content (B2); variable pills click-to-insert (B5); per-template preview
+- [ ] **banlist.html** — add/edit/delete real; B1
+- [ ] **helptopics.html / helptopic-edit.html** — CRUD; number-format radio gates input; forms tab attach/detach (B3/B4)
+- [ ] **filters.html / filter-edit.html** — CRUD; rule/action rows add/remove (B4); match-count preview; filters actually run in the mail/ticket pipeline
+- [ ] **queues.html** — full builder: criteria/columns/sort/conditions rows (B4), drag-reorder columns, export
+      column set, **live preview**, saved queue appears in agent queue tree
+- [ ] **forms.html / form-edit.html** — form designer: field CRUD, per-field config dialog writes back (B2),
+      type select reveals options editor, drag-reorder, live preview; output consumed by portal/agent open pages
+- [ ] **lists.html / list-edit.html** — list editor: item CRUD + reorder (sort-mode gates), import dialog works,
+      properties fields; system lists protected (B4)
+- [ ] **slas.html** — per-row dialog prefilled (B2); grace/transient switches consumed by SLA engine
+- [ ] **schedules.html / schedule-edit.html** — entry/holiday rows add/remove (B4); timezone; **diagnostic answers**; Clone works
+- [ ] **pages.html** — site page CRUD (B2); pages served on portal
+- [ ] **apikeys.html** — key CRUD + regenerate + copy-to-clipboard; IP restriction enforced by the API (B2)
+- [ ] **plugins.html** — feature-flag install/enable/disable per module; per-module configure entry (§3 replaced)
+- [ ] **staff.html / staff-edit.html** — CRUD; permission cards master↔children (B3); access/team rows (B4);
+      LDAP/auth-backend select gates fields; password dialog validated (B2)
+- [ ] **teams.html** — per-row dialog prefilled; member roster add/remove (B2/B4)
+- [ ] **roles.html / role-edit.html** — 42-box matrix with tri-state masters (B3); role consumed by authz on every endpoint
+- [ ] **departments.html / department-edit.html** — CRUD with hierarchy (collapse); autoresponder switches gate;
+      access rows (B3/B4); export
+
+## 7. Open decisions (carry-over, timeline questions removed)
+
+1. **Single-tenant or multi-tenant?** — still the schema blocker; must be answered before S3.
+2. Hosting: Linux containers (recommended) vs Windows/IIS; cloud vs on-prem.
+3. Integrations: SSO (Entra ID/LDAP), CRM/ERP, WhatsApp/telephony, billing on approved effort hours.
+4. Legacy migration source (live osTicket data?) — shapes S9.
+5. Languages beyond TR+EN.
+6. PostgreSQL confirmed, or mandated SQL Server?
+7. Who operates production; uptime/backup SLA; DNS control for SPF/DKIM; KVKK residency/retention.
+8. UAT owners and acceptance criteria; single decision-maker for design disputes.

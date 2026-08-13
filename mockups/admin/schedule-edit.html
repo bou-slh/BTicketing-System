@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Takvim Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "sche.back": "← Çalışma Takvimleri",
+    "sche.sub": "Çalışma saatlerini, tekrar eden girdileri ve tatil günlerini düzenleyin.",
+    "sche.clone": "Kopyala",
+    "sche.diag": "Tanılama",
+    "sche.tabInfo": "Takvim",
+    "sche.tabEntries": "Girdiler",
+    "sche.tabHolidays": "Tatiller",
+    "sche.name": "Ad",
+    "sche.nameHelp": "SLA planlarında ve departman ayarlarında bu adla görünür.",
+    "sche.type": "Tür",
+    "sche.typeBusiness": "Çalışma Saatleri",
+    "sche.typeHoliday": "Tatil Takvimi",
+    "sche.typeHelp": "Tatil takvimleri çalışma saatlerinden düşülen günleri tanımlar.",
+    "sche.tz": "Zaman dilimi",
+    "sche.tzSystem": "— Sistem zaman dilimi —",
+    "sche.tzHelp": "Boş bırakılırsa sistem zaman dilimi kullanılır.",
+    "sche.desc": "Açıklama",
+    "sche.descHelp": "Takvimin ne zaman kullanılacağını hatırlatan kısa bir not.",
+    "sche.entriesHead": "Takvim Girdileri",
+    "sche.entriesHelp": "Her girdi bir çalışma zamanı aralığı tanımlar; tekrar kuralıyla çoğaltılır.",
+    "sche.colStart": "Başlangıç",
+    "sche.colEnd": "Bitiş",
+    "sche.colRepeat": "Tekrar",
+    "sche.colDays": "Günler",
+    "sche.repWeekly": "Haftalık",
+    "sche.repDaily": "Günlük",
+    "sche.repMonthly": "Aylık",
+    "sche.repOnce": "Tek seferlik",
+    "sche.dMon": "Pzt",
+    "sche.dTue": "Sal",
+    "sche.dWed": "Çar",
+    "sche.dThu": "Per",
+    "sche.dFri": "Cum",
+    "sche.dSat": "Cmt",
+    "sche.dSun": "Paz",
+    "sche.addEntry": "＋ Girdi Ekle",
+    "sche.holidaysHead": "Tatil Günleri",
+    "sche.holidaysHelp": "Bu günlerde SLA süresi işlemez.",
+    "sche.colDate": "Tarih",
+    "sche.colHours": "Saat",
+    "sche.allDay": "Tüm gün",
+    "sche.timeRange": "Saat aralığı",
+    "sche.addHoliday": "＋ Ekle",
+    "sche.diagTitle": "Takvim Tanılama",
+    "sche.diagDate": "Tarih seçin",
+    "sche.diagHelp": "Seçilen tarihte takvimin hangi saatlerde açık olduğunu gösterir.",
+    "sche.diagResult": "Bu tarihte çalışma saati: 09:00–18:00",
+  },
+  en: {
+    "sche.back": "← Schedules",
+    "sche.sub": "Edit the working hours, recurring entries and holidays.",
+    "sche.clone": "Clone",
+    "sche.diag": "Diagnostics",
+    "sche.tabInfo": "Schedule",
+    "sche.tabEntries": "Entries",
+    "sche.tabHolidays": "Holidays",
+    "sche.name": "Name",
+    "sche.nameHelp": "Shown under this name in SLA plans and department settings.",
+    "sche.type": "Type",
+    "sche.typeBusiness": "Business Hours",
+    "sche.typeHoliday": "Holiday Schedule",
+    "sche.typeHelp": "Holiday schedules define days subtracted from working hours.",
+    "sche.tz": "Time zone",
+    "sche.tzSystem": "— System time zone —",
+    "sche.tzHelp": "If left empty, the system time zone is used.",
+    "sche.desc": "Description",
+    "sche.descHelp": "A short note reminding when this schedule is used.",
+    "sche.entriesHead": "Schedule Entries",
+    "sche.entriesHelp": "Each entry defines a working-time range, multiplied by its repeat rule.",
+    "sche.colStart": "Starts",
+    "sche.colEnd": "Ends",
+    "sche.colRepeat": "Repeats",
+    "sche.colDays": "Days",
+    "sche.repWeekly": "Weekly",
+    "sche.repDaily": "Daily",
+    "sche.repMonthly": "Monthly",
+    "sche.repOnce": "One-time",
+    "sche.dMon": "Mon",
+    "sche.dTue": "Tue",
+    "sche.dWed": "Wed",
+    "sche.dThu": "Thu",
+    "sche.dFri": "Fri",
+    "sche.dSat": "Sat",
+    "sche.dSun": "Sun",
+    "sche.addEntry": "＋ Add Entry",
+    "sche.holidaysHead": "Holidays",
+    "sche.holidaysHelp": "SLA timers do not run on these days.",
+    "sche.colDate": "Date",
+    "sche.colHours": "Hours",
+    "sche.allDay": "All day",
+    "sche.timeRange": "Time range",
+    "sche.addHoliday": "＋ Add",
+    "sche.diagTitle": "Schedule Diagnostics",
+    "sche.diagDate": "Pick a date",
+    "sche.diagHelp": "Shows which hours the schedule is open on the chosen date.",
+    "sche.diagResult": "Working hours on this date: 09:00–18:00",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="schedules">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+<form>
+
+  <div class="bo-page-head">
+    <div>
+      <a href="schedules.html" style="font-size:13px" data-i18n="sche.back"></a>
+      <h1>Hafta içi 09-18</h1>
+      <p data-i18n="sche.sub"></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="rd-btn" data-i18n="sche.clone"></button>
+      <button type="button" class="rd-btn" data-dialog-open="dlg-diag" data-i18n="sche.diag"></button>
+      <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-i18n="common.delete"></button>
+      <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+    </div>
+  </div>
+
+  <div class="rd-tabs" data-tabs>
+    <button type="button" class="active" data-tab="sche-info" data-i18n="sche.tabInfo"></button>
+    <button type="button" data-tab="sche-entries" data-i18n="sche.tabEntries"></button>
+    <button type="button" data-tab="sche-holidays" data-i18n="sche.tabHolidays"></button>
+  </div>
+
+  <!-- ============ Takvim ============ -->
+  <div class="rd-tab-panel active" id="sche-info">
+    <div class="rd-surface">
+      <div class="rd-surface-body" style="max-width:720px">
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="sche-name" data-i18n="sche.name"></label>
+            <input id="sche-name" class="rd-control" value="Hafta içi 09-18">
+            <div class="rd-help" data-i18n="sche.nameHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="sche-type" data-i18n="sche.type"></label>
+            <select id="sche-type" class="rd-control">
+              <option selected data-i18n="sche.typeBusiness"></option>
+              <option data-i18n="sche.typeHoliday"></option>
+            </select>
+            <div class="rd-help" data-i18n="sche.typeHelp"></div>
+          </div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="sche-tz" data-i18n="sche.tz"></label>
+          <select id="sche-tz" class="rd-control" style="max-width:320px">
+            <option data-i18n="sche.tzSystem"></option>
+            <option selected>Europe/Istanbul (UTC+03)</option>
+            <option>UTC</option>
+            <option>Europe/Berlin (UTC+01)</option>
+          </select>
+          <div class="rd-help" data-i18n="sche.tzHelp"></div>
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="sche-desc" data-i18n="sche.desc"></label>
+          <textarea id="sche-desc" class="rd-control" style="min-height:80px">Standart mesai: hafta içi 09:00–18:00. Resmi Tatiller 2026 takvimiyle birlikte kullanılır.</textarea>
+          <div class="rd-help" data-i18n="sche.descHelp"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Girdiler ============ -->
+  <div class="rd-tab-panel" id="sche-entries">
+    <div class="rd-surface">
+      <div class="rd-surface-head"><span data-i18n="sche.entriesHead"></span></div>
+      <table class="rd-table" id="tbl-entries">
+        <thead>
+          <tr>
+            <th data-i18n="common.name"></th>
+            <th data-i18n="sche.colStart"></th>
+            <th data-i18n="sche.colEnd"></th>
+            <th data-i18n="sche.colRepeat"></th>
+            <th data-i18n="sche.colDays"></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input class="rd-control" value="Hafta içi" style="min-width:120px"></td>
+            <td><input class="rd-control" type="time" value="09:00" style="width:110px"></td>
+            <td><input class="rd-control" type="time" value="18:00" style="width:110px"></td>
+            <td>
+              <select class="rd-control" style="min-width:120px">
+                <option selected data-i18n="sche.repWeekly"></option>
+                <option data-i18n="sche.repDaily"></option>
+                <option data-i18n="sche.repMonthly"></option>
+                <option data-i18n="sche.repOnce"></option>
+              </select>
+            </td>
+            <td>
+              <div style="display:flex;gap:9px;flex-wrap:wrap">
+                <label class="rd-check"><input type="checkbox" checked><span data-i18n="sche.dMon"></span></label>
+                <label class="rd-check"><input type="checkbox" checked><span data-i18n="sche.dTue"></span></label>
+                <label class="rd-check"><input type="checkbox" checked><span data-i18n="sche.dWed"></span></label>
+                <label class="rd-check"><input type="checkbox" checked><span data-i18n="sche.dThu"></span></label>
+                <label class="rd-check"><input type="checkbox" checked><span data-i18n="sche.dFri"></span></label>
+                <label class="rd-check"><input type="checkbox"><span data-i18n="sche.dSat"></span></label>
+                <label class="rd-check"><input type="checkbox"><span data-i18n="sche.dSun"></span></label>
+              </div>
+            </td>
+            <td><button type="button" class="remove" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+        <button type="button" class="rd-btn rd-btn-ghost" data-i18n="sche.addEntry"></button>
+        <div class="rd-help" data-i18n="sche.entriesHelp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Tatiller ============ -->
+  <div class="rd-tab-panel" id="sche-holidays">
+    <div class="rd-surface">
+      <div class="rd-surface-head"><span data-i18n="sche.holidaysHead"></span></div>
+      <table class="rd-table" id="tbl-holidays">
+        <thead>
+          <tr>
+            <th data-i18n="sche.colDate"></th>
+            <th data-i18n="common.name"></th>
+            <th data-i18n="sche.colHours"></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input class="rd-control" type="date" value="2026-10-29" style="width:160px"></td>
+            <td><input class="rd-control" value="29 Ekim Cumhuriyet Bayramı" style="min-width:220px"></td>
+            <td>
+              <select class="rd-control" style="min-width:130px">
+                <option selected data-i18n="sche.allDay"></option>
+                <option data-i18n="sche.timeRange"></option>
+              </select>
+            </td>
+            <td><button type="button" class="remove" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+          </tr>
+          <tr>
+            <td><input class="rd-control" type="date" value="2027-01-01" style="width:160px"></td>
+            <td><input class="rd-control" value="1 Ocak Yılbaşı" style="min-width:220px"></td>
+            <td>
+              <select class="rd-control" style="min-width:130px">
+                <option selected data-i18n="sche.allDay"></option>
+                <option data-i18n="sche.timeRange"></option>
+              </select>
+            </td>
+            <td><button type="button" class="remove" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" data-i18n-title="common.delete">✕</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+        <button type="button" class="rd-btn rd-btn-ghost" data-i18n="sche.addHoliday"></button>
+        <div class="rd-help" data-i18n="sche.holidaysHelp"></div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+  <!-- Tanılama -->
+  <dialog class="rd-dialog" id="dlg-diag">
+    <div class="rd-dialog-head"><span data-i18n="sche.diagTitle"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <div class="rd-field">
+        <label class="rd-label" for="sche-diag-date" data-i18n="sche.diagDate"></label>
+        <input id="sche-diag-date" class="rd-control" type="date" value="2026-08-12" style="max-width:200px">
+        <div class="rd-help" data-i18n="sche.diagHelp"></div>
+      </div>
+      <div class="rd-banner rd-banner-info mb-0"><span>◷</span><span data-i18n="sche.diagResult"></span></div>
+    </div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.close"></button>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

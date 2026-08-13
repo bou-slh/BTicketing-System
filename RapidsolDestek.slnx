@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RapidsolDestek.Domain/RapidsolDestek.Domain.csproj" />
+    <Project Path="src/RapidsolDestek.Infrastructure/RapidsolDestek.Infrastructure.csproj" />
+    <Project Path="src/RapidsolDestek.Web/RapidsolDestek.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RapidsolDestek.E2E/RapidsolDestek.E2E.csproj" />
+    <Project Path="tests/RapidsolDestek.Tests/RapidsolDestek.Tests.csproj" />
+  </Folder>
+</Solution>

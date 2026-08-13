@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Roller</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "rl.title": "Roller",
+    "rl.subtitle": "Temsilcilerin departmanlarındaki yetkilerini belirleyen izin paketleri. Bir role tıklayarak izin matrisini düzenleyin.",
+    "rl.add": "＋ Yeni Rol",
+    "rl.searchPh": "Rol ara…",
+    "rl.colName": "Rol Adı",
+    "rl.colAgents": "Temsilci Sayısı",
+    "rl.emptyTitle": "Henüz rol yok",
+    "rl.emptyText": "Temsilcilere atanacak ilk izin rolünü oluşturun.",
+  },
+  en: {
+    "rl.title": "Roles",
+    "rl.subtitle": "Permission packages defining what agents may do in their departments. Click a role to edit its permission matrix.",
+    "rl.add": "＋ New Role",
+    "rl.searchPh": "Search roles…",
+    "rl.colName": "Role Name",
+    "rl.colAgents": "Agents",
+    "rl.emptyTitle": "No roles yet",
+    "rl.emptyText": "Create the first permission role to assign to agents.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="roles">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="rl.title"></h1>
+      <p data-i18n="rl.subtitle"></p>
+    </div>
+    <div class="actions">
+      <a class="rd-btn-primary" href="role-edit.html" data-i18n="rl.add"></a>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="rl.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="common.enable"></button>
+    <button class="rd-btn" data-i18n="common.disable"></button>
+    <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+  </div>
+
+  <div class="rd-surface" id="tbl-roles">
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-roles" data-i18n-title="common.selectAll"></th>
+          <th class="sortable sorted-desc" data-i18n="rl.colName"></th>
+          <th class="sortable" data-i18n="common.status"></th>
+          <th class="num" data-i18n="rl.colAgents"></th>
+          <th class="sortable" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="role-edit.html">Yönetici</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td class="num">1</td>
+          <td>02.08.2026 10:11</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="role-edit.html">Kıdemli Temsilci</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td class="num">1</td>
+          <td>02.08.2026 10:14</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="role-edit.html">Temsilci</a></td>
+          <td><span class="rd-pill rd-pill-teal" data-i18n="common.active"></span></td>
+          <td class="num">2</td>
+          <td>17.07.2026 15:26</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="role-edit.html">Salt Okunur</a></td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="common.disabled"></span></td>
+          <td class="num">0</td>
+          <td>05.03.2026 09:02</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="common.showing"></span><span>1–4 / 4</span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="empty-roles">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">⛨</div>
+        <h3 data-i18n="rl.emptyTitle"></h3>
+        <p data-i18n="rl.emptyText"></p>
+        <a class="rd-btn-primary" href="role-edit.html" data-i18n="rl.add"></a>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

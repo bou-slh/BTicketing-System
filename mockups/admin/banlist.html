@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Engel Listesi</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "bl.title": "Engel Listesi",
+    "bl.subtitle": "Bu adreslerden gelen e-postalar sessizce reddedilir; talep açılmaz ve otomatik yanıt gönderilmez.",
+    "bl.add": "＋ Engel Ekle",
+    "bl.searchPh": "Engellenen adres ara…",
+    "bl.colEmail": "E-posta Adresi",
+    "bl.stBanned": "Engelli",
+    "bl.stPassive": "Pasif",
+    "bl.emptyTitle": "Engellenen adres yok",
+    "bl.emptyText": "İstenmeyen e-posta gönderen bir adresi buradan engelleyebilirsiniz.",
+    "bl.dlgTitle": "Engel Ekle",
+    "bl.dlgEmail": "E-posta adresi",
+    "bl.dlgEmailHelp": "Bu adresten gelen tüm e-postalar reddedilir.",
+    "bl.dlgStatus": "Durum",
+    "bl.dlgStatusHelp": "Pasif kurallar saklanır ama uygulanmaz.",
+    "bl.dlgActive": "Etkin",
+    "bl.dlgPassive": "Pasif",
+    "bl.dlgNotes": "Notlar",
+  },
+  en: {
+    "bl.title": "Ban List",
+    "bl.subtitle": "Email from these addresses is silently rejected; no ticket is opened and no auto-response is sent.",
+    "bl.add": "＋ Add Ban",
+    "bl.searchPh": "Search banned addresses…",
+    "bl.colEmail": "Email Address",
+    "bl.stBanned": "Banned",
+    "bl.stPassive": "Inactive",
+    "bl.emptyTitle": "No banned addresses",
+    "bl.emptyText": "You can ban an address that sends unwanted email from here.",
+    "bl.dlgTitle": "Add Ban",
+    "bl.dlgEmail": "Email address",
+    "bl.dlgEmailHelp": "All email from this address is rejected.",
+    "bl.dlgStatus": "Status",
+    "bl.dlgStatusHelp": "Inactive rules are kept but not enforced.",
+    "bl.dlgActive": "Active",
+    "bl.dlgPassive": "Inactive",
+    "bl.dlgNotes": "Notes",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="banlist">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="bl.title"></h1>
+      <p data-i18n="bl.subtitle"></p>
+    </div>
+    <div class="actions">
+      <button class="rd-btn-primary" data-dialog-open="dlg-ban" data-i18n="bl.add"></button>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="bl.searchPh">
+    <button class="rd-btn" data-i18n="common.search"></button>
+    <span class="spacer"></span>
+    <button class="rd-btn" data-i18n="common.enable"></button>
+    <button class="rd-btn" data-i18n="common.disable"></button>
+    <button class="rd-btn rd-btn-danger" data-i18n="common.delete"></button>
+  </div>
+
+  <div class="rd-surface" id="tbl-banlist">
+    <table class="rd-table">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-banlist" data-i18n-title="common.selectAll"></th>
+          <th class="sortable" data-i18n="bl.colEmail"></th>
+          <th class="sortable" data-i18n="common.status"></th>
+          <th class="sortable sorted-desc" data-i18n="common.created"></th>
+          <th class="sortable" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-ban">spam@ornek.com</a></td>
+          <td><span class="rd-pill rd-pill-overdue" data-i18n="bl.stBanned"></span></td>
+          <td>07.08.2026</td>
+          <td>07.08.2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-ban">toplu-reklam@kampanyamail.net</a></td>
+          <td><span class="rd-pill rd-pill-overdue" data-i18n="bl.stBanned"></span></td>
+          <td>19.06.2026</td>
+          <td>19.06.2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-ban">bildirim@sahte-banka.xyz</a></td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="bl.stPassive"></span></td>
+          <td>02.02.2026</td>
+          <td>11.05.2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="common.showing"></span><span>1–3 / 3</span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="empty-banlist">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">⃠</div>
+        <h3 data-i18n="bl.emptyTitle"></h3>
+        <p data-i18n="bl.emptyText"></p>
+        <button class="rd-btn-primary" data-dialog-open="dlg-ban" data-i18n="bl.add"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Engel ekle dialogu -->
+  <dialog class="rd-dialog" id="dlg-ban">
+    <form>
+      <div class="rd-dialog-head">
+        <span data-i18n="bl.dlgTitle"></span>
+        <button type="button" class="close" data-dialog-close aria-label="Kapat">✕</button>
+      </div>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="bl-email" data-i18n="bl.dlgEmail"></label>
+          <input id="bl-email" class="rd-control" type="email" placeholder="ornek@alanadi.com">
+          <p class="rd-help" data-i18n="bl.dlgEmailHelp"></p>
+        </div>
+        <div class="rd-field">
+          <span class="rd-label" data-i18n="bl.dlgStatus"></span>
+          <label class="rd-check" style="display:inline-flex;margin-right:18px">
+            <input type="radio" name="bl-status" checked><span data-i18n="bl.dlgActive"></span>
+          </label>
+          <label class="rd-check" style="display:inline-flex">
+            <input type="radio" name="bl-status"><span data-i18n="bl.dlgPassive"></span>
+          </label>
+          <p class="rd-help" data-i18n="bl.dlgStatusHelp"></p>
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="bl-notes" data-i18n="bl.dlgNotes"></label>
+          <textarea id="bl-notes" class="rd-control" style="min-height:80px"></textarea>
+          <p class="rd-help" data-i18n="common.notesHelp"></p>
+        </div>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button class="rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+</body>
+</html>

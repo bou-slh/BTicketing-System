@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — SLA Planları</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "sla.title": "SLA Planları",
+    "sla.sub": "Taleplerin gecikmiş sayılmadan önce çözülmesi gereken süre hedefleri.",
+    "sla.searchPh": "SLA planı ara…",
+    "sla.new": "＋ Yeni SLA",
+    "sla.colGrace": "Süre Limiti (saat)",
+    "sla.colSchedule": "Takvim",
+    "sla.showing": "4 plandan 1–4 arası gösteriliyor",
+    "sla.bulkTitle": "Toplu işlemler",
+    "sla.bulkHelp": "Seçili SLA planlarına uygulanır.",
+    "sla.emptyTitle": "Henüz SLA planı yok",
+    "sla.emptyText": "Yanıt süresi hedeflerini tanımlamak için ilk SLA planınızı oluşturun.",
+    "sla.dlgTitle": "SLA Planı",
+    "sla.name": "Ad",
+    "sla.nameHelp": "Planı tanımlayan kısa bir ad.",
+    "sla.status": "Durum",
+    "sla.grace": "Süre limiti (saat)",
+    "sla.graceHelp": "Talep bu süre içinde çözülmezse gecikmiş olarak işaretlenir.",
+    "sla.schedule": "Çalışma takvimi",
+    "sla.scheduleHelp": "Süre yalnızca seçilen takvimin çalışma saatlerinde işler.",
+    "sla.schedDefault": "— Sistem varsayılanı —",
+    "sla.transient": "Geçici SLA",
+    "sla.transientHelp": "Departman veya konu değişince kalıcı bir SLA bu planın yerini alır.",
+    "sla.alerts": "Gecikme uyarıları",
+    "sla.alertsHelp": "Talep gecikince temsilcilere uyarı e-postası gönderilir.",
+  },
+  en: {
+    "sla.title": "SLA Plans",
+    "sla.sub": "Time targets a request must be resolved within before it counts as overdue.",
+    "sla.searchPh": "Search SLA plans…",
+    "sla.new": "＋ New SLA",
+    "sla.colGrace": "Grace Period (hours)",
+    "sla.colSchedule": "Schedule",
+    "sla.showing": "Showing 1–4 of 4 plans",
+    "sla.bulkTitle": "Bulk actions",
+    "sla.bulkHelp": "Applied to the selected SLA plans.",
+    "sla.emptyTitle": "No SLA plans yet",
+    "sla.emptyText": "Create your first SLA plan to define response-time targets.",
+    "sla.dlgTitle": "SLA Plan",
+    "sla.name": "Name",
+    "sla.nameHelp": "A short name describing the plan.",
+    "sla.status": "Status",
+    "sla.grace": "Grace period (hours)",
+    "sla.graceHelp": "The request is marked overdue if not resolved within this period.",
+    "sla.schedule": "Working schedule",
+    "sla.scheduleHelp": "The clock only runs during the selected schedule's working hours.",
+    "sla.schedDefault": "— System default —",
+    "sla.transient": "Transient SLA",
+    "sla.transientHelp": "A permanent SLA replaces this plan when the department or topic changes.",
+    "sla.alerts": "Overdue alerts",
+    "sla.alertsHelp": "Agents receive an alert email when a request becomes overdue.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="slas">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+
+  <div class="bo-page-head">
+    <div>
+      <h1 data-i18n="sla.title"></h1>
+      <p data-i18n="sla.sub"></p>
+    </div>
+  </div>
+
+  <div class="rd-list-toolbar">
+    <input type="search" class="rd-control" data-i18n-placeholder="sla.searchPh">
+    <span class="spacer"></span>
+    <button class="rd-btn" data-dialog-open="dlg-more"><span data-i18n="common.more"></span> ▾</button>
+    <button class="rd-btn rd-btn-primary" data-dialog-open="dlg-sla" data-i18n="sla.new"></button>
+  </div>
+
+  <div class="rd-surface">
+    <table class="rd-table" id="tbl-slas">
+      <thead>
+        <tr>
+          <th class="col-check"><input type="checkbox" data-check-all="#tbl-slas" data-i18n-title="common.selectAll"></th>
+          <th class="sortable" data-i18n="common.name"></th>
+          <th data-i18n="common.status"></th>
+          <th class="num sortable" data-i18n="sla.colGrace"></th>
+          <th data-i18n="sla.colSchedule"></th>
+          <th class="sortable sorted-desc" data-i18n="common.updated"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-sla">Standart</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td class="num">48</td>
+          <td>Hafta içi 09-18</td>
+          <td>4 Ağu 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-sla">VIP</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td class="num">8</td>
+          <td>Hafta içi 09-18</td>
+          <td>12 Tem 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-sla">Kritik</a></td>
+          <td><span class="rd-pill rd-pill-solved" data-i18n="common.active"></span></td>
+          <td class="num">4</td>
+          <td>7/24</td>
+          <td>12 Tem 2026</td>
+        </tr>
+        <tr>
+          <td class="col-check"><input type="checkbox"></td>
+          <td><a href="#" data-dialog-open="dlg-sla">Dahili Talepler</a></td>
+          <td><span class="rd-pill rd-pill-closed" data-i18n="common.disabled"></span></td>
+          <td class="num">72</td>
+          <td>Hafta içi 09-18</td>
+          <td>3 Oca 2026</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="rd-pagination">
+      <span data-i18n="sla.showing"></span>
+      <div class="pages"><span class="current">1</span></div>
+    </div>
+  </div>
+
+  <!-- Empty-state variant (hidden) -->
+  <div class="rd-tab-panel" id="sla-empty">
+    <div class="rd-surface">
+      <div class="rd-empty">
+        <div class="icon">⏱</div>
+        <h3 data-i18n="sla.emptyTitle"></h3>
+        <p data-i18n="sla.emptyText"></p>
+        <button class="rd-btn rd-btn-primary" data-dialog-open="dlg-sla" data-i18n="sla.new"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLA add/edit dialog -->
+  <dialog class="rd-dialog" id="dlg-sla">
+    <form>
+      <div class="rd-dialog-head"><span data-i18n="sla.dlgTitle"></span><button type="button" class="close" data-dialog-close>✕</button></div>
+      <div class="rd-dialog-body">
+        <div class="rd-field">
+          <label class="rd-label" for="sla-name" data-i18n="sla.name"></label>
+          <input id="sla-name" class="rd-control" value="VIP">
+          <div class="rd-help" data-i18n="sla.nameHelp"></div>
+        </div>
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="sla-grace" data-i18n="sla.grace"></label>
+            <input id="sla-grace" class="rd-control" type="number" value="8" min="1">
+            <div class="rd-help" data-i18n="sla.graceHelp"></div>
+          </div>
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="sla.status"></span>
+            <div style="display:flex;gap:18px;padding:10px 0 2px">
+              <label class="rd-check"><input type="radio" name="sla-status" checked><span data-i18n="common.active"></span></label>
+              <label class="rd-check"><input type="radio" name="sla-status"><span data-i18n="common.disabled"></span></label>
+            </div>
+          </div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="sla-schedule" data-i18n="sla.schedule"></label>
+          <select id="sla-schedule" class="rd-control">
+            <option data-i18n="sla.schedDefault"></option>
+            <option selected>Hafta içi 09-18</option>
+            <option>7/24</option>
+            <option>Cumartesi Yarım Gün</option>
+          </select>
+          <div class="rd-help" data-i18n="sla.scheduleHelp"></div>
+        </div>
+        <details class="rd-advanced">
+          <summary data-i18n="common.advanced"></summary>
+          <div class="rd-advanced-body">
+            <label class="rd-switch" style="margin-bottom:13px">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy"><b data-i18n="sla.transient"></b><small data-i18n="sla.transientHelp"></small></span>
+            </label>
+            <label class="rd-switch" style="margin-bottom:13px">
+              <input type="checkbox" checked>
+              <span class="track"></span>
+              <span class="rd-switch-copy"><b data-i18n="sla.alerts"></b><small data-i18n="sla.alertsHelp"></small></span>
+            </label>
+            <div class="rd-field mb-0">
+              <label class="rd-label" for="sla-notes" data-i18n="common.notes"></label>
+              <textarea id="sla-notes" class="rd-control" style="min-height:70px">Sözleşmeli VIP kullanıcılar için hızlandırılmış plan.</textarea>
+              <div class="rd-help" data-i18n="common.notesHelp"></div>
+            </div>
+          </div>
+        </details>
+      </div>
+      <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+        <button type="submit" class="rd-btn rd-btn-primary" data-dialog-close data-i18n="common.save"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span data-i18n="sla.bulkTitle"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+      <p class="rd-help" style="margin-top:0" data-i18n="sla.bulkHelp"></p>
+      <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+        <button class="rd-btn" data-dialog-close data-i18n="common.enable"></button>
+        <button class="rd-btn" data-dialog-close data-i18n="common.disable"></button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-dialog-close data-i18n="common.delete"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>

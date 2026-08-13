@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — Yardım Konusu Düzenle</title>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/portal.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<script src="../assets/js/i18n-en.js"></script>
+<script src="../assets/js/i18n-tr.js"></script>
+<script>
+window.PAGE_I18N = {
+  tr: {
+    "hte.back": "← Yardım Konuları",
+    "hte.sub": "Yardım konusunu düzenleyin — bilgiler, yeni talep varsayılanları ve ek formlar.",
+    "hte.tabInfo": "Bilgiler",
+    "hte.tabOptions": "Yeni Talep Seçenekleri",
+    "hte.tabForms": "Formlar",
+    "hte.name": "Konu adı",
+    "hte.nameHelp": "Kullanıcıya gösterilen tam ad. Alt konular \"Üst / Alt\" biçiminde görünür.",
+    "hte.status": "Durum",
+    "hte.statusArchived": "Arşiv",
+    "hte.statusHelp": "Arşivlenen konular yeni taleplerde seçilemez; eski taleplerde görünmeye devam eder.",
+    "hte.visibility": "Görünürlük",
+    "hte.public": "Herkese Açık",
+    "hte.internal": "Dahili",
+    "hte.visHelp": "Dahili konular yalnızca temsilci panelinde seçilebilir.",
+    "hte.parent": "Üst konu",
+    "hte.parentNone": "— Yok —",
+    "hte.parentHelp": "Konuyu bir üst başlığın altında gruplamak için seçin.",
+    "hte.sysDefault": "— Sistem varsayılanı —",
+    "hte.dept": "Departman",
+    "hte.deptHelp": "Bu konudan açılan talepler bu departmana yönlendirilir.",
+    "hte.newStatus": "Başlangıç durumu",
+    "hte.newStatusHelp": "Yeni talebin oluşturulduğu andaki durumu.",
+    "hte.priority": "Öncelik",
+    "hte.priorityHelp": "Bu konudan açılan taleplere atanacak öncelik.",
+    "hte.sla": "SLA planı",
+    "hte.slaHelp": "Yanıt süresi hedefini belirler; boşsa departman SLA'sı geçerlidir.",
+    "hte.thanks": "Teşekkür sayfası",
+    "hte.thanksHelp": "Talep oluşturulduktan sonra kullanıcıya gösterilecek sayfa.",
+    "hte.assign": "Otomatik atama",
+    "hte.assignNone": "— Atama yok —",
+    "hte.grpAgents": "Temsilciler",
+    "hte.grpTeams": "Takımlar",
+    "hte.assignHelp": "Yeni talep doğrudan seçilen temsilciye veya takıma atanır.",
+    "hte.numFormat": "Talep numarası biçimi",
+    "hte.numSystem": "Sistem varsayılanı",
+    "hte.numCustom": "Özel biçim",
+    "hte.numHelp": "# karakterleri rakamla değiştirilir. Örn: BRD-000123.",
+    "hte.numSeq": "Numara sırası",
+    "hte.seqGlobal": "Genel sıra",
+    "hte.seqRandom": "Rastgele",
+    "hte.numSeqHelp": "Özel biçimdeki # bölümünün nasıl üretileceğini belirler.",
+    "hte.noAutoresp": "Otomatik yanıtı kapat",
+    "hte.noAutorespHelp": "Bu konudan açılan talepler için yeni talep otomatik yanıtı gönderilmez.",
+    "hte.formsHead": "Ek form: Talep Detayları",
+    "hte.formsHelp": "İşaretli alanlar bu konudan açılan taleplerde gösterilir.",
+    "hte.fEnabled": "Etkin",
+    "hte.fLabel": "Etiket",
+    "hte.fType": "Tür",
+    "hte.fVis": "Görünürlük",
+    "hte.fVar": "Değişken",
+    "hte.tShort": "Kısa Metin",
+    "hte.tLong": "Uzun Metin",
+    "hte.addForm": "Form ekle",
+    "hte.addFormHelp": "Bu konuya bağlanacak ek özel form.",
+  },
+  en: {
+    "hte.back": "← Help Topics",
+    "hte.sub": "Edit the help topic — details, new-ticket defaults and extra forms.",
+    "hte.tabInfo": "Information",
+    "hte.tabOptions": "New Ticket Options",
+    "hte.tabForms": "Forms",
+    "hte.name": "Topic name",
+    "hte.nameHelp": "Full name shown to users. Sub-topics appear as \"Parent / Child\".",
+    "hte.status": "Status",
+    "hte.statusArchived": "Archived",
+    "hte.statusHelp": "Archived topics cannot be picked on new requests; they remain visible on old ones.",
+    "hte.visibility": "Visibility",
+    "hte.public": "Public",
+    "hte.internal": "Internal",
+    "hte.visHelp": "Internal topics can only be selected in the agent panel.",
+    "hte.parent": "Parent topic",
+    "hte.parentNone": "— None —",
+    "hte.parentHelp": "Pick a parent to group this topic under it.",
+    "hte.sysDefault": "— System default —",
+    "hte.dept": "Department",
+    "hte.deptHelp": "Requests opened with this topic are routed to this department.",
+    "hte.newStatus": "Initial status",
+    "hte.newStatusHelp": "The status a new request starts with.",
+    "hte.priority": "Priority",
+    "hte.priorityHelp": "Priority assigned to requests opened with this topic.",
+    "hte.sla": "SLA plan",
+    "hte.slaHelp": "Sets the response-time target; if empty, the department SLA applies.",
+    "hte.thanks": "Thank-you page",
+    "hte.thanksHelp": "Page shown to the user after the request is created.",
+    "hte.assign": "Auto-assignment",
+    "hte.assignNone": "— No assignment —",
+    "hte.grpAgents": "Agents",
+    "hte.grpTeams": "Teams",
+    "hte.assignHelp": "New requests are assigned directly to the chosen agent or team.",
+    "hte.numFormat": "Ticket number format",
+    "hte.numSystem": "System default",
+    "hte.numCustom": "Custom format",
+    "hte.numHelp": "# characters are replaced with digits. E.g. BRD-000123.",
+    "hte.numSeq": "Number sequence",
+    "hte.seqGlobal": "Global sequence",
+    "hte.seqRandom": "Random",
+    "hte.numSeqHelp": "Controls how the # part of the custom format is generated.",
+    "hte.noAutoresp": "Disable auto-response",
+    "hte.noAutorespHelp": "The new-ticket auto-response is not sent for requests opened with this topic.",
+    "hte.formsHead": "Attached form: Talep Detayları",
+    "hte.formsHelp": "Checked fields are shown on requests opened with this topic.",
+    "hte.fEnabled": "Enabled",
+    "hte.fLabel": "Label",
+    "hte.fType": "Type",
+    "hte.fVis": "Visibility",
+    "hte.fVar": "Variable",
+    "hte.tShort": "Short Text",
+    "hte.tLong": "Long Text",
+    "hte.addForm": "Add form",
+    "hte.addFormHelp": "Extra custom form attached to this topic.",
+  }
+};
+</script>
+<script src="../assets/js/app.js" defer></script>
+</head>
+<body class="backoffice" data-panel="admin" data-nav="helptopics">
+<div id="rd-topbar"></div>
+<div id="rd-sidebar"></div>
+<main class="bo-main">
+<form>
+
+  <div class="bo-page-head">
+    <div>
+      <a href="helptopics.html" style="font-size:13px" data-i18n="hte.back"></a>
+      <h1>Bordro / Yol Ücreti</h1>
+      <p data-i18n="hte.sub"></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" data-i18n="common.delete"></button>
+      <button type="reset" class="rd-btn" data-i18n="common.reset"></button>
+      <button type="submit" class="rd-btn rd-btn-primary" data-i18n="common.save"></button>
+    </div>
+  </div>
+
+  <div class="rd-tabs" data-tabs>
+    <button type="button" class="active" data-tab="hte-info" data-i18n="hte.tabInfo"></button>
+    <button type="button" data-tab="hte-options" data-i18n="hte.tabOptions"></button>
+    <button type="button" data-tab="hte-forms" data-i18n="hte.tabForms"></button>
+  </div>
+
+  <!-- ============ Bilgiler ============ -->
+  <div class="rd-tab-panel active" id="hte-info">
+    <div class="rd-surface">
+      <div class="rd-surface-body" style="max-width:720px">
+        <div class="rd-field">
+          <label class="rd-label" for="hte-name" data-i18n="hte.name"></label>
+          <input id="hte-name" class="rd-control" value="Bordro / Yol Ücreti">
+          <div class="rd-help" data-i18n="hte.nameHelp"></div>
+        </div>
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="hte-status" data-i18n="hte.status"></label>
+            <select id="hte-status" class="rd-control">
+              <option selected data-i18n="common.active"></option>
+              <option data-i18n="common.disabled"></option>
+              <option data-i18n="hte.statusArchived"></option>
+            </select>
+            <div class="rd-help" data-i18n="hte.statusHelp"></div>
+          </div>
+          <div class="rd-field">
+            <span class="rd-label" data-i18n="hte.visibility"></span>
+            <div style="display:flex;gap:18px;padding:10px 0 2px">
+              <label class="rd-check"><input type="radio" name="hte-vis" checked><span data-i18n="hte.public"></span></label>
+              <label class="rd-check"><input type="radio" name="hte-vis"><span data-i18n="hte.internal"></span></label>
+            </div>
+            <div class="rd-help" data-i18n="hte.visHelp"></div>
+          </div>
+        </div>
+        <div class="rd-field">
+          <label class="rd-label" for="hte-parent" data-i18n="hte.parent"></label>
+          <select id="hte-parent" class="rd-control">
+            <option data-i18n="hte.parentNone"></option>
+            <option selected>Bordro</option>
+            <option>İzin</option>
+            <option>Vardiya</option>
+            <option>Danışmanlık</option>
+          </select>
+          <div class="rd-help" data-i18n="hte.parentHelp"></div>
+        </div>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="hte-notes" data-i18n="common.notes"></label>
+          <textarea id="hte-notes" class="rd-control">Yol ücreti düzeltmeleri için ayrı alt konu — İK ekibinin isteğiyle açıldı.</textarea>
+          <div class="rd-help" data-i18n="common.notesHelp"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Yeni Talep Seçenekleri ============ -->
+  <div class="rd-tab-panel" id="hte-options">
+    <div class="rd-surface">
+      <div class="rd-surface-body" style="max-width:720px">
+        <div class="rd-grid-2">
+          <div class="rd-field">
+            <label class="rd-label" for="hte-dept" data-i18n="hte.dept"></label>
+            <select id="hte-dept" class="rd-control">
+              <option data-i18n="hte.sysDefault"></option>
+              <option selected>Bordro Yönetimi</option>
+              <option>İnsan Kaynakları</option>
+              <option>Danışmanlık</option>
+              <option>Destek</option>
+            </select>
+            <div class="rd-help" data-i18n="hte.deptHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="hte-newstatus" data-i18n="hte.newStatus"></label>
+            <select id="hte-newstatus" class="rd-control">
+              <option data-i18n="hte.sysDefault"></option>
+              <option selected data-i18n="status.open"></option>
+              <option data-i18n="status.wait"></option>
+            </select>
+            <div class="rd-help" data-i18n="hte.newStatusHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="hte-priority" data-i18n="hte.priority"></label>
+            <select id="hte-priority" class="rd-control">
+              <option data-i18n="hte.sysDefault"></option>
+              <option data-i18n="priority.low"></option>
+              <option data-i18n="priority.normal"></option>
+              <option selected data-i18n="priority.high"></option>
+              <option data-i18n="priority.emergency"></option>
+            </select>
+            <div class="rd-help" data-i18n="hte.priorityHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="hte-sla" data-i18n="hte.sla"></label>
+            <select id="hte-sla" class="rd-control">
+              <option data-i18n="hte.sysDefault"></option>
+              <option>Standart</option>
+              <option selected>VIP</option>
+              <option>Kritik</option>
+            </select>
+            <div class="rd-help" data-i18n="hte.slaHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="hte-thanks" data-i18n="hte.thanks"></label>
+            <select id="hte-thanks" class="rd-control">
+              <option data-i18n="hte.sysDefault"></option>
+              <option selected>Talep Alındı</option>
+              <option>Hoş Geldiniz</option>
+            </select>
+            <div class="rd-help" data-i18n="hte.thanksHelp"></div>
+          </div>
+          <div class="rd-field">
+            <label class="rd-label" for="hte-assign" data-i18n="hte.assign"></label>
+            <select id="hte-assign" class="rd-control">
+              <option data-i18n="hte.assignNone"></option>
+              <optgroup data-i18n-label="hte.grpAgents" label="Temsilciler">
+                <option selected>Ümit Yaşar Akın</option>
+                <option>Merve Çetin</option>
+                <option>Deniz Kaya</option>
+              </optgroup>
+              <optgroup data-i18n-label="hte.grpTeams" label="Takımlar">
+                <option>Bordro Ekibi</option>
+                <option>Destek Ekibi</option>
+              </optgroup>
+            </select>
+            <div class="rd-help" data-i18n="hte.assignHelp"></div>
+          </div>
+        </div>
+
+        <details class="rd-advanced">
+          <summary data-i18n="common.advanced"></summary>
+          <div class="rd-advanced-body">
+            <div class="rd-field">
+              <span class="rd-label" data-i18n="hte.numFormat"></span>
+              <div style="display:flex;gap:18px;padding:6px 0 8px">
+                <label class="rd-check"><input type="radio" name="hte-numfmt"><span data-i18n="hte.numSystem"></span></label>
+                <label class="rd-check"><input type="radio" name="hte-numfmt" checked><span data-i18n="hte.numCustom"></span></label>
+              </div>
+              <input class="rd-control" value="BRD-######" style="max-width:240px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace">
+              <div class="rd-help" data-i18n="hte.numHelp"></div>
+            </div>
+            <div class="rd-field">
+              <label class="rd-label" for="hte-seq" data-i18n="hte.numSeq"></label>
+              <select id="hte-seq" class="rd-control" style="max-width:240px">
+                <option selected data-i18n="hte.seqGlobal"></option>
+                <option data-i18n="hte.seqRandom"></option>
+              </select>
+              <div class="rd-help" data-i18n="hte.numSeqHelp"></div>
+            </div>
+            <label class="rd-switch">
+              <input type="checkbox">
+              <span class="track"></span>
+              <span class="rd-switch-copy"><b data-i18n="hte.noAutoresp"></b><small data-i18n="hte.noAutorespHelp"></small></span>
+            </label>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Formlar ============ -->
+  <div class="rd-tab-panel" id="hte-forms">
+    <div class="rd-surface">
+      <div class="rd-surface-head"><span data-i18n="hte.formsHead"></span></div>
+      <table class="rd-table" id="tbl-topic-fields">
+        <thead>
+          <tr>
+            <th data-i18n="hte.fEnabled"></th>
+            <th data-i18n="hte.fLabel"></th>
+            <th data-i18n="hte.fType"></th>
+            <th data-i18n="hte.fVis"></th>
+            <th data-i18n="hte.fVar"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" checked></td>
+            <td>Konu Başlığı</td>
+            <td data-i18n="hte.tShort"></td>
+            <td data-i18n="hte.public"></td>
+            <td style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">subject</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" checked></td>
+            <td>Açıklama</td>
+            <td data-i18n="hte.tLong"></td>
+            <td data-i18n="hte.public"></td>
+            <td style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">message</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" checked></td>
+            <td>Personel Numarası</td>
+            <td data-i18n="hte.tShort"></td>
+            <td data-i18n="hte.public"></td>
+            <td style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">personel_no</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td>Maliyet Merkezi</td>
+            <td data-i18n="hte.tShort"></td>
+            <td data-i18n="hte.internal"></td>
+            <td style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">maliyet_merkezi</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+        <p class="rd-help" style="margin:0 0 14px" data-i18n="hte.formsHelp"></p>
+        <div class="rd-field mb-0">
+          <label class="rd-label" for="hte-addform" data-i18n="hte.addForm"></label>
+          <div style="display:flex;gap:10px">
+            <select id="hte-addform" class="rd-control" style="max-width:280px">
+              <option>Bordro Ek Bilgileri</option>
+              <option>Proje Talebi</option>
+              <option>Şirket Bilgileri</option>
+            </select>
+            <button type="button" class="rd-btn" data-i18n="common.add"></button>
+          </div>
+          <div class="rd-help" data-i18n="hte.addFormHelp"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+  <dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span data-i18n="common.delete"></span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p data-i18n="common.confirmDelete"></p></div>
+    <div class="rd-dialog-foot">
+      <button class="rd-btn" data-dialog-close data-i18n="common.cancel"></button>
+      <button class="rd-btn rd-btn-danger" data-dialog-close data-i18n="common.delete"></button>
+    </div>
+  </dialog>
+
+</main>
+</body>
+</html>
