@@ -150,6 +150,7 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
     await IdentitySeeder.SeedAsync(scope.ServiceProvider, app.Configuration);
+    await DomainSeeder.SeedAsync(scope.ServiceProvider);
 }
 
 app.Run();
