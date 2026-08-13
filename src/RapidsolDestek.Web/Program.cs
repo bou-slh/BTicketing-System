@@ -38,7 +38,17 @@ builder.Services.AddRapidsolData(builder.Configuration);
 
 // ---- AuthN: two principals, separate cookie schemes ------------------------
 
-builder.Services.AddAuthentication()
+builder.Services.AddAuthentication("Contextual")
+    // Default scheme: pick the cookie matching the URL space, so HttpContext.User
+    // (and antiforgery identity binding) is populated on every request, not only
+    // behind [Authorize] policies.
+    .AddPolicyScheme("Contextual", "Contextual", o =>
+    {
+        o.ForwardDefaultSelector = ctx =>
+            ctx.Request.Path.StartsWithSegments("/agent") || ctx.Request.Path.StartsWithSegments("/admin")
+                ? AuthSchemes.Staff
+                : AuthSchemes.Customer;
+    })
     .AddCookie(AuthSchemes.Customer, o =>
     {
         o.Cookie.Name = "rd.customer";

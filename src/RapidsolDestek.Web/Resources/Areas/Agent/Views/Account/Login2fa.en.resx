@@ -34,7 +34,7 @@
     <value>Sign In</value>
   </data>
   <data name="lg.twofaCaption" xml:space="preserve">
-    <value>Second step — verification code (preview)</value>
+    <value>Second step — verification code</value>
   </data>
   <data name="lg.twofaHelp" xml:space="preserve">
     <value>Enter the 6-digit code from your authenticator app. The code renews every 30 seconds.</value>

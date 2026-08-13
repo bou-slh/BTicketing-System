@@ -4,8 +4,10 @@
     var navKey = ViewData["NavKey"] as string;
     var fullName = User.FindFirst("FullName")?.Value ?? User.Identity?.Name ?? "";
     var orgName = User.FindFirst("OrganizationName")?.Value ?? "";
-    var initials = string.Concat(fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-        .Where(p => p.Length > 0).Take(2).Select(p => char.ToUpperInvariant(p[0])));
+    var nameParts = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+    var initials = nameParts.Length == 0 ? "" :
+        nameParts.Length == 1 ? char.ToUpperInvariant(nameParts[0][0]).ToString() :
+        $"{char.ToUpperInvariant(nameParts[0][0])}{char.ToUpperInvariant(nameParts[^1][0])}";
 }
 <header class="rc-header">
     <a class="rc-logo" href="/">

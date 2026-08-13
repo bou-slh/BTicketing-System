@@ -34,7 +34,7 @@
     <value>Giriş</value>
   </data>
   <data name="lg.twofaCaption" xml:space="preserve">
-    <value>İkinci adım — doğrulama kodu (önizleme)</value>
+    <value>İkinci adım — doğrulama kodu</value>
   </data>
   <data name="lg.twofaHelp" xml:space="preserve">
     <value>Doğrulama uygulamanızdaki 6 haneli kodu girin. Yönetici hesapları için iki adımlı doğrulama zorunludur.</value>
