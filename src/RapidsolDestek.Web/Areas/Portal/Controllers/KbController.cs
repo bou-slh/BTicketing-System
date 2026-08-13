@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Entities;
+using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Web.Navigation;
 
@@ -13,7 +14,7 @@ namespace RapidsolDestek.Web.Areas.Portal.Controllers;
 /// </summary>
 [Area("Portal")]
 [Authorize(Policy = "PortalUser")]
-public class KbController(AppDbContext db) : Controller
+public class KbController(AppDbContext db, IFileStore files) : Controller
 {
     [HttpGet("/kb")]
     [NavKey("kb")]
@@ -62,7 +63,8 @@ public class KbController(AppDbContext db) : Controller
 
         var attachments = await db.Attachments
             .Where(at => at.ObjectType == AttachmentObjectType.FaqArticle && at.ObjectId == id)
-            .Join(db.StoredFiles, at => at.FileId, f => f.Id, (at, f) => at.Name ?? f.Name)
+            .Join(db.StoredFiles, at => at.FileId, f => f.Id,
+                (at, f) => new KbAttachmentVm(at.Id, at.Name ?? f.Name))
             .ToListAsync(ct);
 
         var related = await db.FaqArticles
@@ -100,6 +102,25 @@ public class KbController(AppDbContext db) : Controller
         return RedirectToAction(nameof(Article), new { id });
     }
 
+    /// <summary>Attachment download; only files of published, public articles are served.</summary>
+    [HttpGet("/kb-article/attachment")]
+    public async Task<IActionResult> Attachment(int id, CancellationToken ct)
+    {
+        var attachment = await db.Attachments
+            .Include(at => at.File)
+            .SingleOrDefaultAsync(at =>
+                at.Id == id
+                && at.ObjectType == AttachmentObjectType.FaqArticle
+                && db.FaqArticles.Any(a =>
+                    a.Id == at.ObjectId && a.IsPublished && a.Category!.IsPublic), ct);
+        if (attachment is null)
+            return NotFound();
+
+        var file = attachment.File!;
+        var content = await files.OpenAsync(file, ct);
+        return File(content, file.MimeType, attachment.Name ?? file.Name);
+    }
+
     private static string VotedKey(int id) => $"kb-voted-{id}";
 }
 
@@ -113,12 +134,14 @@ public sealed record KbCategoryVm(int Id, string Name, string Description);
 
 public sealed record KbArticleRowVm(int Id, int CategoryId, string Question, string? Summary, DateTimeOffset UpdatedAt);
 
+public sealed record KbAttachmentVm(int Id, string Name);
+
 public sealed record KbArticleVm(
     int Id,
     string Question,
     string AnswerHtml,
     string CategoryName,
     DateTimeOffset UpdatedAt,
-    IReadOnlyList<string> Attachments,
+    IReadOnlyList<KbAttachmentVm> Attachments,
     IReadOnlyList<KbArticleRowVm> Related,
     bool Voted);

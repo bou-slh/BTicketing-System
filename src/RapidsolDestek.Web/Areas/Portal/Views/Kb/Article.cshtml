@@ -31,9 +31,9 @@
             {
                 <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--rd-border-soft)">
                     <b style="display:block;font-weight:500;margin-bottom:10px;font-size:13px">@L["ka.attachments"]</b>
-                    @foreach (var name in Model.Attachments)
+                    @foreach (var attachment in Model.Attachments)
                     {
-                        <span class="rc-attachment">📎 @name</span>
+                        <a class="rc-attachment" href="/kb-article/attachment?id=@attachment.Id">📎 @attachment.Name</a>
                     }
                 </div>
             }

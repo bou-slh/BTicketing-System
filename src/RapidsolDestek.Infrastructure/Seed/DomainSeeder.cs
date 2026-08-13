@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RapidsolDestek.Domain.Entities;
+using RapidsolDestek.Domain.Services;
 using Thread = RapidsolDestek.Domain.Entities.Thread;
 
 namespace RapidsolDestek.Infrastructure.Seed;
@@ -20,6 +21,7 @@ public static class DomainSeeder
     public static async Task SeedAsync(IServiceProvider services)
     {
         var db = services.GetRequiredService<AppDbContext>();
+        var files = services.GetRequiredService<IFileStore>();
 
         if (await db.TicketStatuses.AnyAsync())
             return;
@@ -569,10 +571,28 @@ public static class DomainSeeder
         hero.DueDate = At(today, 17, 0);
         hero.EstimatedDueDate = At(today, 17, 0);
 
-        var fXlsx = new StoredFile { Backend = "fs", StorageKey = "seed/yol-ucreti-kontrol.xlsx", Name = "yol-ucreti-kontrol.xlsx", MimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", Size = 48_512, CreatedAt = heroCreated };
-        var fPng = new StoredFile { Backend = "fs", StorageKey = "seed/ekran-goruntusu.png", Name = "ekran-goruntusu.png", MimeType = "image/png", Size = 212_480, CreatedAt = heroCreated };
-        var fPdf = new StoredFile { Backend = "fs", StorageKey = "seed/efor-detayi.pdf", Name = "efor-detayi.pdf", MimeType = "application/pdf", Size = 96_256, CreatedAt = At(today, 10, 18) };
-        db.StoredFiles.AddRange(fXlsx, fPng, fPdf);
+        // Placeholder bytes written through IFileStore so downloads actually stream;
+        // padded to the canon byte sizes. Placeholders are not openable documents —
+        // they exist so download endpoints have real content to serve.
+        async Task<StoredFile> SeedFile(string name, string mimeType, int size, DateTimeOffset createdAt)
+        {
+            var bytes = new byte[size];
+            var filler = System.Text.Encoding.UTF8.GetBytes($"RapidsolDestek seed placeholder — {name}\n");
+            for (var i = 0; i < bytes.Length; i++)
+                bytes[i] = filler[i % filler.Length];
+            var file = await files.SaveAsync(new MemoryStream(bytes), name, mimeType);
+            file.CreatedAt = createdAt;
+            return file;
+        }
+
+        const string xlsxMime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        var fXlsx = await SeedFile("yol-ucreti-kontrol.xlsx", xlsxMime, 48_512, heroCreated);
+        var fPng = await SeedFile("ekran-goruntusu.png", "image/png", 212_480, heroCreated);
+        var fPdf = await SeedFile("efor-detayi.pdf", "application/pdf", 96_256, At(today, 10, 18));
+        // KB attachments of the hero article (canon portal/kb-article.html).
+        var fKbXlsx = await SeedFile("yol-ucreti-hesaplama-ornegi.xlsx", xlsxMime, 27_648, At(yesterday, 11, 0));
+        var fKbPdf = await SeedFile("2026-vergi-istisna-tutarlari.pdf", "application/pdf", 84_992, At(yesterday, 11, 0));
+        db.StoredFiles.AddRange(fXlsx, fPng, fPdf, fKbXlsx, fKbPdf);
 
         var heroMsg = new ThreadEntry
         {
@@ -666,7 +686,9 @@ public static class DomainSeeder
         db.Attachments.AddRange(
             new Attachment { ObjectType = AttachmentObjectType.ThreadEntry, ObjectId = heroMsg.Id, FileId = fXlsx.Id },
             new Attachment { ObjectType = AttachmentObjectType.ThreadEntry, ObjectId = heroMsg.Id, FileId = fPng.Id },
-            new Attachment { ObjectType = AttachmentObjectType.ThreadEntry, ObjectId = heroReply.Id, FileId = fPdf.Id });
+            new Attachment { ObjectType = AttachmentObjectType.ThreadEntry, ObjectId = heroReply.Id, FileId = fPdf.Id },
+            new Attachment { ObjectType = AttachmentObjectType.FaqArticle, ObjectId = faqYolUcreti.Id, FileId = fKbXlsx.Id },
+            new Attachment { ObjectType = AttachmentObjectType.FaqArticle, ObjectId = faqYolUcreti.Id, FileId = fKbPdf.Id });
 
         // ----- Tasks (canon agent/tasks.html + task-view.html) ------------------------
         var ticketsByNumber = await db.Tickets.ToDictionaryAsync(t => t.Number, t => t.Id);
