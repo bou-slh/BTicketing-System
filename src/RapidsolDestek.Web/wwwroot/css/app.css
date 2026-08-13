@@ -13,7 +13,8 @@
 }
 
 /* Account dropdown in the chrome (documented deviation: mockups lack logout) */
-details.rd-account-menu { position: relative; }
+/* margin-left:auto replicates the mockup's .rc-account right-alignment, which the details wrapper swallows. */
+details.rd-account-menu { position: relative; margin-left: auto; }
 details.rd-account-menu > summary { list-style: none; cursor: pointer; }
 details.rd-account-menu > summary::-webkit-details-marker { display: none; }
 details.rd-account-menu > .menu {

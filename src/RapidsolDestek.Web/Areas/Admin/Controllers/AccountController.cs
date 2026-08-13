@@ -14,7 +14,8 @@ public class AccountController(
     UserManager<StaffUser> users,
     StaffSignInManager signIn,
     IAppEmailSender mail,
-    IWebHostEnvironment env) : StaffAccountControllerBase(users, signIn, mail, env)
+    IWebHostEnvironment env,
+    RapidsolDestek.Infrastructure.AppDbContext db) : StaffAccountControllerBase(users, signIn, mail, env, db)
 {
     protected override string AreaPrefix => "/admin";
     protected override bool RequireAdmin => true;

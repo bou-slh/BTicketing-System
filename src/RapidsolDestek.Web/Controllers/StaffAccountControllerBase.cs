@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Infrastructure.Identity;
 using RapidsolDestek.Web.Areas.Portal.Controllers;
 using RapidsolDestek.Web.Identity;
@@ -16,7 +18,8 @@ public abstract class StaffAccountControllerBase(
     UserManager<StaffUser> users,
     StaffSignInManager signIn,
     IAppEmailSender mail,
-    IWebHostEnvironment env) : Controller
+    IWebHostEnvironment env,
+    AppDbContext db) : Controller
 {
     protected UserManager<StaffUser> Users => users;
     protected StaffSignInManager StaffSignIn => signIn;
@@ -56,12 +59,22 @@ public abstract class StaffAccountControllerBase(
             return View("Login", vm);
         }
 
+        await StampLastLoginAsync(user);
+
         // Password-only success. Admins must use 2FA: force enrollment before entering the panel.
         if (RequireAdmin && !user.TwoFactorEnabled)
             return Redirect($"{AreaPrefix}/2fa-setup");
 
         return LocalRedirect(SafeReturnUrl(vm.ReturnUrl));
     }
+
+    /// <summary>
+    /// Feeds the directory presence stub. ExecuteUpdate on purpose: a login is not a
+    /// domain mutation, so it must not produce an AuditEvent via the interceptors.
+    /// </summary>
+    private Task StampLastLoginAsync(StaffUser user) =>
+        db.Staff.Where(s => s.IdentityUserId == user.Id)
+            .ExecuteUpdateAsync(s => s.SetProperty(x => x.LastLoginAt, DateTimeOffset.UtcNow));
 
     protected async Task<IActionResult> Login2faCore(StaffLogin2faVm vm)
     {
@@ -82,6 +95,7 @@ public abstract class StaffAccountControllerBase(
             ModelState.AddModelError(string.Empty, "invalidCode");
             return View("Login2fa", vm);
         }
+        await StampLastLoginAsync(user);
         return LocalRedirect(SafeReturnUrl(vm.ReturnUrl));
     }
 
