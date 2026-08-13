@@ -60,6 +60,15 @@
     if (e.target.matches(".rd-editor-toolbar select[data-ed]")) handleEditorAction(e.target);
   });
 
+  /* ---------- Attach inputs list chosen files in the sibling .rc-file-name (B5) ---------- */
+  document.addEventListener("change", (e) => {
+    const input = e.target.closest('input[type="file"]');
+    if (!input) return;
+    const scope = input.closest("form") || input.closest(".rc-form-footer")?.parentElement || document;
+    const label = scope.querySelector(".rc-file-name");
+    if (label) label.textContent = [...input.files].map((f) => f.name).join(", ");
+  });
+
   /* ---------- Select-all checkboxes: <input data-check-all="scopeSelector"> ---------- */
   document.addEventListener("change", (e) => {
     if (e.target.matches("[data-check-all]")) {

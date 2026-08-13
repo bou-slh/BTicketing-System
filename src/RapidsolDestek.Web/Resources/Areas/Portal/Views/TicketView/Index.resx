@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tv.title" xml:space="preserve">
+    <value>Talep {0}</value>
+  </data>
+  <data name="tv.back" xml:space="preserve">
+    <value>← Taleplerim</value>
+  </data>
+  <data name="tv.created" xml:space="preserve">
+    <value>Oluşturulma: {0}</value>
+  </data>
+  <data name="tv.approvalTitle" xml:space="preserve">
+    <value>Efor onayınız bekleniyor</value>
+  </data>
+  <data name="tv.approvalText" xml:space="preserve">
+    <value>RapidSol yöneticisi çalışmanın tamamlanması için aşağıdaki eforu önerdi.</value>
+  </data>
+  <data name="tv.effortLabel" xml:space="preserve">
+    <value>Önerilen efor</value>
+  </data>
+  <data name="tv.effortBy" xml:space="preserve">
+    <value>Onaya gönderen</value>
+  </data>
+  <data name="tv.reject" xml:space="preserve">
+    <value>Reddet / açıklama iste</value>
+  </data>
+  <data name="tv.approve" xml:space="preserve">
+    <value>{0} saati onayla</value>
+  </data>
+  <data name="tv.hours" xml:space="preserve">
+    <value>{0} saat</value>
+  </data>
+  <data name="tv.thread" xml:space="preserve">
+    <value>Yazışmalar</value>
+  </data>
+  <data name="tv.reply" xml:space="preserve">
+    <value>Yanıtınız</value>
+  </data>
+  <data name="tv.replyPh" xml:space="preserve">
+    <value>Mesajınızı yazın…</value>
+  </data>
+  <data name="tv.attach" xml:space="preserve">
+    <value>📎 Dosya ekle</value>
+  </data>
+  <data name="tv.send" xml:space="preserve">
+    <value>Yanıtı gönder</value>
+  </data>
+  <data name="tv.info" xml:space="preserve">
+    <value>Talep bilgileri</value>
+  </data>
+  <data name="tv.status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="tv.effort" xml:space="preserve">
+    <value>Önerilen efor</value>
+  </data>
+  <data name="tv.priority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="tv.consultant" xml:space="preserve">
+    <value>Danışman</value>
+  </data>
+  <data name="tv.topic" xml:space="preserve">
+    <value>Yardım konusu</value>
+  </data>
+  <data name="tv.history" xml:space="preserve">
+    <value>Talep geçmişi</value>
+  </data>
+  <data name="tv.h4" xml:space="preserve">
+    <value>Talep oluşturuldu</value>
+  </data>
+  <data name="tv.evtAssigned" xml:space="preserve">
+    <value>{0}'a atandı</value>
+  </data>
+  <data name="tv.evtEffortProposed" xml:space="preserve">
+    <value>{0} saat efor onayınıza sunuldu</value>
+  </data>
+  <data name="meta.today" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="meta.yesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="status.effortWait" xml:space="preserve">
+    <value>Efor onayınız bekleniyor</value>
+  </data>
+  <data name="tv.rejTitle" xml:space="preserve">
+    <value>Efor önerisini reddet</value>
+  </data>
+  <data name="tv.rejNote" xml:space="preserve">
+    <value>Açıklamanız</value>
+  </data>
+  <data name="tv.rejPh" xml:space="preserve">
+    <value>Örn. Efor yüksek görünüyor; kapsamı birlikte daraltabilir miyiz?</value>
+  </data>
+  <data name="tv.rejHelp" xml:space="preserve">
+    <value>Reddetme nedeninizi yazın — danışmanınıza not olarak iletilecek ve yeni bir öneri hazırlanacaktır.</value>
+  </data>
+  <data name="tv.rejSend" xml:space="preserve">
+    <value>Reddet ve notu gönder</value>
+  </data>
+</root>

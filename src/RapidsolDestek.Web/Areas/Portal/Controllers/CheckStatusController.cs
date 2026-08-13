@@ -16,7 +16,10 @@ namespace RapidsolDestek.Web.Areas.Portal.Controllers;
 /// </summary>
 [Area("Portal")]
 [AllowAnonymous]
-public class CheckStatusController(AppDbContext db, IAppEmailSender mail) : Controller
+public class CheckStatusController(
+    AppDbContext db,
+    IAppEmailSender mail,
+    Microsoft.AspNetCore.DataProtection.IDataProtectionProvider dataProtection) : Controller
 {
     [HttpGet("/check-status")]
     [NavKey("tickets")]
@@ -36,15 +39,16 @@ public class CheckStatusController(AppDbContext db, IAppEmailSender mail) : Cont
         var match = await db.Tickets
             .Where(t => t.Number == number)
             .Where(t => t.User!.Emails.Any(e => e.Address.ToLower() == email.ToLower()))
-            .Select(t => new { t.Number, t.Subject })
+            .Select(t => new { t.Id, t.Number, t.Subject })
             .SingleOrDefaultAsync(ct);
 
         if (match is null)
             return View(vm with { State = CheckStatusState.NotFound });
 
-        // TODO(S5 portal/ticket-view): include a signed one-hour access token in the
-        // link once the guest ticket view exists; until then the mail points at login.
-        var url = $"{Request.Scheme}://{Request.Host}/login";
+        // Signed one-hour guest token → read-only /ticket-view of this single ticket
+        // (TicketViewController validates it; S5 portal/ticket-view TODO resolved).
+        var guestToken = TicketViewController.CreateGuestToken(dataProtection, match.Id, TimeSpan.FromHours(1));
+        var url = $"{Request.Scheme}://{Request.Host}/ticket-view?id={match.Id}&token={Uri.EscapeDataString(guestToken)}";
         await mail.SendAsync(email,
             $"RapidsolDestek — {match.Number}",
             $"<p>{match.Number} · {match.Subject}</p><p><a href=\"{url}\">Talebinize erişmek için tıklayın</a> (1 saat geçerlidir).</p>",

@@ -1,0 +1,226 @@
+@using System.Globalization
+@using RapidsolDestek.Domain.Entities
+@model RapidsolDestek.Web.Areas.Portal.Controllers.TicketViewVm
+@{
+    ViewData["Title"] = L.GetString("tv.title", Model.Number);
+
+    // Mockup pill classes (portal.css): open/wait/test/solved/closed; derived and
+    // internal keys map onto them (effortWait→wait, new→open) — Home/Tickets parity.
+    static string StatusClass(string key) => key switch
+    {
+        "effortWait" => "rc-status-wait",
+        "new" => "rc-status-open",
+        "open" or "wait" or "test" or "solved" or "closed" => $"rc-status-{key}",
+        _ => "rc-status-open",
+    };
+
+    // Table-cell agent name convention (§2 canon): "Ümit Yaşar Akın" → "Ümit Y. Akın".
+    static string ShortName(string? full)
+    {
+        if (string.IsNullOrWhiteSpace(full))
+            return "—";
+        var parts = full.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 3)
+            return full;
+        var middles = string.Join(" ", parts[1..^1].Select(p => $"{char.ToUpperInvariant(p[0])}."));
+        return $"{parts[0]} {middles} {parts[^1]}";
+    }
+
+    // Avatar initials, mockup style ("Bourla Salehi" → BS, "Ümit Yaşar Akın" → ÜA).
+    static string Initials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length == 0 ? "" :
+            parts.Length == 1 ? char.ToUpperInvariant(parts[0][0]).ToString() :
+            $"{char.ToUpperInvariant(parts[0][0])}{char.ToUpperInvariant(parts[^1][0])}";
+    }
+
+    // Thread/timeline times, mockup format: "Bugün 10:18", "Dün 16:29", else "5 Ağustos 16:05".
+    string MetaTime(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        if (local.Date == today)
+            return L.GetString("meta.today", local.ToString("HH:mm"));
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("meta.yesterday", local.ToString("HH:mm"));
+        return $"{local.ToString("m", CultureInfo.CurrentUICulture)} {local:HH:mm}";
+    }
+
+    string Hours(decimal? hours) => (hours ?? 0).ToString("0.##", CultureInfo.CurrentUICulture);
+
+    // History labels for the portal-visible event kinds (controller whitelist).
+    object TimelineLabel(RapidsolDestek.Web.Areas.Portal.Controllers.TimelineItemVm item) => item.Kind switch
+    {
+        "created" => L["tv.h4"],
+        "assigned" => L["tv.evtAssigned", ShortName(item.Actor)],
+        "effort-proposed" or "effort-revised" => L["tv.evtEffortProposed", Hours(item.Hours)],
+        "effort-approved" => SL["status.effortApproved"],
+        "effort-rejected" => SL["status.effortRejected"],
+        _ => item.Kind,
+    };
+
+    var createdLocal = Model.CreatedAt.ToLocalTime();
+    var pending = Model.Effort?.State == EffortState.Pending;
+    var decided = Model.Effort?.State is EffortState.Approved or EffortState.Rejected;
+}
+
+<div class="rc-detail-title">
+    <a class="rc-back-link" href="/tickets">@L["tv.back"]</a>
+    <div>
+        <h1>@Model.Number · @Model.Subject</h1>
+        <p>@L["tv.created", $"{createdLocal.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture)}, {createdLocal:HH:mm}"]</p>
+    </div>
+</div>
+
+<div class="rc-detail-grid">
+    <div class="rc-surface">
+        @if (pending)
+        {
+            <div class="rc-approval">
+                <div class="rc-approval-top">
+                    <span class="rc-approval-icon">◷</span>
+                    <div>
+                        <h3>@L["tv.approvalTitle"]</h3>
+                        <p>@L["tv.approvalText"]</p>
+                    </div>
+                </div>
+                <div class="rc-effort">
+                    <div><small>@L["tv.effortLabel"]</small><b>@L["tv.hours", Hours(Model.Effort!.Hours)]</b></div>
+                    <div><small>@L["tv.effortBy"]</small><b>@ShortName(Model.Effort.ProposedBy)</b></div>
+                </div>
+                @if (!Model.IsGuest)
+                {
+                    <div class="rc-approval-actions">
+                        <button class="rc-button-secondary" data-dialog-open="dlg-effort-reject">@L["tv.reject"]</button>
+                        <form method="post" asp-action="Approve" style="display:contents">
+                            <input type="hidden" name="id" value="@Model.Id">
+                            <button class="rc-button-primary">@L["tv.approve", Hours(Model.Effort.Hours)]</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        }
+        else if (decided)
+        {
+            @* Decided variant of the mockup card — canon effortApproved/effortRejected
+               labels; the rejection shows the portal user's decision note (data). *@
+            <div class="rc-approval">
+                <div class="rc-approval-top">
+                    <span class="rc-approval-icon">@(Model.Effort!.State == EffortState.Approved ? "✓" : "✕")</span>
+                    <div>
+                        <h3>@SL[Model.Effort.State == EffortState.Approved ? "status.effortApproved" : "status.effortRejected"]</h3>
+                        @if (!string.IsNullOrWhiteSpace(Model.Effort.DecisionNote))
+                        {
+                            <p>@Model.Effort.DecisionNote</p>
+                        }
+                    </div>
+                </div>
+                <div class="rc-effort">
+                    <div><small>@L["tv.effortLabel"]</small><b>@L["tv.hours", Hours(Model.Effort.Hours)]</b></div>
+                    <div><small>@L["tv.effortBy"]</small><b>@ShortName(Model.Effort.ProposedBy)</b></div>
+                </div>
+            </div>
+        }
+
+        <div class="rc-surface-head">@L["tv.thread"]</div>
+
+        @foreach (var entry in Model.Entries)
+        {
+            <div class="rc-message@(entry.IsAgent ? " rc-message--agent" : "")">
+                <div class="rc-message-head">
+                    <div class="rd-avatar">@Initials(entry.Poster)</div>@(entry.IsAgent ? $"{entry.Poster} · RapidSol" : entry.Poster) <time>@MetaTime(entry.At)</time>
+                </div>
+                @if (entry.Format == "html")
+                {
+                    @* Stored thread HTML is sanitized at ingress (ThreadService). *@
+                    <p>@Html.Raw(entry.Body)</p>
+                }
+                else
+                {
+                    <p>@Html.Raw(string.Join("<br>", entry.Body.Split('\n').Select(line => Html.Encode(line))))</p>
+                }
+                @foreach (var attachment in entry.Attachments)
+                {
+                    @if (Model.IsGuest)
+                    {
+                        <span class="rc-attachment">📎 @attachment.Name</span>
+                    }
+                    else
+                    {
+                        <a class="rc-attachment" href="/ticket-view/attachment?id=@attachment.Id">📎 @attachment.Name</a>
+                    }
+                }
+            </div>
+        }
+
+        @if (!Model.IsGuest)
+        {
+            <div class="rc-reply">
+                <form method="post" asp-action="Reply" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="@Model.Id">
+                    <label class="rc-label" for="rc-reply">@L["tv.reply"]</label>
+                    <textarea id="rc-reply" name="body" class="rc-control" placeholder="@L["tv.replyPh"]"></textarea>
+                    <div class="rc-form-footer">
+                        <label class="rc-file-label" for="rc-reply-files">
+                            <span>@L["tv.attach"]</span>
+                            <input id="rc-reply-files" name="attachments" type="file" multiple>
+                        </label>
+                        <span class="rc-file-name"></span>
+                        <button class="rc-button-primary">@L["tv.send"]</button>
+                    </div>
+                </form>
+            </div>
+        }
+    </div>
+
+    <aside>
+        <div class="rc-surface">
+            <div class="rc-surface-head">@L["tv.info"]</div>
+            <div class="rc-info">
+                <div class="rc-info-row">
+                    <span>@L["tv.status"]</span>
+                    <b class="rc-status @StatusClass(Model.StatusKey)">@(Model.StatusKey == "effortWait" ? L["status.effortWait"] : SL[$"status.{Model.StatusKey}"])</b>
+                </div>
+                <div class="rc-info-row"><span>@L["tv.effort"]</span><b>@(Model.Effort is null ? (object)"—" : L["tv.hours", Hours(Model.Effort.Hours)])</b></div>
+                <div class="rc-info-row"><span>@L["tv.priority"]</span><b>@(Model.PriorityKey is null ? (object)"—" : SL[$"priority.{Model.PriorityKey}"])</b></div>
+                <div class="rc-info-row"><span>@L["tv.consultant"]</span><b>@ShortName(Model.AgentName)</b></div>
+                <div class="rc-info-row"><span>@L["tv.topic"]</span><b>@(Model.TopicName ?? "—")</b></div>
+            </div>
+        </div>
+
+        <div class="rc-surface" style="margin-top:14px">
+            <div class="rc-surface-head">@L["tv.history"]</div>
+            <div class="rc-timeline">
+                @foreach (var item in Model.Timeline)
+                {
+                    <div class="rc-timeline-item"><b>@TimelineLabel(item)</b><small>@MetaTime(item.At)</small></div>
+                }
+            </div>
+        </div>
+    </aside>
+</div>
+
+@if (pending && !Model.IsGuest)
+{
+    <dialog class="rd-dialog" id="dlg-effort-reject">
+        <form method="post" asp-action="Reject">
+            <input type="hidden" name="id" value="@Model.Id">
+            <div class="rd-dialog-head">
+                <span>@L["tv.rejTitle"]</span>
+                <button type="button" class="close" data-dialog-close>✕</button>
+            </div>
+            <div class="rd-dialog-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="rc-reject-note">@L["tv.rejNote"]</label>
+                    <textarea id="rc-reject-note" name="note" class="rc-control" required placeholder="@L["tv.rejPh"]"></textarea>
+                    <div class="rd-help">@L["tv.rejHelp"]</div>
+                </div>
+            </div>
+            <div class="rd-dialog-foot">
+                <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                <button class="rc-button-primary">@L["tv.rejSend"]</button>
+            </div>
+        </form>
+    </dialog>
+}

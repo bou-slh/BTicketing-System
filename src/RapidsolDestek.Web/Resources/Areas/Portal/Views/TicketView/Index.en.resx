@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tv.title" xml:space="preserve">
+    <value>Request {0}</value>
+  </data>
+  <data name="tv.back" xml:space="preserve">
+    <value>← My Requests</value>
+  </data>
+  <data name="tv.created" xml:space="preserve">
+    <value>Created: {0}</value>
+  </data>
+  <data name="tv.approvalTitle" xml:space="preserve">
+    <value>Awaiting your effort approval</value>
+  </data>
+  <data name="tv.approvalText" xml:space="preserve">
+    <value>The RapidSol manager proposed the effort below to complete the work.</value>
+  </data>
+  <data name="tv.effortLabel" xml:space="preserve">
+    <value>Proposed effort</value>
+  </data>
+  <data name="tv.effortBy" xml:space="preserve">
+    <value>Submitted by</value>
+  </data>
+  <data name="tv.reject" xml:space="preserve">
+    <value>Reject / ask for details</value>
+  </data>
+  <data name="tv.approve" xml:space="preserve">
+    <value>Approve {0} hours</value>
+  </data>
+  <data name="tv.hours" xml:space="preserve">
+    <value>{0} hours</value>
+  </data>
+  <data name="tv.thread" xml:space="preserve">
+    <value>Conversation</value>
+  </data>
+  <data name="tv.reply" xml:space="preserve">
+    <value>Your reply</value>
+  </data>
+  <data name="tv.replyPh" xml:space="preserve">
+    <value>Write your message…</value>
+  </data>
+  <data name="tv.attach" xml:space="preserve">
+    <value>📎 Attach file</value>
+  </data>
+  <data name="tv.send" xml:space="preserve">
+    <value>Send reply</value>
+  </data>
+  <data name="tv.info" xml:space="preserve">
+    <value>Request info</value>
+  </data>
+  <data name="tv.status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="tv.effort" xml:space="preserve">
+    <value>Proposed effort</value>
+  </data>
+  <data name="tv.priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="tv.consultant" xml:space="preserve">
+    <value>Consultant</value>
+  </data>
+  <data name="tv.topic" xml:space="preserve">
+    <value>Help topic</value>
+  </data>
+  <data name="tv.history" xml:space="preserve">
+    <value>Request history</value>
+  </data>
+  <data name="tv.h4" xml:space="preserve">
+    <value>Request created</value>
+  </data>
+  <data name="tv.evtAssigned" xml:space="preserve">
+    <value>Assigned to {0}</value>
+  </data>
+  <data name="tv.evtEffortProposed" xml:space="preserve">
+    <value>{0}-hour effort submitted for your approval</value>
+  </data>
+  <data name="meta.today" xml:space="preserve">
+    <value>Today {0}</value>
+  </data>
+  <data name="meta.yesterday" xml:space="preserve">
+    <value>Yesterday {0}</value>
+  </data>
+  <data name="status.effortWait" xml:space="preserve">
+    <value>Awaiting your effort approval</value>
+  </data>
+  <data name="tv.rejTitle" xml:space="preserve">
+    <value>Reject the effort proposal</value>
+  </data>
+  <data name="tv.rejNote" xml:space="preserve">
+    <value>Your note</value>
+  </data>
+  <data name="tv.rejPh" xml:space="preserve">
+    <value>E.g. The effort looks high; can we narrow the scope together?</value>
+  </data>
+  <data name="tv.rejHelp" xml:space="preserve">
+    <value>Explain why you are rejecting — it will be sent to your consultant as a note and a new proposal will be prepared.</value>
+  </data>
+  <data name="tv.rejSend" xml:space="preserve">
+    <value>Reject and send note</value>
+  </data>
+</root>
