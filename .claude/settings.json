@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in */RapidsolDestek/*.cs) cd \"$CLAUDE_PROJECT_DIR\" && dotnet format RapidsolDestek.sln --include \"${f#\"$CLAUDE_PROJECT_DIR\"/}\" --no-restore -v q >/dev/null 2>&1; dotnet build RapidsolDestek.sln -v q --nologo 2>&1 | grep -E 'error|Error' && exit 2 || exit 0 ;; esac; exit 0"
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in */RapidsolDestek/*.cs) cd \"$CLAUDE_PROJECT_DIR\" && dotnet format RapidsolDestek.slnx --include \"${f#\"$CLAUDE_PROJECT_DIR\"/}\" --no-restore -v q >/dev/null 2>&1; dotnet build RapidsolDestek.slnx -v q --nologo 2>&1 | grep -E 'error|Error' && exit 2 || exit 0 ;; esac; exit 0"
           },
           {
             "type": "command",
