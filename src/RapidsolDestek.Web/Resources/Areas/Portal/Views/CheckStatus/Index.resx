@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="cs.title" xml:space="preserve">
+    <value>Talep durumu sorgula</value>
+  </data>
+  <data name="cs.sub" xml:space="preserve">
+    <value>E-posta adresinizi ve talep numaranızı girin; talebinize özel bir erişim bağlantısını e-posta ile gönderelim.</value>
+  </data>
+  <data name="cs.email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="cs.ticket" xml:space="preserve">
+    <value>Talep numarası</value>
+  </data>
+  <data name="cs.ticketPh" xml:space="preserve">
+    <value>Örn. R716555</value>
+  </data>
+  <data name="cs.ticketHelp" xml:space="preserve">
+    <value>Talep numarası, talebiniz oluşturulduğunda gönderilen e-postada yer alır.</value>
+  </data>
+  <data name="cs.submit" xml:space="preserve">
+    <value>Erişim bağlantısı gönder</value>
+  </data>
+  <data name="cs.note" xml:space="preserve">
+    <value>Bağlantı yalnızca talebi oluşturan e-posta adresine gönderilir ve 1 saat geçerlidir.</value>
+  </data>
+  <data name="cs.haveAccount" xml:space="preserve">
+    <value>Hesabınız var mı?</value>
+  </data>
+  <data name="cs.signin" xml:space="preserve">
+    <value>Giriş yapın</value>
+  </data>
+  <data name="cs.sent" xml:space="preserve">
+    <value>Erişim bağlantısı e-posta adresinize gönderildi. Gelen kutunuzu kontrol edin.</value>
+  </data>
+  <data name="cs.notFound" xml:space="preserve">
+    <value>Bu e-posta ve talep numarasıyla eşleşen bir kayıt bulunamadı.</value>
+  </data>
+</root>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="kb.heroTitle" xml:space="preserve">
+    <value>Size nasıl yardımcı olabiliriz?</value>
+  </data>
+  <data name="kb.heroSub" xml:space="preserve">
+    <value>Bordro, izin, vardiya ve sistem kullanımı hakkında hazır yanıtları arayın.</value>
+  </data>
+  <data name="kb.searchPh" xml:space="preserve">
+    <value>Makalelerde arayın… örn. yol ücreti</value>
+  </data>
+  <data name="kb.catPayroll" xml:space="preserve">
+    <value>Bordro</value>
+  </data>
+  <data name="kb.catLeave" xml:space="preserve">
+    <value>İzin</value>
+  </data>
+  <data name="kb.catShift" xml:space="preserve">
+    <value>Vardiya</value>
+  </data>
+  <data name="kb.catSystem" xml:space="preserve">
+    <value>Sistem</value>
+  </data>
+  <data name="kb.updatedPrefix" xml:space="preserve">
+    <value>Güncellendi:</value>
+  </data>
+</root>

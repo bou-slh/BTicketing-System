@@ -1,0 +1,71 @@
+@using System.Globalization
+@model RapidsolDestek.Web.Areas.Portal.Controllers.KbArticleVm
+@{
+    ViewData["Title"] = Model.Question;
+}
+
+<div class="rc-detail-title">
+    <a class="rc-back-link" href="/kb">@L["ka.back"]</a>
+    <div>
+        <div style="font-size:12px;color:#d9ebea;margin-bottom:8px">
+            <a href="/kb" style="color:inherit">@SL["nav.kb"]</a>
+            <span aria-hidden="true"> » </span>
+            <span>@Model.CategoryName</span>
+        </div>
+        <h1>@Model.Question</h1>
+        <p>
+            <span>@L["ka.updated"]</span> @Model.UpdatedAt.ToString("d MMMM yyyy", CultureInfo.CurrentUICulture)
+            <span aria-hidden="true"> · </span>
+            <span>@L["ka.category"]</span> <span>@Model.CategoryName</span>
+        </p>
+    </div>
+</div>
+
+<div class="rc-columns">
+    <div class="rc-surface">
+        <div style="padding:24px 26px;font-size:14px;line-height:1.7;color:var(--rd-text-soft)">
+            @* Stored KB HTML is authored by staff and sanitized at ingress. *@
+            @Html.Raw(Model.AnswerHtml)
+
+            @if (Model.Attachments.Count > 0)
+            {
+                <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--rd-border-soft)">
+                    <b style="display:block;font-weight:500;margin-bottom:10px;font-size:13px">@L["ka.attachments"]</b>
+                    @foreach (var name in Model.Attachments)
+                    {
+                        <span class="rc-attachment">📎 @name</span>
+                    }
+                </div>
+            }
+
+            <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--rd-border-soft);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                @if (Model.Voted)
+                {
+                    <b style="font-weight:500;font-size:13px">@L["ka.thanks"]</b>
+                }
+                else
+                {
+                    <b style="font-weight:500;font-size:13px">@L["ka.helpful"]</b>
+                    <form method="post" asp-action="Vote" style="display:contents">
+                        <input type="hidden" name="id" value="@Model.Id">
+                        <button class="rd-btn rd-btn-sm" name="helpful" value="true">@SL["common.yes"]</button>
+                        <button class="rd-btn rd-btn-sm" name="helpful" value="false">@SL["common.no"]</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+
+    <aside>
+        <div class="rc-surface">
+            <div class="rc-surface-head">@L["ka.related"]</div>
+            @foreach (var related in Model.Related)
+            {
+                <a class="rc-kb-cat" href="/kb-article?id=@related.Id">
+                    <h3>@related.Question</h3>
+                    <p>@Model.CategoryName · @L["kb.updatedPrefix"] @related.UpdatedAt.ToString("d MMM yyyy", CultureInfo.CurrentUICulture)</p>
+                </a>
+            }
+        </div>
+    </aside>
+</div>

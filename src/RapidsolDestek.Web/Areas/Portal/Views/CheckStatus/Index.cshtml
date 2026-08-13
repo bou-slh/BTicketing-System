@@ -1,0 +1,40 @@
+@model RapidsolDestek.Web.Areas.Portal.Controllers.CheckStatusVm
+@{
+    ViewData["Title"] = L["cs.title"];
+}
+
+<div class="rc-auth-card" style="margin:40px auto">
+    <h1>@L["cs.title"]</h1>
+    <p>@L["cs.sub"]</p>
+
+    @if (Model.State == RapidsolDestek.Web.Areas.Portal.Controllers.CheckStatusState.Sent)
+    {
+        <div class="rc-notice">@L["cs.sent"]</div>
+    }
+    else
+    {
+        <form class="rc-form-grid" method="post" asp-action="Index">
+            <partial name="_FormErrors" />
+            @if (Model.State == RapidsolDestek.Web.Areas.Portal.Controllers.CheckStatusState.NotFound)
+            {
+                <div class="rd-form-error" role="alert">@L["cs.notFound"]</div>
+            }
+            <div>
+                <label class="rc-label" for="cs-email">@L["cs.email"]</label>
+                <input id="cs-email" class="rc-control" type="email" asp-for="Email" autocomplete="email">
+            </div>
+            <div>
+                <label class="rc-label" for="cs-ticket">@L["cs.ticket"]</label>
+                <input id="cs-ticket" class="rc-control" type="text" asp-for="Ticket" placeholder="@L["cs.ticketPh"]">
+                <div class="rd-help">@L["cs.ticketHelp"]</div>
+            </div>
+            <button class="rc-button-primary" style="justify-content:center">@L["cs.submit"]</button>
+            <div class="rc-notice">@L["cs.note"]</div>
+        </form>
+    }
+
+    <div class="rc-auth-foot">
+        <span>@L["cs.haveAccount"]</span>
+        <a href="/login">@L["cs.signin"]</a>
+    </div>
+</div>

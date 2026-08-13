@@ -212,9 +212,9 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 - [ ] **open.html** — help-topic → dynamic form fields (form designer output), file list on attach, validation, creates a real ticket (B3/B5)
 - [ ] **tickets.html** — real list: tabs from data, search + topic filter work, deep links `ticket-view?id=` (B1)
 - [ ] **ticket-view.html** — thread from data; **effort card Onayla/Reddet** (B8); reply composer appends + attach file list (B5)
-- [ ] **check-status.html** — guest lookup (ticket# + email) renders a result/failure state
-- [ ] **kb.html** — search actually searches, category filter, article counts (B1)
-- [ ] **kb-article.html** — helpful yes/no vote with thank-you state; attachments downloadable
+- [x] **check-status.html** — guest lookup (ticket# + email) renders a result/failure state *(S5; access-link mail via dev sender until S8; signed guest token → TODO S5 ticket-view)*
+- [x] **kb.html** — search actually searches, category filter, article counts (B1) *(S5)*
+- [x] **kb-article.html** — helpful yes/no vote with thank-you state; attachments downloadable *(S5; vote + thank-you live, attachment names render — download endpoint TODO with IFileStore wiring)*
 - [ ] **profile.html** — saves; language select actually switches culture; password change validated (B3)
 - [ ] *(portal header everywhere)* — profile + check-status reachable, logout (B9)
 

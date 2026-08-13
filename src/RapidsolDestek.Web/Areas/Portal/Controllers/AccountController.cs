@@ -141,10 +141,6 @@ public class AccountController(
     [AllowAnonymous]
     public IActionResult Offline() => View();
 
-    // TODO(S5): real guest lookup (ticket# + email -> access link). Placeholder so links resolve.
-    [HttpGet("/check-status")]
-    [AllowAnonymous]
-    public IActionResult CheckStatus() => View();
 }
 
 public class LoginVm

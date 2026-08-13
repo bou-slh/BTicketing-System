@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="kb.heroTitle" xml:space="preserve">
+    <value>How can we help you?</value>
+  </data>
+  <data name="kb.heroSub" xml:space="preserve">
+    <value>Search ready answers about payroll, leave, shifts and using the system.</value>
+  </data>
+  <data name="kb.searchPh" xml:space="preserve">
+    <value>Search articles… e.g. commute allowance</value>
+  </data>
+  <data name="kb.catPayroll" xml:space="preserve">
+    <value>Payroll</value>
+  </data>
+  <data name="kb.catLeave" xml:space="preserve">
+    <value>Leave</value>
+  </data>
+  <data name="kb.catShift" xml:space="preserve">
+    <value>Shifts</value>
+  </data>
+  <data name="kb.catSystem" xml:space="preserve">
+    <value>System</value>
+  </data>
+</root>

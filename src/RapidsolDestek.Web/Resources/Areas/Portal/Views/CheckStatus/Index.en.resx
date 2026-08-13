@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="cs.title" xml:space="preserve">
+    <value>Check request status</value>
+  </data>
+  <data name="cs.sub" xml:space="preserve">
+    <value>Enter your email address and request number and we will email you an access link for your request.</value>
+  </data>
+  <data name="cs.email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="cs.ticket" xml:space="preserve">
+    <value>Request number</value>
+  </data>
+  <data name="cs.ticketPh" xml:space="preserve">
+    <value>e.g. R716555</value>
+  </data>
+  <data name="cs.ticketHelp" xml:space="preserve">
+    <value>You can find the request number in the email sent when your request was created.</value>
+  </data>
+  <data name="cs.submit" xml:space="preserve">
+    <value>Send access link</value>
+  </data>
+  <data name="cs.note" xml:space="preserve">
+    <value>The link is only sent to the email address that opened the request and is valid for 1 hour.</value>
+  </data>
+  <data name="cs.haveAccount" xml:space="preserve">
+    <value>Have an account?</value>
+  </data>
+  <data name="cs.signin" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="cs.sent" xml:space="preserve">
+    <value>An access link has been sent to your email address. Please check your inbox.</value>
+  </data>
+  <data name="cs.notFound" xml:space="preserve">
+    <value>No request matches this email and request number.</value>
+  </data>
+</root>

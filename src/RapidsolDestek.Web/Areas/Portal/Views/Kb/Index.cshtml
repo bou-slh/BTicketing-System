@@ -1,0 +1,40 @@
+@using System.Globalization
+@model RapidsolDestek.Web.Areas.Portal.Controllers.KbIndexVm
+@{
+    ViewData["Title"] = SL["nav.kb"];
+    string Updated(DateTimeOffset d) => d.ToString("d MMM yyyy", CultureInfo.CurrentUICulture);
+}
+
+<div class="rc-hero" style="display:block;text-align:center;padding:38px 30px">
+    <h1>@L["kb.heroTitle"]</h1>
+    <p style="max-width:590px;margin:0 auto 20px">@L["kb.heroSub"]</p>
+    <form class="rc-kb-search" method="get" action="/kb">
+        <input class="rc-control" type="search" name="q" value="@Model.Query" placeholder="@L["kb.searchPh"]">
+        @if (Model.CategoryId is { } cat)
+        {
+            <input type="hidden" name="cat" value="@cat">
+        }
+        <button class="rc-button-primary">@SL["common.search"]</button>
+    </form>
+</div>
+
+<div class="rd-grid-2">
+    @foreach (var category in Model.Categories)
+    {
+        var articles = Model.Articles.Where(a => a.CategoryId == category.Id).ToList();
+        if (articles.Count == 0 && (Model.Query is not null || Model.CategoryId is not null))
+        {
+            continue; @* searching: hide empty categories *@
+        }
+        <div class="rc-surface">
+            <div class="rc-surface-head">@category.Name</div>
+            @foreach (var article in articles)
+            {
+                <a class="rc-kb-cat" href="/kb-article?id=@article.Id">
+                    <h3>@article.Question</h3>
+                    <p>@(string.IsNullOrEmpty(article.Summary) ? category.Description : article.Summary) · @L["kb.updatedPrefix"] @Updated(article.UpdatedAt)</p>
+                </a>
+            }
+        </div>
+    }
+</div>
