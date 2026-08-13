@@ -1,0 +1,39 @@
+@model RapidsolDestek.Web.Areas.Portal.Controllers.LoginVm
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["lg.title"];
+}
+<div class="rc-auth-card">
+    <a class="rc-logo" href="/" style="justify-content:center;margin-bottom:20px">
+        <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1>@L["lg.title"]</h1>
+    <p>@L["lg.sub"]</p>
+
+    <form method="post" class="rc-form-grid" asp-action="Login">
+        <partial name="_FormErrors" />
+        <input type="hidden" asp-for="ReturnUrl">
+        <div>
+            <label class="rc-label" for="lg-user">@L["lg.user"]</label>
+            <input id="lg-user" class="rc-control" type="text" asp-for="User" autocomplete="username">
+        </div>
+        <div>
+            <label class="rc-label" for="lg-pass" style="display:flex;align-items:center">
+                <span>@L["lg.password"]</span>
+                <a href="/pwreset" style="margin-left:auto;font-weight:400;font-size:12px">@L["lg.forgot"]</a>
+            </label>
+            <input id="lg-pass" class="rc-control" type="password" asp-for="Password" autocomplete="current-password">
+        </div>
+        <label class="rd-check"><input type="checkbox" asp-for="Remember"><span>@L["lg.remember"]</span></label>
+        <button type="submit" class="rc-button-primary" style="justify-content:center">@L["lg.submit"]</button>
+    </form>
+
+    <div class="rc-auth-foot">
+        <span>@L["lg.noAccount"]</span>
+        <a href="/register">@L["lg.register"]</a>
+        <div style="margin-top:10px;font-size:12px">
+            <a href="/check-status">@L["lg.guestStatus"]</a> ·
+            <a href="/agent/login">@L["lg.agent"]</a>
+        </div>
+    </div>
+</div>

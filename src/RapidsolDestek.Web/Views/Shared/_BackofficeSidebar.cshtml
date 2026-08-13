@@ -1,0 +1,35 @@
+@model string
+@using RapidsolDestek.Web.Navigation
+@inject Microsoft.Extensions.Localization.IStringLocalizer<RapidsolDestek.Web.SharedResources> SL
+@inject ISidebarBadgeService Badges
+@{
+    var panel = Model;
+    var nav = panel == "admin" ? NavConfig.Admin : NavConfig.Agent;
+    var navKey = ViewData["NavKey"] as string;
+}
+<aside class="bo-sidebar">
+    @foreach (var group in nav)
+    {
+        if (panel == "admin")
+        {
+            var open = group.Items.Any(i => i.Key == navKey);
+            <details class="bo-nav-group" open="@open">
+                <summary class="group-label">@SL[group.LabelKey]</summary>
+                @foreach (var item in group.Items)
+                {
+                    <partial name="_SidebarLink" model="item" />
+                }
+            </details>
+        }
+        else
+        {
+            <div class="bo-nav-group">
+                <div class="group-label">@SL[group.LabelKey]</div>
+                @foreach (var item in group.Items)
+                {
+                    <partial name="_SidebarLink" model="item" />
+                }
+            </div>
+        }
+    }
+</aside>

@@ -1,0 +1,20 @@
+@model RapidsolDestek.Web.Navigation.NavItem
+@using RapidsolDestek.Web.Navigation
+@inject Microsoft.Extensions.Localization.IStringLocalizer<RapidsolDestek.Web.SharedResources> SL
+@inject ISidebarBadgeService Badges
+@{
+    var navKey = ViewData["NavKey"] as string;
+    var count = Model.CountKey is null ? null : Badges.GetCount(Model.CountKey);
+}
+<a href="@Model.Url" class="@(Model.Key == navKey ? "active" : "")">
+    <span aria-hidden="true">@Model.Icon</span>
+    <span>@SL[Model.LabelKey]</span>
+    @if (Model.Live)
+    {
+        <span class="rd-live-dot" style="margin-left:auto"></span>
+    }
+    @if (count is not null)
+    {
+        <span class="count">@count</span>
+    }
+</a>

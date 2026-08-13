@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="lg.title" xml:space="preserve">
+    <value>Temsilci Girişi</value>
+  </data>
+  <data name="lg.subtitle" xml:space="preserve">
+    <value>Devam etmek için RapidSol hesabınızla giriş yapın.</value>
+  </data>
+  <data name="lg.fUser" xml:space="preserve">
+    <value>E-posta veya kullanıcı adı</value>
+  </data>
+  <data name="lg.fUserPh" xml:space="preserve">
+    <value>ornek@rapidsol.com.tr</value>
+  </data>
+  <data name="lg.fPass" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="lg.forgot" xml:space="preserve">
+    <value>Parolamı Unuttum</value>
+  </data>
+  <data name="lg.signin" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="lg.twofaCaption" xml:space="preserve">
+    <value>İkinci adım — doğrulama kodu (önizleme)</value>
+  </data>
+  <data name="lg.twofaHelp" xml:space="preserve">
+    <value>Doğrulama uygulamanızdaki 6 haneli kodu girin. Kod 30 saniyede bir yenilenir.</value>
+  </data>
+  <data name="lg.verify" xml:space="preserve">
+    <value>Doğrula</value>
+  </data>
+  <data name="lg.backPortal" xml:space="preserve">
+    <value>← Kullanıcı portalına dön</value>
+  </data>
+</root>

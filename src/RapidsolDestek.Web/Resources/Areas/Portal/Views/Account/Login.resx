@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="lg.title" xml:space="preserve">
+    <value>Giriş yapın</value>
+  </data>
+  <data name="lg.sub" xml:space="preserve">
+    <value>Destek taleplerinizi görüntülemek ve yeni talep oluşturmak için hesabınıza giriş yapın.</value>
+  </data>
+  <data name="lg.user" xml:space="preserve">
+    <value>E-posta veya kullanıcı adı</value>
+  </data>
+  <data name="lg.password" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="lg.forgot" xml:space="preserve">
+    <value>Parolamı unuttum</value>
+  </data>
+  <data name="lg.remember" xml:space="preserve">
+    <value>Beni hatırla</value>
+  </data>
+  <data name="lg.submit" xml:space="preserve">
+    <value>Giriş yap</value>
+  </data>
+  <data name="lg.noAccount" xml:space="preserve">
+    <value>Hesabınız yok mu?</value>
+  </data>
+  <data name="lg.register" xml:space="preserve">
+    <value>Hesap oluşturun</value>
+  </data>
+  <data name="lg.guestStatus" xml:space="preserve">
+    <value>Üye olmadan talep durumu sorgula</value>
+  </data>
+  <data name="lg.agent" xml:space="preserve">
+    <value>Danışman girişi (RapidSol ekibi)</value>
+  </data>
+</root>

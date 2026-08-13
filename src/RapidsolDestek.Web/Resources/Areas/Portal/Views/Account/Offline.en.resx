@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="of.title" xml:space="preserve">
+    <value>The support system is under maintenance</value>
+  </data>
+  <data name="of.text" xml:space="preserve">
+    <value>The support portal is temporarily unavailable due to planned maintenance. Your requests and data are safe; we will be back as soon as the work is complete.</value>
+  </data>
+  <data name="of.mail" xml:space="preserve">
+    <value>For urgent matters you can email us:</value>
+  </data>
+</root>

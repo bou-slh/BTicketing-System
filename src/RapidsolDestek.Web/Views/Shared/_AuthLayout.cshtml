@@ -1,0 +1,25 @@
+@using System.Globalization
+<!doctype html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — @ViewData["Title"]</title>
+<link rel="icon" href="~/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="~/css/base.css">
+<link rel="stylesheet" href="~/css/portal.css">
+<link rel="stylesheet" href="~/css/app.css">
+<script src="~/js/rd.js" defer></script>
+</head>
+<body class="portal">
+
+<div style="position:fixed;top:18px;right:18px;z-index:10">
+    <partial name="_LanguageSelect" />
+</div>
+
+<div class="rc-auth-wrap" style="min-height:100vh">
+    @RenderBody()
+</div>
+
+</body>
+</html>

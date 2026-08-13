@@ -1,0 +1,63 @@
+@model RapidsolDestek.Web.Areas.Portal.Controllers.RegisterVm
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["rg.title"];
+}
+<div class="rc-auth-card" style="width:min(560px,100%)">
+    <a class="rc-logo" href="/" style="justify-content:center;margin-bottom:20px">
+        <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1>@L["rg.title"]</h1>
+    <p>@L["rg.sub"]</p>
+
+    <form method="post" class="rc-form-grid" asp-action="Register">
+        <partial name="_FormErrors" />
+        <div class="rc-form-step"><span class="rc-step-icon">1</span><span>@L["rg.secContact"]</span></div>
+        <div>
+            <label class="rc-label" for="rg-email">@L["rg.email"]</label>
+            <input id="rg-email" class="rc-control" type="email" asp-for="Email" autocomplete="email">
+            <div class="rd-help">@L["rg.emailHelp"]</div>
+        </div>
+        <div class="rd-grid-2">
+            <div>
+                <label class="rc-label" for="rg-name">@L["rg.name"]</label>
+                <input id="rg-name" class="rc-control" type="text" asp-for="Name" autocomplete="name">
+            </div>
+            <div>
+                <label class="rc-label" for="rg-phone">@L["rg.phone"]</label>
+                <input id="rg-phone" class="rc-control" type="tel" asp-for="Phone" placeholder="+90 5xx xxx xx xx" autocomplete="tel">
+            </div>
+        </div>
+
+        <div class="rc-form-step"><span class="rc-step-icon">2</span><span>@L["rg.secPrefs"]</span></div>
+        <div>
+            <label class="rc-label" for="rg-tz">@L["rg.tz"]</label>
+            <select id="rg-tz" class="rc-control">
+                <option selected>Europe/Istanbul (GMT+3)</option>
+                <option>Europe/Berlin (GMT+2)</option>
+                <option>Europe/London (GMT+1)</option>
+                <option>UTC</option>
+            </select>
+        </div>
+
+        <div class="rc-form-step"><span class="rc-step-icon">3</span><span>@L["rg.secAccess"]</span></div>
+        <div class="rd-grid-2">
+            <div>
+                <label class="rc-label" for="rg-pass">@L["rg.password"]</label>
+                <input id="rg-pass" class="rc-control" type="password" asp-for="Password" autocomplete="new-password">
+            </div>
+            <div>
+                <label class="rc-label" for="rg-pass2">@L["rg.password2"]</label>
+                <input id="rg-pass2" class="rc-control" type="password" asp-for="Password2" autocomplete="new-password">
+            </div>
+        </div>
+        <div class="rd-help">@L["rg.passHelp"]</div>
+
+        <button type="submit" class="rc-button-primary" style="justify-content:center">@L["rg.submit"]</button>
+    </form>
+
+    <div class="rc-auth-foot">
+        <span>@L["rg.haveAccount"]</span>
+        <a href="/login">@L["rg.signin"]</a>
+    </div>
+</div>

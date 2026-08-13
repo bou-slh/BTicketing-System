@@ -1,0 +1,37 @@
+@using RapidsolDestek.Web.Navigation
+@inject Microsoft.Extensions.Localization.IStringLocalizer<RapidsolDestek.Web.SharedResources> SL
+@{
+    var navKey = ViewData["NavKey"] as string;
+    var fullName = User.FindFirst("FullName")?.Value ?? User.Identity?.Name ?? "";
+    var orgName = User.FindFirst("OrganizationName")?.Value ?? "";
+    var initials = string.Concat(fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        .Where(p => p.Length > 0).Take(2).Select(p => char.ToUpperInvariant(p[0])));
+}
+<header class="rc-header">
+    <a class="rc-logo" href="/">
+        <span class="rc-logo-mark"></span>
+        <span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <nav class="rc-nav" aria-label="Main">
+        @foreach (var item in NavConfig.Portal)
+        {
+            <a class="rc-nav-button @(item.Key == navKey ? "rc-selected" : "")" href="@item.Url">@SL[item.LabelKey]</a>
+        }
+    </nav>
+    <partial name="_LanguageSelect" />
+    <details class="rd-account-menu">
+        <summary>
+            <span class="rc-account" style="text-decoration:none;color:inherit">
+                <span class="rc-account-copy">@fullName<small>@orgName</small></span>
+                <span class="rd-avatar">@initials</span>
+            </span>
+        </summary>
+        <div class="menu">
+            <a href="/profile">@SL["nav.myProfile"]</a>
+            <form method="post" action="/logout">
+                @Html.AntiForgeryToken()
+                <button type="submit">@SL["account.logout"]</button>
+            </form>
+        </div>
+    </details>
+</header>

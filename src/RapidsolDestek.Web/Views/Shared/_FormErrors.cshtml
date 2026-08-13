@@ -1,0 +1,22 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<RapidsolDestek.Web.SharedResources> SL
+@{
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+}
+@if (errors.Count > 0)
+{
+    <div class="rd-form-error" role="alert">
+        @foreach (var e in errors)
+        {
+            <div>
+                @(e switch
+                {
+                    "invalidCredentials" => SL["auth.invalidCredentials"].Value,
+                    "lockedOut" => SL["auth.lockedOut"].Value,
+                    "notAdmin" => SL["auth.notAdmin"].Value,
+                    "invalidCode" => SL["auth.invalidCode"].Value,
+                    _ => e
+                })
+            </div>
+        }
+    </div>
+}

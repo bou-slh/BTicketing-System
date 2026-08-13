@@ -1,0 +1,32 @@
+@using System.Globalization
+@{
+    var panel = (ViewContext.RouteData.Values["area"] as string ?? "Agent").ToLowerInvariant();
+}
+<!doctype html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RapidsolDestek — @ViewData["Title"]</title>
+<link rel="icon" href="~/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="~/css/base.css">
+<link rel="stylesheet" href="~/css/portal.css">
+<link rel="stylesheet" href="~/css/admin.css">
+<link rel="stylesheet" href="~/css/app.css">
+<script src="~/js/rd.js" defer></script>
+</head>
+<body class="backoffice" data-panel="@panel" data-nav="@ViewData["NavKey"]">
+
+<div id="rd-topbar">
+    <partial name="_BackofficeTopbar" model="panel" />
+</div>
+<div id="rd-sidebar">
+    <partial name="_BackofficeSidebar" model="panel" />
+</div>
+
+<main class="bo-main">
+    @RenderBody()
+</main>
+
+</body>
+</html>

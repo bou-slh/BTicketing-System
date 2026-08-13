@@ -1,0 +1,34 @@
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["pw.title"];
+}
+<div class="rc-auth-card">
+    <a class="rc-logo" href="/" style="margin-bottom:18px;display:inline-flex">
+        <span class="rc-logo-mark"></span>
+        <span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1>@L["pw.title"]</h1>
+    <p>@L["pw.subtitle"]</p>
+
+    @if (TempData["PwresetRequested"] is not null)
+    {
+        <div class="rc-notice">✉ @L["pw.help"]</div>
+        @if (TempData["DevResetLink"] is string link)
+        {
+            <div class="rc-notice" style="word-break:break-all"><span>DEV:</span> <a href="@link">@link</a></div>
+        }
+    }
+
+    <form method="post" asp-action="Pwreset">
+        <div class="rd-field">
+            <label class="rd-label" for="pw-email">@L["pw.fEmail"]</label>
+            <input id="pw-email" class="rd-control" type="email" name="email" placeholder="@L["pw.fEmailPh"]" autocomplete="email" required>
+        </div>
+        <button type="submit" class="rd-btn-primary" style="display:flex;justify-content:center;width:100%">@L["pw.send"]</button>
+        <div class="rd-help" style="margin-top:10px">@L["pw.help"]</div>
+    </form>
+
+    <div class="rc-auth-foot">
+        <a href="/admin/login">@L["pw.back"]</a>
+    </div>
+</div>

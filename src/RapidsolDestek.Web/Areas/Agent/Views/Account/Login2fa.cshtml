@@ -1,0 +1,30 @@
+@model RapidsolDestek.Web.Controllers.StaffLogin2faVm
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["lg.title"];
+}
+<div class="rc-auth-card">
+    <a class="rc-logo" href="/" style="margin-bottom:18px;display:inline-flex">
+        <span class="rc-logo-mark"></span>
+        <span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1>@L["lg.title"]</h1>
+
+    <form method="post" asp-action="Login2fa">
+        <partial name="_FormErrors" />
+        <input type="hidden" asp-for="ReturnUrl">
+        <div style="border:1px solid var(--rd-border);border-radius:13px;padding:16px;background:var(--rd-surface-2)">
+            <div class="text-sm rd-muted" style="margin-bottom:10px">@L["lg.twofaCaption"]</div>
+            <div style="display:flex;gap:10px">
+                <input class="rd-control" asp-for="Code" maxlength="7" inputmode="numeric" placeholder="••••••" autocomplete="one-time-code"
+                       style="letter-spacing:7px;text-align:center;font-size:17px;font-variant-numeric:tabular-nums" autofocus>
+                <button type="submit" class="rd-btn">@L["lg.verify"]</button>
+            </div>
+            <div class="rd-help">@L["lg.twofaHelp"]</div>
+        </div>
+    </form>
+
+    <div class="rc-auth-foot">
+        <a href="/agent/login">@L["lg.backPortal"]</a>
+    </div>
+</div>

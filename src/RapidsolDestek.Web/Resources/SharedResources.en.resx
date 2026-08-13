@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="nav.home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="nav.newTicket" xml:space="preserve">
+    <value>New Request</value>
+  </data>
+  <data name="nav.myTickets" xml:space="preserve">
+    <value>My Requests</value>
+  </data>
+  <data name="nav.kb" xml:space="preserve">
+    <value>Knowledge Base</value>
+  </data>
+  <data name="nav.group.workspace" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="nav.group.records" xml:space="preserve">
+    <value>Records</value>
+  </data>
+  <data name="nav.group.knowledge" xml:space="preserve">
+    <value>Knowledge</value>
+  </data>
+  <data name="nav.group.personal" xml:space="preserve">
+    <value>Personal</value>
+  </data>
+  <data name="nav.group.overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="nav.group.settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="nav.group.manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="nav.group.emails" xml:space="preserve">
+    <value>Emails</value>
+  </data>
+  <data name="nav.group.team" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="nav.dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="nav.live" xml:space="preserve">
+    <value>Live Board</value>
+  </data>
+  <data name="nav.tickets" xml:space="preserve">
+    <value>Tickets</value>
+  </data>
+  <data name="nav.tasks" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="nav.users" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="nav.orgs" xml:space="preserve">
+    <value>Companies</value>
+  </data>
+  <data name="nav.directory" xml:space="preserve">
+    <value>Team Directory</value>
+  </data>
+  <data name="nav.canned" xml:space="preserve">
+    <value>Canned Responses</value>
+  </data>
+  <data name="nav.myProfile" xml:space="preserve">
+    <value>My Profile</value>
+  </data>
+  <data name="nav.systemInfo" xml:space="preserve">
+    <value>System Information</value>
+  </data>
+  <data name="nav.systemLogs" xml:space="preserve">
+    <value>System Logs</value>
+  </data>
+  <data name="nav.auditLogs" xml:space="preserve">
+    <value>Audit Logs</value>
+  </data>
+  <data name="nav.company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="nav.system" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="nav.agents" xml:space="preserve">
+    <value>Agents</value>
+  </data>
+  <data name="nav.helptopics" xml:space="preserve">
+    <value>Help Topics</value>
+  </data>
+  <data name="nav.queues" xml:space="preserve">
+    <value>Ticket Queues</value>
+  </data>
+  <data name="nav.filters" xml:space="preserve">
+    <value>Ticket Filters</value>
+  </data>
+  <data name="nav.slas" xml:space="preserve">
+    <value>SLA Plans</value>
+  </data>
+  <data name="nav.schedules" xml:space="preserve">
+    <value>Schedules</value>
+  </data>
+  <data name="nav.forms" xml:space="preserve">
+    <value>Forms</value>
+  </data>
+  <data name="nav.lists" xml:space="preserve">
+    <value>Lists</value>
+  </data>
+  <data name="nav.sitePages" xml:space="preserve">
+    <value>Site Pages</value>
+  </data>
+  <data name="nav.apikeys" xml:space="preserve">
+    <value>API Keys</value>
+  </data>
+  <data name="nav.plugins" xml:space="preserve">
+    <value>Plugins</value>
+  </data>
+  <data name="nav.emailAddresses" xml:space="preserve">
+    <value>Email Addresses</value>
+  </data>
+  <data name="nav.emailSettings" xml:space="preserve">
+    <value>Email Settings</value>
+  </data>
+  <data name="nav.templates" xml:space="preserve">
+    <value>Email Templates</value>
+  </data>
+  <data name="nav.banlist" xml:space="preserve">
+    <value>Ban List</value>
+  </data>
+  <data name="nav.emailDiagnostic" xml:space="preserve">
+    <value>Email Diagnostic</value>
+  </data>
+  <data name="nav.staff" xml:space="preserve">
+    <value>Agents</value>
+  </data>
+  <data name="nav.teams" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="nav.roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="nav.departments" xml:space="preserve">
+    <value>Departments</value>
+  </data>
+  <data name="topbar.search" xml:space="preserve">
+    <value>Search tickets, users, companies, settings…</value>
+  </data>
+  <data name="panel.portal" xml:space="preserve">
+    <value>Portal</value>
+  </data>
+  <data name="panel.agent" xml:space="preserve">
+    <value>Agent</value>
+  </data>
+  <data name="panel.admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="common.save" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
+  <data name="common.cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="common.reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="common.add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="common.addNew" xml:space="preserve">
+    <value>Add New</value>
+  </data>
+  <data name="common.edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="common.delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="common.enable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="common.disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="common.archive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="common.export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="common.import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="common.search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="common.filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="common.more" xml:space="preserve">
+    <value>More</value>
+  </data>
+  <data name="common.close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="common.confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="common.print" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="common.apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="common.advanced" xml:space="preserve">
+    <value>Advanced settings</value>
+  </data>
+  <data name="common.viewAll" xml:space="preserve">
+    <value>View all</value>
+  </data>
+  <data name="common.back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="common.actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="common.name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="common.status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="common.created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="common.updated" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="common.notes" xml:space="preserve">
+    <value>Internal Notes</value>
+  </data>
+  <data name="common.notesHelp" xml:space="preserve">
+    <value>Visible to agents only — never shown to users.</value>
+  </data>
+  <data name="common.active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="common.disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="common.yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="common.no" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="common.mockSaved" xml:space="preserve">
+    <value>Mockup: changes would be saved here.</value>
+  </data>
+  <data name="common.confirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete the selected items? This cannot be undone.</value>
+  </data>
+  <data name="common.selectAll" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="common.perPage" xml:space="preserve">
+    <value>per page</value>
+  </data>
+  <data name="common.showing" xml:space="preserve">
+    <value>Showing</value>
+  </data>
+  <data name="editor.font" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="editor.size" xml:space="preserve">
+    <value>Font size</value>
+  </data>
+  <data name="editor.bold" xml:space="preserve">
+    <value>Bold</value>
+  </data>
+  <data name="editor.italic" xml:space="preserve">
+    <value>Italic</value>
+  </data>
+  <data name="editor.underline" xml:space="preserve">
+    <value>Underline</value>
+  </data>
+  <data name="editor.strike" xml:space="preserve">
+    <value>Strikethrough</value>
+  </data>
+  <data name="editor.ul" xml:space="preserve">
+    <value>Bulleted list</value>
+  </data>
+  <data name="editor.ol" xml:space="preserve">
+    <value>Numbered list</value>
+  </data>
+  <data name="editor.link" xml:space="preserve">
+    <value>Insert link</value>
+  </data>
+  <data name="editor.photo" xml:space="preserve">
+    <value>Insert photo</value>
+  </data>
+  <data name="editor.video" xml:space="preserve">
+    <value>Insert video</value>
+  </data>
+  <data name="editor.file" xml:space="preserve">
+    <value>Attach file</value>
+  </data>
+  <data name="editor.table" xml:space="preserve">
+    <value>Insert table</value>
+  </data>
+  <data name="editor.hr" xml:space="preserve">
+    <value>Horizontal line</value>
+  </data>
+  <data name="editor.phText" xml:space="preserve">
+    <value>text</value>
+  </data>
+  <data name="editor.phItem" xml:space="preserve">
+    <value>list item</value>
+  </data>
+  <data name="editor.phLink" xml:space="preserve">
+    <value>link text</value>
+  </data>
+  <data name="editor.phCol" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="editor.mockPicker" xml:space="preserve">
+    <value>Mockup: the file picker will open here.</value>
+  </data>
+  <data name="status.open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="status.wait" xml:space="preserve">
+    <value>Waiting for response</value>
+  </data>
+  <data name="status.test" xml:space="preserve">
+    <value>In testing</value>
+  </data>
+  <data name="status.solved" xml:space="preserve">
+    <value>Resolved</value>
+  </data>
+  <data name="status.closed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="status.overdue" xml:space="preserve">
+    <value>Overdue</value>
+  </data>
+  <data name="status.new" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="status.effortWait" xml:space="preserve">
+    <value>Awaiting effort approval</value>
+  </data>
+  <data name="status.effortApproved" xml:space="preserve">
+    <value>Effort approved</value>
+  </data>
+  <data name="status.effortRejected" xml:space="preserve">
+    <value>Effort rejected</value>
+  </data>
+  <data name="effort.label" xml:space="preserve">
+    <value>Proposed Effort</value>
+  </data>
+  <data name="effort.state" xml:space="preserve">
+    <value>Effort Status</value>
+  </data>
+  <data name="priority.low" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="priority.normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="priority.high" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="priority.emergency" xml:space="preserve">
+    <value>Emergency</value>
+  </data>
+  <data name="account.logout" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="auth.invalidCredentials" xml:space="preserve">
+    <value>Incorrect email/username or password.</value>
+  </data>
+  <data name="auth.lockedOut" xml:space="preserve">
+    <value>Too many failed attempts — the account is locked for 15 minutes.</value>
+  </data>
+  <data name="auth.notAdmin" xml:space="preserve">
+    <value>This account does not have administrator access.</value>
+  </data>
+  <data name="auth.invalidCode" xml:space="preserve">
+    <value>The verification code is incorrect. Try again.</value>
+  </data>
+  <data name="twofa.setupTitle" xml:space="preserve">
+    <value>Two-Factor Authentication Setup</value>
+  </data>
+  <data name="twofa.setupSub" xml:space="preserve">
+    <value>Add the key below to your authenticator app (e.g. Google Authenticator), then activate by entering the generated 6-digit code. Mandatory for administrator accounts.</value>
+  </data>
+  <data name="twofa.key" xml:space="preserve">
+    <value>Setup key</value>
+  </data>
+  <data name="twofa.enterCode" xml:space="preserve">
+    <value>Verification code</value>
+  </data>
+  <data name="twofa.activate" xml:space="preserve">
+    <value>Activate</value>
+  </data>
+</root>

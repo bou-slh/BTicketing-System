@@ -1,0 +1,23 @@
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["pw.title2"];
+}
+<div style="display:grid;gap:26px;width:min(420px,100%)">
+    <a class="rc-logo" href="/" style="justify-content:center">
+        <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <div class="rc-auth-card" style="width:100%;text-align:center">
+        <div style="font-size:40px;margin-bottom:12px" aria-hidden="true">✉</div>
+        <h1>@L["pw.title2"]</h1>
+        <p>@L["pw.sub2"]</p>
+        @if (TempData["DevResetLink"] is string link)
+        {
+            <div class="rc-notice" style="word-break:break-all">
+                <span>DEV:</span> <a href="@link">@link</a>
+            </div>
+        }
+        <div class="rc-auth-foot">
+            <a href="/login">@L["pw.backLogin"]</a>
+        </div>
+    </div>
+</div>

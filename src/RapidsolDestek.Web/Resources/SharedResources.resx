@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="nav.home" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+  <data name="nav.newTicket" xml:space="preserve">
+    <value>Yeni Talep</value>
+  </data>
+  <data name="nav.myTickets" xml:space="preserve">
+    <value>Taleplerim</value>
+  </data>
+  <data name="nav.kb" xml:space="preserve">
+    <value>Bilgi Bankası</value>
+  </data>
+  <data name="nav.group.workspace" xml:space="preserve">
+    <value>Çalışma Alanı</value>
+  </data>
+  <data name="nav.group.records" xml:space="preserve">
+    <value>Kayıtlar</value>
+  </data>
+  <data name="nav.group.knowledge" xml:space="preserve">
+    <value>Bilgi</value>
+  </data>
+  <data name="nav.group.personal" xml:space="preserve">
+    <value>Kişisel</value>
+  </data>
+  <data name="nav.group.overview" xml:space="preserve">
+    <value>Genel Bakış</value>
+  </data>
+  <data name="nav.group.settings" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="nav.group.manage" xml:space="preserve">
+    <value>Yönetim</value>
+  </data>
+  <data name="nav.group.emails" xml:space="preserve">
+    <value>E-postalar</value>
+  </data>
+  <data name="nav.group.team" xml:space="preserve">
+    <value>Ekip</value>
+  </data>
+  <data name="nav.dashboard" xml:space="preserve">
+    <value>Panel</value>
+  </data>
+  <data name="nav.live" xml:space="preserve">
+    <value>Canlı İzleme</value>
+  </data>
+  <data name="nav.tickets" xml:space="preserve">
+    <value>Talepler</value>
+  </data>
+  <data name="nav.tasks" xml:space="preserve">
+    <value>Görevler</value>
+  </data>
+  <data name="nav.users" xml:space="preserve">
+    <value>Kullanıcılar</value>
+  </data>
+  <data name="nav.orgs" xml:space="preserve">
+    <value>Şirketler</value>
+  </data>
+  <data name="nav.directory" xml:space="preserve">
+    <value>Ekip Rehberi</value>
+  </data>
+  <data name="nav.canned" xml:space="preserve">
+    <value>Hazır Yanıtlar</value>
+  </data>
+  <data name="nav.myProfile" xml:space="preserve">
+    <value>Profilim</value>
+  </data>
+  <data name="nav.systemInfo" xml:space="preserve">
+    <value>Sistem Bilgisi</value>
+  </data>
+  <data name="nav.systemLogs" xml:space="preserve">
+    <value>Sistem Kayıtları</value>
+  </data>
+  <data name="nav.auditLogs" xml:space="preserve">
+    <value>Denetim Kayıtları</value>
+  </data>
+  <data name="nav.company" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="nav.system" xml:space="preserve">
+    <value>Sistem</value>
+  </data>
+  <data name="nav.agents" xml:space="preserve">
+    <value>Temsilciler</value>
+  </data>
+  <data name="nav.helptopics" xml:space="preserve">
+    <value>Yardım Konuları</value>
+  </data>
+  <data name="nav.queues" xml:space="preserve">
+    <value>Talep Kuyrukları</value>
+  </data>
+  <data name="nav.filters" xml:space="preserve">
+    <value>Talep Filtreleri</value>
+  </data>
+  <data name="nav.slas" xml:space="preserve">
+    <value>SLA Planları</value>
+  </data>
+  <data name="nav.schedules" xml:space="preserve">
+    <value>Çalışma Takvimleri</value>
+  </data>
+  <data name="nav.forms" xml:space="preserve">
+    <value>Formlar</value>
+  </data>
+  <data name="nav.lists" xml:space="preserve">
+    <value>Listeler</value>
+  </data>
+  <data name="nav.sitePages" xml:space="preserve">
+    <value>Site Sayfaları</value>
+  </data>
+  <data name="nav.apikeys" xml:space="preserve">
+    <value>API Anahtarları</value>
+  </data>
+  <data name="nav.plugins" xml:space="preserve">
+    <value>Eklentiler</value>
+  </data>
+  <data name="nav.emailAddresses" xml:space="preserve">
+    <value>E-posta Adresleri</value>
+  </data>
+  <data name="nav.emailSettings" xml:space="preserve">
+    <value>E-posta Ayarları</value>
+  </data>
+  <data name="nav.templates" xml:space="preserve">
+    <value>E-posta Şablonları</value>
+  </data>
+  <data name="nav.banlist" xml:space="preserve">
+    <value>Engel Listesi</value>
+  </data>
+  <data name="nav.emailDiagnostic" xml:space="preserve">
+    <value>E-posta Tanılama</value>
+  </data>
+  <data name="nav.staff" xml:space="preserve">
+    <value>Temsilciler</value>
+  </data>
+  <data name="nav.teams" xml:space="preserve">
+    <value>Takımlar</value>
+  </data>
+  <data name="nav.roles" xml:space="preserve">
+    <value>Roller</value>
+  </data>
+  <data name="nav.departments" xml:space="preserve">
+    <value>Departmanlar</value>
+  </data>
+  <data name="topbar.search" xml:space="preserve">
+    <value>Talep, kullanıcı, şirket veya ayar ara…</value>
+  </data>
+  <data name="panel.portal" xml:space="preserve">
+    <value>Portal</value>
+  </data>
+  <data name="panel.agent" xml:space="preserve">
+    <value>Temsilci</value>
+  </data>
+  <data name="panel.admin" xml:space="preserve">
+    <value>Yönetici</value>
+  </data>
+  <data name="common.save" xml:space="preserve">
+    <value>Değişiklikleri Kaydet</value>
+  </data>
+  <data name="common.cancel" xml:space="preserve">
+    <value>Vazgeç</value>
+  </data>
+  <data name="common.reset" xml:space="preserve">
+    <value>Sıfırla</value>
+  </data>
+  <data name="common.add" xml:space="preserve">
+    <value>Ekle</value>
+  </data>
+  <data name="common.addNew" xml:space="preserve">
+    <value>Yeni Ekle</value>
+  </data>
+  <data name="common.edit" xml:space="preserve">
+    <value>Düzenle</value>
+  </data>
+  <data name="common.delete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="common.enable" xml:space="preserve">
+    <value>Etkinleştir</value>
+  </data>
+  <data name="common.disable" xml:space="preserve">
+    <value>Devre Dışı Bırak</value>
+  </data>
+  <data name="common.archive" xml:space="preserve">
+    <value>Arşivle</value>
+  </data>
+  <data name="common.export" xml:space="preserve">
+    <value>Dışa Aktar</value>
+  </data>
+  <data name="common.import" xml:space="preserve">
+    <value>İçe Aktar</value>
+  </data>
+  <data name="common.search" xml:space="preserve">
+    <value>Ara</value>
+  </data>
+  <data name="common.filter" xml:space="preserve">
+    <value>Filtrele</value>
+  </data>
+  <data name="common.more" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="common.close" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="common.confirm" xml:space="preserve">
+    <value>Onayla</value>
+  </data>
+  <data name="common.print" xml:space="preserve">
+    <value>Yazdır</value>
+  </data>
+  <data name="common.apply" xml:space="preserve">
+    <value>Uygula</value>
+  </data>
+  <data name="common.advanced" xml:space="preserve">
+    <value>Gelişmiş ayarlar</value>
+  </data>
+  <data name="common.viewAll" xml:space="preserve">
+    <value>Tümünü görüntüle</value>
+  </data>
+  <data name="common.back" xml:space="preserve">
+    <value>Geri</value>
+  </data>
+  <data name="common.actions" xml:space="preserve">
+    <value>İşlemler</value>
+  </data>
+  <data name="common.name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="common.status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="common.created" xml:space="preserve">
+    <value>Oluşturulma</value>
+  </data>
+  <data name="common.updated" xml:space="preserve">
+    <value>Son Güncelleme</value>
+  </data>
+  <data name="common.notes" xml:space="preserve">
+    <value>İç Notlar</value>
+  </data>
+  <data name="common.notesHelp" xml:space="preserve">
+    <value>Yalnızca temsilciler görür — kullanıcılara asla gösterilmez.</value>
+  </data>
+  <data name="common.active" xml:space="preserve">
+    <value>Etkin</value>
+  </data>
+  <data name="common.disabled" xml:space="preserve">
+    <value>Devre Dışı</value>
+  </data>
+  <data name="common.yes" xml:space="preserve">
+    <value>Evet</value>
+  </data>
+  <data name="common.no" xml:space="preserve">
+    <value>Hayır</value>
+  </data>
+  <data name="common.mockSaved" xml:space="preserve">
+    <value>Mockup: değişiklikler burada kaydedilecek.</value>
+  </data>
+  <data name="common.confirmDelete" xml:space="preserve">
+    <value>Seçili öğeleri silmek istediğinize emin misiniz? Bu işlem geri alınamaz.</value>
+  </data>
+  <data name="common.selectAll" xml:space="preserve">
+    <value>Tümünü seç</value>
+  </data>
+  <data name="common.perPage" xml:space="preserve">
+    <value>sayfa başına</value>
+  </data>
+  <data name="common.showing" xml:space="preserve">
+    <value>Gösterilen</value>
+  </data>
+  <data name="editor.font" xml:space="preserve">
+    <value>Yazı tipi</value>
+  </data>
+  <data name="editor.size" xml:space="preserve">
+    <value>Yazı boyutu</value>
+  </data>
+  <data name="editor.bold" xml:space="preserve">
+    <value>Kalın</value>
+  </data>
+  <data name="editor.italic" xml:space="preserve">
+    <value>İtalik</value>
+  </data>
+  <data name="editor.underline" xml:space="preserve">
+    <value>Altı çizili</value>
+  </data>
+  <data name="editor.strike" xml:space="preserve">
+    <value>Üstü çizili</value>
+  </data>
+  <data name="editor.ul" xml:space="preserve">
+    <value>Madde işaretli liste</value>
+  </data>
+  <data name="editor.ol" xml:space="preserve">
+    <value>Numaralı liste</value>
+  </data>
+  <data name="editor.link" xml:space="preserve">
+    <value>Bağlantı ekle</value>
+  </data>
+  <data name="editor.photo" xml:space="preserve">
+    <value>Fotoğraf ekle</value>
+  </data>
+  <data name="editor.video" xml:space="preserve">
+    <value>Video ekle</value>
+  </data>
+  <data name="editor.file" xml:space="preserve">
+    <value>Dosya ekle</value>
+  </data>
+  <data name="editor.table" xml:space="preserve">
+    <value>Tablo ekle</value>
+  </data>
+  <data name="editor.hr" xml:space="preserve">
+    <value>Yatay çizgi</value>
+  </data>
+  <data name="editor.phText" xml:space="preserve">
+    <value>metin</value>
+  </data>
+  <data name="editor.phItem" xml:space="preserve">
+    <value>liste öğesi</value>
+  </data>
+  <data name="editor.phLink" xml:space="preserve">
+    <value>bağlantı metni</value>
+  </data>
+  <data name="editor.phCol" xml:space="preserve">
+    <value>Sütun</value>
+  </data>
+  <data name="editor.mockPicker" xml:space="preserve">
+    <value>Mockup: dosya seçici burada açılacak.</value>
+  </data>
+  <data name="status.open" xml:space="preserve">
+    <value>Açık</value>
+  </data>
+  <data name="status.wait" xml:space="preserve">
+    <value>Yanıt bekliyor</value>
+  </data>
+  <data name="status.test" xml:space="preserve">
+    <value>Testte</value>
+  </data>
+  <data name="status.solved" xml:space="preserve">
+    <value>Çözüldü</value>
+  </data>
+  <data name="status.closed" xml:space="preserve">
+    <value>Kapalı</value>
+  </data>
+  <data name="status.overdue" xml:space="preserve">
+    <value>Gecikmiş</value>
+  </data>
+  <data name="status.new" xml:space="preserve">
+    <value>Yeni</value>
+  </data>
+  <data name="status.effortWait" xml:space="preserve">
+    <value>Efor onayı bekleniyor</value>
+  </data>
+  <data name="status.effortApproved" xml:space="preserve">
+    <value>Efor onaylandı</value>
+  </data>
+  <data name="status.effortRejected" xml:space="preserve">
+    <value>Efor reddedildi</value>
+  </data>
+  <data name="effort.label" xml:space="preserve">
+    <value>Önerilen Efor</value>
+  </data>
+  <data name="effort.state" xml:space="preserve">
+    <value>Efor Durumu</value>
+  </data>
+  <data name="priority.low" xml:space="preserve">
+    <value>Düşük</value>
+  </data>
+  <data name="priority.normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="priority.high" xml:space="preserve">
+    <value>Yüksek</value>
+  </data>
+  <data name="priority.emergency" xml:space="preserve">
+    <value>Acil</value>
+  </data>
+  <data name="account.logout" xml:space="preserve">
+    <value>Çıkış yap</value>
+  </data>
+  <data name="auth.invalidCredentials" xml:space="preserve">
+    <value>E-posta/kullanıcı adı veya parola hatalı.</value>
+  </data>
+  <data name="auth.lockedOut" xml:space="preserve">
+    <value>Çok fazla hatalı deneme — hesap 15 dakika kilitlendi.</value>
+  </data>
+  <data name="auth.notAdmin" xml:space="preserve">
+    <value>Bu hesabın yönetici yetkisi yok.</value>
+  </data>
+  <data name="auth.invalidCode" xml:space="preserve">
+    <value>Doğrulama kodu hatalı. Tekrar deneyin.</value>
+  </data>
+  <data name="twofa.setupTitle" xml:space="preserve">
+    <value>İki Adımlı Doğrulama Kurulumu</value>
+  </data>
+  <data name="twofa.setupSub" xml:space="preserve">
+    <value>Doğrulama uygulamanıza (ör. Google Authenticator) aşağıdaki anahtarı ekleyin, ardından üretilen 6 haneli kodu girerek etkinleştirin. Yönetici hesapları için zorunludur.</value>
+  </data>
+  <data name="twofa.key" xml:space="preserve">
+    <value>Kurulum anahtarı</value>
+  </data>
+  <data name="twofa.enterCode" xml:space="preserve">
+    <value>Doğrulama kodu</value>
+  </data>
+  <data name="twofa.activate" xml:space="preserve">
+    <value>Etkinleştir</value>
+  </data>
+</root>

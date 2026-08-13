@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="pw.title" xml:space="preserve">
+    <value>Parola Sıfırlama</value>
+  </data>
+  <data name="pw.subtitle" xml:space="preserve">
+    <value>Yönetici hesabınızın e-posta adresini girin; sıfırlama bağlantısı gönderelim.</value>
+  </data>
+  <data name="pw.fEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="pw.fEmailPh" xml:space="preserve">
+    <value>ornek@rapidsol.com.tr</value>
+  </data>
+  <data name="pw.send" xml:space="preserve">
+    <value>Sıfırlama Bağlantısı Gönder</value>
+  </data>
+  <data name="pw.help" xml:space="preserve">
+    <value>Bağlantı 30 dakika geçerlidir. E-posta gelmezse yöneticinizle iletişime geçin.</value>
+  </data>
+  <data name="pw.back" xml:space="preserve">
+    <value>← Girişe dön</value>
+  </data>
+</root>

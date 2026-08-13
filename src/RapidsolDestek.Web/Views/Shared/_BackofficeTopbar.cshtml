@@ -1,0 +1,38 @@
+@model string
+@inject Microsoft.Extensions.Localization.IStringLocalizer<RapidsolDestek.Web.SharedResources> SL
+@{
+    var panel = Model;
+    var fullName = User.FindFirst("FullName")?.Value ?? User.Identity?.Name ?? "";
+    var initials = string.Concat(fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+        .Where(p => p.Length > 0).Take(2).Select(p => char.ToUpperInvariant(p[0])));
+    var isAdmin = User.IsInRole("Admin");
+    var home = panel == "admin" ? "/admin/dashboard" : "/agent/dashboard";
+}
+<div class="bo-topbar">
+    <a class="rc-logo" href="@home">
+        <span class="rc-logo-mark"></span>
+        <span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <div class="bo-search"><input type="search" placeholder="@SL["topbar.search"]"></div>
+    <div class="bo-topbar-right">
+        <nav class="bo-panel-switch" aria-label="Panels">
+            <a href="/">@SL["panel.portal"]</a>
+            <a href="/agent/dashboard" class="@(panel == "agent" ? "active" : "")">@SL["panel.agent"]</a>
+            @if (isAdmin)
+            {
+                <a href="/admin/dashboard" class="@(panel == "admin" ? "active" : "")">@SL["panel.admin"]</a>
+            }
+        </nav>
+        <partial name="_LanguageSelect" />
+        <details class="rd-account-menu">
+            <summary><span class="rd-avatar" title="@fullName">@initials</span></summary>
+            <div class="menu">
+                <a href="/agent/profile">@SL["nav.myProfile"]</a>
+                <form method="post" action="/@(panel)/logout">
+                    @Html.AntiForgeryToken()
+                    <button type="submit">@SL["account.logout"]</button>
+                </form>
+            </div>
+        </details>
+    </div>
+</div>

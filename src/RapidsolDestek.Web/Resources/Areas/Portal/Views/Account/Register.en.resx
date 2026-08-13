@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="rg.title" xml:space="preserve">
+    <value>Create an account</value>
+  </data>
+  <data name="rg.sub" xml:space="preserve">
+    <value>Create a free account to track all your support requests in one place.</value>
+  </data>
+  <data name="rg.secContact" xml:space="preserve">
+    <value>Contact information</value>
+  </data>
+  <data name="rg.email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="rg.emailHelp" xml:space="preserve">
+    <value>Request notifications will be sent to this address.</value>
+  </data>
+  <data name="rg.name" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+  <data name="rg.phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="rg.secPrefs" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="rg.tz" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+  <data name="rg.secAccess" xml:space="preserve">
+    <value>Access credentials</value>
+  </data>
+  <data name="rg.password" xml:space="preserve">
+    <value>Create password</value>
+  </data>
+  <data name="rg.password2" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="rg.passHelp" xml:space="preserve">
+    <value>At least 8 characters; must contain letters and digits.</value>
+  </data>
+  <data name="rg.submit" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="rg.haveAccount" xml:space="preserve">
+    <value>Already have an account?</value>
+  </data>
+  <data name="rg.signin" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+</root>

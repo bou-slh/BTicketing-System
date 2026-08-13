@@ -1,0 +1,30 @@
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = SL["twofa.setupTitle"];
+}
+@* Minimal S2 enrollment page (mandatory for admins). Full UX with QR code arrives with the profile 2FA work. *@
+<div class="rc-auth-card">
+    <a class="rc-logo" href="/" style="margin-bottom:18px;display:inline-flex">
+        <span class="rc-logo-mark"></span>
+        <span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1>@SL["twofa.setupTitle"]</h1>
+    <p>@SL["twofa.setupSub"]</p>
+
+    <div style="border:1px solid var(--rd-border);border-radius:13px;padding:16px;background:var(--rd-surface-2);margin-bottom:16px">
+        <div class="text-sm rd-muted" style="margin-bottom:6px">@SL["twofa.key"]</div>
+        <code style="font-size:15px;letter-spacing:2px;word-break:break-all">@ViewData["AuthenticatorKey"]</code>
+    </div>
+
+    <form method="post" asp-action="TwoFactorSetup">
+        <partial name="_FormErrors" />
+        <div class="rd-field">
+            <label class="rd-label" for="tf-code">@SL["twofa.enterCode"]</label>
+            <div style="display:flex;gap:10px">
+                <input id="tf-code" class="rd-control" name="code" maxlength="7" inputmode="numeric" placeholder="••••••" autocomplete="one-time-code"
+                       style="letter-spacing:7px;text-align:center;font-size:17px;font-variant-numeric:tabular-nums" autofocus>
+                <button type="submit" class="rd-btn-primary">@SL["twofa.activate"]</button>
+            </div>
+        </div>
+    </form>
+</div>

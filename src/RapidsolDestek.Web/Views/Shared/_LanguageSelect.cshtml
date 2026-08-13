@@ -1,0 +1,14 @@
+@using System.Globalization
+@{
+    var current = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+<form method="post" action="/culture" style="display:contents">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="returnUrl" value="@returnUrl">
+    <select class="rc-language" name="culture" data-lang-switch aria-label="Language">
+        <option value="tr" selected="@(current == "tr")">TR</option>
+        <option value="en" selected="@(current == "en")">EN</option>
+    </select>
+    <noscript><button type="submit" class="rd-btn rd-btn-sm">OK</button></noscript>
+</form>

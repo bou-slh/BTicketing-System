@@ -1,0 +1,35 @@
+@model RapidsolDestek.Web.Areas.Portal.Controllers.PwresetNewVm
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["pw.title3"];
+    // Staff areas reuse this view; they pass their own post URL.
+    var postUrl = ViewData["PwresetPostUrl"] as string ?? "/pwreset/new";
+    var backUrl = ViewData["PwresetBackUrl"] as string ?? "/login";
+}
+<div style="display:grid;gap:26px;width:min(420px,100%)">
+    <a class="rc-logo" href="/" style="justify-content:center">
+        <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <div class="rc-auth-card" style="width:100%">
+        <h1>@L["pw.title3"]</h1>
+        <p>@L["pw.sub3"]</p>
+        <form method="post" class="rc-form-grid" action="@postUrl">
+            <partial name="_FormErrors" />
+            <input type="hidden" asp-for="Email">
+            <input type="hidden" asp-for="Token">
+            <div>
+                <label class="rc-label" for="pw-new">@L["pw.new"]</label>
+                <input id="pw-new" class="rc-control" type="password" asp-for="Password" autocomplete="new-password">
+            </div>
+            <div>
+                <label class="rc-label" for="pw-new2">@L["pw.new2"]</label>
+                <input id="pw-new2" class="rc-control" type="password" asp-for="Password2" autocomplete="new-password">
+                <div class="rd-help">@L["pw.passHelp"]</div>
+            </div>
+            <button type="submit" class="rc-button-primary" style="justify-content:center">@L["pw.save"]</button>
+        </form>
+        <div class="rc-auth-foot">
+            <a href="@backUrl">@L["pw.backLogin"]</a>
+        </div>
+    </div>
+</div>

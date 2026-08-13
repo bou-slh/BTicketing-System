@@ -1,0 +1,32 @@
+/* RapidsolDestek product-only styles.
+   NEVER edit base/portal/admin.css here — they must stay byte-identical to mockups/assets/css/. */
+
+/* Validation / auth error notice (mockups have no error state; ROADMAP B6 requires one) */
+.rd-form-error {
+  background: var(--rd-red-bg);
+  color: var(--rd-red);
+  border: 1px solid color-mix(in srgb, var(--rd-red) 30%, transparent);
+  border-radius: 11px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+/* Account dropdown in the chrome (documented deviation: mockups lack logout) */
+details.rd-account-menu { position: relative; }
+details.rd-account-menu > summary { list-style: none; cursor: pointer; }
+details.rd-account-menu > summary::-webkit-details-marker { display: none; }
+details.rd-account-menu > .menu {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 60;
+  min-width: 180px; padding: 6px;
+  background: var(--rd-surface); border: 1px solid var(--rd-border);
+  border-radius: 13px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+details.rd-account-menu > .menu a,
+details.rd-account-menu > .menu button {
+  display: block; width: 100%; text-align: left;
+  padding: 8px 11px; border: 0; background: none;
+  border-radius: 9px; font-size: 13px; color: inherit; cursor: pointer;
+}
+details.rd-account-menu > .menu a:hover,
+details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); text-decoration: none; }

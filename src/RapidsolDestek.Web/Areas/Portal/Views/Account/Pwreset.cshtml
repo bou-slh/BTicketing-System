@@ -1,0 +1,26 @@
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["pw.title1"];
+}
+<div style="display:grid;gap:26px;width:min(420px,100%)">
+    <a class="rc-logo" href="/" style="justify-content:center">
+        <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <div>
+        <div class="rc-auth-card" style="width:100%">
+            <h1>@L["pw.title1"]</h1>
+            <p>@L["pw.sub1"]</p>
+            <form method="post" class="rc-form-grid" asp-action="Pwreset">
+                <partial name="_FormErrors" />
+                <div>
+                    <label class="rc-label" for="pw-email">@L["pw.email"]</label>
+                    <input id="pw-email" class="rc-control" type="email" name="email" autocomplete="email" required>
+                </div>
+                <button type="submit" class="rc-button-primary" style="justify-content:center">@L["pw.send"]</button>
+            </form>
+            <div class="rc-auth-foot">
+                <a href="/login">@L["pw.backLogin"]</a>
+            </div>
+        </div>
+    </div>
+</div>
