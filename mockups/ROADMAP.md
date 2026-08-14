@@ -229,8 +229,16 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       category headers are DB data so they stay TR in EN — mockup's kb.cat* localization needs a per-category
       translation decision; card subtitles fall back to the category description until articles carry a summary)*
 - [x] **kb-article.html** — helpful yes/no vote with thank-you state; attachments downloadable *(S5; vote + thank-you live; attachments download via IFileStore — seeded canon files carry placeholder bytes)*
-- [ ] **profile.html** — saves; language select actually switches culture; password change validated (B3)
-- [ ] *(portal header everywhere)* — profile + check-status reachable, logout (B9)
+- [x] **profile.html** — saves; language select actually switches culture; password change validated (B3) *(S5;
+      name/phone/timezone/language persist on CustomerUser (new TimeZone/Language columns, S5_CustomerPrefs
+      migration) and name/phone sync to the domain User row + FullName claim/cookie; register.html's deferred
+      timezone select now persists too, and login applies the saved language; language select keeps the mockup's
+      data-lang-switch → submits the profile form, save sets the culture cookie server-side so the response is
+      already in the new language; password change optional via ChangePasswordAsync with rd.js strength/match
+      hints + localized Identity errors; success = rd.js toast via body[data-toast] handoff (mockup's submit
+      toast); email readonly per mockup; NavKey "home" faithful to the mockup's data-nav)*
+- [x] *(portal header everywhere)* — profile + check-status reachable, logout (B9) *(S5; header account menu →
+      /profile now resolves on every portal page, guest check-status linked from login, logout POST live)*
 
 ### 6.2 Agent (18 pages)
 

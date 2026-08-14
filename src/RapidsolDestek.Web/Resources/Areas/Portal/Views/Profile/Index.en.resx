@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="pf.title" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="pf.sub" xml:space="preserve">
+    <value>Manage your profile details</value>
+  </data>
+  <data name="pf.secContact" xml:space="preserve">
+    <value>Contact information</value>
+  </data>
+  <data name="pf.email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="pf.emailHelp" xml:space="preserve">
+    <value>The email address cannot be changed; contact the support team to update it.</value>
+  </data>
+  <data name="pf.name" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+  <data name="pf.phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="pf.secPrefs" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="pf.tz" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+  <data name="pf.lang" xml:space="preserve">
+    <value>Preferred language</value>
+  </data>
+  <data name="pf.secAccess" xml:space="preserve">
+    <value>Access credentials</value>
+  </data>
+  <data name="pf.current" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="pf.new" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="pf.new2" xml:space="preserve">
+    <value>New password (repeat)</value>
+  </data>
+  <data name="pf.passHelp" xml:space="preserve">
+    <value>Leave these fields empty if you do not want to change your password.</value>
+  </data>
+  <data name="pf.saved" xml:space="preserve">
+    <value>Changes saved.</value>
+  </data>
+  <data name="pf.errName" xml:space="preserve">
+    <value>Full name is required.</value>
+  </data>
+  <data name="pf.errCurrentRequired" xml:space="preserve">
+    <value>Enter your current password to change your password.</value>
+  </data>
+  <data name="pf.errCurrentWrong" xml:space="preserve">
+    <value>The current password is incorrect.</value>
+  </data>
+  <data name="pf.errPasswordWeak" xml:space="preserve">
+    <value>The password must be at least 8 characters and contain letters and digits.</value>
+  </data>
+  <data name="pf.errPasswordMismatch" xml:space="preserve">
+    <value>The passwords do not match.</value>
+  </data>
+</root>

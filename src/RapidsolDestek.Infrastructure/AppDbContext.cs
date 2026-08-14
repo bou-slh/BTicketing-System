@@ -186,6 +186,8 @@ public class AppDbContext : DbContext
             b.Property(u => u.NormalizedEmail).HasMaxLength(256);
             b.Property(u => u.FullName).IsRequired().HasMaxLength(256);
             b.Property(u => u.OrganizationName).HasMaxLength(256);
+            b.Property(u => u.TimeZone).HasMaxLength(64);
+            b.Property(u => u.Language).HasMaxLength(8);
 
             b.HasMany<CustomerUserClaim>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
             b.HasMany<CustomerUserLogin>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();

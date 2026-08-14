@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RapidsolDestek.Infrastructure.Identity;
+using RapidsolDestek.Web.Controllers;
 using RapidsolDestek.Web.Identity;
 using RapidsolDestek.Web.Services;
 
@@ -37,7 +38,12 @@ public class AccountController(
         {
             var result = await signIn.PasswordSignInAsync(user, vm.Password, vm.Remember, lockoutOnFailure: true);
             if (result.Succeeded)
+            {
+                // Saved language preference (profile page) wins over the cookie default.
+                if (user.Language is { } lang && CultureController.Supported.Contains(lang))
+                    CultureController.ApplyCultureCookie(Response, lang);
                 return LocalRedirect(Url.IsLocalUrl(vm.ReturnUrl) ? vm.ReturnUrl! : "/tickets");
+            }
             if (result.IsLockedOut)
             {
                 ModelState.AddModelError(string.Empty, "lockedOut");
@@ -77,9 +83,9 @@ public class AccountController(
             Email = vm.Email,
             FullName = vm.Name,
             PhoneNumber = vm.Phone,
+            // Persisted since the profile port (ROADMAP §6.1 profile row); /profile edits it.
+            TimeZone = ProfileController.TimeZones.Any(t => t.Id == vm.TimeZone) ? vm.TimeZone : "Europe/Istanbul",
         };
-        // TODO(S7): persist vm.TimeZone as a user preference once portal/profile.html
-        // ports its preferences section (ROADMAP §6.1 profile row).
         var result = await users.CreateAsync(user, vm.Password);
         if (!result.Succeeded)
         {
@@ -183,7 +189,7 @@ public class RegisterVm
 
     public string? Phone { get; set; }
 
-    /// <summary>IANA id from the mockup's preference select; persisted in S7 (profile).</summary>
+    /// <summary>IANA id from the mockup's preference select; stored on CustomerUser.TimeZone.</summary>
     public string TimeZone { get; set; } = "Europe/Istanbul";
 
     [Required(ErrorMessage = "passwordWeak"), MinLength(8, ErrorMessage = "passwordWeak")]

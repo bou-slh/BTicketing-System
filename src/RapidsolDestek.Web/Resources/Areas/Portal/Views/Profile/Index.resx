@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="pf.title" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="pf.sub" xml:space="preserve">
+    <value>Profil bilgilerinizi yönetin</value>
+  </data>
+  <data name="pf.secContact" xml:space="preserve">
+    <value>İletişim bilgileri</value>
+  </data>
+  <data name="pf.email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="pf.emailHelp" xml:space="preserve">
+    <value>E-posta adresi değiştirilemez; değişiklik için destek ekibiyle iletişime geçin.</value>
+  </data>
+  <data name="pf.name" xml:space="preserve">
+    <value>Ad Soyad</value>
+  </data>
+  <data name="pf.phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="pf.secPrefs" xml:space="preserve">
+    <value>Tercihler</value>
+  </data>
+  <data name="pf.tz" xml:space="preserve">
+    <value>Saat dilimi</value>
+  </data>
+  <data name="pf.lang" xml:space="preserve">
+    <value>Tercih edilen dil</value>
+  </data>
+  <data name="pf.secAccess" xml:space="preserve">
+    <value>Erişim bilgileri</value>
+  </data>
+  <data name="pf.current" xml:space="preserve">
+    <value>Mevcut parola</value>
+  </data>
+  <data name="pf.new" xml:space="preserve">
+    <value>Yeni parola</value>
+  </data>
+  <data name="pf.new2" xml:space="preserve">
+    <value>Yeni parola (tekrar)</value>
+  </data>
+  <data name="pf.passHelp" xml:space="preserve">
+    <value>Parolanızı değiştirmek istemiyorsanız bu alanları boş bırakın.</value>
+  </data>
+  <data name="pf.saved" xml:space="preserve">
+    <value>Değişiklikler kaydedildi.</value>
+  </data>
+  <data name="pf.errName" xml:space="preserve">
+    <value>Ad Soyad alanı zorunludur.</value>
+  </data>
+  <data name="pf.errCurrentRequired" xml:space="preserve">
+    <value>Parolanızı değiştirmek için mevcut parolanızı girin.</value>
+  </data>
+  <data name="pf.errCurrentWrong" xml:space="preserve">
+    <value>Mevcut parola hatalı.</value>
+  </data>
+  <data name="pf.errPasswordWeak" xml:space="preserve">
+    <value>Parola en az 8 karakter olmalı; harf ve rakam içermelidir.</value>
+  </data>
+  <data name="pf.errPasswordMismatch" xml:space="preserve">
+    <value>Parolalar eşleşmiyor.</value>
+  </data>
+</root>

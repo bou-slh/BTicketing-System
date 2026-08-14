@@ -1,0 +1,109 @@
+@model RapidsolDestek.Web.Areas.Portal.Controllers.ProfileVm
+@using RapidsolDestek.Web.Areas.Portal.Controllers
+@{
+    ViewData["Title"] = L["pf.title"];
+
+    // Post-save toast handoff (mockup submits toast "saved"): the layout stamps
+    // ViewData["Toast"] onto <body data-toast> and rd.js shows it after the PRG
+    // redirect — already localized in the just-switched culture.
+    if (TempData["ProfileSaved"] is not null)
+    {
+        ViewData["Toast"] = L["pf.saved"].Value;
+    }
+
+    // B3 error presentation: same .rd-form-error block as Register, with this
+    // page's validation codes mapped to i18n here.
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+    string ErrorText(string code) => code switch
+    {
+        "errName" => L["pf.errName"].Value,
+        "errCurrentRequired" => L["pf.errCurrentRequired"].Value,
+        "currentWrong" => L["pf.errCurrentWrong"].Value,
+        "passwordWeak" => L["pf.errPasswordWeak"].Value,
+        "passwordMismatch" => L["pf.errPasswordMismatch"].Value,
+        _ => code,
+    };
+}
+<div class="rc-heading">
+    <div>
+        <h1>@L["pf.title"]</h1>
+        <p>@L["pf.sub"]</p>
+    </div>
+</div>
+
+<form method="post" class="rc-form" style="max-width:720px" asp-action="Index">
+    <div class="rc-form-grid">
+        @if (errors.Count > 0)
+        {
+            <div class="rd-form-error" role="alert">
+                @foreach (var e in errors)
+                {
+                    <div>@ErrorText(e)</div>
+                }
+            </div>
+        }
+        <div class="rc-form-step"><span class="rc-step-icon">1</span><span>@L["pf.secContact"]</span></div>
+        <div>
+            <label class="rc-label" for="pf-email">@L["pf.email"]</label>
+            <input id="pf-email" class="rc-control" type="email" value="@Model.Email" readonly>
+            <div class="rd-help">@L["pf.emailHelp"]</div>
+        </div>
+        <div class="rd-grid-2">
+            <div>
+                <label class="rc-label" for="pf-name">@L["pf.name"]</label>
+                <input id="pf-name" class="rc-control" type="text" asp-for="Name" autocomplete="name" required>
+            </div>
+            <div>
+                <label class="rc-label" for="pf-phone">@L["pf.phone"]</label>
+                <input id="pf-phone" class="rc-control" type="tel" asp-for="Phone" autocomplete="tel">
+            </div>
+        </div>
+
+        <div class="rc-form-step"><span class="rc-step-icon">2</span><span>@L["pf.secPrefs"]</span></div>
+        <div class="rd-grid-2">
+            <div>
+                <label class="rc-label" for="pf-tz">@L["pf.tz"]</label>
+                <select id="pf-tz" class="rc-control" asp-for="TimeZone">
+                    @foreach (var tz in ProfileController.TimeZones)
+                    {
+                        <option value="@tz.Id">@tz.Label</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label class="rc-label" for="pf-lang">@L["pf.lang"]</label>
+                @* data-lang-switch submits the surrounding form on change (rd.js), so
+                   picking a language saves the profile and the response — culture
+                   cookie set server-side — already renders in the new language. *@
+                <select id="pf-lang" class="rc-control" asp-for="Language" data-lang-switch>
+                    <option value="tr">Türkçe</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="rc-form-step"><span class="rc-step-icon">3</span><span>@L["pf.secAccess"]</span></div>
+        <div>
+            <label class="rc-label" for="pf-current">@L["pf.current"]</label>
+            <input id="pf-current" class="rc-control" type="password" asp-for="CurrentPassword" autocomplete="current-password">
+        </div>
+        <div class="rd-grid-2">
+            <div>
+                <label class="rc-label" for="pf-new">@L["pf.new"]</label>
+                <input id="pf-new" class="rc-control" type="password" asp-for="NewPassword" autocomplete="new-password"
+                       data-pw-strength="@L["pf.errPasswordWeak"]">
+            </div>
+            <div>
+                <label class="rc-label" for="pf-new2">@L["pf.new2"]</label>
+                <input id="pf-new2" class="rc-control" type="password" asp-for="NewPassword2" autocomplete="new-password"
+                       data-pw-match="#pf-new" data-pw-match-msg="@L["pf.errPasswordMismatch"]">
+            </div>
+        </div>
+        <div class="rd-help">@L["pf.passHelp"]</div>
+    </div>
+
+    <div class="rc-form-footer">
+        <a class="rd-btn" href="/">@SL["common.cancel"]</a>
+        <button class="rc-button-primary">@SL["common.save"]</button>
+    </div>
+</form>
