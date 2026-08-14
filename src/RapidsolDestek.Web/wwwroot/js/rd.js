@@ -158,13 +158,13 @@
       bar.className = "rd-editor-toolbar";
       bar.setAttribute("role", "toolbar");
       bar.innerHTML = `
-        <select data-ed="font">
+        <select data-ed="font" title="${ED("font", "Yazı tipi")}">
           <option value="">Inter</option>
           <option value="Arial">Arial</option>
           <option value="Georgia">Georgia</option>
           <option value="'Courier New',monospace">Courier New</option>
         </select>
-        <select data-ed="size">
+        <select data-ed="size" title="${ED("size", "Yazı boyutu")}">
           <option value="12px">12</option>
           <option value="14px" selected>14</option>
           <option value="16px">16</option>

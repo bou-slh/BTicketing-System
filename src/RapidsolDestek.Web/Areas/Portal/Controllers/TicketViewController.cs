@@ -144,8 +144,24 @@ public class TicketViewController(
             })
             .ToListAsync(ct);
 
+        // Event StaffId is the ACTOR (null for system auto-assign); the assignee lives in
+        // Data as "staff" (seeded canon, a name) or "staffId" (TicketService).
+        var dataStaffIds = events
+            .Where(ev => ev.StaffName is null)
+            .Select(ev => StaffIdFromEventData(ev.Data))
+            .OfType<int>()
+            .Distinct()
+            .ToList();
+        var dataStaffNames = dataStaffIds.Count == 0
+            ? new Dictionary<int, string>()
+            : await db.Staff.Where(s => dataStaffIds.Contains(s.Id))
+                .ToDictionaryAsync(s => s.Id, s => s.FirstName + " " + s.LastName, ct);
+
         var timeline = events
-            .Select(ev => new TimelineItemVm(ev.Kind, ev.OccurredAt, ev.StaffName, HoursFromEventData(ev.Data)))
+            .Select(ev => new TimelineItemVm(
+                ev.Kind, ev.OccurredAt,
+                ev.StaffName ?? ActorFromEventData(ev.Data, dataStaffNames),
+                HoursFromEventData(ev.Data)))
             .Append(new TimelineItemVm("created", ticket.CreatedAt, null, null))
             .ToList();
 
@@ -172,6 +188,41 @@ public class TicketViewController(
                     .Select(a => new TicketAttachmentVm(a.Id, a.Name)).ToList())).ToList(),
             timeline);
         return View(vm);
+    }
+
+    private static int? StaffIdFromEventData(string? data)
+    {
+        if (string.IsNullOrEmpty(data))
+            return null;
+        try
+        {
+            return JsonDocument.Parse(data).RootElement.TryGetProperty("staffId", out var id)
+                && id.ValueKind == JsonValueKind.Number ? id.GetInt32() : null;
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
+
+    private static string? ActorFromEventData(string? data, Dictionary<int, string> staffNames)
+    {
+        if (string.IsNullOrEmpty(data))
+            return null;
+        try
+        {
+            var root = JsonDocument.Parse(data).RootElement;
+            if (root.TryGetProperty("staff", out var name) && name.ValueKind == JsonValueKind.String)
+                return name.GetString();
+            if (root.TryGetProperty("staffId", out var id) && id.ValueKind == JsonValueKind.Number
+                && staffNames.TryGetValue(id.GetInt32(), out var resolved))
+                return resolved;
+            return null;
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 
     private static decimal? HoursFromEventData(string? data)
