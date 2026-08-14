@@ -176,7 +176,13 @@ pattern dead in the mockups.
   search), canned+variables, **EffortProposalService** (B8 state machine + guards + domain events),
   `IFileStore`. *Gate*: service test suite green incl. full effort lifecycle and revision loops.
 - **S5 — Portal area** (12 pages, checklists §6.1). *Gate*: portal E2E — register → open → reply → effort
-  approve + reject paths; visual diff accepted.
+  approve + reject paths; visual diff accepted. *(Gate E2E green 2026-08-14, `PortalGoldenPathTests`:
+  fresh-user register → open → reply incl. org auto-link assert; hero-proposal Reddet mandatory-note guard +
+  Onayla decision. The full portal reject transition is service-tested (S4 suite) and gets its E2E in the S6
+  golden path — the hero proposal is the only seeded pending one and a decided proposal can't be re-proposed
+  until agent-side revise exists. Gate also surfaced+fixed: registration created no domain User row, so fresh
+  registrants couldn't open tickets; now claims an existing unlinked user by email or creates one with
+  Organization.Domain auto-link.)*
 - **S6 — Agent area** (18 pages, §6.2; B1 on lists, B5 composers, B7 live board). *Gate*: golden path E2E
   (portal open → agent proposes 6h → portal approves → agent resolves); live board updates <1s across two
   browsers.

@@ -3,6 +3,10 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using RapidsolDestek.Domain.Entities;
+using RapidsolDestek.Infrastructure;
+using RapidsolDestek.Infrastructure.Auditing;
 using RapidsolDestek.Infrastructure.Identity;
 using RapidsolDestek.Web.Controllers;
 using RapidsolDestek.Web.Identity;
@@ -14,6 +18,7 @@ namespace RapidsolDestek.Web.Areas.Portal.Controllers;
 public class AccountController(
     UserManager<CustomerUser> users,
     CustomerSignInManager signIn,
+    AppDbContext db,
     IAppEmailSender mail,
     IWebHostEnvironment env) : Controller
 {
@@ -100,8 +105,58 @@ public class AccountController(
                 });
             return View(vm);
         }
+        await LinkDomainUserAsync(user, vm);
         await signIn.SignInAsync(user, isPersistent: false);
         return Redirect("/");
+    }
+
+    /// <summary>
+    /// Registration must end with a domain <see cref="User"/> row — every portal page
+    /// resolves the principal via User.IdentityUserId, and /open forbids without one
+    /// (osTicket user_account ↔ user split). Claims an existing unlinked user carrying
+    /// this address (agent/guest-created records), else creates one, auto-linking the
+    /// organization by email domain (Organization.Domain, comma-separated).
+    /// </summary>
+    private async Task LinkDomainUserAsync(CustomerUser identity, RegisterVm vm)
+    {
+        var address = vm.Email.Trim();
+        using var _ = new ActorContext(ActorType.User, null, vm.Name.Trim()).BeginAuditScope();
+
+        var existing = await db.UserEmails
+            .Where(e => e.Address.ToLower() == address.ToLower())
+            .Select(e => e.User!)
+            .FirstOrDefaultAsync();
+        if (existing is not null)
+        {
+            if (existing.IdentityUserId is null)
+            {
+                existing.IdentityUserId = identity.Id;
+                existing.Phone ??= vm.Phone;
+                await db.SaveChangesAsync();
+            }
+            return;
+        }
+
+        var host = address[(address.IndexOf('@') + 1)..];
+        var orgId = (await db.Organizations
+                .Where(o => o.Domain != null)
+                .Select(o => new { o.Id, o.Domain })
+                .ToListAsync())
+            .FirstOrDefault(o => o.Domain!.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+                .Any(d => d.Equals(host, StringComparison.OrdinalIgnoreCase)))?.Id;
+
+        var domainUser = new User
+        {
+            Name = vm.Name.Trim(),
+            Phone = vm.Phone,
+            IdentityUserId = identity.Id,
+            OrganizationId = orgId,
+            Emails = [new UserEmail { Address = address }],
+        };
+        db.Users.Add(domainUser);
+        await db.SaveChangesAsync();
+        domainUser.DefaultEmailId = domainUser.Emails[0].Id;
+        await db.SaveChangesAsync();
     }
 
     // ---- Password reset (3-step flow) --------------------------------------
