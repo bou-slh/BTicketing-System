@@ -11,10 +11,11 @@
     if (sel && sel.form) sel.form.submit();
   });
 
-  /* ---------- Toolbar filter selects: submit their GET form on change ---------- */
+  /* ---------- Toolbar filter controls: submit their GET form on change ----------
+     Selects and (B1) the details.rd-filter checkboxes opt in via data-autosubmit. */
   document.addEventListener("change", (e) => {
-    const sel = e.target.closest("select[data-autosubmit]");
-    if (sel && sel.form) sel.form.submit();
+    const ctl = e.target.closest("[data-autosubmit]");
+    if (ctl && ctl.form) ctl.form.submit();
   });
 
   /* ---------- Tabs: [data-tabs] > [data-tab=panelId]; panels .rd-tab-panel ---------- */
@@ -41,6 +42,21 @@
     if (closer) {
       e.preventDefault();
       closer.closest("dialog")?.close();
+    }
+
+    // B4 builder rule rows: [data-rule-add="templateId"] appends a clone of the
+    // template before itself; the row's .remove button deletes it (agent tickets
+    // advanced search now; admin builders reuse the same contract in S7).
+    const ruleAdd = e.target.closest("[data-rule-add]");
+    if (ruleAdd) {
+      e.preventDefault();
+      const tpl = document.getElementById(ruleAdd.getAttribute("data-rule-add"));
+      if (tpl) ruleAdd.before(tpl.content.cloneNode(true));
+    }
+    const ruleRemove = e.target.closest(".bo-rule-row .remove");
+    if (ruleRemove) {
+      e.preventDefault();
+      ruleRemove.closest(".bo-rule-row")?.remove();
     }
 
     // Rich-text editor tool buttons
@@ -88,6 +104,7 @@
       e.preventDefault();
       document.querySelectorAll("details.rd-filter input:checked").forEach((c) => (c.checked = false));
       syncFilters();
+      autoSubmitFilters();
     }
   });
   document.addEventListener("change", (e) => {
@@ -118,12 +135,48 @@
       const x = document.createElement("button");
       x.type = "button";
       x.textContent = "✕";
-      x.addEventListener("click", () => { c.checked = false; syncFilters(); });
+      x.addEventListener("click", () => { c.checked = false; syncFilters(); autoSubmitFilters(); });
       chip.append(x);
       chipsWrap.insertBefore(chip, clearLink);
     });
     chipsWrap.hidden = checked.length === 0;
   }
+
+  /* Server-driven filters (B1): when the filter checkboxes opt into data-autosubmit,
+     chip removal / clear-all must round-trip too. */
+  function autoSubmitFilters() {
+    const inp = document.querySelector("details.rd-filter input[data-autosubmit]");
+    if (inp && inp.form) inp.form.submit();
+  }
+
+  /* ---------- Advanced-search "save as queue" (agent tickets, B2) ----------
+     <button data-advsearch-save="url"> posts its form's rule rows / columns / sort
+     plus the queue name, then navigates to the created queue. The antiforgery token
+     is borrowed from the page's POST form (#tq-bulk) so the GET search form stays
+     token-free. */
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-advsearch-save]");
+    if (!btn) return;
+    e.preventDefault();
+    const form = btn.closest("form");
+    if (!form) return;
+    const fd = new FormData(form);
+    const name = (fd.get("qname") || "").toString().trim();
+    if (!name) {
+      toast(btn.getAttribute("data-err-name") || "!", "error");
+      return;
+    }
+    const token = document.querySelector('form[method="post"] input[name="__RequestVerificationToken"]');
+    if (token) fd.append("__RequestVerificationToken", token.value);
+    try {
+      const res = await fetch(btn.getAttribute("data-advsearch-save"), { method: "POST", body: fd });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      location.href = data.url;
+    } catch {
+      toast(btn.getAttribute("data-err") || "!", "error");
+    }
+  });
 
   /* ---------- B9 topbar global search: debounce + fetch + fill the dropdown ----------
      <input data-global-search="/agent/search"> + sibling .bo-search-results panel.

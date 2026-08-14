@@ -1,0 +1,487 @@
+@using System.Globalization
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model TicketsIndexVm
+@{
+    ViewData["Title"] = L["tq.title"];
+
+    // PRG toast handoff after bulk actions (_BackofficeLayout stamps <body data-toast>).
+    if (TempData["TicketsBulkNone"] is not null)
+    {
+        ViewData["Toast"] = L["tq.bulkNone"].Value;
+        ViewData["ToastVariant"] = "error";
+    }
+    else if (TempData["TicketsBulkOk"] is int bulkOk)
+    {
+        var bulkSkipped = TempData["TicketsBulkSkipped"] as int? ?? 0;
+        ViewData["Toast"] = bulkSkipped > 0
+            ? L["tq.bulkPartial", bulkOk, bulkSkipped].Value
+            : L["tq.bulkDone", bulkOk].Value;
+    }
+
+    // Backoffice pill classes (dashboard precedent): derived overdue is computed in
+    // the controller; effort pseudo-statuses render in the Efor column on this page.
+    static string StatusPill(string key) => key switch
+    {
+        "new" => "rd-pill rd-pill-open",
+        "open" or "wait" or "test" or "solved" or "closed" or "overdue" => $"rd-pill rd-pill-{key}",
+        _ => "rd-pill rd-pill-open",
+    };
+
+    // Priority pills per the mockup rows: low→closed, normal→teal, high→wait, emergency→overdue.
+    static string PriorityPill(string key) => key switch
+    {
+        "low" => "rd-pill rd-pill-closed",
+        "high" => "rd-pill rd-pill-wait",
+        "emergency" => "rd-pill rd-pill-overdue",
+        _ => "rd-pill rd-pill-teal",
+    };
+
+    // Table-cell agent name convention (§2 canon): "Ümit Yaşar Akın" → "Ümit Y. Akın".
+    static string ShortName(string? full)
+    {
+        if (string.IsNullOrWhiteSpace(full))
+            return "—";
+        var parts = full.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 3)
+            return full;
+        var middles = string.Join(" ", parts[1..^1].Select(p => $"{char.ToUpperInvariant(p[0])}."));
+        return $"{parts[0]} {middles} {parts[^1]}";
+    }
+
+    // Updated cell, mockup formats: "Bugün 10:18" / "Dün 17:40" / "8 Ağu 16:55".
+    string UpdatedText(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        var time = local.ToString("HH:mm");
+        if (local.Date == today)
+            return L.GetString("tq.updToday", time);
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("tq.updYesterday", time);
+        return local.ToString(L.GetString("tq.updDateFmt"), CultureInfo.CurrentUICulture);
+    }
+
+    string Hours(decimal h) => h.ToString("0.##", CultureInfo.CurrentUICulture);
+
+    // Queue titles are DB data (TR canon); the seeded tree maps onto the mockup's
+    // i18n keys so EN stays localized — custom/builder queues render their raw title.
+    string QueueLabel(string title) => title switch
+    {
+        "Açık" => L["tq.qOpen"].Value,
+        "Yanıtlanmamış" => L["tq.qUnanswered"].Value,
+        "Yanıtlanmış" => L["tq.qAnswered"].Value,
+        "Gecikmiş" => L["tq.qOverdue"].Value,
+        "Efor Onayında" => L["tq.qEffort"].Value,
+        "Taleplerim" => L["tq.qMine"].Value,
+        "Bana Atanan" => L["tq.qAssignedMe"].Value,
+        "Takımıma Atanan" => L["tq.qAssignedTeam"].Value,
+        "Kapalı" => L["tq.qClosed"].Value,
+        "Bugün" => L["tq.qToday"].Value,
+        "Bu Hafta" => L["tq.qWeek"].Value,
+        "Bu Ay" => L["tq.qMonth"].Value,
+        _ => title,
+    };
+
+    // Canonical querystring builder so header sort / pagination / export preserve
+    // the whole list state (queue, quick search, filters, adv rules, columns).
+    string BuildUrl(string path = "/agent/tickets", string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        if (!Model.IsAdvanced && Model.ActiveQueueId is { } activeId)
+            Add("queue", activeId.ToString());
+        Add("q", Model.Query);
+        foreach (var s in Model.StatusFilter) Add("st", s);
+        foreach (var p in Model.PriorityFilter) Add("pr", p);
+        foreach (var r in Model.Rules) { Add("ff", r.Field); Add("fo", r.Op); Add("fv", r.Value); }
+        foreach (var c in Model.ColsParam) Add("cols", c);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return path + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key == "subject" ? "asc" : "desc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    string PageUrl(int p) => BuildUrl(pageOver: p);
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+
+    string ColumnLabel(string key) => key switch
+    {
+        "no" => L["tq.colNo"].Value,
+        "updated" => SL["common.updated"].Value,
+        "subject" => L["tq.colSubject"].Value,
+        "user" => L["tq.colUser"].Value,
+        "org" => L["tq.colOrg"].Value,
+        "priority" => L["tq.colPriority"].Value,
+        "effort" => L["tq.colEffort"].Value,
+        "status" => SL["common.status"].Value,
+        "assigned" => L["tq.colAssigned"].Value,
+        "sla" => L["tq.colSla"].Value,
+        _ => key,
+    };
+
+    string FieldLabel(string f) => f switch
+    {
+        "status" => L["tq.fldStatus"].Value,
+        "effort" => L["tq.fldEffort"].Value,
+        "dept" => L["tq.fldDept"].Value,
+        "assigned" => L["tq.fldAssigned"].Value,
+        "org" => L["tq.fldOrg"].Value,
+        "date" => L["tq.fldDate"].Value,
+        _ => f,
+    };
+    string OpLabel(string o) => o switch
+    {
+        "is" => L["tq.opIs"].Value,
+        "not" => L["tq.opNot"].Value,
+        "contains" => L["tq.opContains"].Value,
+        "after" => L["tq.opAfter"].Value,
+        _ => o,
+    };
+
+    // async: the <option> tag helper inside forces a Task-returning markup function (MVC1006).
+    async Task RuleRow(AdvRule? rule)
+    {
+        <div class="bo-rule-row">
+            <select class="rd-control" name="ff">
+                @foreach (var f in AdvRule.Fields)
+                {
+                    <option value="@f" selected="@(rule?.Field == f)">@FieldLabel(f)</option>
+                }
+            </select>
+            <select class="rd-control" name="fo">
+                @foreach (var o in AdvRule.Ops)
+                {
+                    <option value="@o" selected="@(rule?.Op == o)">@OpLabel(o)</option>
+                }
+            </select>
+            <input class="rd-control" name="fv" placeholder="@L["tq.valuePh"]" value="@rule?.Value">
+            <button type="button" class="remove">✕</button>
+        </div>
+    }
+
+    // Mockup column-picker entries (status is always on — it has no checkbox there).
+    string[] pickerColumns = ["no", "updated", "subject", "user", "org", "priority", "effort", "assigned"];
+    string[] statusFilterKeys = ["open", "wait", "effortWait", "overdue", "solved", "closed"];
+    string[] priorityFilterKeys = ["low", "normal", "high", "emergency"];
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <h1>@L["tq.title"]</h1>
+        <p>@L["tq.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <a class="rd-btn-ghost rd-btn" href="@BuildUrl(path: "/agent/tickets/export")">@SL["common.export"]</a>
+        @* Deep link dead until agent/ticket-open ports (S5 precedent). *@
+        <a class="rd-btn-primary" href="/agent/ticket-open">@L["tq.newTicket"]</a>
+    </div>
+</div>
+
+<div style="display:grid;grid-template-columns:208px minmax(0,1fr);gap:18px;align-items:start">
+
+    <!-- Queue tree -->
+    <div class="rd-surface">
+        <div class="rd-surface-body" style="padding:13px 9px">
+            @for (var g = 0; g < Model.Tree.Count; g++)
+            {
+                var group = Model.Tree[g];
+                <div class="bo-nav-group" style="@(g == Model.Tree.Count - 1 ? "margin-bottom:0" : null)">
+                    <div class="group-label">@(group.Label is null ? L["tq.qSaved"].Value : QueueLabel(group.Label))</div>
+                    @foreach (var item in group.Items)
+                    {
+                        <a href="/agent/tickets?queue=@item.Id" class="@(item.Active ? "active" : null)"><span>@QueueLabel(item.Title)</span>@if (item.Count is { } n)
+                            {<span class="count">@n</span>}</a>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- List -->
+    <div>
+        <form class="rd-list-toolbar" method="get" action="/agent/tickets">
+            @if (!Model.IsAdvanced && Model.ActiveQueueId is { } activeQueueId)
+            {
+                <input type="hidden" name="queue" value="@activeQueueId">
+            }
+            @foreach (var r in Model.Rules)
+            {
+                <input type="hidden" name="ff" value="@r.Field">
+                <input type="hidden" name="fo" value="@r.Op">
+                <input type="hidden" name="fv" value="@r.Value">
+            }
+            @foreach (var c in Model.ColsParam)
+            {
+                <input type="hidden" name="cols" value="@c">
+            }
+            <input class="rd-control" type="search" name="q" value="@Model.Query" placeholder="@L["tq.searchPh"]">
+            <details class="rd-filter">
+                <summary><span>@L["tq.fldStatus"]</span><b class="rd-filter-count">@Model.StatusFilter.Length</b></summary>
+                <div class="rd-filter-menu">
+                    @foreach (var key in statusFilterKeys)
+                    {
+                        <label class="rd-check"><input type="checkbox" name="st" value="@key" data-autosubmit checked="@Model.StatusFilter.Contains(key)"><span>@SL[$"status.{key}"]</span></label>
+                    }
+                </div>
+            </details>
+            <details class="rd-filter">
+                <summary><span>@L["tq.fldPriority"]</span><b class="rd-filter-count">@Model.PriorityFilter.Length</b></summary>
+                <div class="rd-filter-menu">
+                    @foreach (var key in priorityFilterKeys)
+                    {
+                        <label class="rd-check"><input type="checkbox" name="pr" value="@key" data-autosubmit checked="@Model.PriorityFilter.Contains(key)"><span>@SL[$"priority.{key}"]</span></label>
+                    }
+                </div>
+            </details>
+            <select class="rd-control" name="sort" data-autosubmit>
+                <option value="updated" selected="@(Model.Sort == "updated")">@L["tq.sortUpdated"]</option>
+                <option value="created" selected="@(Model.Sort == "created")">@L["tq.sortCreated"]</option>
+                <option value="priority" selected="@(Model.Sort == "priority")">@L["tq.sortPriority"]</option>
+                <option value="due" selected="@(Model.Sort == "due")">@L["tq.sortDue"]</option>
+            </select>
+            <a href="#" data-dialog-open="dlg-advsearch">@L["tq.advSearch"]</a>
+            <div class="spacer"></div>
+            <button class="rd-btn rd-btn-sm" type="submit" form="tq-bulk" name="act" value="assign">@L["tq.assign"]</button>
+            @* TODO(S6): merge needs the merge/link service (arrives with agent/ticket-view). *@
+            <button class="rd-btn rd-btn-sm" type="button" disabled title="@L["tq.notYet"]">@L["tq.merge"]</button>
+            @* TODO(S6): transfer needs a department picker dialog (agent/ticket-view "Diğer" scope). *@
+            <button class="rd-btn rd-btn-sm" type="button" disabled title="@L["tq.notYet"]">@L["tq.transfer"]</button>
+            <button class="rd-btn rd-btn-sm" type="button" data-dialog-open="dlg-bulk-status">@L["tq.changeStatus"]</button>
+            @* TODO(S6): delete needs the deleted-state status flow (no service yet). *@
+            <button class="rd-btn rd-btn-sm rd-btn-danger" type="button" disabled title="@L["tq.notYet"]">@SL["common.delete"]</button>
+        </form>
+
+        <div class="rd-filter-chips" data-filter-chips hidden>
+            <a href="#" class="clear" data-filter-clear>@L["tq.clearFilters"]</a>
+        </div>
+
+        @if (Model.Rows.Count == 0)
+        {
+            <div class="rd-surface">
+                <div class="rd-empty">
+                    <div class="icon">◫</div>
+                    <h3>@L["tq.emptyTitle"]</h3>
+                    <p>@L["tq.emptyText"]</p>
+                    <a class="rd-btn-primary" href="/agent/ticket-open">@L["tq.newTicket"]</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="rd-surface">
+                <table class="rd-table" id="tq-table">
+                    <thead>
+                        <tr>
+                            <th class="col-check"><input type="checkbox" data-check-all="#tq-table" aria-label="@SL["common.selectAll"]"></th>
+                            @foreach (var col in Model.Columns)
+                            {
+                                if (TicketListEngine.SortableColumns.Contains(col))
+                                {
+                                    <th class="@SortClass(col)"><a href="@SortUrl(col)">@ColumnLabel(col)</a></th>
+                                }
+                                else
+                                {
+                                    <th>@ColumnLabel(col)</th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @* Row deep-links dead until agent/ticket-view + user-view + org-view port (S5 precedent). *@
+                        @foreach (var r in Model.Rows)
+                        {
+                            <tr>
+                                <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="tq-bulk"></td>
+                                @foreach (var col in Model.Columns)
+                                {
+                                    switch (col)
+                                    {
+                                        case "no":
+                                            <td><a href="/agent/ticket-view?id=@r.Id">@r.Number</a></td>
+                                            break;
+                                        case "updated":
+                                            <td>@UpdatedText(r.Updated)</td>
+                                            break;
+                                        case "subject":
+                                            <td><a href="/agent/ticket-view?id=@r.Id">@r.Subject</a> <span class="rd-muted text-sm">💬 @r.MessageCount@(r.HasAttachment ? " 📎" : null)</span></td>
+                                            break;
+                                        case "user":
+                                            <td><a href="/agent/user-view?id=@r.UserId">@r.UserName</a></td>
+                                            break;
+                                        case "org":
+                                            if (r.OrgId is { } orgId)
+                                            {
+                                                <td><a href="/agent/org-view?id=@orgId">@r.OrgName</a></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="rd-muted">—</td>
+                                            }
+                                            break;
+                                        case "priority":
+                                            <td><span class="@PriorityPill(r.PriorityKey)">@SL[$"priority.{r.PriorityKey}"]</span></td>
+                                            break;
+                                        case "effort":
+                                            switch (r.EffortState)
+                                            {
+                                                case EffortState.Pending:
+                                                    <td><span class="rd-pill rd-pill-wait" title="@SL["status.effortWait"]">@L["tq.hoursShort", Hours(r.EffortHours!.Value)]</span></td>
+                                                    break;
+                                                case EffortState.Approved:
+                                                    <td><span class="rd-pill rd-pill-solved" title="@SL["status.effortApproved"]">@L["tq.hoursShort", Hours(r.EffortHours!.Value)] ✓</span></td>
+                                                    break;
+                                                case EffortState.Rejected:
+                                                    <td><span class="rd-pill rd-pill-overdue" title="@SL["status.effortRejected"]">@L["tq.hoursShort", Hours(r.EffortHours!.Value)] ✕</span></td>
+                                                    break;
+                                                default:
+                                                    <td class="rd-muted">—</td>
+                                                    break;
+                                            }
+                                            break;
+                                        case "status":
+                                            <td><span class="@StatusPill(r.StatusKey)">@SL[$"status.{r.StatusKey}"]</span></td>
+                                            break;
+                                        case "assigned":
+                                            <td>@ShortName(r.AssigneeName)</td>
+                                            break;
+                                        case "sla":
+                                            <td>@(r.Due is { } due ? UpdatedText(due) : "—")</td>
+                                            break;
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="rd-pagination">
+                    <span>@SL["common.showing"]</span> <b>@Model.From–@Model.To</b> <span>@L["tq.pageOf", Model.Total]</span>
+                    <div class="pages">
+                        @for (var p = 1; p <= Model.PageCount; p++)
+                        {
+                            if (p == Model.Page)
+                            {
+                                <span class="current">@p</span>
+                            }
+                            else
+                            {
+                                <a href="@PageUrl(p)">@p</a>
+                            }
+                        }
+                        @if (Model.Page < Model.PageCount)
+                        {
+                            <a href="@PageUrl(Model.Page + 1)">›</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@* Selection carrier for the bulk actions: row checkboxes and the toolbar/status-dialog
+   buttons associate via form="tq-bulk" so the toolbar stays a plain GET form. *@
+<form id="tq-bulk" method="post" asp-area="Agent" asp-controller="Tickets" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+<!-- Advanced search dialog -->
+<dialog class="rd-dialog" id="dlg-advsearch" style="width:min(680px,calc(100vw - 40px))">
+    <div class="rd-dialog-head">
+        <span>@L["tq.advTitle"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="get" action="/agent/tickets">
+        <div class="rd-dialog-body">
+            <div class="rd-tabs" data-tabs data-tabs-scope="advs">
+                <button type="button" class="active" data-tab="adv-criteria">@L["tq.tabCriteria"]</button>
+                <button type="button" data-tab="adv-columns">@L["tq.tabColumns"]</button>
+                <button type="button" data-tab="adv-sort">@L["tq.tabSort"]</button>
+                <button type="button" data-tab="adv-save">@L["tq.tabSave"]</button>
+            </div>
+
+            <div class="rd-tab-panel active" data-tab-group="advs" id="adv-criteria">
+                @if (Model.Rules.Count > 0)
+                {
+                    foreach (var rule in Model.Rules)
+                    {
+                        await RuleRow(rule);
+                    }
+                }
+                else
+                {
+                    await RuleRow(null);
+                }
+                <button type="button" class="rd-btn-ghost rd-btn rd-btn-sm" data-rule-add="tq-rule-tpl">@L["tq.addRule"]</button>
+            </div>
+
+            <div class="rd-tab-panel" data-tab-group="advs" id="adv-columns">
+                <p class="rd-help" style="margin-bottom:12px">@L["tq.columnsHint"]</p>
+                <div style="display:flex;flex-wrap:wrap;gap:9px 22px">
+                    @foreach (var col in pickerColumns)
+                    {
+                        <label class="rd-check"><input type="checkbox" name="cols" value="@col" checked="@Model.Columns.Contains(col)"><span>@ColumnLabel(col)</span></label>
+                    }
+                </div>
+            </div>
+
+            <div class="rd-tab-panel" data-tab-group="advs" id="adv-sort">
+                <p class="rd-help" style="margin-bottom:12px">@L["tq.sortHint"]</p>
+                <select class="rd-control" style="max-width:280px" name="sort">
+                    <option value="updated" selected="@(Model.Sort == "updated")">@L["tq.sortUpdated"]</option>
+                    <option value="created" selected="@(Model.Sort == "created")">@L["tq.sortCreated"]</option>
+                    <option value="priority" selected="@(Model.Sort == "priority")">@L["tq.sortPriority"]</option>
+                    <option value="due" selected="@(Model.Sort == "due")">@L["tq.sortDue"]</option>
+                </select>
+            </div>
+
+            <div class="rd-tab-panel" data-tab-group="advs" id="adv-save">
+                <div class="rd-field">
+                    <label class="rd-label">@L["tq.saveName"]</label>
+                    <input class="rd-control" name="qname" placeholder="@L["tq.saveNamePh"]">
+                    <div class="rd-help">@L["tq.saveHelp"]</div>
+                </div>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-advsearch-save="/agent/tickets/save-search"
+                    data-err-name="@L["tq.saveNameReq"]" data-err="@L["tq.saveError"]">@L["tq.saveSearch"]</button>
+            <button type="submit" class="rd-btn-primary">@SL["common.search"]</button>
+        </div>
+    </form>
+</dialog>
+<template id="tq-rule-tpl">
+    @{ await RuleRow(null); }
+</template>
+
+@* Bulk status-change dialog: invented UI (the mockup's toolbar button has no dialog) so
+   "Durum Değiştir" actually works — B2 pattern; flagged for canon sign-off in ROADMAP. *@
+<dialog class="rd-dialog" id="dlg-bulk-status">
+    <div class="rd-dialog-head">
+        <span>@L["tq.changeStatus"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <div class="rd-field">
+            <label class="rd-label">@L["tq.fldStatus"]</label>
+            <select class="rd-control" name="statusId" form="tq-bulk">
+                @foreach (var s in Model.Statuses)
+                {
+                    <option value="@s.Id">@SL[$"status.{s.Key}"]</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        <button type="submit" class="rd-btn-primary" form="tq-bulk" name="act" value="status">@SL["common.apply"]</button>
+    </div>
+</dialog>

@@ -55,3 +55,8 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
 .bo-search-results a span { overflow: hidden; text-overflow: ellipsis; }
 .bo-search-results a small { margin-left: auto; color: var(--rd-text-soft); }
 .bo-search-results .empty { padding: 10px 11px; font-size: 13px; color: var(--rd-text-soft); }
+
+/* B1 list engine (agent/tickets, S6): sortable headers are real links —
+   inherit the th styling so the DOM matches the mockup's plain-text headers. */
+.rd-table th.sortable a { color: inherit; text-decoration: none; }
+.rd-table th.sortable a:hover { text-decoration: none; }

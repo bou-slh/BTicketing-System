@@ -287,8 +287,32 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       (app.css .bo-search-results) needs canon sign-off; admin topbar search + settings scope TODO(S7).)*
 - [ ] **live.html** — SignalR board: real column membership, drag between columns, Üstlen/claim, ticker from
       domain events, recoverable SLA countdown, pause (B7)
-- [ ] **tickets.html** — queue tree filters for real (counts live, active state moves); B1 full list engine;
+- [x] **tickets.html** — queue tree filters for real (counts live, active state moves); B1 full list engine;
       advanced-search dialog: rule rows add/remove, column picker, sort, **save as queue**; export CSV; bulk bar
+      *(S6; queue tree renders the seeded SavedQueue tree (+ the staff's personal queues under "Kayıtlı
+      Aramalarım"), live counts via one QueueEngine COUNT per open-state child queue, memory-cached 30s per
+      staff — closed windows/saved searches render without a badge, matching the mockup; ?queue= moves the
+      active node, default = the assignee:me child ("Bana Atanan" per mockup). B1: header sort
+      (updated/subject/priority/effort — effort via active-proposal-hours subquery) + toolbar sort select,
+      status/priority multi-filters as autosubmitting rd-filter chips (effortWait/overdue filter on their
+      derived flags), pagination 8/page, quick search composes with the queue via QueueCriteria.Search
+      (tsvector ∩ queue criteria; number PREFIX search stays topbar-only — whole-token numbers match).
+      Queue column configs honored (SLA VIP renders its 6 configured columns; "SLA Kalan" cell shows the
+      due date, countdown decorator TODO(S7) with the queue builder). dlg-advsearch: rule add/remove
+      (rd.js data-rule-add/.remove, B4 contract), 6 fields × 4 ops as free-text rules applied server-side,
+      column picker (status has no checkbox → always on, as mocked), sort tab; apply = plain GET; save
+      as queue creates a personal SavedQueue (flat-criteria keys where representable — status/dept/
+      assignee/effort-pending resolved to keys/ids; org/date/not/contains stored as descriptive extra keys
+      the engine logs-and-ignores by design, same as seeded SLA VIP). CSV export streams the current
+      filter + visible columns (UTF-8 BOM). Bulk bar: Ata = assign-to-me and Durum Değiştir (via an
+      INVENTED minimal status dialog dlg-bulk-status — mockup button had no dialog; needs canon sign-off)
+      run per-row through TicketService with skipped-count toasts; Birleştir/Aktar/Sil disabled with
+      explanatory titles — TODO(S6): merge service + transfer picker arrive with ticket-view, delete needs
+      the deleted-state flow. Flagged deviations: queue titles are DB data — seeded canonical titles map
+      onto the tq.q* keys for EN, custom queues render raw titles (needs canon sign-off); tq.pageOf
+      parameterized "/ {0} talep"; invented keys tq.hoursShort/updToday/updYesterday/updDateFmt/colSla/
+      bulk*/save*/notYet. Row/new-ticket deep links dead until ticket-view/user-view/org-view/ticket-open
+      port (S5 precedent).)*
 - [ ] **ticket-view.html** — all header actions incl. Yazdır (print CSS) and Düzenle; effort propose/revise/
       withdraw + 3 banner states + thread events (B8); reply/note composers append; canned insert; signature
       preview; after-reply status; attach list; Diğer menu actions (merge/link/release/ban/delete…) implemented;

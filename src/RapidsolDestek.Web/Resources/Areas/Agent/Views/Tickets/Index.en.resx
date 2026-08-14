@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tq.title" xml:space="preserve">
+    <value>Tickets</value>
+  </data>
+  <data name="tq.subtitle" xml:space="preserve">
+    <value>View, filter and manage all support tickets across your queues.</value>
+  </data>
+  <data name="tq.newTicket" xml:space="preserve">
+    <value>＋ New Ticket</value>
+  </data>
+  <data name="tq.qOpen" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="tq.qUnanswered" xml:space="preserve">
+    <value>Unanswered</value>
+  </data>
+  <data name="tq.qAnswered" xml:space="preserve">
+    <value>Answered</value>
+  </data>
+  <data name="tq.qOverdue" xml:space="preserve">
+    <value>Overdue</value>
+  </data>
+  <data name="tq.qMine" xml:space="preserve">
+    <value>My Tickets</value>
+  </data>
+  <data name="tq.qAssignedMe" xml:space="preserve">
+    <value>Assigned to Me</value>
+  </data>
+  <data name="tq.qAssignedTeam" xml:space="preserve">
+    <value>Assigned to My Team</value>
+  </data>
+  <data name="tq.qClosed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="tq.qToday" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="tq.qWeek" xml:space="preserve">
+    <value>This Week</value>
+  </data>
+  <data name="tq.qMonth" xml:space="preserve">
+    <value>This Month</value>
+  </data>
+  <data name="tq.qSaved" xml:space="preserve">
+    <value>My Saved Searches</value>
+  </data>
+  <data name="tq.qSlaVip" xml:space="preserve">
+    <value>SLA Risk VIP</value>
+  </data>
+  <data name="tq.searchPh" xml:space="preserve">
+    <value>Search tickets…</value>
+  </data>
+  <data name="tq.fldPriority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="tq.clearFilters" xml:space="preserve">
+    <value>Clear filters</value>
+  </data>
+  <data name="tq.sortUpdated" xml:space="preserve">
+    <value>Sort: Last updated</value>
+  </data>
+  <data name="tq.sortCreated" xml:space="preserve">
+    <value>Sort: Created</value>
+  </data>
+  <data name="tq.sortPriority" xml:space="preserve">
+    <value>Sort: Priority</value>
+  </data>
+  <data name="tq.sortDue" xml:space="preserve">
+    <value>Sort: Due date</value>
+  </data>
+  <data name="tq.advSearch" xml:space="preserve">
+    <value>[Advanced search]</value>
+  </data>
+  <data name="tq.assign" xml:space="preserve">
+    <value>Assign</value>
+  </data>
+  <data name="tq.merge" xml:space="preserve">
+    <value>Merge</value>
+  </data>
+  <data name="tq.transfer" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="tq.changeStatus" xml:space="preserve">
+    <value>Change Status</value>
+  </data>
+  <data name="tq.colNo" xml:space="preserve">
+    <value>Ticket #</value>
+  </data>
+  <data name="tq.colSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="tq.colUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="tq.colOrg" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="tq.colPriority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="tq.colAssigned" xml:space="preserve">
+    <value>Assigned To</value>
+  </data>
+  <data name="tq.pageOf" xml:space="preserve">
+    <value>/ {0} tickets</value>
+  </data>
+  <data name="tq.advTitle" xml:space="preserve">
+    <value>Advanced Search</value>
+  </data>
+  <data name="tq.tabCriteria" xml:space="preserve">
+    <value>Criteria</value>
+  </data>
+  <data name="tq.tabColumns" xml:space="preserve">
+    <value>Columns</value>
+  </data>
+  <data name="tq.tabSort" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="tq.tabSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="tq.colEffort" xml:space="preserve">
+    <value>Effort</value>
+  </data>
+  <data name="tq.qEffort" xml:space="preserve">
+    <value>Awaiting Effort Approval</value>
+  </data>
+  <data name="tq.fldEffort" xml:space="preserve">
+    <value>Effort Status</value>
+  </data>
+  <data name="tq.fldStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="tq.fldDept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="tq.fldAssigned" xml:space="preserve">
+    <value>Assigned To</value>
+  </data>
+  <data name="tq.fldOrg" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="tq.fldDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="tq.opIs" xml:space="preserve">
+    <value>is</value>
+  </data>
+  <data name="tq.opNot" xml:space="preserve">
+    <value>is not</value>
+  </data>
+  <data name="tq.opContains" xml:space="preserve">
+    <value>contains</value>
+  </data>
+  <data name="tq.opAfter" xml:space="preserve">
+    <value>is after</value>
+  </data>
+  <data name="tq.valuePh" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="tq.addRule" xml:space="preserve">
+    <value>＋ Add criterion</value>
+  </data>
+  <data name="tq.columnsHint" xml:space="preserve">
+    <value>Choose the columns shown in the list.</value>
+  </data>
+  <data name="tq.sortHint" xml:space="preserve">
+    <value>Choose the default sort order for results.</value>
+  </data>
+  <data name="tq.saveName" xml:space="preserve">
+    <value>Search name</value>
+  </data>
+  <data name="tq.saveNamePh" xml:space="preserve">
+    <value>e.g. SLA Risk VIP</value>
+  </data>
+  <data name="tq.saveHelp" xml:space="preserve">
+    <value>Saved searches appear in the queue tree on the left.</value>
+  </data>
+  <data name="tq.saveSearch" xml:space="preserve">
+    <value>Save Search</value>
+  </data>
+  <data name="tq.emptyTitle" xml:space="preserve">
+    <value>No tickets in this queue</value>
+  </data>
+  <data name="tq.emptyText" xml:space="preserve">
+    <value>No tickets match the selected criteria. Clear the filters or open a new ticket.</value>
+  </data>
+  <!-- Invented keys (not in the mockup PAGE_I18N — data comes from the DB / real actions;
+       flagged on the ROADMAP tickets.html row). -->
+  <data name="tq.hoursShort" xml:space="preserve">
+    <value>{0}h</value>
+  </data>
+  <data name="tq.updToday" xml:space="preserve">
+    <value>Today {0}</value>
+  </data>
+  <data name="tq.updYesterday" xml:space="preserve">
+    <value>Yesterday {0}</value>
+  </data>
+  <data name="tq.updDateFmt" xml:space="preserve">
+    <value>d MMM HH:mm</value>
+  </data>
+  <data name="tq.colSla" xml:space="preserve">
+    <value>SLA Remaining</value>
+  </data>
+  <data name="tq.bulkDone" xml:space="preserve">
+    <value>{0} tickets updated</value>
+  </data>
+  <data name="tq.bulkPartial" xml:space="preserve">
+    <value>{0} tickets updated, {1} skipped</value>
+  </data>
+  <data name="tq.bulkNone" xml:space="preserve">
+    <value>No tickets selected</value>
+  </data>
+  <data name="tq.saveNameReq" xml:space="preserve">
+    <value>Search name required — enter a name on the Save tab.</value>
+  </data>
+  <data name="tq.saveError" xml:space="preserve">
+    <value>Could not save the search.</value>
+  </data>
+  <data name="tq.notYet" xml:space="preserve">
+    <value>Not available yet</value>
+  </data>
+</root>

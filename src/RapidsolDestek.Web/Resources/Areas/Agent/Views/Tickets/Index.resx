@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tq.title" xml:space="preserve">
+    <value>Talepler</value>
+  </data>
+  <data name="tq.subtitle" xml:space="preserve">
+    <value>Kuyruklardaki tüm destek taleplerini görüntüleyin, filtreleyin ve yönetin.</value>
+  </data>
+  <data name="tq.newTicket" xml:space="preserve">
+    <value>＋ Yeni Talep</value>
+  </data>
+  <data name="tq.qOpen" xml:space="preserve">
+    <value>Açık</value>
+  </data>
+  <data name="tq.qUnanswered" xml:space="preserve">
+    <value>Yanıtlanmamış</value>
+  </data>
+  <data name="tq.qAnswered" xml:space="preserve">
+    <value>Yanıtlanmış</value>
+  </data>
+  <data name="tq.qOverdue" xml:space="preserve">
+    <value>Gecikmiş</value>
+  </data>
+  <data name="tq.qMine" xml:space="preserve">
+    <value>Taleplerim</value>
+  </data>
+  <data name="tq.qAssignedMe" xml:space="preserve">
+    <value>Bana Atanan</value>
+  </data>
+  <data name="tq.qAssignedTeam" xml:space="preserve">
+    <value>Takımıma Atanan</value>
+  </data>
+  <data name="tq.qClosed" xml:space="preserve">
+    <value>Kapalı</value>
+  </data>
+  <data name="tq.qToday" xml:space="preserve">
+    <value>Bugün</value>
+  </data>
+  <data name="tq.qWeek" xml:space="preserve">
+    <value>Bu Hafta</value>
+  </data>
+  <data name="tq.qMonth" xml:space="preserve">
+    <value>Bu Ay</value>
+  </data>
+  <data name="tq.qSaved" xml:space="preserve">
+    <value>Kayıtlı Aramalarım</value>
+  </data>
+  <data name="tq.qSlaVip" xml:space="preserve">
+    <value>SLA Riskli VIP</value>
+  </data>
+  <data name="tq.searchPh" xml:space="preserve">
+    <value>Taleplerde ara…</value>
+  </data>
+  <data name="tq.fldPriority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="tq.clearFilters" xml:space="preserve">
+    <value>Filtreleri temizle</value>
+  </data>
+  <data name="tq.sortUpdated" xml:space="preserve">
+    <value>Sırala: Son güncellenen</value>
+  </data>
+  <data name="tq.sortCreated" xml:space="preserve">
+    <value>Sırala: Oluşturulma</value>
+  </data>
+  <data name="tq.sortPriority" xml:space="preserve">
+    <value>Sırala: Öncelik</value>
+  </data>
+  <data name="tq.sortDue" xml:space="preserve">
+    <value>Sırala: Son tarih</value>
+  </data>
+  <data name="tq.advSearch" xml:space="preserve">
+    <value>[Gelişmiş arama]</value>
+  </data>
+  <data name="tq.assign" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="tq.merge" xml:space="preserve">
+    <value>Birleştir</value>
+  </data>
+  <data name="tq.transfer" xml:space="preserve">
+    <value>Aktar</value>
+  </data>
+  <data name="tq.changeStatus" xml:space="preserve">
+    <value>Durum Değiştir</value>
+  </data>
+  <data name="tq.colNo" xml:space="preserve">
+    <value>Talep No</value>
+  </data>
+  <data name="tq.colSubject" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="tq.colUser" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="tq.colOrg" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="tq.colPriority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="tq.colAssigned" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="tq.pageOf" xml:space="preserve">
+    <value>/ {0} talep</value>
+  </data>
+  <data name="tq.advTitle" xml:space="preserve">
+    <value>Gelişmiş Arama</value>
+  </data>
+  <data name="tq.tabCriteria" xml:space="preserve">
+    <value>Kriterler</value>
+  </data>
+  <data name="tq.tabColumns" xml:space="preserve">
+    <value>Sütunlar</value>
+  </data>
+  <data name="tq.tabSort" xml:space="preserve">
+    <value>Sıralama</value>
+  </data>
+  <data name="tq.tabSave" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="tq.colEffort" xml:space="preserve">
+    <value>Efor</value>
+  </data>
+  <data name="tq.qEffort" xml:space="preserve">
+    <value>Efor Onayında</value>
+  </data>
+  <data name="tq.fldEffort" xml:space="preserve">
+    <value>Efor Durumu</value>
+  </data>
+  <data name="tq.fldStatus" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="tq.fldDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="tq.fldAssigned" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="tq.fldOrg" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="tq.fldDate" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="tq.opIs" xml:space="preserve">
+    <value>eşittir</value>
+  </data>
+  <data name="tq.opNot" xml:space="preserve">
+    <value>eşit değildir</value>
+  </data>
+  <data name="tq.opContains" xml:space="preserve">
+    <value>içerir</value>
+  </data>
+  <data name="tq.opAfter" xml:space="preserve">
+    <value>sonrasında</value>
+  </data>
+  <data name="tq.valuePh" xml:space="preserve">
+    <value>Değer</value>
+  </data>
+  <data name="tq.addRule" xml:space="preserve">
+    <value>＋ Kriter ekle</value>
+  </data>
+  <data name="tq.columnsHint" xml:space="preserve">
+    <value>Listede gösterilecek sütunları seçin.</value>
+  </data>
+  <data name="tq.sortHint" xml:space="preserve">
+    <value>Sonuçların varsayılan sıralamasını seçin.</value>
+  </data>
+  <data name="tq.saveName" xml:space="preserve">
+    <value>Arama adı</value>
+  </data>
+  <data name="tq.saveNamePh" xml:space="preserve">
+    <value>Örn. SLA Riskli VIP</value>
+  </data>
+  <data name="tq.saveHelp" xml:space="preserve">
+    <value>Kaydedilen aramalar soldaki kuyruk ağacında görünür.</value>
+  </data>
+  <data name="tq.saveSearch" xml:space="preserve">
+    <value>Aramayı Kaydet</value>
+  </data>
+  <data name="tq.emptyTitle" xml:space="preserve">
+    <value>Bu kuyrukta talep yok</value>
+  </data>
+  <data name="tq.emptyText" xml:space="preserve">
+    <value>Seçili kriterlere uyan talep bulunamadı. Filtreleri temizleyin veya yeni bir talep açın.</value>
+  </data>
+  <!-- Invented keys (not in the mockup PAGE_I18N — data comes from the DB / real actions;
+       flagged on the ROADMAP tickets.html row). -->
+  <data name="tq.hoursShort" xml:space="preserve">
+    <value>{0}s</value>
+  </data>
+  <data name="tq.updToday" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="tq.updYesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="tq.updDateFmt" xml:space="preserve">
+    <value>d MMM HH:mm</value>
+  </data>
+  <data name="tq.colSla" xml:space="preserve">
+    <value>SLA Kalan</value>
+  </data>
+  <data name="tq.bulkDone" xml:space="preserve">
+    <value>{0} talep güncellendi</value>
+  </data>
+  <data name="tq.bulkPartial" xml:space="preserve">
+    <value>{0} talep güncellendi, {1} atlandı</value>
+  </data>
+  <data name="tq.bulkNone" xml:space="preserve">
+    <value>Seçili talep yok</value>
+  </data>
+  <data name="tq.saveNameReq" xml:space="preserve">
+    <value>Arama adı gerekli — Kaydet sekmesine bir ad girin.</value>
+  </data>
+  <data name="tq.saveError" xml:space="preserve">
+    <value>Arama kaydedilemedi.</value>
+  </data>
+  <data name="tq.notYet" xml:space="preserve">
+    <value>Henüz kullanılamıyor</value>
+  </data>
+</root>

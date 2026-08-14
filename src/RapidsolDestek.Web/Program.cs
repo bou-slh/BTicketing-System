@@ -125,6 +125,7 @@ builder.Services.AddAuthorization(o =>
 // ---- App services ----------------------------------------------------------
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddMemoryCache(); // agent tickets queue-count cache (S6)
 builder.Services.AddScoped<ISidebarBadgeService, SidebarBadgeService>();
 builder.Services.AddSingleton<IAppEmailSender, DevLoggingEmailSender>();
 
