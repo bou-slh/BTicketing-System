@@ -267,7 +267,24 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       (`rd-field`/`rd-control`, no portal "Adım 3 / 3" caption) with portal-copied `pw.*` strings —
       mockup lacks this card entirely, S0 to add; canon conflict: agent `pw.help` promises 30-min link
       validity vs portal's 1 h vs Identity's 1-day default — TODO(S7) at `PwresetCore`)*
-- [ ] **dashboard.html** — live stat tiles, tables from data with row deep-links, topbar search (B9)
+- [x] **dashboard.html** — live stat tiles, tables from data with row deep-links, topbar search (B9) *(S6;
+      tiles + tables query the signed-in staff's scope (assigned-to-me; solved/closed rows stay in the
+      Taleplerim table per the mockup's solved row): my-open incl. updated-today note, due-today over
+      DueDate??EstimatedDueDate, effort tile = my open tickets whose ACTIVE proposal is pending, tasks tile
+      with overdue note (overdue derived IsOverdue || DueDate<now — seed sets no task flags). Hero R716555
+      renders `effortWait` on the wait pill (§2 canon; portal Tickets derivation, overdue flag next in
+      precedence, then status key). Tile notes with embedded counts are parameterized — TR copy deviates from
+      mockup for suffix safety ("{0} tanesi bugün güncellendi" vs "2'si") — needs canon sign-off; due cells
+      use invented db.dueToday/dueTomorrow/dueYesterday/db.dueDateFmt keys (mockup db.due*/task* sample-data
+      keys dropped from resx, data comes from DB); table rows are the live top-5/top-3 by recency, not the
+      mockup's exact sample rows. Deep links `/agent/ticket-view?id=`, `/agent/user-view?id=`,
+      `/agent/task-view?id=`, `/agent/ticket-open` dead until those pages port (S5 precedent); "Tümünü gör" →
+      /agent/tickets & /agent/tasks. B9 DONE here: (a) sidebar counts real — SidebarBadgeService replaces the
+      stub ("tickets"=my open tickets, "tasks"=my open tasks, per-staff); (b) topbar search live on the agent
+      panel — GET /agent/search (number-prefix ILIKE + tsvector via IQueueEngine, dept visibility applies;
+      users name/email; orgs name; 5/group) filled into a debounce+fetch dropdown (rd.js) — chosen over a
+      results page as the lighter invention since the mockups define NO search-results UI: dropdown design
+      (app.css .bo-search-results) needs canon sign-off; admin topbar search + settings scope TODO(S7).)*
 - [ ] **live.html** — SignalR board: real column membership, drag between columns, Üstlen/claim, ticker from
       domain events, recoverable SLA countdown, pause (B7)
 - [ ] **tickets.html** — queue tree filters for real (counts live, active state moves); B1 full list engine;

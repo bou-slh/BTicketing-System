@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="db.title" xml:space="preserve">
+    <value>My Dashboard</value>
+  </data>
+  <data name="db.newTicket" xml:space="preserve">
+    <value>New Ticket</value>
+  </data>
+  <data name="db.subtitle" xml:space="preserve">
+    <value>Overview of the tickets and tasks assigned to you — team statistics live in the Admin panel.</value>
+  </data>
+  <data name="db.statMyOpen" xml:space="preserve">
+    <value>My Open Tickets</value>
+  </data>
+  <data name="db.statMyOpenNote" xml:space="preserve">
+    <value>{0} updated today</value>
+  </data>
+  <data name="db.statDueToday" xml:space="preserve">
+    <value>Due Today</value>
+  </data>
+  <data name="db.statDueTodayNote" xml:space="preserve">
+    <value>SLA expires today</value>
+  </data>
+  <data name="db.statEffort" xml:space="preserve">
+    <value>Awaiting Effort Approval</value>
+  </data>
+  <data name="db.statEffortNote" xml:space="preserve">
+    <value>waiting for the client</value>
+  </data>
+  <data name="db.statMyTasks" xml:space="preserve">
+    <value>My Open Tasks</value>
+  </data>
+  <data name="db.statMyTasksNote" xml:space="preserve">
+    <value>{0} overdue</value>
+  </data>
+  <data name="db.myTickets" xml:space="preserve">
+    <value>My Tickets</value>
+  </data>
+  <data name="db.myTasks" xml:space="preserve">
+    <value>My Tasks</value>
+  </data>
+  <data name="db.viewAll" xml:space="preserve">
+    <value>View all</value>
+  </data>
+  <data name="db.colNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="db.colSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="db.colUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="db.colPriority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="db.colDue" xml:space="preserve">
+    <value>Due</value>
+  </data>
+  <data name="db.dueToday" xml:space="preserve">
+    <value>Today {0}</value>
+  </data>
+  <data name="db.dueTomorrow" xml:space="preserve">
+    <value>Tomorrow {0}</value>
+  </data>
+  <data name="db.dueYesterday" xml:space="preserve">
+    <value>Yesterday {0}</value>
+  </data>
+  <data name="db.dueDateFmt" xml:space="preserve">
+    <value>MMM d HH:mm</value>
+  </data>
+</root>

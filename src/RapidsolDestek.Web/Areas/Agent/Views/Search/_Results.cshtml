@@ -1,0 +1,35 @@
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model SearchResultsVm
+@* B9 topbar search dropdown fragment. Group labels reuse the shared nav.* keys;
+   deep links dead until ticket-view/user-view/org-view port (S5 precedent). *@
+@if (Model.IsEmpty)
+{
+    <div class="empty">@SL["search.noResults"]</div>
+}
+else
+{
+    @if (Model.Tickets.Count > 0)
+    {
+        <div class="group">@SL["nav.tickets"]</div>
+        foreach (var t in Model.Tickets)
+        {
+            <a href="/agent/ticket-view?id=@t.Id"><b>@t.Number</b><span>@t.Subject</span><small>@t.UserName</small></a>
+        }
+    }
+    @if (Model.Users.Count > 0)
+    {
+        <div class="group">@SL["nav.users"]</div>
+        foreach (var u in Model.Users)
+        {
+            <a href="/agent/user-view?id=@u.Id"><span>@u.Name</span><small>@u.Email</small></a>
+        }
+    }
+    @if (Model.Orgs.Count > 0)
+    {
+        <div class="group">@SL["nav.orgs"]</div>
+        foreach (var o in Model.Orgs)
+        {
+            <a href="/agent/org-view?id=@o.Id"><span>@o.Name</span></a>
+        }
+    }
+}

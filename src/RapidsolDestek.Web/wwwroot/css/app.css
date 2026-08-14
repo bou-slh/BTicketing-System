@@ -31,3 +31,27 @@ details.rd-account-menu > .menu button {
 }
 details.rd-account-menu > .menu a:hover,
 details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); text-decoration: none; }
+
+/* B9 topbar global search dropdown (no mockup counterpart — design flagged for
+   canon sign-off on the ROADMAP agent/dashboard row). Mirrors the account-menu
+   panel; .bo-search is already position:relative in admin.css. */
+.bo-search-results {
+  position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 60;
+  padding: 6px;
+  background: var(--rd-surface); border: 1px solid var(--rd-border);
+  border-radius: 13px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  max-height: 60vh; overflow-y: auto;
+}
+.bo-search-results .group {
+  padding: 8px 11px 4px; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--rd-text-soft);
+}
+.bo-search-results a {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 8px 11px; border-radius: 9px; font-size: 13px; color: inherit;
+  overflow: hidden; white-space: nowrap;
+}
+.bo-search-results a:hover { background: var(--rd-teal-bg); text-decoration: none; }
+.bo-search-results a span { overflow: hidden; text-overflow: ellipsis; }
+.bo-search-results a small { margin-left: auto; color: var(--rd-text-soft); }
+.bo-search-results .empty { padding: 10px 11px; font-size: 13px; color: var(--rd-text-soft); }

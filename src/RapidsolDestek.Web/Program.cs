@@ -125,7 +125,7 @@ builder.Services.AddAuthorization(o =>
 // ---- App services ----------------------------------------------------------
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSingleton<ISidebarBadgeService, StubSidebarBadgeService>();
+builder.Services.AddScoped<ISidebarBadgeService, SidebarBadgeService>();
 builder.Services.AddSingleton<IAppEmailSender, DevLoggingEmailSender>();
 
 // Interim B8 effort emails (S8 replaces the transport, the handler contract stays).

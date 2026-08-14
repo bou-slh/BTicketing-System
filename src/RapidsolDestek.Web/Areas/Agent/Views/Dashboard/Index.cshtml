@@ -1,9 +1,153 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model DashboardVm
 @{
-    ViewData["Title"] = SL["nav.dashboard"];
+    ViewData["Title"] = L["db.title"];
+
+    // Backoffice pill classes (admin.css): status keys incl. the derived
+    // pseudo-statuses. effortWait renders on the wait pill (portal Tickets
+    // StatusClass precedent); "new" has no own pill in the mockups → open.
+    static string StatusPill(string key) => key switch
+    {
+        "effortWait" => "rd-pill rd-pill-wait",
+        "new" => "rd-pill rd-pill-open",
+        "open" or "wait" or "test" or "solved" or "closed" or "overdue" => $"rd-pill rd-pill-{key}",
+        _ => "rd-pill rd-pill-open",
+    };
+
+    // Priority pill classes per the agent mockups (tickets.html rows):
+    // low→closed, normal→teal, high→wait, emergency→overdue.
+    static string PriorityPill(string key) => key switch
+    {
+        "low" => "rd-pill rd-pill-closed",
+        "high" => "rd-pill rd-pill-wait",
+        "emergency" => "rd-pill rd-pill-overdue",
+        _ => "rd-pill rd-pill-teal",
+    };
+
+    // Due formats from the mockup samples: "Bugün 17:00" / "Yarın 12:00" /
+    // "Dün 17:00" / "13 Ağu 17:00"; no due date renders an em dash.
+    string DueText(DateTimeOffset? due)
+    {
+        if (due is not { } value)
+            return "—";
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        var time = local.ToString("HH:mm");
+        if (local.Date == today)
+            return L.GetString("db.dueToday", time);
+        if (local.Date == today.AddDays(1))
+            return L.GetString("db.dueTomorrow", time);
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("db.dueYesterday", time);
+        return local.ToString(L.GetString("db.dueDateFmt"), CultureInfo.CurrentUICulture);
+    }
 }
-<!-- Placeholder: ported in a later stage (/port-page). Chrome parity only. -->
-<div class="bo-page-head">
+
+<div class="bo-page-head rc-hero">
     <div>
-        <h1>@SL["nav.dashboard"]</h1>
+        <h1>@L["db.title"]</h1>
+        <p>@L["db.subtitle"]</p>
+    </div>
+    <div class="actions">
+        @* Deep link dead until agent/ticket-open ports (S5 precedent). *@
+        <a class="rd-btn-primary" href="/agent/ticket-open">@L["db.newTicket"]</a>
+    </div>
+</div>
+
+<div class="rd-grid-4" style="margin-bottom:20px">
+    <div class="rd-stat">
+        <div class="rd-stat-label">@L["db.statMyOpen"]</div>
+        <div class="rd-stat-value">@Model.MyOpenCount</div>
+        <div class="rd-stat-note">@L["db.statMyOpenNote", Model.UpdatedTodayCount]</div>
+    </div>
+    <div class="rd-stat">
+        <div class="rd-stat-label">@L["db.statDueToday"]</div>
+        <div class="rd-stat-value">@Model.DueTodayCount</div>
+        <div class="rd-stat-note">@L["db.statDueTodayNote"]</div>
+    </div>
+    <div class="rd-stat">
+        <div class="rd-stat-label">@L["db.statEffort"]</div>
+        <div class="rd-stat-value">@Model.EffortPendingCount</div>
+        <div class="rd-stat-note">@L["db.statEffortNote"]</div>
+    </div>
+    <div class="rd-stat">
+        <div class="rd-stat-label">@L["db.statMyTasks"]</div>
+        <div class="rd-stat-value">@Model.MyTaskCount</div>
+        <div class="rd-stat-note">@L["db.statMyTasksNote", Model.OverdueTaskCount]</div>
+    </div>
+</div>
+
+<div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-head">
+        <span>@L["db.myTickets"]</span>
+        <span class="spacer"></span>
+        <a class="rd-btn rd-btn-sm rd-btn-ghost" href="/agent/tickets">@L["db.viewAll"]</a>
+    </div>
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th>@L["db.colNo"]</th>
+                    <th>@L["db.colSubject"]</th>
+                    <th>@L["db.colUser"]</th>
+                    <th>@L["db.colPriority"]</th>
+                    <th>@SL["common.status"]</th>
+                    <th>@L["db.colDue"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* Row deep-links dead until agent/ticket-view + user-view port (S5 precedent). *@
+                @foreach (var t in Model.Tickets)
+                {
+                    <tr>
+                        <td><a href="/agent/ticket-view?id=@t.Id">@t.Number</a></td>
+                        <td><a href="/agent/ticket-view?id=@t.Id">@t.Subject</a></td>
+                        <td><a href="/agent/user-view?id=@t.UserId">@t.UserName</a></td>
+                        <td><span class="@PriorityPill(t.PriorityKey)">@SL[$"priority.{t.PriorityKey}"]</span></td>
+                        <td><span class="@StatusPill(t.StatusKey)">@SL[$"status.{t.StatusKey}"]</span></td>
+                        <td>@DueText(t.Due)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="rd-surface">
+    <div class="rd-surface-head">
+        <span>@L["db.myTasks"]</span>
+        <span class="spacer"></span>
+        <a class="rd-btn rd-btn-sm rd-btn-ghost" href="/agent/tasks">@L["db.viewAll"]</a>
+    </div>
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th>@L["db.colSubject"]</th>
+                    <th>@SL["common.status"]</th>
+                    <th>@L["db.colDue"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in Model.Tasks)
+                {
+                    <tr>
+                        <td><a href="/agent/task-view?id=@t.Id">@t.Number · @t.Title</a></td>
+                        <td>
+                            @if (t.IsOverdue)
+                            {
+                                <span class="rd-pill rd-pill-overdue">@SL["status.overdue"]</span>
+                            }
+                            else
+                            {
+                                <span class="rd-pill rd-pill-open">@SL["status.open"]</span>
+                            }
+                        </td>
+                        <td>@DueText(t.Due)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>

@@ -4,7 +4,7 @@
 @inject ISidebarBadgeService Badges
 @{
     var navKey = ViewData["NavKey"] as string;
-    var count = Model.CountKey is null ? null : Badges.GetCount(Model.CountKey);
+    var count = Model.CountKey is null ? null : await Badges.GetCountAsync(Model.CountKey);
 }
 <a href="@Model.Url" class="@(Model.Key == navKey ? "active" : "")">
     <span aria-hidden="true">@Model.Icon</span>

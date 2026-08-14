@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="db.title" xml:space="preserve">
+    <value>Panom</value>
+  </data>
+  <data name="db.newTicket" xml:space="preserve">
+    <value>Yeni Talep</value>
+  </data>
+  <data name="db.subtitle" xml:space="preserve">
+    <value>Size atanan taleplere ve görevlere genel bakış — ekip istatistikleri Yönetim panelindedir.</value>
+  </data>
+  <data name="db.statMyOpen" xml:space="preserve">
+    <value>Açık Taleplerim</value>
+  </data>
+  <data name="db.statMyOpenNote" xml:space="preserve">
+    <value>{0} tanesi bugün güncellendi</value>
+  </data>
+  <data name="db.statDueToday" xml:space="preserve">
+    <value>Bugün Teslim</value>
+  </data>
+  <data name="db.statDueTodayNote" xml:space="preserve">
+    <value>SLA süresi bugün dolan</value>
+  </data>
+  <data name="db.statEffort" xml:space="preserve">
+    <value>Efor Onayında</value>
+  </data>
+  <data name="db.statEffortNote" xml:space="preserve">
+    <value>kullanıcı yanıtı bekleniyor</value>
+  </data>
+  <data name="db.statMyTasks" xml:space="preserve">
+    <value>Açık Görevlerim</value>
+  </data>
+  <data name="db.statMyTasksNote" xml:space="preserve">
+    <value>{0} tanesi gecikmiş</value>
+  </data>
+  <data name="db.myTickets" xml:space="preserve">
+    <value>Taleplerim</value>
+  </data>
+  <data name="db.myTasks" xml:space="preserve">
+    <value>Görevlerim</value>
+  </data>
+  <data name="db.viewAll" xml:space="preserve">
+    <value>Tümünü gör</value>
+  </data>
+  <data name="db.colNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="db.colSubject" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="db.colUser" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="db.colPriority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="db.colDue" xml:space="preserve">
+    <value>Son Tarih</value>
+  </data>
+  <data name="db.dueToday" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="db.dueTomorrow" xml:space="preserve">
+    <value>Yarın {0}</value>
+  </data>
+  <data name="db.dueYesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="db.dueDateFmt" xml:space="preserve">
+    <value>d MMM HH:mm</value>
+  </data>
+</root>

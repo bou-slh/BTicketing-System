@@ -15,7 +15,20 @@
         <span class="rc-logo-mark"></span>
         <span>RAPID<span class="rc-logo-accent">SOL</span></span>
     </a>
-    <div class="bo-search"><input type="search" placeholder="@SL["topbar.search"]"></div>
+    @if (panel == "agent")
+    {
+        @* B9 global search: rd.js debounces input and fills the dropdown from /agent/search. *@
+        <div class="bo-search">
+            <input type="search" placeholder="@SL["topbar.search"]" autocomplete="off"
+                   data-global-search="/agent/search">
+            <div class="bo-search-results" hidden></div>
+        </div>
+    }
+    else
+    {
+        @* TODO(S7): admin topbar search (B9 adds settings scope) — wire to an admin endpoint when the admin area ports. *@
+        <div class="bo-search"><input type="search" placeholder="@SL["topbar.search"]"></div>
+    }
     <div class="bo-topbar-right">
         <nav class="bo-panel-switch" aria-label="Panels">
             <a href="/">@SL["panel.portal"]</a>

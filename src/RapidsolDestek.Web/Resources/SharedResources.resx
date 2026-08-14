@@ -414,4 +414,7 @@
   <data name="twofa.activate" xml:space="preserve">
     <value>Etkinleştir</value>
   </data>
+  <data name="search.noResults" xml:space="preserve">
+    <value>Sonuç bulunamadı</value>
+  </data>
 </root>

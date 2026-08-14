@@ -125,6 +125,44 @@
     chipsWrap.hidden = checked.length === 0;
   }
 
+  /* ---------- B9 topbar global search: debounce + fetch + fill the dropdown ----------
+     <input data-global-search="/agent/search"> + sibling .bo-search-results panel.
+     Chosen over a results page: the mockups define no search-results UI, so a
+     dropdown fragment keeps the invention minimal (flagged for canon sign-off). */
+  let searchTimer;
+  let searchSeq = 0;
+  document.addEventListener("input", (e) => {
+    const inp = e.target.closest("input[data-global-search]");
+    if (!inp) return;
+    const panel = inp.parentElement.querySelector(".bo-search-results");
+    if (!panel) return;
+    clearTimeout(searchTimer);
+    const q = inp.value.trim();
+    if (q.length < 2) {
+      panel.hidden = true;
+      panel.innerHTML = "";
+      return;
+    }
+    searchTimer = setTimeout(async () => {
+      const seq = ++searchSeq;
+      try {
+        const res = await fetch(`${inp.getAttribute("data-global-search")}?q=${encodeURIComponent(q)}`);
+        if (!res.ok || seq !== searchSeq) return; // stale or failed — keep current panel
+        panel.innerHTML = await res.text();
+        panel.hidden = false;
+      } catch { /* network error: leave the panel as-is */ }
+    }, 250);
+  });
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll(".bo-search-results:not([hidden])").forEach((p) => {
+      if (!p.closest(".bo-search").contains(e.target)) p.hidden = true;
+    });
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape")
+      document.querySelectorAll(".bo-search-results").forEach((p) => (p.hidden = true));
+  });
+
   /* ---------- Password strength + match feedback (B3: register/pwreset) ----------
      Inputs opt in via data attributes carrying server-localized messages:
        <input data-pw-strength="msg">                      — ≥8 chars, letters + digits
