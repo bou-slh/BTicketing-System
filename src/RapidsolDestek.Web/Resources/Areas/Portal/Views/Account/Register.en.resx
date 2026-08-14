@@ -60,4 +60,25 @@
   <data name="rg.signin" xml:space="preserve">
     <value>Sign in</value>
   </data>
+  <data name="rg.kvkk" xml:space="preserve">
+    <value>I have read and accept the privacy notice on the processing of my personal data under the Turkish Data Protection Law (KVKK, Law No. 6698).</value>
+  </data>
+  <data name="rg.errKvkk" xml:space="preserve">
+    <value>You must accept the KVKK privacy notice to register.</value>
+  </data>
+  <data name="rg.errEmail" xml:space="preserve">
+    <value>Enter a valid email address.</value>
+  </data>
+  <data name="rg.errName" xml:space="preserve">
+    <value>Full name is required.</value>
+  </data>
+  <data name="rg.errEmailTaken" xml:space="preserve">
+    <value>An account with this email address already exists.</value>
+  </data>
+  <data name="rg.errPasswordWeak" xml:space="preserve">
+    <value>The password must be at least 8 characters and contain letters and digits.</value>
+  </data>
+  <data name="rg.errPasswordMismatch" xml:space="preserve">
+    <value>The passwords do not match.</value>
+  </data>
 </root>

@@ -5,31 +5,54 @@
     // Staff areas reuse this view; they pass their own post URL.
     var postUrl = ViewData["PwresetPostUrl"] as string ?? "/pwreset/new";
     var backUrl = ViewData["PwresetBackUrl"] as string ?? "/login";
+
+    // B3 error presentation (Open-page pattern): controller codes → page i18n.
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+    string ErrorText(string code) => code switch
+    {
+        "passwordWeak" => L["pw.errPasswordWeak"].Value,
+        "passwordMismatch" => L["pw.errPasswordMismatch"].Value,
+        "invalidToken" => L["pw.errInvalidToken"].Value,
+        _ => code,
+    };
 }
 <div style="display:grid;gap:26px;width:min(420px,100%)">
     <a class="rc-logo" href="/" style="justify-content:center">
         <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
     </a>
-    <div class="rc-auth-card" style="width:100%">
-        <h1>@L["pw.title3"]</h1>
-        <p>@L["pw.sub3"]</p>
-        <form method="post" class="rc-form-grid" action="@postUrl">
-            <partial name="_FormErrors" />
-            <input type="hidden" asp-for="Email">
-            <input type="hidden" asp-for="Token">
-            <div>
-                <label class="rc-label" for="pw-new">@L["pw.new"]</label>
-                <input id="pw-new" class="rc-control" type="password" asp-for="Password" autocomplete="new-password">
+    <div>
+        <div style="font-size:12px;color:var(--rd-muted);margin:0 4px 8px">@L["pw.step3cap"]</div>
+        <div class="rc-auth-card" style="width:100%">
+            <h1>@L["pw.title3"]</h1>
+            <p>@L["pw.sub3"]</p>
+            <form method="post" class="rc-form-grid" action="@postUrl">
+                @if (errors.Count > 0)
+                {
+                    <div class="rd-form-error" role="alert">
+                        @foreach (var e in errors)
+                        {
+                            <div>@ErrorText(e)</div>
+                        }
+                    </div>
+                }
+                <input type="hidden" asp-for="Email">
+                <input type="hidden" asp-for="Token">
+                <div>
+                    <label class="rc-label" for="pw-new">@L["pw.new"]</label>
+                    <input id="pw-new" class="rc-control" type="password" asp-for="Password" autocomplete="new-password"
+                           required minlength="8" data-pw-strength="@L["pw.errPasswordWeak"]">
+                </div>
+                <div>
+                    <label class="rc-label" for="pw-new2">@L["pw.new2"]</label>
+                    <input id="pw-new2" class="rc-control" type="password" asp-for="Password2" autocomplete="new-password"
+                           required data-pw-match="#pw-new" data-pw-match-msg="@L["pw.errPasswordMismatch"]">
+                    <div class="rd-help">@L["pw.passHelp"]</div>
+                </div>
+                <button type="submit" class="rc-button-primary" style="justify-content:center">@L["pw.save"]</button>
+            </form>
+            <div class="rc-auth-foot">
+                <a href="@backUrl">@L["pw.backLogin"]</a>
             </div>
-            <div>
-                <label class="rc-label" for="pw-new2">@L["pw.new2"]</label>
-                <input id="pw-new2" class="rc-control" type="password" asp-for="Password2" autocomplete="new-password">
-                <div class="rd-help">@L["pw.passHelp"]</div>
-            </div>
-            <button type="submit" class="rc-button-primary" style="justify-content:center">@L["pw.save"]</button>
-        </form>
-        <div class="rc-auth-foot">
-            <a href="@backUrl">@L["pw.backLogin"]</a>
         </div>
     </div>
 </div>

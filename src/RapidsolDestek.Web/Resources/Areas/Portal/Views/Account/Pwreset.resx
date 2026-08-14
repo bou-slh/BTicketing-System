@@ -60,4 +60,7 @@
   <data name="pw.save" xml:space="preserve">
     <value>Parolayı güncelle</value>
   </data>
+  <data name="pw.errEmail" xml:space="preserve">
+    <value>Geçerli bir e-posta adresi girin.</value>
+  </data>
 </root>

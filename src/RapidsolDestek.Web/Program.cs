@@ -145,6 +145,8 @@ if (!app.Environment.IsDevelopment())
 
 app.MapStaticAssets();
 app.UseRequestLocalization();
+// Before routing so the rewritten path (portal → /offline) is what gets routed.
+app.UseMiddleware<MaintenanceModeMiddleware>();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

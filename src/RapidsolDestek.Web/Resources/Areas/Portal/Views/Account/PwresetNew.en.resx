@@ -60,4 +60,13 @@
   <data name="pw.save" xml:space="preserve">
     <value>Update password</value>
   </data>
+  <data name="pw.errPasswordWeak" xml:space="preserve">
+    <value>The password must be at least 8 characters and contain letters and digits.</value>
+  </data>
+  <data name="pw.errPasswordMismatch" xml:space="preserve">
+    <value>The passwords do not match.</value>
+  </data>
+  <data name="pw.errInvalidToken" xml:space="preserve">
+    <value>The reset link is invalid or has expired. Please request a new one.</value>
+  </data>
 </root>

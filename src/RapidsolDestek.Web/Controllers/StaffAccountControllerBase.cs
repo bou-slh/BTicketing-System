@@ -141,7 +141,14 @@ public abstract class StaffAccountControllerBase(
             var result = await users.ResetPasswordAsync(user, vm.Token, vm.Password);
             if (!result.Succeeded)
             {
-                foreach (var e in result.Errors) ModelState.AddModelError(string.Empty, e.Description);
+                // Same code → i18n mapping as the portal flow (shared PwresetNew view).
+                foreach (var e in result.Errors)
+                    ModelState.AddModelError(string.Empty, e.Code switch
+                    {
+                        "InvalidToken" => "invalidToken",
+                        _ when e.Code.StartsWith("Password") => "passwordWeak",
+                        _ => e.Description,
+                    });
                 return View("~/Areas/Portal/Views/Account/PwresetNew.cshtml", vm);
             }
         }

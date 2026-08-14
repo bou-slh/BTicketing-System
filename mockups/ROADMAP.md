@@ -204,10 +204,22 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 
 ### 6.1 Portal (12 pages)
 
-- [ ] **login.html** — real form + validation, remember-me, error state, 2FA (B6)
-- [ ] **register.html** — real registration, password match/strength, consent (KVKK), multi-step per design (B6)
-- [ ] **pwreset.html** — 3 steps as an actual flow (request → code → new password) (B6)
-- [ ] **offline.html** — served by real maintenance-mode switch (settings-system)
+- [x] **login.html** — real form + validation, remember-me, error state, 2FA (B6) *(S5; Identity sign-in with
+      lockout, invalid-credential + locked-out states via `.rd-form-error`; guest check-status link live; 2FA
+      stays open — the mockup has no portal 2FA UI, deferred TODO(S7); open decision: portal /login is
+      offline-blocked (customer route, staff enter via their own logins) — matches osTicket, confirm intended)*
+- [x] **register.html** — real registration, password match/strength, consent (KVKK), multi-step per design (B6)
+      *(S5; mockup is single-page with 3 numbered sections — followed exactly, not multi-step; client
+      strength/match feedback in rd.js + server Identity errors localized; KVKK checkbox is NOT in the mockup —
+      added per spec with stock `.rd-check`, mockup needs an S0-style pass to gain the row (visual-differ will
+      flag); timezone select bound, persistence TODO(S7) with profile)*
+- [x] **pwreset.html** — 3 steps as an actual flow (request → code → new password) (B6) *(S5; /pwreset →
+      /pwreset/sent → /pwreset/new mail-token flow, each page renders its mockup step's DOM incl. "Adım N / 3"
+      captions; enumeration-safe; parity note: Sent page keeps a "← Girişe dön" foot link the mockup's step-2
+      card lacks — kept for usability, remove if strict parity wins)*
+- [x] **offline.html** — served by real maintenance-mode switch (settings-system) *(S5; Setting
+      namespace=system key=offline via ISettingsService, default off; middleware blocks client-portal routes
+      only — staff/admin reachable, osTicket semantics; admin toggle TODO(S7); 24 unit tests)*
 - [x] **index.html** — live tile counts, KB mini-search works, recent tickets from data, account menu + logout (B9) *(S5; recent rows deep-link `/ticket-view?id=` — dead until portal ticket-view ports; account menu + logout via shared portal header)*
 - [x] **open.html** — help-topic → dynamic form fields (form designer output), file list on attach, validation, creates a real ticket (B3/B5) *(S5; topic select = public+active HelpTopics, seeded HelpTopicForm fields swap in client-side and persist as FormEntry/Values — S7 designer will edit the definitions; attachments via IFileStore onto the initial Message entry; priority select = real normal/high/emergency rows; reference field stored as a labelled line in the first message until the built-in ticket form exists (TODO S7); creates via ITicketService → redirects /tickets; differ note: new Yol Ücreti tickets number as BRD-7166xx — faithful to the topic's canon NumberFormat "BRD-######" (admin/helptopic-edit) but visually off-canon vs §2's single R-scheme; resolve when the numbering canon is revisited)*
 - [x] **tickets.html** — real list: tabs from data, search + topic filter work, deep links `ticket-view?id=` (B1) *(S5; open/closed tabs + counts live incl. derived effortWait pills, search + public-topic filter compose with the active tab; row links `/ticket-view?id=` — dead until portal ticket-view ports)*

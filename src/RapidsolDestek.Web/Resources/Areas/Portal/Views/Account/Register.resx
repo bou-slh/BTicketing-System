@@ -60,4 +60,25 @@
   <data name="rg.signin" xml:space="preserve">
     <value>Giriş yapın</value>
   </data>
+  <data name="rg.kvkk" xml:space="preserve">
+    <value>Kişisel verilerimin 6698 sayılı KVKK kapsamında işlenmesine ilişkin aydınlatma metnini okudum ve kabul ediyorum.</value>
+  </data>
+  <data name="rg.errKvkk" xml:space="preserve">
+    <value>Kayıt olmak için KVKK aydınlatma metnini kabul etmeniz gerekir.</value>
+  </data>
+  <data name="rg.errEmail" xml:space="preserve">
+    <value>Geçerli bir e-posta adresi girin.</value>
+  </data>
+  <data name="rg.errName" xml:space="preserve">
+    <value>Ad Soyad alanı zorunludur.</value>
+  </data>
+  <data name="rg.errEmailTaken" xml:space="preserve">
+    <value>Bu e-posta adresiyle kayıtlı bir hesap zaten var.</value>
+  </data>
+  <data name="rg.errPasswordWeak" xml:space="preserve">
+    <value>Parola en az 8 karakter olmalı; harf ve rakam içermelidir.</value>
+  </data>
+  <data name="rg.errPasswordMismatch" xml:space="preserve">
+    <value>Parolalar eşleşmiyor.</value>
+  </data>
 </root>

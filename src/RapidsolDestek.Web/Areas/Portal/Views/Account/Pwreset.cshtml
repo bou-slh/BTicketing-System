@@ -1,17 +1,34 @@
 @{
     Layout = "_AuthLayout";
     ViewData["Title"] = L["pw.title1"];
+
+    // B3 error presentation (Open-page pattern): controller codes → page i18n.
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+    string ErrorText(string code) => code switch
+    {
+        "errEmail" => L["pw.errEmail"].Value,
+        _ => code,
+    };
 }
 <div style="display:grid;gap:26px;width:min(420px,100%)">
     <a class="rc-logo" href="/" style="justify-content:center">
         <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
     </a>
     <div>
+        <div style="font-size:12px;color:var(--rd-muted);margin:0 4px 8px">@L["pw.step1cap"]</div>
         <div class="rc-auth-card" style="width:100%">
             <h1>@L["pw.title1"]</h1>
             <p>@L["pw.sub1"]</p>
             <form method="post" class="rc-form-grid" asp-action="Pwreset">
-                <partial name="_FormErrors" />
+                @if (errors.Count > 0)
+                {
+                    <div class="rd-form-error" role="alert">
+                        @foreach (var e in errors)
+                        {
+                            <div>@ErrorText(e)</div>
+                        }
+                    </div>
+                }
                 <div>
                     <label class="rc-label" for="pw-email">@L["pw.email"]</label>
                     <input id="pw-email" class="rc-control" type="email" name="email" autocomplete="email" required>

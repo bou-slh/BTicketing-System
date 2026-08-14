@@ -125,6 +125,30 @@
     chipsWrap.hidden = checked.length === 0;
   }
 
+  /* ---------- Password strength + match feedback (B3: register/pwreset) ----------
+     Inputs opt in via data attributes carrying server-localized messages:
+       <input data-pw-strength="msg">                      — ≥8 chars, letters + digits
+       <input data-pw-match="#otherId" data-pw-match-msg="msg"> — must equal the target
+     Native constraint validation (setCustomValidity) blocks submit and surfaces
+     the message; the server repeats the same checks (VM annotations). */
+  function syncPasswordChecks(form) {
+    form.querySelectorAll("input[data-pw-strength]").forEach((inp) => {
+      const weak = inp.value !== "" && !/^(?=.*\p{L})(?=.*\d).{8,}$/u.test(inp.value);
+      inp.setCustomValidity(weak ? inp.getAttribute("data-pw-strength") : "");
+    });
+    form.querySelectorAll("input[data-pw-match]").forEach((inp) => {
+      const target = document.querySelector(inp.getAttribute("data-pw-match"));
+      const mismatch = inp.value !== "" && target && inp.value !== target.value;
+      inp.setCustomValidity(mismatch ? inp.getAttribute("data-pw-match-msg") || "" : "");
+    });
+  }
+  document.addEventListener("input", (e) => {
+    if (e.target.matches("input[data-pw-strength],input[data-pw-match]") && e.target.form)
+      syncPasswordChecks(e.target.form);
+    else if (e.target.matches("input[type=password]") && e.target.form?.querySelector("[data-pw-match]"))
+      syncPasswordChecks(e.target.form); // primary field changed → recheck the confirm
+  });
+
   /* ---------- Rich-text editor (attached to every textarea) ---------- */
   // Toolbar titles/placeholders are read from data-editor-* attributes the
   // layout stamps on <body> (server-localized), falling back to TR defaults.

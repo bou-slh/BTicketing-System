@@ -2,6 +2,28 @@
 @{
     Layout = "_AuthLayout";
     ViewData["Title"] = L["rg.title"];
+
+    // B3 error presentation: same .rd-form-error block as Login (_FormErrors
+    // pattern), with this page's validation codes mapped to i18n here.
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+    string ErrorText(string code) => code switch
+    {
+        "errEmail" => L["rg.errEmail"].Value,
+        "errName" => L["rg.errName"].Value,
+        "emailTaken" => L["rg.errEmailTaken"].Value,
+        "passwordWeak" => L["rg.errPasswordWeak"].Value,
+        "passwordMismatch" => L["rg.errPasswordMismatch"].Value,
+        "errKvkk" => L["rg.errKvkk"].Value,
+        _ => code,
+    };
+
+    var timeZones = new (string Id, string Label)[]
+    {
+        ("Europe/Istanbul", "Europe/Istanbul (GMT+3)"),
+        ("Europe/Berlin", "Europe/Berlin (GMT+2)"),
+        ("Europe/London", "Europe/London (GMT+1)"),
+        ("UTC", "UTC"),
+    };
 }
 <div class="rc-auth-card" style="width:min(560px,100%)">
     <a class="rc-logo" href="/" style="justify-content:center;margin-bottom:20px">
@@ -11,17 +33,25 @@
     <p>@L["rg.sub"]</p>
 
     <form method="post" class="rc-form-grid" asp-action="Register">
-        <partial name="_FormErrors" />
+        @if (errors.Count > 0)
+        {
+            <div class="rd-form-error" role="alert">
+                @foreach (var e in errors)
+                {
+                    <div>@ErrorText(e)</div>
+                }
+            </div>
+        }
         <div class="rc-form-step"><span class="rc-step-icon">1</span><span>@L["rg.secContact"]</span></div>
         <div>
             <label class="rc-label" for="rg-email">@L["rg.email"]</label>
-            <input id="rg-email" class="rc-control" type="email" asp-for="Email" autocomplete="email">
+            <input id="rg-email" class="rc-control" type="email" asp-for="Email" autocomplete="email" required>
             <div class="rd-help">@L["rg.emailHelp"]</div>
         </div>
         <div class="rd-grid-2">
             <div>
                 <label class="rc-label" for="rg-name">@L["rg.name"]</label>
-                <input id="rg-name" class="rc-control" type="text" asp-for="Name" autocomplete="name">
+                <input id="rg-name" class="rc-control" type="text" asp-for="Name" autocomplete="name" required>
             </div>
             <div>
                 <label class="rc-label" for="rg-phone">@L["rg.phone"]</label>
@@ -32,11 +62,11 @@
         <div class="rc-form-step"><span class="rc-step-icon">2</span><span>@L["rg.secPrefs"]</span></div>
         <div>
             <label class="rc-label" for="rg-tz">@L["rg.tz"]</label>
-            <select id="rg-tz" class="rc-control">
-                <option selected>Europe/Istanbul (GMT+3)</option>
-                <option>Europe/Berlin (GMT+2)</option>
-                <option>Europe/London (GMT+1)</option>
-                <option>UTC</option>
+            <select id="rg-tz" class="rc-control" asp-for="TimeZone">
+                @foreach (var tz in timeZones)
+                {
+                    <option value="@tz.Id">@tz.Label</option>
+                }
             </select>
         </div>
 
@@ -44,14 +74,20 @@
         <div class="rd-grid-2">
             <div>
                 <label class="rc-label" for="rg-pass">@L["rg.password"]</label>
-                <input id="rg-pass" class="rc-control" type="password" asp-for="Password" autocomplete="new-password">
+                <input id="rg-pass" class="rc-control" type="password" asp-for="Password" autocomplete="new-password"
+                       required minlength="8" data-pw-strength="@L["rg.errPasswordWeak"]">
             </div>
             <div>
                 <label class="rc-label" for="rg-pass2">@L["rg.password2"]</label>
-                <input id="rg-pass2" class="rc-control" type="password" asp-for="Password2" autocomplete="new-password">
+                <input id="rg-pass2" class="rc-control" type="password" asp-for="Password2" autocomplete="new-password"
+                       required data-pw-match="#rg-pass" data-pw-match-msg="@L["rg.errPasswordMismatch"]">
             </div>
         </div>
         <div class="rd-help">@L["rg.passHelp"]</div>
+
+        @* KVKK consent is a product requirement on top of the mockup (registration
+           may not proceed without it); reuses the stock .rd-check component. *@
+        <label class="rd-check"><input type="checkbox" asp-for="Kvkk" required><span>@L["rg.kvkk"]</span></label>
 
         <button type="submit" class="rc-button-primary" style="justify-content:center">@L["rg.submit"]</button>
     </form>

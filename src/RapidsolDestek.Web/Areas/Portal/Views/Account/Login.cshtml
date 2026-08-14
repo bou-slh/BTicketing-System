@@ -15,14 +15,14 @@
         <input type="hidden" asp-for="ReturnUrl">
         <div>
             <label class="rc-label" for="lg-user">@L["lg.user"]</label>
-            <input id="lg-user" class="rc-control" type="text" asp-for="User" autocomplete="username">
+            <input id="lg-user" class="rc-control" type="text" asp-for="User" autocomplete="username" required>
         </div>
         <div>
             <label class="rc-label" for="lg-pass" style="display:flex;align-items:center">
                 <span>@L["lg.password"]</span>
                 <a href="/pwreset" style="margin-left:auto;font-weight:400;font-size:12px">@L["lg.forgot"]</a>
             </label>
-            <input id="lg-pass" class="rc-control" type="password" asp-for="Password" autocomplete="current-password">
+            <input id="lg-pass" class="rc-control" type="password" asp-for="Password" autocomplete="current-password" required>
         </div>
         <label class="rd-check"><input type="checkbox" asp-for="Remember"><span>@L["lg.remember"]</span></label>
         <button type="submit" class="rc-button-primary" style="justify-content:center">@L["lg.submit"]</button>

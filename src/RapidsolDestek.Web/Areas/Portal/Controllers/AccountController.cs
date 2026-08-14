@@ -17,6 +17,9 @@ public class AccountController(
     IWebHostEnvironment env) : Controller
 {
     // ---- Login -------------------------------------------------------------
+    // TODO(S7): optional TOTP 2FA step for portal customers (ROADMAP B6; the
+    // portal/login.html mockup has no 2FA UI — staff logins already 2FA via
+    // their Login2fa views, and 2FA stays mandatory for admins only).
 
     [HttpGet("/login")]
     [AllowAnonymous]
@@ -65,6 +68,7 @@ public class AccountController(
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterVm vm)
     {
+        if (!vm.Kvkk) ModelState.AddModelError(nameof(vm.Kvkk), "errKvkk");
         if (!ModelState.IsValid) return View(vm);
 
         var user = new CustomerUser
@@ -74,10 +78,20 @@ public class AccountController(
             FullName = vm.Name,
             PhoneNumber = vm.Phone,
         };
+        // TODO(S7): persist vm.TimeZone as a user preference once portal/profile.html
+        // ports its preferences section (ROADMAP §6.1 profile row).
         var result = await users.CreateAsync(user, vm.Password);
         if (!result.Succeeded)
         {
-            foreach (var e in result.Errors) ModelState.AddModelError(string.Empty, e.Description);
+            // Identity error codes → view-localized markers (Open-page pattern).
+            foreach (var e in result.Errors)
+                ModelState.AddModelError(string.Empty, e.Code switch
+                {
+                    "DuplicateUserName" or "DuplicateEmail" => "emailTaken",
+                    "InvalidEmail" or "InvalidUserName" => "errEmail",
+                    _ when e.Code.StartsWith("Password") => "passwordWeak",
+                    _ => e.Description,
+                });
             return View(vm);
         }
         await signIn.SignInAsync(user, isPersistent: false);
@@ -93,7 +107,8 @@ public class AccountController(
     [HttpPost("/pwreset")]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Pwreset([EmailAddress, Required] string email)
+    public async Task<IActionResult> Pwreset(
+        [EmailAddress(ErrorMessage = "errEmail"), Required(ErrorMessage = "errEmail")] string email)
     {
         var user = await users.FindByEmailAsync(email);
         if (user is not null)
@@ -128,10 +143,17 @@ public class AccountController(
             var result = await users.ResetPasswordAsync(user, vm.Token, vm.Password);
             if (!result.Succeeded)
             {
-                foreach (var e in result.Errors) ModelState.AddModelError(string.Empty, e.Description);
+                foreach (var e in result.Errors)
+                    ModelState.AddModelError(string.Empty, e.Code switch
+                    {
+                        "InvalidToken" => "invalidToken",
+                        _ when e.Code.StartsWith("Password") => "passwordWeak",
+                        _ => e.Description,
+                    });
                 return View(vm);
             }
         }
+        // Unknown email falls through to /login without a hint (enumeration safety).
         return Redirect("/login");
     }
 
@@ -153,17 +175,35 @@ public class LoginVm
 
 public class RegisterVm
 {
-    [Required, EmailAddress] public string Email { get; set; } = "";
-    [Required] public string Name { get; set; } = "";
+    [Required(ErrorMessage = "errEmail"), EmailAddress(ErrorMessage = "errEmail")]
+    public string Email { get; set; } = "";
+
+    [Required(ErrorMessage = "errName")]
+    public string Name { get; set; } = "";
+
     public string? Phone { get; set; }
-    [Required, MinLength(8)] public string Password { get; set; } = "";
-    [Required, Compare(nameof(Password))] public string Password2 { get; set; } = "";
+
+    /// <summary>IANA id from the mockup's preference select; persisted in S7 (profile).</summary>
+    public string TimeZone { get; set; } = "Europe/Istanbul";
+
+    [Required(ErrorMessage = "passwordWeak"), MinLength(8, ErrorMessage = "passwordWeak")]
+    public string Password { get; set; } = "";
+
+    [Compare(nameof(Password), ErrorMessage = "passwordMismatch")]
+    public string Password2 { get; set; } = "";
+
+    /// <summary>KVKK (Turkish DPA) consent — must be ticked to register.</summary>
+    public bool Kvkk { get; set; }
 }
 
 public class PwresetNewVm
 {
     [Required] public string Email { get; set; } = "";
     [Required] public string Token { get; set; } = "";
-    [Required, MinLength(8)] public string Password { get; set; } = "";
-    [Required, Compare(nameof(Password))] public string Password2 { get; set; } = "";
+
+    [Required(ErrorMessage = "passwordWeak"), MinLength(8, ErrorMessage = "passwordWeak")]
+    public string Password { get; set; } = "";
+
+    [Compare(nameof(Password), ErrorMessage = "passwordMismatch")]
+    public string Password2 { get; set; } = "";
 }

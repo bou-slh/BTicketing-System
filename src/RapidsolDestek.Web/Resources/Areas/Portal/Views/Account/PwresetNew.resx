@@ -60,4 +60,13 @@
   <data name="pw.save" xml:space="preserve">
     <value>Parolayı güncelle</value>
   </data>
+  <data name="pw.errPasswordWeak" xml:space="preserve">
+    <value>Parola en az 8 karakter olmalı; harf ve rakam içermelidir.</value>
+  </data>
+  <data name="pw.errPasswordMismatch" xml:space="preserve">
+    <value>Parolalar eşleşmiyor.</value>
+  </data>
+  <data name="pw.errInvalidToken" xml:space="preserve">
+    <value>Sıfırlama bağlantısı geçersiz veya süresi dolmuş. Lütfen yeni bir bağlantı isteyin.</value>
+  </data>
 </root>

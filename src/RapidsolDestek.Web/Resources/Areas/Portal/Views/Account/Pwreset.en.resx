@@ -60,4 +60,7 @@
   <data name="pw.save" xml:space="preserve">
     <value>Update password</value>
   </data>
+  <data name="pw.errEmail" xml:space="preserve">
+    <value>Enter a valid email address.</value>
+  </data>
 </root>
