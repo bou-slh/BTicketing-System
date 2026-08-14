@@ -313,10 +313,45 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       parameterized "/ {0} talep"; invented keys tq.hoursShort/updToday/updYesterday/updDateFmt/colSla/
       bulk*/save*/notYet. Row/new-ticket deep links dead until ticket-view/user-view/org-view/ticket-open
       port (S5 precedent).)*
-- [ ] **ticket-view.html** — all header actions incl. Yazdır (print CSS) and Düzenle; effort propose/revise/
+- [x] **ticket-view.html** — all header actions incl. Yazdır (print CSS) and Düzenle; effort propose/revise/
       withdraw + 3 banner states + thread events (B8); reply/note composers append; canned insert; signature
       preview; after-reply status; attach list; Diğer menu actions (merge/link/release/ban/delete…) implemented;
       thread ⋯ menus; related-tickets link dialog (B2/B5)
+      *(S6 partial; /agent/ticket-view?id= with QueueEngine department visibility (list-page scope), NavKey
+      tickets. DONE — thread: ALL entry types incl. internal Notes with the mockup's is-note styling, timeline
+      events interleaved from thread_event rows (all seeded kinds, invented tv.evt* labels; assigned-with-nulls
+      renders as released), per-entry attachment chips download through IFileStore staff-gated; hero R716555
+      renders its pending 6h card. DONE — B8 flagship: dlg-effort proposes, or REVISES while a proposal is
+      pending (header button, banner "Revize Et" and rejected-banner "Yeni Öneri Gönder" all reuse it, mockup
+      wiring); "Geri Çek" withdraws; all three banner states live (approved/rejected variants taken from the
+      mockup's HTML comments); every transition writes its thread event + AuditEvent via EffortProposalService;
+      guard violations (state machine, revision limit, effort.propose permission) surface as error toasts;
+      tv.effPendingTitle/tv.effApprovedMsg + the three tab labels are parameterized "{0}" versions of the
+      mockup's sample-data copy — needs canon sign-off. DONE — B5 composers: reply posts a staff Response via
+      IThreadService ("text" format; B8 work gate → tv.errWorkBlocked error toast), From select = EmailAccounts
+      with the dept account preselected and a recipients/from JSON snapshot on the entry, attachments via
+      IFileStore with an added .rc-file-name span (mockup lacks one — B5 requires the list); note composer
+      appends Note with optional title; after-reply/note status select (open/wait/solved rows per mockup)
+      applies via TransitionStatusAsync — refusals (B8 close gate/permission) keep the entry and toast
+      tv.errStatus. Canned select = dept+global CannedResponses from DB plus the mockup's Orijinal/Son Mesaj
+      quote options; expansion server-side (CannedResponseService variables) → rd.js data-canned-insert inserts
+      at the caret. Signature radios preview the staff/department signature into an added rd-help block —
+      NOTE(S8): applying the chosen signature happens at outbound-mail render, nothing to persist yet.
+      DONE — header: Aktar/Ata dialogs drive TransferAsync/AssignAsync (staff "s:{id}"/team "t:{id}" options;
+      the optional comment posts as an internal note, osTicket parity); Yazdır = rd.js [data-print] +
+      product-only @media print block in app.css (mockups define NO print CSS — design needs canon sign-off).
+      DONE — Diğer: Serbest Bırak (AssignAsync null/null), Gecikmiş İşaretle (flag + "overdue" event under the
+      actor's audit scope — no dedicated S4 service exists for the flag), Yanıtlandı İşaretle (flag,
+      ticket.markanswered check). TODO(S6): Düzenle disabled — needs the built-in ticket edit form (S7 form
+      designer feeds it; mockup defines no edit dialog); Diğer items Sahibi Değiştir/Birleştir/Bağlantıla/
+      Yönlendirmeler/Katılımcılar/E-posta Engelle/Talebi Sil disabled with explanatory titles (no merge/link/
+      ban/delete services yet; Formları Yönet is TODO(S7)); related-tickets tab renders the ParentId family
+      (seed links none → mockup empty state) but the LINK DIALOG is TODO(S6) with the merge/link service —
+      empty-state button disabled; thread ⋯ entry menus TODO(S6) (needs a thread-edit service; the mockup
+      defines no menu DOM) — buttons disabled, never dead-looking. Invented keys: meta.today/yesterday,
+      tv.dateLong/dateShort/slaFmt/hoursFmt/source*/evt*/toast*/err*/notYet (TR+EN twins). Tests:
+      AgentTicketViewTests — effort propose→revise→withdraw through the controller path incl. thread events,
+      composer Response/Note append + after-reply status.)*
 - [ ] **ticket-open.html** — user autocomplete + inline "Yeni Kullanıcı"; topic→dept/SLA/form cascading;
       attach list; creates ticket on behalf of user (B3/B5)
 - [ ] **tasks.html** — tab bar (fixed in S0) filters from data; B1 engine; new-task dialog creates

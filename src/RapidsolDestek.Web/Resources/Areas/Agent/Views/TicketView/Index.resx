@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tv.reply" xml:space="preserve">
+    <value>Yanıtla</value>
+  </data>
+  <data name="tv.actTransfer" xml:space="preserve">
+    <value>Aktar</value>
+  </data>
+  <data name="tv.actAssign" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="tv.actMore" xml:space="preserve">
+    <value>Diğer ▾</value>
+  </data>
+  <data name="tv.priority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="tv.dept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="tv.sla" xml:space="preserve">
+    <value>SLA Planı</value>
+  </data>
+  <data name="tv.due" xml:space="preserve">
+    <value>Son Tarih</value>
+  </data>
+  <data name="tv.actEffort" xml:space="preserve">
+    <value>Efor Öner</value>
+  </data>
+  <data name="tv.effPendingTitle" xml:space="preserve">
+    <value>{0} saat efor kullanıcı onayında</value>
+  </data>
+  <data name="tv.effNoteLabel" xml:space="preserve">
+    <value>Not</value>
+  </data>
+  <data name="tv.effWithdraw" xml:space="preserve">
+    <value>Geri Çek</value>
+  </data>
+  <data name="tv.effRevise" xml:space="preserve">
+    <value>Revize Et</value>
+  </data>
+  <data name="tv.effApprovedMsg" xml:space="preserve">
+    <value>Kullanıcı {0} saatlik eforu onayladı — çalışmaya başlayabilirsiniz.</value>
+  </data>
+  <data name="tv.effRejectedMsg" xml:space="preserve">
+    <value>Kullanıcı efor önerisini reddetti</value>
+  </data>
+  <data name="tv.effResend" xml:space="preserve">
+    <value>Yeni Öneri Gönder</value>
+  </data>
+  <data name="tv.dlgEffort" xml:space="preserve">
+    <value>Efor Önerisi Gönder</value>
+  </data>
+  <data name="tv.effUnit" xml:space="preserve">
+    <value>saat</value>
+  </data>
+  <data name="tv.effNotePh" xml:space="preserve">
+    <value>İsteğe bağlı: kapsam ve varsayımlarınızı yazın…</value>
+  </data>
+  <data name="tv.effDlgHelp" xml:space="preserve">
+    <value>Öneri kullanıcı onayına gönderilir; onaylanana kadar çalışmaya başlanmaz (Ayarlar → Talepler → Efor Onayı'ndan değiştirilebilir).</value>
+  </data>
+  <data name="tv.effSend" xml:space="preserve">
+    <value>Onaya Gönder</value>
+  </data>
+  <data name="tv.user" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="tv.email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="tv.org" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="tv.source" xml:space="preserve">
+    <value>Kaynak</value>
+  </data>
+  <data name="tv.sourceWeb" xml:space="preserve">
+    <value>Web</value>
+  </data>
+  <data name="tv.topic" xml:space="preserve">
+    <value>Yardım Konusu</value>
+  </data>
+  <data name="tv.assigned" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="tv.tabThread" xml:space="preserve">
+    <value>Yazışmalar ({0})</value>
+  </data>
+  <data name="tv.tabTasks" xml:space="preserve">
+    <value>Görevler ({0})</value>
+  </data>
+  <data name="tv.tabRelated" xml:space="preserve">
+    <value>İlişkili Talepler ({0})</value>
+  </data>
+  <data name="tv.noteBadge" xml:space="preserve">
+    <value>İç Not</value>
+  </data>
+  <data name="tv.taskCol" xml:space="preserve">
+    <value>Görev</value>
+  </data>
+  <data name="tv.taskAssigned" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="tv.taskDue" xml:space="preserve">
+    <value>Son Tarih</value>
+  </data>
+  <data name="tv.relatedEmptyTitle" xml:space="preserve">
+    <value>İlişkili talep yok</value>
+  </data>
+  <data name="tv.relatedEmptyText" xml:space="preserve">
+    <value>Bu talep henüz başka bir taleple bağlantılanmadı.</value>
+  </data>
+  <data name="tv.linkTicket" xml:space="preserve">
+    <value>Talep Bağlantıla</value>
+  </data>
+  <data name="tv.cTabReply" xml:space="preserve">
+    <value>Yanıt Gönder</value>
+  </data>
+  <data name="tv.cTabNote" xml:space="preserve">
+    <value>İç Not</value>
+  </data>
+  <data name="tv.from" xml:space="preserve">
+    <value>Kimden</value>
+  </data>
+  <data name="tv.recipients" xml:space="preserve">
+    <value>Alıcılar</value>
+  </data>
+  <data name="tv.canned" xml:space="preserve">
+    <value>Hazır Yanıt</value>
+  </data>
+  <data name="tv.cannedPh" xml:space="preserve">
+    <value>Hazır yanıt seç</value>
+  </data>
+  <data name="tv.cannedOrig" xml:space="preserve">
+    <value>Orijinal Mesaj</value>
+  </data>
+  <data name="tv.cannedLast" xml:space="preserve">
+    <value>Son Mesaj</value>
+  </data>
+  <data name="tv.replyPh" xml:space="preserve">
+    <value>Yanıtınızı yazın…</value>
+  </data>
+  <data name="tv.attach" xml:space="preserve">
+    <value>📎 Dosya ekle</value>
+  </data>
+  <data name="tv.signature" xml:space="preserve">
+    <value>İmza</value>
+  </data>
+  <data name="tv.sigNone" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="tv.sigMine" xml:space="preserve">
+    <value>İmzam</value>
+  </data>
+  <data name="tv.sigDept" xml:space="preserve">
+    <value>Departman İmzası</value>
+  </data>
+  <data name="tv.statusAfter" xml:space="preserve">
+    <value>Yanıt sonrası durum</value>
+  </data>
+  <data name="tv.send" xml:space="preserve">
+    <value>Yanıtı Gönder</value>
+  </data>
+  <data name="tv.noteTitle" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="tv.noteTitlePh" xml:space="preserve">
+    <value>Not başlığı (isteğe bağlı)</value>
+  </data>
+  <data name="tv.notePh" xml:space="preserve">
+    <value>Yalnızca temsilcilerin göreceği notu yazın…</value>
+  </data>
+  <data name="tv.addNote" xml:space="preserve">
+    <value>Not Ekle</value>
+  </data>
+  <data name="tv.dlgTransfer" xml:space="preserve">
+    <value>Talebi Aktar</value>
+  </data>
+  <data name="tv.dlgAssign" xml:space="preserve">
+    <value>Talebi Ata</value>
+  </data>
+  <data name="tv.dlgMore" xml:space="preserve">
+    <value>Diğer İşlemler</value>
+  </data>
+  <data name="tv.assignee" xml:space="preserve">
+    <value>Temsilci / Takım</value>
+  </data>
+  <data name="tv.comment" xml:space="preserve">
+    <value>Açıklama</value>
+  </data>
+  <data name="tv.commentPh" xml:space="preserve">
+    <value>İşlemle ilgili kısa bir açıklama (isteğe bağlı)…</value>
+  </data>
+  <data name="tv.mOwner" xml:space="preserve">
+    <value>Sahibi Değiştir</value>
+  </data>
+  <data name="tv.mMerge" xml:space="preserve">
+    <value>Birleştir</value>
+  </data>
+  <data name="tv.mLink" xml:space="preserve">
+    <value>Bağlantıla</value>
+  </data>
+  <data name="tv.mRelease" xml:space="preserve">
+    <value>Serbest Bırak</value>
+  </data>
+  <data name="tv.mOverdue" xml:space="preserve">
+    <value>Gecikmiş İşaretle</value>
+  </data>
+  <data name="tv.mAnswered" xml:space="preserve">
+    <value>Yanıtlandı İşaretle</value>
+  </data>
+  <data name="tv.mReferrals" xml:space="preserve">
+    <value>Yönlendirmeleri Yönet</value>
+  </data>
+  <data name="tv.mForms" xml:space="preserve">
+    <value>Formları Yönet</value>
+  </data>
+  <data name="tv.mCollabs" xml:space="preserve">
+    <value>Katılımcıları Yönet</value>
+  </data>
+  <data name="tv.mBan" xml:space="preserve">
+    <value>E-postayı Engelle</value>
+  </data>
+  <data name="tv.mDelete" xml:space="preserve">
+    <value>Talebi Sil</value>
+  </data>
+  <data name="tv.title" xml:space="preserve">
+    <value>Talep {0}</value>
+  </data>
+  <data name="meta.today" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="meta.yesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="tv.dateLong" xml:space="preserve">
+    <value>d MMMM yyyy, HH:mm</value>
+  </data>
+  <data name="tv.dateShort" xml:space="preserve">
+    <value>d MMMM yyyy</value>
+  </data>
+  <data name="tv.slaFmt" xml:space="preserve">
+    <value>{0} ({1} saat)</value>
+  </data>
+  <data name="tv.hoursFmt" xml:space="preserve">
+    <value>{0} saat</value>
+  </data>
+  <data name="tv.sourceEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="tv.sourcePhone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="tv.sourceApi" xml:space="preserve">
+    <value>API</value>
+  </data>
+  <data name="tv.sourceOther" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="tv.evtCreated" xml:space="preserve">
+    <value>Talep oluşturuldu</value>
+  </data>
+  <data name="tv.evtAssigned" xml:space="preserve">
+    <value>{0}'a atandı</value>
+  </data>
+  <data name="tv.evtReleased" xml:space="preserve">
+    <value>Atama kaldırıldı</value>
+  </data>
+  <data name="tv.evtTransferred" xml:space="preserve">
+    <value>{0} departmanına aktarıldı</value>
+  </data>
+  <data name="tv.evtEffortProposed" xml:space="preserve">
+    <value>{0} saat efor kullanıcı onayına sunuldu</value>
+  </data>
+  <data name="tv.evtEffortRevised" xml:space="preserve">
+    <value>Efor önerisi {0} saat olarak revize edildi</value>
+  </data>
+  <data name="tv.evtEffortWithdrawn" xml:space="preserve">
+    <value>Efor önerisi geri çekildi</value>
+  </data>
+  <data name="tv.evtEffortApproved" xml:space="preserve">
+    <value>Kullanıcı {0} saatlik eforu onayladı</value>
+  </data>
+  <data name="tv.evtEffortRejected" xml:space="preserve">
+    <value>Kullanıcı efor önerisini reddetti</value>
+  </data>
+  <data name="tv.evtClosed" xml:space="preserve">
+    <value>Talep kapatıldı</value>
+  </data>
+  <data name="tv.evtReopened" xml:space="preserve">
+    <value>Talep yeniden açıldı</value>
+  </data>
+  <data name="tv.evtOverdue" xml:space="preserve">
+    <value>Gecikmiş olarak işaretlendi</value>
+  </data>
+  <data name="tv.evtEdited" xml:space="preserve">
+    <value>Talep güncellendi</value>
+  </data>
+  <data name="tv.toastReply" xml:space="preserve">
+    <value>Yanıt gönderildi</value>
+  </data>
+  <data name="tv.toastNote" xml:space="preserve">
+    <value>İç not eklendi</value>
+  </data>
+  <data name="tv.toastEffort" xml:space="preserve">
+    <value>Efor önerisi onaya gönderildi</value>
+  </data>
+  <data name="tv.toastEffortRevised" xml:space="preserve">
+    <value>Efor önerisi revize edildi</value>
+  </data>
+  <data name="tv.toastWithdrawn" xml:space="preserve">
+    <value>Efor önerisi geri çekildi</value>
+  </data>
+  <data name="tv.toastAssigned" xml:space="preserve">
+    <value>Talep atandı</value>
+  </data>
+  <data name="tv.toastTransferred" xml:space="preserve">
+    <value>Talep aktarıldı</value>
+  </data>
+  <data name="tv.toastReleased" xml:space="preserve">
+    <value>Talep serbest bırakıldı</value>
+  </data>
+  <data name="tv.toastOverdue" xml:space="preserve">
+    <value>Gecikmiş olarak işaretlendi</value>
+  </data>
+  <data name="tv.toastAnswered" xml:space="preserve">
+    <value>Yanıtlandı olarak işaretlendi</value>
+  </data>
+  <data name="tv.errWorkBlocked" xml:space="preserve">
+    <value>Efor onayı bekleniyor — kullanıcı onaylayana kadar yanıt gönderilemez</value>
+  </data>
+  <data name="tv.errEffort" xml:space="preserve">
+    <value>Efor işlemi gerçekleştirilemedi</value>
+  </data>
+  <data name="tv.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok</value>
+  </data>
+  <data name="tv.errEmpty" xml:space="preserve">
+    <value>Boş içerik gönderilemez</value>
+  </data>
+  <data name="tv.errStatus" xml:space="preserve">
+    <value>Durum değiştirilemedi</value>
+  </data>
+  <data name="tv.errCanned" xml:space="preserve">
+    <value>Hazır yanıt eklenemedi</value>
+  </data>
+  <data name="tv.notYet" xml:space="preserve">
+    <value>Henüz kullanılamıyor</value>
+  </data>
+</root>

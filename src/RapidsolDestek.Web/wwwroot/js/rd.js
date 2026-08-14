@@ -149,6 +149,47 @@
     if (inp && inp.form) inp.form.submit();
   }
 
+  /* ---------- B10 "Yazdır": [data-print] triggers the browser print dialog ----------
+     Page-specific print styling lives in app.css @media print. */
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("[data-print]")) {
+      e.preventDefault();
+      window.print();
+    }
+  });
+
+  /* ---------- B5 canned-response insert (agent ticket-view composer) ----------
+     <select data-canned-insert="url"> fetches `url&what=<value>` → {text} and inserts
+     it at the caret of the same form's textarea, then resets to the placeholder. */
+  document.addEventListener("change", async (e) => {
+    const sel = e.target.closest("select[data-canned-insert]");
+    if (!sel || !sel.value) return;
+    const what = sel.value;
+    sel.selectedIndex = 0;
+    const ta = sel.closest("form")?.querySelector("textarea");
+    if (!ta) return;
+    try {
+      const res = await fetch(`${sel.getAttribute("data-canned-insert")}&what=${encodeURIComponent(what)}`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      edInsert(ta, data.text || "", "", "");
+    } catch {
+      toast(sel.getAttribute("data-canned-err") || "!", "error");
+    }
+  });
+
+  /* ---------- B5 signature preview: radios carry data-sig-text ----------
+     The checked radio's text renders into the form's [data-sig-preview] block. */
+  document.addEventListener("change", (e) => {
+    const radio = e.target.closest("input[data-sig-text]");
+    if (!radio) return;
+    const preview = radio.closest("form")?.querySelector("[data-sig-preview]");
+    if (!preview) return;
+    const text = radio.getAttribute("data-sig-text") || "";
+    preview.textContent = text;
+    preview.hidden = text === "";
+  });
+
   /* ---------- Advanced-search "save as queue" (agent tickets, B2) ----------
      <button data-advsearch-save="url"> posts its form's rule rows / columns / sort
      plus the queue name, then navigates to the created queue. The antiforgery token

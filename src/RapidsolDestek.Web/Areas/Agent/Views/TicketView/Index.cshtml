@@ -1,0 +1,549 @@
+@using System.Globalization
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model AgentTicketViewVm
+@{
+    ViewData["Title"] = L.GetString("tv.title", Model.Number);
+
+    // PRG toast handoff (tickets-page precedent; _BackofficeLayout stamps <body data-toast>).
+    if (TempData["TvToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["TvToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Backoffice pill classes (tickets/dashboard precedent) + effort-state pills.
+    static string StatusPill(string key) => key switch
+    {
+        "new" => "rd-pill rd-pill-open",
+        "effortWait" => "rd-pill rd-pill-wait",
+        "effortApproved" => "rd-pill rd-pill-solved",
+        "effortRejected" => "rd-pill rd-pill-overdue",
+        "open" or "wait" or "test" or "solved" or "closed" or "overdue" => $"rd-pill rd-pill-{key}",
+        _ => "rd-pill rd-pill-open",
+    };
+
+    // Table-cell agent name convention (§2 canon): "Ümit Yaşar Akın" → "Ümit Y. Akın".
+    static string ShortName(string? full)
+    {
+        if (string.IsNullOrWhiteSpace(full))
+            return "—";
+        var parts = full.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 3)
+            return full;
+        var middles = string.Join(" ", parts[1..^1].Select(p => $"{char.ToUpperInvariant(p[0])}."));
+        return $"{parts[0]} {middles} {parts[^1]}";
+    }
+
+    // Avatar initials, mockup style ("Bourla Salehi" → BS, "Ümit Y. Akın" → ÜA).
+    static string Initials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length == 0 ? "" :
+            parts.Length == 1 ? char.ToUpperInvariant(parts[0][0]).ToString() :
+            $"{char.ToUpperInvariant(parts[0][0])}{char.ToUpperInvariant(parts[^1][0])}";
+    }
+
+    // Thread/timeline times, mockup format: "Bugün 10:18", "Dün 16:29", else "5 Ağustos 16:05".
+    string MetaTime(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        if (local.Date == today)
+            return L.GetString("meta.today", local.ToString("HH:mm"));
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("meta.yesterday", local.ToString("HH:mm"));
+        return $"{local.ToString("m", CultureInfo.CurrentUICulture)} {local:HH:mm}";
+    }
+
+    string DateLong(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("tv.dateLong"), CultureInfo.CurrentUICulture);
+
+    string DateShort(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("tv.dateShort"), CultureInfo.CurrentUICulture);
+
+    string Hours(decimal? hours) => (hours ?? 0).ToString("0.##", CultureInfo.CurrentUICulture);
+
+    string SourceLabel(TicketSource source) => source switch
+    {
+        TicketSource.Web => L["tv.sourceWeb"].Value,
+        TicketSource.Email => L["tv.sourceEmail"].Value,
+        TicketSource.Phone => L["tv.sourcePhone"].Value,
+        TicketSource.Api => L["tv.sourceApi"].Value,
+        _ => L["tv.sourceOther"].Value,
+    };
+
+    // Inline timeline rows (mockup .bo-thread-entry.is-event): icon + label.
+    string EventIcon(string kind) => kind.StartsWith("effort-", StringComparison.Ordinal) ? "◷" : "◉";
+    string EventLabel(AgentEventVm ev) => ev.Kind switch
+    {
+        "created" => L["tv.evtCreated"].Value,
+        "assigned" when ev.Released => L["tv.evtReleased"].Value,
+        "assigned" => L.GetString("tv.evtAssigned", ShortName(ev.Assignee)),
+        "released" => L["tv.evtReleased"].Value,
+        "transferred" => L.GetString("tv.evtTransferred", ev.TargetDept ?? "—"),
+        "effort-proposed" => L.GetString("tv.evtEffortProposed", Hours(ev.Hours)),
+        "effort-revised" => L.GetString("tv.evtEffortRevised", Hours(ev.Hours)),
+        "effort-withdrawn" => L["tv.evtEffortWithdrawn"].Value,
+        "effort-approved" => L.GetString("tv.evtEffortApproved", Hours(ev.Hours)),
+        "effort-rejected" => L["tv.evtEffortRejected"].Value,
+        "closed" => L["tv.evtClosed"].Value,
+        "reopened" => L["tv.evtReopened"].Value,
+        "overdue" => L["tv.evtOverdue"].Value,
+        _ => L["tv.evtEdited"].Value,
+    };
+
+    var pending = Model.Effort?.State == EffortState.Pending;
+    var entryCount = Model.Thread.Count(i => i.Entry is not null);
+    var effortStateKey = Model.Effort?.State switch
+    {
+        EffortState.Pending => "effortWait",
+        EffortState.Approved => "effortApproved",
+        EffortState.Rejected => "effortRejected",
+        _ => null,
+    };
+    var cannedUrl = $"/agent/ticket-view/canned?id={Model.Id}";
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <h1>@Model.Number · @Model.Subject
+            <span class="@StatusPill(Model.StatusKey)" style="vertical-align:middle">@SL[$"status.{Model.StatusKey}"]</span>
+        </h1>
+        <p><a href="/agent/tickets">@SL["common.back"]</a></p>
+    </div>
+    <div class="actions">
+        <a class="rd-btn-primary" href="#reply">@L["tv.reply"]</a>
+        @* TODO(S7): Düzenle needs the built-in ticket edit form + dynamic fields (form
+           designer output); the mockup defines no edit dialog — disabled, never dead-looking. *@
+        <button class="rd-btn" disabled title="@L["tv.notYet"]">@SL["common.edit"]</button>
+        <button class="rd-btn" data-dialog-open="dlg-transfer">@L["tv.actTransfer"]</button>
+        <button class="rd-btn" data-dialog-open="dlg-assign">@L["tv.actAssign"]</button>
+        @if (Model.EffortEnabled)
+        {
+            <button class="rd-btn" data-dialog-open="dlg-effort">@L["tv.actEffort"]</button>
+        }
+        else
+        {
+            <button class="rd-btn" disabled title="@L["tv.notYet"]">@L["tv.actEffort"]</button>
+        }
+        <button class="rd-btn" data-print>@SL["common.print"]</button>
+        <button class="rd-btn" data-dialog-open="dlg-more">@L["tv.actMore"]</button>
+    </div>
+</div>
+
+<!-- Info row -->
+<div class="rd-grid-2" style="margin-bottom:22px">
+    <div class="rd-surface">
+        <div class="rd-surface-body" style="padding:9px 19px">
+            <div class="bo-def">
+                <div class="row"><span>@SL["common.status"]</span><span><span class="@StatusPill(Model.StatusKey)">@SL[$"status.{Model.StatusKey}"]</span></span></div>
+                <div class="row"><span>@L["tv.priority"]</span><span>@(Model.PriorityKey is null ? "—" : SL[$"priority.{Model.PriorityKey}"].Value)</span></div>
+                <div class="row"><span>@L["tv.dept"]</span><span>@Model.DeptName</span></div>
+                <div class="row"><span>@SL["common.created"]</span><span>@DateLong(Model.CreatedAt)</span></div>
+                <div class="row"><span>@L["tv.sla"]</span><span>@(Model.SlaName is null ? "—" : L.GetString("tv.slaFmt", Model.SlaName, Model.SlaGraceHours ?? 0))</span></div>
+                <div class="row"><span>@L["tv.due"]</span><span>@(Model.Due is { } due ? DateLong(due) : "—")</span></div>
+                <div class="row"><span>@SL["effort.label"]</span><span>@(Model.Effort is null ? "—" : L.GetString("tv.hoursFmt", Hours(Model.Effort.Hours)))</span></div>
+                <div class="row"><span>@SL["effort.state"]</span><span>@if (effortStateKey is not null)
+                    {<span class="@StatusPill(effortStateKey)">@SL[$"status.{effortStateKey}"]</span>}
+                    else
+                    {<text>—</text>}</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="rd-surface">
+        <div class="rd-surface-body" style="padding:9px 19px">
+            <div class="bo-def">
+                <div class="row"><span>@L["tv.user"]</span><span><a href="/agent/user-view?id=@Model.UserId">@Model.UserName</a></span></div>
+                <div class="row"><span>@L["tv.email"]</span><span>@(Model.UserEmail ?? "—")</span></div>
+                <div class="row"><span>@L["tv.org"]</span><span>@if (Model.OrgId is { } orgId)
+                    {<a href="/agent/org-view?id=@orgId">@Model.OrgName</a>}
+                    else
+                    {<text>—</text>}</span></div>
+                <div class="row"><span>@L["tv.source"]</span><span>@SourceLabel(Model.Source)</span></div>
+                <div class="row"><span>@L["tv.topic"]</span><span>@(Model.TopicName ?? "—")</span></div>
+                <div class="row"><span>@L["tv.assigned"]</span><span>@ShortName(Model.AssigneeName)</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Effort proposal state (B8): pending card / approved / rejected banner variants —
+   the approved/rejected variants come from the mockup's HTML comments. *@
+@if (Model.Effort is { } effort)
+{
+    if (pending)
+    {
+        <div class="bo-toggle-card" style="margin-bottom:22px">
+            <div class="head">
+                <span class="rc-approval-icon" style="width:32px;height:32px;border-radius:9px">◷</span>
+                <div>
+                    <b>@L["tv.effPendingTitle", Hours(effort.Hours)]</b>
+                    <small>@ShortName(effort.ProposedBy) · @MetaTime(effort.ProposedAt)@if (!string.IsNullOrWhiteSpace(effort.Note))
+                        {<text> — @L["tv.effNoteLabel"]: "@effort.Note"</text>}</small>
+                </div>
+                <div style="margin-left:auto;display:flex;gap:7px">
+                    <form method="post" asp-action="Withdraw" style="display:contents">
+                        <input type="hidden" name="id" value="@Model.Id">
+                        <button class="rd-btn rd-btn-sm">@L["tv.effWithdraw"]</button>
+                    </form>
+                    <button class="rd-btn rd-btn-sm" data-dialog-open="dlg-effort">@L["tv.effRevise"]</button>
+                </div>
+            </div>
+        </div>
+    }
+    else if (effort.State == EffortState.Approved)
+    {
+        <div class="rd-banner rd-banner-success" style="margin-bottom:22px"><span>✓</span><span>@L["tv.effApprovedMsg", Hours(effort.Hours)]</span></div>
+    }
+    else if (effort.State == EffortState.Rejected)
+    {
+        <div class="rd-banner rd-banner-warn" style="margin-bottom:22px">
+            <span>✕</span>
+            <span><b>@L["tv.effRejectedMsg"]</b>@if (!string.IsNullOrWhiteSpace(effort.DecisionNote))
+                {<text> — "@effort.DecisionNote"</text>}
+                <button class="rd-btn rd-btn-sm" data-dialog-open="dlg-effort" style="margin-left:9px">@L["tv.effResend"]</button></span>
+        </div>
+    }
+}
+
+<!-- Tabs -->
+<div class="rd-tabs" data-tabs data-tabs-scope="tv">
+    <button class="active" data-tab="tv-thread">@L["tv.tabThread", entryCount]</button>
+    <button data-tab="tv-tasks">@L["tv.tabTasks", Model.Tasks.Count]</button>
+    <button data-tab="tv-related">@L["tv.tabRelated", Model.Related.Count]</button>
+</div>
+
+<!-- Thread -->
+<div class="rd-tab-panel active" data-tab-group="tv" id="tv-thread">
+    @foreach (var item in Model.Thread)
+    {
+        if (item.Entry is { } entry)
+        {
+            <div class="bo-thread-entry@(entry.Type == ThreadEntryType.Note ? " is-note" : null)">
+                <div class="head">
+                    <div class="rd-avatar">@Initials(entry.Poster)</div>
+                    <b>@entry.Poster</b>
+                    @if (entry.Type == ThreadEntryType.Note)
+                    {
+                        <span class="rd-pill rd-pill-wait">@L["tv.noteBadge"]</span>
+                    }
+                    else if (entry.OrgLabel is not null)
+                    {
+                        <span class="rd-muted text-sm">@entry.OrgLabel</span>
+                    }
+                    <time>@MetaTime(item.At)</time>
+                    @* TODO(S6): entry ⋯ menu (edit/delete) needs a thread-edit service —
+                       the mockup defines no menu; disabled, never dead-looking. *@
+                    <button class="rd-btn rd-btn-sm" style="border:0" disabled title="@L["tv.notYet"]">⋯</button>
+                </div>
+                <div class="body">
+                    @if (entry.Format == "html")
+                    {
+                        @* Stored thread HTML is sanitized at ingress (ThreadService). *@
+                        @Html.Raw(entry.Body)
+                    }
+                    else
+                    {
+                        @Html.Raw(string.Join("<br>", entry.Body.Split('\n').Select(line => Html.Encode(line))))
+                    }
+                    @if (entry.Attachments.Count > 0)
+                    {
+                        <div class="rd-muted text-sm" style="margin-top:9px">
+                            @for (var a = 0; a < entry.Attachments.Count; a++)
+                            {
+                                if (a > 0)
+                                {<text> · </text>}
+                                <text>📎 </text><a href="/agent/ticket-view/attachment?id=@entry.Attachments[a].Id">@entry.Attachments[a].Name</a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else if (item.Event is { } evt)
+        {
+            <div class="bo-thread-entry is-event">@EventIcon(evt.Kind) @EventLabel(evt) — @MetaTime(item.At)</div>
+        }
+    }
+</div>
+
+<!-- Tasks -->
+<div class="rd-tab-panel" data-tab-group="tv" id="tv-tasks">
+    <div class="rd-surface">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th>@L["tv.taskCol"]</th>
+                    <th>@SL["common.status"]</th>
+                    <th>@L["tv.taskAssigned"]</th>
+                    <th>@L["tv.taskDue"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* Task deep-links dead until agent/task-view ports (S5 precedent). *@
+                @foreach (var task in Model.Tasks)
+                {
+                    <tr>
+                        <td><a href="/agent/task-view?id=@task.Id">@task.Number · @task.Title</a></td>
+                        <td><span class="@StatusPill(task.StatusKey)">@SL[$"status.{task.StatusKey}"]</span></td>
+                        <td>@ShortName(task.Assignee)</td>
+                        <td>@(task.Due is { } taskDue ? DateShort(taskDue) : "—")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Related -->
+<div class="rd-tab-panel" data-tab-group="tv" id="tv-related">
+    <div class="rd-surface">
+        @if (Model.Related.Count == 0)
+        {
+            <div class="rd-empty">
+                <div class="icon">🔗</div>
+                <h3>@L["tv.relatedEmptyTitle"]</h3>
+                <p>@L["tv.relatedEmptyText"]</p>
+                @* TODO(S6): the link dialog needs the merge/link service — disabled, never dead-looking. *@
+                <button class="rd-btn-primary" disabled title="@L["tv.notYet"]">@L["tv.linkTicket"]</button>
+            </div>
+        }
+        else
+        {
+            <table class="rd-table">
+                <tbody>
+                    @foreach (var rel in Model.Related)
+                    {
+                        <tr>
+                            <td><a href="/agent/ticket-view?id=@rel.Id">@rel.Number · @rel.Subject</a></td>
+                            <td><span class="@StatusPill(rel.StatusKey)">@SL[$"status.{rel.StatusKey}"]</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+<!-- Reply composer -->
+<div class="rd-surface" id="reply" style="margin-top:22px">
+    <div class="rd-surface-body">
+        <div class="rd-tabs" data-tabs data-tabs-scope="composer">
+            <button class="active" data-tab="c-reply">@L["tv.cTabReply"]</button>
+            <button data-tab="c-note">@L["tv.cTabNote"]</button>
+        </div>
+
+        <div class="rd-tab-panel active" data-tab-group="composer" id="c-reply">
+            <form method="post" asp-action="Reply" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="@Model.Id">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label">@L["tv.from"]</label>
+                        <select class="rd-control" name="fromAccountId">
+                            @foreach (var account in Model.FromAccounts)
+                            {
+                                <option value="@account.Id" selected="@(account.Id == Model.DefaultFromAccountId)">@account.DisplayName &lt;@account.Address&gt;</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label">@L["tv.recipients"]</label>
+                        <input class="rd-control" readonly value="@($"{Model.UserName} <{Model.UserEmail}>")">
+                    </div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label">@L["tv.canned"]</label>
+                    <select class="rd-control" data-canned-insert="@cannedUrl" data-canned-err="@L["tv.errCanned"]">
+                        <option value="">@L["tv.cannedPh"]</option>
+                        <option value="orig">@L["tv.cannedOrig"]</option>
+                        <option value="last">@L["tv.cannedLast"]</option>
+                        @foreach (var canned in Model.Canned)
+                        {
+                            <option value="@canned.Id">@canned.Title</option>
+                        }
+                    </select>
+                </div>
+                <div class="rd-field">
+                    <textarea class="rd-control" name="body" style="min-height:140px" placeholder="@L["tv.replyPh"]"></textarea>
+                </div>
+                <div class="rd-field" style="display:flex;flex-wrap:wrap;gap:12px 26px;align-items:center">
+                    <label class="rd-btn rd-btn-sm" style="cursor:pointer">
+                        <span>@L["tv.attach"]</span>
+                        <input type="file" name="attachments" multiple hidden>
+                    </label>
+                    <span class="rc-file-name"></span>
+                    <span class="rd-label" style="margin:0">@L["tv.signature"]</span>
+                    <label class="rd-check"><input type="radio" name="sig" value="none" checked data-sig-text=""><span>@L["tv.sigNone"]</span></label>
+                    <label class="rd-check"><input type="radio" name="sig" value="mine" data-sig-text="@Model.StaffSignature"><span>@L["tv.sigMine"]</span></label>
+                    <label class="rd-check"><input type="radio" name="sig" value="dept" data-sig-text="@Model.DeptSignature"><span>@L["tv.sigDept"]</span></label>
+                </div>
+                @* B5 signature preview target (mockup radios are dead; NOTE(S8): the choice
+                   is applied when the outbound email renders). *@
+                <div class="rd-help" data-sig-preview hidden style="white-space:pre-line;margin:-6px 0 14px"></div>
+                <div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
+                    <div class="rd-field" style="margin:0">
+                        <label class="rd-label">@L["tv.statusAfter"]</label>
+                        <select class="rd-control" name="statusId" style="width:auto;min-width:180px">
+                            @foreach (var status in Model.Statuses)
+                            {
+                                <option value="@status.Id" selected="@(status.Id == Model.CurrentStatusId)">@SL[$"status.{status.Key}"]</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="rd-btn-primary">@L["tv.send"]</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="rd-tab-panel" data-tab-group="composer" id="c-note">
+            <form method="post" asp-action="Note">
+                <input type="hidden" name="id" value="@Model.Id">
+                <div class="rd-field">
+                    <label class="rd-label">@L["tv.noteTitle"]</label>
+                    <input class="rd-control" name="title" placeholder="@L["tv.noteTitlePh"]">
+                </div>
+                <div class="rd-field">
+                    <textarea class="rd-control" name="body" style="min-height:120px" placeholder="@L["tv.notePh"]"></textarea>
+                    <div class="rd-help">@SL["common.notesHelp"]</div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap">
+                    <div class="rd-field" style="margin:0">
+                        <label class="rd-label">@SL["common.status"]</label>
+                        <select class="rd-control" name="statusId" style="width:auto;min-width:180px">
+                            @foreach (var status in Model.Statuses)
+                            {
+                                <option value="@status.Id" selected="@(status.Id == Model.CurrentStatusId)">@SL[$"status.{status.Key}"]</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="rd-btn-primary">@L["tv.addNote"]</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Transfer dialog -->
+<dialog class="rd-dialog" id="dlg-transfer">
+    <div class="rd-dialog-head">
+        <span>@L["tv.dlgTransfer"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Transfer">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label">@L["tv.dept"]</label>
+                <select class="rd-control" name="departmentId">
+                    @foreach (var dept in Model.Departments)
+                    {
+                        <option value="@dept.Id" selected="@(dept.Id == Model.CurrentDeptId)">@dept.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label">@L["tv.comment"]</label>
+                <textarea class="rd-control" name="comment" style="min-height:90px" placeholder="@L["tv.commentPh"]"></textarea>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@L["tv.actTransfer"]</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Assign dialog -->
+<dialog class="rd-dialog" id="dlg-assign">
+    <div class="rd-dialog-head">
+        <span>@L["tv.dlgAssign"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Assign">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label">@L["tv.assignee"]</label>
+                <select class="rd-control" name="assignee">
+                    @foreach (var option in Model.Assignees)
+                    {
+                        <option value="@option.Value" selected="@option.Selected">@ShortName(option.Label)</option>
+                    }
+                </select>
+            </div>
+            <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label">@L["tv.comment"]</label>
+                <textarea class="rd-control" name="comment" style="min-height:90px" placeholder="@L["tv.commentPh"]"></textarea>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@L["tv.actAssign"]</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- More-actions dialog: implemented actions POST through the S4 services; the rest
+     are disabled with an explanatory title (TODO(S6/S7): merge/link/owner/referrals/
+     forms/collabs/ban/delete need services or builder output that don't exist yet). -->
+<dialog class="rd-dialog" id="dlg-more" style="width:min(380px,calc(100vw - 40px))">
+    <div class="rd-dialog-head">
+        <span>@L["tv.dlgMore"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body" style="display:flex;flex-direction:column;gap:2px;padding:10px">
+        <span style="padding:9px 12px;border-radius:9px;opacity:.5;cursor:not-allowed" title="@L["tv.notYet"]">@L["tv.mOwner"]</span>
+        <span style="padding:9px 12px;border-radius:9px;opacity:.5;cursor:not-allowed" title="@L["tv.notYet"]">@L["tv.mMerge"]</span>
+        <span style="padding:9px 12px;border-radius:9px;opacity:.5;cursor:not-allowed" title="@L["tv.notYet"]">@L["tv.mLink"]</span>
+        <form method="post" asp-action="Release" style="display:contents">
+            <input type="hidden" name="id" value="@Model.Id">
+            <button style="padding:9px 12px;border-radius:9px;border:0;background:none;text-align:left;font:inherit;color:inherit;cursor:pointer">@L["tv.mRelease"]</button>
+        </form>
+        <form method="post" asp-action="MarkOverdue" style="display:contents">
+            <input type="hidden" name="id" value="@Model.Id">
+            <button style="padding:9px 12px;border-radius:9px;border:0;background:none;text-align:left;font:inherit;color:inherit;cursor:pointer">@L["tv.mOverdue"]</button>
+        </form>
+        <form method="post" asp-action="MarkAnswered" style="display:contents">
+            <input type="hidden" name="id" value="@Model.Id">
+            <button style="padding:9px 12px;border-radius:9px;border:0;background:none;text-align:left;font:inherit;color:inherit;cursor:pointer">@L["tv.mAnswered"]</button>
+        </form>
+        <span style="padding:9px 12px;border-radius:9px;opacity:.5;cursor:not-allowed" title="@L["tv.notYet"]">@L["tv.mReferrals"]</span>
+        <span style="padding:9px 12px;border-radius:9px;opacity:.5;cursor:not-allowed" title="@L["tv.notYet"]">@L["tv.mForms"]</span>
+        <span style="padding:9px 12px;border-radius:9px;opacity:.5;cursor:not-allowed" title="@L["tv.notYet"]">@L["tv.mCollabs"]</span>
+        <span style="padding:9px 12px;border-radius:9px;opacity:.5;cursor:not-allowed" title="@L["tv.notYet"]">@L["tv.mBan"]</span>
+        <span style="padding:9px 12px;border-radius:9px;opacity:.5;cursor:not-allowed;color:var(--rd-red)" title="@L["tv.notYet"]">@L["tv.mDelete"]</span>
+    </div>
+</dialog>
+
+<!-- Effort proposal dialog (B8): proposes, or revises while a proposal is pending -->
+<dialog class="rd-dialog" id="dlg-effort">
+    <form method="post" asp-action="Effort">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-head">
+            <span>@L["tv.dlgEffort"]</span>
+            <button type="button" class="close" data-dialog-close>✕</button>
+        </div>
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="ef-hours">@SL["effort.label"]</label>
+                <div style="display:flex;gap:9px;align-items:center">
+                    <input id="ef-hours" name="hours" type="number" class="rd-control" value="@((pending ? Model.Effort!.Hours : Model.Effort?.Hours ?? 6).ToString("0.##", CultureInfo.InvariantCulture))" min="1" style="max-width:110px">
+                    <span class="rd-muted">@L["tv.effUnit"]</span>
+                </div>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="ef-note">@L["tv.effNoteLabel"]</label>
+                <textarea id="ef-note" name="note" class="rd-control" placeholder="@L["tv.effNotePh"]">@(pending ? Model.Effort!.Note : null)</textarea>
+            </div>
+            <div class="rd-help">@L["tv.effDlgHelp"]</div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button class="rd-btn-primary">@L["tv.effSend"]</button>
+        </div>
+    </form>
+</dialog>

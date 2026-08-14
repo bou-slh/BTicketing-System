@@ -60,3 +60,22 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
    inherit the th styling so the DOM matches the mockup's plain-text headers. */
 .rd-table th.sortable a { color: inherit; text-decoration: none; }
 .rd-table th.sortable a:hover { text-decoration: none; }
+
+/* B10 "Yazdır" print view (agent/ticket-view, S6): the mockups define no print CSS,
+   so this is product-only. Chrome, actions, tab bar, composers and dialogs drop out;
+   the header, info cards, effort state and the thread print full-width. */
+@media print {
+  #rd-topbar,
+  #rd-sidebar,
+  .bo-page-head .actions,
+  .rd-tabs,
+  #reply,
+  dialog,
+  #rd-toast,
+  .bo-thread-entry > .head button,
+  .bo-toggle-card .head > div:last-child { display: none !important; }
+  body.backoffice { display: block !important; background: #fff !important; }
+  .bo-main { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+  .rd-tab-panel { display: block !important; }
+  .rd-surface, .bo-thread-entry, .bo-toggle-card, .rd-banner { break-inside: avoid; }
+}
