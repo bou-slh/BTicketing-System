@@ -80,6 +80,10 @@ public static class IdentitySeeder
                 EmailConfirmed = true,
                 FullName = "Bourla Salehi",
                 OrganizationName = "Ulaşım A.Ş.",
+                // portal/profile.html canon. Note: agent/user-view.html shows the
+                // domain User.Phone (+90 212 555 0180) for the same person — the
+                // two mockups disagree; tracked as a §2 cross-page canon decision.
+                PhoneNumber = "+90 532 481 22 15",
             };
             var created = await customers.CreateAsync(bourla, password);
             if (!created.Succeeded)

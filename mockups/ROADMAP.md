@@ -176,7 +176,8 @@ pattern dead in the mockups.
   search), canned+variables, **EffortProposalService** (B8 state machine + guards + domain events),
   `IFileStore`. *Gate*: service test suite green incl. full effort lifecycle and revision loops.
 - **S5 — Portal area** (12 pages, checklists §6.1). *Gate*: portal E2E — register → open → reply → effort
-  approve + reject paths; visual diff accepted. *(Gate E2E green 2026-08-14, `PortalGoldenPathTests`:
+  approve + reject paths; visual diff accepted. *(Differ #3 2026-08-14: login/register/pwreset×3/offline/
+  profile all PASS in 4 states — S5 visual diff accepted. Gate E2E green 2026-08-14, `PortalGoldenPathTests`:
   fresh-user register → open → reply incl. org auto-link assert; hero-proposal Reddet mandatory-note guard +
   Onayla decision. The full portal reject transition is service-tested (S4 suite) and gets its E2E in the S6
   golden path — the hero proposal is the only seeded pending one and a decided proposal can't be re-proposed
@@ -242,7 +243,10 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       data-lang-switch → submits the profile form, save sets the culture cookie server-side so the response is
       already in the new language; password change optional via ChangePasswordAsync with rd.js strength/match
       hints + localized Identity errors; success = rd.js toast via body[data-toast] handoff (mockup's submit
-      toast); email readonly per mockup; NavKey "home" faithful to the mockup's data-nav)*
+      toast); email readonly per mockup; NavKey "home" faithful to the mockup's data-nav; differ #3 PASS all
+      4 states — fixed seed gap: identity PhoneNumber now seeded from this mockup's "+90 532 481 22 15", which
+      CONFLICTS with agent/user-view.html's "+90 212 555 0180" for the same person — absorbed as identity
+      phone vs domain User.Phone for now, needs a §2 canon decision)*
 - [x] *(portal header everywhere)* — profile + check-status reachable, logout (B9) *(S5; header account menu →
       /profile now resolves on every portal page, guest check-status linked from login, logout POST live)*
 
