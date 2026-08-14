@@ -20,6 +20,9 @@ public class AccountController(
     protected override string AreaPrefix => "/agent";
     protected override bool RequireAdmin => false;
 
+    // Agent panel has its own new-password card (rd-field conventions, no portal step captions).
+    protected override string PwresetNewViewName => "PwresetNew";
+
     [HttpGet("/agent/login")]
     [AllowAnonymous]
     public IActionResult Login(string? returnUrl) => View(new StaffLoginVm { ReturnUrl = returnUrl });

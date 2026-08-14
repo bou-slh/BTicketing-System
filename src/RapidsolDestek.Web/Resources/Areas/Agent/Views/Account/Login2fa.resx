@@ -45,4 +45,7 @@
   <data name="lg.backPortal" xml:space="preserve">
     <value>← Kullanıcı portalına dön</value>
   </data>
+  <data name="lg.backLogin" xml:space="preserve">
+    <value>← Girişe dön</value>
+  </data>
 </root>

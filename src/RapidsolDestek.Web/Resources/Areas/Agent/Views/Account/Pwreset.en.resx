@@ -33,4 +33,7 @@
   <data name="pw.back" xml:space="preserve">
     <value>← Back to sign-in</value>
   </data>
+  <data name="pw.sentNotice" xml:space="preserve">
+    <value>The reset link has been sent to your email address. Check your inbox and your spam folder.</value>
+  </data>
 </root>

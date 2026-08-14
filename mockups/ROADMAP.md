@@ -252,8 +252,21 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 
 ### 6.2 Agent (18 pages)
 
-- [ ] **login.html** — real form, 2FA, lockout, forgot-password → pwreset (B6)
-- [ ] **pwreset.html** — staff reset-link flow (request → mail → new password) (B6)
+- [x] **login.html** — real form, 2FA, lockout, forgot-password → pwreset (B6) *(S6; Identity staff
+      sign-in with lockout, invalid-credential/locked-out states via `.rd-form-error` + shared `auth.*`
+      keys; mockup's `<a>` sign-in → real `<button type=submit>` (+`width:100%`); mockup's in-card 2FA
+      "önizleme" box renders as the separate `/agent/login/2fa` step (portal-pwreset multi-step
+      precedent) reusing the box's exact DOM — mockup needs an S0-style pass to gain a real 2FA step
+      card, drop "(önizleme)" from `lg.twofaCaption` (product copy strips it) and define the added
+      `lg.backLogin` foot key; no remember-me — faithful, the agent mockup has none; E2E ids
+      `#lg-user`/`#lg-pass` kept)*
+- [x] **pwreset.html** — staff reset-link flow (request → mail → new password) (B6) *(S6; request card
+      = mockup DOM, enumeration-safe, dev-mode reset link via TempData; sent state = `rc-notice` on the
+      same page with added `pw.sentNotice` copy (invented, modeled on portal `pw.sub2`) — the mockup
+      has no sent card, S0 to add or bless the notice; new-password step is an agent-conventions card
+      (`rd-field`/`rd-control`, no portal "Adım 3 / 3" caption) with portal-copied `pw.*` strings —
+      mockup lacks this card entirely, S0 to add; canon conflict: agent `pw.help` promises 30-min link
+      validity vs portal's 1 h vs Identity's 1-day default — TODO(S7) at `PwresetCore`)*
 - [ ] **dashboard.html** — live stat tiles, tables from data with row deep-links, topbar search (B9)
 - [ ] **live.html** — SignalR board: real column membership, drag between columns, Üstlen/claim, ticker from
       domain events, recoverable SLA countdown, pause (B7)

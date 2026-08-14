@@ -45,4 +45,7 @@
   <data name="lg.backPortal" xml:space="preserve">
     <value>← Back to user portal</value>
   </data>
+  <data name="lg.backLogin" xml:space="preserve">
+    <value>← Back to sign-in</value>
+  </data>
 </root>

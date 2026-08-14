@@ -27,6 +27,13 @@ public abstract class StaffAccountControllerBase(
     protected abstract string AreaPrefix { get; }   // "/agent" or "/admin"
     protected abstract bool RequireAdmin { get; }
 
+    /// <summary>
+    /// View rendered for the reset-link "new password" step. Defaults to the portal view
+    /// (admin still uses it); an area can override with its own view name to match its
+    /// panel's auth-card conventions (agent does).
+    /// </summary>
+    protected virtual string PwresetNewViewName => "~/Areas/Portal/Views/Account/PwresetNew.cshtml";
+
     // ---- Login -------------------------------------------------------------
 
     protected async Task<IActionResult> LoginCore(StaffLoginVm vm)
@@ -109,6 +116,9 @@ public abstract class StaffAccountControllerBase(
 
     protected async Task<IActionResult> PwresetCore(string email)
     {
+        // TODO(S7): reset-token lifespan — the agent mockup's pw.help promises 30 minutes (portal
+        // says 1 hour) while Identity's default DataProtection token lifespan is 1 day; align when
+        // the settings-agents lockout/policy work lands (ROADMAP §6.3 settings-agents ↔ B6).
         var user = await users.FindByEmailAsync(email);
         if (user is not null && (!RequireAdmin || await users.IsInRoleAsync(user, "Admin")))
         {
@@ -126,14 +136,14 @@ public abstract class StaffAccountControllerBase(
     {
         ViewData["PwresetPostUrl"] = $"{AreaPrefix}/pwreset/new";
         ViewData["PwresetBackUrl"] = $"{AreaPrefix}/login";
-        return View("~/Areas/Portal/Views/Account/PwresetNew.cshtml", new PwresetNewVm { Email = email, Token = token });
+        return View(PwresetNewViewName, new PwresetNewVm { Email = email, Token = token });
     }
 
     protected async Task<IActionResult> PwresetNewPostCore(PwresetNewVm vm)
     {
         ViewData["PwresetPostUrl"] = $"{AreaPrefix}/pwreset/new";
         ViewData["PwresetBackUrl"] = $"{AreaPrefix}/login";
-        if (!ModelState.IsValid) return View("~/Areas/Portal/Views/Account/PwresetNew.cshtml", vm);
+        if (!ModelState.IsValid) return View(PwresetNewViewName, vm);
 
         var user = await users.FindByEmailAsync(vm.Email);
         if (user is not null)
@@ -149,7 +159,7 @@ public abstract class StaffAccountControllerBase(
                         _ when e.Code.StartsWith("Password") => "passwordWeak",
                         _ => e.Description,
                     });
-                return View("~/Areas/Portal/Views/Account/PwresetNew.cshtml", vm);
+                return View(PwresetNewViewName, vm);
             }
         }
         return Redirect($"{AreaPrefix}/login");

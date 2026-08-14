@@ -12,7 +12,7 @@
 
     @if (TempData["PwresetRequested"] is not null)
     {
-        <div class="rc-notice">✉ @L["pw.help"]</div>
+        <div class="rc-notice">✉ @L["pw.sentNotice"]</div>
         @if (TempData["DevResetLink"] is string link)
         {
             <div class="rc-notice" style="word-break:break-all"><span>DEV:</span> <a href="@link">@link</a></div>

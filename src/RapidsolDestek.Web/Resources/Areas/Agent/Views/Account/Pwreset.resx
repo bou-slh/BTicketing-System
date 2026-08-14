@@ -33,4 +33,7 @@
   <data name="pw.back" xml:space="preserve">
     <value>← Girişe dön</value>
   </data>
+  <data name="pw.sentNotice" xml:space="preserve">
+    <value>Sıfırlama bağlantısı e-posta adresinize gönderildi. Gelen kutunuzu ve gereksiz (spam) klasörünü kontrol edin.</value>
+  </data>
 </root>
