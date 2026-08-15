@@ -79,3 +79,20 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
   .rd-tab-panel { display: block !important; }
   .rd-surface, .bo-thread-entry, .bo-toggle-card, .rd-banner { break-inside: avoid; }
 }
+
+/* Agent ticket-open user autocomplete (S6): reuses the .bo-search-results dropdown
+   look with <button> rows — the mockup defines no dropdown DOM (flagged on the
+   ROADMAP ticket-open row for canon sign-off). */
+.bo-search-results button {
+  display: flex; align-items: baseline; gap: 8px; width: 100%;
+  padding: 8px 11px; border: 0; background: none; text-align: left;
+  border-radius: 9px; font-size: 13px; color: inherit; cursor: pointer;
+  overflow: hidden; white-space: nowrap;
+}
+.bo-search-results button:hover { background: var(--rd-teal-bg); }
+.bo-search-results button span { overflow: hidden; text-overflow: ellipsis; }
+.bo-search-results button small { margin-left: auto; color: var(--rd-text-soft); }
+
+/* base.css's .rd-grid-2 display:grid (author rule) would beat the UA [hidden]
+   default — the ticket-open inline new-user block toggles via the attribute. */
+.rd-grid-2[hidden] { display: none; }

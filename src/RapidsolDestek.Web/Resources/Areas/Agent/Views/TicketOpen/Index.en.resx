@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="to.title" xml:space="preserve">
+    <value>Open New Ticket</value>
+  </data>
+  <data name="to.sub" xml:space="preserve">
+    <value>Create a new support ticket on behalf of a user.</value>
+  </data>
+  <data name="to.secUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="to.secInfo" xml:space="preserve">
+    <value>Ticket Information</value>
+  </data>
+  <data name="to.secSubject" xml:space="preserve">
+    <value>Subject and Details</value>
+  </data>
+  <data name="to.secFirst" xml:space="preserve">
+    <value>First response and internal note</value>
+  </data>
+  <data name="to.userSearch" xml:space="preserve">
+    <value>Search user</value>
+  </data>
+  <data name="to.userSearchPh" xml:space="preserve">
+    <value>Search by name, email or phone…</value>
+  </data>
+  <data name="to.newUser" xml:space="preserve">
+    <value>＋ New User</value>
+  </data>
+  <data name="to.cc" xml:space="preserve">
+    <value>CC collaborators</value>
+  </data>
+  <data name="to.ccPh" xml:space="preserve">
+    <value>Add email addresses separated by commas…</value>
+  </data>
+  <data name="to.notify" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="to.notifyAll" xml:space="preserve">
+    <value>Notify everyone</value>
+  </data>
+  <data name="to.notifyUser" xml:space="preserve">
+    <value>User only</value>
+  </data>
+  <data name="to.notifyNone" xml:space="preserve">
+    <value>Do not notify</value>
+  </data>
+  <data name="to.source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="to.srcPhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="to.srcEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="to.srcWeb" xml:space="preserve">
+    <value>Web</value>
+  </data>
+  <data name="to.srcOther" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="to.topic" xml:space="preserve">
+    <value>Help Topic</value>
+  </data>
+  <data name="to.dept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="to.sla" xml:space="preserve">
+    <value>SLA Plan</value>
+  </data>
+  <data name="to.due" xml:space="preserve">
+    <value>Due Date</value>
+  </data>
+  <data name="to.assign" xml:space="preserve">
+    <value>Assign To</value>
+  </data>
+  <data name="to.select" xml:space="preserve">
+    <value>— Select —</value>
+  </data>
+  <data name="to.summary" xml:space="preserve">
+    <value>Issue summary</value>
+  </data>
+  <data name="to.summaryPh" xml:space="preserve">
+    <value>Summarize the issue in one sentence…</value>
+  </data>
+  <data name="to.priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="to.details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="to.detailsPh" xml:space="preserve">
+    <value>Describe the issue in detail…</value>
+  </data>
+  <data name="to.upload" xml:space="preserve">
+    <value>Drag files here or click to choose</value>
+  </data>
+  <data name="to.canned" xml:space="preserve">
+    <value>Canned Response</value>
+  </data>
+  <data name="to.cannedPh" xml:space="preserve">
+    <value>Select a canned response</value>
+  </data>
+  <data name="to.replyLabel" xml:space="preserve">
+    <value>First response</value>
+  </data>
+  <data name="to.replyPh" xml:space="preserve">
+    <value>Write the first response to send to the user (optional)…</value>
+  </data>
+  <data name="to.signature" xml:space="preserve">
+    <value>Signature</value>
+  </data>
+  <data name="to.sigNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="to.sigMine" xml:space="preserve">
+    <value>My Signature</value>
+  </data>
+  <data name="to.sigDept" xml:space="preserve">
+    <value>Department Signature</value>
+  </data>
+  <data name="to.note" xml:space="preserve">
+    <value>Internal note</value>
+  </data>
+  <data name="to.notePh" xml:space="preserve">
+    <value>Add a note visible to agents only (optional)…</value>
+  </data>
+  <data name="to.open" xml:space="preserve">
+    <value>Open Ticket</value>
+  </data>
+  <data name="to.errUser" xml:space="preserve">
+    <value>Select a user or create a new one.</value>
+  </data>
+  <data name="to.errNewUser" xml:space="preserve">
+    <value>Enter a name and a valid email for the new user.</value>
+  </data>
+  <data name="to.errEmailInUse" xml:space="preserve">
+    <value>This email already belongs to an existing user — pick them from the search box.</value>
+  </data>
+  <data name="to.errBlocked" xml:space="preserve">
+    <value>This user is blocked; tickets cannot be opened on their behalf.</value>
+  </data>
+  <data name="to.errTopic" xml:space="preserve">
+    <value>Select a help topic.</value>
+  </data>
+  <data name="to.errSummary" xml:space="preserve">
+    <value>Issue summary is required.</value>
+  </data>
+  <data name="to.errDetails" xml:space="preserve">
+    <value>Details are required.</value>
+  </data>
+  <data name="to.errDenied" xml:space="preserve">
+    <value>You do not have permission to open tickets in this department.</value>
+  </data>
+  <data name="to.errField" xml:space="preserve">
+    <value>The “{0}” field is required.</value>
+  </data>
+  <data name="to.errCc" xml:space="preserve">
+    <value>Invalid CC address: {0}</value>
+  </data>
+  <data name="to.errCanned" xml:space="preserve">
+    <value>Canned response could not be loaded.</value>
+  </data>
+  <data name="to.newUserName" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+  <data name="to.newUserEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="to.newUserPhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="to.noUserResults" xml:space="preserve">
+    <value>No matching users found</value>
+  </data>
+  <data name="to.slaFmt" xml:space="preserve">
+    <value>{0} ({1} hours)</value>
+  </data>
+  <data name="to.grpAgents" xml:space="preserve">
+    <value>Agents</value>
+  </data>
+  <data name="to.grpTeams" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+</root>

@@ -1,0 +1,434 @@
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model TicketOpenVm
+@{
+    ViewData["Title"] = L["to.title"];
+    ViewData["MainStyle"] = "max-width:880px";
+
+    // B3 error presentation: portal /open precedent — .rd-form-error block with
+    // this page's validation codes mapped to i18n here.
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+    string ErrorText(string code) => code switch
+    {
+        "errUser" => L["to.errUser"].Value,
+        "errNewUser" => L["to.errNewUser"].Value,
+        "errEmailInUse" => L["to.errEmailInUse"].Value,
+        "errBlocked" => L["to.errBlocked"].Value,
+        "errTopic" => L["to.errTopic"].Value,
+        "errSummary" => L["to.errSummary"].Value,
+        "errDetails" => L["to.errDetails"].Value,
+        "errDenied" => L["to.errDenied"].Value,
+        _ when code.StartsWith("errField:") => L["to.errField", code["errField:".Length..]].Value,
+        _ when code.StartsWith("errCc:") => L["to.errCc", code["errCc:".Length..]].Value,
+        _ => code,
+    };
+
+    var selectedTopic = Model.Form.Topic;
+    var selectedDept = Model.Form.DepartmentId ?? Model.DefaultDeptId;
+    var selectedSla = Model.Form.SlaId ?? Model.DefaultSlaId;
+    var selectedPriority = Model.Form.Priority;
+    var source = Model.Form.Source ?? "phone";
+    var notify = Model.Form.Notify ?? "all";
+    var sig = Model.Form.Sig ?? "none";
+    var deptSig = Model.Departments.FirstOrDefault(d => d.Id == selectedDept)?.Signature ?? "";
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <h1>@L["to.title"]</h1>
+        <p>@L["to.sub"]</p>
+    </div>
+</div>
+
+<form method="post" enctype="multipart/form-data" asp-action="Index" style="display:flex;flex-direction:column;gap:20px">
+    @if (errors.Count > 0)
+    {
+        <div class="rd-form-error" role="alert">
+            @foreach (var e in errors)
+            {
+                <div>@ErrorText(e)</div>
+            }
+        </div>
+    }
+
+    <!-- 1. User -->
+    <div class="rd-surface">
+        <div class="rd-surface-head">@L["to.secUser"]</div>
+        <div class="rd-surface-body">
+            <div class="rd-field">
+                <label class="rd-label" for="to-user-search">@L["to.userSearch"]</label>
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    @* The mockup's plain input gains a relative wrapper + results panel
+                       (topbar-search dropdown reuse) — it defines no dropdown DOM. *@
+                    <div style="position:relative;flex:1;min-width:220px">
+                        <input id="to-user-search" class="rd-control" style="width:100%" name="UserQuery"
+                               placeholder="@L["to.userSearchPh"]" value="@Model.UserLabel" autocomplete="off">
+                        <div id="to-user-results" class="bo-search-results" hidden
+                             data-empty="@L["to.noUserResults"]"></div>
+                    </div>
+                    <button type="button" id="to-new-user-btn" class="rd-btn rd-btn-ghost">@L["to.newUser"]</button>
+                </div>
+                <input type="hidden" id="to-user-id" name="UserId" value="@Model.Form.UserId">
+                <input type="hidden" id="to-new-user-flag" name="NewUser" value="@(Model.Form.NewUser ? "true" : "false")">
+            </div>
+            @* Inline "Yeni Kullanıcı" fields (mockup defines only the button — this
+               block is product DOM, flagged for canon sign-off on the ROADMAP row). *@
+            <div id="to-new-user-block" class="rd-grid-2" hidden="@(!Model.Form.NewUser)">
+                <div class="rd-field">
+                    <label class="rd-label" for="to-nu-name">@L["to.newUserName"]</label>
+                    <input id="to-nu-name" class="rd-control" name="NewUserName" value="@Model.Form.NewUserName">
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="to-nu-email">@L["to.newUserEmail"]</label>
+                    <input id="to-nu-email" class="rd-control" type="email" name="NewUserEmail" value="@Model.Form.NewUserEmail">
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="to-nu-phone">@L["to.newUserPhone"]</label>
+                    <input id="to-nu-phone" class="rd-control" name="NewUserPhone" value="@Model.Form.NewUserPhone">
+                </div>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="to-cc">@L["to.cc"]</label>
+                <input id="to-cc" class="rd-control" name="Cc" placeholder="@L["to.ccPh"]" value="@Model.Form.Cc">
+            </div>
+            <div class="rd-field" style="margin-bottom:0">
+                <span class="rd-label">@L["to.notify"]</span>
+                @* TODO(S8): the notify choice is accepted but consumed only when the
+                   outbound mail subsystem lands. *@
+                <div style="display:flex;flex-wrap:wrap;gap:9px 22px">
+                    <label class="rd-check"><input type="radio" name="Notify" value="all" checked="@(notify == "all")"><span>@L["to.notifyAll"]</span></label>
+                    <label class="rd-check"><input type="radio" name="Notify" value="user" checked="@(notify == "user")"><span>@L["to.notifyUser"]</span></label>
+                    <label class="rd-check"><input type="radio" name="Notify" value="none" checked="@(notify == "none")"><span>@L["to.notifyNone"]</span></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Ticket info -->
+    <div class="rd-surface">
+        <div class="rd-surface-head">@L["to.secInfo"]</div>
+        <div class="rd-surface-body">
+            <div class="rd-grid-2">
+                <div class="rd-field">
+                    <label class="rd-label" for="to-source">@L["to.source"]</label>
+                    <select id="to-source" class="rd-control" name="Source">
+                        <option value="phone" selected="@(source == "phone")">@L["to.srcPhone"]</option>
+                        <option value="email" selected="@(source == "email")">@L["to.srcEmail"]</option>
+                        <option value="web" selected="@(source == "web")">@L["to.srcWeb"]</option>
+                        <option value="other" selected="@(source == "other")">@L["to.srcOther"]</option>
+                    </select>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="to-topic">@L["to.topic"]</label>
+                    @* Options carry the topic's routing overrides; picking one drives the
+                       dept/priority/SLA selects below and swaps the designed form fields
+                       (server cascade in TicketService stays authoritative). *@
+                    <select id="to-topic" class="rd-control" name="Topic" data-topic-select>
+                        <option value="">@L["to.select"]</option>
+                        @foreach (var t in Model.Topics)
+                        {
+                            <option value="@t.Id" selected="@(selectedTopic == t.Id)"
+                                    data-dept="@t.DeptId" data-priority="@t.PriorityId" data-sla="@t.SlaId">@t.Label</option>
+                        }
+                    </select>
+                </div>
+                @* Help-topic → designed form fields (HelpTopicForm; portal /open
+                   precedent): hidden + disabled until their topic is selected. *@
+                @foreach (var t in Model.Topics)
+                {
+                    var active = selectedTopic == t.Id;
+                    foreach (var f in t.Fields)
+                    {
+                        var fieldId = $"to-field-{f.Id}";
+                        var name = $"Fields[{f.Id}]";
+                        Model.Form.Fields.TryGetValue(f.Id, out var value);
+                        <div class="rd-field" data-topic-field="@t.Id" hidden="@(!active)">
+                            <label class="rd-label" for="@fieldId">@f.Label</label>
+                            @switch (f.Type)
+                            {
+                                case "choices":
+                                    <select id="@fieldId" class="rd-control" name="@name" disabled="@(!active)">
+                                        <option value=""></option>
+                                        @foreach (var c in f.Choices)
+                                        {
+                                            <option value="@c.Id" selected="@(value == c.Id.ToString())">@c.Value</option>
+                                        }
+                                    </select>
+                                    break;
+                                case "date":
+                                    <input id="@fieldId" class="rd-control" type="date" name="@name" value="@value" disabled="@(!active)">
+                                    break;
+                                case "memo":
+                                    <textarea id="@fieldId" class="rd-control" name="@name" data-plain disabled="@(!active)">@value</textarea>
+                                    break;
+                                default:
+                                    <input id="@fieldId" class="rd-control" type="text" name="@name" value="@value" disabled="@(!active)">
+                                    break;
+                            }
+                            @if (!string.IsNullOrWhiteSpace(f.Hint))
+                            {
+                                <div class="rd-help">@f.Hint</div>
+                            }
+                        </div>
+                    }
+                }
+                <div class="rd-field">
+                    <label class="rd-label" for="to-dept">@L["to.dept"]</label>
+                    <select id="to-dept" class="rd-control" name="DepartmentId" data-dept-select>
+                        @foreach (var d in Model.Departments)
+                        {
+                            <option value="@d.Id" selected="@(selectedDept == d.Id)" data-sig="@d.Signature">@d.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="to-sla">@L["to.sla"]</label>
+                    <select id="to-sla" class="rd-control" name="SlaId">
+                        @foreach (var s in Model.Slas)
+                        {
+                            <option value="@s.Id" selected="@(selectedSla == s.Id)">@L["to.slaFmt", s.Name, s.GraceHours]</option>
+                        }
+                    </select>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="to-due">@L["to.due"]</label>
+                    <input id="to-due" class="rd-control" type="date" name="Due" value="@(Model.Form.Due?.ToString("yyyy-MM-dd"))">
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="to-assign">@L["to.assign"]</label>
+                    <select id="to-assign" class="rd-control" name="Assignee">
+                        <option value="">@L["to.select"]</option>
+                        <optgroup label="@L["to.grpAgents"]">
+                            @foreach (var a in Model.Agents)
+                            {
+                                <option value="@a.Value" selected="@(Model.Form.Assignee == a.Value)">@a.Label</option>
+                            }
+                        </optgroup>
+                        <optgroup label="@L["to.grpTeams"]">
+                            @foreach (var t in Model.Teams)
+                            {
+                                <option value="@t.Value" selected="@(Model.Form.Assignee == t.Value)">@t.Label</option>
+                            }
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Subject + details -->
+    <div class="rd-surface">
+        <div class="rd-surface-head">@L["to.secSubject"]</div>
+        <div class="rd-surface-body">
+            <div class="rd-grid-2">
+                <div class="rd-field">
+                    <label class="rd-label" for="to-summary">@L["to.summary"]</label>
+                    <input id="to-summary" class="rd-control" name="Summary" placeholder="@L["to.summaryPh"]" value="@Model.Form.Summary">
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="to-priority">@L["to.priority"]</label>
+                    <select id="to-priority" class="rd-control" name="Priority" data-priority-select>
+                        @foreach (var p in Model.Priorities)
+                        {
+                            <option value="@p.Id" selected="@(selectedPriority == p.Id || (selectedPriority is null && p.Key == "normal"))">@SL[$"priority.{p.Key}"]</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="to-details">@L["to.details"]</label>
+                <textarea id="to-details" class="rd-control" style="min-height:140px" name="Details" placeholder="@L["to.detailsPh"]">@Model.Form.Details</textarea>
+            </div>
+            <label class="rd-upload" style="display:block;margin-bottom:0" for="to-files">
+                <span>@L["to.upload"]</span>
+                <input id="to-files" name="Files" type="file" multiple hidden>
+            </label>
+            @* B5 attach list target (mockup lacks one; rd.js fills it on change). *@
+            <span class="rc-file-name"></span>
+
+            <!-- 4. First response + note (advanced) -->
+            <details class="rd-advanced" open="@(!string.IsNullOrEmpty(Model.Form.Reply) || !string.IsNullOrEmpty(Model.Form.Note))">
+                <summary>@L["to.secFirst"]</summary>
+                <div class="rd-advanced-body">
+                    <div class="rd-field">
+                        <label class="rd-label" for="to-canned">@L["to.canned"]</label>
+                        @* data-canned-open: page-scoped insert into the reply textarea —
+                           rd.js's data-canned-insert targets the form's FIRST textarea,
+                           which here is the details field. *@
+                        <select id="to-canned" class="rd-control" data-canned-open="/agent/ticket-open/canned?src=open"
+                                data-canned-err="@L["to.errCanned"]">
+                            <option value="">@L["to.cannedPh"]</option>
+                            @foreach (var c in Model.Canned)
+                            {
+                                <option value="@c.Id">@c.Title</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="to-reply">@L["to.replyLabel"]</label>
+                        <textarea id="to-reply" class="rd-control" name="Reply" placeholder="@L["to.replyPh"]">@Model.Form.Reply</textarea>
+                    </div>
+                    <div class="rd-field">
+                        <span class="rd-label">@L["to.signature"]</span>
+                        @* NOTE(S8): the chosen signature applies at outbound-mail render;
+                           radios preview into the added rd-help block (ticket-view parity). *@
+                        <div style="display:flex;flex-wrap:wrap;gap:9px 22px">
+                            <label class="rd-check"><input type="radio" name="Sig" value="none" checked="@(sig == "none")" data-sig-text=""><span>@L["to.sigNone"]</span></label>
+                            <label class="rd-check"><input type="radio" name="Sig" value="mine" checked="@(sig == "mine")" data-sig-text="@Model.StaffSignature"><span>@L["to.sigMine"]</span></label>
+                            <label class="rd-check"><input type="radio" name="Sig" value="dept" checked="@(sig == "dept")" data-sig-text="@deptSig"><span>@L["to.sigDept"]</span></label>
+                        </div>
+                        <div class="rd-help" data-sig-preview hidden style="white-space:pre-line"></div>
+                    </div>
+                    <div class="rd-field" style="margin-bottom:0">
+                        <label class="rd-label" for="to-note">@L["to.note"]</label>
+                        <textarea id="to-note" class="rd-control" name="Note" placeholder="@L["to.notePh"]">@Model.Form.Note</textarea>
+                        <div class="rd-help">@SL["common.notesHelp"]</div>
+                    </div>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="display:flex;gap:10px;align-items:center">
+        <button type="submit" class="rd-btn-primary">@L["to.open"]</button>
+        <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+        <a class="rd-btn rd-btn-ghost" href="/agent/tickets">@SL["common.cancel"]</a>
+    </div>
+</form>
+
+@* Page-local behavior, mirroring the mockups' inline-script pattern: user
+   autocomplete + inline new-user toggle, topic cascade + field swap (B3),
+   dept → signature sync, canned insert and the upload drop zone (B5). *@
+<script>
+(() => {
+  /* ---------- User autocomplete (topbar debounce+fetch pattern) ---------- */
+  const search = document.getElementById("to-user-search");
+  const panel = document.getElementById("to-user-results");
+  const userId = document.getElementById("to-user-id");
+  let timer, seq = 0;
+  search?.addEventListener("input", () => {
+    userId.value = ""; // typing invalidates the previous selection
+    clearTimeout(timer);
+    const q = search.value.trim();
+    if (q.length < 2) { panel.hidden = true; panel.innerHTML = ""; return; }
+    timer = setTimeout(async () => {
+      const s = ++seq;
+      try {
+        const res = await fetch(`/agent/ticket-open/users?q=${encodeURIComponent(q)}`);
+        if (!res.ok || s !== seq) return;
+        const rows = await res.json();
+        panel.innerHTML = "";
+        if (!rows.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty";
+          empty.textContent = panel.getAttribute("data-empty") || "";
+          panel.appendChild(empty);
+        }
+        rows.forEach((r) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          const label = r.email ? `${r.name} — ${r.email}` : r.name;
+          const span = document.createElement("span");
+          span.textContent = label;
+          btn.appendChild(span);
+          if (r.org) {
+            const small = document.createElement("small");
+            small.textContent = r.org;
+            btn.appendChild(small);
+          }
+          btn.addEventListener("click", () => {
+            userId.value = r.id;
+            search.value = label;
+            panel.hidden = true;
+            setNewUser(false);
+          });
+          panel.appendChild(btn);
+        });
+        panel.hidden = false;
+      } catch { /* network error: leave the panel as-is */ }
+    }, 250);
+  });
+  document.addEventListener("click", (e) => {
+    if (panel && !panel.hidden && !panel.parentElement.contains(e.target)) panel.hidden = true;
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && panel) panel.hidden = true;
+  });
+
+  /* ---------- Inline "Yeni Kullanıcı" toggle ---------- */
+  const newBtn = document.getElementById("to-new-user-btn");
+  const newBlock = document.getElementById("to-new-user-block");
+  const newFlag = document.getElementById("to-new-user-flag");
+  function setNewUser(on) {
+    newBlock.hidden = !on;
+    newFlag.value = on ? "true" : "false";
+    if (on) userId.value = "";
+  }
+  newBtn?.addEventListener("click", () => setNewUser(newBlock.hidden));
+
+  /* ---------- Topic cascade: routed dept/priority/SLA + field swap ---------- */
+  const topicSelect = document.querySelector("[data-topic-select]");
+  const deptSelect = document.querySelector("[data-dept-select]");
+  const prioritySelect = document.querySelector("[data-priority-select]");
+  const slaSelect = document.getElementById("to-sla");
+  const syncTopic = () => {
+    document.querySelectorAll("[data-topic-field]").forEach((wrap) => {
+      const active = topicSelect.value !== "" && wrap.getAttribute("data-topic-field") === topicSelect.value;
+      wrap.hidden = !active;
+      wrap.querySelectorAll("input,select,textarea").forEach((c) => (c.disabled = !active));
+    });
+    const opt = topicSelect.selectedOptions[0];
+    if (!opt) return;
+    if (opt.dataset.dept) { deptSelect.value = opt.dataset.dept; syncDeptSig(); }
+    if (opt.dataset.priority) prioritySelect.value = opt.dataset.priority;
+    if (opt.dataset.sla) slaSelect.value = opt.dataset.sla;
+  };
+  topicSelect?.addEventListener("change", syncTopic);
+
+  /* ---------- Department → dept-signature radio text ---------- */
+  function syncDeptSig() {
+    const radio = document.querySelector('input[name="Sig"][value="dept"]');
+    const sigText = deptSelect.selectedOptions[0]?.dataset.sig || "";
+    radio.setAttribute("data-sig-text", sigText);
+    if (radio.checked) {
+      const preview = radio.closest("form").querySelector("[data-sig-preview]");
+      preview.textContent = sigText;
+      preview.hidden = sigText === "";
+    }
+  }
+  deptSelect?.addEventListener("change", syncDeptSig);
+
+  /* ---------- Canned insert into the first-response textarea ---------- */
+  const canned = document.querySelector("[data-canned-open]");
+  canned?.addEventListener("change", async () => {
+    if (!canned.value) return;
+    const what = canned.value;
+    canned.selectedIndex = 0;
+    const ta = document.getElementById("to-reply");
+    try {
+      const res = await fetch(`${canned.getAttribute("data-canned-open")}&what=${encodeURIComponent(what)}`);
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const s = ta.selectionStart ?? ta.value.length;
+      const e = ta.selectionEnd ?? ta.value.length;
+      ta.value = ta.value.slice(0, s) + (data.text || "") + ta.value.slice(e);
+      ta.focus();
+      ta.dispatchEvent(new Event("input"));
+    } catch {
+      window.RD?.toast(canned.getAttribute("data-canned-err") || "!", "error");
+    }
+  });
+
+  /* ---------- Upload drop zone (B5; portal /open precedent) ---------- */
+  const fileInput = document.getElementById("to-files");
+  const zone = fileInput?.closest(".rd-upload");
+  zone?.addEventListener("dragover", (e) => e.preventDefault());
+  zone?.addEventListener("drop", (e) => {
+    e.preventDefault();
+    if (e.dataTransfer?.files?.length) {
+      fileInput.files = e.dataTransfer.files;
+      fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  });
+})();
+</script>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="to.title" xml:space="preserve">
+    <value>Yeni Talep Aç</value>
+  </data>
+  <data name="to.sub" xml:space="preserve">
+    <value>Kullanıcı adına yeni bir destek talebi oluşturun.</value>
+  </data>
+  <data name="to.secUser" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="to.secInfo" xml:space="preserve">
+    <value>Talep Bilgileri</value>
+  </data>
+  <data name="to.secSubject" xml:space="preserve">
+    <value>Konu ve Detaylar</value>
+  </data>
+  <data name="to.secFirst" xml:space="preserve">
+    <value>İlk yanıt ve iç not</value>
+  </data>
+  <data name="to.userSearch" xml:space="preserve">
+    <value>Kullanıcı ara</value>
+  </data>
+  <data name="to.userSearchPh" xml:space="preserve">
+    <value>Ad, e-posta veya telefon ile arayın…</value>
+  </data>
+  <data name="to.newUser" xml:space="preserve">
+    <value>＋ Yeni Kullanıcı</value>
+  </data>
+  <data name="to.cc" xml:space="preserve">
+    <value>CC katılımcılar</value>
+  </data>
+  <data name="to.ccPh" xml:space="preserve">
+    <value>E-posta adreslerini virgülle ayırarak ekleyin…</value>
+  </data>
+  <data name="to.notify" xml:space="preserve">
+    <value>Bildirim</value>
+  </data>
+  <data name="to.notifyAll" xml:space="preserve">
+    <value>Tümüne bildirim gönder</value>
+  </data>
+  <data name="to.notifyUser" xml:space="preserve">
+    <value>Sadece kullanıcıya</value>
+  </data>
+  <data name="to.notifyNone" xml:space="preserve">
+    <value>Bildirim gönderme</value>
+  </data>
+  <data name="to.source" xml:space="preserve">
+    <value>Kaynak</value>
+  </data>
+  <data name="to.srcPhone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="to.srcEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="to.srcWeb" xml:space="preserve">
+    <value>Web</value>
+  </data>
+  <data name="to.srcOther" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="to.topic" xml:space="preserve">
+    <value>Yardım Konusu</value>
+  </data>
+  <data name="to.dept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="to.sla" xml:space="preserve">
+    <value>SLA Planı</value>
+  </data>
+  <data name="to.due" xml:space="preserve">
+    <value>Son Tarih</value>
+  </data>
+  <data name="to.assign" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="to.select" xml:space="preserve">
+    <value>— Seçin —</value>
+  </data>
+  <data name="to.summary" xml:space="preserve">
+    <value>Talep özeti</value>
+  </data>
+  <data name="to.summaryPh" xml:space="preserve">
+    <value>Sorunu tek cümleyle özetleyin…</value>
+  </data>
+  <data name="to.priority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="to.details" xml:space="preserve">
+    <value>Detaylar</value>
+  </data>
+  <data name="to.detailsPh" xml:space="preserve">
+    <value>Sorunun ayrıntılarını yazın…</value>
+  </data>
+  <data name="to.upload" xml:space="preserve">
+    <value>Dosyaları buraya sürükleyin veya seçmek için tıklayın</value>
+  </data>
+  <data name="to.canned" xml:space="preserve">
+    <value>Hazır Yanıt</value>
+  </data>
+  <data name="to.cannedPh" xml:space="preserve">
+    <value>Hazır yanıt seç</value>
+  </data>
+  <data name="to.replyLabel" xml:space="preserve">
+    <value>İlk yanıt</value>
+  </data>
+  <data name="to.replyPh" xml:space="preserve">
+    <value>Kullanıcıya gönderilecek ilk yanıtı yazın (isteğe bağlı)…</value>
+  </data>
+  <data name="to.signature" xml:space="preserve">
+    <value>İmza</value>
+  </data>
+  <data name="to.sigNone" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="to.sigMine" xml:space="preserve">
+    <value>İmzam</value>
+  </data>
+  <data name="to.sigDept" xml:space="preserve">
+    <value>Departman İmzası</value>
+  </data>
+  <data name="to.note" xml:space="preserve">
+    <value>İç not</value>
+  </data>
+  <data name="to.notePh" xml:space="preserve">
+    <value>Yalnızca temsilcilerin göreceği bir not ekleyin (isteğe bağlı)…</value>
+  </data>
+  <data name="to.open" xml:space="preserve">
+    <value>Talebi Aç</value>
+  </data>
+  <data name="to.errUser" xml:space="preserve">
+    <value>Bir kullanıcı seçin veya yeni kullanıcı oluşturun.</value>
+  </data>
+  <data name="to.errNewUser" xml:space="preserve">
+    <value>Yeni kullanıcı için ad ve geçerli bir e-posta girin.</value>
+  </data>
+  <data name="to.errEmailInUse" xml:space="preserve">
+    <value>Bu e-posta zaten kayıtlı bir kullanıcıya ait — kullanıcıyı arama kutusundan seçin.</value>
+  </data>
+  <data name="to.errBlocked" xml:space="preserve">
+    <value>Bu kullanıcı engellenmiş; adına talep açılamaz.</value>
+  </data>
+  <data name="to.errTopic" xml:space="preserve">
+    <value>Yardım konusu seçin.</value>
+  </data>
+  <data name="to.errSummary" xml:space="preserve">
+    <value>Talep özeti gerekli.</value>
+  </data>
+  <data name="to.errDetails" xml:space="preserve">
+    <value>Detay alanı gerekli.</value>
+  </data>
+  <data name="to.errDenied" xml:space="preserve">
+    <value>Bu departmanda talep açma yetkiniz yok.</value>
+  </data>
+  <data name="to.errField" xml:space="preserve">
+    <value>“{0}” alanı gerekli.</value>
+  </data>
+  <data name="to.errCc" xml:space="preserve">
+    <value>Geçersiz CC adresi: {0}</value>
+  </data>
+  <data name="to.errCanned" xml:space="preserve">
+    <value>Hazır yanıt yüklenemedi.</value>
+  </data>
+  <data name="to.newUserName" xml:space="preserve">
+    <value>Ad Soyad</value>
+  </data>
+  <data name="to.newUserEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="to.newUserPhone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="to.noUserResults" xml:space="preserve">
+    <value>Eşleşen kullanıcı bulunamadı</value>
+  </data>
+  <data name="to.slaFmt" xml:space="preserve">
+    <value>{0} ({1} saat)</value>
+  </data>
+  <data name="to.grpAgents" xml:space="preserve">
+    <value>Temsilciler</value>
+  </data>
+  <data name="to.grpTeams" xml:space="preserve">
+    <value>Takımlar</value>
+  </data>
+</root>

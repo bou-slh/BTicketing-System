@@ -352,8 +352,32 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       tv.dateLong/dateShort/slaFmt/hoursFmt/source*/evt*/toast*/err*/notYet (TR+EN twins). Tests:
       AgentTicketViewTests — effort propose→revise→withdraw through the controller path incl. thread events,
       composer Response/Note append + after-reply status.)*
-- [ ] **ticket-open.html** — user autocomplete + inline "Yeni Kullanıcı"; topic→dept/SLA/form cascading;
-      attach list; creates ticket on behalf of user (B3/B5)
+- [x] **ticket-open.html** — user autocomplete + inline "Yeni Kullanıcı"; topic→dept/SLA/form cascading;
+      attach list; creates ticket on behalf of user (B3/B5) *(S6; /agent/ticket-open. DONE — user block: search
+      input debounce+fetches /agent/ticket-open/users (SearchController ILike patterns + phone per the mockup
+      placeholder) into a .bo-search-results dropdown of buttons (mockup defines NO dropdown DOM — reused the
+      topbar-search panel, needs canon sign-off); picking fills "Name — email" + hidden UserId. "Yeni Kullanıcı"
+      toggles an ADDED inline name/email/phone block (mockup has only the button — DOM flagged for canon
+      sign-off); submit creates a guest User+UserEmail, org auto-linked by email domain (AccountController.
+      LinkDomainUserAsync pattern), IdentityUserId null; duplicate email → errEmailInUse, blocked user →
+      errBlocked. DONE — cascade: topic options carry data-dept/priority/sla and drive the dept/SLA/priority
+      selects client-side + swap the topic's HelpTopicForm fields (portal /open hidden+disabled precedent,
+      agent field scope VisibleToAgents/RequiredForAgents); server cascade in TicketService.CreateAsync stays
+      authoritative, so a hand-picked dept/SLA only applies when the topic has no override (osTicket parity —
+      flagged). SLA options = active plans as "Name (N saat)" (to.slaFmt); dept/SLA preselect = core.default_*
+      settings. DONE — create: ITicketService.CreateAsync with ActorContext.ForStaff (audit + events + permission
+      pre-flight on the effective dept BEFORE the guest user is created), source select phone/email/web/other →
+      TicketSource, due date, attachments via IFileStore onto the initial Message (+added .rc-file-name span,
+      B5), FormEntry/Values persisted, CC field → find-or-create guest users + ThreadCollaborator (Cc role) via
+      IThreadService.AddCollaboratorAsync; Ata select ("s:/t:" options) → AssignAsync post-create (refusal does
+      not fail creation). Advanced: first response posts a staff Response ("text" + recipients snapshot), iç not
+      posts a Note; canned select inserts via /agent/ticket-open/canned — body returned UNEXPANDED (%{vars}
+      resolve only against an existing ticket; page-scoped handler because rd.js data-canned-insert targets the
+      form's first textarea = details). Redirects /agent/ticket-view?id=. NOTE(S8): Bildirim radios + signature
+      choice accepted but only consumed when outbound mail lands (sig radios preview via data-sig-text, dept sig
+      follows the dept select). Layout gained an optional ViewData["MainStyle"] so <main> carries the mockup's
+      max-width:880px. Invented keys (TR/EN twins): to.err*/newUser*/noUserResults/slaFmt/grpAgents/grpTeams —
+      grp* localize the mockup's hardcoded optgroup labels "Temsilciler"/"Takımlar" (mockup bug: not data-i18n).)*
 - [ ] **tasks.html** — tab bar (fixed in S0) filters from data; B1 engine; new-task dialog creates
 - [ ] **task-view.html** — header actions (Kapat/Ata/Aktar/Düzenle/Sil) via dialogs; note composer appends (B2/B5)
 - [ ] **users.html** — B1 engine; add-user dialog creates; "Diğer" bulk menu actions real; CSV import
