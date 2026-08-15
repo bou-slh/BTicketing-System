@@ -186,7 +186,9 @@ pattern dead in the mockups.
   Organization.Domain auto-link.)*
 - **S6 — Agent area** (18 pages, §6.2; B1 on lists, B5 composers, B7 live board). *Gate*: golden path E2E
   (portal open → agent proposes 6h → portal approves → agent resolves); live board updates <1s across two
-  browsers.
+  browsers. *(Golden-path leg GREEN 2026-08-15: `GoldenPathTests` — fresh portal user opens a Bordro ticket,
+  saydin proposes 6h via dlg-effort, portal Onayla flips the card, agent replies + resolves to Çözüldü,
+  both panels reflect it. Live-board leg still open until live.html ports.)*
 - **S7 — Admin area** (42 pages, §6.3; B1–B4 everywhere, builders, settings actually consumed by the engine).
   *Gate*: every setting round-trips (flip block-work-until-approved → S4 guard flips); builder-created
   queue/form/list/filter demonstrably affects the agent panel.
