@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="kf.back" xml:space="preserve">
+    <value>← Bilgi Bankası</value>
+  </data>
+  <data name="kf.meta" xml:space="preserve">
+    <value>Bordro · Herkese Açık · Son güncelleme: 5 Ağu 2026</value>
+  </data>
+  <data name="kf.preview" xml:space="preserve">
+    <value>Önizle</value>
+  </data>
+  <data name="kf.category" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+  <data name="kf.categoryHelp" xml:space="preserve">
+    <value>Makalenin portalda hangi kategori altında listeleneceğini belirler.</value>
+  </data>
+  <data name="kf.topics" xml:space="preserve">
+    <value>Yardım Konuları</value>
+  </data>
+  <data name="kf.topicsHelp" xml:space="preserve">
+    <value>Makale, seçilen yardım konularıyla açılan taleplerde öneri olarak gösterilir. Çoklu seçim için Ctrl/Cmd kullanın.</value>
+  </data>
+  <data name="kf.listing" xml:space="preserve">
+    <value>Listeleme Türü</value>
+  </data>
+  <data name="kf.featured" xml:space="preserve">
+    <value>Öne Çıkan</value>
+  </data>
+  <data name="kf.public" xml:space="preserve">
+    <value>Herkese Açık</value>
+  </data>
+  <data name="kf.internal" xml:space="preserve">
+    <value>Dahili</value>
+  </data>
+  <data name="kf.listingHelp" xml:space="preserve">
+    <value>Dahili makaleler yalnızca temsilci panelinde görünür; öne çıkanlar portal ana sayfasında listelenir.</value>
+  </data>
+  <data name="kf.tabContent" xml:space="preserve">
+    <value>İçerik</value>
+  </data>
+  <data name="kf.tabAttach" xml:space="preserve">
+    <value>Ekler</value>
+  </data>
+  <data name="kf.question" xml:space="preserve">
+    <value>Soru</value>
+  </data>
+  <data name="kf.answer" xml:space="preserve">
+    <value>Yanıt</value>
+  </data>
+  <data name="kf.uploadHint" xml:space="preserve">
+    <value>Dosyaları buraya sürükleyin veya seçmek için tıklayın</value>
+  </data>
+  <data name="kf.notesPh" xml:space="preserve">
+    <value>Bu makale hakkında dahili not yazın…</value>
+  </data>
+  <data name="kf.newTitle" xml:space="preserve">
+    <value>Yeni Makale</value>
+  </data>
+  <data name="kf.metaNew" xml:space="preserve">
+    <value>Yeni makale — henüz kaydedilmedi</value>
+  </data>
+  <data name="kf.metaUpdated" xml:space="preserve">
+    <value>Son güncelleme:</value>
+  </data>
+  <data name="kf.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="kf.deleteConfirm" xml:space="preserve">
+    <value>Bu makale ve ekleri kalıcı olarak silinecek. Emin misiniz?</value>
+  </data>
+  <data name="kf.toastCreated" xml:space="preserve">
+    <value>Makale oluşturuldu.</value>
+  </data>
+  <data name="kf.toastSaved" xml:space="preserve">
+    <value>Makale kaydedildi.</value>
+  </data>
+  <data name="kf.toastAttachDeleted" xml:space="preserve">
+    <value>Ek silindi.</value>
+  </data>
+  <data name="kf.errInvalid" xml:space="preserve">
+    <value>Kategori, soru ve yanıt alanlarını kontrol edin.</value>
+  </data>
+  <data name="kf.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok.</value>
+  </data>
+</root>

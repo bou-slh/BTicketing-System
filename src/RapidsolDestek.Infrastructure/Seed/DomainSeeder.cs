@@ -384,6 +384,10 @@ public static class DomainSeeder
             "<p>Yol ücreti, fiili çalışılan gün sayısı üzerinden hesaplanır; vergi istisnası ve kesinti kuralları uygulanır.</p>" +
             "<ol><li>Fiili çalışılan gün sayısını belirleyin.</li><li>Günlük yol ücreti tutarıyla çarpın.</li><li>Vergi istisnası sınırını kontrol edin.</li></ol>" +
             "<p>Örnek: 21 fiili gün × 88,00 TL = 1.848,00 TL.</p>");
+        // Canon internal note of the hero article (agent/kb-faq.html Notlar tab).
+        faqYolUcreti.Notes = "2026 tarife değişikliğinde örnek hesap tablosu güncellenmeli. — MÇ";
+        // No canon article is Featured: the hero's kf-listing radio has Herkese Açık
+        // checked (agent/kb-faq.html) and no mockup lists a featured article.
         var kbArticles = new[]
         {
             faqYolUcreti,

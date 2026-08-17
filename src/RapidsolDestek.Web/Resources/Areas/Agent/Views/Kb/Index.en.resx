@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="kb.title" xml:space="preserve">
+    <value>Knowledge Base (FAQ)</value>
+  </data>
+  <data name="kb.subtitle" xml:space="preserve">
+    <value>Manage the articles shown on the user portal and ticket forms.</value>
+  </data>
+  <data name="kb.allCats" xml:space="preserve">
+    <value>All Categories</value>
+  </data>
+  <data name="kb.searchPh" xml:space="preserve">
+    <value>Search articles…</value>
+  </data>
+  <data name="kb.newArticle" xml:space="preserve">
+    <value>＋ New Article</value>
+  </data>
+  <data name="kb.manageCats" xml:space="preserve">
+    <value>Manage Categories</value>
+  </data>
+  <data name="kb.articles" xml:space="preserve">
+    <value>articles</value>
+  </data>
+  <data name="kb.public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="kb.internal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="kb.newCatPh" xml:space="preserve">
+    <value>New category name…</value>
+  </data>
+  <data name="kb.catsHelp" xml:space="preserve">
+    <value>Categories are used for grouping on the portal and filtering in the agent panel.</value>
+  </data>
+  <data name="kb.catNameLabel" xml:space="preserve">
+    <value>Category name</value>
+  </data>
+  <data name="kb.emptyTitle" xml:space="preserve">
+    <value>No results found</value>
+  </data>
+  <data name="kb.emptyText" xml:space="preserve">
+    <value>No articles match your search criteria.</value>
+  </data>
+  <data name="kb.toastCatAdded" xml:space="preserve">
+    <value>Category added.</value>
+  </data>
+  <data name="kb.toastCatRenamed" xml:space="preserve">
+    <value>Category renamed.</value>
+  </data>
+  <data name="kb.toastCatDeleted" xml:space="preserve">
+    <value>Category deleted.</value>
+  </data>
+  <data name="kb.toastArticleDeleted" xml:space="preserve">
+    <value>Article deleted.</value>
+  </data>
+  <data name="kb.errCatNameInUse" xml:space="preserve">
+    <value>A category with this name already exists.</value>
+  </data>
+  <data name="kb.errCatHasArticles" xml:space="preserve">
+    <value>The category cannot be deleted: it still has articles.</value>
+  </data>
+  <data name="kb.errInvalid" xml:space="preserve">
+    <value>The category name is invalid.</value>
+  </data>
+  <data name="kb.errDenied" xml:space="preserve">
+    <value>You do not have permission for this action.</value>
+  </data>
+</root>

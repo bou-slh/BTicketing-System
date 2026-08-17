@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="kb.title" xml:space="preserve">
+    <value>Bilgi Bankası (SSS)</value>
+  </data>
+  <data name="kb.subtitle" xml:space="preserve">
+    <value>Kullanıcı portalında ve talep formlarında gösterilen makaleleri yönetin.</value>
+  </data>
+  <data name="kb.allCats" xml:space="preserve">
+    <value>Tüm Kategoriler</value>
+  </data>
+  <data name="kb.searchPh" xml:space="preserve">
+    <value>Makale ara…</value>
+  </data>
+  <data name="kb.newArticle" xml:space="preserve">
+    <value>＋ Yeni Makale</value>
+  </data>
+  <data name="kb.manageCats" xml:space="preserve">
+    <value>Kategorileri Yönet</value>
+  </data>
+  <data name="kb.articles" xml:space="preserve">
+    <value>makale</value>
+  </data>
+  <data name="kb.public" xml:space="preserve">
+    <value>Herkese Açık</value>
+  </data>
+  <data name="kb.internal" xml:space="preserve">
+    <value>Dahili</value>
+  </data>
+  <data name="kb.newCatPh" xml:space="preserve">
+    <value>Yeni kategori adı…</value>
+  </data>
+  <data name="kb.catsHelp" xml:space="preserve">
+    <value>Kategoriler portalda gruplama, temsilci panelinde filtreleme için kullanılır.</value>
+  </data>
+  <data name="kb.catNameLabel" xml:space="preserve">
+    <value>Kategori adı</value>
+  </data>
+  <data name="kb.emptyTitle" xml:space="preserve">
+    <value>Sonuç bulunamadı</value>
+  </data>
+  <data name="kb.emptyText" xml:space="preserve">
+    <value>Arama ölçütlerinizle eşleşen makale yok.</value>
+  </data>
+  <data name="kb.toastCatAdded" xml:space="preserve">
+    <value>Kategori eklendi.</value>
+  </data>
+  <data name="kb.toastCatRenamed" xml:space="preserve">
+    <value>Kategori yeniden adlandırıldı.</value>
+  </data>
+  <data name="kb.toastCatDeleted" xml:space="preserve">
+    <value>Kategori silindi.</value>
+  </data>
+  <data name="kb.toastArticleDeleted" xml:space="preserve">
+    <value>Makale silindi.</value>
+  </data>
+  <data name="kb.errCatNameInUse" xml:space="preserve">
+    <value>Bu adda bir kategori zaten var.</value>
+  </data>
+  <data name="kb.errCatHasArticles" xml:space="preserve">
+    <value>Kategori silinemedi: içinde makaleler var.</value>
+  </data>
+  <data name="kb.errInvalid" xml:space="preserve">
+    <value>Kategori adı geçersiz.</value>
+  </data>
+  <data name="kb.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok.</value>
+  </data>
+</root>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="kf.back" xml:space="preserve">
+    <value>← Knowledge Base</value>
+  </data>
+  <data name="kf.meta" xml:space="preserve">
+    <value>Payroll · Public · Last updated: 5 Aug 2026</value>
+  </data>
+  <data name="kf.preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="kf.category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="kf.categoryHelp" xml:space="preserve">
+    <value>Determines which category the article is listed under on the portal.</value>
+  </data>
+  <data name="kf.topics" xml:space="preserve">
+    <value>Help Topics</value>
+  </data>
+  <data name="kf.topicsHelp" xml:space="preserve">
+    <value>The article is suggested on tickets opened with the selected help topics. Use Ctrl/Cmd for multiple selection.</value>
+  </data>
+  <data name="kf.listing" xml:space="preserve">
+    <value>Listing Type</value>
+  </data>
+  <data name="kf.featured" xml:space="preserve">
+    <value>Featured</value>
+  </data>
+  <data name="kf.public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="kf.internal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="kf.listingHelp" xml:space="preserve">
+    <value>Internal articles are visible only in the agent panel; featured ones are listed on the portal home page.</value>
+  </data>
+  <data name="kf.tabContent" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="kf.tabAttach" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="kf.question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="kf.answer" xml:space="preserve">
+    <value>Answer</value>
+  </data>
+  <data name="kf.uploadHint" xml:space="preserve">
+    <value>Drag files here or click to choose</value>
+  </data>
+  <data name="kf.notesPh" xml:space="preserve">
+    <value>Write an internal note about this article…</value>
+  </data>
+  <data name="kf.newTitle" xml:space="preserve">
+    <value>New Article</value>
+  </data>
+  <data name="kf.metaNew" xml:space="preserve">
+    <value>New article — not saved yet</value>
+  </data>
+  <data name="kf.metaUpdated" xml:space="preserve">
+    <value>Last updated:</value>
+  </data>
+  <data name="kf.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="kf.deleteConfirm" xml:space="preserve">
+    <value>This article and its attachments will be permanently deleted. Are you sure?</value>
+  </data>
+  <data name="kf.toastCreated" xml:space="preserve">
+    <value>Article created.</value>
+  </data>
+  <data name="kf.toastSaved" xml:space="preserve">
+    <value>Article saved.</value>
+  </data>
+  <data name="kf.toastAttachDeleted" xml:space="preserve">
+    <value>Attachment deleted.</value>
+  </data>
+  <data name="kf.errInvalid" xml:space="preserve">
+    <value>Check the category, question and answer fields.</value>
+  </data>
+  <data name="kf.errDenied" xml:space="preserve">
+    <value>You do not have permission for this action.</value>
+  </data>
+</root>

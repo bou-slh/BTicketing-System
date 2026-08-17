@@ -1,0 +1,222 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@using RapidsolDestek.Infrastructure.Services
+@model KbFaqVm
+@{
+    var isNew = Model.Id is null;
+    ViewData["Title"] = isNew ? L["kf.newTitle"].Value : Model.Question;
+
+    // PRG toast handoff after save / attachment ops (orgs precedent).
+    if (TempData["KfToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["KfToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Meta line composed from data (the mockup's kf.meta is one static sample string):
+    // "Bordro · Herkese Açık · Son güncelleme: 5 Ağu 2026".
+    string listingLabel = Model.Listing switch
+    {
+        KbListing.Featured => L["kf.featured"].Value,
+        KbListing.Internal => L["kf.internal"].Value,
+        _ => L["kf.public"].Value,
+    };
+    string meta = isNew
+        ? L["kf.metaNew"].Value
+        : $"{Model.CategoryName} · {listingLabel} · {L["kf.metaUpdated"].Value} " +
+          Model.UpdatedAt!.Value.ToLocalTime().ToString(L.GetString("kf.dateFmt"), CultureInfo.CurrentUICulture);
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <a href="/agent/kb" class="text-sm">@L["kf.back"]</a>
+        <h1 style="margin-top:6px">@(isNew ? L["kf.newTitle"].Value : Model.Question)</h1>
+        <p>@meta</p>
+    </div>
+    <div class="actions">
+        <button class="rd-btn rd-btn-ghost" data-dialog-open="dlg-preview">@L["kf.preview"]</button>
+        @* Sil disabled until the article exists (mockup shows it always; nothing to delete on a new page). *@
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" disabled="@isNew">@SL["common.delete"]</button>
+    </div>
+</div>
+
+<form method="post" enctype="multipart/form-data" asp-area="Agent" asp-controller="KbFaq" asp-action="Save" id="kf-form">
+    @if (Model.Id is { } articleId)
+    {
+        <input type="hidden" name="id" value="@articleId">
+    }
+    <div class="rd-surface" style="margin-bottom:20px">
+        <div class="rd-surface-body">
+            <div class="rd-grid-3">
+                <div class="rd-field">
+                    <label class="rd-label" for="kf-cat">@L["kf.category"]</label>
+                    <select id="kf-cat" name="categoryId" class="rd-control">
+                        @foreach (var c in Model.Categories)
+                        {
+                            <option value="@c.Id" selected="@(c.Id == Model.CategoryId)">@c.Name</option>
+                        }
+                    </select>
+                    <div class="rd-help">@L["kf.categoryHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="kf-topics">@L["kf.topics"]</label>
+                    <select id="kf-topics" name="topicIds" class="rd-control" multiple size="3">
+                        @foreach (var t in Model.Topics)
+                        {
+                            <option value="@t.Id" selected="@t.Selected">@t.Label</option>
+                        }
+                    </select>
+                    <div class="rd-help">@L["kf.topicsHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <span class="rd-label">@L["kf.listing"]</span>
+                    <label class="rd-check" style="margin-bottom:7px">
+                        <input type="radio" name="listing" value="featured" checked="@(Model.Listing == KbListing.Featured)">
+                        <span>@L["kf.featured"]</span>
+                    </label>
+                    <label class="rd-check" style="margin-bottom:7px">
+                        <input type="radio" name="listing" value="public" checked="@(Model.Listing == KbListing.Public)">
+                        <span>@L["kf.public"]</span>
+                    </label>
+                    <label class="rd-check">
+                        <input type="radio" name="listing" value="internal" checked="@(Model.Listing == KbListing.Internal)">
+                        <span>@L["kf.internal"]</span>
+                    </label>
+                    <div class="rd-help">@L["kf.listingHelp"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rd-tabs" data-tabs>
+        <button type="button" class="@(Model.ActiveTab == "content" ? "active" : null)" data-tab="kf-panel-content">@L["kf.tabContent"]</button>
+        <button type="button" class="@(Model.ActiveTab == "attach" ? "active" : null)" data-tab="kf-panel-attach">@L["kf.tabAttach"]</button>
+        <button type="button" class="@(Model.ActiveTab == "notes" ? "active" : null)" data-tab="kf-panel-notes">@SL["common.notes"]</button>
+    </div>
+
+    <div class="rd-tab-panel @(Model.ActiveTab == "content" ? "active" : null)" id="kf-panel-content">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="kf-question">@L["kf.question"]</label>
+                    <input id="kf-question" name="question" class="rd-control" value="@Model.Question" required>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="kf-answer">@L["kf.answer"]</label>
+                    <textarea id="kf-answer" name="answer" class="rd-control" style="min-height:280px" required>@Model.Answer</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rd-tab-panel @(Model.ActiveTab == "attach" ? "active" : null)" id="kf-panel-attach">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <label class="rd-upload">@L["kf.uploadHint"]<input type="file" name="attachments" multiple hidden></label>
+                @* Chosen-files list target (B5) — added like ticket-view; the mockup lacks the span. *@
+                <span class="rc-file-name"></span>
+                @foreach (var att in Model.Attachments)
+                {
+                    <span class="rc-attachment">📎 <a href="/agent/kb-faq/attachment?id=@att.Id">@att.Name</a>
+                        @* Per-file delete (B2/B5, invented — mockup chips are static): submits the
+                           external form below; the panel itself sits inside the save form. *@
+                        <button type="submit" class="rd-btn rd-btn-sm rd-btn-ghost" form="kf-att-del"
+                                name="id" value="@att.Id" aria-label="@SL["common.delete"]">✕</button>
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="rd-tab-panel @(Model.ActiveTab == "notes" ? "active" : null)" id="kf-panel-notes">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <textarea class="rd-control" name="notes" placeholder="@L["kf.notesPh"]">@Model.Notes</textarea>
+                    <div class="rd-help">@SL["common.notesHelp"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+        <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+        <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+        <a class="rd-btn rd-btn-ghost" href="/agent/kb">@SL["common.cancel"]</a>
+    </div>
+</form>
+
+@if (Model.Id is { } attArticleId)
+{
+    @* Selection carrier for the per-attachment ✕ buttons (tasks ta-bulk precedent). *@
+    <form id="kf-att-del" method="post" asp-area="Agent" asp-controller="KbFaq" asp-action="DeleteAttachment" hidden>
+        <input type="hidden" name="articleId" value="@attArticleId">
+    </form>
+}
+
+@* Preview dialog (invented UI — the mockup's Önizle button is dead; needs canon
+   sign-off): renders the current editor content the way the portal article page
+   would, without saving. *@
+<dialog class="rd-dialog" id="dlg-preview">
+    <div class="rd-dialog-head">
+        <span>@L["kf.preview"]</span>
+        <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <h3 id="kf-preview-q" style="margin:0 0 12px"></h3>
+        <div id="kf-preview-a"></div>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.close"]</button>
+    </div>
+</dialog>
+
+@if (Model.Id is { } delArticleId)
+{
+    @* Delete confirm dialog (B2, tasks dlg-bulk-delete precedent). *@
+    <dialog class="rd-dialog" id="dlg-delete">
+        <div class="rd-dialog-head">
+            <span>@SL["common.delete"]</span>
+            <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+        </div>
+        <form method="post" asp-area="Agent" asp-controller="KbFaq" asp-action="Delete">
+            <div class="rd-dialog-body">
+                <p>@L["kf.deleteConfirm"]</p>
+            </div>
+            <div class="rd-dialog-foot">
+                <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                <button type="submit" class="rd-btn rd-btn-danger" name="id" value="@delArticleId">@SL["common.delete"]</button>
+            </div>
+        </form>
+    </dialog>
+}
+
+<script>
+    // Preview fill (page-scoped; user-view override-form precedent): mirrors the
+    // server's answer normalization — HTML passes through, plain text becomes
+    // <p>/<br> paragraphs (text nodes, so nothing is interpreted as markup).
+    document.addEventListener("click", (e) => {
+        if (!e.target.closest('[data-dialog-open="dlg-preview"]')) return;
+        const q = document.getElementById("kf-question")?.value || "";
+        const a = document.getElementById("kf-answer")?.value || "";
+        document.getElementById("kf-preview-q").textContent = q;
+        const target = document.getElementById("kf-preview-a");
+        target.replaceChildren();
+        if (/<[a-zA-Z]/.test(a)) {
+            target.innerHTML = a; // stored HTML (sanitized server-side on save)
+        } else {
+            for (const para of a.replace(/\r\n/g, "\n").split(/\n{2,}/)) {
+                if (!para.trim()) continue;
+                const p = document.createElement("p");
+                para.split("\n").forEach((line, i) => {
+                    if (i > 0) p.appendChild(document.createElement("br"));
+                    p.appendChild(document.createTextNode(line));
+                });
+                target.appendChild(p);
+            }
+        }
+    });
+</script>

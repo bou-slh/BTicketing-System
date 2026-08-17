@@ -31,6 +31,12 @@ public class FaqArticle : TimestampedEntity
 
     public bool IsPublished { get; set; }
 
+    /// <summary>
+    /// osTicket ispublished=2 "Featured" — listed on the portal home page.
+    /// Implies <see cref="IsPublished"/>; never true on an internal article.
+    /// </summary>
+    public bool IsFeatured { get; set; }
+
     /// <summary>Title (osTicket question).</summary>
     public required string Question { get; set; }
 

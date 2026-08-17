@@ -1,0 +1,200 @@
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model AgentKbIndexVm
+@{
+    ViewData["Title"] = L["kb.title"];
+
+    // PRG toast handoff after manage-categories CRUD / article delete (orgs precedent).
+    if (TempData["KbToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["KbToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    string TabUrl(int? cat)
+    {
+        var parts = new List<string>();
+        if (!string.IsNullOrEmpty(Model.Query))
+            parts.Add($"q={Uri.EscapeDataString(Model.Query)}");
+        if (cat is { } id)
+            parts.Add($"cat={id}");
+        return "/agent/kb" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+
+    var visibleCategories = Model.Categories
+        .Where(c => Model.CategoryId is not { } active || c.Id == active)
+        .ToList();
+    bool searching = !string.IsNullOrWhiteSpace(Model.Query);
+    // Mockup panel ids (kb-panel-bordro …) from the category names, TR-transliterated.
+    var panelId = Model.CategoryId is { } activeCat
+        ? $"kb-panel-{Slug(Model.Categories.First(c => c.Id == activeCat).Name)}"
+        : "kb-panel-all";
+
+    // Category card (mockup .rd-surface block), shared by the all-tab and single-tab views.
+    void CategoryCard(AgentKbCategoryVm c, IReadOnlyList<AgentKbArticleVm> rows)
+    {
+        <div class="rd-surface">
+            <div class="rd-surface-head">
+                @c.Name
+                <span class="spacer"></span>
+                <span class="text-sm rd-muted">@rows.Count <span>@L["kb.articles"]</span></span>
+            </div>
+            <div class="rd-surface-body">
+                @foreach (var a in rows)
+                {
+                    <div class="kb-article-row">
+                        <a href="/agent/kb-faq?id=@a.Id">@a.Question</a>
+                        @if (a.IsPublished)
+                        {
+                            <span class="rd-pill rd-pill-teal">@L["kb.public"]</span>
+                        }
+                        else
+                        {
+                            <span class="rd-pill rd-pill-closed">@L["kb.internal"]</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}
+
+@* Page style from the mockup head (kb.html <style>). *@
+<style>
+.kb-article-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rd-border-soft);
+  font-size: 13px;
+}
+.kb-article-row:last-child { border-bottom: 0; }
+</style>
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <h1>@L["kb.title"]</h1>
+        <p>@L["kb.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <button class="rd-btn" data-dialog-open="dlg-cats">@L["kb.manageCats"]</button>
+        <a class="rd-btn-primary" href="/agent/kb-faq">@L["kb.newArticle"]</a>
+    </div>
+</div>
+
+@* Mockup tab bar (fixed in S0): server round-trip links instead of client data-tabs —
+   only the active tab's panel is rendered from data (agent tasks precedent). *@
+<div class="rd-tabs">
+    <a class="@(Model.CategoryId is null ? "active" : null)" href="@TabUrl(null)">@L["kb.allCats"]</a>
+    @foreach (var c in Model.Categories)
+    {
+        <a class="@(Model.CategoryId == c.Id ? "active" : null)" href="@TabUrl(c.Id)">@c.Name · @c.ArticleCount</a>
+    }
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/agent/kb">
+    @if (Model.CategoryId is { } cat)
+    {
+        <input type="hidden" name="cat" value="@cat">
+    }
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["kb.searchPh"]">
+</form>
+
+@if (Model.Articles.Count == 0)
+{
+    @* Invented per B1 (reachable empty state on search miss) — the mockup defines none. *@
+    <div class="rd-surface">
+        <div class="rd-empty">
+            <div class="icon">✎</div>
+            <h3>@L["kb.emptyTitle"]</h3>
+            <p>@L["kb.emptyText"]</p>
+            <a class="rd-btn-primary" href="/agent/kb-faq">@L["kb.newArticle"]</a>
+        </div>
+    </div>
+}
+else if (Model.CategoryId is null)
+{
+    @* All-categories view: the mockup nests the active panel inside .rd-grid-2. *@
+    <div class="rd-grid-2">
+    <div class="rd-tab-panel active" id="@panelId">
+        @foreach (var c in visibleCategories)
+        {
+            var rows = Model.Articles.Where(a => a.CategoryId == c.Id).ToList();
+            if (rows.Count == 0 && searching)
+            {
+                continue; @* searching: hide empty categories (portal KB precedent) *@
+            }
+            CategoryCard(c, rows);
+        }
+    </div>
+    </div>
+}
+else
+{
+    <div class="rd-tab-panel active" id="@panelId">
+        @foreach (var c in visibleCategories)
+        {
+            var rows = Model.Articles.Where(a => a.CategoryId == c.Id).ToList();
+            CategoryCard(c, rows);
+        }
+    </div>
+}
+
+<dialog class="rd-dialog" id="dlg-cats">
+    <div class="rd-dialog-head">
+        <span>@L["kb.manageCats"]</span>
+        <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <div class="rd-help" style="margin:0 0 12px">@L["kb.catsHelp"]</div>
+        @* Real CRUD rows (invented row forms — the mockup rows are static name+count;
+           needs canon sign-off): rename inline + save, ✕ delete (guarded server-side). *@
+        @foreach (var c in Model.Categories)
+        {
+            <form class="kb-article-row" method="post" asp-area="Agent" asp-controller="Kb" asp-action="RenameCategory">
+                <input type="hidden" name="id" value="@c.Id">
+                <input type="hidden" name="q" value="@Model.Query">
+                <input type="hidden" name="cat" value="@Model.CategoryId">
+                <input class="rd-control" name="name" value="@c.Name" aria-label="@L["kb.catNameLabel"]" required>
+                <span class="text-sm rd-muted">@c.ArticleCount</span>
+                <button type="submit" class="rd-btn rd-btn-sm">@SL["common.save"]</button>
+                <button type="submit" class="rd-btn rd-btn-sm rd-btn-danger"
+                        formaction="/agent/kb/cats/delete" formnovalidate
+                        aria-label="@SL["common.delete"]">✕</button>
+            </form>
+        }
+        <form style="display:flex;gap:10px;margin-top:14px" method="post" asp-area="Agent" asp-controller="Kb" asp-action="CreateCategory">
+            <input type="hidden" name="q" value="@Model.Query">
+            <input type="hidden" name="cat" value="@Model.CategoryId">
+            <input class="rd-control" name="name" placeholder="@L["kb.newCatPh"]" required>
+            <button type="submit" class="rd-btn-primary">@SL["common.add"]</button>
+        </form>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.close"]</button>
+    </div>
+</dialog>
+
+@functions {
+    // Mockup panel-id slugs (kb-panel-bordro / -izin / -vardiya / -sistem) from TR names.
+    static string Slug(string name)
+    {
+        var map = new Dictionary<char, char>
+        {
+            ['ç'] = 'c', ['ğ'] = 'g', ['ı'] = 'i', ['i'] = 'i', ['ö'] = 'o', ['ş'] = 's', ['ü'] = 'u',
+            ['Ç'] = 'c', ['Ğ'] = 'g', ['I'] = 'i', ['İ'] = 'i', ['Ö'] = 'o', ['Ş'] = 's', ['Ü'] = 'u',
+        };
+        var chars = name.Trim().Select(ch =>
+        {
+            if (map.TryGetValue(ch, out var mapped))
+                return mapped;
+            var lower = char.ToLowerInvariant(ch);
+            return char.IsAsciiLetterOrDigit(lower) ? lower : '-';
+        });
+        return string.Concat(chars).Trim('-');
+    }
+}

@@ -500,8 +500,35 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       updToday/updYesterday/syncToday/syncYesterday/noteTimeFmt/sw*/fName/fDomainHelp/fSector/fManagerNone/
       noUsers/noTickets/notYet/deleteConfirm/err*/toast*; ov.meta/syncBanner/lastSync resx values carry
       {0}-style holes for the live numbers.)*
-- [ ] **kb.html** — category tabs (fixed in S0) filter; search; manage-categories dialog CRUD
-- [ ] **kb-faq.html** — saves; attachments upload with file list (input added in S0); preview; delete (B2/B5)
+- [x] **kb.html** — category tabs (fixed in S0) filter; search; manage-categories dialog CRUD *(S6;
+      /agent/kb. New KbService (Infrastructure, faq.manage checked "anywhere" — seeded on Yönetici +
+      Kıdemli Temsilci; AuditEvents via actor scope). Tabs = server round-trip links (tasks precedent),
+      per-category counts live; search = the portal KB ILike over question/keywords/answer, composing
+      with the active tab; agent scope lists drafts too (Dahili pill = IsPublished false). rd-empty on
+      search miss invented per B1 (mockup defines none). Manage-categories dialog: add is real; the
+      static name+count rows became inline rename forms with Kaydet + ✕ delete (INVENTED row UI —
+      needs canon sign-off); delete refused with kb.errCatHasArticles while the category has articles
+      (honest guard vs osTicket's cascade — flag for canon). The mockup's stray extra </div> after
+      kb-panel-sistem is not reproduced (only the active panel renders). Portal-side notes carry over:
+      category names are DB data (stay TR in EN), no per-article summaries. Invented keys (TR/EN twins):
+      kb.catNameLabel/emptyTitle/emptyText/toastCat*/toastArticleDeleted/errCat*/errInvalid/errDenied.)*
+- [x] **kb-faq.html** — saves; attachments upload with file list (input added in S0); preview; delete (B2/B5)
+      *(S6; /agent/kb-faq (new) + ?id= (edit). Saves create/update real FaqArticles via KbService; the
+      kf-listing radios persist as IsPublished + new FaqArticle.IsFeatured (osTicket ispublished=2
+      "Featured", implies published; S6_KbFeatured migration — no canon article seeds featured: the hero's
+      radio is Herkese Açık and no mockup lists one); Yardım Konuları multi-select persists FaqArticleTopic
+      rows ("Parent / Child" labels, ticket-open precedent); Notlar persists FaqArticle.Notes (hero note
+      seeded from this mockup's textarea). Answer stays stored HTML under a plain textarea: tag-less input
+      is paragraph-wrapped on save, HTML passes through sanitized — the hero article therefore shows its
+      seeded HTML source when edited (mockup shows prose; rich editor TODO(S7)). Attachments (B5): S0 file
+      input uploads on save (added .rc-file-name span, ticket-view precedent), list + staff download, per-file
+      ✕ delete via external form (INVENTED — mockup chip is static) — all through IFileStore; the mockup's
+      sample chip "yol-ucreti-ornek-hesap.xlsx" conflicts with portal kb-article's two canon files (portal
+      canon kept, needs §2 decision). Önizle = client-filled preview dialog of the current editor content
+      (INVENTED — mockup button dead; needs canon sign-off); Sil = B2 confirm dialog → article + attachments
+      deleted, lands on /agent/kb; disabled on a new article. Header meta composed from data — the static
+      kf.meta sample string stays unused in the resx. Invented keys (TR/EN twins): kf.newTitle/metaNew/
+      metaUpdated/dateFmt/deleteConfirm/toast*/errInvalid/errDenied.)*
 - [ ] **canned.html** — B1 engine; per-row edit dialog prefilled (B2); create/disable/delete
 - [x] **directory.html** — search + department filter work; mailto/tel links *(S6; presence from real sessions still TODO — current pills are a stub: LastLoginAt/OnVacation-derived; B1 header sort TODO)*
 - [ ] **profile.html** — saves; 2FA setup ("Yapılandır"); vacation switch has effect (assignment guard);
