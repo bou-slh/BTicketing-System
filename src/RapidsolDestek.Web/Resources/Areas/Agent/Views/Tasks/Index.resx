@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ta.title" xml:space="preserve">
+    <value>Görevler</value>
+  </data>
+  <data name="ta.subtitle" xml:space="preserve">
+    <value>Taleplere bağlı veya bağımsız iç iş kalemlerini takip edin.</value>
+  </data>
+  <data name="ta.qOpen" xml:space="preserve">
+    <value>Açık</value>
+  </data>
+  <data name="ta.qMine" xml:space="preserve">
+    <value>Görevlerim</value>
+  </data>
+  <data name="ta.qOverdue" xml:space="preserve">
+    <value>Gecikmiş</value>
+  </data>
+  <data name="ta.qDone" xml:space="preserve">
+    <value>Tamamlanan</value>
+  </data>
+  <data name="ta.searchPh" xml:space="preserve">
+    <value>Görev ara…</value>
+  </data>
+  <data name="ta.assign" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="ta.transfer" xml:space="preserve">
+    <value>Aktar</value>
+  </data>
+  <data name="ta.new" xml:space="preserve">
+    <value>＋ Yeni Görev</value>
+  </data>
+  <data name="ta.colNo" xml:space="preserve">
+    <value>Görev No</value>
+  </data>
+  <data name="ta.colDate" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="ta.colTitle" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="ta.colTicket" xml:space="preserve">
+    <value>İlgili Talep</value>
+  </data>
+  <data name="ta.colDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="ta.colAssignee" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="ta.dlgTitle" xml:space="preserve">
+    <value>Yeni Görev</value>
+  </data>
+  <data name="ta.fTitle" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="ta.fTitlePh" xml:space="preserve">
+    <value>Görevi kısaca tanımlayın…</value>
+  </data>
+  <data name="ta.fDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="ta.fAssignee" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="ta.fDue" xml:space="preserve">
+    <value>Son Tarih</value>
+  </data>
+  <data name="ta.fDesc" xml:space="preserve">
+    <value>Açıklama</value>
+  </data>
+  <data name="ta.fDescPh" xml:space="preserve">
+    <value>Görevin detaylarını yazın…</value>
+  </data>
+  <data name="ta.fDescHelp" xml:space="preserve">
+    <value>Açıklama görev yazışmalarının ilk kaydı olarak eklenir.</value>
+  </data>
+  <data name="ta.create" xml:space="preserve">
+    <value>Görevi Oluştur</value>
+  </data>
+  <data name="ta.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="ta.emptyTitle" xml:space="preserve">
+    <value>Bu sekmede görev yok</value>
+  </data>
+  <data name="ta.emptyText" xml:space="preserve">
+    <value>Seçili kriterlere uyan görev bulunamadı. Aramayı temizleyin veya yeni bir görev oluşturun.</value>
+  </data>
+  <data name="ta.bulkDone" xml:space="preserve">
+    <value>{0} görev güncellendi</value>
+  </data>
+  <data name="ta.bulkPartial" xml:space="preserve">
+    <value>{0} görev güncellendi, {1} atlandı</value>
+  </data>
+  <data name="ta.bulkNone" xml:space="preserve">
+    <value>Seçili görev yok</value>
+  </data>
+  <data name="ta.deleteConfirm" xml:space="preserve">
+    <value>Seçili görevler ve yazışmaları kalıcı olarak silinecek. Emin misiniz?</value>
+  </data>
+</root>

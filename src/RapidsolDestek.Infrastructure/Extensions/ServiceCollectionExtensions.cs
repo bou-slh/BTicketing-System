@@ -39,6 +39,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPermissionService, PermissionService>();
         services.AddScoped<IThreadService, ThreadService>();
         services.AddScoped<ITicketService, TicketService>();
+        services.AddScoped<ITaskService, TaskService>();
         services.AddScoped<IEffortProposalService, EffortProposalService>();
         services.AddScoped<IQueueEngine, QueueEngine>();
         services.AddScoped<ICannedResponseService, CannedResponseService>();

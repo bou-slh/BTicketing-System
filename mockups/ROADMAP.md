@@ -380,8 +380,38 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       follows the dept select). Layout gained an optional ViewData["MainStyle"] so <main> carries the mockup's
       max-width:880px. Invented keys (TR/EN twins): to.err*/newUser*/noUserResults/slaFmt/grpAgents/grpTeams —
       grp* localize the mockup's hardcoded optgroup labels "Temsilciler"/"Takımlar" (mockup bug: not data-i18n).)*
-- [ ] **tasks.html** — tab bar (fixed in S0) filters from data; B1 engine; new-task dialog creates
-- [ ] **task-view.html** — header actions (Kapat/Ata/Aktar/Düzenle/Sil) via dialogs; note composer appends (B2/B5)
+- [x] **tasks.html** — tab bar (fixed in S0) filters from data; B1 engine; new-task dialog creates *(S6; new
+      TaskService (Infrastructure) carries create/close/assign/transfer/edit/delete with the task.* permission
+      keys, task-sequence numbering (settings tasks.*), thread events + AuditEvent via interceptor, and a
+      VisibleAsync scope mirroring the QueueEngine ticket rule (own depts ∪ assigned-to-me; AssignedOnly
+      honored). Tabs (Açık/Görevlerim/Gecikmiş/Tamamlanan) filter from data with live counts; the mockup's
+      client data-tabs become server round-trip links (only the active panel renders — agent-login <a>→<button>
+      deviation precedent); "mine" stays the default active tab per the mockup. B1: header sort on
+      no/date/title/dept/assignee (date desc default), quick search (number/title ILIKE), pagination 8/page
+      (tickets parity; the mockup pagination is sample data). Toolbar Ata = bulk assign-to-me (tickets-toolbar
+      precedent), Aktar/Sil = invented bulk dialogs (dlg-bulk-status precedent; Sil hard-deletes via service,
+      skipped rows reported) — need canon sign-off. dlg-newtask creates a real TaskItem (title/dept/assignee/
+      due/description; description → first thread entry per ta.fDescHelp) and redirects to its task-view; the
+      mockup's hardcoded due value 2026-08-18 is treated as sample data (input renders empty). Invented
+      (TR/EN twins): ta.dateFmt/emptyTitle/emptyText/bulk*/deleteConfirm; rd-empty state invented per B1 (the
+      mockup defines none). Overdue = IsOverdue || DueDate&lt;now (dashboard derivation).)*
+- [x] **task-view.html** — header actions (Kapat/Ata/Aktar/Düzenle/Sil) via dialogs; note composer appends (B2/B5)
+      *(S6; header/meta/thread from data; status pill derived open/overdue/closed. The five header buttons open
+      invented B2 dialogs (the mockup's buttons are dead — ticket-view dialog DOM reused; need canon sign-off):
+      Kapat = close + optional internal note; Ata reuses the s:/t: assignee encoding (staff + teams); Aktar =
+      dept select; Düzenle = plain fields only (title + due; dept/assignee live in their own dialogs — no
+      form-designer scope needed); Sil = confirm → HARD delete of task + thread (osTicket parity; the entity
+      has no soft-delete flag) → back to /agent/tasks. All actions post through TaskService with
+      ActorContext.ForStaff; permission failures toast tav.errDenied (buttons stay enabled per mockup, service
+      enforces task.* keys). Closed tasks disable Kapat (tav.closedInfo title) — the mockup defines no reopen
+      control, TODO(S7) if canon wants one. Note composer appends via IThreadService (Note, "text"); no attach
+      control in the mockup → none rendered. Thread interleaves timeline events (ticket-view is-event row —
+      the task mockup shows entries only, seed adds no events; service actions add them). Ticket link renders
+      both ways (İlgili Talep here ↔ ticket-view Görevler tab). Creator line: the entity has no creator field —
+      tav.createdLine renders created date · assignee (mockup sample shows the assignee name); needs canon
+      sign-off. Invented (TR/EN twins): tav.pageTitle/createdLine/date*/timeFmt/meta*/editTitle/deleteConfirm/
+      closedInfo/evt*/toast*/err*. Tests: TaskServiceTests (7) cover create/close/assign/transfer/edit/delete
+      incl. permission denials.)*
 - [ ] **users.html** — B1 engine; add-user dialog creates; "Diğer" bulk menu actions real; CSV import
 - [ ] **user-view.html** — header actions; "Geçersiz kıl" inline override of inherited fields; tabs from data;
       note composer (B3/B5)

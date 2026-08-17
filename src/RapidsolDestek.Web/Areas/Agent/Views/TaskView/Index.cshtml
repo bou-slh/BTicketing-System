@@ -1,0 +1,303 @@
+@using System.Globalization
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model AgentTaskViewVm
+@{
+    ViewData["Title"] = L.GetString("tav.pageTitle", Model.Number);
+
+    // PRG toast handoff (ticket-view precedent; _BackofficeLayout stamps <body data-toast>).
+    if (TempData["TavToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["TavToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Derived task status pill: open / overdue / closed (§2 canon derivation).
+    var pillClass = $"rd-pill rd-pill-{Model.StatusKey}";
+    var closed = Model.StatusKey == "closed";
+
+    // Table-cell agent name convention (§2 canon): "Ümit Yaşar Akın" → "Ümit Y. Akın".
+    static string ShortName(string? full)
+    {
+        if (string.IsNullOrWhiteSpace(full))
+            return "—";
+        var parts = full.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 3)
+            return full;
+        var middles = string.Join(" ", parts[1..^1].Select(p => $"{char.ToUpperInvariant(p[0])}."));
+        return $"{parts[0]} {middles} {parts[^1]}";
+    }
+
+    // Avatar initials, mockup style ("Ümit Yaşar Akın" → ÜA).
+    static string Initials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length == 0 ? "" :
+            parts.Length == 1 ? char.ToUpperInvariant(parts[0][0]).ToString() :
+            $"{char.ToUpperInvariant(parts[0][0])}{char.ToUpperInvariant(parts[^1][0])}";
+    }
+
+    // Thread/timeline times, mockup format: "7 Ağu 14:22" (+ today/yesterday variants).
+    string MetaTime(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        if (local.Date == today)
+            return L.GetString("tav.metaToday", local.ToString("HH:mm"));
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("tav.metaYesterday", local.ToString("HH:mm"));
+        return local.ToString(L.GetString("tav.timeFmt"), CultureInfo.CurrentUICulture);
+    }
+
+    string DateLong(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("tav.dateLong"), CultureInfo.CurrentUICulture);
+
+    string DateOnlyText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("tav.dateOnly"), CultureInfo.CurrentUICulture);
+
+    // Inline timeline rows (ticket-view .bo-thread-entry.is-event precedent — the
+    // task mockup shows entries only; service actions add these events).
+    string EventLabel(TaskEventVm ev) => ev.Kind switch
+    {
+        "created" => L["tav.evtCreated"].Value,
+        "assigned" => L.GetString("tav.evtAssigned", ShortName(ev.Assignee)),
+        "transferred" => L.GetString("tav.evtTransferred", ev.TargetDept ?? "—"),
+        "closed" => L["tav.evtClosed"].Value,
+        _ => L["tav.evtEdited"].Value,
+    };
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <a href="/agent/tasks" class="text-sm">@L["tav.back"]</a>
+        <h1 style="margin-top:6px">@Model.Number · @Model.Title
+            <span class="@pillClass" style="vertical-align:middle;margin-left:8px">@SL[$"status.{Model.StatusKey}"]</span>
+        </h1>
+        <p>@L["tav.createdLine", DateLong(Model.CreatedAt), ShortName(Model.AssigneeName)]</p>
+    </div>
+    <div class="actions">
+        @if (closed)
+        {
+            @* No reopen control exists in the mockup — TODO(S7) flagged in ROADMAP. *@
+            <button class="rd-btn" disabled title="@L["tav.closedInfo"]">@L["tav.close"]</button>
+        }
+        else
+        {
+            <button class="rd-btn" data-dialog-open="dlg-close">@L["tav.close"]</button>
+        }
+        <button class="rd-btn" data-dialog-open="dlg-assign">@L["tav.assign"]</button>
+        <button class="rd-btn" data-dialog-open="dlg-transfer">@L["tav.transfer"]</button>
+        <button class="rd-btn rd-btn-ghost" data-dialog-open="dlg-edit">@SL["common.edit"]</button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete">@SL["common.delete"]</button>
+    </div>
+</div>
+
+<div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-head">@L["tav.info"]</div>
+    <div class="rd-surface-body">
+        <div class="rd-grid-2">
+            <div class="bo-def">
+                <div class="row">
+                    <span>@SL["common.status"]</span>
+                    <span><span class="@pillClass">@SL[$"status.{Model.StatusKey}"]</span></span>
+                </div>
+                <div class="row">
+                    <span>@SL["common.created"]</span>
+                    <span>@DateLong(Model.CreatedAt)</span>
+                </div>
+                <div class="row">
+                    <span>@L["tav.due"]</span>
+                    <span>@(Model.Due is { } due ? DateOnlyText(due) : "—")</span>
+                </div>
+            </div>
+            <div class="bo-def">
+                <div class="row">
+                    <span>@L["tav.dept"]</span>
+                    <span>@Model.DeptName</span>
+                </div>
+                <div class="row">
+                    <span>@L["tav.assignee"]</span>
+                    <span>@ShortName(Model.AssigneeName)</span>
+                </div>
+                <div class="row">
+                    <span>@L["tav.ticket"]</span>
+                    <span>@if (Model.TicketId is { } ticketId)
+                        {<a href="/agent/ticket-view?id=@ticketId">@Model.TicketNumber · @Model.TicketSubject</a>}
+                        else
+                        {<text>—</text>}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 style="margin-bottom:12px">@L["tav.thread"]</h2>
+
+@foreach (var item in Model.Thread)
+{
+    if (item.Entry is { } entry)
+    {
+        <div class="bo-thread-entry@(entry.Type == ThreadEntryType.Note ? " is-note" : null)">
+            <div class="head">
+                <div class="rd-avatar">@Initials(entry.Poster)</div>
+                <b>@entry.Poster</b>
+                @if (entry.Type == ThreadEntryType.Note)
+                {
+                    <span class="rd-pill rd-pill-wait">@L["tav.noteBadge"]</span>
+                }
+                <time>@MetaTime(item.At)</time>
+            </div>
+            <div class="body">
+                @if (entry.Format == "html")
+                {
+                    @* Stored thread HTML is sanitized at ingress (ThreadService). *@
+                    @Html.Raw(entry.Body)
+                }
+                else
+                {
+                    @Html.Raw(string.Join("<br>", entry.Body.Split('\n').Select(line => Html.Encode(line))))
+                }
+            </div>
+        </div>
+    }
+    else if (item.Event is { } evt)
+    {
+        <div class="bo-thread-entry is-event">◉ @EventLabel(evt) — @MetaTime(item.At)</div>
+    }
+}
+
+<div class="rd-surface" style="margin-top:20px">
+    <div class="rd-surface-head">@L["tav.addNote"]</div>
+    <form class="rd-surface-body" method="post" asp-action="Note">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-field">
+            <textarea class="rd-control" name="body" placeholder="@L["tav.notePh"]"></textarea>
+            <div class="rd-help">@SL["common.notesHelp"]</div>
+        </div>
+        <button type="submit" class="rd-btn-primary">@L["tav.addNoteBtn"]</button>
+    </form>
+</div>
+
+@* Header-action dialogs: invented UI following the agent ticket-view dialog DOM (B2) —
+   the mockup's buttons are dead; flagged in ROADMAP for canon sign-off. *@
+
+<!-- Close dialog -->
+<dialog class="rd-dialog" id="dlg-close">
+    <div class="rd-dialog-head">
+        <span>@L["tav.close"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Close">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label">@SL["common.notes"]</label>
+                <textarea class="rd-control" name="note" style="min-height:90px" placeholder="@L["tav.notePh"]"></textarea>
+                <div class="rd-help">@SL["common.notesHelp"]</div>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@L["tav.close"]</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Assign dialog ("s:/t:" encoding, ticket-view precedent) -->
+<dialog class="rd-dialog" id="dlg-assign">
+    <div class="rd-dialog-head">
+        <span>@L["tav.assign"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Assign">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label">@L["tav.assignee"]</label>
+                <select class="rd-control" name="assignee">
+                    @foreach (var option in Model.Assignees)
+                    {
+                        <option value="@option.Value" selected="@option.Selected">@ShortName(option.Label)</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@L["tav.assign"]</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Transfer dialog -->
+<dialog class="rd-dialog" id="dlg-transfer">
+    <div class="rd-dialog-head">
+        <span>@L["tav.transfer"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Transfer">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label">@L["tav.dept"]</label>
+                <select class="rd-control" name="departmentId">
+                    @foreach (var dept in Model.Departments)
+                    {
+                        <option value="@dept.Id" selected="@(dept.Id == Model.CurrentDeptId)">@dept.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@L["tav.transfer"]</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Edit dialog (plain fields only: title + due date) -->
+<dialog class="rd-dialog" id="dlg-edit">
+    <div class="rd-dialog-head">
+        <span>@SL["common.edit"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Edit">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="te-title">@L["tav.editTitle"]</label>
+                <input id="te-title" name="title" class="rd-control" value="@Model.Title" required>
+            </div>
+            <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label" for="te-due">@L["tav.due"]</label>
+                <input id="te-due" name="due" type="date" class="rd-control"
+                       value="@(Model.Due is { } d ? d.ToLocalTime().ToString("yyyy-MM-dd") : null)">
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Delete confirm dialog (hard delete; task.delete permission enforced in the service) -->
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Delete">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <p>@L["tav.deleteConfirm"]</p>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn rd-btn-danger">@SL["common.delete"]</button>
+        </div>
+    </form>
+</dialog>

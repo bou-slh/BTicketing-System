@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tav.back" xml:space="preserve">
+    <value>← Görevler</value>
+  </data>
+  <data name="tav.close" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="tav.assign" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="tav.transfer" xml:space="preserve">
+    <value>Aktar</value>
+  </data>
+  <data name="tav.info" xml:space="preserve">
+    <value>Görev Bilgileri</value>
+  </data>
+  <data name="tav.due" xml:space="preserve">
+    <value>Son Tarih</value>
+  </data>
+  <data name="tav.dept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="tav.assignee" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="tav.ticket" xml:space="preserve">
+    <value>İlgili Talep</value>
+  </data>
+  <data name="tav.thread" xml:space="preserve">
+    <value>Yazışmalar</value>
+  </data>
+  <data name="tav.noteBadge" xml:space="preserve">
+    <value>İç Not</value>
+  </data>
+  <data name="tav.addNote" xml:space="preserve">
+    <value>Not Ekle</value>
+  </data>
+  <data name="tav.notePh" xml:space="preserve">
+    <value>Yalnızca temsilcilerin göreceği bir not yazın…</value>
+  </data>
+  <data name="tav.addNoteBtn" xml:space="preserve">
+    <value>Notu Ekle</value>
+  </data>
+  <data name="tav.pageTitle" xml:space="preserve">
+    <value>Görev {0}</value>
+  </data>
+  <data name="tav.createdLine" xml:space="preserve">
+    <value>Oluşturulma: {0} · {1}</value>
+  </data>
+  <data name="tav.dateLong" xml:space="preserve">
+    <value>d MMMM yyyy HH:mm</value>
+  </data>
+  <data name="tav.dateOnly" xml:space="preserve">
+    <value>d MMMM yyyy</value>
+  </data>
+  <data name="tav.timeFmt" xml:space="preserve">
+    <value>d MMM HH:mm</value>
+  </data>
+  <data name="tav.metaToday" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="tav.metaYesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="tav.editTitle" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="tav.deleteConfirm" xml:space="preserve">
+    <value>Bu görev ve yazışmaları kalıcı olarak silinecek. Emin misiniz?</value>
+  </data>
+  <data name="tav.closedInfo" xml:space="preserve">
+    <value>Görev zaten kapalı</value>
+  </data>
+  <data name="tav.evtCreated" xml:space="preserve">
+    <value>Görev oluşturuldu</value>
+  </data>
+  <data name="tav.evtAssigned" xml:space="preserve">
+    <value>{0}'a atandı</value>
+  </data>
+  <data name="tav.evtTransferred" xml:space="preserve">
+    <value>{0} departmanına aktarıldı</value>
+  </data>
+  <data name="tav.evtClosed" xml:space="preserve">
+    <value>Görev kapatıldı</value>
+  </data>
+  <data name="tav.evtEdited" xml:space="preserve">
+    <value>Görev güncellendi</value>
+  </data>
+  <data name="tav.toastCreated" xml:space="preserve">
+    <value>Görev oluşturuldu</value>
+  </data>
+  <data name="tav.toastNote" xml:space="preserve">
+    <value>İç not eklendi</value>
+  </data>
+  <data name="tav.toastClosed" xml:space="preserve">
+    <value>Görev kapatıldı</value>
+  </data>
+  <data name="tav.toastAssigned" xml:space="preserve">
+    <value>Görev atandı</value>
+  </data>
+  <data name="tav.toastTransferred" xml:space="preserve">
+    <value>Görev aktarıldı</value>
+  </data>
+  <data name="tav.toastSaved" xml:space="preserve">
+    <value>Görev güncellendi</value>
+  </data>
+  <data name="tav.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok</value>
+  </data>
+  <data name="tav.errEmpty" xml:space="preserve">
+    <value>Boş içerik gönderilemez</value>
+  </data>
+</root>
