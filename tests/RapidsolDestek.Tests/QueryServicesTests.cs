@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RapidsolDestek.Domain.Common;
 using RapidsolDestek.Domain.Queues;
 using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure.Services;
@@ -147,5 +148,156 @@ public class CannedResponseTests(PostgresFixture fixture)
         Assert.Contains("Bourla Salehi", expanded);
         Assert.Contains("6", expanded); // %{effort.hours}
         Assert.DoesNotContain("%{", expanded); // nothing left unexpanded
+    }
+
+    // ---- S6 agent/canned.html CRUD (create / edit / disable / delete) ----------------
+
+    private static string UniqueTitle() => $"Test Yanıtı {Guid.NewGuid():N}";
+
+    [Fact]
+    public async Task Create_NormalizesPlainTextBody_AndPersists()
+    {
+        var title = UniqueTitle();
+        int cannedId;
+        using (var s = new ServiceScopeBundle(fixture))
+        {
+            // mcetin = Kıdemli Temsilci: holds canned.manage.
+            var mcetin = await TestActors.StaffAsync(s.Db, "mcetin");
+            var bordro = await s.Db.Departments.SingleAsync(d => d.Name == "Bordro");
+            var canned = await s.Get<ICannedResponseService>().CreateAsync(new CannedUpsertRequest
+            {
+                Title = $"  {title}  ",
+                DepartmentId = bordro.Id,
+                Response = "Merhaba %{ticket.user.name},\n\nTalebiniz işlemde.",
+            }, mcetin);
+            cannedId = canned.Id;
+        }
+
+        using var fresh = new ServiceScopeBundle(fixture);
+        var saved = await fresh.Db.CannedResponses.SingleAsync(c => c.Id == cannedId);
+        Assert.Equal(title, saved.Title);
+        Assert.True(saved.IsEnabled);
+        // Plain textarea input is paragraph-wrapped to stored HTML; %{variables} survive.
+        Assert.Equal("<p>Merhaba %{ticket.user.name},</p><p>Talebiniz işlemde.</p>", saved.Response);
+    }
+
+    [Fact]
+    public async Task Create_DuplicateTitleRefused_AndPermissionGated()
+    {
+        using var s = new ServiceScopeBundle(fixture);
+        var mcetin = await TestActors.StaffAsync(s.Db, "mcetin");
+        var svc = s.Get<ICannedResponseService>();
+
+        var ex = await Assert.ThrowsAsync<DomainRuleException>(() => svc.CreateAsync(new CannedUpsertRequest
+        {
+            Title = "Ek Bilgi Talebi", // seeded canon title "Ek bilgi talebi", case-insensitive
+            Response = "x",
+        }, mcetin));
+        Assert.Equal("title-in-use", ex.Code);
+
+        // dkaya = Temsilci: no canned.manage anywhere.
+        var dkaya = await TestActors.StaffAsync(s.Db, "dkaya");
+        await Assert.ThrowsAsync<PermissionDeniedException>(() => svc.CreateAsync(new CannedUpsertRequest
+        {
+            Title = UniqueTitle(),
+            Response = "x",
+        }, dkaya));
+    }
+
+    [Fact]
+    public async Task Update_SavesEditDialogFields_AcrossScopes()
+    {
+        int cannedId, destekId;
+        using (var s = new ServiceScopeBundle(fixture))
+        {
+            var mcetin = await TestActors.StaffAsync(s.Db, "mcetin");
+            destekId = (await s.Db.Departments.SingleAsync(d => d.Name == "Destek")).Id;
+            var canned = await s.Get<ICannedResponseService>().CreateAsync(new CannedUpsertRequest
+            {
+                Title = UniqueTitle(),
+                Response = "Eski içerik.",
+            }, mcetin);
+            cannedId = canned.Id;
+        }
+
+        var newTitle = UniqueTitle();
+        using (var s = new ServiceScopeBundle(fixture))
+        {
+            var mcetin = await TestActors.StaffAsync(s.Db, "mcetin");
+            await s.Get<ICannedResponseService>().UpdateAsync(cannedId, new CannedUpsertRequest
+            {
+                Title = newTitle,
+                DepartmentId = destekId,
+                Response = "<p>Yeni içerik.</p>",
+                IsEnabled = false,
+            }, mcetin);
+        }
+
+        using var fresh = new ServiceScopeBundle(fixture);
+        var saved = await fresh.Db.CannedResponses.SingleAsync(c => c.Id == cannedId);
+        Assert.Equal(newTitle, saved.Title);
+        Assert.Equal(destekId, saved.DepartmentId);
+        Assert.Equal("<p>Yeni içerik.</p>", saved.Response);
+        Assert.False(saved.IsEnabled);
+    }
+
+    [Fact]
+    public async Task SetEnabled_False_DropsOutOfComposerList_ThenReEnables()
+    {
+        int cannedId, bordroId;
+        string title = UniqueTitle();
+        using (var s = new ServiceScopeBundle(fixture))
+        {
+            var mcetin = await TestActors.StaffAsync(s.Db, "mcetin");
+            bordroId = (await s.Db.Departments.SingleAsync(d => d.Name == "Bordro")).Id;
+            var canned = await s.Get<ICannedResponseService>().CreateAsync(new CannedUpsertRequest
+            {
+                Title = title,
+                DepartmentId = bordroId,
+                Response = "x",
+            }, mcetin);
+            cannedId = canned.Id;
+
+            await s.Get<ICannedResponseService>().SetEnabledAsync(cannedId, false, mcetin);
+        }
+
+        using (var fresh = new ServiceScopeBundle(fixture))
+        {
+            // Disabled → gone from the ticket-view/ticket-open composer select source.
+            var list = await fresh.Get<ICannedResponseService>().ListForAsync(bordroId);
+            Assert.DoesNotContain(list, c => c.Id == cannedId);
+
+            var mcetin = await TestActors.StaffAsync(fresh.Db, "mcetin");
+            await fresh.Get<ICannedResponseService>().SetEnabledAsync(cannedId, true, mcetin);
+        }
+
+        using var last = new ServiceScopeBundle(fixture);
+        var relisted = await last.Get<ICannedResponseService>().ListForAsync(bordroId);
+        Assert.Contains(relisted, c => c.Id == cannedId);
+    }
+
+    [Fact]
+    public async Task Delete_HardDeletes_AndIsPermissionGated()
+    {
+        int cannedId;
+        using (var s = new ServiceScopeBundle(fixture))
+        {
+            var mcetin = await TestActors.StaffAsync(s.Db, "mcetin");
+            var canned = await s.Get<ICannedResponseService>().CreateAsync(new CannedUpsertRequest
+            {
+                Title = UniqueTitle(),
+                Response = "x",
+            }, mcetin);
+            cannedId = canned.Id;
+
+            var dkaya = await TestActors.StaffAsync(s.Db, "dkaya");
+            await Assert.ThrowsAsync<PermissionDeniedException>(() =>
+                s.Get<ICannedResponseService>().DeleteAsync(cannedId, dkaya));
+
+            await s.Get<ICannedResponseService>().DeleteAsync(cannedId, mcetin);
+        }
+
+        using var fresh = new ServiceScopeBundle(fixture);
+        Assert.False(await fresh.Db.CannedResponses.AnyAsync(c => c.Id == cannedId));
     }
 }

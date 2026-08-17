@@ -529,7 +529,29 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       deleted, lands on /agent/kb; disabled on a new article. Header meta composed from data — the static
       kf.meta sample string stays unused in the resx. Invented keys (TR/EN twins): kf.newTitle/metaNew/
       metaUpdated/dateFmt/deleteConfirm/toast*/errInvalid/errDenied.)*
-- [ ] **canned.html** — B1 engine; per-row edit dialog prefilled (B2); create/disable/delete
+- [x] **canned.html** — B1 engine; per-row edit dialog prefilled (B2); create/disable/delete
+      *(S6; new /agent/canned (CannedController) over the existing CannedResponseService — CRUD added there
+      (create/update/enable-disable/hard delete), gated by canned.manage checked anywhere (KbService
+      faq.manage precedent; Temsilci lacks it, Kıdemli+ hold it); expansion/composer-insert untouched. B1:
+      header sort title/dept/updated (updated desc default per the mockup), search ILike over title+body,
+      pagination (PageSize 8, orgs precedent); rd-empty on search miss invented per B1 (mockup defines none).
+      B2: the mockup's ONE dlg-canned shared by the new-button and all 5 rows split into a create dialog
+      (mockup DOM verbatim) + per-row edit dialogs prefilled server-side — edit title cn.dlgEditTitle and an
+      Etkin rd-check (INVENTED, needs canon sign-off: without it disabled rows could never be re-enabled;
+      the mockup only offers bulk Devre Dışı Bırak). Body: plain textarea over stored HTML, kb-faq answer
+      precedent (tag-less input paragraph-wrapped, HTML sanitized; %{variables} survive; raw HTML shows when
+      editing seeded rows — rich editor TODO(S7)). Toolbar bulk buttons act on the checkbox selection via
+      the hidden cn-bulk form (users precedent): Devre Dışı Bırak posts directly, Sil = INVENTED confirm
+      dialog (tasks/users precedent) → HARD delete (tasks Sil precedent — nothing references a canned
+      response after insert; flagged for canon). Disable/enable verified to gate the ticket-view/ticket-open
+      composer selects (ListForAsync + the ticket-open query both filter IsEnabled — no change needed).
+      Dept cell renders cn.fDeptAll for department-less rows (none seeded; canon seeds 7, all dept-scoped).
+      Duplicate-title guard title-in-use (org name-in-use precedent). Tool fix ridealong: i18n-convert's
+      lang-section regex stopped at the first '}' — inside %{ticket.number} of cn.fBodyHelp — silently
+      dropping the key; closing brace now anchored to its own line (matters for S7 template pages).
+      Invented keys (TR/EN twins): cn.dlgEditTitle/fEnabled/fEnabledHelp/deleteConfirm/emptyTitle/emptyText/
+      dateFmt/updToday/updYesterday/toastCreated/toastSaved/errTitleInUse/errInvalid/errDenied/bulkNone/
+      bulkDone/bulkPartial.)*
 - [x] **directory.html** — search + department filter work; mailto/tel links *(S6; presence from real sessions still TODO — current pills are a stub: LastLoginAt/OnVacation-derived; B1 header sort TODO)*
 - [ ] **profile.html** — saves; 2FA setup ("Yapılandır"); vacation switch has effect (assignment guard);
       signature editor; language select switches culture

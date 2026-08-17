@@ -86,7 +86,10 @@ int RunPage(string htmlPath, string[] viewPaths)
 
 Dictionary<string, string>? ParseLangSection(string block, string lang, string source)
 {
-    var m = Regex.Match(block, $@"\b{lang}\s*:\s*\{{([\s\S]*?)\}}");
+    // The closing brace must open its own line: values may contain '}' (template
+    // variables like %{ticket.number}), which a bare non-greedy \} would stop at,
+    // silently dropping every entry from that line on.
+    var m = Regex.Match(block, $@"\b{lang}\s*:\s*\{{([\s\S]*?)\n\s*\}}");
     if (!m.Success)
     {
         Console.Error.WriteLine($"error: no '{lang}:' section inside PAGE_I18N of {source}");

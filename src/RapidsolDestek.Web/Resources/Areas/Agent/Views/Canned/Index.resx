@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="cn.title" xml:space="preserve">
+    <value>Hazır Yanıtlar</value>
+  </data>
+  <data name="cn.subtitle" xml:space="preserve">
+    <value>Yanıt penceresinden tek tıkla eklenebilen şablon metinleri yönetin.</value>
+  </data>
+  <data name="cn.searchPh" xml:space="preserve">
+    <value>Hazır yanıt ara…</value>
+  </data>
+  <data name="cn.new" xml:space="preserve">
+    <value>＋ Yeni Yanıt</value>
+  </data>
+  <data name="cn.colTitle" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="cn.colDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="cn.dlgTitle" xml:space="preserve">
+    <value>Yeni Hazır Yanıt</value>
+  </data>
+  <data name="cn.fTitle" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="cn.fTitlePh" xml:space="preserve">
+    <value>Örn. Ek bilgi talebi</value>
+  </data>
+  <data name="cn.fDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="cn.fDeptAll" xml:space="preserve">
+    <value>Tüm departmanlar</value>
+  </data>
+  <data name="cn.fDeptHelp" xml:space="preserve">
+    <value>Bir departman seçilirse yanıt yalnızca o departmandaki temsilcilere önerilir.</value>
+  </data>
+  <data name="cn.fBody" xml:space="preserve">
+    <value>İçerik</value>
+  </data>
+  <data name="cn.fBodyPh" xml:space="preserve">
+    <value>Şablon metnini yazın…</value>
+  </data>
+  <data name="cn.fBodyHelp" xml:space="preserve">
+    <value>Değişkenler desteklenir: %{ticket.number}, %{user.name}, %{agent.name}…</value>
+  </data>
+  <data name="cn.dlgEditTitle" xml:space="preserve">
+    <value>Hazır Yanıtı Düzenle</value>
+  </data>
+  <data name="cn.fEnabled" xml:space="preserve">
+    <value>Etkin</value>
+  </data>
+  <data name="cn.fEnabledHelp" xml:space="preserve">
+    <value>Devre dışı yanıtlar temsilcilerin yanıt penceresinde listelenmez.</value>
+  </data>
+  <data name="cn.deleteConfirm" xml:space="preserve">
+    <value>Seçili hazır yanıtlar kalıcı olarak silinecek. Devam edilsin mi?</value>
+  </data>
+  <data name="cn.emptyTitle" xml:space="preserve">
+    <value>Sonuç bulunamadı</value>
+  </data>
+  <data name="cn.emptyText" xml:space="preserve">
+    <value>Arama ölçütlerinizle eşleşen hazır yanıt yok.</value>
+  </data>
+  <data name="cn.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="cn.updToday" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="cn.updYesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="cn.toastCreated" xml:space="preserve">
+    <value>Hazır yanıt oluşturuldu.</value>
+  </data>
+  <data name="cn.toastSaved" xml:space="preserve">
+    <value>Hazır yanıt kaydedildi.</value>
+  </data>
+  <data name="cn.errTitleInUse" xml:space="preserve">
+    <value>Bu başlıkla kayıtlı bir hazır yanıt zaten var.</value>
+  </data>
+  <data name="cn.errInvalid" xml:space="preserve">
+    <value>Başlık ve içerik gerekli.</value>
+  </data>
+  <data name="cn.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok.</value>
+  </data>
+  <data name="cn.bulkNone" xml:space="preserve">
+    <value>Önce listeden kayıt seçin.</value>
+  </data>
+  <data name="cn.bulkDone" xml:space="preserve">
+    <value>{0} hazır yanıt güncellendi.</value>
+  </data>
+  <data name="cn.bulkPartial" xml:space="preserve">
+    <value>{0} işlem tamamlandı, {1} kayıt atlandı.</value>
+  </data>
+</root>

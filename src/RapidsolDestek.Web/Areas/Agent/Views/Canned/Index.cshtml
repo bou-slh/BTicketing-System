@@ -1,0 +1,245 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model CannedIndexVm
+@{
+    ViewData["Title"] = L["cn.title"];
+
+    // PRG toast handoff after create/update/bulk (users-page precedent).
+    if (TempData["CannedToast"] is string toastKey)
+    {
+        var ok = TempData["CannedToastOk"] as int? ?? 0;
+        var skipped = TempData["CannedToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "cn.bulkDone" or "cn.bulkPartial"
+            ? L[toastKey, ok, skipped].Value
+            : L[toastKey].Value;
+        if (TempData["CannedToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Updated cell: "Bugün 09:12" / "Dün 17:05" / "8 Ağu 2026" (orgs-page derivation).
+    string UpdatedText(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        if (local.Date == today)
+            return L.GetString("cn.updToday", local.ToString("HH:mm"));
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("cn.updYesterday", local.ToString("HH:mm"));
+        return local.ToString(L.GetString("cn.dateFmt"), CultureInfo.CurrentUICulture);
+    }
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/agent/canned" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key is "updated" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <h1>@L["cn.title"]</h1>
+        <p>@L["cn.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <button class="rd-btn-primary" data-dialog-open="dlg-canned">@L["cn.new"]</button>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/agent/canned">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["cn.searchPh"]">
+    <span class="spacer"></span>
+    @* Mockup's dead bulk buttons act on the checkbox selection (users-page precedent):
+       Devre Dışı Bırak posts directly (reversible via the edit dialog's Etkin toggle),
+       Sil chains into the invented confirm dialog (tasks dlg-bulk-delete precedent). *@
+    <button class="rd-btn" type="submit" form="cn-bulk" name="act" value="disable">@SL["common.disable"]</button>
+    <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-bulk-delete">@SL["common.delete"]</button>
+</form>
+
+<div class="rd-surface">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Invented per B1 (reachable empty state on search miss) — the mockup defines none. *@
+        <div class="rd-empty">
+            <div class="icon">❝</div>
+            <h3>@L["cn.emptyTitle"]</h3>
+            <p>@L["cn.emptyText"]</p>
+            <button class="rd-btn-primary" data-dialog-open="dlg-canned">@L["cn.new"]</button>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table" id="tbl-canned">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-canned" aria-label="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("title")"><a href="@SortUrl("title")">@L["cn.colTitle"]</a></th>
+                    <th>@SL["common.status"]</th>
+                    <th class="@SortClass("dept")"><a href="@SortUrl("dept")">@L["cn.colDept"]</a></th>
+                    <th class="@SortClass("updated")"><a href="@SortUrl("updated")">@SL["common.updated"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td><input type="checkbox" name="ids" value="@r.Id" form="cn-bulk"></td>
+                        <td><a data-dialog-open="dlg-canned-@r.Id" href="#">@r.Title</a></td>
+                        @if (r.IsEnabled)
+                        {
+                            <td><span class="rd-pill rd-pill-solved">@SL["common.active"]</span></td>
+                        }
+                        else
+                        {
+                            <td><span class="rd-pill rd-pill-closed">@SL["common.disabled"]</span></td>
+                        }
+                        <td>@(r.DeptName ?? L["cn.fDeptAll"].Value)</td>
+                        <td>@UpdatedText(r.Updated)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span><span>@SL["common.showing"]</span> @Model.From–@Model.To / @Model.Total</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the toolbar bulk actions (users us-bulk precedent). *@
+<form id="cn-bulk" method="post" asp-area="Agent" asp-controller="Canned" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+@* Bulk delete confirm dialog: invented UI (B2, tasks/users precedent). Hard delete —
+   inserted text was copied into threads, nothing references a canned response. *@
+<dialog class="rd-dialog" id="dlg-bulk-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <p>@L["cn.deleteConfirm"]</p>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        <button type="submit" class="rd-btn rd-btn-danger" form="cn-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>
+
+<dialog class="rd-dialog" id="dlg-canned">
+    <div class="rd-dialog-head">
+        <span>@L["cn.dlgTitle"]</span>
+        <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+    </div>
+    <form method="post" asp-area="Agent" asp-controller="Canned" asp-action="Create">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="cn-title">@L["cn.fTitle"]</label>
+                <input id="cn-title" name="title" class="rd-control" placeholder="@L["cn.fTitlePh"]" required>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="cn-dept">@L["cn.fDept"]</label>
+                <select id="cn-dept" name="deptId" class="rd-control">
+                    <option value="">@L["cn.fDeptAll"]</option>
+                    @foreach (var d in Model.Departments)
+                    {
+                        <option value="@d.Id">@d.Name</option>
+                    }
+                </select>
+                <div class="rd-help">@L["cn.fDeptHelp"]</div>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="cn-body">@L["cn.fBody"]</label>
+                <textarea id="cn-body" name="body" class="rd-control" style="min-height:150px" placeholder="@L["cn.fBodyPh"]"></textarea>
+                <div class="rd-help">@L["cn.fBodyHelp"]</div>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            @* No data-dialog-close on the submit — the audited B2 close-swallows-save bug. *@
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</dialog>
+
+@* Per-row edit dialogs, prefilled server-side (B2) — the mockup reuses one hardcoded
+   dlg-canned for every row; edit title + Etkin toggle are invented (flagged in ROADMAP). *@
+@foreach (var r in Model.Rows)
+{
+<dialog class="rd-dialog" id="dlg-canned-@r.Id">
+    <div class="rd-dialog-head">
+        <span>@L["cn.dlgEditTitle"]</span>
+        <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+    </div>
+    <form method="post" asp-area="Agent" asp-controller="Canned" asp-action="Update">
+        <input type="hidden" name="id" value="@r.Id">
+        <input type="hidden" name="returnUrl" value="@currentUrl">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="cn-title-@r.Id">@L["cn.fTitle"]</label>
+                <input id="cn-title-@r.Id" name="title" class="rd-control" placeholder="@L["cn.fTitlePh"]" value="@r.Title" required>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="cn-dept-@r.Id">@L["cn.fDept"]</label>
+                <select id="cn-dept-@r.Id" name="deptId" class="rd-control">
+                    <option value="" selected="@(r.DepartmentId is null)">@L["cn.fDeptAll"]</option>
+                    @foreach (var d in Model.Departments)
+                    {
+                        <option value="@d.Id" selected="@(r.DepartmentId == d.Id)">@d.Name</option>
+                    }
+                </select>
+                <div class="rd-help">@L["cn.fDeptHelp"]</div>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="cn-body-@r.Id">@L["cn.fBody"]</label>
+                @* Raw stored HTML in the textarea (kb-faq answer precedent). *@
+                <textarea id="cn-body-@r.Id" name="body" class="rd-control" style="min-height:150px" placeholder="@L["cn.fBodyPh"]">@r.Response</textarea>
+                <div class="rd-help">@L["cn.fBodyHelp"]</div>
+            </div>
+            <div class="rd-field">
+                @* Invented Etkin toggle so disabled responses can be re-enabled (needs canon sign-off). *@
+                <label class="rd-check"><input type="checkbox" name="enabled" value="true" checked="@r.IsEnabled"><span>@L["cn.fEnabled"]</span></label>
+                <div class="rd-help">@L["cn.fEnabledHelp"]</div>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</dialog>
+}
