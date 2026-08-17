@@ -42,6 +42,7 @@ public class AppDbContext : DbContext
     // ----- Domain: people & staffing -----
     public DbSet<User> Users => Set<User>();
     public DbSet<UserEmail> UserEmails => Set<UserEmail>();
+    public DbSet<UserNote> UserNotes => Set<UserNote>();
     public DbSet<Organization> Organizations => Set<Organization>();
     public DbSet<Staff> Staff => Set<Staff>();
     public DbSet<Team> Teams => Set<Team>();

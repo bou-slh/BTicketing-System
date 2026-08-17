@@ -22,7 +22,14 @@ public class User : TimestampedEntity
     /// <summary>Customer Identity principal when the user registered on the portal.</summary>
     public Guid? IdentityUserId { get; set; }
 
+    /// <summary>
+    /// Per-user value; null inherits <see cref="Organization.Phone"/> (agent/user-view
+    /// "Şirketten" badge — "Geçersiz kıl" stores an override here).
+    /// </summary>
     public string? Phone { get; set; }
+
+    /// <summary>Per-user override of <see cref="Organization.Address"/>; null inherits.</summary>
+    public string? Address { get; set; }
 
     /// <summary>Blocks new tickets from this user (osTicket lock/ban status bit).</summary>
     public bool IsBlocked { get; set; }
@@ -30,6 +37,25 @@ public class User : TimestampedEntity
     public string? Notes { get; set; }
 
     public List<UserEmail> Emails { get; set; } = [];
+}
+
+/// <summary>
+/// Internal staff note about a user (agent/user-view.html Notlar tab). osTicket keeps
+/// only a notes text blob; the mockup's note cards carry author + badge + timestamp,
+/// so notes append here — the smallest faithful mechanism (no thread machinery).
+/// </summary>
+public class UserNote : TimestampedEntity
+{
+    public int UserId { get; set; }
+    public User? User { get; set; }
+
+    /// <summary>Author staff id (plain column, ThreadEntry.StaffId precedent).</summary>
+    public int? StaffId { get; set; }
+
+    /// <summary>Author display-name snapshot (ThreadEntry.Poster parity).</summary>
+    public required string AuthorName { get; set; }
+
+    public required string Body { get; set; }
 }
 
 /// <summary>One of a user's addresses (osTicket user_email); inbound mail matches on these.</summary>

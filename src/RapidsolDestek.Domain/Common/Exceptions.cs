@@ -11,6 +11,15 @@ public class PermissionDeniedException(string permission, int? departmentId = nu
     public int? DepartmentId { get; } = departmentId;
 }
 
+/// <summary>
+/// A user-correctable rule violation (duplicate value, restricted delete, …).
+/// <see cref="Code"/> is stable for UI toast mapping (S6 users pages).
+/// </summary>
+public class DomainRuleException(string code, string message) : DomainException(message)
+{
+    public string Code { get; } = code;
+}
+
 /// <summary>An entity referenced by id does not exist (mapped to 404 in Web).</summary>
 public class DomainNotFoundException(string entity, object key)
     : DomainException($"{entity} '{key}' not found.")

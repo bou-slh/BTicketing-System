@@ -347,6 +347,15 @@ public static class DomainSeeder
         foreach (var u in users)
             u.DefaultEmailId = u.Emails[0].Id;
 
+        // Canon internal note on the hero user (agent/user-view.html Notlar tab).
+        db.UserNotes.Add(new UserNote
+        {
+            User = bourla, StaffId = mcetin.Id, AuthorName = "Merve Çetin",
+            CreatedAt = On(2026, 8, 4, 11, 5),
+            Body = "Kullanıcı telefonla arandı; bordro entegrasyonu projesi için tek yetkili iletişim "
+                + "kişisi olduğu teyit edildi. Acil konularda önce e-posta, sonra telefon tercih ediyor.",
+        });
+
         // ----- Knowledge base (canon agent/kb.html + portal/kb.html) ------------------
         var kbBordro = new KbCategory { Name = "Bordro", IsPublic = true, Description = "Bordro hesaplama ve kesinti soruları" };
         var kbIzin = new KbCategory { Name = "İzin", IsPublic = true, Description = "İzin türleri, devir ve bakiye işlemleri" };

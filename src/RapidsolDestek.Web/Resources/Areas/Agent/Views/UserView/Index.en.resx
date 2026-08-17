@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="uv.back" xml:space="preserve">
+    <value>← Users</value>
+  </data>
+  <data name="uv.manage" xml:space="preserve">
+    <value>Manage Account</value>
+  </data>
+  <data name="uv.pwReset" xml:space="preserve">
+    <value>Send Password Reset</value>
+  </data>
+  <data name="uv.profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="uv.email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="uv.phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="uv.address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="uv.org" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="uv.reg" xml:space="preserve">
+    <value>Registered</value>
+  </data>
+  <data name="uv.tz" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+  <data name="uv.stActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="uv.inherited" xml:space="preserve">
+    <value>From company</value>
+  </data>
+  <data name="uv.override" xml:space="preserve">
+    <value>Override</value>
+  </data>
+  <data name="uv.inheritHelp" xml:space="preserve">
+    <value>Fields with the “From company” badge are inherited from the company profile and kept in sync automatically when company details change. Use “Override” to set a user-specific value.</value>
+  </data>
+  <data name="uv.account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="uv.loginMethod" xml:space="preserve">
+    <value>Sign-in method</value>
+  </data>
+  <data name="uv.loginEmail" xml:space="preserve">
+    <value>Email + password</value>
+  </data>
+  <data name="uv.lastLogin" xml:space="preserve">
+    <value>Last sign-in</value>
+  </data>
+  <data name="uv.twofa" xml:space="preserve">
+    <value>2FA status</value>
+  </data>
+  <data name="uv.twofaOn" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="uv.tabTickets" xml:space="preserve">
+    <value>Tickets</value>
+  </data>
+  <data name="uv.tabNotes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="uv.colNo" xml:space="preserve">
+    <value>Ticket #</value>
+  </data>
+  <data name="uv.colSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="uv.notePh" xml:space="preserve">
+    <value>Write a note about this user…</value>
+  </data>
+  <data name="uv.addNote" xml:space="preserve">
+    <value>Add Note</value>
+  </data>
+  <data name="uv.noteBadge" xml:space="preserve">
+    <value>Internal Note</value>
+  </data>
+  <data name="uv.pageTitle" xml:space="preserve">
+    <value>User: {0}</value>
+  </data>
+  <data name="uv.stGuest" xml:space="preserve">
+    <value>Guest</value>
+  </data>
+  <data name="uv.stLocked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="uv.loginGuest" xml:space="preserve">
+    <value>Guest — no portal account</value>
+  </data>
+  <data name="uv.twofaOff" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="uv.dateLong" xml:space="preserve">
+    <value>d MMMM yyyy</value>
+  </data>
+  <data name="uv.noteTimeFmt" xml:space="preserve">
+    <value>d MMM yyyy HH:mm</value>
+  </data>
+  <data name="uv.updToday" xml:space="preserve">
+    <value>Today {0}</value>
+  </data>
+  <data name="uv.updYesterday" xml:space="preserve">
+    <value>Yesterday {0}</value>
+  </data>
+  <data name="uv.updFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="uv.noTickets" xml:space="preserve">
+    <value>This user has no tickets.</value>
+  </data>
+  <data name="uv.fName" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="uv.fInheritHelp" xml:space="preserve">
+    <value>Leave blank to inherit the value from the company profile.</value>
+  </data>
+  <data name="uv.fOrgNone" xml:space="preserve">
+    <value>— No company selected —</value>
+  </data>
+  <data name="uv.manageHelp" xml:space="preserve">
+    <value>While the account is locked the user cannot open new tickets. Password reset and registration invites arrive with the email subsystem (S8).</value>
+  </data>
+  <data name="uv.mLock" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="uv.mUnlock" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
+  <data name="uv.deleteConfirm" xml:space="preserve">
+    <value>This user will be permanently deleted (including their emails, notes and portal account). Users with tickets cannot be deleted. Continue?</value>
+  </data>
+  <data name="uv.errHasTickets" xml:space="preserve">
+    <value>A user with tickets cannot be deleted.</value>
+  </data>
+  <data name="uv.errDenied" xml:space="preserve">
+    <value>You do not have permission for this action.</value>
+  </data>
+  <data name="uv.errEmpty" xml:space="preserve">
+    <value>A required field cannot be left empty.</value>
+  </data>
+  <data name="uv.notYet" xml:space="preserve">
+    <value>Not available yet</value>
+  </data>
+  <data name="uv.toastCreated" xml:space="preserve">
+    <value>User created.</value>
+  </data>
+  <data name="uv.toastSaved" xml:space="preserve">
+    <value>Changes saved.</value>
+  </data>
+  <data name="uv.toastNote" xml:space="preserve">
+    <value>Note added.</value>
+  </data>
+  <data name="uv.toastBlocked" xml:space="preserve">
+    <value>User locked.</value>
+  </data>
+  <data name="uv.toastUnblocked" xml:space="preserve">
+    <value>User unlocked.</value>
+  </data>
+</root>

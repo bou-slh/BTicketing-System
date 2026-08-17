@@ -1,0 +1,343 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model UserViewVm
+@{
+    ViewData["Title"] = L.GetString("uv.pageTitle", Model.Name);
+
+    // PRG toast handoff (task-view precedent; _BackofficeLayout stamps <body data-toast>).
+    if (TempData["UvToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["UvToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Avatar initials, mockup style ("Bourla Salehi" → BS).
+    static string Initials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length == 0 ? "" :
+            parts.Length == 1 ? char.ToUpperInvariant(parts[0][0]).ToString() :
+            $"{char.ToUpperInvariant(parts[0][0])}{char.ToUpperInvariant(parts[^1][0])}";
+    }
+
+    // Dates: registered "12 Ocak 2025", notes "4 Ağu 2026 11:05", tickets "Bugün 10:18".
+    string DateLong(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("uv.dateLong"), CultureInfo.CurrentUICulture);
+    string NoteTime(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("uv.noteTimeFmt"), CultureInfo.CurrentUICulture);
+    string UpdatedText(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        if (local.Date == today)
+            return L.GetString("uv.updToday", local.ToString("HH:mm"));
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("uv.updYesterday", local.ToString("HH:mm"));
+        return local.ToString(L.GetString("uv.updFmt"), CultureInfo.CurrentUICulture);
+    }
+
+    // Time zone row: "Europe/Istanbul (GMT+3)" from the portal account preference.
+    string TimeZoneText()
+    {
+        var id = Model.TimeZoneId ?? "Europe/Istanbul";
+        try
+        {
+            var offset = TimeZoneInfo.FindSystemTimeZoneById(id).BaseUtcOffset;
+            var sign = offset < TimeSpan.Zero ? "-" : "+";
+            var text = offset.Minutes == 0 ? $"{Math.Abs(offset.Hours)}" : $"{Math.Abs(offset.Hours)}:{Math.Abs(offset.Minutes):00}";
+            return $"{id} (GMT{sign}{text})";
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            return id;
+        }
+    }
+
+    // Status pill (users-page mapping): locked → overdue, guest → closed, active → solved.
+    var statusPill = Model.StatusKey switch
+    {
+        "locked" => "rd-pill rd-pill-overdue",
+        "guest" => "rd-pill rd-pill-closed",
+        _ => "rd-pill rd-pill-solved",
+    };
+    var statusLabel = Model.StatusKey switch
+    {
+        "locked" => L["uv.stLocked"].Value,
+        "guest" => L["uv.stGuest"].Value,
+        _ => L["uv.stActive"].Value,
+    };
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <a href="/agent/users" class="text-sm">@L["uv.back"]</a>
+        <h1 style="margin-top:6px;display:flex;align-items:center;gap:12px">
+            <span class="rd-avatar">@Initials(Model.Name)</span> @Model.Name
+        </h1>
+        <p>@Model.Email@(Model.OrgName is not null ? $" · {Model.OrgName}" : null)</p>
+    </div>
+    <div class="actions">
+        <button class="rd-btn" data-dialog-open="dlg-edit">@SL["common.edit"]</button>
+        <button class="rd-btn" data-dialog-open="dlg-manage">@L["uv.manage"]</button>
+        @* Parola sıfırlama gönder needs outbound mail (S8) — disabled, never dead-looking. *@
+        <button class="rd-btn rd-btn-ghost" disabled title="@L["uv.notYet"]">@L["uv.pwReset"]</button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete">@SL["common.delete"]</button>
+    </div>
+</div>
+
+<div class="rd-grid-2" style="margin-bottom:20px">
+    <div class="rd-surface">
+        <div class="rd-surface-head">@L["uv.profile"]</div>
+        <div class="rd-surface-body">
+            <div class="bo-def">
+                <div class="row">
+                    <span>@L["uv.email"]</span>
+                    <span>@(Model.Email ?? "—")</span>
+                </div>
+                <div class="row">
+                    <span>@L["uv.phone"]</span>
+                    <span>@(Model.Phone.Value ?? "—")
+                        @if (Model.Phone.Inherited)
+                        {
+                            <span class="rd-badge-inherited">@L["uv.inherited"]</span>
+                            <button type="button" class="rd-btn rd-btn-sm rd-btn-ghost" data-override-open="ov-phone">@L["uv.override"]</button>
+                            @* Invented inline override form (B3) — the mockup button is dead. *@
+                            <form method="post" asp-action="Override" id="ov-phone" class="uv-override-form">
+                                <input type="hidden" name="id" value="@Model.Id">
+                                <input type="hidden" name="field" value="phone">
+                                <input class="rd-control" name="value" value="@Model.Phone.OrgValue">
+                                <button type="submit" class="rd-btn rd-btn-sm rd-btn-primary">@SL["common.save"]</button>
+                                <button type="button" class="rd-btn rd-btn-sm" data-override-cancel>@SL["common.cancel"]</button>
+                            </form>
+                        }
+                    </span>
+                </div>
+                <div class="row">
+                    <span>@L["uv.address"]</span>
+                    <span>@(Model.Address.Value ?? "—")
+                        @if (Model.Address.Inherited)
+                        {
+                            <span class="rd-badge-inherited">@L["uv.inherited"]</span>
+                            <button type="button" class="rd-btn rd-btn-sm rd-btn-ghost" data-override-open="ov-address">@L["uv.override"]</button>
+                            <form method="post" asp-action="Override" id="ov-address" class="uv-override-form">
+                                <input type="hidden" name="id" value="@Model.Id">
+                                <input type="hidden" name="field" value="address">
+                                <input class="rd-control" name="value" value="@Model.Address.OrgValue">
+                                <button type="submit" class="rd-btn rd-btn-sm rd-btn-primary">@SL["common.save"]</button>
+                                <button type="button" class="rd-btn rd-btn-sm" data-override-cancel>@SL["common.cancel"]</button>
+                            </form>
+                        }
+                    </span>
+                </div>
+                <div class="row">
+                    <span>@L["uv.org"]</span>
+                    <span>@if (Model.OrgId is { } orgId)
+                        {<a href="/agent/org-view?id=@orgId">@Model.OrgName</a>}
+                        else
+                        {<text>—</text>}</span>
+                </div>
+                <div class="row">
+                    <span>@SL["common.status"]</span>
+                    <span><span class="@statusPill">@statusLabel</span></span>
+                </div>
+                <div class="row">
+                    <span>@L["uv.reg"]</span>
+                    <span>@DateLong(Model.Registered)</span>
+                </div>
+                <div class="row">
+                    <span>@L["uv.tz"]</span>
+                    <span>@TimeZoneText()</span>
+                </div>
+            </div>
+            <div class="rd-help" style="margin-top:12px">@L["uv.inheritHelp"]</div>
+        </div>
+    </div>
+
+    <div class="rd-surface">
+        <div class="rd-surface-head">@L["uv.account"]</div>
+        <div class="rd-surface-body">
+            <div class="bo-def">
+                <div class="row">
+                    <span>@L["uv.loginMethod"]</span>
+                    <span>@(Model.HasIdentity ? L["uv.loginEmail"].Value : L["uv.loginGuest"].Value)</span>
+                </div>
+                <div class="row">
+                    <span>@L["uv.lastLogin"]</span>
+                    @* Customer sessions are not tracked yet — honest placeholder, TODO flagged in ROADMAP. *@
+                    <span>—</span>
+                </div>
+                <div class="row">
+                    <span>@L["uv.twofa"]</span>
+                    <span>@if (Model.HasIdentity && Model.TwoFactorEnabled)
+                        {<span class="rd-pill rd-pill-solved">@L["uv.twofaOn"]</span>}
+                        else if (Model.HasIdentity)
+                        {<span class="rd-pill rd-pill-closed">@L["uv.twofaOff"]</span>}
+                        else
+                        {<text>—</text>}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="rd-tabs" data-tabs>
+    <button class="@(Model.ActiveTab == "tickets" ? "active" : null)" data-tab="uv-panel-tickets"><span>@L["uv.tabTickets"]</span> · @Model.Tickets.Count</button>
+    <button class="@(Model.ActiveTab == "notes" ? "active" : null)" data-tab="uv-panel-notes"><span>@L["uv.tabNotes"]</span> · @Model.Notes.Count</button>
+</div>
+
+<div class="rd-tab-panel @(Model.ActiveTab == "tickets" ? "active" : null)" id="uv-panel-tickets">
+    <div class="rd-surface">
+        <div style="overflow-x:auto">
+            <table class="rd-table">
+                <thead>
+                    <tr>
+                        <th>@L["uv.colNo"]</th>
+                        <th>@L["uv.colSubject"]</th>
+                        <th>@SL["common.status"]</th>
+                        <th class="sortable sorted-desc">@SL["common.updated"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Tickets.Count == 0)
+                    {
+                        <tr><td colspan="4" class="rd-muted">@L["uv.noTickets"]</td></tr>
+                    }
+                    @foreach (var t in Model.Tickets)
+                    {
+                        <tr>
+                            <td><a href="/agent/ticket-view?id=@t.Id">@t.Number</a></td>
+                            <td><a href="/agent/ticket-view?id=@t.Id">@t.Subject</a></td>
+                            <td><span class="rd-pill rd-pill-@t.StatusKey">@SL[$"status.{t.StatusKey}"]</span></td>
+                            <td>@UpdatedText(t.Updated)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="rd-tab-panel @(Model.ActiveTab == "notes" ? "active" : null)" id="uv-panel-notes">
+    @foreach (var note in Model.Notes)
+    {
+        <div class="bo-thread-entry is-note">
+            <div class="head">
+                <div class="rd-avatar">@Initials(note.AuthorName)</div>
+                <b>@note.AuthorName</b>
+                <span class="rd-pill rd-pill-wait">@L["uv.noteBadge"]</span>
+                <time>@NoteTime(note.At)</time>
+            </div>
+            <div class="body">
+                @Html.Raw(string.Join("<br>", note.Body.Split('\n').Select(line => Html.Encode(line))))
+            </div>
+        </div>
+    }
+    <div class="rd-surface">
+        <form class="rd-surface-body" method="post" asp-action="Note">
+            <input type="hidden" name="id" value="@Model.Id">
+            <div class="rd-field">
+                <textarea class="rd-control" name="body" placeholder="@L["uv.notePh"]"></textarea>
+                <div class="rd-help">@SL["common.notesHelp"]</div>
+            </div>
+            <button type="submit" class="rd-btn-primary">@L["uv.addNote"]</button>
+        </form>
+    </div>
+</div>
+
+@* Header-action dialogs: invented UI following the task-view dialog DOM (B2) — the
+   mockup's buttons are dead; flagged in ROADMAP for canon sign-off. *@
+
+<!-- Edit dialog: name + phone/address overrides (blank = inherit) + company -->
+<dialog class="rd-dialog" id="dlg-edit">
+    <div class="rd-dialog-head">
+        <span>@SL["common.edit"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Edit">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="ue-name">@L["uv.fName"]</label>
+                <input id="ue-name" name="name" class="rd-control" value="@Model.Name" required>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="ue-phone">@L["uv.phone"]</label>
+                <input id="ue-phone" name="phone" class="rd-control" value="@Model.OwnPhone">
+                <div class="rd-help">@L["uv.fInheritHelp"]</div>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="ue-address">@L["uv.address"]</label>
+                <input id="ue-address" name="address" class="rd-control" value="@Model.OwnAddress">
+                <div class="rd-help">@L["uv.fInheritHelp"]</div>
+            </div>
+            <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label" for="ue-org">@L["uv.org"]</label>
+                <select id="ue-org" name="orgId" class="rd-control">
+                    <option value="">@L["uv.fOrgNone"]</option>
+                    @foreach (var org in Model.Organizations)
+                    {
+                        <option value="@org.Id" selected="@(org.Id == Model.OrgId)">@org.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Manage dialog: Kilitle / Kilidi Aç (IsBlocked, osTicket lock bit) -->
+<dialog class="rd-dialog" id="dlg-manage">
+    <div class="rd-dialog-head">
+        <span>@L["uv.manage"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Manage">
+        <input type="hidden" name="id" value="@Model.Id">
+        <input type="hidden" name="act" value="@(Model.StatusKey == "locked" ? "unlock" : "lock")">
+        <div class="rd-dialog-body">
+            <p>@L["uv.manageHelp"]</p>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@(Model.StatusKey == "locked" ? L["uv.mUnlock"].Value : L["uv.mLock"].Value)</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Delete confirm dialog (hard delete; users with tickets are refused with a toast) -->
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Delete">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <p>@L["uv.deleteConfirm"]</p>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn rd-btn-danger">@SL["common.delete"]</button>
+        </div>
+    </form>
+</dialog>
+
+<script>
+    // "Geçersiz kıl" inline override forms (page-scoped; rd.js has no override contract).
+    document.addEventListener("click", (e) => {
+        const open = e.target.closest("[data-override-open]");
+        if (open) {
+            const form = document.getElementById(open.getAttribute("data-override-open"));
+            form?.classList.toggle("open");
+            form?.querySelector("input[name=value]")?.focus();
+        }
+        const cancel = e.target.closest("[data-override-cancel]");
+        if (cancel) cancel.closest("form")?.classList.remove("open");
+    });
+</script>

@@ -129,6 +129,13 @@ public static class DomainModelConfiguration
                 .HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
         });
 
+        b.Entity<UserNote>(e =>
+        {
+            e.HasIndex(x => x.UserId);
+            e.HasOne(x => x.User).WithMany()
+                .HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
         b.Entity<Organization>(e => e.HasIndex(x => x.Name).IsUnique());
 
         // ----- Staffing -----

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="uv.back" xml:space="preserve">
+    <value>← Kullanıcılar</value>
+  </data>
+  <data name="uv.manage" xml:space="preserve">
+    <value>Hesabı Yönet</value>
+  </data>
+  <data name="uv.pwReset" xml:space="preserve">
+    <value>Parola Sıfırlama Gönder</value>
+  </data>
+  <data name="uv.profile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="uv.email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="uv.phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="uv.address" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="uv.org" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="uv.reg" xml:space="preserve">
+    <value>Kayıt tarihi</value>
+  </data>
+  <data name="uv.tz" xml:space="preserve">
+    <value>Zaman dilimi</value>
+  </data>
+  <data name="uv.stActive" xml:space="preserve">
+    <value>Aktif</value>
+  </data>
+  <data name="uv.inherited" xml:space="preserve">
+    <value>Şirketten</value>
+  </data>
+  <data name="uv.override" xml:space="preserve">
+    <value>Geçersiz kıl</value>
+  </data>
+  <data name="uv.inheritHelp" xml:space="preserve">
+    <value>“Şirketten” rozetli alanlar şirket profilinden devralınır ve şirket bilgileri değiştiğinde otomatik eşitlenir. “Geçersiz kıl” ile bu kullanıcıya özel bir değer tanımlayabilirsiniz.</value>
+  </data>
+  <data name="uv.account" xml:space="preserve">
+    <value>Hesap</value>
+  </data>
+  <data name="uv.loginMethod" xml:space="preserve">
+    <value>Giriş yöntemi</value>
+  </data>
+  <data name="uv.loginEmail" xml:space="preserve">
+    <value>E-posta + parola</value>
+  </data>
+  <data name="uv.lastLogin" xml:space="preserve">
+    <value>Son giriş</value>
+  </data>
+  <data name="uv.twofa" xml:space="preserve">
+    <value>2FA durumu</value>
+  </data>
+  <data name="uv.twofaOn" xml:space="preserve">
+    <value>Etkin</value>
+  </data>
+  <data name="uv.tabTickets" xml:space="preserve">
+    <value>Talepler</value>
+  </data>
+  <data name="uv.tabNotes" xml:space="preserve">
+    <value>Notlar</value>
+  </data>
+  <data name="uv.colNo" xml:space="preserve">
+    <value>Talep No</value>
+  </data>
+  <data name="uv.colSubject" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="uv.notePh" xml:space="preserve">
+    <value>Bu kullanıcı hakkında bir not yazın…</value>
+  </data>
+  <data name="uv.addNote" xml:space="preserve">
+    <value>Notu Ekle</value>
+  </data>
+  <data name="uv.noteBadge" xml:space="preserve">
+    <value>İç Not</value>
+  </data>
+  <data name="uv.pageTitle" xml:space="preserve">
+    <value>Kullanıcı: {0}</value>
+  </data>
+  <data name="uv.stGuest" xml:space="preserve">
+    <value>Misafir</value>
+  </data>
+  <data name="uv.stLocked" xml:space="preserve">
+    <value>Kilitli</value>
+  </data>
+  <data name="uv.loginGuest" xml:space="preserve">
+    <value>Misafir — portal hesabı yok</value>
+  </data>
+  <data name="uv.twofaOff" xml:space="preserve">
+    <value>Kapalı</value>
+  </data>
+  <data name="uv.dateLong" xml:space="preserve">
+    <value>d MMMM yyyy</value>
+  </data>
+  <data name="uv.noteTimeFmt" xml:space="preserve">
+    <value>d MMM yyyy HH:mm</value>
+  </data>
+  <data name="uv.updToday" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="uv.updYesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="uv.updFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="uv.noTickets" xml:space="preserve">
+    <value>Bu kullanıcının talebi yok.</value>
+  </data>
+  <data name="uv.fName" xml:space="preserve">
+    <value>Ad Soyad</value>
+  </data>
+  <data name="uv.fInheritHelp" xml:space="preserve">
+    <value>Boş bırakılırsa değer şirket profilinden devralınır.</value>
+  </data>
+  <data name="uv.fOrgNone" xml:space="preserve">
+    <value>— Şirket seçilmedi —</value>
+  </data>
+  <data name="uv.manageHelp" xml:space="preserve">
+    <value>Hesap kilitliyken kullanıcı yeni talep açamaz. Parola sıfırlama ve kayıt davetleri e-posta altyapısıyla (S8) gelecek.</value>
+  </data>
+  <data name="uv.mLock" xml:space="preserve">
+    <value>Kilitle</value>
+  </data>
+  <data name="uv.mUnlock" xml:space="preserve">
+    <value>Kilidi Aç</value>
+  </data>
+  <data name="uv.deleteConfirm" xml:space="preserve">
+    <value>Bu kullanıcı kalıcı olarak silinecek (e-postaları, notları ve portal hesabı dahil). Talebi bulunan kullanıcılar silinemez. Devam edilsin mi?</value>
+  </data>
+  <data name="uv.errHasTickets" xml:space="preserve">
+    <value>Talebi bulunan kullanıcı silinemez.</value>
+  </data>
+  <data name="uv.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok.</value>
+  </data>
+  <data name="uv.errEmpty" xml:space="preserve">
+    <value>Zorunlu alan boş bırakılamaz.</value>
+  </data>
+  <data name="uv.notYet" xml:space="preserve">
+    <value>Henüz kullanılamıyor</value>
+  </data>
+  <data name="uv.toastCreated" xml:space="preserve">
+    <value>Kullanıcı oluşturuldu.</value>
+  </data>
+  <data name="uv.toastSaved" xml:space="preserve">
+    <value>Değişiklikler kaydedildi.</value>
+  </data>
+  <data name="uv.toastNote" xml:space="preserve">
+    <value>Not eklendi.</value>
+  </data>
+  <data name="uv.toastBlocked" xml:space="preserve">
+    <value>Kullanıcı kilitlendi.</value>
+  </data>
+  <data name="uv.toastUnblocked" xml:space="preserve">
+    <value>Kilit açıldı.</value>
+  </data>
+</root>

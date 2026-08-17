@@ -1,0 +1,317 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model UsersIndexVm
+@{
+    ViewData["Title"] = L["us.title"];
+
+    // PRG toast handoff after create/bulk/import (tasks-page precedent).
+    if (TempData["UsersToast"] is string toastKey)
+    {
+        var ok = TempData["UsersToastOk"] as int? ?? 0;
+        var skipped = TempData["UsersToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "us.bulkDone" or "us.bulkPartial" or "us.bulkDeleteSkipped" or "us.importDone"
+            ? L[toastKey, ok, skipped].Value
+            : L[toastKey].Value;
+        if (TempData["UsersToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Date cell, mockup format: "12 Oca 2025".
+    string DateText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("us.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Updated cell: "Bugün 09:12" / "Dün 16:40" / "8 Ağu 2026" (tickets-page derivation).
+    string UpdatedText(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        if (local.Date == today)
+            return L.GetString("us.updToday", local.ToString("HH:mm"));
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("us.updYesterday", local.ToString("HH:mm"));
+        return DateText(value);
+    }
+
+    // Status pill (§2 canon): locked → overdue pill, active → solved, guest → closed.
+    string PillClass(string key) => key switch
+    {
+        "locked" => "rd-pill rd-pill-overdue",
+        "guest" => "rd-pill rd-pill-closed",
+        _ => "rd-pill rd-pill-solved",
+    };
+    string PillLabel(string key) => key switch
+    {
+        "locked" => L["us.stLocked"].Value,
+        "guest" => L["us.stGuest"].Value,
+        _ => L["us.stActive"].Value,
+    };
+
+    // Canonical querystring builder so tabs / header sort / pagination preserve state.
+    string BuildUrl(string? tabOver = null, string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("tab", tabOver ?? Model.Tab);
+        Add("q", Model.Query);
+        if (tabOver is null)
+        {
+            Add("sort", sortOver ?? Model.Sort);
+            Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        }
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/agent/users" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key is "reg" or "updated" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+
+    string TabLabel(string tab) => tab == "archive" ? L["us.tabArchive"].Value : L["us.tabAll"].Value;
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <h1>@L["us.title"]</h1>
+        <p>@L["us.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <button class="rd-btn-primary" data-dialog-open="dlg-adduser">@L["us.add"]</button>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/agent/users">
+    <input type="hidden" name="tab" value="@Model.Tab">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["us.searchPh"]">
+    <span class="spacer"></span>
+    @* Mockup's dead İçe Aktar button gains data-dialog-open (B2) — dlg-import DOM
+       invented after admin/list-edit's dlg-import, with a file input per B5. *@
+    <button class="rd-btn rd-btn-ghost" type="button" data-dialog-open="dlg-import">@SL["common.import"]</button>
+    <button class="rd-btn" type="button" data-dialog-open="dlg-more"><span>@SL["common.more"]</span> ▾</button>
+</form>
+
+@* Mockup tab bar: server round-trip links with live counts (tasks-page precedent —
+   only the active tab's panel renders from data). *@
+<div class="rd-tabs">
+    @foreach (var tab in UsersController.Tabs)
+    {
+        <a class="@(tab == Model.Tab ? "active" : null)" href="@BuildUrl(tabOver: tab)"><span>@TabLabel(tab)</span> · @Model.Counts[tab]</a>
+    }
+</div>
+
+<div class="rd-tab-panel active" id="us-panel-@Model.Tab">
+<div class="rd-surface">
+    @if (Model.Tab == "archive")
+    {
+        @* The mockup's own archive empty state — the entity has no archive flag
+           (hard deletes only, osTicket parity), so this tab is honestly empty. *@
+        <div class="rd-empty">
+            <div class="icon">◔</div>
+            <h3>@L["us.emptyTitle"]</h3>
+            <p>@L["us.emptyText"]</p>
+            <button class="rd-btn-primary" data-dialog-open="dlg-adduser">@L["us.add"]</button>
+        </div>
+    }
+    else if (Model.Rows.Count == 0)
+    {
+        @* Invented per B1 (reachable empty state on search miss) — the mockup only
+           defines the archive variant. *@
+        <div class="rd-empty">
+            <div class="icon">◔</div>
+            <h3>@L["us.emptyAllTitle"]</h3>
+            <p>@L["us.emptyAllText"]</p>
+            <button class="rd-btn-primary" data-dialog-open="dlg-adduser">@L["us.add"]</button>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table" id="tbl-users">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-users" aria-label="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("name")"><a href="@SortUrl("name")">@SL["common.name"]</a></th>
+                    <th class="@SortClass("email")"><a href="@SortUrl("email")">@L["us.colEmail"]</a></th>
+                    <th class="@SortClass("org")"><a href="@SortUrl("org")">@L["us.colOrg"]</a></th>
+                    <th>@SL["common.status"]</th>
+                    <th class="@SortClass("reg")"><a href="@SortUrl("reg")">@L["us.colReg"]</a></th>
+                    <th class="@SortClass("updated")"><a href="@SortUrl("updated")">@SL["common.updated"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td><input type="checkbox" name="ids" value="@r.Id" form="us-bulk"></td>
+                        <td><a href="/agent/user-view?id=@r.Id">@r.Name</a></td>
+                        <td>@(r.Email ?? "—")</td>
+                        @if (r.OrgId is { } orgId)
+                        {
+                            <td><a href="/agent/org-view?id=@orgId">@r.OrgName</a></td>
+                        }
+                        else
+                        {
+                            <td class="rd-muted">—</td>
+                        }
+                        <td><span class="@PillClass(r.StatusKey)">@PillLabel(r.StatusKey)</span></td>
+                        <td>@DateText(r.Registered)</td>
+                        <td>@UpdatedText(r.Updated)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span><span>@SL["common.showing"]</span> @Model.From–@Model.To / @Model.Total</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+</div>
+
+@* Selection carrier for the dlg-more bulk actions (tasks ta-bulk precedent). *@
+<form id="us-bulk" method="post" asp-area="Agent" asp-controller="Users" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+<dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head">
+        <span>@L["us.moreTitle"]</span>
+        <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <div class="rd-help" style="margin:0 0 12px">@L["us.moreHelp"]</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+            @* Şirkete Ekle chains into the invented org-select dialog (B2; the mockup
+               button only closed the menu) — flagged in ROADMAP. *@
+            <button class="rd-btn" style="justify-content:flex-start" data-dialog-close data-dialog-open="dlg-addorg">@L["us.mAddOrg"]</button>
+            @* Parola sıfırlama needs outbound mail (S8) — disabled, never dead-looking. *@
+            <button class="rd-btn" style="justify-content:flex-start" disabled title="@L["us.notYet"]">@L["us.mPwReset"]</button>
+            @* Kaydet (guest → portal account invite) has no service yet — TODO(S8). *@
+            <button class="rd-btn" style="justify-content:flex-start" disabled title="@L["us.notYet"]">@L["us.mRegister"]</button>
+            @* No data-dialog-close on submits — the audited B2 bug (close swallows the
+               save); the POST navigates away, closing the dialog with the page. *@
+            <button class="rd-btn" style="justify-content:flex-start" type="submit" form="us-bulk" name="act" value="lock">@L["us.mLock"]</button>
+            <button class="rd-btn" style="justify-content:flex-start" type="submit" form="us-bulk" name="act" value="unlock">@L["us.mUnlock"]</button>
+            @* Sil chains into the invented confirm dialog (tasks dlg-bulk-delete precedent). *@
+            <button class="rd-btn rd-btn-danger" style="justify-content:flex-start" data-dialog-close data-dialog-open="dlg-bulk-delete">@SL["common.delete"]</button>
+        </div>
+    </div>
+</dialog>
+
+@* Bulk add-to-company dialog: invented UI (B2) so "Şirkete Ekle" actually works —
+   tasks dlg-bulk-transfer precedent; flagged in ROADMAP. *@
+<dialog class="rd-dialog" id="dlg-addorg">
+    <div class="rd-dialog-head">
+        <span>@L["us.mAddOrg"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <div class="rd-field" style="margin-bottom:0">
+            <label class="rd-label">@L["us.fOrg"]</label>
+            <select class="rd-control" name="orgId" form="us-bulk">
+                @foreach (var org in Model.Organizations)
+                {
+                    <option value="@org.Id">@org.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        <button type="submit" class="rd-btn-primary" form="us-bulk" name="act" value="addorg">@SL["common.apply"]</button>
+    </div>
+</dialog>
+
+@* Bulk delete confirm dialog: invented UI (B2, tasks precedent). Users with tickets
+   are skipped by the service guard and reported in the toast. *@
+<dialog class="rd-dialog" id="dlg-bulk-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <p>@L["us.deleteConfirm"]</p>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        <button type="submit" class="rd-btn rd-btn-danger" form="us-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>
+
+<dialog class="rd-dialog" id="dlg-adduser">
+    <div class="rd-dialog-head">
+        <span>@L["us.dlgAddTitle"]</span>
+        <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+    </div>
+    <form method="post" asp-area="Agent" asp-controller="Users" asp-action="Create">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="au-name">@L["us.fName"]</label>
+                <input id="au-name" name="name" class="rd-control" required>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="au-email">@L["us.fEmail"]</label>
+                <input id="au-email" name="email" type="email" class="rd-control" required>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="au-org">@L["us.fOrg"]</label>
+                <select id="au-org" name="orgId" class="rd-control">
+                    <option value="">@L["us.fOrgNone"]</option>
+                    @foreach (var org in Model.Organizations)
+                    {
+                        <option value="@org.Id">@org.Name</option>
+                    }
+                </select>
+                <div class="rd-help">@L["us.fOrgHelp"]</div>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@SL["common.add"]</button>
+        </div>
+    </form>
+</dialog>
+
+@* CSV import dialog: invented DOM (B2) after admin/list-edit's dlg-import, with a
+   file input (B5 file-name list via rd.js). Strict format: name,email[,org]. *@
+<dialog class="rd-dialog" id="dlg-import">
+    <div class="rd-dialog-head">
+        <span>@SL["common.import"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" enctype="multipart/form-data" asp-area="Agent" asp-controller="Users" asp-action="Import">
+        <div class="rd-dialog-body">
+            <div class="rd-field mb-0">
+                <label class="rd-label" for="us-import-file">@L["us.importLabel"]</label>
+                <input id="us-import-file" name="file" type="file" class="rd-control" accept=".csv,text/csv" required>
+                <div class="rd-help">@L["us.importHelp"]</div>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.import"]</button>
+        </div>
+    </form>
+</dialog>

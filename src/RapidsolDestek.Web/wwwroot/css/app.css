@@ -96,3 +96,10 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
 /* base.css's .rd-grid-2 display:grid (author rule) would beat the UA [hidden]
    default — the ticket-open inline new-user block toggles via the attribute. */
 .rd-grid-2[hidden] { display: none; }
+
+/* Agent user-view (S6): "Geçersiz kıl" inline override form — invented affordance
+   (the mockup button is dead; flagged on the ROADMAP user-view row). Class-toggled
+   because an author display rule would beat the UA [hidden] default. */
+.uv-override-form { display: none; gap: 6px; margin-top: 6px; align-items: center; }
+.uv-override-form.open { display: flex; }
+.uv-override-form .rd-control { min-width: 0; flex: 1; }

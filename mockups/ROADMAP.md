@@ -412,9 +412,54 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       sign-off. Invented (TR/EN twins): tav.pageTitle/createdLine/date*/timeFmt/meta*/editTitle/deleteConfirm/
       closedInfo/evt*/toast*/err*. Tests: TaskServiceTests (7) cover create/close/assign/transfer/edit/delete
       incl. permission denials.)*
-- [ ] **users.html** — B1 engine; add-user dialog creates; "Diğer" bulk menu actions real; CSV import
-- [ ] **user-view.html** — header actions; "Geçersiz kıl" inline override of inherited fields; tabs from data;
-      note composer (B3/B5)
+- [x] **users.html** — B1 engine; add-user dialog creates; "Diğer" bulk menu actions real; CSV import *(S6; new
+      UserService (Infrastructure) carries create/update/override/block/org/delete/note/CSV-import with the
+      user.edit / user.manage keys checked "anywhere" (users are non-departmental; Temsilci holds neither) and
+      AuditEvent via the interceptor. B1: header sort name/email/org/reg/updated (updated desc default), quick
+      search (name/email ILIKE), pagination 8/page, row checkboxes + select-all feeding the us-bulk carrier.
+      Tabs are server round-trip links with live counts (tasks precedent); the Arşiv tab honestly counts 0 and
+      renders the mockup's rd-empty — the entity has NO archive flag (hard deletes only, osTicket parity), so
+      an archive mechanism needs a canon decision if the tab should ever fill. dlg-adduser creates a real
+      User+UserEmail via UserService (explicit org select wins, else Organization.Domain auto-link per
+      us.fOrgHelp; duplicate email → us.errEmailInUse error toast) and redirects to the new user-view.
+      "Diğer" = the mockup's bulk dialog: Kilitle/Kilidi Aç drive IsBlocked; Şirkete Ekle chains into an
+      INVENTED org-select dialog dlg-addorg (B2, tasks dlg-bulk-transfer precedent — needs canon sign-off);
+      Sil chains into an INVENTED confirm dialog, hard delete with a service guard — users with tickets or
+      collaborator rows are skipped and reported (tickets.user_id FK is Restrict); submit buttons drop the
+      mockup's data-dialog-close (the audited B2 close-swallows-save bug). Parola Sıfırlama Gönder + Kaydet
+      disabled with us.notYet titles — both need outbound mail / an invite service (TODO S8). CSV import: the
+      dead İçe Aktar button gains data-dialog-open onto an INVENTED dlg-import (admin/list-edit dlg-import
+      DOM with a file input, B2/B5 — needs canon sign-off); strict name,email[,org] parser (optional header,
+      quoted fields) creates users with org-by-name or domain auto-link and toasts created/skipped counts.
+      Invented keys (TR/EN twins): us.dateFmt/updToday/updYesterday/emptyAll*/bulk*/deleteConfirm/import*/
+      err*/notYet/toastDeleted; rd-empty for the all-tab search miss invented per B1 (mockup only defines the
+      archive variant). Org cells deep-link /agent/org-view?id= — dead until org-view ports (S5 precedent).
+      Tests: UserServiceTests (9).)*
+- [x] **user-view.html** — header actions; "Geçersiz kıl" inline override of inherited fields; tabs from data;
+      note composer (B3/B5) *(S6; /agent/user-view?id=. Profile card from data; osTicket user/organization
+      field inheritance implemented for the two fields the mockup badges: User.Phone + new User.Address
+      (S6_Users migration) are per-user overrides; null inherits Organization.Phone/Address with the
+      "Şirketten" badge, and "Geçersiz kıl" opens an INVENTED inline value+save form (B3; app.css
+      .uv-override-form — needs canon sign-off). Blank saves revert to inherited; dlg-edit's phone/address
+      fields (blank = inherit, uv.fInheritHelp) are the revert affordance. CANON CONFLICT flagged: hero
+      Bourla renders his §2-canon domain Phone +90 212 555 0180 as a per-user value WITHOUT the badge — the
+      mockup badges the phone as inherited, but Ulaşım's seeded/org-view phone is +90 212 555 0142, so both
+      pages cannot be right at once; needs a §2 decision (align the org phone or drop the badge). Account
+      card honest: login method = uv.loginEmail vs invented uv.loginGuest; 2FA pill from
+      CustomerUser.TwoFactorEnabled (Etkin/Kapalı); Son giriş renders "—" — customer sessions are not
+      tracked yet (TODO with B6 session work; mockup's IP line has no data source). Tabs keep the mockup's
+      client data-tabs with live counts: tickets tab = this user's tickets from data (overdue-wins derived
+      status, ticket-view deep links), notes tab = NEW UserNote rows — the mockup's note cards carry
+      author+badge+time, which the legacy User.Notes text blob cannot, so UserNote (user_notes table) is the
+      chosen smallest faithful mechanism, seeded with the canon Merve Çetin 4 Ağu 2026 note; org-view's
+      composer should reuse it when that page ports. Note composer appends via UserService.AddNoteAsync (B5)
+      and reopens the Notlar tab. Header: Düzenle = INVENTED dlg-edit (name/phone/address/org), Hesabı
+      Yönet = INVENTED dlg-manage (Kilitle/Kilidi Aç per current state; broader account management lands
+      with S8 invites), Sil = confirm dialog → hard delete incl. the portal Identity account, refused with
+      uv.errHasTickets while tickets/collaborations exist; Parola Sıfırlama Gönder disabled (uv.notYet,
+      TODO S8). All mutations run through UserService with ActorContext.ForStaff (+ audit scope). Invented
+      keys (TR/EN twins): uv.pageTitle/stGuest/stLocked/loginGuest/twofaOff/dateLong/noteTimeFmt/upd*/
+      noTickets/fName/fInheritHelp/fOrgNone/manageHelp/mLock/mUnlock/deleteConfirm/err*/notYet/toast*.)*
 - [ ] **orgs.html** — B1 engine; add-org dialog creates; export
 - [ ] **org-view.html** — header actions; sync switches persist + banner reflects actual sync; tabs from data;
       note composer

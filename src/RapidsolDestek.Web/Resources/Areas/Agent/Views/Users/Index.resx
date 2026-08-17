@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="us.title" xml:space="preserve">
+    <value>Kullanıcılar</value>
+  </data>
+  <data name="us.subtitle" xml:space="preserve">
+    <value>Tüm kullanıcı hesaplarını görüntüleyin, şirketlere bağlayın ve yönetin.</value>
+  </data>
+  <data name="us.searchPh" xml:space="preserve">
+    <value>Ad veya e-posta ile ara…</value>
+  </data>
+  <data name="us.add" xml:space="preserve">
+    <value>＋ Kullanıcı Ekle</value>
+  </data>
+  <data name="us.tabAll" xml:space="preserve">
+    <value>Tümü</value>
+  </data>
+  <data name="us.tabArchive" xml:space="preserve">
+    <value>Arşiv</value>
+  </data>
+  <data name="us.colEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="us.colOrg" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="us.colReg" xml:space="preserve">
+    <value>Kayıt</value>
+  </data>
+  <data name="us.stActive" xml:space="preserve">
+    <value>Aktif</value>
+  </data>
+  <data name="us.stGuest" xml:space="preserve">
+    <value>Misafir</value>
+  </data>
+  <data name="us.stLocked" xml:space="preserve">
+    <value>Kilitli</value>
+  </data>
+  <data name="us.emptyTitle" xml:space="preserve">
+    <value>Arşivlenmiş kullanıcı yok</value>
+  </data>
+  <data name="us.emptyText" xml:space="preserve">
+    <value>Arşivlenen hesaplar burada listelenir; dilediğinizde geri alabilirsiniz.</value>
+  </data>
+  <data name="us.moreTitle" xml:space="preserve">
+    <value>Toplu İşlemler</value>
+  </data>
+  <data name="us.moreHelp" xml:space="preserve">
+    <value>Seçili kullanıcı kayıtlarına uygulanır.</value>
+  </data>
+  <data name="us.mAddOrg" xml:space="preserve">
+    <value>Şirkete Ekle</value>
+  </data>
+  <data name="us.mPwReset" xml:space="preserve">
+    <value>Parola Sıfırlama Gönder</value>
+  </data>
+  <data name="us.mRegister" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="us.mLock" xml:space="preserve">
+    <value>Kilitle</value>
+  </data>
+  <data name="us.mUnlock" xml:space="preserve">
+    <value>Kilidi Aç</value>
+  </data>
+  <data name="us.dlgAddTitle" xml:space="preserve">
+    <value>Yeni Kullanıcı</value>
+  </data>
+  <data name="us.fName" xml:space="preserve">
+    <value>Ad Soyad</value>
+  </data>
+  <data name="us.fEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="us.fOrg" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="us.fOrgNone" xml:space="preserve">
+    <value>— Şirket seçilmedi —</value>
+  </data>
+  <data name="us.fOrgHelp" xml:space="preserve">
+    <value>E-posta alan adı bir şirketin alan adıyla eşleşirse kullanıcı otomatik olarak o şirkete bağlanır.</value>
+  </data>
+  <data name="us.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="us.updToday" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="us.updYesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="us.emptyAllTitle" xml:space="preserve">
+    <value>Sonuç bulunamadı</value>
+  </data>
+  <data name="us.emptyAllText" xml:space="preserve">
+    <value>Arama ölçütlerinizle eşleşen kullanıcı yok.</value>
+  </data>
+  <data name="us.bulkDone" xml:space="preserve">
+    <value>{0} kullanıcı güncellendi.</value>
+  </data>
+  <data name="us.bulkPartial" xml:space="preserve">
+    <value>{0} işlem tamamlandı, {1} kayıt atlandı.</value>
+  </data>
+  <data name="us.bulkNone" xml:space="preserve">
+    <value>Önce listeden kayıt seçin.</value>
+  </data>
+  <data name="us.bulkDeleteSkipped" xml:space="preserve">
+    <value>{0} kullanıcı silindi; {1} kullanıcı talepleri bulunduğu için silinemedi.</value>
+  </data>
+  <data name="us.deleteConfirm" xml:space="preserve">
+    <value>Seçili kullanıcılar kalıcı olarak silinecek. Talebi bulunan kullanıcılar silinemez. Devam edilsin mi?</value>
+  </data>
+  <data name="us.importLabel" xml:space="preserve">
+    <value>CSV dosyası (ad,e-posta,şirket)</value>
+  </data>
+  <data name="us.importHelp" xml:space="preserve">
+    <value>Her satır bir kullanıcı: Ad Soyad, e-posta ve isteğe bağlı şirket adı. E-posta alan adı bir şirketle eşleşirse kullanıcı otomatik bağlanır; geçersiz veya zaten kayıtlı satırlar atlanır.</value>
+  </data>
+  <data name="us.importDone" xml:space="preserve">
+    <value>{0} kullanıcı içe aktarıldı, {1} satır atlandı.</value>
+  </data>
+  <data name="us.importNone" xml:space="preserve">
+    <value>İçe aktarılacak bir CSV dosyası seçin.</value>
+  </data>
+  <data name="us.errEmailInUse" xml:space="preserve">
+    <value>Bu e-posta adresi zaten kayıtlı.</value>
+  </data>
+  <data name="us.errInvalid" xml:space="preserve">
+    <value>Ad ve geçerli bir e-posta adresi gerekli.</value>
+  </data>
+  <data name="us.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok.</value>
+  </data>
+  <data name="us.notYet" xml:space="preserve">
+    <value>Henüz kullanılamıyor</value>
+  </data>
+  <data name="us.toastDeleted" xml:space="preserve">
+    <value>Kullanıcı silindi.</value>
+  </data>
+</root>
