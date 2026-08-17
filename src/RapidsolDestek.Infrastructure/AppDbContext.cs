@@ -44,6 +44,7 @@ public class AppDbContext : DbContext
     public DbSet<UserEmail> UserEmails => Set<UserEmail>();
     public DbSet<UserNote> UserNotes => Set<UserNote>();
     public DbSet<Organization> Organizations => Set<Organization>();
+    public DbSet<OrgNote> OrgNotes => Set<OrgNote>();
     public DbSet<Staff> Staff => Set<Staff>();
     public DbSet<Team> Teams => Set<Team>();
     public DbSet<Role> Roles => Set<Role>();

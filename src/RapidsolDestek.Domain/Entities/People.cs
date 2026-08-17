@@ -82,6 +82,13 @@ public class Organization : TimestampedEntity
     /// </summary>
     public string? Domain { get; set; }
 
+    /// <summary>
+    /// Industry line (agent/orgs.html "Sektör" column + org-view meta). Product-original
+    /// column — osTicket keeps no such field; the mockup lists it, so it is real data
+    /// rather than a prefix inside <see cref="Notes"/>.
+    /// </summary>
+    public string? Sector { get; set; }
+
     public int? ManagerStaffId { get; set; }
 
     /// <summary>All members can see each other's tickets (osTicket COLLAB_ALL_MEMBERS).</summary>
@@ -99,4 +106,24 @@ public class Organization : TimestampedEntity
     public string? Notes { get; set; }
 
     public List<User> Members { get; set; } = [];
+}
+
+/// <summary>
+/// Internal staff note about an organization (agent/org-view.html Notlar tab).
+/// Deliberately a parallel twin of <see cref="UserNote"/> (same columns) rather than a
+/// polymorphic note table — the smaller change; generalizing both into one table would
+/// churn the existing user_notes migration for no behavioral gain.
+/// </summary>
+public class OrgNote : TimestampedEntity
+{
+    public int OrganizationId { get; set; }
+    public Organization? Organization { get; set; }
+
+    /// <summary>Author staff id (plain column, ThreadEntry.StaffId precedent).</summary>
+    public int? StaffId { get; set; }
+
+    /// <summary>Author display-name snapshot (ThreadEntry.Poster parity).</summary>
+    public required string AuthorName { get; set; }
+
+    public required string Body { get; set; }
 }

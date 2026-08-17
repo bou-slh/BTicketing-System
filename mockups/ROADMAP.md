@@ -433,7 +433,7 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       quoted fields) creates users with org-by-name or domain auto-link and toasts created/skipped counts.
       Invented keys (TR/EN twins): us.dateFmt/updToday/updYesterday/emptyAll*/bulk*/deleteConfirm/import*/
       err*/notYet/toastDeleted; rd-empty for the all-tab search miss invented per B1 (mockup only defines the
-      archive variant). Org cells deep-link /agent/org-view?id= — dead until org-view ports (S5 precedent).
+      archive variant). Org cells deep-link /agent/org-view?id= — live since the org pages ported (same S6).
       Tests: UserServiceTests (9).)*
 - [x] **user-view.html** — header actions; "Geçersiz kıl" inline override of inherited fields; tabs from data;
       note composer (B3/B5) *(S6; /agent/user-view?id=. Profile card from data; osTicket user/organization
@@ -460,9 +460,46 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       TODO S8). All mutations run through UserService with ActorContext.ForStaff (+ audit scope). Invented
       keys (TR/EN twins): uv.pageTitle/stGuest/stLocked/loginGuest/twofaOff/dateLong/noteTimeFmt/upd*/
       noTickets/fName/fInheritHelp/fOrgNone/manageHelp/mLock/mUnlock/deleteConfirm/err*/notYet/toast*.)*
-- [ ] **orgs.html** — B1 engine; add-org dialog creates; export
-- [ ] **org-view.html** — header actions; sync switches persist + banner reflects actual sync; tabs from data;
-      note composer
+- [x] **orgs.html** — B1 engine; add-org dialog creates; export *(S6; new OrgService (Infrastructure,
+      UserService shape) carries create/update/sync-flags/note/delete behind org.edit checked "anywhere"
+      (orgs are non-departmental; no finer org.manage/org.delete key exists in the seeded role matrix —
+      needs a canon/roles decision if delete should be scoped tighter). B1: header sort
+      name/sector/users/open/manager/updated (name asc default; users/open/updated default desc), quick
+      search (name/sector/domain ILIKE), pagination 8/page; row checkboxes + select-all render per mockup
+      but drive nothing — the mockup defines no bulk bar. Kullanıcı Sayısı / Açık Talep are live counts
+      (members; member tickets in an Open-state status). NEW Organization.Sector column (S6_Orgs migration)
+      backs the Sektör column/dialog field — the seeder's "Sektör:" Notes prefix moved there; org seed rows
+      also gained canon CreatedAt values so the Updated column reads like the mockup. dlg-addorg creates a
+      real Organization via OrgService (duplicate name → og.errNameInUse; domain input normalized "@"-less
+      comma-list so UserService auto-link matches; invented "—" manager option, us.fOrgNone precedent) and
+      redirects to the new org-view. Dışa Aktar = CSV of the current search+sort, all pages (tickets export
+      precedent; sirketler.csv). Invented keys (TR/EN twins): og.fManagerNone/dateFmt/updToday/updYesterday/
+      emptyTitle/emptyText/err*/toastDeleted; rd-empty for the search miss invented per B1 (mockup defines
+      none). Tests: OrgServiceTests (7).)*
+- [x] **org-view.html** — header actions; sync switches persist + banner reflects actual sync; tabs from data;
+      note composer *(S6; /agent/org-view?id=. Profile card from data (domain pills, phone/address, manager);
+      SLA Planı renders "—" — the entity has no per-org SLA (osTicket parity: SLA lives on topic/dept/ticket)
+      and the mockup's "Kurumsal (8 saat)" also conflicts with the §2 SLA canon — needs a canon decision;
+      Zaman dilimi renders the single-tenant company zone (Europe/Istanbul, user-view fallback convention).
+      SYNC CARD DEVIATION (needs canon sign-off): the mockup's two switches (domain auto-link, field push)
+      map to no entity flag — the card instead persists the three real osTicket flags
+      ShareTicketsWithMembers / CcPrimaryContacts / AssignToManager as auto-submitting switches (B3,
+      invented ov.swShare/swCc/swAssign keys; ov.sw1/sw2 remain in the resx unused), and the success banner
+      + "Son senkronizasyon" line render from the actual saved state (PRG flag + UpdatedAt + live member
+      count) instead of the mockup's static show-on-any-click "14". Tabs from data with live counts: members
+      5/page (mockup pagination), user-view deep links, phone inheritance badge (null Phone → org phone +
+      Şirketten); tickets = org-wide via members (overdue-wins derived status, ticket-view links); notes =
+      NEW OrgNote rows — deliberately a parallel twin of UserNote (same columns, S6_Orgs migration) rather
+      than generalizing to a polymorphic note table (smaller change, no user_notes churn), seeded with the
+      canon Ümit Yaşar Akın 1 Ağu 2026 note (moved out of the Ulaşım Notes blob). Composer appends via
+      OrgService.AddNoteAsync (B5) and reopens Notlar. Header: Düzenle = INVENTED dlg-edit
+      (name/domains/sector/manager/phone/address; user-view dialog DOM); Formları Yönet disabled (ov.notYet,
+      needs the S7 form designer); Sil = confirm dialog → hard delete (notes cascade), refused with
+      ov.errHasMembers while members or member tickets exist. All mutations run through OrgService with
+      ActorContext.ForStaff (+ audit scope). Invented keys (TR/EN twins): ov.pageTitle/stLocked/dateFmt/
+      updToday/updYesterday/syncToday/syncYesterday/noteTimeFmt/sw*/fName/fDomainHelp/fSector/fManagerNone/
+      noUsers/noTickets/notYet/deleteConfirm/err*/toast*; ov.meta/syncBanner/lastSync resx values carry
+      {0}-style holes for the live numbers.)*
 - [ ] **kb.html** — category tabs (fixed in S0) filter; search; manage-categories dialog CRUD
 - [ ] **kb-faq.html** — saves; attachments upload with file list (input added in S0); preview; delete (B2/B5)
 - [ ] **canned.html** — B1 engine; per-row edit dialog prefilled (B2); create/disable/delete

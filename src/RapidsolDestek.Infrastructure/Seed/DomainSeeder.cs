@@ -305,17 +305,20 @@ public static class DomainSeeder
         htYolUcreti.Forms.Add(new HelpTopicForm { FormDefinitionId = formBordroEk.Id, Sort = 1 });
 
         // ----- Organizations & users (canon agent/orgs.html, users.html, org-view) ----
+        // Sector moved from the Notes blob into the Sector column (agent/orgs.html column);
+        // Ulaşım's note text lives as the canon OrgNote below (agent/org-view.html Notlar tab).
+        // CreatedAt = the orgs.html Updated column canon (Bugün 09:12 / 8 Ağu / 6 Ağu / Dün 17:05).
         var orgUlasim = new Organization
         {
-            Name = "Ulaşım A.Ş.", Domain = "ulasim.com.tr", ManagerStaffId = uakin.Id,
+            Name = "Ulaşım A.Ş.", Domain = "ulasim.com.tr", Sector = "Toplu taşıma", ManagerStaffId = uakin.Id,
             Phone = "+90 212 555 0142",
             Address = "Esentepe Mah. Kore Şehitleri Cad. No: 34, Şişli / İstanbul",
             ShareTicketsWithMembers = true, CcPrimaryContacts = true,
-            Notes = "Sektör: Toplu taşıma. Sözleşme yenilemesi Eylül başında. İK direktörü Ayşe Yıldırım tüm bordro taleplerinin tek onay noktası; kritik değişikliklerde önce onu bilgilendirin.",
+            CreatedAt = At(today, 9, 12),
         };
-        var orgTosyali = new Organization { Name = "Tosyalı Holding", Domain = "tosyali.com.tr", ManagerStaffId = mcetin.Id, Notes = "Sektör: Çelik üretim." };
-        var orgKonecta = new Organization { Name = "Konecta", Domain = "konecta.com", ManagerStaffId = dkaya.Id, Notes = "Sektör: Çağrı merkezi." };
-        var orgRapidsol = new Organization { Name = "RapidSol", Domain = "rapidsol.com.tr", ManagerStaffId = uakin.Id, Notes = "Sektör: İK danışmanlık." };
+        var orgTosyali = new Organization { Name = "Tosyalı Holding", Domain = "tosyali.com.tr", Sector = "Çelik üretim", ManagerStaffId = mcetin.Id, CreatedAt = On(2026, 8, 8) };
+        var orgKonecta = new Organization { Name = "Konecta", Domain = "konecta.com", Sector = "Çağrı merkezi", ManagerStaffId = dkaya.Id, CreatedAt = On(2026, 8, 6) };
+        var orgRapidsol = new Organization { Name = "RapidSol", Domain = "rapidsol.com.tr", Sector = "İK danışmanlık", ManagerStaffId = uakin.Id, CreatedAt = At(yesterday, 17, 5) };
         db.Organizations.AddRange(orgUlasim, orgTosyali, orgKonecta, orgRapidsol);
 
         var bourlaIdentity = await db.CustomerUsers
@@ -346,6 +349,15 @@ public static class DomainSeeder
         await db.SaveChangesAsync();
         foreach (var u in users)
             u.DefaultEmailId = u.Emails[0].Id;
+
+        // Canon internal note on the hero org (agent/org-view.html Notlar tab).
+        db.OrgNotes.Add(new OrgNote
+        {
+            Organization = orgUlasim, StaffId = uakin.Id, AuthorName = "Ümit Yaşar Akın",
+            CreatedAt = On(2026, 8, 1, 10, 30),
+            Body = "Sözleşme yenilemesi Eylül başında. İK direktörü Ayşe Yıldırım tüm bordro "
+                + "taleplerinin tek onay noktası; kritik değişikliklerde önce onu bilgilendirin.",
+        });
 
         // Canon internal note on the hero user (agent/user-view.html Notlar tab).
         db.UserNotes.Add(new UserNote

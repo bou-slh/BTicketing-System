@@ -138,6 +138,13 @@ public static class DomainModelConfiguration
 
         b.Entity<Organization>(e => e.HasIndex(x => x.Name).IsUnique());
 
+        b.Entity<OrgNote>(e =>
+        {
+            e.HasIndex(x => x.OrganizationId);
+            e.HasOne(x => x.Organization).WithMany()
+                .HasForeignKey(x => x.OrganizationId).OnDelete(DeleteBehavior.Cascade);
+        });
+
         // ----- Staffing -----
 
         b.Entity<Staff>(e =>

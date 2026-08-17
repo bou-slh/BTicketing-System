@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="og.title" xml:space="preserve">
+    <value>Şirketler</value>
+  </data>
+  <data name="og.subtitle" xml:space="preserve">
+    <value>Kullanıcı hesaplarının bağlı olduğu şirket kayıtlarını yönetin.</value>
+  </data>
+  <data name="og.searchPh" xml:space="preserve">
+    <value>Şirket ara…</value>
+  </data>
+  <data name="og.add" xml:space="preserve">
+    <value>＋ Şirket Ekle</value>
+  </data>
+  <data name="og.colName" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="og.colSector" xml:space="preserve">
+    <value>Sektör</value>
+  </data>
+  <data name="og.colUsers" xml:space="preserve">
+    <value>Kullanıcı Sayısı</value>
+  </data>
+  <data name="og.colOpen" xml:space="preserve">
+    <value>Açık Talep</value>
+  </data>
+  <data name="og.colManager" xml:space="preserve">
+    <value>Hesap Yöneticisi</value>
+  </data>
+  <data name="og.dlgTitle" xml:space="preserve">
+    <value>Yeni Şirket</value>
+  </data>
+  <data name="og.fName" xml:space="preserve">
+    <value>Şirket Adı</value>
+  </data>
+  <data name="og.fDomain" xml:space="preserve">
+    <value>E-posta alan adı</value>
+  </data>
+  <data name="og.fDomainHelp" xml:space="preserve">
+    <value>Bu alan adıyla kaydolan kullanıcılar şirkete otomatik bağlanabilir (şirket detayından açılır).</value>
+  </data>
+  <data name="og.fSector" xml:space="preserve">
+    <value>Sektör</value>
+  </data>
+  <data name="og.fManager" xml:space="preserve">
+    <value>Hesap Yöneticisi</value>
+  </data>
+  <data name="og.fManagerNone" xml:space="preserve">
+    <value>— Yönetici seçilmedi —</value>
+  </data>
+  <data name="og.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="og.updToday" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="og.updYesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="og.emptyTitle" xml:space="preserve">
+    <value>Sonuç bulunamadı</value>
+  </data>
+  <data name="og.emptyText" xml:space="preserve">
+    <value>Arama ölçütlerinizle eşleşen şirket yok.</value>
+  </data>
+  <data name="og.errNameInUse" xml:space="preserve">
+    <value>Bu adla kayıtlı bir şirket zaten var.</value>
+  </data>
+  <data name="og.errInvalid" xml:space="preserve">
+    <value>Şirket adı gerekli.</value>
+  </data>
+  <data name="og.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok.</value>
+  </data>
+  <data name="og.toastDeleted" xml:space="preserve">
+    <value>Şirket silindi.</value>
+  </data>
+</root>

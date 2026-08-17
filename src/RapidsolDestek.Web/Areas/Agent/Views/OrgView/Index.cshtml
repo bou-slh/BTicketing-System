@@ -1,0 +1,399 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model OrgViewVm
+@{
+    ViewData["Title"] = L.GetString("ov.pageTitle", Model.Name);
+
+    // PRG toast handoff (user-view precedent; _BackofficeLayout stamps <body data-toast>).
+    if (TempData["OvToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["OvToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Sync banner: rendered from the ACTUAL saved state after the sync POST — the
+    // mockup's banner is static (shows on any checkbox click, text hardcoded "14").
+    var showSyncBanner = TempData["OvSynced"] is not null;
+
+    // Avatar initials (mockup: company "U", note authors "ÜA").
+    static string Initials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length == 0 ? "" :
+            parts.Length == 1 ? char.ToUpperInvariant(parts[0][0]).ToString() :
+            $"{char.ToUpperInvariant(parts[0][0])}{char.ToUpperInvariant(parts[^1][0])}";
+    }
+
+    // Table-cell agent name convention (§2 canon): "Ümit Yaşar Akın" → "Ümit Y. Akın".
+    static string ShortName(string full)
+    {
+        var parts = full.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length < 3)
+            return full;
+        var middles = string.Join(" ", parts[1..^1].Select(p => $"{char.ToUpperInvariant(p[0])}."));
+        return $"{parts[0]} {middles} {parts[^1]}";
+    }
+
+    // Dates: notes "1 Ağu 2026 10:30", tickets "Bugün 08:55", sync line "bugün 09:12".
+    string NoteTime(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("ov.noteTimeFmt"), CultureInfo.CurrentUICulture);
+    string UpdatedText(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        if (local.Date == today)
+            return L.GetString("ov.updToday", local.ToString("HH:mm"));
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("ov.updYesterday", local.ToString("HH:mm"));
+        return local.ToString(L.GetString("ov.dateFmt"), CultureInfo.CurrentUICulture);
+    }
+    string SyncTimeText(DateTimeOffset value)
+    {
+        var local = value.ToLocalTime();
+        var today = DateTime.Now.Date;
+        if (local.Date == today)
+            return L.GetString("ov.syncToday", local.ToString("HH:mm"));
+        if (local.Date == today.AddDays(-1))
+            return L.GetString("ov.syncYesterday", local.ToString("HH:mm"));
+        return local.ToString(L.GetString("ov.dateFmt"), CultureInfo.CurrentUICulture);
+    }
+
+    // Time zone row: single-tenant company zone (user-view fallback convention — the
+    // entity carries no per-org zone).
+    string TimeZoneText()
+    {
+        const string id = "Europe/Istanbul";
+        var offset = TimeZoneInfo.FindSystemTimeZoneById(id).BaseUtcOffset;
+        var sign = offset < TimeSpan.Zero ? "-" : "+";
+        var text = offset.Minutes == 0 ? $"{Math.Abs(offset.Hours)}" : $"{Math.Abs(offset.Hours)}:{Math.Abs(offset.Minutes):00}";
+        return $"{id} (GMT{sign}{text})";
+    }
+
+    // Member status pill (users-page mapping): locked → overdue, guest → closed, active → solved.
+    string PillClass(string key) => key switch
+    {
+        "locked" => "rd-pill rd-pill-overdue",
+        "guest" => "rd-pill rd-pill-closed",
+        _ => "rd-pill rd-pill-solved",
+    };
+    string PillLabel(string key) => key switch
+    {
+        "locked" => L["ov.stLocked"].Value,
+        "guest" => L["ov.stGuest"].Value,
+        _ => L["ov.stActive"].Value,
+    };
+
+    var domains = (Model.Domain ?? "")
+        .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+    var memberFrom = Model.MemberTotal == 0 ? 0 : (Model.MemberPage - 1) * OrgViewController.MemberPageSize + 1;
+    var memberTo = Math.Min(Model.MemberPage * OrgViewController.MemberPageSize, Model.MemberTotal);
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <a href="/agent/orgs" class="text-sm">@L["ov.back"]</a>
+        <h1 style="margin-top:6px;display:flex;align-items:center;gap:12px">
+            <span class="rd-avatar">@Initials(Model.Name)</span> @Model.Name
+        </h1>
+        <p>@L.GetString("ov.meta", Model.Sector ?? "—", Model.MemberTotal, Model.OpenCount)</p>
+    </div>
+    <div class="actions">
+        <button class="rd-btn" data-dialog-open="dlg-edit">@SL["common.edit"]</button>
+        @* Formları Yönet needs the form designer (admin/forms, S7) — disabled, never dead-looking. *@
+        <button class="rd-btn" disabled title="@L["ov.notYet"]">@L["ov.manageForms"]</button>
+        <button class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete">@SL["common.delete"]</button>
+    </div>
+</div>
+
+<div class="rd-banner rd-banner-success" id="sync-banner" style="display:@(showSyncBanner ? "flex" : "none")">
+    <span aria-hidden="true">✓</span>
+    <span>@L.GetString("ov.syncBanner", Model.MemberTotal)</span>
+</div>
+
+<div class="rd-grid-2" style="margin-bottom:20px">
+    <div class="rd-surface">
+        <div class="rd-surface-head">@L["ov.profile"]</div>
+        <div class="rd-surface-body">
+            <div class="bo-def">
+                <div class="row">
+                    <span>@L["ov.name"]</span>
+                    <span>@Model.Name</span>
+                </div>
+                <div class="row">
+                    <span>@L["ov.domains"]</span>
+                    <span>@if (domains.Length == 0)
+                        {<text>—</text>}
+                        else
+                        {@foreach (var d in domains)
+                            {<span class="rd-pill rd-pill-teal">@("@" + d)</span>}
+                        }</span>
+                </div>
+                <div class="row">
+                    <span>@L["ov.phone"]</span>
+                    <span>@(Model.Phone ?? "—")</span>
+                </div>
+                <div class="row">
+                    <span>@L["ov.address"]</span>
+                    <span>@(Model.Address ?? "—")</span>
+                </div>
+                <div class="row">
+                    <span>@L["ov.manager"]</span>
+                    <span>@(Model.ManagerName is null ? "—" : ShortName(Model.ManagerName))</span>
+                </div>
+                <div class="row">
+                    <span>@L["ov.sla"]</span>
+                    @* The entity carries no per-org SLA (osTicket parity: SLA lives on
+                       topic/dept/ticket) — honest placeholder; the mockup's "Kurumsal
+                       (8 saat)" also conflicts with the §2 SLA canon. Needs a canon
+                       decision; flagged in ROADMAP. *@
+                    <span>—</span>
+                </div>
+                <div class="row">
+                    <span>@L["ov.tz"]</span>
+                    <span>@TimeZoneText()</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rd-surface" id="sync-card">
+        <div class="rd-surface-head">@L["ov.autoMatch"]</div>
+        <div class="rd-surface-body">
+            @* The mockup's two switches (domain auto-link, field push) map to no entity
+               flag; the card persists the three real osTicket collaboration/assignment
+               flags instead — needs canon sign-off, flagged in ROADMAP. Switches
+               auto-submit (B3); the banner above renders from the saved values. *@
+            <form method="post" asp-action="Sync" id="sync-form" data-autosubmit>
+                <input type="hidden" name="id" value="@Model.Id">
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="share" value="true" checked="@Model.ShareTickets">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["ov.swShare"]</b>
+                            <small>@L["ov.swShareHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="cc" value="true" checked="@Model.CcPrimary">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["ov.swCc"]</b>
+                            <small>@L["ov.swCcHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="assign" value="true" checked="@Model.AssignManager">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["ov.swAssign"]</b>
+                            <small>@L["ov.swAssignHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+            </form>
+            <div class="rd-help" style="border-top:1px dashed var(--rd-border);padding-top:11px">@L.GetString("ov.lastSync", SyncTimeText(Model.LastSync), Model.MemberTotal)</div>
+        </div>
+    </div>
+</div>
+
+<div class="rd-tabs" data-tabs>
+    <button class="@(Model.ActiveTab == "users" ? "active" : null)" data-tab="ov-panel-users"><span>@L["ov.tabUsers"]</span> · @Model.MemberTotal</button>
+    <button class="@(Model.ActiveTab == "tickets" ? "active" : null)" data-tab="ov-panel-tickets"><span>@L["ov.tabTickets"]</span> · @Model.Tickets.Count</button>
+    <button class="@(Model.ActiveTab == "notes" ? "active" : null)" data-tab="ov-panel-notes"><span>@L["ov.tabNotes"]</span> · @Model.Notes.Count</button>
+</div>
+
+<div class="rd-tab-panel @(Model.ActiveTab == "users" ? "active" : null)" id="ov-panel-users">
+    <div class="rd-surface">
+        <div style="overflow-x:auto">
+            <table class="rd-table">
+                <thead>
+                    <tr>
+                        <th class="sortable sorted-desc">@SL["common.name"]</th>
+                        <th class="sortable">@L["ov.colEmail"]</th>
+                        <th>@L["ov.colPhone"]</th>
+                        <th>@SL["common.status"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Members.Count == 0)
+                    {
+                        <tr><td colspan="4" class="rd-muted">@L["ov.noUsers"]</td></tr>
+                    }
+                    @foreach (var m in Model.Members)
+                    {
+                        <tr>
+                            <td><a href="/agent/user-view?id=@m.Id">@m.Name</a></td>
+                            <td>@(m.Email ?? "—")</td>
+                            <td>@if (m.PhoneInherited && Model.Phone is not null)
+                                {@Model.Phone <span class="rd-badge-inherited">@L["ov.inherited"]</span>}
+                                else
+                                {@(m.OwnPhone ?? "—")}</td>
+                            <td><span class="@PillClass(m.StatusKey)">@PillLabel(m.StatusKey)</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="rd-pagination">
+            <span><span>@SL["common.showing"]</span> @memberFrom–@memberTo / @Model.MemberTotal</span>
+            <div class="pages">
+                @for (var p = 1; p <= Model.MemberPageCount; p++)
+                {
+                    if (p == Model.MemberPage)
+                    {
+                        <span class="current">@p</span>
+                    }
+                    else
+                    {
+                        <a href="/agent/org-view?id=@Model.Id&mpage=@p">@p</a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="rd-tab-panel @(Model.ActiveTab == "tickets" ? "active" : null)" id="ov-panel-tickets">
+    <div class="rd-surface">
+        <div style="overflow-x:auto">
+            <table class="rd-table">
+                <thead>
+                    <tr>
+                        <th>@L["ov.colNo"]</th>
+                        <th>@L["ov.colSubject"]</th>
+                        <th>@SL["common.status"]</th>
+                        <th class="sortable sorted-desc">@SL["common.updated"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Tickets.Count == 0)
+                    {
+                        <tr><td colspan="4" class="rd-muted">@L["ov.noTickets"]</td></tr>
+                    }
+                    @foreach (var t in Model.Tickets)
+                    {
+                        <tr>
+                            <td><a href="/agent/ticket-view?id=@t.Id">@t.Number</a></td>
+                            <td><a href="/agent/ticket-view?id=@t.Id">@t.Subject</a></td>
+                            <td><span class="rd-pill rd-pill-@t.StatusKey">@SL[$"status.{t.StatusKey}"]</span></td>
+                            <td>@UpdatedText(t.Updated)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="rd-tab-panel @(Model.ActiveTab == "notes" ? "active" : null)" id="ov-panel-notes">
+    @foreach (var note in Model.Notes)
+    {
+        <div class="bo-thread-entry is-note">
+            <div class="head">
+                <div class="rd-avatar">@Initials(note.AuthorName)</div>
+                <b>@note.AuthorName</b>
+                <span class="rd-pill rd-pill-wait">@L["ov.noteBadge"]</span>
+                <time>@NoteTime(note.At)</time>
+            </div>
+            <div class="body">
+                @Html.Raw(string.Join("<br>", note.Body.Split('\n').Select(line => Html.Encode(line))))
+            </div>
+        </div>
+    }
+    <div class="rd-surface">
+        <form class="rd-surface-body" method="post" asp-action="Note">
+            <input type="hidden" name="id" value="@Model.Id">
+            <div class="rd-field">
+                <textarea class="rd-control" name="body" placeholder="@L["ov.notePh"]"></textarea>
+                <div class="rd-help">@SL["common.notesHelp"]</div>
+            </div>
+            <button type="submit" class="rd-btn-primary">@L["ov.addNote"]</button>
+        </form>
+    </div>
+</div>
+
+@* Header-action dialogs: invented UI following the user-view dialog DOM (B2) — the
+   mockup's buttons are dead; flagged in ROADMAP for canon sign-off. *@
+
+<!-- Edit dialog: the profile-card fields (name/domain/sector/phone/address/manager) -->
+<dialog class="rd-dialog" id="dlg-edit">
+    <div class="rd-dialog-head">
+        <span>@SL["common.edit"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Edit">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="oe-name">@L["ov.fName"]</label>
+                <input id="oe-name" name="name" class="rd-control" value="@Model.Name" required>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="oe-domain">@L["ov.domains"]</label>
+                <input id="oe-domain" name="domain" class="rd-control" value="@Model.Domain" placeholder="@@sirket.com.tr">
+                <div class="rd-help">@L["ov.fDomainHelp"]</div>
+            </div>
+            <div class="rd-grid-2">
+                <div class="rd-field">
+                    <label class="rd-label" for="oe-sector">@L["ov.fSector"]</label>
+                    <input id="oe-sector" name="sector" class="rd-control" value="@Model.Sector">
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="oe-manager">@L["ov.manager"]</label>
+                    <select id="oe-manager" name="managerId" class="rd-control">
+                        <option value="">@L["ov.fManagerNone"]</option>
+                        @foreach (var s in Model.StaffOptions)
+                        {
+                            <option value="@s.Id" selected="@(s.Id == Model.ManagerStaffId)">@ShortName(s.Name)</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="oe-phone">@L["ov.phone"]</label>
+                <input id="oe-phone" name="phone" class="rd-control" value="@Model.Phone">
+            </div>
+            <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label" for="oe-address">@L["ov.address"]</label>
+                <input id="oe-address" name="address" class="rd-control" value="@Model.Address">
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- Delete confirm dialog (hard delete; orgs with members or tickets are refused with a toast) -->
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <form method="post" asp-action="Delete">
+        <input type="hidden" name="id" value="@Model.Id">
+        <div class="rd-dialog-body">
+            <p>@L["ov.deleteConfirm"]</p>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn rd-btn-danger">@SL["common.delete"]</button>
+        </div>
+    </form>
+</dialog>
+
+<script>
+    // Sync switches persist on change (B3; the mockup only revealed a static banner).
+    document.getElementById("sync-form")?.addEventListener("change", (e) => {
+        if (e.target.type === "checkbox") e.target.form.submit();
+    });
+</script>

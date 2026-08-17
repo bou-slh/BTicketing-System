@@ -41,6 +41,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITicketService, TicketService>();
         services.AddScoped<ITaskService, TaskService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IOrgService, OrgService>();
         services.AddScoped<IEffortProposalService, EffortProposalService>();
         services.AddScoped<IQueueEngine, QueueEngine>();
         services.AddScoped<ICannedResponseService, CannedResponseService>();

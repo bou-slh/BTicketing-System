@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ov.back" xml:space="preserve">
+    <value>← Şirketler</value>
+  </data>
+  <data name="ov.meta" xml:space="preserve">
+    <value>{0} · {1} kullanıcı · {2} açık talep</value>
+  </data>
+  <data name="ov.manageForms" xml:space="preserve">
+    <value>Formları Yönet</value>
+  </data>
+  <data name="ov.syncBanner" xml:space="preserve">
+    <value>Şirket bilgileri güncellendi — {0} kullanıcı kaydıyla senkronize edildi.</value>
+  </data>
+  <data name="ov.profile" xml:space="preserve">
+    <value>Şirket Profili</value>
+  </data>
+  <data name="ov.name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="ov.domains" xml:space="preserve">
+    <value>E-posta alan adları</value>
+  </data>
+  <data name="ov.phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="ov.address" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="ov.manager" xml:space="preserve">
+    <value>Hesap Yöneticisi</value>
+  </data>
+  <data name="ov.sla" xml:space="preserve">
+    <value>SLA Planı</value>
+  </data>
+  <data name="ov.tz" xml:space="preserve">
+    <value>Zaman dilimi</value>
+  </data>
+  <data name="ov.autoMatch" xml:space="preserve">
+    <value>Otomatik Eşleştirme</value>
+  </data>
+  <data name="ov.sw1" xml:space="preserve">
+    <value>Alan adı eşleşen yeni kullanıcıları bu şirkete bağla</value>
+  </data>
+  <data name="ov.sw1Help" xml:space="preserve">
+    <value>@ulasim.com.tr adresiyle kaydolan her yeni kullanıcı, elle işlem gerekmeden bu şirketin altına eklenir.</value>
+  </data>
+  <data name="ov.sw2" xml:space="preserve">
+    <value>Şirket alanlarını (adres, telefon, SLA) kullanıcı profillerine aktar</value>
+  </data>
+  <data name="ov.sw2Help" xml:space="preserve">
+    <value>Şirket profilinde yapılan değişiklikler, geçersiz kılınmamış tüm kullanıcı alanlarına otomatik yansıtılır.</value>
+  </data>
+  <data name="ov.lastSync" xml:space="preserve">
+    <value>Son senkronizasyon: {0} · {1} kullanıcı</value>
+  </data>
+  <data name="ov.tabUsers" xml:space="preserve">
+    <value>Kullanıcılar</value>
+  </data>
+  <data name="ov.tabTickets" xml:space="preserve">
+    <value>Talepler</value>
+  </data>
+  <data name="ov.tabNotes" xml:space="preserve">
+    <value>Notlar</value>
+  </data>
+  <data name="ov.colEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="ov.colPhone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="ov.colNo" xml:space="preserve">
+    <value>Talep No</value>
+  </data>
+  <data name="ov.colSubject" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="ov.stActive" xml:space="preserve">
+    <value>Aktif</value>
+  </data>
+  <data name="ov.stGuest" xml:space="preserve">
+    <value>Misafir</value>
+  </data>
+  <data name="ov.inherited" xml:space="preserve">
+    <value>Şirketten</value>
+  </data>
+  <data name="ov.noteBadge" xml:space="preserve">
+    <value>İç Not</value>
+  </data>
+  <data name="ov.notePh" xml:space="preserve">
+    <value>Bu şirket hakkında bir not yazın…</value>
+  </data>
+  <data name="ov.addNote" xml:space="preserve">
+    <value>Notu Ekle</value>
+  </data>
+  <data name="ov.pageTitle" xml:space="preserve">
+    <value>Şirket: {0}</value>
+  </data>
+  <data name="ov.stLocked" xml:space="preserve">
+    <value>Kilitli</value>
+  </data>
+  <data name="ov.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="ov.updToday" xml:space="preserve">
+    <value>Bugün {0}</value>
+  </data>
+  <data name="ov.updYesterday" xml:space="preserve">
+    <value>Dün {0}</value>
+  </data>
+  <data name="ov.syncToday" xml:space="preserve">
+    <value>bugün {0}</value>
+  </data>
+  <data name="ov.syncYesterday" xml:space="preserve">
+    <value>dün {0}</value>
+  </data>
+  <data name="ov.noteTimeFmt" xml:space="preserve">
+    <value>d MMM yyyy HH:mm</value>
+  </data>
+  <data name="ov.swShare" xml:space="preserve">
+    <value>Şirket üyeleri birbirlerinin taleplerini görebilsin</value>
+  </data>
+  <data name="ov.swShareHelp" xml:space="preserve">
+    <value>Açıkken portala giriş yapan her üye, şirketin tüm taleplerini kendi listesinde görür.</value>
+  </data>
+  <data name="ov.swCc" xml:space="preserve">
+    <value>Birincil kişiler üye taleplerine otomatik CC eklensin</value>
+  </data>
+  <data name="ov.swCcHelp" xml:space="preserve">
+    <value>Şirketin birincil iletişim kişileri, üyelerin açtığı her yeni talebe bilgi amaçlı eklenir.</value>
+  </data>
+  <data name="ov.swAssign" xml:space="preserve">
+    <value>Yeni üye talepleri hesap yöneticisine atansın</value>
+  </data>
+  <data name="ov.swAssignHelp" xml:space="preserve">
+    <value>Bu şirketten gelen her yeni talep, elle işlem gerekmeden hesap yöneticisine atanır.</value>
+  </data>
+  <data name="ov.fName" xml:space="preserve">
+    <value>Şirket Adı</value>
+  </data>
+  <data name="ov.fDomainHelp" xml:space="preserve">
+    <value>Virgülle ayırarak birden fazla alan adı girebilirsiniz; bu alan adlarıyla kaydolan kullanıcılar şirkete otomatik bağlanır.</value>
+  </data>
+  <data name="ov.fSector" xml:space="preserve">
+    <value>Sektör</value>
+  </data>
+  <data name="ov.fManagerNone" xml:space="preserve">
+    <value>— Yönetici seçilmedi —</value>
+  </data>
+  <data name="ov.noUsers" xml:space="preserve">
+    <value>Bu şirkete bağlı kullanıcı yok.</value>
+  </data>
+  <data name="ov.noTickets" xml:space="preserve">
+    <value>Bu şirketin talebi yok.</value>
+  </data>
+  <data name="ov.notYet" xml:space="preserve">
+    <value>Henüz kullanılamıyor</value>
+  </data>
+  <data name="ov.deleteConfirm" xml:space="preserve">
+    <value>Bu şirket kalıcı olarak silinecek (notları dahil). Üyesi veya talebi bulunan şirketler silinemez. Devam edilsin mi?</value>
+  </data>
+  <data name="ov.errEmpty" xml:space="preserve">
+    <value>Zorunlu alan boş bırakılamaz.</value>
+  </data>
+  <data name="ov.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok.</value>
+  </data>
+  <data name="ov.errHasMembers" xml:space="preserve">
+    <value>Üyesi veya talebi bulunan şirket silinemez.</value>
+  </data>
+  <data name="ov.toastCreated" xml:space="preserve">
+    <value>Şirket oluşturuldu.</value>
+  </data>
+  <data name="ov.toastSaved" xml:space="preserve">
+    <value>Değişiklikler kaydedildi.</value>
+  </data>
+  <data name="ov.toastNote" xml:space="preserve">
+    <value>Not eklendi.</value>
+  </data>
+</root>
