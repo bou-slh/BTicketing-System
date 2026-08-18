@@ -72,6 +72,17 @@ builder.Services.AddAuthentication("Contextual")
         o.Events.OnRedirectToAccessDenied = ctx =>
         {
             // Admin area without admin rights / without mfa → admin login (which enforces both).
+            // Exception: an authenticated admin whose session lacks amr=mfa is mid-enrollment
+            // (password-only sign-in of a no-2FA admin) — send them to finish the mandatory
+            // setup instead of the login form (B6 mandatory 2FA).
+            var user = ctx.HttpContext.User;
+            if (ctx.Request.Path.StartsWithSegments("/admin")
+                && user.Identity?.IsAuthenticated == true
+                && user.IsInRole("Admin") && !user.HasClaim("amr", "mfa"))
+            {
+                ctx.Response.Redirect("/admin/2fa-setup");
+                return Task.CompletedTask;
+            }
             var login = ctx.Request.Path.StartsWithSegments("/admin") ? "/admin/login" : "/agent/login";
             ctx.Response.Redirect(login);
             return Task.CompletedTask;
@@ -98,17 +109,24 @@ builder.Services.AddIdentityCore<CustomerUser>(ConfigureIdentity)
     .AddSignInManager<CustomerSignInManager>()
     .AddDefaultTokenProviders();
 
+// Staff reset links expire per the mockups' pw.help ("30 dakika") instead of the 1-day default.
+// TODO(S7): settings-agents consumes — sa.resetWindow will own this value when that page ports.
+builder.Services.Configure<StaffResetTokenProviderOptions>(o =>
+    o.TokenLifespan = TimeSpan.FromMinutes(builder.Configuration.GetValue("StaffAuth:ResetWindowMinutes", 30)));
+
 builder.Services.AddIdentityCore<StaffUser>(o =>
     {
         ConfigureIdentity(o);
         // Staff usernames are short handles (uakin); customers use email as username.
         o.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+        o.Tokens.PasswordResetTokenProvider = StaffResetTokenProvider.ProviderName;
     })
     .AddRoles<StaffRole>()
     .AddUserStore<StaffStore>()
     .AddRoleStore<StaffRoleStore>()
     .AddSignInManager<StaffSignInManager>()
-    .AddDefaultTokenProviders();
+    .AddDefaultTokenProviders()
+    .AddTokenProvider<StaffResetTokenProvider>(StaffResetTokenProvider.ProviderName);
 
 // ---- AuthZ policies --------------------------------------------------------
 

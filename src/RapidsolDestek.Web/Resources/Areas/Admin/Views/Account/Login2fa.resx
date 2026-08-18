@@ -48,4 +48,7 @@
   <data name="lg.twofaHelpEmail" xml:space="preserve">
     <value>E-posta adresinize gönderilen 6 haneli kodu girin.</value>
   </data>
+  <data name="lg.backLogin" xml:space="preserve">
+    <value>← Girişe dön</value>
+  </data>
 </root>

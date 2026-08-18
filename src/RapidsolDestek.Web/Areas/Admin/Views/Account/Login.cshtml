@@ -16,11 +16,11 @@
         <input type="hidden" asp-for="ReturnUrl">
         <div class="rd-field">
             <label class="rd-label" for="lg-user">@L["lg.fUser"]</label>
-            <input id="lg-user" class="rd-control" asp-for="User" placeholder="@L["lg.fUserPh"]" autocomplete="username">
+            <input id="lg-user" class="rd-control" asp-for="User" placeholder="@L["lg.fUserPh"]" autocomplete="username" required>
         </div>
         <div class="rd-field">
             <label class="rd-label" for="lg-pass">@L["lg.fPass"]</label>
-            <input id="lg-pass" type="password" class="rd-control" asp-for="Password" autocomplete="current-password">
+            <input id="lg-pass" type="password" class="rd-control" asp-for="Password" autocomplete="current-password" required>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
             <a href="/admin/pwreset" class="text-sm">@L["lg.forgot"]</a>

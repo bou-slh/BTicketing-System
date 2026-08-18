@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Entities;
 using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Infrastructure.Identity;
+using RapidsolDestek.Infrastructure.Services;
 using RapidsolDestek.Web.Areas.Portal.Controllers;
 using RapidsolDestek.Web.Identity;
 using RapidsolDestek.Web.Services;
@@ -20,7 +21,8 @@ public abstract class StaffAccountControllerBase(
     StaffSignInManager signIn,
     IAppEmailSender mail,
     IWebHostEnvironment env,
-    AppDbContext db) : Controller
+    AppDbContext db,
+    ISettingsService settings) : Controller
 {
     protected UserManager<StaffUser> Users => users;
     protected StaffSignInManager StaffSignIn => signIn;
@@ -72,7 +74,10 @@ public abstract class StaffAccountControllerBase(
         }
         if (!result.Succeeded)
         {
-            ModelState.AddModelError(string.Empty, "invalidCredentials");
+            // B6 admin-only lockout policy: stricter threshold/duration than the
+            // staff-wide Identity defaults, applied only at the admin sign-in.
+            ModelState.AddModelError(string.Empty,
+                await ApplyAdminLockoutAsync(user) ? "lockedOut" : "invalidCredentials");
             return View("Login", vm);
         }
 
@@ -107,11 +112,38 @@ public abstract class StaffAccountControllerBase(
         db.Staff.Where(s => s.IdentityUserId == user.Id)
             .Select(s => s.TwoFactorMethod).FirstOrDefaultAsync();
 
+    /// <summary>
+    /// Admin-only lockout policy (B6, admin/pwreset row): after a failed attempt at the
+    /// ADMIN sign-in, lock earlier and longer than the staff-wide Identity defaults.
+    /// Identity has already counted the failure (password and 2FA sign-ins both call
+    /// AccessFailedAsync); this only turns the count into a lock at the admin threshold.
+    /// Returns true when this attempt tripped the lock.
+    /// </summary>
+    private async Task<bool> ApplyAdminLockoutAsync(StaffUser user)
+    {
+        if (!RequireAdmin || !await users.GetLockoutEnabledAsync(user)) return false;
+
+        // TODO(S7): settings-agents consumes — admin/settings-agents.html (sa.maxAttempts /
+        // sa.lockDuration) will own these values; until that page ports, sensible defaults
+        // (3 attempts, 30 min — the mockup select's strictest option + its selected duration)
+        // hardcoded behind the Setting keys below. Flag for canon: the mockup's fields are
+        // staff-wide; the ADMIN-only tightening (3 vs 5) is invented per the B6 row.
+        var attempts = int.TryParse(await settings.GetAsync("agents", "admin_max_login_attempts"), out var a) ? a : 3;
+        var minutes = int.TryParse(await settings.GetAsync("agents", "admin_lockout_minutes"), out var m) ? m : 30;
+
+        if (await users.GetAccessFailedCountAsync(user) < attempts) return false;
+
+        await users.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddMinutes(minutes));
+        await users.ResetAccessFailedCountAsync(user); // Identity's own lockout does the same
+        return true;
+    }
+
     /// <summary>GET login/2fa: flags the email-code variant so the card's help text stays honest.</summary>
     protected async Task<IActionResult> Login2faGetCore(string? returnUrl)
     {
         var user = await signIn.GetTwoFactorAuthenticationUserAsync();
-        if (user is not null && await TwoFactorMethodOfAsync(user) == TwoFactorMethod.Email)
+        if (user is null) return Redirect($"{AreaPrefix}/login"); // no pending password step
+        if (await TwoFactorMethodOfAsync(user) == TwoFactorMethod.Email)
             ViewData["TwofaEmail"] = true;
         return View("Login2fa", new StaffLogin2faVm { ReturnUrl = returnUrl });
     }
@@ -138,7 +170,10 @@ public abstract class StaffAccountControllerBase(
         }
         if (!result.Succeeded)
         {
-            ModelState.AddModelError(string.Empty, "invalidCode");
+            // Wrong codes count as failed attempts too (Identity increments them);
+            // the admin threshold may turn this one into a lock.
+            ModelState.AddModelError(string.Empty,
+                await ApplyAdminLockoutAsync(user) ? "lockedOut" : "invalidCode");
             return View("Login2fa", vm);
         }
         await StampLastLoginAsync(user);
@@ -155,9 +190,11 @@ public abstract class StaffAccountControllerBase(
 
     protected async Task<IActionResult> PwresetCore(string email)
     {
-        // TODO(S7): reset-token lifespan — the agent mockup's pw.help promises 30 minutes (portal
-        // says 1 hour) while Identity's default DataProtection token lifespan is 1 day; align when
-        // the settings-agents lockout/policy work lands (ROADMAP §6.3 settings-agents ↔ B6).
+        // Staff reset links now really expire in 30 minutes (StaffResetTokenProvider), matching
+        // the agent + admin pw.help copy and settings-agents' sa.resetWindow default (30).
+        // TODO(S7): settings-agents consumes — sa.resetWindow owns the value once that page
+        // ports (config key StaffAuth:ResetWindowMinutes until then). Portal's 1-hour promise
+        // is a separate customer-side canon item (still on Identity's 1-day default).
         var user = await users.FindByEmailAsync(email);
         if (user is not null && (!RequireAdmin || await users.IsInRoleAsync(user, "Admin")))
         {

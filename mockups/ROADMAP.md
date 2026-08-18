@@ -623,8 +623,33 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
 Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty state), every dialog B2
 (parameterized + correct submit), every settings page B3 (gating) + B9 scroll-spy, builders B4.
 
-- [ ] **login.html** — real form, mandatory 2FA, forgot-password (B6)
-- [ ] **pwreset.html** — admin reset-link flow, admin-only lockout policy (B6)
+- [x] **login.html** — real form, mandatory 2FA, forgot-password (B6) *(S7; verify-and-complete over the
+      S2/S6 StaffAccountControllerBase: admin Identity sign-in (auth.notAdmin role gate, `.rd-form-error`
+      states) was already live — parity fixes: `required` on both inputs, 2FA card margin-top/maxlength 6,
+      foot link was lg.backAgent copy pointing at /admin/login → now invented lg.backLogin "← Girişe dön"
+      (agent Login2fa precedent). Mandatory 2FA is real end-to-end: password-only success of a no-2FA
+      admin lands on /admin/2fa-setup (INVENTED page, S2 — mockup has no enrollment card; now shows the
+      otpauth link via new shared twofa.link, profile dlg-2fa precedent), the staff cookie's access-denied
+      handler reroutes every /admin/* attempt back to setup until a TOTP code confirms (then sign-out →
+      re-login with amr=mfa for AdminOnly); already-enrolled admins get redirected to the dashboard, and a
+      2fa GET without a pending password step bounces to login. Mockup's in-card "(önizleme)" box stays
+      the separate /admin/login/2fa step (S6 agent precedent); email-code method honored via
+      Staff.TwoFactorMethod. +2 tests (AdminAuthTests).)*
+- [x] **pwreset.html** — admin reset-link flow, admin-only lockout policy (B6) *(S7; request card = mockup
+      DOM; sent state = `rc-notice` with invented pw.sentNotice (agent-precedent copy — mockup has no sent
+      card, S0 to add or bless); flow is admin-gated: non-admin emails get the same enumeration-safe
+      notice but no mail; new-password step = new admin PwresetNew card (agent-conventions twin — the
+      mockup lacks this card entirely, S0 to add). Reset-validity canon: this mockup's pw.help + the
+      settings-agents sa.resetWindow default agree on 30 min → staff reset links now really expire in
+      30 min (StaffResetTokenProvider; config StaffAuth:ResetWindowMinutes; TODO(S7) settings-agents
+      consumes sa.resetWindow when it ports; portal's 1-hour pw.help promise still sits on Identity's
+      1-day default — open customer-side canon item). Admin-only lockout: 3 failed attempts (password or
+      2FA code) at the ADMIN sign-in lock the account 30 min (Setting keys agents/admin_max_login_attempts
+      + admin_lockout_minutes, defaults hardcoded, TODO(S7) settings-agents consumes; INVENTED: the
+      mockup's sa.maxAttempts/sa.lockDuration are staff-wide with defaults 5/30 — tightening admins to 3
+      needs canon sign-off); staff-wide Identity lockout stays 5 attempts/15 min (15 ≠ the mockup's
+      selected 30 — align when settings-agents ports); shared auth.lockedOut copy de-hardcoded from
+      "15 dakika" to duration-neutral. +5 tests (AdminAuthTests) — suite 167.)*
 - [ ] **dashboard.html** — date range re-renders data-driven charts with tooltips; export; 3 stats tables sortable (B10)
 - [ ] **system-info.html** — real server/PHP→.NET runtime/db info; update check
 - [ ] **system-logs.html** — filters + Apply work; purge deletes; row detail dialog (B1/B2)

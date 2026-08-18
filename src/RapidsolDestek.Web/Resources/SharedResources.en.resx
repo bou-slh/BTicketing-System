@@ -391,7 +391,7 @@
     <value>Incorrect email/username or password.</value>
   </data>
   <data name="auth.lockedOut" xml:space="preserve">
-    <value>Too many failed attempts — the account is locked for 15 minutes.</value>
+    <value>Too many failed attempts — the account is temporarily locked. Try again later.</value>
   </data>
   <data name="auth.notAdmin" xml:space="preserve">
     <value>This account does not have administrator access.</value>
@@ -413,6 +413,9 @@
   </data>
   <data name="twofa.activate" xml:space="preserve">
     <value>Activate</value>
+  </data>
+  <data name="twofa.link" xml:space="preserve">
+    <value>Open in authenticator app</value>
   </data>
   <data name="search.noResults" xml:space="preserve">
     <value>No results found</value>

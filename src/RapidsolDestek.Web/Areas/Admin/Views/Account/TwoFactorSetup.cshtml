@@ -14,6 +14,8 @@
     <div style="border:1px solid var(--rd-border);border-radius:13px;padding:16px;background:var(--rd-surface-2);margin-bottom:16px">
         <div class="text-sm rd-muted" style="margin-bottom:6px">@SL["twofa.key"]</div>
         <code style="font-size:15px;letter-spacing:2px;word-break:break-all">@ViewData["AuthenticatorKey"]</code>
+        @* Same otpauth deep link as the profile dlg-2fa (no QR image; S7 if canon wants one). *@
+        <div class="rd-help"><a href="@ViewData["OtpauthUri"]">@SL["twofa.link"]</a></div>
     </div>
 
     <form method="post" asp-action="TwoFactorSetup">

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="pw.newTitle" xml:space="preserve">
+    <value>Set a new password</value>
+  </data>
+  <data name="pw.newSub" xml:space="preserve">
+    <value>Create a new password for your account. You will be asked to sign in again after saving.</value>
+  </data>
+  <data name="pw.new" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="pw.new2" xml:space="preserve">
+    <value>New password (repeat)</value>
+  </data>
+  <data name="pw.passHelp" xml:space="preserve">
+    <value>At least 8 characters; must contain letters and digits.</value>
+  </data>
+  <data name="pw.save" xml:space="preserve">
+    <value>Update password</value>
+  </data>
+  <data name="pw.back" xml:space="preserve">
+    <value>← Back to sign-in</value>
+  </data>
+  <data name="pw.errPasswordWeak" xml:space="preserve">
+    <value>The password must be at least 8 characters and contain letters and digits.</value>
+  </data>
+  <data name="pw.errPasswordMismatch" xml:space="preserve">
+    <value>The passwords do not match.</value>
+  </data>
+  <data name="pw.errInvalidToken" xml:space="preserve">
+    <value>The reset link is invalid or has expired. Please request a new one.</value>
+  </data>
+</root>

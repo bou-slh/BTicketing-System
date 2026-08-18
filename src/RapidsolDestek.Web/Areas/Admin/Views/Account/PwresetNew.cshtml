@@ -1,0 +1,53 @@
+@model RapidsolDestek.Web.Areas.Portal.Controllers.PwresetNewVm
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["pw.newTitle"];
+
+    // B3 error presentation (agent PwresetNew pattern): controller codes → page i18n.
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+    string ErrorText(string code) => code switch
+    {
+        "passwordWeak" => L["pw.errPasswordWeak"].Value,
+        "passwordMismatch" => L["pw.errPasswordMismatch"].Value,
+        "invalidToken" => L["pw.errInvalidToken"].Value,
+        _ => code,
+    };
+}
+<div class="rc-auth-card">
+    <a class="rc-logo" href="/" style="margin-bottom:18px;display:inline-flex">
+        <span class="rc-logo-mark"></span>
+        <span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <h1>@L["pw.newTitle"]</h1>
+    <p>@L["pw.newSub"]</p>
+
+    <form method="post" asp-action="PwresetNew">
+        @if (errors.Count > 0)
+        {
+            <div class="rd-form-error" role="alert">
+                @foreach (var e in errors)
+                {
+                    <div>@ErrorText(e)</div>
+                }
+            </div>
+        }
+        <input type="hidden" asp-for="Email">
+        <input type="hidden" asp-for="Token">
+        <div class="rd-field">
+            <label class="rd-label" for="pw-new">@L["pw.new"]</label>
+            <input id="pw-new" class="rd-control" type="password" asp-for="Password" autocomplete="new-password"
+                   required minlength="8" data-pw-strength="@L["pw.errPasswordWeak"]">
+        </div>
+        <div class="rd-field">
+            <label class="rd-label" for="pw-new2">@L["pw.new2"]</label>
+            <input id="pw-new2" class="rd-control" type="password" asp-for="Password2" autocomplete="new-password"
+                   required data-pw-match="#pw-new" data-pw-match-msg="@L["pw.errPasswordMismatch"]">
+            <div class="rd-help">@L["pw.passHelp"]</div>
+        </div>
+        <button type="submit" class="rd-btn-primary" style="display:flex;justify-content:center;width:100%">@L["pw.save"]</button>
+    </form>
+
+    <div class="rc-auth-foot">
+        <a href="/admin/login">@L["pw.back"]</a>
+    </div>
+</div>

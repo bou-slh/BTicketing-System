@@ -13,10 +13,10 @@
     <form method="post" asp-action="Login2fa">
         <partial name="_FormErrors" />
         <input type="hidden" asp-for="ReturnUrl">
-        <div style="border:1px solid var(--rd-border);border-radius:13px;padding:16px;background:var(--rd-surface-2)">
+        <div style="margin-top:22px;border:1px solid var(--rd-border);border-radius:13px;padding:16px;background:var(--rd-surface-2)">
             <div class="text-sm rd-muted" style="margin-bottom:10px">@L["lg.twofaCaption"]</div>
             <div style="display:flex;gap:10px">
-                <input class="rd-control" asp-for="Code" maxlength="7" inputmode="numeric" placeholder="••••••" autocomplete="one-time-code"
+                <input class="rd-control" asp-for="Code" maxlength="6" inputmode="numeric" placeholder="••••••" autocomplete="one-time-code" required
                        style="letter-spacing:7px;text-align:center;font-size:17px;font-variant-numeric:tabular-nums" autofocus>
                 <button type="submit" class="rd-btn">@L["lg.verify"]</button>
             </div>
@@ -26,6 +26,6 @@
     </form>
 
     <div class="rc-auth-foot">
-        <a href="/admin/login">@L["lg.backAgent"]</a>
+        <a href="/admin/login">@L["lg.backLogin"]</a>
     </div>
 </div>

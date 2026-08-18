@@ -391,7 +391,7 @@
     <value>E-posta/kullanıcı adı veya parola hatalı.</value>
   </data>
   <data name="auth.lockedOut" xml:space="preserve">
-    <value>Çok fazla hatalı deneme — hesap 15 dakika kilitlendi.</value>
+    <value>Çok fazla hatalı deneme — hesap geçici olarak kilitlendi. Daha sonra tekrar deneyin.</value>
   </data>
   <data name="auth.notAdmin" xml:space="preserve">
     <value>Bu hesabın yönetici yetkisi yok.</value>
@@ -413,6 +413,9 @@
   </data>
   <data name="twofa.activate" xml:space="preserve">
     <value>Etkinleştir</value>
+  </data>
+  <data name="twofa.link" xml:space="preserve">
+    <value>Doğrulama uygulamasında aç</value>
   </data>
   <data name="search.noResults" xml:space="preserve">
     <value>Sonuç bulunamadı</value>
