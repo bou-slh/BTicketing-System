@@ -1,9 +1,242 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model AdminDashboardVm
 @{
-    ViewData["Title"] = SL["nav.dashboard"];
+    ViewData["Title"] = L["db.title"];
+
+    var inv = CultureInfo.InvariantCulture;
+    var n = Model.Buckets.Count;
+
+    // SVG geometry — the mockup's hardcoded chart, generalized: x runs 60..676,
+    // y runs 180 (0) .. 30 (max); coordinates always invariant-formatted.
+    string Fx(double v) => v.ToString("0.##", inv);
+    double X(int i) => n <= 1 ? 368 : 60 + i * 616.0 / (n - 1);
+    double Y(int v) => 180 - (Model.YMax <= 0 ? 0 : v * 150.0 / Model.YMax);
+    string Points(int[] series) => string.Join(" ", series.Select((v, i) => $"{Fx(X(i))},{Fx(Y(v))}"));
+
+    // Bucket x-label: monthly buckets use the mockup's db.mo* keys ("Oca"); daily and
+    // weekly buckets prefix the day number ("12 Tem"). Day numbers are data.
+    string BucketLabel(DashboardEngine.Bucket b) => b.Kind == DashboardEngine.BucketKind.Month
+        ? L.GetString($"db.mo{b.Month}")
+        : $"{b.Day} {L.GetString($"db.mo{b.Month}")}";
+
+    // "1s 42d" (mockup db.statFirstRespVal sample) from a real average.
+    string Duration(double? hours)
+    {
+        if (hours is not { } value)
+            return "—";
+        var h = (int)value;
+        var m = (int)Math.Round((value - h) * 60);
+        if (m == 60) { h++; m = 0; }
+        return h > 0 ? L.GetString("db.durHm", h, m) : L.GetString("db.durM", m);
+    }
+
+    // "%94" TR / "94%" EN.
+    string Pct(int value) => L.GetString("db.pctFmt", value);
+
+    // Tile delta note vs the previous equal-length period ("geçen döneme göre +%12").
+    string DeltaNote(string noteKey, int current, int previous)
+    {
+        if (previous <= 0)
+            return L.GetString("db.statNoPrev");
+        var delta = (int)Math.Round(100.0 * (current - previous) / previous);
+        var signed = (delta >= 0 ? "+" : "-") + Pct(Math.Abs(delta));
+        return L.GetString(noteKey, signed);
+    }
+
+    // "6,4 sa" (culture-aware decimal, localized unit).
+    string HoursCell(double? hours) => hours is { } v
+        ? L.GetString("db.hoursFmt", v.ToString("0.0", CultureInfo.CurrentCulture))
+        : "—";
+
+    // Canonical querystring so the range form / sort headers / export preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, string? tabOver = null,
+        string path = "/admin/dashboard")
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("start", Model.Range.StartDate.ToString("yyyy-MM-dd"));
+        Add("range", Model.Range.RangeKey);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        Add("tab", tabOver);
+        return path + "?" + string.Join("&", parts);
+    }
+    string SortUrl(string key, string tab) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc", tabOver: tab)
+        : BuildUrl(sortOver: key, dirOver: "desc", tabOver: tab);
+    string SortClass(string key) =>
+        Model.Sort != key ? "num sortable" : Model.Desc ? "num sortable sorted-desc" : "num sortable sorted-asc";
+
+    // SVG x-axis labels as raw markup (Razor reserves <text> inside code blocks).
+    string XLabels()
+    {
+        var sb = new System.Text.StringBuilder();
+        for (var i = 0; i < n; i++)
+        {
+            if (i % Model.LabelEvery == 0)
+            {
+                sb.Append($"<text x=\"{Fx(X(i))}\" y=\"205\">{System.Net.WebUtility.HtmlEncode(BucketLabel(Model.Buckets[i]))}</text>");
+            }
+        }
+        return sb.ToString();
+    }
+
+    // One stats table (the three panels share the mockup's column set).
+    void StatTable(string panelId, string tabKey, string nameKey, IReadOnlyList<DashboardEngine.StatRow> rows)
+    {
+        <div class="rd-tab-panel @(Model.ActiveTab == tabKey ? "active" : null)" id="@panelId" style="overflow-x:auto">
+            <table class="rd-table">
+                <thead>
+                    <tr>
+                        <th>@L[nameKey]</th>
+                        <th class="@SortClass("opened")"><a href="@SortUrl("opened", tabKey)">@L["db.colOpened"]</a></th>
+                        <th class="@SortClass("assigned")"><a href="@SortUrl("assigned", tabKey)">@L["db.colAssigned"]</a></th>
+                        <th class="@SortClass("overdue")"><a href="@SortUrl("overdue", tabKey)">@L["db.colOverdue"]</a></th>
+                        <th class="@SortClass("closed")"><a href="@SortUrl("closed", tabKey)">@L["db.colClosed"]</a></th>
+                        <th class="@SortClass("reopened")"><a href="@SortUrl("reopened", tabKey)">@L["db.colReopened"]</a></th>
+                        <th class="num">@L["db.colService"]</th>
+                        <th class="num">@L["db.colResponse"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in rows)
+                    {
+                        <tr>
+                            <td>@row.Name</td>
+                            <td class="num">@row.Opened</td>
+                            <td class="num">@row.Assigned</td>
+                            <td class="num">@row.Overdue</td>
+                            <td class="num">@row.Closed</td>
+                            <td class="num">@row.Reopened</td>
+                            <td class="num">@HoursCell(row.AvgServiceHours)</td>
+                            <td class="num">@HoursCell(row.AvgResponseHours)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 }
-<!-- Placeholder: ported in a later stage (/port-page). Chrome parity only. -->
+
 <div class="bo-page-head">
     <div>
-        <h1>@SL["nav.dashboard"]</h1>
+        <h1>@L["db.title"]</h1>
+        <p>@L["db.subtitle"]</p>
+    </div>
+    <form class="actions" style="flex-wrap:wrap" method="get" action="/admin/dashboard">
+        <input type="hidden" name="sort" value="@Model.Sort">
+        <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+        <input type="hidden" name="tab" value="@Model.ActiveTab">
+        <input type="date" class="rd-control" name="start"
+               value="@Model.Range.StartDate.ToString("yyyy-MM-dd")" title="@L["db.startDate"]">
+        <select class="rd-control" name="range">
+            <option value="30" selected="@(Model.Range.RangeKey == "30")">@L["db.range30"]</option>
+            <option value="quarter" selected="@(Model.Range.RangeKey == "quarter")">@L["db.rangeQ"]</option>
+            <option value="year" selected="@(Model.Range.RangeKey == "year")">@L["db.rangeY"]</option>
+        </select>
+        <button type="submit" class="rd-btn-primary">@SL["common.apply"]</button>
+    </form>
+</div>
+
+<div class="rd-grid-4" style="margin-bottom:20px">
+    <div class="rd-stat">
+        <div class="rd-stat-label">@L["db.statOpened"]</div>
+        <div class="rd-stat-value">@Model.Tiles.Opened</div>
+        <div class="rd-stat-note">@DeltaNote("db.statOpenedNote", Model.Tiles.Opened, Model.PrevOpened)</div>
+    </div>
+    <div class="rd-stat">
+        <div class="rd-stat-label">@L["db.statSolved"]</div>
+        <div class="rd-stat-value">@Model.Tiles.Closed</div>
+        <div class="rd-stat-note">@DeltaNote("db.statSolvedNote", Model.Tiles.Closed, Model.PrevClosed)</div>
+    </div>
+    <div class="rd-stat">
+        <div class="rd-stat-label">@L["db.statFirstResp"]</div>
+        <div class="rd-stat-value">@Duration(Model.Tiles.AvgFirstResponseHours)</div>
+        <div class="rd-stat-note">@L["db.statFirstRespNote"]</div>
+    </div>
+    <div class="rd-stat">
+        <div class="rd-stat-label">@L["db.statSla"]</div>
+        <div class="rd-stat-value">@(Model.Tiles.SlaCompliancePct is { } sla ? Pct(sla) : "—")</div>
+        <div class="rd-stat-note">@L["db.statSlaNote"]</div>
+    </div>
+</div>
+
+<div class="rd-surface" style="margin-bottom:20px">
+    <div class="rd-surface-head">
+        <span>@L["db.activity"]</span>
+        <span class="spacer"></span>
+        <span class="text-sm rd-muted" style="display:inline-flex;align-items:center;gap:6px">
+            <span style="width:11px;height:11px;border-radius:3px;background:var(--rd-primary);display:inline-block"></span>
+            <span>@L["db.legendOpened"]</span>
+        </span>
+        <span class="text-sm rd-muted" style="display:inline-flex;align-items:center;gap:6px">
+            <span style="width:16px;border-top:2px dashed var(--rd-muted);display:inline-block"></span>
+            <span>@L["db.legendClosed"]</span>
+        </span>
+    </div>
+    <div class="rd-surface-body" style="overflow-x:auto">
+        <svg viewBox="0 0 700 220" width="100%" style="min-width:560px;display:block" role="img" aria-label="@L["db.chartAria"]">
+            <!-- gridlines -->
+            <line x1="44" y1="30"  x2="688" y2="30"  stroke="var(--rd-border-soft)"/>
+            <line x1="44" y1="80"  x2="688" y2="80"  stroke="var(--rd-border-soft)"/>
+            <line x1="44" y1="130" x2="688" y2="130" stroke="var(--rd-border-soft)"/>
+            <line x1="44" y1="180" x2="688" y2="180" stroke="var(--rd-border)"/>
+            <!-- y labels -->
+            <text x="36" y="34"  text-anchor="end" font-size="11" fill="var(--rd-muted)">@Model.YMax</text>
+            <text x="36" y="84"  text-anchor="end" font-size="11" fill="var(--rd-muted)">@(Model.YMax * 2 / 3)</text>
+            <text x="36" y="134" text-anchor="end" font-size="11" fill="var(--rd-muted)">@(Model.YMax / 3)</text>
+            <text x="36" y="184" text-anchor="end" font-size="11" fill="var(--rd-muted)">0</text>
+            <!-- series: resolved (muted reference, dashed) -->
+            <polyline fill="none" stroke="var(--rd-muted)" stroke-width="2" stroke-dasharray="5 4"
+              stroke-linecap="round" stroke-linejoin="round"
+              points="@Points(Model.ClosedSeries)"/>
+            <!-- series: opened (brand) -->
+            <polyline fill="none" stroke="var(--rd-primary)" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"
+              points="@Points(Model.OpenedSeries)"/>
+            <!-- dots: resolved (native <title> hover tooltips, B10) -->
+            <g fill="var(--rd-muted)" stroke="var(--rd-surface)" stroke-width="1.5">
+                @for (var i = 0; i < n; i++)
+                {
+                    <circle cx="@Fx(X(i))" cy="@Fx(Y(Model.ClosedSeries[i]))" r="3"><title>@BucketLabel(Model.Buckets[i]) · @L["db.legendClosed"]: @Model.ClosedSeries[i]</title></circle>
+                }
+            </g>
+            <!-- dots: opened -->
+            <g fill="var(--rd-primary)" stroke="var(--rd-surface)" stroke-width="1.5">
+                @for (var i = 0; i < n; i++)
+                {
+                    <circle cx="@Fx(X(i))" cy="@Fx(Y(Model.OpenedSeries[i]))" r="3.5"><title>@BucketLabel(Model.Buckets[i]) · @L["db.legendOpened"]: @Model.OpenedSeries[i]</title></circle>
+                }
+            </g>
+            <!-- x labels (Razor reserves the <text> tag inside code blocks — emitted raw, values HTML-encoded) -->
+            <g font-size="11" fill="var(--rd-muted)" text-anchor="middle">@Html.Raw(XLabels())</g>
+        </svg>
+    </div>
+</div>
+
+<div class="rd-surface">
+    <div class="rd-surface-head">
+        <span>@L["db.stats"]</span>
+        <span class="spacer"></span>
+        @* Mockup's dead Dışa Aktar button → CSV of the current range (tickets export precedent). *@
+        <a class="rd-btn rd-btn-sm rd-btn-ghost" href="@BuildUrl(path: "/admin/dashboard/export")">@SL["common.export"]</a>
+    </div>
+    <div class="rd-surface-body">
+        <div class="rd-tabs" data-tabs>
+            <button class="@(Model.ActiveTab == "dept" ? "active" : null)" data-tab="db-panel-dept">@L["db.tabDept"]</button>
+            <button class="@(Model.ActiveTab == "topic" ? "active" : null)" data-tab="db-panel-topic">@L["db.tabTopic"]</button>
+            <button class="@(Model.ActiveTab == "agent" ? "active" : null)" data-tab="db-panel-agent">@L["db.tabAgent"]</button>
+        </div>
+
+        @{
+            StatTable("db-panel-dept", "dept", "db.tabDept", Model.DeptRows);
+            StatTable("db-panel-topic", "topic", "db.tabTopic", Model.TopicRows);
+            StatTable("db-panel-agent", "agent", "db.tabAgent", Model.AgentRows);
+        }
     </div>
 </div>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="db.title" xml:space="preserve">
+    <value>Panel</value>
+  </data>
+  <data name="db.subtitle" xml:space="preserve">
+    <value>Tüm ekiplerin talep hacmine ve yanıt performansına genel bakış.</value>
+  </data>
+  <data name="db.range30" xml:space="preserve">
+    <value>Son 30 gün</value>
+  </data>
+  <data name="db.rangeQ" xml:space="preserve">
+    <value>Bu çeyrek</value>
+  </data>
+  <data name="db.rangeY" xml:space="preserve">
+    <value>Bu yıl</value>
+  </data>
+  <data name="db.startDate" xml:space="preserve">
+    <value>Başlangıç tarihi</value>
+  </data>
+  <data name="db.statOpened" xml:space="preserve">
+    <value>Açılan</value>
+  </data>
+  <data name="db.statSolved" xml:space="preserve">
+    <value>Çözülen</value>
+  </data>
+  <data name="db.statFirstResp" xml:space="preserve">
+    <value>Ort. İlk Yanıt</value>
+  </data>
+  <data name="db.statSla" xml:space="preserve">
+    <value>SLA Uyumu</value>
+  </data>
+  <data name="db.statOpenedNote" xml:space="preserve">
+    <value>geçen döneme göre {0}</value>
+  </data>
+  <data name="db.statSolvedNote" xml:space="preserve">
+    <value>geçen döneme göre {0}</value>
+  </data>
+  <data name="db.statFirstRespNote" xml:space="preserve">
+    <value>hedef: 2 saat</value>
+  </data>
+  <data name="db.statSlaNote" xml:space="preserve">
+    <value>hedef: %90</value>
+  </data>
+  <data name="db.activity" xml:space="preserve">
+    <value>Talep Aktivitesi</value>
+  </data>
+  <data name="db.legendOpened" xml:space="preserve">
+    <value>Açılan</value>
+  </data>
+  <data name="db.legendClosed" xml:space="preserve">
+    <value>Çözülen</value>
+  </data>
+  <data name="db.stats" xml:space="preserve">
+    <value>İstatistikler</value>
+  </data>
+  <data name="db.tabDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="db.tabTopic" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="db.tabAgent" xml:space="preserve">
+    <value>Temsilci</value>
+  </data>
+  <data name="db.colOpened" xml:space="preserve">
+    <value>Açılan</value>
+  </data>
+  <data name="db.colAssigned" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="db.colOverdue" xml:space="preserve">
+    <value>Geciken</value>
+  </data>
+  <data name="db.colClosed" xml:space="preserve">
+    <value>Kapatılan</value>
+  </data>
+  <data name="db.colReopened" xml:space="preserve">
+    <value>Yeniden Açılan</value>
+  </data>
+  <data name="db.colService" xml:space="preserve">
+    <value>Servis Süresi</value>
+  </data>
+  <data name="db.colResponse" xml:space="preserve">
+    <value>Yanıt Süresi</value>
+  </data>
+  <data name="db.mo9" xml:space="preserve">
+    <value>Eyl</value>
+  </data>
+  <data name="db.mo10" xml:space="preserve">
+    <value>Eki</value>
+  </data>
+  <data name="db.mo11" xml:space="preserve">
+    <value>Kas</value>
+  </data>
+  <data name="db.mo12" xml:space="preserve">
+    <value>Ara</value>
+  </data>
+  <data name="db.pctFmt" xml:space="preserve">
+    <value>%{0}</value>
+  </data>
+  <data name="db.statNoPrev" xml:space="preserve">
+    <value>geçen dönem verisi yok</value>
+  </data>
+  <data name="db.durHm" xml:space="preserve">
+    <value>{0}s {1}d</value>
+  </data>
+  <data name="db.durM" xml:space="preserve">
+    <value>{0}d</value>
+  </data>
+  <data name="db.hoursFmt" xml:space="preserve">
+    <value>{0} sa</value>
+  </data>
+  <data name="db.chartAria" xml:space="preserve">
+    <value>Talep aktivitesi grafiği</value>
+  </data>
+  <data name="db.colGroup" xml:space="preserve">
+    <value>Grup</value>
+  </data>
+</root>

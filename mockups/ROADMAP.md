@@ -650,7 +650,22 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       needs canon sign-off); staff-wide Identity lockout stays 5 attempts/15 min (15 ≠ the mockup's
       selected 30 — align when settings-agents ports); shared auth.lockedOut copy de-hardcoded from
       "15 dakika" to duration-neutral. +5 tests (AdminAuthTests) — suite 167.)*
-- [ ] **dashboard.html** — date range re-renders data-driven charts with tooltips; export; 3 stats tables sortable (B10)
+- [x] **dashboard.html** — date range re-renders data-driven charts with tooltips; export; 3 stats tables sortable (B10)
+      *(S7; DashboardEngine (TicketListEngine-style split for testability): range resolution (start + 30d/
+      quarter/year — "Bu çeyrek"/"Bu yıl" = CALENDAR period of the start date, chart capped at today —
+      needs canon sign-off), daily/weekly/monthly buckets reproducing the mockup's Oca..Ağu year-to-date
+      axis, NiceMax y-grid. Metric mapping: Açılan=CreatedAt, Çözülen/Kapatılan=ClosedAt, Atanan="assigned"
+      thread events (sparse in seed — only the hero's), Geciken=IsOverdue on opened-in-range, Yeniden
+      Açılan=ReopenedAt, Servis=avg(close−create), Yanıt=avg(first staff Response−create), SLA Uyumu=%
+      closed on/before due; tile deltas vs equal-length previous period. Chart SVG generated with the
+      mockup's exact structure from real aggregates; native <title> hover tooltips INVENTED (B10 asks for
+      tooltips, mockup has none). 3 tables: 5 sortable columns = B1 server-sort links, tab preserved via
+      ?tab=. Export = ONE CSV of all three tables w/ Grup column (UTF-8 BOM). Invented keys: db.mo9–12,
+      pctFmt, statNoPrev, durHm/durM/hoursFmt, chartAria (mockup hardcodes a TR aria-label — mockup bug),
+      colGroup; tile notes parameterized "geçen döneme göre {0}". Canon notes: agent table keeps the
+      mockup's FULL staff names (vs §2 short-name cell convention); thread events don't snapshot dept/
+      topic/assignee so groups use the ticket's CURRENT values (deviation from osTicket per-event
+      snapshots); no empty-state variant (mockup defines none).)*
 - [ ] **system-info.html** — real server/PHP→.NET runtime/db info; update check
 - [ ] **system-logs.html** — filters + Apply work; purge deletes; row detail dialog (B1/B2)
 - [ ] **audit-logs.html** — filters/export/pagination; rows drill down to the audited object (B10)

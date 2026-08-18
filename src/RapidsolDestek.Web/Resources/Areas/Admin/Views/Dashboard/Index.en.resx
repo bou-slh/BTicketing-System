@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="db.title" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="db.subtitle" xml:space="preserve">
+    <value>Overview of ticket volume and response performance across all teams.</value>
+  </data>
+  <data name="db.range30" xml:space="preserve">
+    <value>Last 30 days</value>
+  </data>
+  <data name="db.rangeQ" xml:space="preserve">
+    <value>This quarter</value>
+  </data>
+  <data name="db.rangeY" xml:space="preserve">
+    <value>This year</value>
+  </data>
+  <data name="db.startDate" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="db.statOpened" xml:space="preserve">
+    <value>Opened</value>
+  </data>
+  <data name="db.statSolved" xml:space="preserve">
+    <value>Resolved</value>
+  </data>
+  <data name="db.statFirstResp" xml:space="preserve">
+    <value>Avg. First Response</value>
+  </data>
+  <data name="db.statSla" xml:space="preserve">
+    <value>SLA Compliance</value>
+  </data>
+  <data name="db.statOpenedNote" xml:space="preserve">
+    <value>{0} vs previous period</value>
+  </data>
+  <data name="db.statSolvedNote" xml:space="preserve">
+    <value>{0} vs previous period</value>
+  </data>
+  <data name="db.statFirstRespNote" xml:space="preserve">
+    <value>target: 2 hours</value>
+  </data>
+  <data name="db.statSlaNote" xml:space="preserve">
+    <value>target: 90%</value>
+  </data>
+  <data name="db.activity" xml:space="preserve">
+    <value>Ticket Activity</value>
+  </data>
+  <data name="db.legendOpened" xml:space="preserve">
+    <value>Opened</value>
+  </data>
+  <data name="db.legendClosed" xml:space="preserve">
+    <value>Resolved</value>
+  </data>
+  <data name="db.stats" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="db.tabDept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="db.tabTopic" xml:space="preserve">
+    <value>Topic</value>
+  </data>
+  <data name="db.tabAgent" xml:space="preserve">
+    <value>Agent</value>
+  </data>
+  <data name="db.colOpened" xml:space="preserve">
+    <value>Opened</value>
+  </data>
+  <data name="db.colAssigned" xml:space="preserve">
+    <value>Assigned</value>
+  </data>
+  <data name="db.colOverdue" xml:space="preserve">
+    <value>Overdue</value>
+  </data>
+  <data name="db.colClosed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="db.colReopened" xml:space="preserve">
+    <value>Reopened</value>
+  </data>
+  <data name="db.colService" xml:space="preserve">
+    <value>Service Time</value>
+  </data>
+  <data name="db.colResponse" xml:space="preserve">
+    <value>Response Time</value>
+  </data>
+  <data name="db.mo9" xml:space="preserve">
+    <value>Sep</value>
+  </data>
+  <data name="db.mo10" xml:space="preserve">
+    <value>Oct</value>
+  </data>
+  <data name="db.mo11" xml:space="preserve">
+    <value>Nov</value>
+  </data>
+  <data name="db.mo12" xml:space="preserve">
+    <value>Dec</value>
+  </data>
+  <data name="db.pctFmt" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="db.statNoPrev" xml:space="preserve">
+    <value>no previous-period data</value>
+  </data>
+  <data name="db.durHm" xml:space="preserve">
+    <value>{0}h {1}m</value>
+  </data>
+  <data name="db.durM" xml:space="preserve">
+    <value>{0}m</value>
+  </data>
+  <data name="db.hoursFmt" xml:space="preserve">
+    <value>{0} h</value>
+  </data>
+  <data name="db.chartAria" xml:space="preserve">
+    <value>Ticket activity chart</value>
+  </data>
+  <data name="db.colGroup" xml:space="preserve">
+    <value>Group</value>
+  </data>
+</root>
