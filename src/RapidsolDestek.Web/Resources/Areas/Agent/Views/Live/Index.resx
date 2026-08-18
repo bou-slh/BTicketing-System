@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="lv.title" xml:space="preserve">
+    <value>Canlı İzleme</value>
+  </data>
+  <data name="lv.sub" xml:space="preserve">
+    <value>Gelen talepler gerçek zamanlı izleniyor</value>
+  </data>
+  <data name="lv.pause" xml:space="preserve">
+    <value>Duraklat</value>
+  </data>
+  <data name="lv.autoNote" xml:space="preserve">
+    <value>6 saniyede bir yenilenir</value>
+  </data>
+  <data name="lv.colNew" xml:space="preserve">
+    <value>Yeni</value>
+  </data>
+  <data name="lv.colUnassigned" xml:space="preserve">
+    <value>Atanmamış</value>
+  </data>
+  <data name="lv.colWaiting" xml:space="preserve">
+    <value>Yanıt Bekleyen</value>
+  </data>
+  <data name="lv.colSla" xml:space="preserve">
+    <value>SLA Riskli</value>
+  </data>
+  <data name="lv.colEffort" xml:space="preserve">
+    <value>Efor Onayında</value>
+  </data>
+  <data name="lv.claim" xml:space="preserve">
+    <value>Üstlen</value>
+  </data>
+  <data name="lv.open" xml:space="preserve">
+    <value>Aç</value>
+  </data>
+  <data name="lv.feed" xml:space="preserve">
+    <value>Canlı Akış</value>
+  </data>
+  <data name="lv.team" xml:space="preserve">
+    <value>Ekip Durumu</value>
+  </data>
+  <data name="lv.evtCreated" xml:space="preserve">
+    <value>{0} yeni talep açıldı — {1}</value>
+  </data>
+  <data name="lv.evtAssigned" xml:space="preserve">
+    <value>{0} şu temsilciye atandı: {1}</value>
+  </data>
+  <data name="lv.evtUserReply" xml:space="preserve">
+    <value>{0} kullanıcı yanıtı geldi — {1}</value>
+  </data>
+  <data name="lv.evtSolved" xml:space="preserve">
+    <value>{0} çözüldü olarak işaretlendi</value>
+  </data>
+  <data name="lv.evtSlaRisk" xml:space="preserve">
+    <value>{0} SLA riskine girdi — {1}</value>
+  </data>
+  <data name="lv.evtEffortProposed" xml:space="preserve">
+    <value>{0} için {1} saat efor onaya sunuldu — {2}</value>
+  </data>
+  <data name="lv.evtEffortApproved" xml:space="preserve">
+    <value>{1} {0} eforunu onayladı</value>
+  </data>
+  <data name="lv.evtEffortRejected" xml:space="preserve">
+    <value>{1} {0} eforunu reddetti</value>
+  </data>
+  <data name="lv.agoNow" xml:space="preserve">
+    <value>şimdi</value>
+  </data>
+  <data name="lv.agoMin" xml:space="preserve">
+    <value>{0} dk önce</value>
+  </data>
+  <data name="lv.agoHour" xml:space="preserve">
+    <value>{0} sa önce</value>
+  </data>
+  <data name="lv.agoDay" xml:space="preserve">
+    <value>{0} gün önce</value>
+  </data>
+  <data name="lv.hoursShort" xml:space="preserve">
+    <value>{0}s</value>
+  </data>
+  <data name="lv.openCount" xml:space="preserve">
+    <value>{0} açık talep</value>
+  </data>
+  <data name="lv.errDenied" xml:space="preserve">
+    <value>Bu işlem için yetkiniz yok</value>
+  </data>
+  <data name="lv.errVacation" xml:space="preserve">
+    <value>Tatil modunda atama yapılamaz</value>
+  </data>
+  <data name="lv.errTaken" xml:space="preserve">
+    <value>Talep zaten üstlenilmiş</value>
+  </data>
+  <data name="lv.errDerived" xml:space="preserve">
+    <value>Bu sütun türetilmiş durumdan oluşur — kart buraya taşınamaz</value>
+  </data>
+  <data name="lv.errBlocked" xml:space="preserve">
+    <value>Efor onayı bekleyen talep kapatılamaz</value>
+  </data>
+  <data name="lv.errNotFound" xml:space="preserve">
+    <value>Talep bulunamadı</value>
+  </data>
+  <data name="lv.errGeneric" xml:space="preserve">
+    <value>İşlem gerçekleştirilemedi</value>
+  </data>
+</root>

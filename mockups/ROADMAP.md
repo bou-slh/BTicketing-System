@@ -188,7 +188,10 @@ pattern dead in the mockups.
   (portal open → agent proposes 6h → portal approves → agent resolves); live board updates <1s across two
   browsers. *(Golden-path leg GREEN 2026-08-15: `GoldenPathTests` — fresh portal user opens a Bordro ticket,
   saydin proposes 6h via dlg-effort, portal Onayla flips the card, agent replies + resolves to Çözüldü,
-  both panels reflect it. Live-board leg still open until live.html ports.)*
+  both panels reflect it. Live-board leg GREEN 2026-08-18: `LiveBoardTests` — two browser contexts
+  (dkaya + kyilmaz) sit on /agent/live over LiveBoardHub; dkaya's Üstlen appears on kyilmaz's board in
+  <1 s (1 s-timeout web-first assert plus a stopwatch guard), then both boards converge the card out of
+  the claimable columns. Fresh-seed dependent like the rest of the suite.)*
 - **S7 — Admin area** (42 pages, §6.3; B1–B4 everywhere, builders, settings actually consumed by the engine).
   *Gate*: every setting round-trips (flip block-work-until-approved → S4 guard flips); builder-created
   queue/form/list/filter demonstrably affects the agent panel.
@@ -287,8 +290,40 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       users name/email; orgs name; 5/group) filled into a debounce+fetch dropdown (rd.js) — chosen over a
       results page as the lighter invention since the mockups define NO search-results UI: dropdown design
       (app.css .bo-search-results) needs canon sign-off; admin topbar search + settings scope TODO(S7).)*
-- [ ] **live.html** — SignalR board: real column membership, drag between columns, Üstlen/claim, ticker from
-      domain events, recoverable SLA countdown, pause (B7)
+- [x] **live.html** — SignalR board: real column membership, drag between columns, Üstlen/claim, ticker from
+      domain events, recoverable SLA countdown, pause (B7) *(S6; /agent/live + LiveBoardHub at
+      /agent/live/hub (Staff policy; mounted under /agent so the Contextual cookie scheme + maintenance
+      rewrite behave), signalr.min.js 10.0.11 vendored under wwwroot/lib. Membership real via
+      LiveBoardEngine over QueueEngine visibility: Yeni=status "new"; Atanmamış=open-state unassigned
+      minus "new"; Yanıt Bekleyen=status "wait"; SLA Riskli=IsOverdue flag OR due (DueDate??
+      EstimatedDueDate) inside an INVENTED 10-min risk window (mockup samples imply <8 min, no canon —
+      needs sign-off); Efor Onayında=active pending proposal — columns are independent queries (the
+      mockup itself shows R716555 in two). Fan-out via per-department hub groups mirroring
+      VisibleTicketsAsync (edge flagged: assigned-to-me-outside-my-depts and AssignedOnly agents can
+      receive a ticker line for a dept ticket they can't open; their board refetch stays correctly
+      filtered). LiveBoardHandler (Web/Services, EffortEmailHandler precedent) maps TicketCreated/
+      Assigned/StatusChanged/Transferred/ThreadEntryAdded/Effort*/TicketOverdue → "BoardChanged"
+      (clients refetch /agent/live/state, 200 ms debounce outliving the effort events' in-transaction
+      dispatch) + "Ticker" items localized client-side (invented lv.evt*/lv.ago*/lv.err* TR-EN twins;
+      TR assigned copy is suffix-safe "şu temsilciye atandı: X" vs mockup "Deniz Kaya'ya atandı" —
+      needs canon sign-off; effort-reject line + ✗ emoji invented as the ✓ twin). Üstlen = ClaimAsync
+      (vacation guard applies) + best-effort new→open transition so a claimed Yeni card moves; the
+      mockup shows Üstlen on already-assigned cards too — kept for DOM parity, server refuses with the
+      lv.errTaken toast. Drag = POST /agent/live/move: Yeni/Yanıt Bekleyen are status transitions,
+      Atanmamış is a release (ticket.assign check); SLA Riskli/Efor Onayında are derived-membership →
+      refused, card snaps back + toast; drag/drop styles added in app.css (mockup ships none). SLA
+      chips tick every 6 s (lv.autoNote cadence) with warn<5 min/danger<1 min from the mockup JS (the
+      static markup contradicts it — 12:37 rendered warn; the JS thresholds win) and RECOVER both on
+      tick and on event re-render; chips render only where a due instant or overdue flag exists (most
+      seeds have neither — EstimatedDueDate stays unset until the S8 SLA sweep, which also owns
+      TicketOverdue: subscribed, never raised yet), remaining >1 h shows as total-minutes mm:ss. Pause
+      buffers ticker items (cap 8) and collapses membership refetches into one on resume — flagged
+      choice, the mockup simply drops its fake tick. Canlı Akış backfill reconstructs the last 6 items
+      from thread_event rows + customer messages (domain events aren't persisted); Ekip Durumu = the
+      active+visible roster with live open counts, away = Tatil Modu (canon defines no presence
+      source — needs sign-off). E2E `LiveBoardTests` needs a freshly seeded DB (the single Destek
+      claimable card is consumed per run — suite precedent, GoldenPath's hero step is equally
+      one-shot).)*
 - [x] **tickets.html** — queue tree filters for real (counts live, active state moves); B1 full list engine;
       advanced-search dialog: rule rows add/remove, column picker, sort, **save as queue**; export CSV; bulk bar
       *(S6; queue tree renders the seeded SavedQueue tree (+ the staff's personal queues under "Kayıtlı

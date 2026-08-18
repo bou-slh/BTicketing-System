@@ -1,0 +1,438 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model LiveBoardState
+@{
+    ViewData["Title"] = L["lv.title"];
+
+    var now = DateTimeOffset.UtcNow;
+
+    // Relative times per the mockup samples ("2 dk önce" / "1 sa önce"); the page JS
+    // re-derives the same strings from data-ago/data-ts stamps on every tick.
+    string Ago(DateTimeOffset ts)
+    {
+        var d = now - ts;
+        if (d.TotalMinutes < 1)
+            return L.GetString("lv.agoNow");
+        if (d.TotalMinutes < 60)
+            return L.GetString("lv.agoMin", (int)d.TotalMinutes);
+        if (d.TotalHours < 24)
+            return L.GetString("lv.agoHour", (int)d.TotalHours);
+        return L.GetString("lv.agoDay", (int)d.TotalDays);
+    }
+
+    string Hours(decimal? h) => h is not { } v ? "" :
+        v % 1 == 0 ? ((int)v).ToString(CultureInfo.InvariantCulture) : v.ToString("0.##", CultureInfo.InvariantCulture);
+
+    string MmSs(double seconds)
+    {
+        var s = Math.Max(0, (int)seconds);
+        return $"{s / 60:00}:{s % 60:00}";
+    }
+
+    // Feed emoji per the mockup ticker lines; ✗ (reject) is the invented twin of ✓.
+    string Emoji(string kind) => kind switch
+    {
+        "created" => "🟢",
+        "assigned" => "👤",
+        "userReply" => "💬",
+        "slaRisk" => "⏱",
+        "solved" => "✅",
+        "effortProposed" => "◷",
+        "effortApproved" => "✓",
+        "effortRejected" => "✗",
+        _ => "•",
+    };
+
+    string FeedText(LiveFeedVm f) => f.Kind switch
+    {
+        "created" => L.GetString("lv.evtCreated", f.Number, f.Org),
+        "assigned" => L.GetString("lv.evtAssigned", f.Number, f.Name ?? "—"),
+        "userReply" => L.GetString("lv.evtUserReply", f.Number, f.Org),
+        "solved" => L.GetString("lv.evtSolved", f.Number),
+        "slaRisk" => L.GetString("lv.evtSlaRisk", f.Number, f.Org),
+        "effortProposed" => L.GetString("lv.evtEffortProposed", f.Number, Hours(f.Hours), f.Org),
+        "effortApproved" => L.GetString("lv.evtEffortApproved", f.Number, f.Name ?? "—"),
+        "effortRejected" => L.GetString("lv.evtEffortRejected", f.Number, f.Name ?? "—"),
+        _ => f.Number,
+    };
+
+    // One card template for all five columns (mockup .lb-card): the effort column
+    // swaps the SLA chip for the hours pill and drops Üstlen; Yanıt Bekleyen and
+    // SLA Riskli show the assignee in the meta row, the rest show relative age.
+    // The page JS re-renders the same DOM client-side — keep the two in sync.
+    void Card(LiveCardVm c, string col)
+    {
+        var showAssignee = col is "waiting" or "sla";
+        <div class="lb-card" draggable="true" data-id="@c.Id" data-number="@c.Number">
+            @if (col == "effort")
+            {
+                <span class="rd-pill rd-pill-wait" style="float:right" title="@SL["status.effortWait"]">@L.GetString("lv.hoursShort", Hours(c.EffortHours))</span>
+            }
+            else if (c.Due is not null || c.Overdue)
+            {
+                var remaining = c.Due is { } due ? (due - now).TotalSeconds : 0;
+                var cls = c.Overdue || remaining < 60 ? " danger" : remaining < 300 ? " warn" : "";
+                <span class="lb-sla@(cls)" data-due="@(c.Due?.ToString("O"))" data-overdue="@(c.Overdue ? "" : null)">@MmSs(remaining)</span>
+            }
+            <a href="/agent/ticket-view?id=@c.Id">@c.Number</a>
+            <div class="subj">@c.Subject</div>
+            <div class="meta">
+                <span>@c.Org</span>·<span>@c.Topic</span>·@if (showAssignee)
+                {
+                    <span>@(c.Assignee ?? "—")</span>
+                }
+                else
+                {
+                    <span data-ago="@c.Created.ToString("O")">@Ago(c.Created)</span>
+                }
+            </div>
+            <div class="actions">
+                @if (col != "effort")
+                {
+                    <button class="rd-btn rd-btn-sm" data-claim>@L["lv.claim"]</button>
+                }
+                <a class="rd-btn rd-btn-sm rd-btn-ghost" href="/agent/ticket-view?id=@c.Id">@L["lv.open"]</a>
+            </div>
+        </div>
+    }
+
+    void Column(string col, string headKey, IReadOnlyList<LiveCardVm> cards)
+    {
+        <div class="lb-col" data-col="@col">
+            <div class="lb-col-head"><span>@L[headKey]</span><span class="count">@cards.Count</span></div>
+            @foreach (var c in cards)
+            {
+                Card(c, col);
+            }
+        </div>
+    }
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <h1><span class="rd-live-dot" style="vertical-align:middle;margin-right:8px"></span><span>@L["lv.title"]</span></h1>
+        <p>@L["lv.sub"]</p>
+    </div>
+    <div class="actions">
+        <span class="rd-muted text-sm">@L["lv.autoNote"]</span>
+        <button class="rd-btn rd-btn-ghost" id="lv-pause">@L["lv.pause"]</button>
+    </div>
+</div>
+
+<div class="lb-board" style="margin-bottom:22px" id="lv-board"
+     data-hub-url="/agent/live/hub" data-state-url="/agent/live/state"
+     data-claim-url="/agent/live/claim" data-move-url="/agent/live/move">
+    @{
+        Column("new", "lv.colNew", Model.New);
+        Column("unassigned", "lv.colUnassigned", Model.Unassigned);
+        Column("waiting", "lv.colWaiting", Model.Waiting);
+        Column("sla", "lv.colSla", Model.SlaRisk);
+        Column("effort", "lv.colEffort", Model.Effort);
+    }
+</div>
+
+<div class="rd-grid-2">
+    <!-- Live feed -->
+    <div class="rd-surface">
+        <div class="rd-surface-head">@L["lv.feed"]</div>
+        <div class="rd-surface-body" style="padding-top:6px;padding-bottom:6px">
+            <div class="lb-ticker" id="lv-ticker" aria-live="polite">
+                @foreach (var f in Model.Feed)
+                {
+                    <div class="item" data-ts="@f.Ts.ToString("O")"><span>@Emoji(f.Kind)</span><span>@FeedText(f)</span><time>@Ago(f.Ts)</time></div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Team status -->
+    <div class="rd-surface">
+        <div class="rd-surface-head">@L["lv.team"]</div>
+        <div class="rd-surface-body" style="display:flex;flex-direction:column;gap:14px" id="lv-team">
+            @foreach (var m in Model.Team)
+            {
+                <div style="display:flex;align-items:center;gap:12px">
+                    <div class="rd-avatar @(m.Away ? "away" : "online")">@m.Initials</div>
+                    <b style="font-size:13px">@m.Name</b>
+                    <span class="rd-muted text-sm" style="margin-left:auto">@L.GetString("lv.openCount", m.OpenCount)</span>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@* Antiforgery source for the JS POSTs (rd.js save-as-queue scavenge precedent). *@
+<form method="post" hidden>@Html.AntiForgeryToken()</form>
+
+<script type="application/json" id="lv-i18n">
+    @Json.Serialize(new
+    {
+        claim = L["lv.claim"].Value,
+        open = L["lv.open"].Value,
+        effortWait = SL["status.effortWait"].Value,
+        hoursShort = L["lv.hoursShort"].Value,
+        openCount = L["lv.openCount"].Value,
+        agoNow = L["lv.agoNow"].Value,
+        agoMin = L["lv.agoMin"].Value,
+        agoHour = L["lv.agoHour"].Value,
+        agoDay = L["lv.agoDay"].Value,
+        evtCreated = L["lv.evtCreated"].Value,
+        evtAssigned = L["lv.evtAssigned"].Value,
+        evtUserReply = L["lv.evtUserReply"].Value,
+        evtSolved = L["lv.evtSolved"].Value,
+        evtSlaRisk = L["lv.evtSlaRisk"].Value,
+        evtEffortProposed = L["lv.evtEffortProposed"].Value,
+        evtEffortApproved = L["lv.evtEffortApproved"].Value,
+        evtEffortRejected = L["lv.evtEffortRejected"].Value,
+        errors = new
+        {
+            denied = L["lv.errDenied"].Value,
+            vacation = L["lv.errVacation"].Value,
+            taken = L["lv.errTaken"].Value,
+            derived = L["lv.errDerived"].Value,
+            blocked = L["lv.errBlocked"].Value,
+            notfound = L["lv.errNotFound"].Value,
+            generic = L["lv.errGeneric"].Value,
+        },
+    })
+</script>
+
+<script src="~/lib/signalr/signalr.min.js"></script>
+@* Page-scoped (rd.js precedent: no board/hub contract there). Replaces the mockup's
+   fabricated 6-second tick with the LiveBoardHub feed: BoardChanged → debounced
+   /agent/live/state refetch + full re-render (SLA chips thereby RECOVER from
+   warn/danger when the underlying state changes); Ticker → Canlı Akış items.
+   The 200ms refetch debounce also outlives the effort-event in-transaction
+   dispatch window (see LiveBoardHandler). *@
+<script>
+(function () {
+    "use strict";
+    var I18N = JSON.parse(document.getElementById("lv-i18n").textContent);
+    var EMOJI = { created: "🟢", assigned: "👤", userReply: "💬", slaRisk: "⏱", solved: "✅", effortProposed: "◷", effortApproved: "✓", effortRejected: "✗" };
+    var board = document.getElementById("lv-board");
+    var ticker = document.getElementById("lv-ticker");
+    var team = document.getElementById("lv-team");
+    var paused = false, dirty = false, buffered = [], refetchTimer = null, dragId = null, dragCol = null;
+
+    function fmt(tpl) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        return tpl.replace(/\{(\d)\}/g, function (_, i) { return args[+i] != null ? args[+i] : ""; });
+    }
+    function esc(s) {
+        var d = document.createElement("span");
+        d.textContent = s == null ? "" : String(s);
+        return d.innerHTML;
+    }
+    function hoursText(h) { return h == null ? "" : String(+h); }
+    function ago(iso) {
+        var s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+        if (s < 60) return I18N.agoNow;
+        if (s < 3600) return fmt(I18N.agoMin, Math.floor(s / 60));
+        if (s < 86400) return fmt(I18N.agoHour, Math.floor(s / 3600));
+        return fmt(I18N.agoDay, Math.floor(s / 86400));
+    }
+    function mmss(s) { return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); }
+
+    // ---- SLA countdown (mockup cadence: 6 s tick; thresholds warn <5 min,
+    // danger <1 min from the mockup JS). classList.toggle both ways = chips also
+    // recover on tick, not only on re-render.
+    function tickSla() {
+        if (paused) return;
+        board.querySelectorAll(".lb-sla").forEach(function (chip) {
+            var due = chip.getAttribute("data-due");
+            var overdue = chip.hasAttribute("data-overdue");
+            var s = due ? Math.max(0, Math.floor((new Date(due).getTime() - Date.now()) / 1000)) : 0;
+            chip.textContent = mmss(s);
+            chip.classList.toggle("danger", overdue || s < 60);
+            chip.classList.toggle("warn", !overdue && s >= 60 && s < 300);
+        });
+        board.querySelectorAll(".lb-card [data-ago]").forEach(function (el) { el.textContent = ago(el.getAttribute("data-ago")); });
+        ticker.querySelectorAll(".item[data-ts]").forEach(function (item) { item.querySelector("time").textContent = ago(item.getAttribute("data-ts")); });
+    }
+    setInterval(tickSla, 6000);
+
+    // ---- Client card factory — mirror of the Razor Card() template above.
+    function cardEl(c, col) {
+        var el = document.createElement("div");
+        el.className = "lb-card";
+        el.setAttribute("draggable", "true");
+        el.dataset.id = c.id;
+        el.dataset.number = c.number;
+        var chip = "";
+        if (col === "effort")
+            chip = '<span class="rd-pill rd-pill-wait" style="float:right" title="' + esc(I18N.effortWait) + '">' + esc(fmt(I18N.hoursShort, hoursText(c.effortHours))) + "</span>";
+        else if (c.due || c.overdue)
+            chip = '<span class="lb-sla"' + (c.due ? ' data-due="' + esc(c.due) + '"' : "") + (c.overdue ? ' data-overdue=""' : "") + "></span>";
+        var third = col === "waiting" || col === "sla"
+            ? "<span>" + esc(c.assignee || "—") + "</span>"
+            : '<span data-ago="' + esc(c.created) + '">' + esc(ago(c.created)) + "</span>";
+        var view = "/agent/ticket-view?id=" + c.id;
+        el.innerHTML = chip
+            + '<a href="' + view + '">' + esc(c.number) + "</a>"
+            + '<div class="subj">' + esc(c.subject) + "</div>"
+            + '<div class="meta"><span>' + esc(c.org) + "</span>·<span>" + esc(c.topic) + "</span>·" + third + "</div>"
+            + '<div class="actions">'
+            + (col === "effort" ? "" : '<button class="rd-btn rd-btn-sm" data-claim>' + esc(I18N.claim) + "</button>")
+            + '<a class="rd-btn rd-btn-sm rd-btn-ghost" href="' + view + '">' + esc(I18N.open) + "</a></div>";
+        return el;
+    }
+
+    function render(state) {
+        var map = { "new": state.new, unassigned: state.unassigned, waiting: state.waiting, sla: state.slaRisk, effort: state.effort };
+        Object.keys(map).forEach(function (key) {
+            var colEl = board.querySelector('[data-col="' + key + '"]');
+            colEl.querySelectorAll(".lb-card").forEach(function (c) { c.remove(); });
+            (map[key] || []).forEach(function (c) { colEl.appendChild(cardEl(c, key)); });
+            colEl.querySelector(".lb-col-head .count").textContent = (map[key] || []).length;
+        });
+        team.innerHTML = state.team.map(function (m) {
+            return '<div style="display:flex;align-items:center;gap:12px">'
+                + '<div class="rd-avatar ' + (m.away ? "away" : "online") + '">' + esc(m.initials) + "</div>"
+                + '<b style="font-size:13px">' + esc(m.name) + "</b>"
+                + '<span class="rd-muted text-sm" style="margin-left:auto">' + esc(fmt(I18N.openCount, m.openCount)) + "</span></div>";
+        }).join("");
+        tickSlaNow();
+    }
+    function tickSlaNow() { var p = paused; paused = false; tickSla(); paused = p; }
+
+    function scheduleRefetch() {
+        if (paused) { dirty = true; return; }
+        clearTimeout(refetchTimer);
+        refetchTimer = setTimeout(refetch, 200);
+    }
+    async function refetch() {
+        try {
+            var res = await fetch(board.getAttribute("data-state-url"));
+            if (!res.ok) return;
+            render(await res.json());
+        } catch (e) { /* transient; next signal retries */ }
+    }
+
+    // ---- Ticker (Canlı Akış) — column-reverse: appended item shows on top.
+    function tickerText(ev) {
+        switch (ev.kind) {
+            case "created": return fmt(I18N.evtCreated, ev.number, ev.org);
+            case "assigned": return fmt(I18N.evtAssigned, ev.number, ev.name || "—");
+            case "userReply": return fmt(I18N.evtUserReply, ev.number, ev.org);
+            case "solved": return fmt(I18N.evtSolved, ev.number);
+            case "slaRisk": return fmt(I18N.evtSlaRisk, ev.number, ev.org);
+            case "effortProposed": return fmt(I18N.evtEffortProposed, ev.number, hoursText(ev.hours), ev.org);
+            case "effortApproved": return fmt(I18N.evtEffortApproved, ev.number, ev.name || "—");
+            case "effortRejected": return fmt(I18N.evtEffortRejected, ev.number, ev.name || "—");
+            default: return null;
+        }
+    }
+    function addTickerItem(ev) {
+        var text = tickerText(ev);
+        if (!text) return;
+        var item = document.createElement("div");
+        item.className = "item";
+        item.setAttribute("data-ts", ev.ts);
+        item.setAttribute("data-kind", ev.kind);
+        item.innerHTML = "<span>" + (EMOJI[ev.kind] || "•") + "</span><span>" + esc(text) + "</span><time>" + esc(ago(ev.ts)) + "</time>";
+        ticker.appendChild(item);
+        while (ticker.children.length > 8) ticker.removeChild(ticker.firstChild);
+    }
+
+    // ---- Mutations (rd.js fetch-POST + antiforgery-scavenge idiom).
+    async function post(url, fields) {
+        var fd = new FormData();
+        Object.keys(fields).forEach(function (k) { fd.append(k, fields[k]); });
+        var token = document.querySelector('form[method="post"] input[name="__RequestVerificationToken"]');
+        if (token) fd.append("__RequestVerificationToken", token.value);
+        try {
+            var res = await fetch(url, { method: "POST", body: fd });
+            if (!res.ok) {
+                var code = "generic";
+                try { code = (await res.json()).code || "generic"; } catch (e) { }
+                window.RD.toast(I18N.errors[code] || I18N.errors.generic, "error");
+                return false;
+            }
+            return true;
+        } catch (e) {
+            window.RD.toast(I18N.errors.generic, "error");
+            return false;
+        }
+    }
+
+    board.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-claim]");
+        if (!btn) return;
+        var card = btn.closest(".lb-card");
+        post(board.getAttribute("data-claim-url"), { id: card.dataset.id });
+    });
+
+    // ---- Drag between columns (B7): no optimistic move — a successful drop
+    // re-renders via the hub signal; a refusal leaves the card in place (the
+    // snap-back) with the server's toast code.
+    board.addEventListener("dragstart", function (e) {
+        var card = e.target.closest(".lb-card");
+        if (!card) return;
+        dragId = card.dataset.id;
+        dragCol = card.closest(".lb-col").getAttribute("data-col");
+        card.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+        try { e.dataTransfer.setData("text/plain", dragId); } catch (err) { }
+    });
+    board.addEventListener("dragend", function () {
+        dragId = dragCol = null;
+        board.querySelectorAll(".lb-card.dragging").forEach(function (c) { c.classList.remove("dragging"); });
+        board.querySelectorAll(".lb-col.drop-target").forEach(function (c) { c.classList.remove("drop-target"); });
+    });
+    board.addEventListener("dragover", function (e) {
+        var col = e.target.closest(".lb-col");
+        if (!col || dragId == null) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        col.classList.add("drop-target");
+    });
+    board.addEventListener("dragleave", function (e) {
+        var col = e.target.closest(".lb-col");
+        if (col && !col.contains(e.relatedTarget)) col.classList.remove("drop-target");
+    });
+    board.addEventListener("drop", function (e) {
+        var col = e.target.closest(".lb-col");
+        if (!col || dragId == null) return;
+        e.preventDefault();
+        col.classList.remove("drop-target");
+        var id = dragId, from = dragCol;
+        dragId = dragCol = null;
+        if (col.getAttribute("data-col") === from) return;
+        post(board.getAttribute("data-move-url"), { id: id, col: col.getAttribute("data-col") });
+    });
+
+    // ---- Pause (mockup #lv-pause): visibly stops updates; ticker items queue
+    // (capped like the feed) and membership refetches collapse into one dirty
+    // flag applied on resume — flagged choice, the mockup just drops its tick.
+    document.getElementById("lv-pause").addEventListener("click", function () {
+        paused = !paused;
+        this.style.opacity = paused ? "0.5" : "";
+        if (!paused) {
+            buffered.forEach(addTickerItem);
+            buffered = [];
+            if (dirty) { dirty = false; refetch(); }
+        }
+    });
+
+    // ---- Hub.
+    var conn = new signalR.HubConnectionBuilder()
+        .withUrl(board.getAttribute("data-hub-url"))
+        .withAutomaticReconnect()
+        .build();
+    conn.on("BoardChanged", function () { scheduleRefetch(); });
+    conn.on("Ticker", function (ev) {
+        if (paused) {
+            buffered.push(ev);
+            if (buffered.length > 8) buffered.shift();
+            return;
+        }
+        addTickerItem(ev);
+    });
+    conn.onreconnected(function () { scheduleRefetch(); });
+    conn.start()
+        .then(function () { board.setAttribute("data-connected", ""); }) // E2E readiness marker
+        .catch(function () { /* page still renders; reconnect handles retries */ });
+
+    tickSlaNow();
+})();
+</script>

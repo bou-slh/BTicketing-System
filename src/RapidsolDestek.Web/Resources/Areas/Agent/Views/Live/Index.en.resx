@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="lv.title" xml:space="preserve">
+    <value>Live Board</value>
+  </data>
+  <data name="lv.sub" xml:space="preserve">
+    <value>Incoming tickets are monitored in real time</value>
+  </data>
+  <data name="lv.pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="lv.autoNote" xml:space="preserve">
+    <value>Refreshes every 6 seconds</value>
+  </data>
+  <data name="lv.colNew" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="lv.colUnassigned" xml:space="preserve">
+    <value>Unassigned</value>
+  </data>
+  <data name="lv.colWaiting" xml:space="preserve">
+    <value>Awaiting Reply</value>
+  </data>
+  <data name="lv.colSla" xml:space="preserve">
+    <value>SLA Risk</value>
+  </data>
+  <data name="lv.colEffort" xml:space="preserve">
+    <value>Effort Approval</value>
+  </data>
+  <data name="lv.claim" xml:space="preserve">
+    <value>Claim</value>
+  </data>
+  <data name="lv.open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="lv.feed" xml:space="preserve">
+    <value>Live Feed</value>
+  </data>
+  <data name="lv.team" xml:space="preserve">
+    <value>Team Status</value>
+  </data>
+  <data name="lv.evtCreated" xml:space="preserve">
+    <value>{0} new ticket opened — {1}</value>
+  </data>
+  <data name="lv.evtAssigned" xml:space="preserve">
+    <value>{0} assigned to {1}</value>
+  </data>
+  <data name="lv.evtUserReply" xml:space="preserve">
+    <value>{0} customer reply received — {1}</value>
+  </data>
+  <data name="lv.evtSolved" xml:space="preserve">
+    <value>{0} marked as solved</value>
+  </data>
+  <data name="lv.evtSlaRisk" xml:space="preserve">
+    <value>{0} entered SLA risk — {1}</value>
+  </data>
+  <data name="lv.evtEffortProposed" xml:space="preserve">
+    <value>{1}h effort submitted for approval on {0} — {2}</value>
+  </data>
+  <data name="lv.evtEffortApproved" xml:space="preserve">
+    <value>{1} approved the effort on {0}</value>
+  </data>
+  <data name="lv.evtEffortRejected" xml:space="preserve">
+    <value>{1} rejected the effort on {0}</value>
+  </data>
+  <data name="lv.agoNow" xml:space="preserve">
+    <value>now</value>
+  </data>
+  <data name="lv.agoMin" xml:space="preserve">
+    <value>{0} min ago</value>
+  </data>
+  <data name="lv.agoHour" xml:space="preserve">
+    <value>{0} h ago</value>
+  </data>
+  <data name="lv.agoDay" xml:space="preserve">
+    <value>{0} d ago</value>
+  </data>
+  <data name="lv.hoursShort" xml:space="preserve">
+    <value>{0}h</value>
+  </data>
+  <data name="lv.openCount" xml:space="preserve">
+    <value>{0} open tickets</value>
+  </data>
+  <data name="lv.errDenied" xml:space="preserve">
+    <value>You do not have permission for this action</value>
+  </data>
+  <data name="lv.errVacation" xml:space="preserve">
+    <value>Assignment is not possible in vacation mode</value>
+  </data>
+  <data name="lv.errTaken" xml:space="preserve">
+    <value>This ticket is already claimed</value>
+  </data>
+  <data name="lv.errDerived" xml:space="preserve">
+    <value>This column is derived — cards cannot be moved here</value>
+  </data>
+  <data name="lv.errBlocked" xml:space="preserve">
+    <value>A ticket awaiting effort approval cannot be closed</value>
+  </data>
+  <data name="lv.errNotFound" xml:space="preserve">
+    <value>Ticket not found</value>
+  </data>
+  <data name="lv.errGeneric" xml:space="preserve">
+    <value>The action could not be completed</value>
+  </data>
+</root>

@@ -126,6 +126,7 @@ builder.Services.AddAuthorization(o =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache(); // agent tickets queue-count cache (S6)
+builder.Services.AddSignalR(); // B7 live board (agent/live)
 builder.Services.AddScoped<ISidebarBadgeService, SidebarBadgeService>();
 builder.Services.AddSingleton<IAppEmailSender, DevLoggingEmailSender>();
 
@@ -134,6 +135,19 @@ builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHand
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRevised>, EffortEmailHandler>();
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortApproved>, EffortEmailHandler>();
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRejected>, EffortEmailHandler>();
+
+// B7 live board: domain events → LiveBoardHub broadcasts (EffortEmailHandler precedent).
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketCreated>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketAssigned>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketStatusChanged>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketTransferred>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.ThreadEntryAdded>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortProposed>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRevised>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortWithdrawn>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortApproved>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRejected>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketOverdue>, LiveBoardHandler>();
 
 var app = builder.Build();
 
@@ -153,6 +167,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers().WithStaticAssets();
+// Under /agent so the Contextual scheme picks the staff cookie and the
+// maintenance middleware's portal rewrite never touches the hub path.
+app.MapHub<RapidsolDestek.Web.Hubs.LiveBoardHub>(RapidsolDestek.Web.Hubs.LiveBoardHub.Path);
 
 // Dev bootstrap: migrate + seed (idempotent).
 if (app.Environment.IsDevelopment())

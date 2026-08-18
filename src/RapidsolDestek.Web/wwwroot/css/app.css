@@ -103,3 +103,9 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
 .uv-override-form { display: none; gap: 6px; margin-top: 6px; align-items: center; }
 .uv-override-form.open { display: flex; }
 .uv-override-form .rd-control { min-width: 0; flex: 1; }
+
+/* Agent live board (S6, B7): drag-between-columns affordances — the mockup ships
+   no drag styles (drag is a ROADMAP B7 behavior, flagged on the live.html row). */
+.lb-card[draggable="true"] { cursor: grab; }
+.lb-card.dragging { opacity: 0.5; }
+.lb-col.drop-target { outline: 2px dashed var(--rd-petrol); outline-offset: -2px; }
