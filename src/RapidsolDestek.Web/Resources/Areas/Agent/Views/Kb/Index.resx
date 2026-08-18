@@ -45,6 +45,9 @@
   <data name="kb.catsHelp" xml:space="preserve">
     <value>Kategoriler portalda gruplama, temsilci panelinde filtreleme için kullanılır.</value>
   </data>
+  <data name="kb.catSave" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
   <data name="kb.catNameLabel" xml:space="preserve">
     <value>Kategori adı</value>
   </data>

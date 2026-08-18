@@ -55,7 +55,7 @@
     <value>Şablon metnini yazın…</value>
   </data>
   <data name="cn.fBodyHelp" xml:space="preserve">
-    <value>Değişkenler desteklenir: %{ticket.number}, %{user.name}, %{agent.name}…</value>
+    <value>Değişkenler desteklenir: %{{ticket.number}}, %{{user.name}}, %{{agent.name}}…</value>
   </data>
   <data name="cn.dlgEditTitle" xml:space="preserve">
     <value>Hazır Yanıtı Düzenle</value>

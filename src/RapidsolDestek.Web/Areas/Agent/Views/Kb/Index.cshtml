@@ -161,7 +161,7 @@ else
                 <input type="hidden" name="cat" value="@Model.CategoryId">
                 <input class="rd-control" name="name" value="@c.Name" aria-label="@L["kb.catNameLabel"]" required>
                 <span class="text-sm rd-muted">@c.ArticleCount</span>
-                <button type="submit" class="rd-btn rd-btn-sm">@SL["common.save"]</button>
+                <button type="submit" class="rd-btn rd-btn-sm">@L["kb.catSave"]</button>
                 <button type="submit" class="rd-btn rd-btn-sm rd-btn-danger"
                         formaction="/agent/kb/cats/delete" formnovalidate
                         aria-label="@SL["common.delete"]">✕</button>

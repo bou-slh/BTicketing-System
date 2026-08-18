@@ -45,6 +45,9 @@
   <data name="kb.catsHelp" xml:space="preserve">
     <value>Categories are used for grouping on the portal and filtering in the agent panel.</value>
   </data>
+  <data name="kb.catSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="kb.catNameLabel" xml:space="preserve">
     <value>Category name</value>
   </data>

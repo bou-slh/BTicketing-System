@@ -55,7 +55,7 @@
     <value>Write the template text…</value>
   </data>
   <data name="cn.fBodyHelp" xml:space="preserve">
-    <value>Variables are supported: %{ticket.number}, %{user.name}, %{agent.name}…</value>
+    <value>Variables are supported: %{{ticket.number}}, %{{user.name}}, %{{agent.name}}…</value>
   </data>
   <data name="cn.dlgEditTitle" xml:space="preserve">
     <value>Edit Canned Response</value>

@@ -69,6 +69,16 @@ if (!args.includes('--mockups-only')) {
           e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)])
       : [];
   const all = walk(RES).filter((f) => f.endsWith('.resx'));
+  // Unescaped braces: IHtmlLocalizer runs values through string.Format, so any `{` that is not
+  // `{{` or a `{0}`-style placeholder throws FormatException mid-response (aborts the page).
+  for (const f of all) {
+    const rel = path.relative(ROOT, f);
+    for (const m of fs.readFileSync(f, 'utf8').matchAll(/<data name="([^"]+)"[\s\S]*?<value>([\s\S]*?)<\/value>/g)) {
+      const bare = m[2].replace(/\{\{|\}\}/g, '');
+      if (/\{(?!\d+\})/.test(bare) || /(?<!\d)\}/.test(bare.replace(/\{\d+\}/g, '')))
+        report('unescaped brace (string.Format hazard)', m[1], 'in', rel);
+    }
+  }
   let pairs = 0;
   for (const tr of all.filter((f) => !f.endsWith('.en.resx'))) {
     pairs++;

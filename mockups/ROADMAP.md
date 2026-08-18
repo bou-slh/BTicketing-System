@@ -323,7 +323,7 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       active+visible roster with live open counts, away = Tatil Modu (canon defines no presence
       source — needs sign-off). E2E `LiveBoardTests` needs a freshly seeded DB (the single Destek
       claimable card is consumed per run — suite precedent, GoldenPath's hero step is equally
-      one-shot).)*
+      one-shot). Differ 2026-08-18 PASS; canon question: mockup shows an SLA countdown chip on EVERY card, app only where a due instant exists (seed sparse until S8 EstimatedDueDate sweep).)*
 - [x] **tickets.html** — queue tree filters for real (counts live, active state moves); B1 full list engine;
       advanced-search dialog: rule rows add/remove, column picker, sort, **save as queue**; export CSV; bulk bar
       *(S6; queue tree renders the seeded SavedQueue tree (+ the staff's personal queues under "Kayıtlı
@@ -586,7 +586,7 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       dropping the key; closing brace now anchored to its own line (matters for S7 template pages).
       Invented keys (TR/EN twins): cn.dlgEditTitle/fEnabled/fEnabledHelp/deleteConfirm/emptyTitle/emptyText/
       dateFmt/updToday/updYesterday/toastCreated/toastSaved/errTitleInUse/errInvalid/errDenied/bulkNone/
-      bulkDone/bulkPartial.)*
+      bulkDone/bulkPartial. Differ 2026-08-18: page 500ed in all states — cn.fBodyHelp resx value carried unescaped %{var} braces and IHtmlLocalizer string.Formats every value → FormatException mid-response; braces now escaped {{ }} and check-i18n.mjs gained an unescaped-brace guard; dialogs re-diffed after the fix.)*
 - [x] **directory.html** — search + department filter work; mailto/tel links *(S6; presence from real sessions still TODO — current pills are a stub: LastLoginAt/OnVacation-derived; B1 header sort TODO)*
 - [x] **profile.html** — saves; 2FA setup ("Yapılandır"); vacation switch has effect (assignment guard);
       signature editor; language select switches culture *(S6; /agent/profile (new ProfileController,
@@ -616,7 +616,7 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       AdminTotpKey enabled TOTP). Invented keys (TR/EN twins): pf.dateFmt/dlg2fa/dlg2faKey/dlg2faHelp/
       dlg2faLink/dlg2faCode/toastSaved/toastPass/toast2faOn/err2faCode/err2faNeedsSetup/
       err2faAdminRequired/errCurrentWrong/errPasswordWeak/errPasswordMismatch/errInvalid/errEmailInUse
-      + lg.twofaHelpEmail. +9 tests (AgentProfileTests, incl. a full-pipeline render smoke) — suite 144.)*
+      + lg.twofaHelpEmail. +9 tests (AgentProfileTests, incl. a full-pipeline render smoke) — suite 144. Differ 2026-08-18 PASS; canon note: seeded username uakin vs mockup umit.akin (login name choice — needs canon call).)*
 
 ### 6.3 Admin (42 pages)
 
