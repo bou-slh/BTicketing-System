@@ -185,6 +185,20 @@ public static class DomainSeeder
         var saydin = MakeStaff("saydin", "Selin", "Aydın", depBordro, roleTemsilci, "104", vacation: true);
         var kyilmaz = MakeStaff("kyilmaz", "Kerem", "Yılmaz", depDestek, roleTemsilci, "105");
         var adogan = MakeStaff("adogan", "Aslı", "Doğan", depDestek, roleTemsilci, "106");
+
+        // agent/profile.html canon — uakin's own profile page: mobile, signature text,
+        // default signature "İmzam", 1-minute auto-refresh, last password change
+        // "12 Haz 2026". TwoFactorMethod mirrors the Identity seed: App only when the
+        // dev AdminTotpKey actually enabled TOTP for the admin (kept honest otherwise).
+        uakin.Mobile = "+90 532 555 0101";
+        uakin.Signature = "Ümit Yaşar Akın\nKıdemli Bordro Danışmanı · RapidSol\nTel: +90 212 555 0101 (Dahili 101)";
+        uakin.DefaultSignatureType = SignatureType.Mine;
+        uakin.AutoRefreshMinutes = 1;
+        uakin.PasswordChangedAt = On(2026, 6, 12);
+        uakin.TwoFactorMethod = await db.StaffUsers.AnyAsync(u => u.UserName == "uakin" && u.TwoFactorEnabled)
+            ? TwoFactorMethod.App
+            : TwoFactorMethod.None;
+
         db.Staff.AddRange(uakin, mcetin, dkaya, saydin, kyilmaz, adogan);
         await db.SaveChangesAsync();
 

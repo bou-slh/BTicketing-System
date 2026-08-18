@@ -190,8 +190,11 @@ public class TicketViewController(
             .Select(s => new StatusOptionVm(s.Id, s.Key))
             .ToListAsync(ct);
 
+        // Vacation guard (profile Tatil Modu): agents on vacation leave the dlg-assign
+        // list (mockup lists only available agents); the current assignee stays visible
+        // so the select keeps showing reality. TicketService guards the POST too.
         var assignees = (await db.Staff
-                .Where(s => s.IsActive)
+                .Where(s => s.IsActive && (!s.OnVacation || s.Id == ticket.StaffId))
                 .OrderBy(s => s.FirstName)
                 .Select(s => new { s.Id, s.FullName })
                 .ToListAsync(ct))

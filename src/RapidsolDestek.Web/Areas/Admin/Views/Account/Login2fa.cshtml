@@ -20,7 +20,8 @@
                        style="letter-spacing:7px;text-align:center;font-size:17px;font-variant-numeric:tabular-nums" autofocus>
                 <button type="submit" class="rd-btn">@L["lg.verify"]</button>
             </div>
-            <div class="rd-help">@L["lg.twofaHelp"]</div>
+            @* Email-code variant (profile pf-2fa "E-posta kodu"): honest help text per method. *@
+            <div class="rd-help">@(ViewData["TwofaEmail"] is true ? L["lg.twofaHelpEmail"] : L["lg.twofaHelp"])</div>
         </div>
     </form>
 

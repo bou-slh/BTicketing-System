@@ -45,4 +45,7 @@
   <data name="lg.backAgent" xml:space="preserve">
     <value>← Temsilci girişine dön</value>
   </data>
+  <data name="lg.twofaHelpEmail" xml:space="preserve">
+    <value>E-posta adresinize gönderilen 6 haneli kodu girin.</value>
+  </data>
 </root>

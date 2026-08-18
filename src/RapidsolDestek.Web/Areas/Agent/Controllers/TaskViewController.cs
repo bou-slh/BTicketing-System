@@ -101,8 +101,10 @@ public class TaskViewController(
             .ToList();
 
         // ---- Dialog data (ticket-view assign "s:/t:" + transfer precedents) ---------
+        // Vacation guard (profile Tatil Modu): vacationing agents drop out of the Ata
+        // options; the current assignee stays listed (ticket-view precedent).
         var assignees = (await db.Staff
-                .Where(s => s.IsActive)
+                .Where(s => s.IsActive && (!s.OnVacation || s.Id == task.StaffId))
                 .OrderBy(s => s.FirstName)
                 .Select(s => new { s.Id, s.FullName })
                 .ToListAsync(ct))

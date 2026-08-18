@@ -92,8 +92,9 @@ public class TasksController(AppDbContext db, ITaskService taskService) : Contro
             .OrderBy(d => d.Id)
             .Select(d => new DeptOptionVm(d.Id, d.Name))
             .ToListAsync(ct);
+        // Vacation guard (profile Tatil Modu): a new task can't target a vacationing agent.
         var assignees = await db.Staff
-            .Where(s => s.IsActive)
+            .Where(s => s.IsActive && !s.OnVacation)
             .OrderBy(s => s.FirstName)
             .Select(s => new TaskAssigneeVm(s.Id, s.FullName))
             .ToListAsync(ct);

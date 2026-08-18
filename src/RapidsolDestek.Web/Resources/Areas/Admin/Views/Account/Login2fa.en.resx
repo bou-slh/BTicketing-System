@@ -45,4 +45,7 @@
   <data name="lg.backAgent" xml:space="preserve">
     <value>← Back to agent sign-in</value>
   </data>
+  <data name="lg.twofaHelpEmail" xml:space="preserve">
+    <value>Enter the 6-digit code sent to your email address.</value>
+  </data>
 </root>

@@ -47,6 +47,35 @@ public class Staff : TimestampedEntity
 
     public SignatureType DefaultSignatureType { get; set; } = SignatureType.None;
 
+    /// <summary>
+    /// Two-step verification method (agent/profile.html pf-2fa select). App/Email
+    /// imply the Identity user's TwoFactorEnabled; App additionally requires a
+    /// confirmed authenticator enrollment ("Yapılandır" dialog).
+    /// </summary>
+    public TwoFactorMethod TwoFactorMethod { get; set; } = TwoFactorMethod.None;
+
+    /// <summary>Stamped by the profile password change (pf.passHelp "Son değişiklik").</summary>
+    public DateTimeOffset? PasswordChangedAt { get; set; }
+
+    // ----- Working preferences (agent/profile.html Tercihler tab). Persisted from
+    // the profile save; list-engine/rendering consumption is TODO(S7) with the
+    // admin settings work (ROADMAP §6.3). -----
+
+    /// <summary>Rows per page on list pages (pf-pagesize: 10/25/50).</summary>
+    public int PageSize { get; set; } = 25;
+
+    /// <summary>Auto-refresh interval for ticket lists in minutes; 0 = off (pf-refresh).</summary>
+    public int AutoRefreshMinutes { get; set; }
+
+    /// <summary>Queue shown when the Tickets tab opens (pf-queue).</summary>
+    public AgentDefaultQueue DefaultQueue { get; set; } = AgentDefaultQueue.Open;
+
+    /// <summary>Thread view order (pf-order: newest/oldest first).</summary>
+    public bool ThreadOrderNewestFirst { get; set; } = true;
+
+    /// <summary>Time format (pf-timefmt: 24-hour vs 12-hour AM/PM).</summary>
+    public bool Use24HourTime { get; set; } = true;
+
     public string? Notes { get; set; }
 
     public DateTimeOffset? LastLoginAt { get; set; }
@@ -61,6 +90,21 @@ public enum SignatureType
     None,
     Mine,
     Department,
+}
+
+/// <summary>Profile pf-2fa options: Devre dışı / Doğrulama uygulaması / E-posta kodu.</summary>
+public enum TwoFactorMethod
+{
+    None,
+    App,
+    Email,
+}
+
+/// <summary>Profile pf-queue options: Açık Talepler / Taleplerim.</summary>
+public enum AgentDefaultQueue
+{
+    Open,
+    Mine,
 }
 
 /// <summary>

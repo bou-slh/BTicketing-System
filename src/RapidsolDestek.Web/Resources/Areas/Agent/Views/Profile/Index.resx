@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="pf.title" xml:space="preserve">
+    <value>Profilim</value>
+  </data>
+  <data name="pf.subtitle" xml:space="preserve">
+    <value>Hesap bilgilerinizi, çalışma tercihlerinizi ve imzanızı yönetin.</value>
+  </data>
+  <data name="pf.tabAccount" xml:space="preserve">
+    <value>Hesap</value>
+  </data>
+  <data name="pf.tabPrefs" xml:space="preserve">
+    <value>Tercihler</value>
+  </data>
+  <data name="pf.tabSig" xml:space="preserve">
+    <value>İmza</value>
+  </data>
+  <data name="pf.personal" xml:space="preserve">
+    <value>Kişisel Bilgiler</value>
+  </data>
+  <data name="pf.fFirst" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="pf.fLast" xml:space="preserve">
+    <value>Soyad</value>
+  </data>
+  <data name="pf.fEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="pf.fPhone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="pf.fExt" xml:space="preserve">
+    <value>Dahili</value>
+  </data>
+  <data name="pf.fMobile" xml:space="preserve">
+    <value>Mobil</value>
+  </data>
+  <data name="pf.auth" xml:space="preserve">
+    <value>Kimlik Doğrulama</value>
+  </data>
+  <data name="pf.fUsername" xml:space="preserve">
+    <value>Kullanıcı adı</value>
+  </data>
+  <data name="pf.password" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="pf.changePass" xml:space="preserve">
+    <value>Parola Değiştir</value>
+  </data>
+  <data name="pf.passHelp" xml:space="preserve">
+    <value>Son değişiklik: {0}.</value>
+  </data>
+  <data name="pf.f2fa" xml:space="preserve">
+    <value>İki adımlı doğrulama (2FA)</value>
+  </data>
+  <data name="pf.f2faNone" xml:space="preserve">
+    <value>Devre dışı</value>
+  </data>
+  <data name="pf.f2faApp" xml:space="preserve">
+    <value>Doğrulama uygulaması</value>
+  </data>
+  <data name="pf.f2faEmail" xml:space="preserve">
+    <value>E-posta kodu</value>
+  </data>
+  <data name="pf.configure" xml:space="preserve">
+    <value>Yapılandır</value>
+  </data>
+  <data name="pf.f2faHelp" xml:space="preserve">
+    <value>Girişte parolanıza ek olarak 6 haneli bir kod istenir.</value>
+  </data>
+  <data name="pf.statusHead" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="pf.vacation" xml:space="preserve">
+    <value>Tatil Modu</value>
+  </data>
+  <data name="pf.vacationHelp" xml:space="preserve">
+    <value>Etkinken size yeni talep atanmaz; mevcut talepleriniz kuyruğa alınır.</value>
+  </data>
+  <data name="pf.dlgPass" xml:space="preserve">
+    <value>Parola Değiştir</value>
+  </data>
+  <data name="pf.fCurPass" xml:space="preserve">
+    <value>Mevcut parola</value>
+  </data>
+  <data name="pf.fNewPass" xml:space="preserve">
+    <value>Yeni parola</value>
+  </data>
+  <data name="pf.fNewPass2" xml:space="preserve">
+    <value>Yeni parola (tekrar)</value>
+  </data>
+  <data name="pf.fPageSize" xml:space="preserve">
+    <value>Sayfa boyutu</value>
+  </data>
+  <data name="pf.fPageSizeHelp" xml:space="preserve">
+    <value>Liste sayfalarında bir seferde gösterilecek satır sayısı.</value>
+  </data>
+  <data name="pf.fRefresh" xml:space="preserve">
+    <value>Otomatik yenileme</value>
+  </data>
+  <data name="pf.refOff" xml:space="preserve">
+    <value>Kapalı</value>
+  </data>
+  <data name="pf.ref1" xml:space="preserve">
+    <value>1 dakika</value>
+  </data>
+  <data name="pf.ref3" xml:space="preserve">
+    <value>3 dakika</value>
+  </data>
+  <data name="pf.fRefreshHelp" xml:space="preserve">
+    <value>Talep listeleri seçilen aralıkta kendiliğinden yenilenir.</value>
+  </data>
+  <data name="pf.fQueue" xml:space="preserve">
+    <value>Varsayılan kuyruk</value>
+  </data>
+  <data name="pf.qOpen" xml:space="preserve">
+    <value>Açık Talepler</value>
+  </data>
+  <data name="pf.qMine" xml:space="preserve">
+    <value>Taleplerim</value>
+  </data>
+  <data name="pf.fQueueHelp" xml:space="preserve">
+    <value>Talepler sekmesi açıldığında gösterilecek kuyruk.</value>
+  </data>
+  <data name="pf.fThreadOrder" xml:space="preserve">
+    <value>Konu görünüm sırası</value>
+  </data>
+  <data name="pf.orderNewest" xml:space="preserve">
+    <value>En yeni üstte</value>
+  </data>
+  <data name="pf.orderOldest" xml:space="preserve">
+    <value>En eski üstte</value>
+  </data>
+  <data name="pf.fSig" xml:space="preserve">
+    <value>Varsayılan imza</value>
+  </data>
+  <data name="pf.sigMine" xml:space="preserve">
+    <value>İmzam</value>
+  </data>
+  <data name="pf.sigDept" xml:space="preserve">
+    <value>Departman imzası</value>
+  </data>
+  <data name="pf.sigNone" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="pf.fTz" xml:space="preserve">
+    <value>Zaman dilimi</value>
+  </data>
+  <data name="pf.fTimeFmt" xml:space="preserve">
+    <value>Saat biçimi</value>
+  </data>
+  <data name="pf.fmt24" xml:space="preserve">
+    <value>24 saat</value>
+  </data>
+  <data name="pf.fmt12" xml:space="preserve">
+    <value>12 saat (ÖÖ/ÖS)</value>
+  </data>
+  <data name="pf.fLang" xml:space="preserve">
+    <value>Tercih edilen dil</value>
+  </data>
+  <data name="pf.fLangHelp" xml:space="preserve">
+    <value>Panel arayüzü bu dilde açılır; kullanıcı yazışmalarını etkilemez.</value>
+  </data>
+  <data name="pf.sigLabel" xml:space="preserve">
+    <value>İmza metni</value>
+  </data>
+  <data name="pf.sigHelp" xml:space="preserve">
+    <value>İmza, gönderdiğiniz yanıtların altına otomatik eklenir.</value>
+  </data>
+  <data name="pf.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="pf.dlg2fa" xml:space="preserve">
+    <value>İki Adımlı Doğrulama Kurulumu</value>
+  </data>
+  <data name="pf.dlg2faKey" xml:space="preserve">
+    <value>Manuel anahtar</value>
+  </data>
+  <data name="pf.dlg2faHelp" xml:space="preserve">
+    <value>Anahtarı doğrulama uygulamanıza ekleyin, ardından uygulamanın ürettiği 6 haneli kodu girin.</value>
+  </data>
+  <data name="pf.dlg2faLink" xml:space="preserve">
+    <value>Doğrulama uygulamasında aç</value>
+  </data>
+  <data name="pf.dlg2faCode" xml:space="preserve">
+    <value>Doğrulama kodu</value>
+  </data>
+  <data name="pf.toastSaved" xml:space="preserve">
+    <value>Değişiklikler kaydedildi.</value>
+  </data>
+  <data name="pf.toastPass" xml:space="preserve">
+    <value>Parolanız güncellendi.</value>
+  </data>
+  <data name="pf.toast2faOn" xml:space="preserve">
+    <value>İki adımlı doğrulama etkinleştirildi.</value>
+  </data>
+  <data name="pf.err2faCode" xml:space="preserve">
+    <value>Kod doğrulanamadı. Lütfen yeniden deneyin.</value>
+  </data>
+  <data name="pf.err2faNeedsSetup" xml:space="preserve">
+    <value>Doğrulama uygulamasına geçmek için önce Yapılandır ile kurulumu tamamlayın.</value>
+  </data>
+  <data name="pf.err2faAdminRequired" xml:space="preserve">
+    <value>Yönetici hesaplarında iki adımlı doğrulama kapatılamaz.</value>
+  </data>
+  <data name="pf.errCurrentWrong" xml:space="preserve">
+    <value>Mevcut parola hatalı.</value>
+  </data>
+  <data name="pf.errPasswordWeak" xml:space="preserve">
+    <value>Parola en az 8 karakter olmalı; harf ve rakam içermelidir.</value>
+  </data>
+  <data name="pf.errPasswordMismatch" xml:space="preserve">
+    <value>Parolalar eşleşmiyor.</value>
+  </data>
+  <data name="pf.errInvalid" xml:space="preserve">
+    <value>Form doğrulanamadı. Lütfen alanları kontrol edin.</value>
+  </data>
+  <data name="pf.errEmailInUse" xml:space="preserve">
+    <value>Bu e-posta adresi başka bir hesapta kullanılıyor.</value>
+  </data>
+</root>

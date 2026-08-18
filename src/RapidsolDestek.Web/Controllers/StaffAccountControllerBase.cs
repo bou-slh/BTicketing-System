@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RapidsolDestek.Domain.Entities;
 using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Infrastructure.Identity;
 using RapidsolDestek.Web.Areas.Portal.Controllers;
@@ -54,7 +55,16 @@ public abstract class StaffAccountControllerBase(
 
         var result = await signIn.PasswordSignInAsync(user, vm.Password, isPersistent: false, lockoutOnFailure: true);
         if (result.RequiresTwoFactor)
+        {
+            // Profile pf-2fa "E-posta kodu": send the 6-digit code now; the shared
+            // Login2fa card verifies it against the Email token provider.
+            if (await TwoFactorMethodOfAsync(user) == TwoFactorMethod.Email && user.Email is { } to)
+            {
+                var code = await users.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
+                await mail.SendAsync(to, "RapidsolDestek", code);
+            }
             return Redirect($"{AreaPrefix}/login/2fa?returnUrl={Uri.EscapeDataString(vm.ReturnUrl ?? "")}");
+        }
         if (result.IsLockedOut)
         {
             ModelState.AddModelError(string.Empty, "lockedOut");
@@ -78,10 +88,33 @@ public abstract class StaffAccountControllerBase(
     /// <summary>
     /// Feeds the directory presence stub. ExecuteUpdate on purpose: a login is not a
     /// domain mutation, so it must not produce an AuditEvent via the interceptors.
+    /// Also applies the persisted profile language to the culture cookie so the panel
+    /// opens in the agent's preferred language (portal login/profile precedent).
     /// </summary>
-    private Task StampLastLoginAsync(StaffUser user) =>
-        db.Staff.Where(s => s.IdentityUserId == user.Id)
+    private async Task StampLastLoginAsync(StaffUser user)
+    {
+        await db.Staff.Where(s => s.IdentityUserId == user.Id)
             .ExecuteUpdateAsync(s => s.SetProperty(x => x.LastLoginAt, DateTimeOffset.UtcNow));
+
+        var language = await db.Staff.Where(s => s.IdentityUserId == user.Id)
+            .Select(s => s.Language).FirstOrDefaultAsync();
+        if (language is not null && CultureController.Supported.Contains(language))
+            CultureController.ApplyCultureCookie(Response, language);
+    }
+
+    /// <summary>Staff row's 2FA method (agent profile pf-2fa): picks the login verification provider.</summary>
+    protected Task<TwoFactorMethod> TwoFactorMethodOfAsync(StaffUser user) =>
+        db.Staff.Where(s => s.IdentityUserId == user.Id)
+            .Select(s => s.TwoFactorMethod).FirstOrDefaultAsync();
+
+    /// <summary>GET login/2fa: flags the email-code variant so the card's help text stays honest.</summary>
+    protected async Task<IActionResult> Login2faGetCore(string? returnUrl)
+    {
+        var user = await signIn.GetTwoFactorAuthenticationUserAsync();
+        if (user is not null && await TwoFactorMethodOfAsync(user) == TwoFactorMethod.Email)
+            ViewData["TwofaEmail"] = true;
+        return View("Login2fa", new StaffLogin2faVm { ReturnUrl = returnUrl });
+    }
 
     protected async Task<IActionResult> Login2faCore(StaffLogin2faVm vm)
     {
@@ -90,8 +123,14 @@ public abstract class StaffAccountControllerBase(
         var user = await signIn.GetTwoFactorAuthenticationUserAsync();
         if (user is null) return Redirect($"{AreaPrefix}/login");
 
+        var method = await TwoFactorMethodOfAsync(user);
+        if (method == TwoFactorMethod.Email)
+            ViewData["TwofaEmail"] = true; // keep the email help text on error re-renders
+
         var code = vm.Code.Replace(" ", "").Replace("-", "");
-        var result = await signIn.TwoFactorAuthenticatorSignInAsync(code, isPersistent: false, rememberClient: false);
+        var result = method == TwoFactorMethod.Email
+            ? await signIn.TwoFactorSignInAsync(TokenOptions.DefaultEmailProvider, code, isPersistent: false, rememberClient: false)
+            : await signIn.TwoFactorAuthenticatorSignInAsync(code, isPersistent: false, rememberClient: false);
         if (result.IsLockedOut)
         {
             ModelState.AddModelError(string.Empty, "lockedOut");

@@ -1,0 +1,269 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Agent.Controllers
+@model AgentProfileVm
+@{
+    ViewData["Title"] = L["pf.title"];
+
+    // Toast handoff: PRG keys via TempData, failed-save keys via ViewData["PfToastKey"]
+    // (users/canned precedent). All non-PRG keys are errors.
+    var toastKey = TempData["PfToast"] as string ?? ViewData["PfToastKey"] as string;
+    if (toastKey is not null)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["PfToastError"] is not null || ViewData["PfToastKey"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+}
+
+<div class="bo-page-head rc-hero">
+    <div>
+        <h1>@L["pf.title"]</h1>
+        <p>@L["pf.subtitle"]</p>
+    </div>
+</div>
+
+<form method="post" asp-area="Agent" asp-controller="Profile" asp-action="Index">
+    <div class="rd-tabs" data-tabs>
+        <button type="button" class="active" data-tab="pf-panel-account">@L["pf.tabAccount"]</button>
+        <button type="button" data-tab="pf-panel-prefs">@L["pf.tabPrefs"]</button>
+        <button type="button" data-tab="pf-panel-sig">@L["pf.tabSig"]</button>
+    </div>
+
+    <div class="rd-tab-panel active" id="pf-panel-account">
+        <div class="rd-surface" style="margin-bottom:20px">
+            <div class="rd-surface-head">@L["pf.personal"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-first">@L["pf.fFirst"]</label>
+                        <input id="pf-first" class="rd-control" asp-for="FirstName" required>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-last">@L["pf.fLast"]</label>
+                        <input id="pf-last" class="rd-control" asp-for="LastName" required>
+                    </div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="pf-email">@L["pf.fEmail"]</label>
+                    <input id="pf-email" type="email" class="rd-control" asp-for="Email" required>
+                </div>
+                <div class="rd-grid-3">
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-phone">@L["pf.fPhone"]</label>
+                        <input id="pf-phone" class="rd-control" asp-for="Phone">
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-ext">@L["pf.fExt"]</label>
+                        <input id="pf-ext" class="rd-control" asp-for="PhoneExt">
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-mobile">@L["pf.fMobile"]</label>
+                        <input id="pf-mobile" class="rd-control" asp-for="Mobile">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rd-surface" style="margin-bottom:20px">
+            <div class="rd-surface-head">@L["pf.auth"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="pf-username">@L["pf.fUsername"]</label>
+                    @* Display-only (mockup readonly input) — never posted. *@
+                    <input id="pf-username" class="rd-control" value="@Model.Username" readonly>
+                </div>
+                <div class="rd-field">
+                    <span class="rd-label">@L["pf.password"]</span>
+                    <button type="button" class="rd-btn" data-dialog-open="dlg-pass">@L["pf.changePass"]</button>
+                    @if (Model.PasswordChangedAt is { } passwordChanged)
+                    {
+                        @* pf.passHelp carries a {0} hole for the real change date (mockup sample: 12 Haz 2026). *@
+                        <div class="rd-help">@string.Format(L.GetString("pf.passHelp"), passwordChanged.ToLocalTime().ToString(L.GetString("pf.dateFmt"), CultureInfo.CurrentUICulture))</div>
+                    }
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="pf-2fa">@L["pf.f2fa"]</label>
+                    <div style="display:flex;gap:10px">
+                        <select id="pf-2fa" class="rd-control" style="width:auto;min-width:220px" name="TwoFactor">
+                            <option value="none" selected="@(Model.TwoFactor == "none")">@L["pf.f2faNone"]</option>
+                            <option value="app" selected="@(Model.TwoFactor == "app")">@L["pf.f2faApp"]</option>
+                            <option value="email" selected="@(Model.TwoFactor == "email")">@L["pf.f2faEmail"]</option>
+                        </select>
+                        @* Mockup's dead Yapılandır button gains data-dialog-open — dlg-2fa DOM is
+                           invented (the mockup defines no enrollment dialog; flagged in ROADMAP). *@
+                        <button type="button" class="rd-btn rd-btn-ghost" data-dialog-open="dlg-2fa">@L["pf.configure"]</button>
+                    </div>
+                    <div class="rd-help">@L["pf.f2faHelp"]</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rd-surface">
+            <div class="rd-surface-head">@L["pf.statusHead"]</div>
+            <div class="rd-surface-body">
+                <label class="rd-switch">
+                    <input type="checkbox" name="OnVacation" value="true" checked="@Model.OnVacation">
+                    <span class="track"></span>
+                    <span class="rd-switch-copy">
+                        <b>@L["pf.vacation"]</b>
+                        <small>@L["pf.vacationHelp"]</small>
+                    </span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="rd-tab-panel" id="pf-panel-prefs">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-pagesize">@L["pf.fPageSize"]</label>
+                        <select id="pf-pagesize" class="rd-control" name="PageSize">
+                            <option value="10" selected="@(Model.PageSize == 10)">10</option>
+                            <option value="25" selected="@(Model.PageSize == 25)">25</option>
+                            <option value="50" selected="@(Model.PageSize == 50)">50</option>
+                        </select>
+                        <div class="rd-help">@L["pf.fPageSizeHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-refresh">@L["pf.fRefresh"]</label>
+                        <select id="pf-refresh" class="rd-control" name="AutoRefresh">
+                            <option value="0" selected="@(Model.AutoRefresh == 0)">@L["pf.refOff"]</option>
+                            <option value="1" selected="@(Model.AutoRefresh == 1)">@L["pf.ref1"]</option>
+                            <option value="3" selected="@(Model.AutoRefresh == 3)">@L["pf.ref3"]</option>
+                        </select>
+                        <div class="rd-help">@L["pf.fRefreshHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-queue">@L["pf.fQueue"]</label>
+                        <select id="pf-queue" class="rd-control" name="DefaultQueue">
+                            <option value="open" selected="@(Model.DefaultQueue == "open")">@L["pf.qOpen"]</option>
+                            <option value="mine" selected="@(Model.DefaultQueue == "mine")">@L["pf.qMine"]</option>
+                        </select>
+                        <div class="rd-help">@L["pf.fQueueHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-order">@L["pf.fThreadOrder"]</label>
+                        <select id="pf-order" class="rd-control" name="ThreadOrder">
+                            <option value="newest" selected="@(Model.ThreadOrder == "newest")">@L["pf.orderNewest"]</option>
+                            <option value="oldest" selected="@(Model.ThreadOrder == "oldest")">@L["pf.orderOldest"]</option>
+                        </select>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-sig-default">@L["pf.fSig"]</label>
+                        <select id="pf-sig-default" class="rd-control" name="SigDefault">
+                            <option value="mine" selected="@(Model.SigDefault == "mine")">@L["pf.sigMine"]</option>
+                            <option value="dept" selected="@(Model.SigDefault == "dept")">@L["pf.sigDept"]</option>
+                            <option value="none" selected="@(Model.SigDefault == "none")">@L["pf.sigNone"]</option>
+                        </select>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-tz">@L["pf.fTz"]</label>
+                        <select id="pf-tz" class="rd-control" name="TimeZone">
+                            @foreach (var tz in ProfileController.TimeZones)
+                            {
+                                <option value="@tz.Id" selected="@(Model.TimeZone == tz.Id)">@tz.Label</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-timefmt">@L["pf.fTimeFmt"]</label>
+                        <select id="pf-timefmt" class="rd-control" name="TimeFormat">
+                            <option value="24" selected="@(Model.TimeFormat == "24")">@L["pf.fmt24"]</option>
+                            <option value="12" selected="@(Model.TimeFormat == "12")">@L["pf.fmt12"]</option>
+                        </select>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="pf-lang">@L["pf.fLang"]</label>
+                        @* data-lang-switch submits this form on change (rd.js), so picking a
+                           language saves the profile and the response — culture cookie set
+                           server-side — already renders in the new language (portal precedent). *@
+                        <select id="pf-lang" class="rd-control" name="Language" data-lang-switch>
+                            <option value="tr" selected="@(Model.Language == "tr")">Türkçe</option>
+                            <option value="en" selected="@(Model.Language == "en")">English</option>
+                        </select>
+                        <div class="rd-help">@L["pf.fLangHelp"]</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rd-tab-panel" id="pf-panel-sig">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="pf-sig">@L["pf.sigLabel"]</label>
+                    <textarea id="pf-sig" class="rd-control" style="min-height:160px" name="Signature">@Model.Signature</textarea>
+                    <div class="rd-help">@L["pf.sigHelp"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+        <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+        <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+    </div>
+</form>
+
+<dialog class="rd-dialog" id="dlg-pass">
+    <div class="rd-dialog-head">
+        <span>@L["pf.dlgPass"]</span>
+        <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+    </div>
+    <form method="post" asp-area="Agent" asp-controller="Profile" asp-action="Password">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="pw-cur">@L["pf.fCurPass"]</label>
+                <input id="pw-cur" type="password" class="rd-control" name="currentPassword" autocomplete="current-password" required>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="pw-new">@L["pf.fNewPass"]</label>
+                <input id="pw-new" type="password" class="rd-control" name="newPassword" autocomplete="new-password" required
+                       data-pw-strength="@L["pf.errPasswordWeak"]">
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="pw-new2">@L["pf.fNewPass2"]</label>
+                <input id="pw-new2" type="password" class="rd-control" name="newPassword2" autocomplete="new-password" required
+                       data-pw-match="#pw-new" data-pw-match-msg="@L["pf.errPasswordMismatch"]">
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</dialog>
+
+@* INVENTED dialog (needs canon sign-off): the mockup's Yapılandır button is dead and no
+   enrollment DOM exists. TOTP enrollment per the admin 2fa-setup precedent — manual key +
+   otpauth link (no QR image; renderable client-side in S7 if canon wants one), confirm code. *@
+<dialog class="rd-dialog" id="dlg-2fa">
+    <div class="rd-dialog-head">
+        <span>@L["pf.dlg2fa"]</span>
+        <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+    </div>
+    <form method="post" asp-area="Agent" asp-controller="Profile" asp-action="Enable2fa">
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <span class="rd-label">@L["pf.dlg2faKey"]</span>
+                <code style="display:block;border:1px solid var(--rd-border);border-radius:13px;padding:12px 16px;background:var(--rd-surface-2);font-size:15px;letter-spacing:2px;word-break:break-all">@Model.AuthenticatorKey</code>
+                <div class="rd-help">@L["pf.dlg2faHelp"] <a href="@Model.OtpauthUri">@L["pf.dlg2faLink"]</a></div>
+            </div>
+            <div class="rd-field" style="margin-bottom:0">
+                <label class="rd-label" for="tf-code">@L["pf.dlg2faCode"]</label>
+                <input id="tf-code" class="rd-control" name="code" maxlength="7" inputmode="numeric" placeholder="••••••"
+                       autocomplete="one-time-code" required
+                       style="letter-spacing:7px;text-align:center;font-size:17px;font-variant-numeric:tabular-nums">
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn-primary">@SL["common.enable"]</button>
+        </div>
+    </form>
+</dialog>

@@ -81,6 +81,10 @@ public sealed class TaskService(
         if (actor.IsStaff)
             await permissions.EnsureAsync(actor, PermissionKeys.TaskCreate, request.DepartmentId, ct);
 
+        // Vacation guard (profile Tatil Modu): dlg-newtask's explicit assignee pick
+        // fails loudly instead of silently landing work on a vacationing agent.
+        await StaffAvailability.EnsureAssignableAsync(db, request.StaffId, ct);
+
         var numbering = await settings.GetTaskNumberingAsync(ct);
         var number = await sequences.NextAsync(numbering.SequenceId, numbering.NumberFormat, ct);
 
@@ -140,6 +144,9 @@ public sealed class TaskService(
         var task = await LoadAsync(taskId, ct);
         if (actor.IsStaff)
             await permissions.EnsureAsync(actor, PermissionKeys.TaskAssign, task.DepartmentId, ct);
+
+        // Vacation guard (profile Tatil Modu): no new work for a vacationing agent.
+        await StaffAvailability.EnsureAssignableAsync(db, staffId, ct);
 
         task.StaffId = staffId;
         task.TeamId = teamId;

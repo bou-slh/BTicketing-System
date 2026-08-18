@@ -487,8 +487,9 @@ public class TicketOpenController(
             .Select(p => new TicketOpenPriorityVm(p.Id, p.Key))
             .ToListAsync(ct);
 
+        // Vacation guard (profile Tatil Modu): the open-form Ata select only offers available agents.
         var agents = await db.Staff
-            .Where(s => s.IsActive)
+            .Where(s => s.IsActive && !s.OnVacation)
             .OrderBy(s => s.FirstName)
             .Select(s => new TicketOpenAssigneeVm($"s:{s.Id}", s.FirstName + " " + s.LastName))
             .ToListAsync(ct);

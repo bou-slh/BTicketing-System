@@ -98,7 +98,10 @@ public sealed class TicketService(
             PriorityId = priorityId,
             SlaId = slaId,
             HelpTopicId = topic?.Id,
-            StaffId = topic?.StaffId,
+            // Vacation guard (profile Tatil Modu): topic auto-assignment skips an agent
+            // on vacation — the ticket still routes (department/team), only the staff
+            // pin is dropped so it lands unassigned in the queue.
+            StaffId = await StaffAvailability.FilterAutoAssignAsync(db, topic?.StaffId, ct),
             TeamId = topic?.TeamId,
             EmailAccountId = request.EmailAccountId,
             Source = request.Source,
@@ -234,6 +237,9 @@ public sealed class TicketService(
 
     private async Task ApplyAssignmentAsync(Ticket ticket, int? staffId, int? teamId, ActorContext actor, CancellationToken ct)
     {
+        // Vacation guard (profile Tatil Modu): covers Assign, Claim and the bulk paths.
+        await StaffAvailability.EnsureAssignableAsync(db, staffId, ct);
+
         ticket.StaffId = staffId;
         ticket.TeamId = teamId;
         ticket.LastUpdateAt = DateTimeOffset.UtcNow;

@@ -553,8 +553,35 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       dateFmt/updToday/updYesterday/toastCreated/toastSaved/errTitleInUse/errInvalid/errDenied/bulkNone/
       bulkDone/bulkPartial.)*
 - [x] **directory.html** — search + department filter work; mailto/tel links *(S6; presence from real sessions still TODO — current pills are a stub: LastLoginAt/OnVacation-derived; B1 header sort TODO)*
-- [ ] **profile.html** — saves; 2FA setup ("Yapılandır"); vacation switch has effect (assignment guard);
-      signature editor; language select switches culture
+- [x] **profile.html** — saves; 2FA setup ("Yapılandır"); vacation switch has effect (assignment guard);
+      signature editor; language select switches culture *(S6; /agent/profile (new ProfileController,
+      Staff policy, own row only — no staff-id parameter). Saves: contact/auth/prefs/signature persist on
+      Staff (S6_StaffPrefs migration: TwoFactorMethod, PasswordChangedAt, PageSize, AutoRefreshMinutes,
+      DefaultQueue, ThreadOrderNewestFirst, Use24HourTime) with Identity email + FullName-claim sync;
+      page-size/refresh/queue/thread-order/time-format/DefaultSignatureType persist but their list-engine/
+      rendering consumption is TODO(S7) with the settings round-trip work. Language: portal precedent —
+      data-lang-switch submits the form, culture cookie server-side; staff login now also applies the
+      persisted language. Password dialog = portal B3 (client match+strength, server current-password
+      check; PasswordChangedAt feeds pf.passHelp's new {0} hole — seeded 12 Haz 2026 for uakin only,
+      help line hidden while null). 2FA: pf-2fa select is real — Yapılandır opens dlg-2fa (INVENTED DOM,
+      needs canon sign-off: manual key + otpauth link + code confirm per the admin 2fa-setup precedent;
+      no QR image, client-side QR is S7 if canon wants one); "E-posta kodu" is a working method (login
+      sends the code via the Email token provider; Login2fa help swaps to invented lg.twofaHelpEmail on
+      both staff login cards); selecting the app method without a confirmed enrollment is refused
+      (pf.err2faNeedsSetup), and admins cannot disable 2FA (AdminOnly mfa policy — pf.err2faAdminRequired,
+      flag for canon). Vacation switch persists OnVacation and gets its guard: StaffAvailability throws
+      staff-on-vacation in Ticket/Task Assign/Claim/Create (bulk paths report it as skipped), topic
+      auto-assign drops the staff pin but still routes, and the four assignee option lists (ticket-view,
+      task-view, tasks, ticket-open) exclude vacationing agents while keeping a current assignee visible —
+      consistent with dlg-assign's canon roster (no Selin Aydın). Existing assignments stay put:
+      pf.vacationHelp's "mevcut talepleriniz kuyruğa alınır" promise is NOT implemented — flag for canon.
+      Signature textarea persists Staff.Signature, which the ticket-view/ticket-open composers already
+      consume via data-sig-*. Seed: uakin gains Mobile, the profile signature text,
+      DefaultSignatureType=Mine and AutoRefresh=1 per this mockup (TwoFactorMethod=App only when the dev
+      AdminTotpKey enabled TOTP). Invented keys (TR/EN twins): pf.dateFmt/dlg2fa/dlg2faKey/dlg2faHelp/
+      dlg2faLink/dlg2faCode/toastSaved/toastPass/toast2faOn/err2faCode/err2faNeedsSetup/
+      err2faAdminRequired/errCurrentWrong/errPasswordWeak/errPasswordMismatch/errInvalid/errEmailInUse
+      + lg.twofaHelpEmail. +9 tests (AgentProfileTests, incl. a full-pipeline render smoke) — suite 144.)*
 
 ### 6.3 Admin (42 pages)
 

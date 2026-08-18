@@ -34,7 +34,7 @@ public class AccountController(
 
     [HttpGet("/agent/login/2fa")]
     [AllowAnonymous]
-    public IActionResult Login2fa(string? returnUrl) => View(new StaffLogin2faVm { ReturnUrl = returnUrl });
+    public Task<IActionResult> Login2fa(string? returnUrl) => Login2faGetCore(returnUrl);
 
     [HttpPost("/agent/login/2fa")]
     [AllowAnonymous]
