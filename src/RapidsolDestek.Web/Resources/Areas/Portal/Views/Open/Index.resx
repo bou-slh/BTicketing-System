@@ -118,4 +118,7 @@
   <data name="open.errField" xml:space="preserve">
     <value>Lütfen "{0}" alanını doldurun.</value>
   </data>
+  <data name="open.errMaxOpen" xml:space="preserve">
+    <value>Açık talep limitinize ulaştınız; mevcut talepleriniz sonuçlanmadan yeni talep açılamaz.</value>
+  </data>
 </root>

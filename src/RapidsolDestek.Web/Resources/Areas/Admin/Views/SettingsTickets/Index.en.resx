@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="st.title" xml:space="preserve">
+    <value>Ticket Settings</value>
+  </data>
+  <data name="st.subtitle" xml:space="preserve">
+    <value>Ticket numbering, defaults, behavior rules, autoresponses and agent alerts.</value>
+  </data>
+  <data name="st.secNumbering" xml:space="preserve">
+    <value>Numbering</value>
+  </data>
+  <data name="st.secDefaults" xml:space="preserve">
+    <value>Defaults</value>
+  </data>
+  <data name="st.secBehavior" xml:space="preserve">
+    <value>Behavior</value>
+  </data>
+  <data name="st.secEffort" xml:space="preserve">
+    <value>Effort Approval</value>
+  </data>
+  <data name="st.secAutoresp" xml:space="preserve">
+    <value>Autoresponses</value>
+  </data>
+  <data name="st.efEnable" xml:space="preserve">
+    <value>Enable effort approval</value>
+  </data>
+  <data name="st.efEnableHelp" xml:space="preserve">
+    <value>Agents can send effort proposals on tickets; the user approves or rejects with a note from the portal.</value>
+  </data>
+  <data name="st.efBlockWork" xml:space="preserve">
+    <value>Work cannot start without approval</value>
+  </data>
+  <data name="st.efBlockWorkHelp" xml:space="preserve">
+    <value>A ticket cannot be moved to 'in progress' until the effort is approved.</value>
+  </data>
+  <data name="st.efRejectNote" xml:space="preserve">
+    <value>Note required on rejection</value>
+  </data>
+  <data name="st.efRejectNoteHelp" xml:space="preserve">
+    <value>Users must write an explanatory note when rejecting a proposal.</value>
+  </data>
+  <data name="st.efUnit" xml:space="preserve">
+    <value>Effort unit</value>
+  </data>
+  <data name="st.efUnitHours" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="st.efUnitDays" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="st.efUnitHelp" xml:space="preserve">
+    <value>Unit used in proposals.</value>
+  </data>
+  <data name="st.efReminder" xml:space="preserve">
+    <value>Reminder period (days)</value>
+  </data>
+  <data name="st.efReminderHelp" xml:space="preserve">
+    <value>If a proposal stays unanswered this many days, the user gets a reminder.</value>
+  </data>
+  <data name="st.efAutoApprove" xml:space="preserve">
+    <value>Auto-approve threshold (hours)</value>
+  </data>
+  <data name="st.efAutoApproveHelp" xml:space="preserve">
+    <value>Proposals under this value are approved automatically; 0 = off.</value>
+  </data>
+  <data name="st.efRevLimit" xml:space="preserve">
+    <value>Revision limit</value>
+  </data>
+  <data name="st.efRevLimitHelp" xml:space="preserve">
+    <value>At most this many proposals can be sent for one ticket.</value>
+  </data>
+  <data name="st.arEffort" xml:space="preserve">
+    <value>Effort proposal → user notification</value>
+  </data>
+  <data name="st.arEffortHelp" xml:space="preserve">
+    <value>When a new effort proposal is sent, the user receives an email with an approval link.</value>
+  </data>
+  <data name="st.secAlerts" xml:space="preserve">
+    <value>Alerts and Notices</value>
+  </data>
+  <data name="st.secQueues" xml:space="preserve">
+    <value>Queues</value>
+  </data>
+  <data name="st.numberFormat" xml:space="preserve">
+    <value>Number format</value>
+  </data>
+  <data name="st.numberFormatHelp" xml:space="preserve">
+    <value># marks are replaced with random/sequential digits. Example: R716555</value>
+  </data>
+  <data name="st.sequence" xml:space="preserve">
+    <value>Sequence</value>
+  </data>
+  <data name="st.sequenceHelp" xml:space="preserve">
+    <value>Random numbers are unguessable; sequential ones advance from a counter.</value>
+  </data>
+  <data name="st.seqRandom" xml:space="preserve">
+    <value>Random</value>
+  </data>
+  <data name="st.seqSequential" xml:space="preserve">
+    <value>Sequential</value>
+  </data>
+  <data name="st.manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="st.dlgSeqTitle" xml:space="preserve">
+    <value>Number sequences</value>
+  </data>
+  <data name="st.dlgSeqHelp" xml:space="preserve">
+    <value>Sequential counters are defined here; each format can use its own counter.</value>
+  </data>
+  <data name="st.seqName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="st.seqNext" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="st.addSequence" xml:space="preserve">
+    <value>Add sequence</value>
+  </data>
+  <data name="st.defStatus" xml:space="preserve">
+    <value>Default status</value>
+  </data>
+  <data name="st.defStatusHelp" xml:space="preserve">
+    <value>New tickets open in this status.</value>
+  </data>
+  <data name="st.defPriority" xml:space="preserve">
+    <value>Default priority</value>
+  </data>
+  <data name="st.defPriorityHelp" xml:space="preserve">
+    <value>Used when no help topic or form sets a priority.</value>
+  </data>
+  <data name="st.defSla" xml:space="preserve">
+    <value>Default SLA</value>
+  </data>
+  <data name="st.defSlaHelp" xml:space="preserve">
+    <value>The plan applied when no department or help topic assigns an SLA.</value>
+  </data>
+  <data name="st.defTopic" xml:space="preserve">
+    <value>Default help topic</value>
+  </data>
+  <data name="st.defTopicHelp" xml:space="preserve">
+    <value>Applied to email-created tickets when no topic was chosen.</value>
+  </data>
+  <data name="st.defQueue" xml:space="preserve">
+    <value>Default queue</value>
+  </data>
+  <data name="st.defQueueHelp" xml:space="preserve">
+    <value>The agent panel opens ticket lists with this queue.</value>
+  </data>
+  <data name="st.topCounts" xml:space="preserve">
+    <value>Top-level counts</value>
+  </data>
+  <data name="st.topCountsHelp" xml:space="preserve">
+    <value>Shows per-queue ticket counts in the side menu; turning it off improves performance on large installs.</value>
+  </data>
+  <data name="st.lock" xml:space="preserve">
+    <value>Lock semantics</value>
+  </data>
+  <data name="st.lockHelp" xml:space="preserve">
+    <value>Prevents two agents replying to the same ticket at once.</value>
+  </data>
+  <data name="st.lockDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="st.lockOnView" xml:space="preserve">
+    <value>Lock on view</value>
+  </data>
+  <data name="st.lockOnActivity" xml:space="preserve">
+    <value>Lock while composing</value>
+  </data>
+  <data name="st.maxOpen" xml:space="preserve">
+    <value>Open tickets per user</value>
+  </data>
+  <data name="st.maxOpenHelp" xml:space="preserve">
+    <value>0 = unlimited. Over the limit, new tickets are rejected and a notice can be sent.</value>
+  </data>
+  <data name="st.captcha" xml:space="preserve">
+    <value>CAPTCHA verification</value>
+  </data>
+  <data name="st.captchaHelp" xml:space="preserve">
+    <value>Visitors who are not signed in pass a robot check when opening a ticket.</value>
+  </data>
+  <data name="st.claimOnResponse" xml:space="preserve">
+    <value>Claim on response</value>
+  </data>
+  <data name="st.claimOnResponseHelp" xml:space="preserve">
+    <value>An agent replying to an unassigned ticket automatically claims it.</value>
+  </data>
+  <data name="st.autoReferOnClose" xml:space="preserve">
+    <value>Auto-refer on close</value>
+  </data>
+  <data name="st.autoReferOnCloseHelp" xml:space="preserve">
+    <value>The closing agent is added as a referrer so they hear about reopenings.</value>
+  </data>
+  <data name="st.requireTopicToClose" xml:space="preserve">
+    <value>Require help topic to close</value>
+  </data>
+  <data name="st.requireTopicToCloseHelp" xml:space="preserve">
+    <value>Tickets without a help topic cannot be closed; reports stay consistent.</value>
+  </data>
+  <data name="st.externalImages" xml:space="preserve">
+    <value>Allow external images</value>
+  </data>
+  <data name="st.externalImagesHelp" xml:space="preserve">
+    <value>Remote images in emails are displayed in threads. Keep off for privacy.</value>
+  </data>
+  <data name="st.collabVisibility" xml:space="preserve">
+    <value>Participant ticket visibility</value>
+  </data>
+  <data name="st.collabVisibilityHelp" xml:space="preserve">
+    <value>People added as participants can view the ticket on the user portal.</value>
+  </data>
+  <data name="st.attachNote" xml:space="preserve">
+    <value>Attachment rules (allowed types, count, size) are configured on the Attachments field of the Ticket Details form:</value>
+  </data>
+  <data name="st.attachNoteLink" xml:space="preserve">
+    <value>Open Forms</value>
+  </data>
+  <data name="st.arNewTicket" xml:space="preserve">
+    <value>New ticket → owner</value>
+  </data>
+  <data name="st.arNewTicketHelp" xml:space="preserve">
+    <value>A confirmation email is sent to the user when a ticket is opened.</value>
+  </data>
+  <data name="st.arAgentNew" xml:space="preserve">
+    <value>Agent-opened ticket → owner</value>
+  </data>
+  <data name="st.arAgentNewHelp" xml:space="preserve">
+    <value>The user is notified when an agent opens a ticket on their behalf.</value>
+  </data>
+  <data name="st.arNewMessage" xml:space="preserve">
+    <value>New message → submitter</value>
+  </data>
+  <data name="st.arNewMessageHelp" xml:space="preserve">
+    <value>A 'received' confirmation is sent for every user message.</value>
+  </data>
+  <data name="st.arNewMessageCollab" xml:space="preserve">
+    <value>New message → participants</value>
+  </data>
+  <data name="st.arNewMessageCollabHelp" xml:space="preserve">
+    <value>Copies of new messages are forwarded to ticket participants.</value>
+  </data>
+  <data name="st.arOverlimit" xml:space="preserve">
+    <value>Overlimit notice</value>
+  </data>
+  <data name="st.arOverlimitHelp" xml:space="preserve">
+    <value>Users exceeding the open-ticket limit receive an explanatory email.</value>
+  </data>
+  <data name="st.alNewTicket" xml:space="preserve">
+    <value>New Ticket Alert</value>
+  </data>
+  <data name="st.alNewTicketHelp" xml:space="preserve">
+    <value>Sent when a new ticket arrives in the system.</value>
+  </data>
+  <data name="st.alNewMessage" xml:space="preserve">
+    <value>New Message Alert</value>
+  </data>
+  <data name="st.alNewMessageHelp" xml:space="preserve">
+    <value>Sent when a user replies to an existing ticket.</value>
+  </data>
+  <data name="st.alNewActivity" xml:space="preserve">
+    <value>New Internal Activity Alert</value>
+  </data>
+  <data name="st.alNewActivityHelp" xml:space="preserve">
+    <value>Sent when an internal note or agent activity is added.</value>
+  </data>
+  <data name="st.alAssignment" xml:space="preserve">
+    <value>Assignment Alert</value>
+  </data>
+  <data name="st.alAssignmentHelp" xml:space="preserve">
+    <value>Sent when a ticket is assigned to an agent or team.</value>
+  </data>
+  <data name="st.alTransfer" xml:space="preserve">
+    <value>Transfer Alert</value>
+  </data>
+  <data name="st.alTransferHelp" xml:space="preserve">
+    <value>Sent when a ticket is transferred to another department.</value>
+  </data>
+  <data name="st.alEffort" xml:space="preserve">
+    <value>Effort Response Alert</value>
+  </data>
+  <data name="st.alEffortHelp" xml:space="preserve">
+    <value>Sent when the user approves or rejects an effort proposal.</value>
+  </data>
+  <data name="st.alOverdue" xml:space="preserve">
+    <value>Overdue Alert</value>
+  </data>
+  <data name="st.alOverdueHelp" xml:space="preserve">
+    <value>Sent when a ticket passes its SLA and becomes overdue.</value>
+  </data>
+  <data name="st.alSystemErrors" xml:space="preserve">
+    <value>System Errors</value>
+  </data>
+  <data name="st.alSystemErrorsHelp" xml:space="preserve">
+    <value>Critical system problems are emailed to the administrator.</value>
+  </data>
+  <data name="st.rcpAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="st.rcpDeptManager" xml:space="preserve">
+    <value>Department Manager</value>
+  </data>
+  <data name="st.rcpDeptMembers" xml:space="preserve">
+    <value>Department Members</value>
+  </data>
+  <data name="st.rcpAccountManager" xml:space="preserve">
+    <value>Account Manager</value>
+  </data>
+  <data name="st.rcpLastRespondent" xml:space="preserve">
+    <value>Last respondent</value>
+  </data>
+  <data name="st.rcpAssigned" xml:space="preserve">
+    <value>Assigned agent / team</value>
+  </data>
+  <data name="st.rcpTeamLead" xml:space="preserve">
+    <value>Team lead</value>
+  </data>
+  <data name="st.rcpTeamMembers" xml:space="preserve">
+    <value>Team members</value>
+  </data>
+  <data name="st.rcpSystemErrors" xml:space="preserve">
+    <value>System errors (always on)</value>
+  </data>
+  <data name="st.rcpSqlErrors" xml:space="preserve">
+    <value>SQL errors</value>
+  </data>
+  <data name="st.rcpLoginErrors" xml:space="preserve">
+    <value>Login errors</value>
+  </data>
+  <data name="st.colQueue" xml:space="preserve">
+    <value>Queue</value>
+  </data>
+  <data name="st.colType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="st.typeSystem" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="st.typeCustom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="st.queueBuilder" xml:space="preserve">
+    <value>Queue Builder →</value>
+  </data>
+  <data name="st.queuesHelp" xml:space="preserve">
+    <value>Queues define the ticket lists in the agent panel. Use the builder to edit criteria, columns and sorting.</value>
+  </data>
+  <data name="st.slaFmt" xml:space="preserve">
+    <value>{0} — {1} hours</value>
+  </data>
+  <data name="st.toastSaved" xml:space="preserve">
+    <value>Ticket settings saved.</value>
+  </data>
+  <data name="st.toastSeqSaved" xml:space="preserve">
+    <value>Number sequences saved.</value>
+  </data>
+  <data name="st.errFormat" xml:space="preserve">
+    <value>The number format must contain at least one # mark.</value>
+  </data>
+  <data name="st.errValues" xml:space="preserve">
+    <value>Some fields are invalid; nothing was saved.</value>
+  </data>
+  <data name="st.errSeqInUse" xml:space="preserve">
+    <value>A sequence that is in use or system-protected cannot be deleted.</value>
+  </data>
+  <data name="st.errSeqNext" xml:space="preserve">
+    <value>The next value cannot move backwards; it must stay above the highest used number.</value>
+  </data>
+</root>

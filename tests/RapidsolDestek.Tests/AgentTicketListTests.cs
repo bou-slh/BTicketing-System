@@ -95,7 +95,7 @@ public class AgentTicketListTests(PostgresFixture fixture)
             var staff = await s.Db.Staff.SingleAsync(x => x.Username == "uakin");
             staffId = staff.Id;
             var controller = new TicketsController(
-                s.Db, s.Get<IQueueEngine>(), s.Get<ITicketService>(), s.Get<IMemoryCache>())
+                s.Db, s.Get<IQueueEngine>(), s.Get<ITicketService>(), s.Get<ISettingsService>(), s.Get<IMemoryCache>())
             {
                 ControllerContext = new ControllerContext
                 {

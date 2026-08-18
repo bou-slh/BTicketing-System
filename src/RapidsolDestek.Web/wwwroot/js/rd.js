@@ -11,6 +11,57 @@
     if (sel && sel.form) sel.form.submit();
   });
 
+  /* ---------- B3 switch gating: input[data-gates="selector"] ----------
+     A master switch disables every form control inside its target container(s)
+     while unchecked (admin settings pages: effort master switch, alert
+     bo-toggle-card recipients). Synced on change and at boot. */
+  function syncGates() {
+    document.querySelectorAll("input[data-gates]").forEach((sw) => {
+      const off = !sw.checked;
+      document.querySelectorAll(sw.getAttribute("data-gates")).forEach((el) => {
+        el.classList.toggle("rd-gated-off", off);
+        const controls = el.matches("input,select,textarea,button")
+          ? [el]
+          : [...el.querySelectorAll("input,select,textarea,button")];
+        controls.forEach((c) => {
+          if (c === sw) return;
+          // Controls the server rendered disabled (mockup parity) stay disabled.
+          if (off) { if (!c.disabled) { c.disabled = true; c.dataset.gatedOff = "1"; } }
+          else if (c.dataset.gatedOff) { c.disabled = false; delete c.dataset.gatedOff; }
+        });
+      });
+    });
+  }
+  document.addEventListener("change", (e) => {
+    if (e.target.matches("input[data-gates]")) syncGates();
+  });
+
+  /* ---------- B9 scroll-spy: settings section rail follows the scroll ----------
+     The mockups only click-highlight (.bo-section-index a) — scroll desyncs, the
+     ROADMAP B9 spec adds real spying: the last .bo-section above the fold owns
+     the highlight. Shared by every admin settings page (S7). */
+  const sectionIndex = () => document.querySelector(".bo-section-index");
+  let spyTick = false;
+  function syncScrollSpy() {
+    const idx = sectionIndex();
+    if (!idx) return;
+    const sections = [...document.querySelectorAll(".bo-section[id]")];
+    if (!sections.length) return;
+    const probe = window.scrollY + 140; // below the sticky topbar
+    let current = sections[0];
+    sections.forEach((s) => { if (s.offsetTop <= probe) current = s; });
+    // Bottom of page: the last section may never reach the probe line.
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2)
+      current = sections[sections.length - 1];
+    idx.querySelectorAll("a").forEach((a) =>
+      a.classList.toggle("active", a.getAttribute("href") === `#${current.id}`));
+  }
+  window.addEventListener("scroll", () => {
+    if (spyTick || !sectionIndex()) return;
+    spyTick = true;
+    requestAnimationFrame(() => { spyTick = false; syncScrollSpy(); });
+  }, { passive: true });
+
   /* ---------- Toolbar filter controls: submit their GET form on change ----------
      Selects and (B1) the details.rd-filter checkboxes opt in via data-autosubmit. */
   document.addEventListener("change", (e) => {
@@ -45,13 +96,20 @@
     }
 
     // B4 builder rule rows: [data-rule-add="templateId"] appends a clone of the
-    // template before itself; the row's .remove button deletes it (agent tickets
-    // advanced search now; admin builders reuse the same contract in S7).
+    // template before itself — or into [data-rule-into="selector"] when the button
+    // sits outside the row container (settings-tickets dlg-seq table rows, S7);
+    // the row's .remove button deletes it (agent tickets advanced search; admin
+    // builders reuse the same contract in S7).
     const ruleAdd = e.target.closest("[data-rule-add]");
     if (ruleAdd) {
       e.preventDefault();
       const tpl = document.getElementById(ruleAdd.getAttribute("data-rule-add"));
-      if (tpl) ruleAdd.before(tpl.content.cloneNode(true));
+      if (tpl) {
+        const into = ruleAdd.getAttribute("data-rule-into");
+        const target = into ? document.querySelector(into) : null;
+        if (target) target.append(tpl.content.cloneNode(true));
+        else ruleAdd.before(tpl.content.cloneNode(true));
+      }
     }
     const ruleRemove = e.target.closest(".bo-rule-row .remove");
     if (ruleRemove) {
@@ -406,6 +464,8 @@
   function boot() {
     enhanceTextareas();
     syncFilters();
+    syncGates();
+    syncScrollSpy();
     // Server-rendered toast handoff: <body data-toast="..."> after a redirect.
     const pending = document.body.getAttribute("data-toast");
     if (pending) toast(pending, document.body.getAttribute("data-toast-variant") || undefined);

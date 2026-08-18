@@ -73,19 +73,35 @@ public sealed class TicketService(
         if (actor.IsStaff)
             await permissions.EnsureAsync(actor, PermissionKeys.TicketCreate, departmentId, ct);
 
+        // tickets.max_open_per_user (S7 admin/settings-tickets): end-user creates over
+        // the limit are refused; staff/system creates bypass (osTicket parity).
+        // TODO(S8): the "overlimit notice" autoresponse mails the refused user.
+        var behavior = await settings.GetTicketBehaviorAsync(ct);
+        if (!actor.IsStaff && behavior.MaxOpenPerUser > 0)
+        {
+            var openCount = await db.Tickets
+                .Where(t => t.UserId == request.UserId)
+                .CountAsync(t => db.TicketStatuses
+                    .Any(s => s.Id == t.StatusId && s.State == TicketState.Open), ct);
+            if (openCount >= behavior.MaxOpenPerUser)
+                throw new DomainRuleException("max-open-exceeded",
+                    $"User {request.UserId} already has {openCount} open tickets (limit {behavior.MaxOpenPerUser}).");
+        }
+
         var numbering = await settings.GetTicketNumberingAsync(ct);
         var statusKey = numbering.DefaultStatusKey ?? "open";
         var statusId = topic?.StatusId
             ?? await db.TicketStatuses.Where(s => s.Key == statusKey).Select(s => s.Id).SingleAsync(ct);
 
-        var priorityId = topic?.PriorityId ?? request.PriorityId;
+        // Priority cascade ends at core.default_priority (S7; seeded "normal").
+        var priorityId = topic?.PriorityId
+            ?? request.PriorityId
+            ?? await DefaultPriorityIdAsync(ct);
         var slaId = topic?.SlaId
             ?? request.SlaId
             ?? ParseOrNull(await settings.GetAsync("core", "default_sla_id", ct));
 
-        var number = await sequences.NextAsync(
-            topic?.SequenceId ?? numbering.SequenceId,
-            topic?.NumberFormat ?? numbering.NumberFormat, ct);
+        var number = await DrawNumberAsync(topic, numbering, ct);
 
         var ticket = new Ticket
         {
@@ -157,6 +173,15 @@ public sealed class TicketService(
         // B8 gate: can't resolve/close while an effort proposal awaits the customer.
         if (closing && !await IsWorkAllowedAsync(ticketId, ct))
             throw new WorkBlockedByEffortException(ticketId);
+
+        // tickets.require_topic_to_close (S7 admin/settings-tickets): topic-less
+        // tickets cannot be closed so reports stay consistent (mockup help text).
+        if (closing && ticket.HelpTopicId is null
+            && (await settings.GetTicketBehaviorAsync(ct)).RequireTopicToClose)
+        {
+            throw new DomainRuleException("topic-required-to-close",
+                $"Ticket {ticketId} has no help topic; tickets.require_topic_to_close is on.");
+        }
 
         if (reopening && !current.AllowReopen && actor.IsStaff && !(await permissions.ResolveAsync(actor.Id!.Value, ct)).IsAdmin)
             throw new PermissionDeniedException(PermissionKeys.TicketClose, ticket.DepartmentId);
@@ -254,6 +279,45 @@ public sealed class TicketService(
     private async Task<Ticket> LoadAsync(int ticketId, CancellationToken ct) =>
         await db.Tickets.SingleOrDefaultAsync(t => t.Id == ticketId, ct)
             ?? throw new DomainNotFoundException("Ticket", ticketId);
+
+    private async Task<int?> DefaultPriorityIdAsync(CancellationToken ct)
+    {
+        var key = await settings.GetAsync("core", "default_priority", ct);
+        if (string.IsNullOrEmpty(key))
+            return null;
+        return await db.TicketPriorities.Where(p => p.Key == key)
+            .Select(p => (int?)p.Id).FirstOrDefaultAsync(ct);
+    }
+
+    /// <summary>
+    /// Public ticket number: the topic's own sequence wins, else tickets.number_mode
+    /// decides — "random" draws unguessable digits (osTicket random sequence),
+    /// anything else advances the configured row-locked sequence.
+    /// </summary>
+    private async Task<string> DrawNumberAsync(HelpTopic? topic, NumberingSettings numbering, CancellationToken ct)
+    {
+        var format = topic?.NumberFormat ?? numbering.NumberFormat;
+        if (topic?.SequenceId is { } topicSeq)
+            return await sequences.NextAsync(topicSeq, format, ct);
+
+        var mode = await settings.GetAsync("tickets", "number_mode", ct);
+        if (mode != "random")
+            return await sequences.NextAsync(numbering.SequenceId, format, ct);
+
+        // Random mode: fill every '#' with random digits; retry on the (unlikely)
+        // collision with an existing number.
+        var digits = Math.Max(1, format.Count(c => c == '#'));
+        for (var attempt = 0; ; attempt++)
+        {
+            var value = (long)(System.Security.Cryptography.RandomNumberGenerator.GetInt32(1, int.MaxValue)
+                % Math.Pow(10, Math.Min(digits, 9)));
+            var candidate = TicketNumberFormatter.Format(format, value);
+            if (!await db.Tickets.AnyAsync(t => t.Number == candidate, ct))
+                return candidate;
+            if (attempt >= 9)
+                throw new InvalidOperationException("Could not draw a unique random ticket number after 10 attempts.");
+        }
+    }
 
     private static int? ParseOrNull(string? value) =>
         int.TryParse(value, out var i) ? i : null;

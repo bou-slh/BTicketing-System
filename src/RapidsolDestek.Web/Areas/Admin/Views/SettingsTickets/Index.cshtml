@@ -1,0 +1,580 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model SettingsTicketsVm
+@{
+    ViewData["Title"] = L["st.title"];
+
+    // Toast handoff (agent profile precedent): PRG keys via TempData.
+    if (TempData["StToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["StToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["st.title"]</h1>
+        <p>@L["st.subtitle"]</p>
+    </div>
+</div>
+
+<div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+        <a href="#sec-numbering" class="active">@L["st.secNumbering"]</a>
+        <a href="#sec-defaults">@L["st.secDefaults"]</a>
+        <a href="#sec-behavior">@L["st.secBehavior"]</a>
+        <a href="#sec-effort">@L["st.secEffort"]</a>
+        <a href="#sec-autoresp">@L["st.secAutoresp"]</a>
+        <a href="#sec-alerts">@L["st.secAlerts"]</a>
+        <a href="#sec-queues">@L["st.secQueues"]</a>
+    </nav>
+
+    <form class="bo-settings-sections" method="post" asp-area="Admin" asp-controller="SettingsTickets" asp-action="Save">
+
+        <section class="rd-surface bo-section" id="sec-numbering">
+            <div class="rd-surface-head"><span>@L["st.secNumbering"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="tk-format">@L["st.numberFormat"]</label>
+                    <input id="tk-format" class="rd-control" name="number_format" value="@Model.NumberFormat" required style="max-width:220px">
+                    <div class="rd-help">@L["st.numberFormatHelp"]</div>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="tk-seq">@L["st.sequence"]</label>
+                    <div class="bo-rule-row" style="margin-bottom:0">
+                        <select id="tk-seq" class="rd-control" name="number_mode" style="max-width:220px">
+                            <option value="random" selected="@(Model.NumberMode == "random")">@L["st.seqRandom"]</option>
+                            <option value="sequential" selected="@(Model.NumberMode == "sequential")">@L["st.seqSequential"]</option>
+                        </select>
+                        <button type="button" class="rd-btn" data-dialog-open="dlg-seq">@L["st.manage"]</button>
+                    </div>
+                    <div class="rd-help">@L["st.sequenceHelp"]</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-defaults">
+            <div class="rd-surface-head"><span>@L["st.secDefaults"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="tk-status">@L["st.defStatus"]</label>
+                        <select id="tk-status" class="rd-control" name="default_status">
+                            @foreach (var key in Model.StatusKeys)
+                            {
+                                <option value="@key" selected="@(Model.DefaultStatus == key)">@SL[$"status.{key}"]</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["st.defStatusHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="tk-priority">@L["st.defPriority"]</label>
+                        <select id="tk-priority" class="rd-control" name="default_priority">
+                            @foreach (var key in Model.PriorityKeys)
+                            {
+                                <option value="@key" selected="@(Model.DefaultPriority == key)">@SL[$"priority.{key}"]</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["st.defPriorityHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="tk-sla">@L["st.defSla"]</label>
+                        <select id="tk-sla" class="rd-control" name="default_sla">
+                            @foreach (var sla in Model.Slas)
+                            {
+                                <option value="@sla.Id" selected="@(Model.DefaultSlaId == sla.Id)">@L["st.slaFmt", sla.Name, sla.Hours]</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["st.defSlaHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="tk-topic">@L["st.defTopic"]</label>
+                        <select id="tk-topic" class="rd-control" name="default_topic">
+                            @foreach (var topic in Model.Topics)
+                            {
+                                <option value="@topic.Id" selected="@(Model.DefaultTopicId == topic.Id)">@topic.Label</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["st.defTopicHelp"]</div>
+                    </div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="tk-queue">@L["st.defQueue"]</label>
+                    <select id="tk-queue" class="rd-control" name="default_queue" style="max-width:340px">
+                        @foreach (var queue in Model.Queues)
+                        {
+                            <option value="@queue.Id" selected="@(Model.DefaultQueueId == queue.Id)">@queue.Label</option>
+                        }
+                    </select>
+                    <div class="rd-help">@L["st.defQueueHelp"]</div>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="top_counts" value="true" checked="@Model.Behavior.TopLevelCounts">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.topCounts"]</b>
+                            <small>@L["st.topCountsHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-behavior">
+            <div class="rd-surface-head"><span>@L["st.secBehavior"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="tk-lock">@L["st.lock"]</label>
+                    <select id="tk-lock" class="rd-control" name="lock_mode" style="max-width:340px">
+                        <option value="disabled" selected="@(Model.Behavior.LockMode == "disabled")">@L["st.lockDisabled"]</option>
+                        <option value="view" selected="@(Model.Behavior.LockMode == "view")">@L["st.lockOnView"]</option>
+                        <option value="activity" selected="@(Model.Behavior.LockMode == "activity")">@L["st.lockOnActivity"]</option>
+                    </select>
+                    <div class="rd-help">@L["st.lockHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="tk-maxopen">@L["st.maxOpen"]</label>
+                    <input id="tk-maxopen" class="rd-control" type="number" name="max_open" min="0" value="@Model.Behavior.MaxOpenPerUser" style="max-width:220px">
+                    <div class="rd-help">@L["st.maxOpenHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="captcha" value="true" checked="@Model.Behavior.Captcha">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.captcha"]</b>
+                            <small>@L["st.captchaHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="claim_on_response" value="true" checked="@Model.Behavior.ClaimOnResponse">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.claimOnResponse"]</b>
+                            <small>@L["st.claimOnResponseHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+
+                <details class="rd-advanced">
+                    <summary>@SL["common.advanced"]</summary>
+                    <div class="rd-advanced-body">
+                        <div class="rd-field">
+                            <label class="rd-switch">
+                                <input type="checkbox" name="auto_refer" value="true" checked="@Model.Behavior.AutoReferOnClose">
+                                <span class="track"></span>
+                                <span class="rd-switch-copy">
+                                    <b>@L["st.autoReferOnClose"]</b>
+                                    <small>@L["st.autoReferOnCloseHelp"]</small>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="rd-field">
+                            <label class="rd-switch">
+                                <input type="checkbox" name="require_topic" value="true" checked="@Model.Behavior.RequireTopicToClose">
+                                <span class="track"></span>
+                                <span class="rd-switch-copy">
+                                    <b>@L["st.requireTopicToClose"]</b>
+                                    <small>@L["st.requireTopicToCloseHelp"]</small>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="rd-field">
+                            <label class="rd-switch">
+                                <input type="checkbox" name="external_images" value="true" checked="@Model.Behavior.AllowExternalImages">
+                                <span class="track"></span>
+                                <span class="rd-switch-copy">
+                                    <b>@L["st.externalImages"]</b>
+                                    <small>@L["st.externalImagesHelp"]</small>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="rd-field">
+                            <label class="rd-switch">
+                                <input type="checkbox" name="collab_visibility" value="true" checked="@Model.Behavior.CollabVisibility">
+                                <span class="track"></span>
+                                <span class="rd-switch-copy">
+                                    <b>@L["st.collabVisibility"]</b>
+                                    <small>@L["st.collabVisibilityHelp"]</small>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="rd-banner rd-banner-info" style="margin-bottom:0">
+                            <span aria-hidden="true">📎</span>
+                            <span>
+                                <span>@L["st.attachNote"]</span>
+                                <a href="/admin/forms">@L["st.attachNoteLink"]</a>
+                            </span>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-effort">
+            <div class="rd-surface-head"><span>@L["st.secEffort"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        @* B3 gating: the master switch disables the section's dependent
+                           fields while off (rd.js data-gates). *@
+                        <input type="checkbox" name="ef_enabled" value="true" checked="@Model.Effort.Enabled" data-gates="#sec-effort [data-ef-dep]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.efEnable"]</b>
+                            <small>@L["st.efEnableHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field" data-ef-dep>
+                    <label class="rd-switch">
+                        <input type="checkbox" name="ef_block_work" value="true" checked="@Model.Effort.BlockWorkUntilApproved">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.efBlockWork"]</b>
+                            <small>@L["st.efBlockWorkHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field" data-ef-dep>
+                    <label class="rd-switch">
+                        <input type="checkbox" name="ef_reject_note" value="true" checked="@Model.Effort.MandatoryRejectNote">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.efRejectNote"]</b>
+                            <small>@L["st.efRejectNoteHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field" data-ef-dep>
+                    <label class="rd-label" for="ef-unit">@L["st.efUnit"]</label>
+                    <select id="ef-unit" class="rd-control" name="ef_unit" style="max-width:220px">
+                        <option value="hours" selected="@(Model.EffortUnit == "hours")">@L["st.efUnitHours"]</option>
+                        <option value="days" selected="@(Model.EffortUnit == "days")">@L["st.efUnitDays"]</option>
+                    </select>
+                    <div class="rd-help">@L["st.efUnitHelp"]</div>
+                </div>
+                <div class="rd-field" data-ef-dep>
+                    <label class="rd-label" for="ef-reminder">@L["st.efReminder"]</label>
+                    <input id="ef-reminder" type="number" class="rd-control" name="ef_reminder" value="@Model.Effort.ReminderDays" min="0" style="max-width:120px">
+                    <div class="rd-help">@L["st.efReminderHelp"]</div>
+                </div>
+                <details class="rd-advanced" data-ef-dep>
+                    <summary>@SL["common.advanced"]</summary>
+                    <div class="rd-advanced-body">
+                        <div class="rd-field">
+                            <label class="rd-label" for="ef-autoapprove">@L["st.efAutoApprove"]</label>
+                            <input id="ef-autoapprove" type="number" class="rd-control" name="ef_autoapprove" value="@Model.Effort.AutoApproveThresholdHours.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" min="0" style="max-width:120px">
+                            <div class="rd-help">@L["st.efAutoApproveHelp"]</div>
+                        </div>
+                        <div class="rd-field" style="margin-bottom:0">
+                            <label class="rd-label" for="ef-revlimit">@L["st.efRevLimit"]</label>
+                            <input id="ef-revlimit" type="number" class="rd-control" name="ef_revlimit" value="@Model.Effort.RevisionLimit" min="1" style="max-width:120px">
+                            <div class="rd-help">@L["st.efRevLimitHelp"]</div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-autoresp">
+            <div class="rd-surface-head"><span>@L["st.secAutoresp"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="ar_new_ticket" value="true" checked="@Model.Autoresp["new_ticket"]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.arNewTicket"]</b>
+                            <small>@L["st.arNewTicketHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="ar_agent_new_ticket" value="true" checked="@Model.Autoresp["agent_new_ticket"]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.arAgentNew"]</b>
+                            <small>@L["st.arAgentNewHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="ar_new_message" value="true" checked="@Model.Autoresp["new_message"]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.arNewMessage"]</b>
+                            <small>@L["st.arNewMessageHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="ar_new_message_collab" value="true" checked="@Model.Autoresp["new_message_collab"]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.arNewMessageCollab"]</b>
+                            <small>@L["st.arNewMessageCollabHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="ar_overlimit" value="true" checked="@Model.Autoresp["overlimit"]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.arOverlimit"]</b>
+                            <small>@L["st.arOverlimitHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="ar_effort" value="true" checked="@Model.Autoresp["effort_proposal"]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["st.arEffort"]</b>
+                            <small>@L["st.arEffortHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-alerts">
+            <div class="rd-surface-head"><span>@L["st.secAlerts"]</span></div>
+            <div class="rd-surface-body">
+
+                <div class="bo-toggle-card">
+                    <div class="head">
+                        <div>
+                            <b>@L["st.alNewTicket"]</b>
+                            <small>@L["st.alNewTicketHelp"]</small>
+                        </div>
+                        <label class="rd-switch"><input type="checkbox" name="al_new_ticket" value="true" checked="@Model.Alerts["new_ticket"]" data-gates="#rcp-newticket"><span class="track"></span></label>
+                    </div>
+                    <div class="recipients" id="rcp-newticket">
+                        <label class="rd-check"><input type="checkbox" name="al_new_ticket_admin" value="true" checked="@Model.Alerts["new_ticket_admin"]"><span>@L["st.rcpAdmin"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_new_ticket_dept_manager" value="true" checked="@Model.Alerts["new_ticket_dept_manager"]"><span>@L["st.rcpDeptManager"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_new_ticket_dept_members" value="true" checked="@Model.Alerts["new_ticket_dept_members"]"><span>@L["st.rcpDeptMembers"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_new_ticket_account_manager" value="true" checked="@Model.Alerts["new_ticket_account_manager"]"><span>@L["st.rcpAccountManager"]</span></label>
+                    </div>
+                </div>
+
+                <div class="bo-toggle-card">
+                    <div class="head">
+                        <div>
+                            <b>@L["st.alNewMessage"]</b>
+                            <small>@L["st.alNewMessageHelp"]</small>
+                        </div>
+                        <label class="rd-switch"><input type="checkbox" name="al_new_message" value="true" checked="@Model.Alerts["new_message"]" data-gates="#rcp-newmessage"><span class="track"></span></label>
+                    </div>
+                    <div class="recipients" id="rcp-newmessage">
+                        <label class="rd-check"><input type="checkbox" name="al_new_message_last_respondent" value="true" checked="@Model.Alerts["new_message_last_respondent"]"><span>@L["st.rcpLastRespondent"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_new_message_assigned" value="true" checked="@Model.Alerts["new_message_assigned"]"><span>@L["st.rcpAssigned"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_new_message_dept_manager" value="true" checked="@Model.Alerts["new_message_dept_manager"]"><span>@L["st.rcpDeptManager"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_new_message_account_manager" value="true" checked="@Model.Alerts["new_message_account_manager"]"><span>@L["st.rcpAccountManager"]</span></label>
+                    </div>
+                </div>
+
+                <div class="bo-toggle-card">
+                    <div class="head">
+                        <div>
+                            <b>@L["st.alNewActivity"]</b>
+                            <small>@L["st.alNewActivityHelp"]</small>
+                        </div>
+                        <label class="rd-switch"><input type="checkbox" name="al_new_activity" value="true" checked="@Model.Alerts["new_activity"]" data-gates="#rcp-newactivity"><span class="track"></span></label>
+                    </div>
+                    <div class="recipients" id="rcp-newactivity">
+                        <label class="rd-check"><input type="checkbox" name="al_new_activity_last_respondent" value="true" checked="@Model.Alerts["new_activity_last_respondent"]"><span>@L["st.rcpLastRespondent"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_new_activity_assigned" value="true" checked="@Model.Alerts["new_activity_assigned"]"><span>@L["st.rcpAssigned"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_new_activity_dept_manager" value="true" checked="@Model.Alerts["new_activity_dept_manager"]"><span>@L["st.rcpDeptManager"]</span></label>
+                    </div>
+                </div>
+
+                <div class="bo-toggle-card">
+                    <div class="head">
+                        <div>
+                            <b>@L["st.alAssignment"]</b>
+                            <small>@L["st.alAssignmentHelp"]</small>
+                        </div>
+                        <label class="rd-switch"><input type="checkbox" name="al_assignment" value="true" checked="@Model.Alerts["assignment"]" data-gates="#rcp-assignment"><span class="track"></span></label>
+                    </div>
+                    <div class="recipients" id="rcp-assignment">
+                        <label class="rd-check"><input type="checkbox" name="al_assignment_assigned" value="true" checked="@Model.Alerts["assignment_assigned"]"><span>@L["st.rcpAssigned"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_assignment_team_lead" value="true" checked="@Model.Alerts["assignment_team_lead"]"><span>@L["st.rcpTeamLead"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_assignment_team_members" value="true" checked="@Model.Alerts["assignment_team_members"]"><span>@L["st.rcpTeamMembers"]</span></label>
+                    </div>
+                </div>
+
+                <div class="bo-toggle-card">
+                    <div class="head">
+                        <div>
+                            <b>@L["st.alTransfer"]</b>
+                            <small>@L["st.alTransferHelp"]</small>
+                        </div>
+                        <label class="rd-switch"><input type="checkbox" name="al_transfer" value="true" checked="@Model.Alerts["transfer"]" data-gates="#rcp-transfer"><span class="track"></span></label>
+                    </div>
+                    <div class="recipients" id="rcp-transfer">
+                        <label class="rd-check"><input type="checkbox" name="al_transfer_assigned" value="true" checked="@Model.Alerts["transfer_assigned"]"><span>@L["st.rcpAssigned"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_transfer_dept_manager" value="true" checked="@Model.Alerts["transfer_dept_manager"]"><span>@L["st.rcpDeptManager"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_transfer_dept_members" value="true" checked="@Model.Alerts["transfer_dept_members"]"><span>@L["st.rcpDeptMembers"]</span></label>
+                    </div>
+                </div>
+
+                <div class="bo-toggle-card">
+                    <div class="head">
+                        <div>
+                            <b>@L["st.alOverdue"]</b>
+                            <small>@L["st.alOverdueHelp"]</small>
+                        </div>
+                        <label class="rd-switch"><input type="checkbox" name="al_overdue" value="true" checked="@Model.Alerts["overdue"]" data-gates="#rcp-overdue"><span class="track"></span></label>
+                    </div>
+                    <div class="recipients" id="rcp-overdue">
+                        <label class="rd-check"><input type="checkbox" name="al_overdue_assigned" value="true" checked="@Model.Alerts["overdue_assigned"]"><span>@L["st.rcpAssigned"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_overdue_dept_manager" value="true" checked="@Model.Alerts["overdue_dept_manager"]"><span>@L["st.rcpDeptManager"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_overdue_dept_members" value="true" checked="@Model.Alerts["overdue_dept_members"]"><span>@L["st.rcpDeptMembers"]</span></label>
+                    </div>
+                </div>
+
+                <div class="bo-toggle-card">
+                    <div class="head">
+                        <div>
+                            <b>@L["st.alEffort"]</b>
+                            <small>@L["st.alEffortHelp"]</small>
+                        </div>
+                        <label class="rd-switch"><input type="checkbox" name="al_effort" value="true" checked="@Model.Alerts["effort_response"]" data-gates="#rcp-effort"><span class="track"></span></label>
+                    </div>
+                    <div class="recipients" id="rcp-effort">
+                        <label class="rd-check"><input type="checkbox" name="al_effort_assigned" value="true" checked="@Model.Alerts["effort_response_assigned"]"><span>@L["st.rcpAssigned"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_effort_dept_manager" value="true" checked="@Model.Alerts["effort_response_dept_manager"]"><span>@L["st.rcpDeptManager"]</span></label>
+                    </div>
+                </div>
+                <div class="bo-toggle-card" style="margin-bottom:0">
+                    <div class="head">
+                        <div>
+                            <b>@L["st.alSystemErrors"]</b>
+                            <small>@L["st.alSystemErrorsHelp"]</small>
+                        </div>
+                        @* Always-on master (mockup: checked + disabled) — not persisted. *@
+                        <label class="rd-switch"><input type="checkbox" checked disabled><span class="track"></span></label>
+                    </div>
+                    <div class="recipients">
+                        <label class="rd-check"><input type="checkbox" checked disabled><span>@L["st.rcpSystemErrors"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_system_errors_sql" value="true" checked="@Model.Alerts["system_errors_sql"]"><span>@L["st.rcpSqlErrors"]</span></label>
+                        <label class="rd-check"><input type="checkbox" name="al_system_errors_login" value="true" checked="@Model.Alerts["system_errors_login"]"><span>@L["st.rcpLoginErrors"]</span></label>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-queues">
+            <div class="rd-surface-head">
+                <span>@L["st.secQueues"]</span>
+                <span class="spacer"></span>
+                <a class="rd-btn rd-btn-ghost rd-btn-sm" href="/admin/queues">@L["st.queueBuilder"]</a>
+            </div>
+            <table class="rd-table">
+                <thead>
+                    <tr>
+                        <th>@L["st.colQueue"]</th>
+                        <th>@L["st.colType"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model.QueueTable)
+                    {
+                        <tr>
+                            <td>@row.Title</td>
+                            <td>
+                                @if (row.IsSystem)
+                                {
+                                    <span class="rd-pill rd-pill-closed">@L["st.typeSystem"]</span>
+                                }
+                                else
+                                {
+                                    <span class="rd-pill rd-pill-teal">@L["st.typeCustom"]</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="rd-surface-body" style="padding-top:12px">
+                <div class="rd-help">@L["st.queuesHelp"]</div>
+            </div>
+        </section>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+            <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</div>
+
+<dialog class="rd-dialog" id="dlg-seq">
+    <div class="rd-dialog-head">
+        <span>@L["st.dlgSeqTitle"]</span>
+        <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+    </div>
+    @* B4 CRUD over the mockup's static rows: name/next become inputs, ✕ removes the
+       row client-side and the save round-trip deletes it (guarded server-side:
+       internal/in-use sequences refuse, Next never moves backwards). Submit no
+       longer carries data-dialog-close (the audited B2 close-swallows-save bug). *@
+    <form method="post" asp-area="Admin" asp-controller="SettingsTickets" asp-action="Sequences">
+        <div class="rd-dialog-body">
+            <p class="rd-help" style="margin:0 0 12px">@L["st.dlgSeqHelp"]</p>
+            <table class="rd-table">
+                <thead>
+                    <tr>
+                        <th>@L["st.seqName"]</th>
+                        <th class="num">@L["st.seqNext"]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="seq-rows">
+                    @foreach (var seq in Model.Sequences)
+                    {
+                        <tr class="bo-rule-row">
+                            <td>
+                                <input type="hidden" name="seqId" value="@seq.Id">
+                                <input class="rd-control" name="seqName" value="@seq.Name" required>
+                            </td>
+                            <td class="num">
+                                <input class="rd-control" type="number" name="seqNext" value="@seq.Next" min="@seq.Next" required style="max-width:140px;text-align:right">
+                            </td>
+                            <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm remove" style="color:var(--rd-red)">✕</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button type="button" class="rd-btn rd-btn-sm" style="margin-top:12px" data-rule-add="tpl-seq-row" data-rule-into="#seq-rows">@L["st.addSequence"]</button>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</dialog>
+
+<template id="tpl-seq-row">
+    <tr class="bo-rule-row">
+        <td>
+            <input type="hidden" name="seqId" value="0">
+            <input class="rd-control" name="seqName" required>
+        </td>
+        <td class="num">
+            <input class="rd-control" type="number" name="seqNext" value="1" min="1" required style="max-width:140px;text-align:right">
+        </td>
+        <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm remove" style="color:var(--rd-red)">✕</button></td>
+    </tr>
+</template>

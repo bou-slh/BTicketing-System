@@ -18,9 +18,11 @@ public class MaintenanceModeTests
                             key == MaintenanceModeMiddleware.SettingKey ? offline : null);
 
         public Task SetAsync(string ns, string key, string value, CancellationToken ct = default) => Task.CompletedTask;
+        public Task<IReadOnlyDictionary<string, string>> GetSectionAsync(string ns, CancellationToken ct = default) => throw new NotSupportedException();
         public Task<EffortSettings> GetEffortAsync(CancellationToken ct = default) => throw new NotSupportedException();
         public Task<NumberingSettings> GetTicketNumberingAsync(CancellationToken ct = default) => throw new NotSupportedException();
         public Task<NumberingSettings> GetTaskNumberingAsync(CancellationToken ct = default) => throw new NotSupportedException();
+        public Task<TicketBehaviorSettings> GetTicketBehaviorAsync(CancellationToken ct = default) => throw new NotSupportedException();
     }
 
     private static async Task<HttpContext> RunAsync(string path, string? offline, string method = "GET")

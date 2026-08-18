@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="st.title" xml:space="preserve">
+    <value>Talep Ayarları</value>
+  </data>
+  <data name="st.subtitle" xml:space="preserve">
+    <value>Talep numaralandırma, varsayılanlar, davranış kuralları, otomatik yanıtlar ve temsilci uyarıları.</value>
+  </data>
+  <data name="st.secNumbering" xml:space="preserve">
+    <value>Numaralandırma</value>
+  </data>
+  <data name="st.secDefaults" xml:space="preserve">
+    <value>Varsayılanlar</value>
+  </data>
+  <data name="st.secBehavior" xml:space="preserve">
+    <value>Davranış</value>
+  </data>
+  <data name="st.secEffort" xml:space="preserve">
+    <value>Efor Onayı</value>
+  </data>
+  <data name="st.secAutoresp" xml:space="preserve">
+    <value>Otomatik Yanıtlar</value>
+  </data>
+  <data name="st.efEnable" xml:space="preserve">
+    <value>Efor onayını etkinleştir</value>
+  </data>
+  <data name="st.efEnableHelp" xml:space="preserve">
+    <value>Temsilciler talepler için efor önerisi gönderebilir; kullanıcı portaldan onaylar veya notla reddeder.</value>
+  </data>
+  <data name="st.efBlockWork" xml:space="preserve">
+    <value>Onaysız çalışma başlatılamaz</value>
+  </data>
+  <data name="st.efBlockWorkHelp" xml:space="preserve">
+    <value>Efor onaylanmadan talep 'çalışılıyor' durumuna alınamaz.</value>
+  </data>
+  <data name="st.efRejectNote" xml:space="preserve">
+    <value>Redde not zorunlu</value>
+  </data>
+  <data name="st.efRejectNoteHelp" xml:space="preserve">
+    <value>Kullanıcı bir öneriyi reddederken açıklama notu yazmak zorundadır.</value>
+  </data>
+  <data name="st.efUnit" xml:space="preserve">
+    <value>Efor birimi</value>
+  </data>
+  <data name="st.efUnitHours" xml:space="preserve">
+    <value>Saat</value>
+  </data>
+  <data name="st.efUnitDays" xml:space="preserve">
+    <value>Gün</value>
+  </data>
+  <data name="st.efUnitHelp" xml:space="preserve">
+    <value>Önerilerde kullanılacak birim.</value>
+  </data>
+  <data name="st.efReminder" xml:space="preserve">
+    <value>Hatırlatma süresi (gün)</value>
+  </data>
+  <data name="st.efReminderHelp" xml:space="preserve">
+    <value>Öneri bu kadar gün yanıtsız kalırsa kullanıcıya hatırlatma gönderilir.</value>
+  </data>
+  <data name="st.efAutoApprove" xml:space="preserve">
+    <value>Otomatik onay eşiği (saat)</value>
+  </data>
+  <data name="st.efAutoApproveHelp" xml:space="preserve">
+    <value>Bu değerin altındaki öneriler otomatik onaylanır; 0 = kapalı.</value>
+  </data>
+  <data name="st.efRevLimit" xml:space="preserve">
+    <value>Revizyon limiti</value>
+  </data>
+  <data name="st.efRevLimitHelp" xml:space="preserve">
+    <value>Bir talep için en fazla bu kadar kez yeni öneri gönderilebilir.</value>
+  </data>
+  <data name="st.arEffort" xml:space="preserve">
+    <value>Efor önerisi → kullanıcıya bildirim</value>
+  </data>
+  <data name="st.arEffortHelp" xml:space="preserve">
+    <value>Yeni bir efor önerisi gönderildiğinde kullanıcıya onay bağlantısı içeren e-posta iletilir.</value>
+  </data>
+  <data name="st.secAlerts" xml:space="preserve">
+    <value>Uyarılar ve Bildirimler</value>
+  </data>
+  <data name="st.secQueues" xml:space="preserve">
+    <value>Kuyruklar</value>
+  </data>
+  <data name="st.numberFormat" xml:space="preserve">
+    <value>Numara biçimi</value>
+  </data>
+  <data name="st.numberFormatHelp" xml:space="preserve">
+    <value># işaretleri rastgele/ardışık rakamlarla değiştirilir. Örnek: R716555</value>
+  </data>
+  <data name="st.sequence" xml:space="preserve">
+    <value>Sıra</value>
+  </data>
+  <data name="st.sequenceHelp" xml:space="preserve">
+    <value>Rastgele numaralar tahmin edilemez; ardışık sıralar sayaçtan ilerler.</value>
+  </data>
+  <data name="st.seqRandom" xml:space="preserve">
+    <value>Rastgele</value>
+  </data>
+  <data name="st.seqSequential" xml:space="preserve">
+    <value>Ardışık</value>
+  </data>
+  <data name="st.manage" xml:space="preserve">
+    <value>Yönet</value>
+  </data>
+  <data name="st.dlgSeqTitle" xml:space="preserve">
+    <value>Numara sıraları</value>
+  </data>
+  <data name="st.dlgSeqHelp" xml:space="preserve">
+    <value>Ardışık sıralar burada tanımlanır; her biçim ayrı bir sayaç kullanabilir.</value>
+  </data>
+  <data name="st.seqName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="st.seqNext" xml:space="preserve">
+    <value>Sıradaki</value>
+  </data>
+  <data name="st.addSequence" xml:space="preserve">
+    <value>Sıra ekle</value>
+  </data>
+  <data name="st.defStatus" xml:space="preserve">
+    <value>Varsayılan durum</value>
+  </data>
+  <data name="st.defStatusHelp" xml:space="preserve">
+    <value>Yeni talepler bu durumla açılır.</value>
+  </data>
+  <data name="st.defPriority" xml:space="preserve">
+    <value>Varsayılan öncelik</value>
+  </data>
+  <data name="st.defPriorityHelp" xml:space="preserve">
+    <value>Yardım konusu veya form bir öncelik belirtmezse kullanılır.</value>
+  </data>
+  <data name="st.defSla" xml:space="preserve">
+    <value>Varsayılan SLA</value>
+  </data>
+  <data name="st.defSlaHelp" xml:space="preserve">
+    <value>Departman veya yardım konusu bir SLA atamazsa geçerli plan.</value>
+  </data>
+  <data name="st.defTopic" xml:space="preserve">
+    <value>Varsayılan yardım konusu</value>
+  </data>
+  <data name="st.defTopicHelp" xml:space="preserve">
+    <value>E-posta ile açılan taleplerde konu seçilmemişse uygulanır.</value>
+  </data>
+  <data name="st.defQueue" xml:space="preserve">
+    <value>Varsayılan kuyruk</value>
+  </data>
+  <data name="st.defQueueHelp" xml:space="preserve">
+    <value>Temsilci panelinde talepler açılışta bu kuyrukla listelenir.</value>
+  </data>
+  <data name="st.topCounts" xml:space="preserve">
+    <value>Üst düzey sayaçlar</value>
+  </data>
+  <data name="st.topCountsHelp" xml:space="preserve">
+    <value>Yan menüde kuyruk başına talep sayısını gösterir; büyük kurulumlarda kapatmak performansı artırır.</value>
+  </data>
+  <data name="st.lock" xml:space="preserve">
+    <value>Kilit semantiği</value>
+  </data>
+  <data name="st.lockHelp" xml:space="preserve">
+    <value>Aynı talebe iki temsilcinin aynı anda yanıt yazmasını önler.</value>
+  </data>
+  <data name="st.lockDisabled" xml:space="preserve">
+    <value>Devre dışı</value>
+  </data>
+  <data name="st.lockOnView" xml:space="preserve">
+    <value>Görüntülerken kilitle</value>
+  </data>
+  <data name="st.lockOnActivity" xml:space="preserve">
+    <value>Yanıt yazarken kilitle</value>
+  </data>
+  <data name="st.maxOpen" xml:space="preserve">
+    <value>Kullanıcı başına açık talep limiti</value>
+  </data>
+  <data name="st.maxOpenHelp" xml:space="preserve">
+    <value>0 = limitsiz. Limit aşılırsa yeni talep reddedilir ve bildirim gönderilebilir.</value>
+  </data>
+  <data name="st.captcha" xml:space="preserve">
+    <value>CAPTCHA doğrulaması</value>
+  </data>
+  <data name="st.captchaHelp" xml:space="preserve">
+    <value>Giriş yapmamış ziyaretçiler talep açarken robot denetiminden geçer.</value>
+  </data>
+  <data name="st.claimOnResponse" xml:space="preserve">
+    <value>Yanıtta üstlen</value>
+  </data>
+  <data name="st.claimOnResponseHelp" xml:space="preserve">
+    <value>Sahipsiz bir talebe yanıt veren temsilci talebi otomatik üstlenir.</value>
+  </data>
+  <data name="st.autoReferOnClose" xml:space="preserve">
+    <value>Kapanışta otomatik yönlendir</value>
+  </data>
+  <data name="st.autoReferOnCloseHelp" xml:space="preserve">
+    <value>Talebi kapatan temsilci, yeniden açılırsa haberdar olması için takipçi olarak eklenir.</value>
+  </data>
+  <data name="st.requireTopicToClose" xml:space="preserve">
+    <value>Kapanış için yardım konusu zorunlu</value>
+  </data>
+  <data name="st.requireTopicToCloseHelp" xml:space="preserve">
+    <value>Yardım konusu boş olan talepler kapatılamaz; raporlar tutarlı kalır.</value>
+  </data>
+  <data name="st.externalImages" xml:space="preserve">
+    <value>Harici görsellere izin ver</value>
+  </data>
+  <data name="st.externalImagesHelp" xml:space="preserve">
+    <value>E-postalardaki uzak sunucu görselleri yazışmalarda gösterilir. Gizlilik için kapalı tutulabilir.</value>
+  </data>
+  <data name="st.collabVisibility" xml:space="preserve">
+    <value>Katılımcı talep görünürlüğü</value>
+  </data>
+  <data name="st.collabVisibilityHelp" xml:space="preserve">
+    <value>Katılımcı olarak eklenen kişiler talebi kullanıcı portalından görüntüleyebilir.</value>
+  </data>
+  <data name="st.attachNote" xml:space="preserve">
+    <value>Ek dosya kuralları (izin verilen türler, adet, boyut) Talep Detayları formundaki Ekler alanından yapılandırılır:</value>
+  </data>
+  <data name="st.attachNoteLink" xml:space="preserve">
+    <value>Formları aç</value>
+  </data>
+  <data name="st.arNewTicket" xml:space="preserve">
+    <value>Yeni talep → sahibine</value>
+  </data>
+  <data name="st.arNewTicketHelp" xml:space="preserve">
+    <value>Talep açıldığında kullanıcıya onay e-postası gönderilir.</value>
+  </data>
+  <data name="st.arAgentNew" xml:space="preserve">
+    <value>Temsilcinin açtığı talep → sahibine</value>
+  </data>
+  <data name="st.arAgentNewHelp" xml:space="preserve">
+    <value>Bir temsilci kullanıcı adına talep açtığında kullanıcı bilgilendirilir.</value>
+  </data>
+  <data name="st.arNewMessage" xml:space="preserve">
+    <value>Yeni mesaj → gönderene</value>
+  </data>
+  <data name="st.arNewMessageHelp" xml:space="preserve">
+    <value>Kullanıcının her mesajı için 'alındı' onayı gönderilir.</value>
+  </data>
+  <data name="st.arNewMessageCollab" xml:space="preserve">
+    <value>Yeni mesaj → katılımcılara</value>
+  </data>
+  <data name="st.arNewMessageCollabHelp" xml:space="preserve">
+    <value>Yeni mesajların kopyası talep katılımcılarına iletilir.</value>
+  </data>
+  <data name="st.arOverlimit" xml:space="preserve">
+    <value>Limit aşımı bildirimi</value>
+  </data>
+  <data name="st.arOverlimitHelp" xml:space="preserve">
+    <value>Açık talep limitini aşan kullanıcıya açıklayıcı bir e-posta gönderilir.</value>
+  </data>
+  <data name="st.alNewTicket" xml:space="preserve">
+    <value>Yeni Talep Uyarısı</value>
+  </data>
+  <data name="st.alNewTicketHelp" xml:space="preserve">
+    <value>Sisteme yeni bir talep düştüğünde gönderilir.</value>
+  </data>
+  <data name="st.alNewMessage" xml:space="preserve">
+    <value>Yeni Mesaj Uyarısı</value>
+  </data>
+  <data name="st.alNewMessageHelp" xml:space="preserve">
+    <value>Kullanıcı mevcut bir talebe yanıt yazdığında gönderilir.</value>
+  </data>
+  <data name="st.alNewActivity" xml:space="preserve">
+    <value>Yeni İç Aktivite Uyarısı</value>
+  </data>
+  <data name="st.alNewActivityHelp" xml:space="preserve">
+    <value>İç not veya temsilci aktivitesi eklendiğinde gönderilir.</value>
+  </data>
+  <data name="st.alAssignment" xml:space="preserve">
+    <value>Atama Uyarısı</value>
+  </data>
+  <data name="st.alAssignmentHelp" xml:space="preserve">
+    <value>Talep bir temsilciye veya ekibe atandığında gönderilir.</value>
+  </data>
+  <data name="st.alTransfer" xml:space="preserve">
+    <value>Aktarım Uyarısı</value>
+  </data>
+  <data name="st.alTransferHelp" xml:space="preserve">
+    <value>Talep başka bir departmana aktarıldığında gönderilir.</value>
+  </data>
+  <data name="st.alEffort" xml:space="preserve">
+    <value>Efor Yanıtı Uyarısı</value>
+  </data>
+  <data name="st.alEffortHelp" xml:space="preserve">
+    <value>Kullanıcı efor önerisini onayladığında veya reddettiğinde gönderilir.</value>
+  </data>
+  <data name="st.alOverdue" xml:space="preserve">
+    <value>Gecikme Uyarısı</value>
+  </data>
+  <data name="st.alOverdueHelp" xml:space="preserve">
+    <value>Talep SLA süresini aşıp gecikmiş duruma düştüğünde gönderilir.</value>
+  </data>
+  <data name="st.alSystemErrors" xml:space="preserve">
+    <value>Sistem Hataları</value>
+  </data>
+  <data name="st.alSystemErrorsHelp" xml:space="preserve">
+    <value>Kritik sistem sorunları yöneticiye e-postayla bildirilir.</value>
+  </data>
+  <data name="st.rcpAdmin" xml:space="preserve">
+    <value>Yönetici</value>
+  </data>
+  <data name="st.rcpDeptManager" xml:space="preserve">
+    <value>Departman Yöneticisi</value>
+  </data>
+  <data name="st.rcpDeptMembers" xml:space="preserve">
+    <value>Departman Üyeleri</value>
+  </data>
+  <data name="st.rcpAccountManager" xml:space="preserve">
+    <value>Hesap Yöneticisi</value>
+  </data>
+  <data name="st.rcpLastRespondent" xml:space="preserve">
+    <value>Son yanıtlayan</value>
+  </data>
+  <data name="st.rcpAssigned" xml:space="preserve">
+    <value>Atanan temsilci / ekip</value>
+  </data>
+  <data name="st.rcpTeamLead" xml:space="preserve">
+    <value>Ekip lideri</value>
+  </data>
+  <data name="st.rcpTeamMembers" xml:space="preserve">
+    <value>Ekip üyeleri</value>
+  </data>
+  <data name="st.rcpSystemErrors" xml:space="preserve">
+    <value>Sistem hataları (her zaman açık)</value>
+  </data>
+  <data name="st.rcpSqlErrors" xml:space="preserve">
+    <value>SQL hataları</value>
+  </data>
+  <data name="st.rcpLoginErrors" xml:space="preserve">
+    <value>Giriş hataları</value>
+  </data>
+  <data name="st.colQueue" xml:space="preserve">
+    <value>Kuyruk</value>
+  </data>
+  <data name="st.colType" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="st.typeSystem" xml:space="preserve">
+    <value>Sistem</value>
+  </data>
+  <data name="st.typeCustom" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="st.queueBuilder" xml:space="preserve">
+    <value>Kuyruk Oluşturucu →</value>
+  </data>
+  <data name="st.queuesHelp" xml:space="preserve">
+    <value>Kuyruklar, temsilci panelindeki talep listelerini tanımlar. Kriter, sütun ve sıralama düzenlemek için oluşturucuyu kullanın.</value>
+  </data>
+  <data name="st.slaFmt" xml:space="preserve">
+    <value>{0} — {1} saat</value>
+  </data>
+  <data name="st.toastSaved" xml:space="preserve">
+    <value>Talep ayarları kaydedildi.</value>
+  </data>
+  <data name="st.toastSeqSaved" xml:space="preserve">
+    <value>Numara sıraları kaydedildi.</value>
+  </data>
+  <data name="st.errFormat" xml:space="preserve">
+    <value>Numara biçimi en az bir # işareti içermelidir.</value>
+  </data>
+  <data name="st.errValues" xml:space="preserve">
+    <value>Bazı alanlar geçersiz; değişiklikler kaydedilmedi.</value>
+  </data>
+  <data name="st.errSeqInUse" xml:space="preserve">
+    <value>Kullanımda veya sistem tarafından korunan bir sıra silinemez.</value>
+  </data>
+  <data name="st.errSeqNext" xml:space="preserve">
+    <value>Sıradaki değer geriye alınamaz; kullanılmış en yüksek numaranın üzerinde kalmalıdır.</value>
+  </data>
+</root>

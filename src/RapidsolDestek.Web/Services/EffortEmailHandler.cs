@@ -16,6 +16,7 @@ namespace RapidsolDestek.Web.Services;
 public sealed class EffortEmailHandler(
     AppDbContext db,
     ICannedResponseService variables,
+    ISettingsService settings,
     IAppEmailSender mail,
     ILogger<EffortEmailHandler> logger) :
     IDomainEventHandler<EffortProposed>,
@@ -30,18 +31,31 @@ public sealed class EffortEmailHandler(
         SendRequestIfStillPendingAsync(evt.TicketId, evt.ProposalId, ct);
 
     public Task HandleAsync(EffortApproved evt, CancellationToken ct = default) =>
-        SendAsync(evt.TicketId, "effort.response", ToOwner: false, ct);
+        SendResponseAlertAsync(evt.TicketId, ct);
 
     public Task HandleAsync(EffortRejected evt, CancellationToken ct = default) =>
-        SendAsync(evt.TicketId, "effort.response", ToOwner: false, ct);
+        SendResponseAlertAsync(evt.TicketId, ct);
 
     /// <summary>B8: an auto-approved proposal never asks the customer — skip the request.</summary>
     private async Task SendRequestIfStillPendingAsync(int ticketId, int proposalId, CancellationToken ct)
     {
+        // autoresp.effort_proposal (S7 admin/settings-tickets "Efor önerisi →
+        // kullanıcıya bildirim"); default on.
+        if (await settings.GetAsync("autoresp", "effort_proposal", ct) == "false")
+            return;
         var pending = await db.EffortProposals
             .AnyAsync(p => p.Id == proposalId && p.State == Domain.Entities.EffortState.Pending, ct);
         if (pending)
             await SendAsync(ticketId, "effort.request", ToOwner: true, ct);
+    }
+
+    /// <summary>alerts.effort_response (S7 "Efor Yanıtı Uyarısı" master switch; default on).
+    /// TODO(S8): recipient checkboxes (assigned / dept manager) join the alert fan-out.</summary>
+    private async Task SendResponseAlertAsync(int ticketId, CancellationToken ct)
+    {
+        if (await settings.GetAsync("alerts", "effort_response", ct) == "false")
+            return;
+        await SendAsync(ticketId, "effort.response", ToOwner: false, ct);
     }
 
     private async Task SendAsync(int ticketId, string templateCode, bool ToOwner, CancellationToken ct)

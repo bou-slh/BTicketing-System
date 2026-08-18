@@ -28,6 +28,7 @@ public class TicketsController(
     AppDbContext db,
     IQueueEngine queueEngine,
     ITicketService ticketService,
+    ISettingsService settings,
     IMemoryCache cache) : Controller
 {
     private static readonly TimeSpan CountsTtl = TimeSpan.FromSeconds(30);
@@ -46,12 +47,18 @@ public class TicketsController(
         var rules = AdvRule.Parse(ff, fo, fv);
         var isAdv = rules.Count > 0;
 
+        // S7 admin/settings-tickets: tickets.default_queue_id picks the landing queue,
+        // tickets.top_level_counts gates the queue-tree badges.
+        var behavior = await settings.GetTicketBehaviorAsync(ct);
+
         var queues = await LoadQueuesAsync(staff.Id, ct);
-        var activeQueue = isAdv ? null : ResolveActiveQueue(queues, queue);
+        var activeQueue = isAdv ? null : ResolveActiveQueue(queues, queue, behavior.DefaultQueueId);
 
         // ---- Queue tree with live counts (cached briefly per staff — the tree runs
         // one COUNT per countable queue; 30s staleness is acceptable, ROADMAP note). ----
-        var counts = await QueueCountsAsync(queues, staff.Id, actor, ct);
+        var counts = behavior.TopLevelCounts
+            ? await QueueCountsAsync(queues, staff.Id, actor, ct)
+            : new Dictionary<int, int>();
 
         // ---- List query: queue criteria (∩ quick search via criteria.Search →
         // tsvector over number/subject/thread bodies) + adv rules + toolbar filters. ----
@@ -349,11 +356,15 @@ public class TicketsController(
 
     /// <summary>?queue=id, else the mockup's default active node ("Bana Atanan" — the
     /// first child queue whose criteria is assignee:me), else the first leaf.</summary>
-    private static SavedQueue? ResolveActiveQueue(List<SavedQueue> queues, int? requestedId)
+    private static SavedQueue? ResolveActiveQueue(List<SavedQueue> queues, int? requestedId, int defaultQueueId = 0)
     {
         var leaves = queues.Where(x => x.ParentId != null || x.StaffId != null).ToList();
         if (requestedId is { } id && queues.FirstOrDefault(x => x.Id == id) is { } requested)
             return requested;
+        // tickets.default_queue_id (S7 admin/settings-tickets); 0/unresolvable falls
+        // back to the built-in default (the assignee:me child, mockup "Bana Atanan").
+        if (defaultQueueId != 0 && queues.FirstOrDefault(x => x.Id == defaultQueueId) is { } configured)
+            return configured;
         return leaves.FirstOrDefault(x =>
                 x.ParentId != null && QueueCriteria.Parse(x.Criteria).Assignee == "me")
             ?? leaves.FirstOrDefault();

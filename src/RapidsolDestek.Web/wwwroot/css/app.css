@@ -109,3 +109,7 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
 .lb-card[draggable="true"] { cursor: grab; }
 .lb-card.dragging { opacity: 0.5; }
 .lb-col.drop-target { outline: 2px dashed var(--rd-petrol); outline-offset: -2px; }
+
+/* Admin settings pages (S7, B3): containers gated off by an unchecked master
+   switch (rd.js data-gates) — the mockups define no gated look, product-only. */
+.rd-gated-off { opacity: 0.45; }

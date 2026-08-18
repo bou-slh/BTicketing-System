@@ -5,6 +5,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RapidsolDestek.Domain.Common;
 using RapidsolDestek.Domain.Entities;
 using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure;
@@ -88,15 +89,26 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
         // Real creation through the domain service: sequence number, help-topic
         // routing cascade (dept/priority/SLA/status/assignee) and the initial
         // Message thread entry all happen inside CreateAsync.
-        var ticket = await tickets.CreateAsync(new TicketCreateRequest
+        Ticket ticket;
+        try
         {
-            UserId = user.Id,
-            Subject = form.Summary.Trim(),
-            Body = body,
-            HelpTopicId = topic!.Id,
-            PriorityId = priorityId,
-            Source = TicketSource.Web,
-        }, actor, ct);
+            ticket = await tickets.CreateAsync(new TicketCreateRequest
+            {
+                UserId = user.Id,
+                Subject = form.Summary.Trim(),
+                Body = body,
+                HelpTopicId = topic!.Id,
+                PriorityId = priorityId,
+                Source = TicketSource.Web,
+            }, actor, ct);
+        }
+        catch (DomainRuleException ex) when (ex.Code == "max-open-exceeded")
+        {
+            // tickets.max_open_per_user (S7 admin/settings-tickets); the mockup's
+            // maxOpenHelp promises rejection + notice. TODO(S8): overlimit email.
+            ModelState.AddModelError(nameof(OpenForm.Summary), "errMaxOpen");
+            return View(await BuildVmAsync(user, form, ct));
+        }
 
         // B5: uploaded files → IFileStore content + StoredFile/Attachment rows on
         // the initial Message entry (DomainSeeder hero-attachment wiring parity).

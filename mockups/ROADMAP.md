@@ -671,7 +671,44 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
 - [ ] **audit-logs.html** — filters/export/pagination; rows drill down to the audited object (B10)
 - [ ] **settings-company.html** — logo file uploads with preview (B3); page selects live from SitePages
 - [ ] **settings-system.html** — language add/remove rows (B4); attachment storage settings consumed; maintenance mode drives portal/offline
-- [ ] **settings-tickets.html** — all 40 switches gate for real, effort section drives B8 guards; sequence dialog CRUD (B3/B4)
+- [x] **settings-tickets.html** — all 40 switches gate for real, effort section drives B8 guards; sequence dialog CRUD (B3/B4)
+      *(S7; /admin/settings-tickets (SettingsTicketsController) over ISettingsService typed sections
+      (NEW TicketBehaviorSettings + the S4 EffortSettings/NumberingSettings) so the page renders exactly
+      what the engine reads; every control persists (PRG toasts), server-side validation (format needs '#',
+      ranges, select membership) writes NOTHING on failure. LIVE switches (13): number_format + number_mode
+      (Rastgele = collision-checked random draw in TicketService.DrawNumberAsync, counter untouched;
+      Ardışık = row-locked sequence — seed stays sequential, the mockup's selected "Rastgele" is sample
+      state), default_status / default_priority (cascade fallback NEWLY wired in CreateAsync) / default_sla,
+      default_queue_id + top_level_counts (agent TicketsController landing queue + queue-tree badges),
+      max_open_per_user (end-user creates refused over the limit, staff bypass — portal open shows invented
+      open.errMaxOpen; TODO(S8) overlimit mail), claim_on_response (NEW: ThreadService auto-claims on staff
+      response + assigned event/TicketAssigned, osTicket auto_claim parity), require_topic_to_close (NEW
+      close guard in TransitionStatusAsync → existing agent tv.errStatus toast), effort enabled /
+      block_work_until_approved / mandatory_reject_note / auto_approve_threshold / revision_limit (S4 gates,
+      consumed since S4), autoresp effort_proposal + alerts effort_response masters (NEW gates on
+      EffortEmailHandler request/response mails). PERSISTED-ONLY (each annotated at TicketBehaviorSettings /
+      the controller maps): lock_mode (IThreadService lock API exists, composer wiring pending), captcha
+      TODO(S9), auto_refer_on_close (needs the referral mechanism), allow_external_images TODO(S8),
+      collab_visibility (open decision #9), default_topic_id TODO(S8 inbound mail), effort unit (canon flag:
+      proposals are hours everywhere) + reminder_days TODO(S8 Hangfire reminder), 5 autoresponses + 6 alert
+      masters + 24 recipient boxes TODO(S8 alert fan-out); system-errors master stays checked+disabled per
+      mockup (not persisted). dlg-seq = real CRUD (B4, SequenceNumberService.SaveAsync): rows become
+      name/next inputs (INVENTED — mockup rows are static text, needs canon sign-off), ✕ removes, Sıra ekle
+      appends via data-rule-add + NEW data-rule-into rd.js contract; guards: internal/in-use sequences
+      (settings pointer, help topics) undeletable (st.errSeqInUse), Next can never move backwards — stays
+      above the highest drawn number (st.errSeqNext); dialog submit drops the mockup's data-dialog-close
+      (audited B2 close-swallows-save bug). B3 gating = NEW shared rd.js data-gates (effort master gates its
+      dependent fields, each alert master gates its recipients row; product-only .rd-gated-off in app.css).
+      B9 scroll-spy NEW in rd.js — .bo-section-index follows scroll (mockup only click-highlights), shared
+      by the other 6 settings pages. Honest-defaults deviations (mockup checked = sample state, need canon
+      sign-off): require_topic_to_close ships OFF (osTicket parity), sequence select shows the DB truth
+      (sequential). Queues section: table = top-level SavedQueues with System pill = shared vs Custom =
+      personal — the entity has no IsSystem flag yet (queues-page port adds it with delete protection);
+      default-queue select offers shared queues only (the mockup's personal "SLA Riskli VIP" option is
+      sample data). Invented keys (TR/EN twins): st.slaFmt/toastSaved/toastSeqSaved/errFormat/errValues/
+      errSeqInUse/errSeqNext + open.errMaxOpen. Tests: SettingsTicketsTests (9) incl. the S7 exit-gate leg —
+      admin HTTP POST flips block-work-until-approved → S4 guard flips for real (staff reply + close throw
+      WorkBlockedByEffortException, flip back reopens) — suite 185.)*
 - [ ] **settings-tasks.html** — same pattern as tickets (B3/B4)
 - [ ] **settings-agents.html** — template Edit dialogs per-row prefilled (B2); lockout policy consumed by B6
 - [ ] **settings-users.html** — 6 template dialogs prefilled (B2); registration mode consumed by portal

@@ -112,6 +112,7 @@ public sealed class ThreadService(
         if (type == ThreadEntryType.Response)
             thread.LastResponseAt = now;
 
+        var autoClaimed = false;
         if (ticket is not null)
         {
             ticket.LastUpdateAt = now;
@@ -120,12 +121,31 @@ public sealed class ThreadService(
                 ticket.IsAnswered = true;
             else if (type == ThreadEntryType.Message)
                 ticket.IsAnswered = false;
+
+            // tickets.claim_on_response (S7 admin/settings-tickets, osTicket
+            // auto_claim_tickets): a staff response on an unassigned ticket claims it.
+            if (type == ThreadEntryType.Response && actor.IsStaff && ticket.StaffId is null
+                && (await settings.GetTicketBehaviorAsync(ct)).ClaimOnResponse)
+            {
+                ticket.StaffId = actor.Id;
+                autoClaimed = true;
+            }
         }
 
         using (actor.BeginAuditScope())
             await db.SaveChangesAsync(ct);
 
-        await dispatcher.DispatchAsync([new ThreadEntryAdded(threadId, entry.Id, type, ticket?.Id)], ct);
+        var events = new List<Domain.Events.IDomainEvent>
+        {
+            new ThreadEntryAdded(threadId, entry.Id, type, ticket?.Id),
+        };
+        if (autoClaimed)
+        {
+            await AddEventAsync(threadId, "assigned", actor, new { staffId = ticket!.StaffId, teamId = ticket.TeamId }, ct);
+            events.Add(new TicketAssigned(ticket.Id, ticket.StaffId, ticket.TeamId, actor.Name));
+        }
+
+        await dispatcher.DispatchAsync(events, ct);
         return entry;
     }
 
