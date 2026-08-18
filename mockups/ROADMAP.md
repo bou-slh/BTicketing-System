@@ -191,7 +191,7 @@ pattern dead in the mockups.
   both panels reflect it. Live-board leg GREEN 2026-08-18: `LiveBoardTests` — two browser contexts
   (dkaya + kyilmaz) sit on /agent/live over LiveBoardHub; dkaya's Üstlen appears on kyilmaz's board in
   <1 s (1 s-timeout web-first assert plus a stopwatch guard), then both boards converge the card out of
-  the claimable columns. Fresh-seed dependent like the rest of the suite.)*
+  the claimable columns. Fresh-seed dependent like the rest of the suite. STAGE CLOSED 2026-08-18: all 18 §6.2 pages ported, both gate legs green, visual-differ pass over the final five pages (kb, kb-faq, canned, profile, live) ×TR/EN×light/dark incl. dialogs — one S1 caught+fixed (cn.fBodyHelp unescaped braces, see canned row) — all 5 at parity.)*
 - **S7 — Admin area** (42 pages, §6.3; B1–B4 everywhere, builders, settings actually consumed by the engine).
   *Gate*: every setting round-trips (flip block-work-until-approved → S4 guard flips); builder-created
   queue/form/list/filter demonstrably affects the agent panel.
