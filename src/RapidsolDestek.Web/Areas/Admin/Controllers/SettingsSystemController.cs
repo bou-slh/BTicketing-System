@@ -106,11 +106,15 @@ public class SettingsSystemController(AppDbContext db, ISettingsService settings
             .Select(d => new OptionVm(d.Id, d.Name)).ToListAsync(ct);
         // Business-hours schedules only (a holiday list cannot be the default work
         // calendar); the mockup's 2 options are a sample subset of the 3 real rows.
-        var schedules = await db.Schedules.Where(s => s.Kind != ScheduleKind.Holidays)
+        // Inactive schedules stay pickable only while currently pointed at (S7
+        // schedules bulk enable/disable).
+        var storedScheduleId = Int("default_schedule_id", 0);
+        var schedules = await db.Schedules
+            .Where(s => s.Kind != ScheduleKind.Holidays && (s.IsActive || s.Id == storedScheduleId))
             .OrderBy(s => s.Id).Select(s => new OptionVm(s.Id, s.Name)).ToListAsync(ct);
 
         // Unset ⇒ the calendar SLA timers already run against: the default SLA's schedule.
-        var defaultScheduleId = Int("default_schedule_id", 0);
+        var defaultScheduleId = storedScheduleId;
         if (defaultScheduleId == 0)
         {
             var defaultSlaId = ParseOrZero(await settings.GetAsync("core", "default_sla_id", ct));

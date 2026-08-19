@@ -42,10 +42,12 @@ public class SlasController(AppDbContext db, ISettingsService settings) : Contro
 
         // Dialog schedule options: working-hour calendars only (the seeded canon
         // options Hafta içi / 7/24 / Cumartesi — holiday lists are no SLA clock).
+        // IsActive travels with each option so a dialog can hide inactive schedules
+        // while keeping its own row's current selection visible (S7 schedules port).
         var schedules = await db.Schedules
             .Where(s => s.Kind == ScheduleKind.BusinessHours)
             .OrderBy(s => s.Id)
-            .Select(s => new OptionVm(s.Id, s.Name))
+            .Select(s => new ScheduleOptionVm(s.Id, s.Name, s.IsActive))
             .ToListAsync(ct);
 
         return View(new SlasIndexVm(
@@ -248,7 +250,7 @@ public sealed record SlasIndexVm(
     int From,
     int To,
     IReadOnlyList<SlaRowVm> Rows,
-    IReadOnlyList<OptionVm> Schedules);
+    IReadOnlyList<ScheduleOptionVm> Schedules);
 
 public sealed record SlaRowVm(
     int Id,

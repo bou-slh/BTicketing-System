@@ -87,8 +87,8 @@ public static class DomainSeeder
             Timezone = "Europe/Istanbul", Description = "2026 resmi tatil günleri",
             Entries =
             [
-                new ScheduleEntry { Name = "29 Ekim Cumhuriyet Bayramı", StartsOn = new DateOnly(2026, 10, 29), Sort = 1 },
-                new ScheduleEntry { Name = "1 Ocak Yılbaşı", StartsOn = new DateOnly(2027, 1, 1), Sort = 2 },
+                new ScheduleEntry { Name = "29 Ekim Cumhuriyet Bayramı", IsHoliday = true, StartsOn = new DateOnly(2026, 10, 29), Sort = 1 },
+                new ScheduleEntry { Name = "1 Ocak Yılbaşı", IsHoliday = true, StartsOn = new DateOnly(2027, 1, 1), Sort = 2 },
             ],
         };
         var schSaturday = new Schedule

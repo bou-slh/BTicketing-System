@@ -215,6 +215,9 @@ public static class DomainModelConfiguration
 
         b.Entity<SlaPlan>(e => e.HasIndex(x => x.Name).IsUnique());
 
+        // DB default TRUE so pre-S7 live rows stay active when the column lands.
+        b.Entity<Schedule>(e => e.Property(x => x.IsActive).HasDefaultValue(true));
+
         b.Entity<ScheduleEntry>(e =>
         {
             e.HasIndex(x => x.ScheduleId);

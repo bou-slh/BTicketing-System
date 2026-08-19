@@ -1,0 +1,329 @@
+@using System.Globalization
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model ScheduleEditVm
+@{
+    var s = Model.Schedule;
+    var isNew = s is null;
+    ViewData["Title"] = isNew ? L["sche.newTitle"].Value : s!.Name;
+
+    // PRG toast handoff: validation failure (nothing written) or clone success.
+    if (TempData["ScheduleEditToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["ScheduleEditToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    var kind = s?.Kind == ScheduleKind.Holidays ? "holiday" : "business";
+
+    // Weekday checkboxes: the mockup's Pzt..Paz order with the seeded osTicket-style
+    // bits (Sun=1, Mon=2 … Sat=64 — "Hafta içi" = 62).
+    (string Key, int Bit)[] days =
+    [
+        ("sche.dMon", 2), ("sche.dTue", 4), ("sche.dWed", 8), ("sche.dThu", 16),
+        ("sche.dFri", 32), ("sche.dSat", 64), ("sche.dSun", 1),
+    ];
+    (string Value, string Key)[] repeats =
+    [
+        ("weekly", "sche.repWeekly"), ("daily", "sche.repDaily"),
+        ("monthly", "sche.repMonthly"), ("once", "sche.repOnce"),
+    ];
+}
+
+<form method="post" asp-area="Admin" asp-controller="Schedules" asp-action="Save"
+      id="sche-form" data-diagnose-url="/admin/schedule-edit/diagnose">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@s!.Id">
+    }
+
+    <div class="bo-page-head">
+        <div>
+            <a href="/admin/schedules" style="font-size:13px">@L["sche.back"]</a>
+            <h1>@(isNew ? L["sche.newTitle"].Value : s!.Name)</h1>
+            <p>@L["sche.sub"]</p>
+        </div>
+        <div class="actions">
+            @* Clone posts through the hidden carrier below (staff-edit precedent);
+               clone/delete are disabled on create — nothing exists yet. *@
+            <button type="submit" class="rd-btn" form="sche-clone" disabled="@isNew">@L["sche.clone"]</button>
+            <button type="button" class="rd-btn" data-dialog-open="dlg-diag">@L["sche.diag"]</button>
+            <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" disabled="@isNew">@SL["common.delete"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </div>
+
+    <div class="rd-tabs" data-tabs>
+        <button type="button" class="active" data-tab="sche-info">@L["sche.tabInfo"]</button>
+        <button type="button" data-tab="sche-entries">@L["sche.tabEntries"]</button>
+        <button type="button" data-tab="sche-holidays">@L["sche.tabHolidays"]</button>
+    </div>
+
+    @* ============ Takvim ============ *@
+    <div class="rd-tab-panel active" id="sche-info">
+        <div class="rd-surface">
+            <div class="rd-surface-body" style="max-width:720px">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="sche-name">@L["sche.name"]</label>
+                        <input id="sche-name" name="name" class="rd-control" value="@s?.Name" required maxlength="120">
+                        <div class="rd-help">@L["sche.nameHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="sche-type">@L["sche.type"]</label>
+                        <select id="sche-type" name="kind" class="rd-control">
+                            <option value="business" selected="@(kind == "business")">@L["sche.typeBusiness"]</option>
+                            <option value="holiday" selected="@(kind == "holiday")">@L["sche.typeHoliday"]</option>
+                        </select>
+                        <div class="rd-help">@L["sche.typeHelp"]</div>
+                    </div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="sche-tz">@L["sche.tz"]</label>
+                    <select id="sche-tz" name="timezone" class="rd-control" style="max-width:320px">
+                        <option value="" selected="@(string.IsNullOrEmpty(s?.Timezone))">@L["sche.tzSystem"]</option>
+                        @foreach (var tz in Model.Timezones)
+                        {
+                            <option value="@tz.Value" selected="@(s?.Timezone == tz.Value)">@tz.Label</option>
+                        }
+                    </select>
+                    <div class="rd-help">@L["sche.tzHelp"]</div>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="sche-desc">@L["sche.desc"]</label>
+                    <textarea id="sche-desc" name="description" class="rd-control" style="min-height:80px">@s?.Description</textarea>
+                    <div class="rd-help">@L["sche.descHelp"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* ============ Girdiler (B4) ============
+       Row = the mockup's exact DOM plus: hidden entryIds (reconciliation), the
+       entryDayMarks "row" marker opening each row's weekday sequence (unchecked
+       checkboxes post nothing — staff-edit marker precedent) and an INVENTED date
+       input revealed for monthly/one-time repeats (their anchor date — the mockup
+       row cannot express those rules otherwise; needs canon sign-off). *@
+    @{
+        async Task EntryRowAsync(ScheduleEntryRowVm? e)
+        {
+            var repeat = e?.Repeat ?? "weekly";
+            <tr class="bo-rule-row">
+                <td>
+                    <input type="hidden" name="entryIds" value="@(e?.Id ?? 0)">
+                    <input type="hidden" name="entryDayMarks" value="row">
+                    <input class="rd-control" name="entryNames" value="@e?.Name" style="min-width:120px">
+                </td>
+                <td>
+                    <input class="rd-control" type="date" name="entryDates" value="@e?.Date"
+                           style="width:150px;margin-bottom:6px" data-entry-date
+                           title="@L["sche.entryDateTitle"]" hidden="@(repeat is not ("monthly" or "once"))">
+                    <input class="rd-control" type="time" name="entryStarts" value="@(e?.Starts ?? "09:00")" style="width:110px">
+                </td>
+                <td><input class="rd-control" type="time" name="entryEnds" value="@(e?.Ends ?? "18:00")" style="width:110px"></td>
+                <td>
+                    <select class="rd-control" name="entryRepeats" style="min-width:120px" data-entry-repeat>
+                        @foreach (var r in repeats)
+                        {
+                            <option value="@r.Value" selected="@(repeat == r.Value)">@L[r.Key]</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <div style="display:flex;gap:9px;flex-wrap:wrap">
+                        @foreach (var d in days)
+                        {
+                            <label class="rd-check"><input type="checkbox" name="entryDayMarks" value="@d.Bit" checked="@(((e?.DayMask ?? 0) & d.Bit) != 0)"><span>@L[d.Key]</span></label>
+                        }
+                    </div>
+                </td>
+                <td><button type="button" class="remove" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" title="@SL["common.delete"]">✕</button></td>
+            </tr>
+        }
+    }
+    <div class="rd-tab-panel" id="sche-entries">
+        <div class="rd-surface">
+            <div class="rd-surface-head"><span>@L["sche.entriesHead"]</span></div>
+            <table class="rd-table" id="tbl-entries">
+                <thead>
+                    <tr>
+                        <th>@SL["common.name"]</th>
+                        <th>@L["sche.colStart"]</th>
+                        <th>@L["sche.colEnd"]</th>
+                        <th>@L["sche.colRepeat"]</th>
+                        <th>@L["sche.colDays"]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var e in Model.Entries)
+                    {
+                        await EntryRowAsync(e);
+                    }
+                </tbody>
+            </table>
+            <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+                <button type="button" class="rd-btn rd-btn-ghost" data-rule-add="sche-entry-tpl" data-rule-into="#tbl-entries tbody">@L["sche.addEntry"]</button>
+                <div class="rd-help">@L["sche.entriesHelp"]</div>
+            </div>
+        </div>
+        <template id="sche-entry-tpl">
+            @{ await EntryRowAsync(null); }
+        </template>
+    </div>
+
+    @* ============ Tatiller (B4) ============
+       Row = the mockup's exact DOM plus hidden holIds and the INVENTED time pair
+       revealed by the "Saat aralığı" mode (the mockup's select is otherwise
+       inexpressible; needs canon sign-off). *@
+    @{
+        async Task HolidayRowAsync(ScheduleHolidayRowVm? h)
+        {
+            var allDay = h?.AllDay ?? true;
+            <tr class="bo-rule-row">
+                <td>
+                    <input type="hidden" name="holIds" value="@(h?.Id ?? 0)">
+                    <input class="rd-control" type="date" name="holDates" value="@h?.Date" style="width:160px">
+                </td>
+                <td><input class="rd-control" name="holNames" value="@h?.Name" style="min-width:220px"></td>
+                <td>
+                    <select class="rd-control" name="holModes" style="min-width:130px" data-hol-mode>
+                        <option value="allday" selected="@allDay">@L["sche.allDay"]</option>
+                        <option value="range" selected="@(!allDay)">@L["sche.timeRange"]</option>
+                    </select>
+                    <input class="rd-control" type="time" name="holStarts" value="@h?.Starts"
+                           style="width:110px;margin-top:6px" title="@L["sche.colStart"]" hidden="@allDay">
+                    <input class="rd-control" type="time" name="holEnds" value="@h?.Ends"
+                           style="width:110px;margin-top:6px" title="@L["sche.colEnd"]" hidden="@allDay">
+                </td>
+                <td><button type="button" class="remove" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" title="@SL["common.delete"]">✕</button></td>
+            </tr>
+        }
+    }
+    <div class="rd-tab-panel" id="sche-holidays">
+        <div class="rd-surface">
+            <div class="rd-surface-head"><span>@L["sche.holidaysHead"]</span></div>
+            <table class="rd-table" id="tbl-holidays">
+                <thead>
+                    <tr>
+                        <th>@L["sche.colDate"]</th>
+                        <th>@SL["common.name"]</th>
+                        <th>@L["sche.colHours"]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var h in Model.Holidays)
+                    {
+                        await HolidayRowAsync(h);
+                    }
+                </tbody>
+            </table>
+            <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+                <button type="button" class="rd-btn rd-btn-ghost" data-rule-add="sche-hol-tpl" data-rule-into="#tbl-holidays tbody">@L["sche.addHoliday"]</button>
+                <div class="rd-help">@L["sche.holidaysHelp"]</div>
+            </div>
+        </div>
+        <template id="sche-hol-tpl">
+            @{ await HolidayRowAsync(null); }
+        </template>
+    </div>
+</form>
+@* Clone carrier: deep-copies the schedule with every entry+holiday row; the
+   localized default copy name travels from here (sche.cloneNameFmt). *@
+@if (!isNew)
+{
+    <form id="sche-clone" method="post" asp-area="Admin" asp-controller="Schedules" asp-action="Clone" hidden>
+        <input type="hidden" name="id" value="@s!.Id">
+        <input type="hidden" name="cloneName" value="@L["sche.cloneNameFmt", s!.Name]">
+    </form>
+    <form id="sche-del" method="post" asp-area="Admin" asp-controller="Schedules" asp-action="Delete" hidden>
+        <input type="hidden" name="id" value="@s!.Id">
+    </form>
+}
+
+@* Tanılama (B10): the banner is composed client-side from these localized formats;
+   the answer evaluates the CURRENT editor state (unsaved rows included). *@
+<dialog class="rd-dialog" id="dlg-diag">
+    <div class="rd-dialog-head"><span>@L["sche.diagTitle"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+        <div class="rd-field">
+            <label class="rd-label" for="sche-diag-date">@L["sche.diagDate"]</label>
+            <input id="sche-diag-date" class="rd-control" type="date"
+                   value="@DateTime.Today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)" style="max-width:200px">
+            <div class="rd-help">@L["sche.diagHelp"]</div>
+        </div>
+        @* GetString: the open/holiday formats keep their literal {0} for the client
+           script — the indexer would String.Format them argument-less and throw. *@
+        <div class="rd-banner rd-banner-info mb-0"><span>◷</span><span id="sche-diag-result"
+            data-fmt-open="@L.GetString("sche.diagResult")"
+            data-fmt-closed="@L.GetString("sche.diagClosed")"
+            data-fmt-holiday="@L.GetString("sche.diagHoliday")"
+            data-fmt-noholiday="@L.GetString("sche.diagNoHoliday")"
+            data-fmt-error="@L.GetString("sche.diagError")"></span></div>
+    </div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.close"]</button>
+    </div>
+</dialog>
+
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p>@SL["common.confirmDelete"]</p></div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="sche-del" disabled="@isNew">@SL["common.delete"]</button>
+    </div>
+</dialog>
+
+@* Row gating + diagnostic mechanics (page-specific; helptopic-edit page-script
+   precedent). Monthly/one-time entries reveal their anchor date, "Saat aralığı"
+   holidays reveal their time pair; the diagnostic POSTs the whole form (antiforgery
+   token included) plus the chosen date and fills the banner. *@
+<script>
+(() => {
+  const form = document.getElementById("sche-form");
+  if (!form) return;
+
+  const syncRows = () => {
+    form.querySelectorAll("select[name=entryRepeats]").forEach((sel) => {
+      const date = sel.closest("tr")?.querySelector("input[name=entryDates]");
+      if (date) date.hidden = sel.value !== "monthly" && sel.value !== "once";
+    });
+    form.querySelectorAll("select[name=holModes]").forEach((sel) => {
+      const range = sel.value === "range";
+      sel.closest("tr")?.querySelectorAll("input[type=time]").forEach((t) => { t.hidden = !range; });
+    });
+  };
+  document.addEventListener("change", syncRows);
+  // Freshly cloned builder rows (rd.js data-rule-add runs first) need a resync.
+  document.addEventListener("click", () => setTimeout(syncRows, 0));
+  syncRows();
+
+  const dateInput = document.getElementById("sche-diag-date");
+  const banner = document.getElementById("sche-diag-result");
+  const runDiag = async () => {
+    if (!dateInput || !banner || !dateInput.value) return;
+    const data = new FormData(form);
+    data.append("diagDate", dateInput.value);
+    try {
+      const res = await fetch(form.getAttribute("data-diagnose-url"), { method: "POST", body: data });
+      if (!res.ok) throw new Error("diagnose failed");
+      const d = await res.json();
+      banner.textContent =
+        d.status === "open" ? banner.getAttribute("data-fmt-open").replace("{0}", d.ranges)
+        : d.status === "holiday" ? banner.getAttribute("data-fmt-holiday").replace("{0}", d.holiday)
+        : d.status === "noholiday" ? banner.getAttribute("data-fmt-noholiday")
+        : banner.getAttribute("data-fmt-closed");
+    } catch {
+      banner.textContent = banner.getAttribute("data-fmt-error");
+    }
+  };
+  document.addEventListener("click", (e) => {
+    if (e.target.closest('[data-dialog-open="dlg-diag"]')) setTimeout(runDiag, 0);
+  });
+  dateInput?.addEventListener("change", runDiag);
+})();
+</script>

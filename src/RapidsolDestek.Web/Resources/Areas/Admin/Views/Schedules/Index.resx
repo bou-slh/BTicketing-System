@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sch.title" xml:space="preserve">
+    <value>Çalışma Takvimleri</value>
+  </data>
+  <data name="sch.sub" xml:space="preserve">
+    <value>SLA süreleri ve otomatik işlemler için çalışma saatleri ile tatil takvimleri.</value>
+  </data>
+  <data name="sch.searchPh" xml:space="preserve">
+    <value>Takvim ara…</value>
+  </data>
+  <data name="sch.new" xml:space="preserve">
+    <value>＋ Yeni Takvim</value>
+  </data>
+  <data name="sch.colType" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="sch.typeBusiness" xml:space="preserve">
+    <value>Çalışma Saatleri</value>
+  </data>
+  <data name="sch.typeHoliday" xml:space="preserve">
+    <value>Tatil</value>
+  </data>
+  <data name="sch.showing" xml:space="preserve">
+    <value>{2} takvimden {0}–{1} arası gösteriliyor</value>
+  </data>
+  <data name="sch.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="sch.toastSaved" xml:space="preserve">
+    <value>Takvim kaydedildi.</value>
+  </data>
+  <data name="sch.toastCreated" xml:space="preserve">
+    <value>Takvim oluşturuldu.</value>
+  </data>
+  <data name="sch.toastDeleted" xml:space="preserve">
+    <value>Takvim silindi.</value>
+  </data>
+  <data name="sch.bulkNone" xml:space="preserve">
+    <value>Seçili takvim yok.</value>
+  </data>
+  <data name="sch.bulkDone" xml:space="preserve">
+    <value>{0} takvim güncellendi.</value>
+  </data>
+  <data name="sch.bulkPartial" xml:space="preserve">
+    <value>{0} takvim güncellendi, {1} takvim atlandı (kullanımda).</value>
+  </data>
+  <data name="sch.bulkTitle" xml:space="preserve">
+    <value>Toplu işlemler</value>
+  </data>
+  <data name="sch.bulkHelp" xml:space="preserve">
+    <value>Seçili takvimlere uygulanır.</value>
+  </data>
+  <data name="sch.emptyTitle" xml:space="preserve">
+    <value>Henüz takvim yok</value>
+  </data>
+  <data name="sch.emptyText" xml:space="preserve">
+    <value>SLA sürelerinin işleyeceği ilk çalışma takvimini oluşturun.</value>
+  </data>
+</root>

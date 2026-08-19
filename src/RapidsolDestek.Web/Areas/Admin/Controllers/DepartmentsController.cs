@@ -436,10 +436,14 @@ public class DepartmentsController(AppDbContext db) : Controller
             crumb = string.Join(" / ", chain.Append(dept.Name));
         }
 
+        var currentScheduleId = dept?.ScheduleId;
         return new DeptEditVm(
             dept, crumb, parents,
             await db.SlaPlans.OrderBy(s => s.Name).Select(s => new OptionVm(s.Id, s.Name)).ToListAsync(ct),
-            await db.Schedules.OrderBy(s => s.Name).Select(s => new OptionVm(s.Id, s.Name)).ToListAsync(ct),
+            // Inactive schedules stay pickable only while currently selected (S7
+            // schedules bulk enable/disable).
+            await db.Schedules.Where(s => s.IsActive || s.Id == currentScheduleId)
+                .OrderBy(s => s.Name).Select(s => new OptionVm(s.Id, s.Name)).ToListAsync(ct),
             await db.Staff.Where(s => s.IsActive).OrderBy(s => s.FirstName).ThenBy(s => s.LastName)
                 .Select(s => new OptionVm(s.Id, s.FirstName + " " + s.LastName)).ToListAsync(ct),
             await db.EmailAccounts.OrderBy(e => e.Address).Select(e => new OptionVm(e.Id, e.Address)).ToListAsync(ct),

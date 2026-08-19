@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sche.back" xml:space="preserve">
+    <value>← Çalışma Takvimleri</value>
+  </data>
+  <data name="sche.sub" xml:space="preserve">
+    <value>Çalışma saatlerini, tekrar eden girdileri ve tatil günlerini düzenleyin.</value>
+  </data>
+  <data name="sche.clone" xml:space="preserve">
+    <value>Kopyala</value>
+  </data>
+  <data name="sche.diag" xml:space="preserve">
+    <value>Tanılama</value>
+  </data>
+  <data name="sche.tabInfo" xml:space="preserve">
+    <value>Takvim</value>
+  </data>
+  <data name="sche.tabEntries" xml:space="preserve">
+    <value>Girdiler</value>
+  </data>
+  <data name="sche.tabHolidays" xml:space="preserve">
+    <value>Tatiller</value>
+  </data>
+  <data name="sche.name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="sche.nameHelp" xml:space="preserve">
+    <value>SLA planlarında ve departman ayarlarında bu adla görünür.</value>
+  </data>
+  <data name="sche.type" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="sche.typeBusiness" xml:space="preserve">
+    <value>Çalışma Saatleri</value>
+  </data>
+  <data name="sche.typeHoliday" xml:space="preserve">
+    <value>Tatil Takvimi</value>
+  </data>
+  <data name="sche.typeHelp" xml:space="preserve">
+    <value>Tatil takvimleri çalışma saatlerinden düşülen günleri tanımlar.</value>
+  </data>
+  <data name="sche.tz" xml:space="preserve">
+    <value>Zaman dilimi</value>
+  </data>
+  <data name="sche.tzSystem" xml:space="preserve">
+    <value>— Sistem zaman dilimi —</value>
+  </data>
+  <data name="sche.tzHelp" xml:space="preserve">
+    <value>Boş bırakılırsa sistem zaman dilimi kullanılır.</value>
+  </data>
+  <data name="sche.desc" xml:space="preserve">
+    <value>Açıklama</value>
+  </data>
+  <data name="sche.descHelp" xml:space="preserve">
+    <value>Takvimin ne zaman kullanılacağını hatırlatan kısa bir not.</value>
+  </data>
+  <data name="sche.entriesHead" xml:space="preserve">
+    <value>Takvim Girdileri</value>
+  </data>
+  <data name="sche.entriesHelp" xml:space="preserve">
+    <value>Her girdi bir çalışma zamanı aralığı tanımlar; tekrar kuralıyla çoğaltılır.</value>
+  </data>
+  <data name="sche.colStart" xml:space="preserve">
+    <value>Başlangıç</value>
+  </data>
+  <data name="sche.colEnd" xml:space="preserve">
+    <value>Bitiş</value>
+  </data>
+  <data name="sche.colRepeat" xml:space="preserve">
+    <value>Tekrar</value>
+  </data>
+  <data name="sche.colDays" xml:space="preserve">
+    <value>Günler</value>
+  </data>
+  <data name="sche.repWeekly" xml:space="preserve">
+    <value>Haftalık</value>
+  </data>
+  <data name="sche.repDaily" xml:space="preserve">
+    <value>Günlük</value>
+  </data>
+  <data name="sche.repMonthly" xml:space="preserve">
+    <value>Aylık</value>
+  </data>
+  <data name="sche.repOnce" xml:space="preserve">
+    <value>Tek seferlik</value>
+  </data>
+  <data name="sche.dMon" xml:space="preserve">
+    <value>Pzt</value>
+  </data>
+  <data name="sche.dTue" xml:space="preserve">
+    <value>Sal</value>
+  </data>
+  <data name="sche.dWed" xml:space="preserve">
+    <value>Çar</value>
+  </data>
+  <data name="sche.dThu" xml:space="preserve">
+    <value>Per</value>
+  </data>
+  <data name="sche.dFri" xml:space="preserve">
+    <value>Cum</value>
+  </data>
+  <data name="sche.dSat" xml:space="preserve">
+    <value>Cmt</value>
+  </data>
+  <data name="sche.dSun" xml:space="preserve">
+    <value>Paz</value>
+  </data>
+  <data name="sche.addEntry" xml:space="preserve">
+    <value>＋ Girdi Ekle</value>
+  </data>
+  <data name="sche.holidaysHead" xml:space="preserve">
+    <value>Tatil Günleri</value>
+  </data>
+  <data name="sche.holidaysHelp" xml:space="preserve">
+    <value>Bu günlerde SLA süresi işlemez.</value>
+  </data>
+  <data name="sche.colDate" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="sche.colHours" xml:space="preserve">
+    <value>Saat</value>
+  </data>
+  <data name="sche.allDay" xml:space="preserve">
+    <value>Tüm gün</value>
+  </data>
+  <data name="sche.timeRange" xml:space="preserve">
+    <value>Saat aralığı</value>
+  </data>
+  <data name="sche.addHoliday" xml:space="preserve">
+    <value>＋ Ekle</value>
+  </data>
+  <data name="sche.diagTitle" xml:space="preserve">
+    <value>Takvim Tanılama</value>
+  </data>
+  <data name="sche.diagDate" xml:space="preserve">
+    <value>Tarih seçin</value>
+  </data>
+  <data name="sche.diagHelp" xml:space="preserve">
+    <value>Seçilen tarihte takvimin hangi saatlerde açık olduğunu gösterir.</value>
+  </data>
+  <data name="sche.diagResult" xml:space="preserve">
+    <value>Bu tarihte çalışma saati: {0}</value>
+  </data>
+  <data name="sche.diagClosed" xml:space="preserve">
+    <value>Bu tarihte takvim kapalı.</value>
+  </data>
+  <data name="sche.diagHoliday" xml:space="preserve">
+    <value>Bu tarih tatil: {0}</value>
+  </data>
+  <data name="sche.diagNoHoliday" xml:space="preserve">
+    <value>Bu tarih bu takvimde tatil değil.</value>
+  </data>
+  <data name="sche.diagError" xml:space="preserve">
+    <value>Tanılama yanıtı alınamadı.</value>
+  </data>
+  <data name="sche.newTitle" xml:space="preserve">
+    <value>Yeni Takvim</value>
+  </data>
+  <data name="sche.toastCloned" xml:space="preserve">
+    <value>Takvim kopyalandı.</value>
+  </data>
+  <data name="sche.cloneNameFmt" xml:space="preserve">
+    <value>{0} (Kopya)</value>
+  </data>
+  <data name="sche.entryDateTitle" xml:space="preserve">
+    <value>Başlangıç tarihi (aylık / tek seferlik)</value>
+  </data>
+  <data name="sche.errName" xml:space="preserve">
+    <value>Takvim adı gerekli (en fazla 120 karakter).</value>
+  </data>
+  <data name="sche.errTz" xml:space="preserve">
+    <value>Zaman dilimi tanınmadı.</value>
+  </data>
+  <data name="sche.errEntry" xml:space="preserve">
+    <value>Girdi satırları çözümlenemedi.</value>
+  </data>
+  <data name="sche.errEntryName" xml:space="preserve">
+    <value>Her girdi satırı için ad gerekli.</value>
+  </data>
+  <data name="sche.errEntryTime" xml:space="preserve">
+    <value>Girdi bitiş saati başlangıç saatinden sonra olmalı.</value>
+  </data>
+  <data name="sche.errEntryDays" xml:space="preserve">
+    <value>Haftalık girdilerde en az bir gün seçilmeli.</value>
+  </data>
+  <data name="sche.errEntryDate" xml:space="preserve">
+    <value>Aylık ve tek seferlik girdiler için tarih gerekli.</value>
+  </data>
+  <data name="sche.errHoliday" xml:space="preserve">
+    <value>Tatil satırları çözümlenemedi.</value>
+  </data>
+  <data name="sche.errHolName" xml:space="preserve">
+    <value>Her tatil satırı için ad gerekli.</value>
+  </data>
+  <data name="sche.errHolDate" xml:space="preserve">
+    <value>Her tatil satırı için tarih gerekli.</value>
+  </data>
+  <data name="sche.errHolTime" xml:space="preserve">
+    <value>Tatil saat aralığında bitiş başlangıçtan sonra olmalı.</value>
+  </data>
+  <data name="sche.errInUse" xml:space="preserve">
+    <value>Bu takvim kullanımda (SLA planı, departman veya varsayılan takvim) — silinemez.</value>
+  </data>
+</root>

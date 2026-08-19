@@ -946,7 +946,46 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       keys (TR/EN twins): sla.dateFmt/dlgNewTitle/dlgTitleFmt/err*/toast*/bulk* + parameterized
       sla.showing. Differ note: Updated cells show live timestamps (seed carries no canon dates).
       +5 tests (HelpTopicsSlasAdminTests) — suite 247.)*
-- [ ] **schedules.html / schedule-edit.html** — entry/holiday rows add/remove (B4); timezone; **diagnostic answers**; Clone works
+- [x] **schedules.html / schedule-edit.html** — entry/holiday rows add/remove (B4); timezone; **diagnostic answers**; Clone works
+      *(S7; /admin/schedules + /admin/schedule-edit?id= (SchedulesController; no id = create — the mockup's
+      new-button links straight to schedule-edit.html). NEW S7_ScheduleEntries migration:
+      ScheduleEntry.IsHoliday (entry vs holiday rows share the one osTicket-parity schedule_entry table;
+      legacy pre-column rows classified by shape — date-only one-time = holiday) + Schedule.IsActive
+      (DB default TRUE; the bulk dialog's Etkinleştir/Devre Dışı Bırak needed a column — the mockup list
+      shows NO status column, so state is visible only through pickers: the SLA dialog, settings-system
+      default-schedule and department-edit selects now hide inactive schedules except a row's own current
+      selection). B1 list: sort name/created/updated (updated-desc indicator + id tiebreak = the mockup's
+      exact row order — its sample dates contradict their own sorted-desc, helptopics deviation precedent),
+      search, pagination (PageSize 8), dlg-more bulk with delete guard (SLA plans / departments /
+      system default_schedule_id skip+partial toast; NOTE: the row's "topic references" don't exist —
+      HelpTopic carries no schedule column); rd-empty = the mockup's hidden #sch-empty reachable. Editor:
+      whole-page save (B3 refuses writing NOTHING on bad rows); entry rows (B4, data-rule-add/-into +
+      tr.bo-rule-row ✕, settings-tickets dlg-seq contract) post weekday checkboxes as an entryDayMarks
+      "row"/bit marker sequence (staff-edit precedent; bits Sun=1…Sat=64, seed Day=62 parity); INVENTED
+      per-row anchor-date input revealed for Aylık/Tek seferlik repeats (the mockup row cannot express
+      them — monthly = anchor's day-of-month, once = the anchor date; needs canon sign-off); holiday rows
+      = date+name+mode with an INVENTED gated time pair for "Saat aralığı" (all-day otherwise; needs canon
+      sign-off; no yearly-repeat control — mockup defines none, osTicket repeats-yearly parity gap
+      flagged); rows reconcile by hidden id (update-in-place/remove/add). SAMPLE-STATE CONFLICT flagged:
+      the mockup edits "Hafta içi" yet shows 29 Ekim/1 Ocak holiday rows — seed canon keeps those on
+      Resmi Tatiller 2026 (renders them in its Tatiller tab); Hafta içi's holiday tab is honestly empty.
+      Timezone: the mockup's 3 fixed options (+ system default = system/timezone Setting fallback) with
+      real IANA values; a schedule holding another valid id renders appended verbatim; Berlin's "(UTC+01)"
+      label kept verbatim (DST mismatch in the mockup label, flagged). Clone = deep copy (schedule + every
+      entry/holiday, Sort/StopsOn/Week/Month included) named via view-supplied sche.cloneNameFmt
+      "{0} (Kopya)" + numeric uniqueness suffix, lands on the copy's editor; clone/delete disabled on
+      create. DIAGNOSTIC (B10): dlg-diag POSTs the CURRENT editor state (unsaved rows included — works on
+      the create form) + date to /admin/schedule-edit/diagnose; Domain ScheduleEvaluator merges entry
+      ranges and subtracts holidays (all-day clears the date, timed rows cut their span); JSON
+      status/ranges/holiday composed client-side from data-fmt-* resx attributes — sche.diagResult
+      re-parameterized to "…: {0}" (mockup hardcodes 09:00–18:00); holiday-kind schedules answer the
+      holiday question (invented diagHoliday/diagNoHoliday); diag date defaults to TODAY (mockup's
+      2026-08-12 = sample state). The date answer is wall-clock (tz-free); the tz-aware instant API
+      ScheduleEvaluator.IsOpenAt (open in Istanbul ≠ open under UTC for the same instant) is the S8 SLA
+      sweep's hook, tested. osTicket Yearly repeats (enum kept) are inexpressible in the select — render
+      as "once", flagged. Invented keys (TR/EN twins): sch.dateFmt/toast*/bulk* + parameterized
+      sch.showing; sche.newTitle/toastCloned/cloneNameFmt/entryDateTitle/diagClosed/diagHoliday/
+      diagNoHoliday/diagError/err*. +8 tests (SchedulesAdminTests) — suite 255.)*
 - [ ] **pages.html** — site page CRUD (B2); pages served on portal
 - [ ] **apikeys.html** — key CRUD + regenerate + copy-to-clipboard; IP restriction enforced by the API (B2)
 - [ ] **plugins.html** — feature-flag install/enable/disable per module; per-module configure entry (§3 replaced)

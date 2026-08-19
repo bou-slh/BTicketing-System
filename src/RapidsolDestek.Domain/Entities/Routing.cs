@@ -152,6 +152,10 @@ public class Schedule : TimestampedEntity
 
     public string Description { get; set; } = "";
 
+    /// <summary>Inactive schedules stay referenced but drop out of new-assignment
+    /// pickers (admin schedules bulk enable/disable — S7).</summary>
+    public bool IsActive { get; set; } = true;
+
     public List<ScheduleEntry> Entries { get; set; } = [];
 }
 
@@ -174,6 +178,11 @@ public class ScheduleEntry : TimestampedEntity
     public int Sort { get; set; }
 
     public required string Name { get; set; }
+
+    /// <summary>Holiday rows (schedule-edit "Tatiller" tab) close the schedule on
+    /// their date instead of opening it; entry rows open it. Both live in the one
+    /// osTicket-parity schedule_entry table (S7).</summary>
+    public bool IsHoliday { get; set; }
 
     public ScheduleRepeat Repeats { get; set; } = ScheduleRepeat.Never;
 

@@ -181,7 +181,9 @@
                         <label class="rd-label" for="sla-schedule-@dialogId">@L["sla.schedule"]</label>
                         <select id="sla-schedule-@dialogId" name="scheduleId" class="rd-control">
                             <option value="" selected="@(sla?.ScheduleId is null)">@L["sla.schedDefault"]</option>
-                            @foreach (var o in Model.Schedules)
+                            @* Inactive schedules hidden from new picks; a row's own
+                               (inactive) selection stays visible (S7 schedules port). *@
+                            @foreach (var o in Model.Schedules.Where(o => o.IsActive || o.Id == sla?.ScheduleId))
                             {
                                 <option value="@o.Id" selected="@(sla?.ScheduleId == o.Id)">@o.Label</option>
                             }

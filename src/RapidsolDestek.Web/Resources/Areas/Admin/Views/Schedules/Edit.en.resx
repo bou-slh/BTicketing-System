@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sche.back" xml:space="preserve">
+    <value>← Schedules</value>
+  </data>
+  <data name="sche.sub" xml:space="preserve">
+    <value>Edit the working hours, recurring entries and holidays.</value>
+  </data>
+  <data name="sche.clone" xml:space="preserve">
+    <value>Clone</value>
+  </data>
+  <data name="sche.diag" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
+  <data name="sche.tabInfo" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="sche.tabEntries" xml:space="preserve">
+    <value>Entries</value>
+  </data>
+  <data name="sche.tabHolidays" xml:space="preserve">
+    <value>Holidays</value>
+  </data>
+  <data name="sche.name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="sche.nameHelp" xml:space="preserve">
+    <value>Shown under this name in SLA plans and department settings.</value>
+  </data>
+  <data name="sche.type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="sche.typeBusiness" xml:space="preserve">
+    <value>Business Hours</value>
+  </data>
+  <data name="sche.typeHoliday" xml:space="preserve">
+    <value>Holiday Schedule</value>
+  </data>
+  <data name="sche.typeHelp" xml:space="preserve">
+    <value>Holiday schedules define days subtracted from working hours.</value>
+  </data>
+  <data name="sche.tz" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+  <data name="sche.tzSystem" xml:space="preserve">
+    <value>— System time zone —</value>
+  </data>
+  <data name="sche.tzHelp" xml:space="preserve">
+    <value>If left empty, the system time zone is used.</value>
+  </data>
+  <data name="sche.desc" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="sche.descHelp" xml:space="preserve">
+    <value>A short note reminding when this schedule is used.</value>
+  </data>
+  <data name="sche.entriesHead" xml:space="preserve">
+    <value>Schedule Entries</value>
+  </data>
+  <data name="sche.entriesHelp" xml:space="preserve">
+    <value>Each entry defines a working-time range, multiplied by its repeat rule.</value>
+  </data>
+  <data name="sche.colStart" xml:space="preserve">
+    <value>Starts</value>
+  </data>
+  <data name="sche.colEnd" xml:space="preserve">
+    <value>Ends</value>
+  </data>
+  <data name="sche.colRepeat" xml:space="preserve">
+    <value>Repeats</value>
+  </data>
+  <data name="sche.colDays" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="sche.repWeekly" xml:space="preserve">
+    <value>Weekly</value>
+  </data>
+  <data name="sche.repDaily" xml:space="preserve">
+    <value>Daily</value>
+  </data>
+  <data name="sche.repMonthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="sche.repOnce" xml:space="preserve">
+    <value>One-time</value>
+  </data>
+  <data name="sche.dMon" xml:space="preserve">
+    <value>Mon</value>
+  </data>
+  <data name="sche.dTue" xml:space="preserve">
+    <value>Tue</value>
+  </data>
+  <data name="sche.dWed" xml:space="preserve">
+    <value>Wed</value>
+  </data>
+  <data name="sche.dThu" xml:space="preserve">
+    <value>Thu</value>
+  </data>
+  <data name="sche.dFri" xml:space="preserve">
+    <value>Fri</value>
+  </data>
+  <data name="sche.dSat" xml:space="preserve">
+    <value>Sat</value>
+  </data>
+  <data name="sche.dSun" xml:space="preserve">
+    <value>Sun</value>
+  </data>
+  <data name="sche.addEntry" xml:space="preserve">
+    <value>＋ Add Entry</value>
+  </data>
+  <data name="sche.holidaysHead" xml:space="preserve">
+    <value>Holidays</value>
+  </data>
+  <data name="sche.holidaysHelp" xml:space="preserve">
+    <value>SLA timers do not run on these days.</value>
+  </data>
+  <data name="sche.colDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="sche.colHours" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="sche.allDay" xml:space="preserve">
+    <value>All day</value>
+  </data>
+  <data name="sche.timeRange" xml:space="preserve">
+    <value>Time range</value>
+  </data>
+  <data name="sche.addHoliday" xml:space="preserve">
+    <value>＋ Add</value>
+  </data>
+  <data name="sche.diagTitle" xml:space="preserve">
+    <value>Schedule Diagnostics</value>
+  </data>
+  <data name="sche.diagDate" xml:space="preserve">
+    <value>Pick a date</value>
+  </data>
+  <data name="sche.diagHelp" xml:space="preserve">
+    <value>Shows which hours the schedule is open on the chosen date.</value>
+  </data>
+  <data name="sche.diagResult" xml:space="preserve">
+    <value>Working hours on this date: {0}</value>
+  </data>
+  <data name="sche.diagClosed" xml:space="preserve">
+    <value>The schedule is closed on this date.</value>
+  </data>
+  <data name="sche.diagHoliday" xml:space="preserve">
+    <value>This date is a holiday: {0}</value>
+  </data>
+  <data name="sche.diagNoHoliday" xml:space="preserve">
+    <value>This date is not a holiday in this calendar.</value>
+  </data>
+  <data name="sche.diagError" xml:space="preserve">
+    <value>The diagnostic answer could not be fetched.</value>
+  </data>
+  <data name="sche.newTitle" xml:space="preserve">
+    <value>New Schedule</value>
+  </data>
+  <data name="sche.toastCloned" xml:space="preserve">
+    <value>Schedule cloned.</value>
+  </data>
+  <data name="sche.cloneNameFmt" xml:space="preserve">
+    <value>{0} (Copy)</value>
+  </data>
+  <data name="sche.entryDateTitle" xml:space="preserve">
+    <value>Start date (monthly / one-time)</value>
+  </data>
+  <data name="sche.errName" xml:space="preserve">
+    <value>A schedule name is required (max 120 characters).</value>
+  </data>
+  <data name="sche.errTz" xml:space="preserve">
+    <value>The time zone was not recognized.</value>
+  </data>
+  <data name="sche.errEntry" xml:space="preserve">
+    <value>The entry rows could not be parsed.</value>
+  </data>
+  <data name="sche.errEntryName" xml:space="preserve">
+    <value>Every entry row needs a name.</value>
+  </data>
+  <data name="sche.errEntryTime" xml:space="preserve">
+    <value>An entry must end after it starts.</value>
+  </data>
+  <data name="sche.errEntryDays" xml:space="preserve">
+    <value>Weekly entries need at least one selected day.</value>
+  </data>
+  <data name="sche.errEntryDate" xml:space="preserve">
+    <value>Monthly and one-time entries need a date.</value>
+  </data>
+  <data name="sche.errHoliday" xml:space="preserve">
+    <value>The holiday rows could not be parsed.</value>
+  </data>
+  <data name="sche.errHolName" xml:space="preserve">
+    <value>Every holiday row needs a name.</value>
+  </data>
+  <data name="sche.errHolDate" xml:space="preserve">
+    <value>Every holiday row needs a date.</value>
+  </data>
+  <data name="sche.errHolTime" xml:space="preserve">
+    <value>A holiday time range must end after it starts.</value>
+  </data>
+  <data name="sche.errInUse" xml:space="preserve">
+    <value>This schedule is in use (SLA plan, department or default schedule) — it cannot be deleted.</value>
+  </data>
+</root>
