@@ -1,0 +1,188 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model SettingsCompanyVm
+@{
+    ViewData["Title"] = L["sc.title"];
+
+    // Toast handoff (settings-tickets precedent): PRG keys via TempData.
+    if (TempData["ScToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["ScToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["sc.title"]</h1>
+        <p>@L["sc.subtitle"]</p>
+    </div>
+</div>
+
+<div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+        <a href="#sec-basic" class="active">@L["sc.secBasic"]</a>
+        <a href="#sec-pages">@L["sc.secPages"]</a>
+        <a href="#sec-logos">@L["sc.secLogos"]</a>
+        <a href="#sec-backdrop">@L["sc.secBackdrop"]</a>
+    </nav>
+
+    <form class="bo-settings-sections" method="post" enctype="multipart/form-data"
+          asp-area="Admin" asp-controller="SettingsCompany" asp-action="Save">
+
+        <section class="rd-surface bo-section" id="sec-basic">
+            <div class="rd-surface-head"><span>@L["sc.secBasic"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="co-name">@L["sc.name"]</label>
+                    <input id="co-name" class="rd-control" name="company_name" value="@Model.Name" required>
+                    <div class="rd-help">@L["sc.nameHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="co-web">@L["sc.website"]</label>
+                    <input id="co-web" class="rd-control" type="url" name="website" value="@Model.Website">
+                    <div class="rd-help">@L["sc.websiteHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="co-phone">@L["sc.phone"]</label>
+                    <input id="co-phone" class="rd-control" name="phone" value="@Model.Phone">
+                    <div class="rd-help">@L["sc.phoneHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="co-address">@L["sc.address"]</label>
+                    <textarea id="co-address" class="rd-control" name="address">@Model.Address</textarea>
+                    <div class="rd-help">@L["sc.addressHelp"]</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-pages">
+            <div class="rd-surface-head">
+                <span>@L["sc.secPages"]</span>
+                <span class="spacer"></span>
+                <a class="rd-btn rd-btn-ghost rd-btn-sm" href="/admin/pages">@L["sc.managePages"]</a>
+            </div>
+            <div class="rd-surface-body">
+                @* Selects list REAL SitePage rows per type (seeded canon pages from
+                   admin/pages.html); the mockup's second options are sample state. *@
+                <div class="rd-field">
+                    <label class="rd-label" for="co-landing">@L["sc.landing"]</label>
+                    <select id="co-landing" class="rd-control" name="landing_page">
+                        @foreach (var option in Model.LandingPages)
+                        {
+                            <option value="@option.Id" selected="@(Model.LandingPageId == option.Id)">@option.Label</option>
+                        }
+                    </select>
+                    <div class="rd-help">@L["sc.landingHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="co-offline">@L["sc.offline"]</label>
+                    <select id="co-offline" class="rd-control" name="offline_page">
+                        @foreach (var option in Model.OfflinePages)
+                        {
+                            <option value="@option.Id" selected="@(Model.OfflinePageId == option.Id)">@option.Label</option>
+                        }
+                    </select>
+                    <div class="rd-help">@L["sc.offlineHelp"]</div>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="co-thanks">@L["sc.thanks"]</label>
+                    <select id="co-thanks" class="rd-control" name="thanks_page">
+                        @foreach (var option in Model.ThanksPages)
+                        {
+                            <option value="@option.Id" selected="@(Model.ThanksPageId == option.Id)">@option.Label</option>
+                        }
+                    </select>
+                    <div class="rd-help">@L["sc.thanksHelp"]</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-logos">
+            <div class="rd-surface-head"><span>@L["sc.secLogos"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <span class="rd-label">@L["sc.clientLogo"]</span>
+                    <div style="border:1px solid var(--rd-border);border-radius:11px;padding:18px;display:flex;align-items:center;gap:12px;margin-bottom:10px">
+                        @* Geçerli box: the stored custom logo streams back from the Logo
+                           action (B3 preview, no base64); otherwise the default mark. *@
+                        @if (Model.ClientLogoMode == "custom" && Model.ClientLogoFileId != 0)
+                        {
+                            <img src="/admin/settings-company/logo?which=client&v=@Model.ClientLogoFileId" alt="" style="max-height:36px;max-width:220px">
+                        }
+                        else
+                        {
+                            <span class="rc-logo"><span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span></span>
+                        }
+                        <span class="rd-pill rd-pill-teal">@L["sc.current"]</span>
+                    </div>
+                    <label class="rd-check" style="margin-bottom:7px">
+                        <input type="radio" name="client_logo" value="default" checked="@(Model.ClientLogoMode != "custom")">
+                        <span>@L["sc.logoDefault"]</span>
+                    </label>
+                    <label class="rd-check" style="margin-bottom:10px">
+                        @* B3: the custom radio gates its upload zone (rd.js data-gates). *@
+                        <input type="radio" name="client_logo" value="custom" checked="@(Model.ClientLogoMode == "custom")" data-gates="#up-client">
+                        <span>@L["sc.logoCustom"]</span>
+                    </label>
+                    <label class="rd-upload" id="up-client">@L["sc.upload"]<input type="file" name="clientLogoFile" accept=".png,.svg,image/png,image/svg+xml" hidden></label>
+                    <div class="rd-help">@L["sc.clientLogoHelp"]</div>
+                </div>
+
+                <div class="rd-field mb-0">
+                    <span class="rd-label">@L["sc.staffLogo"]</span>
+                    <div style="border:1px solid var(--rd-border);border-radius:11px;padding:18px;display:flex;align-items:center;gap:12px;margin-bottom:10px">
+                        @if (Model.StaffLogoMode == "custom" && Model.StaffLogoFileId != 0)
+                        {
+                            <img src="/admin/settings-company/logo?which=staff&v=@Model.StaffLogoFileId" alt="" style="max-height:36px;max-width:220px">
+                        }
+                        else
+                        {
+                            <span class="rc-logo"><span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span></span>
+                        }
+                        <span class="rd-pill rd-pill-teal">@L["sc.current"]</span>
+                    </div>
+                    <label class="rd-check" style="margin-bottom:7px">
+                        <input type="radio" name="staff_logo" value="default" checked="@(Model.StaffLogoMode != "custom")">
+                        <span>@L["sc.logoDefault"]</span>
+                    </label>
+                    <label class="rd-check" style="margin-bottom:10px">
+                        <input type="radio" name="staff_logo" value="custom" checked="@(Model.StaffLogoMode == "custom")" data-gates="#up-staff">
+                        <span>@L["sc.logoCustom"]</span>
+                    </label>
+                    <label class="rd-upload" id="up-staff">@L["sc.upload"]<input type="file" name="staffLogoFile" accept=".png,.svg,image/png,image/svg+xml" hidden></label>
+                    <div class="rd-help">@L["sc.staffLogoHelp"]</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-backdrop">
+            <div class="rd-surface-head"><span>@L["sc.secBackdrop"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-field mb-0">
+                    <span class="rd-label">@L["sc.backdrop"]</span>
+                    @* Stored backdrop previews from the Logo action; empty = brand gradient
+                       (mockup help text). No removal control exists in the mockup — once
+                       set, a new upload replaces it (flagged on the ROADMAP row). *@
+                    @if (Model.BackdropFileId != 0)
+                    {
+                        <div style="background:url('/admin/settings-company/logo?which=backdrop&v=@Model.BackdropFileId') center/cover;border-radius:11px;height:120px;margin-bottom:10px"></div>
+                    }
+                    else
+                    {
+                        <div style="background:var(--rd-hero-gradient);border-radius:11px;height:120px;margin-bottom:10px"></div>
+                    }
+                    <label class="rd-upload">@L["sc.upload"]<input type="file" name="backdropFile" accept=".png,.svg,image/png,image/svg+xml" hidden></label>
+                    <div class="rd-help">@L["sc.backdropHelp"]</div>
+                </div>
+            </div>
+        </section>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+            <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</div>

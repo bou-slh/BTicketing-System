@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sc.title" xml:space="preserve">
+    <value>Company Settings</value>
+  </data>
+  <data name="sc.subtitle" xml:space="preserve">
+    <value>Company identity, portal pages and logos. This information appears on the user portal and in email templates.</value>
+  </data>
+  <data name="sc.secBasic" xml:space="preserve">
+    <value>Basic Information</value>
+  </data>
+  <data name="sc.secPages" xml:space="preserve">
+    <value>Site Pages</value>
+  </data>
+  <data name="sc.secLogos" xml:space="preserve">
+    <value>Logos</value>
+  </data>
+  <data name="sc.secBackdrop" xml:space="preserve">
+    <value>Login Backdrop</value>
+  </data>
+  <data name="sc.name" xml:space="preserve">
+    <value>Company name</value>
+  </data>
+  <data name="sc.nameHelp" xml:space="preserve">
+    <value>The official name shown in email signatures and the portal footer.</value>
+  </data>
+  <data name="sc.website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="sc.websiteHelp" xml:space="preserve">
+    <value>The company link in the portal footer.</value>
+  </data>
+  <data name="sc.phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="sc.phoneHelp" xml:space="preserve">
+    <value>The support phone number shown to users.</value>
+  </data>
+  <data name="sc.address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="sc.addressHelp" xml:space="preserve">
+    <value>Available in email templates via the %{{company.address}} variable.</value>
+  </data>
+  <data name="sc.landing" xml:space="preserve">
+    <value>Landing page</value>
+  </data>
+  <data name="sc.landingHelp" xml:space="preserve">
+    <value>The content shown on the user portal home page.</value>
+  </data>
+  <data name="sc.offline" xml:space="preserve">
+    <value>Offline page</value>
+  </data>
+  <data name="sc.offlineHelp" xml:space="preserve">
+    <value>The page shown to users while the help desk is offline.</value>
+  </data>
+  <data name="sc.thanks" xml:space="preserve">
+    <value>Thank-you page</value>
+  </data>
+  <data name="sc.thanksHelp" xml:space="preserve">
+    <value>The confirmation page shown after a new request is created.</value>
+  </data>
+  <data name="sc.managePages" xml:space="preserve">
+    <value>Edit page contents →</value>
+  </data>
+  <data name="sc.clientLogo" xml:space="preserve">
+    <value>Portal logo</value>
+  </data>
+  <data name="sc.clientLogoHelp" xml:space="preserve">
+    <value>The logo shown in the user portal header.</value>
+  </data>
+  <data name="sc.staffLogo" xml:space="preserve">
+    <value>Panel logo</value>
+  </data>
+  <data name="sc.staffLogoHelp" xml:space="preserve">
+    <value>The logo shown in the agent and admin panel headers.</value>
+  </data>
+  <data name="sc.logoDefault" xml:space="preserve">
+    <value>Default RapidSol logo</value>
+  </data>
+  <data name="sc.logoCustom" xml:space="preserve">
+    <value>Upload a custom logo</value>
+  </data>
+  <data name="sc.upload" xml:space="preserve">
+    <value>Drag a file here or click to browse (PNG/SVG, max 2 MB)</value>
+  </data>
+  <data name="sc.current" xml:space="preserve">
+    <value>Current</value>
+  </data>
+  <data name="sc.backdrop" xml:space="preserve">
+    <value>Login backdrop image</value>
+  </data>
+  <data name="sc.backdropHelp" xml:space="preserve">
+    <value>Shown behind the agent sign-in page. If left empty, the brand gradient is used.</value>
+  </data>
+  <data name="sc.toastSaved" xml:space="preserve">
+    <value>Company settings saved.</value>
+  </data>
+  <data name="sc.errValues" xml:space="preserve">
+    <value>Some fields are invalid; nothing was saved.</value>
+  </data>
+  <data name="sc.errLogo" xml:space="preserve">
+    <value>Custom logo selected but no file has been uploaded.</value>
+  </data>
+  <data name="sc.errLogoFile" xml:space="preserve">
+    <value>Logo files must be PNG or SVG and at most 2 MB.</value>
+  </data>
+</root>

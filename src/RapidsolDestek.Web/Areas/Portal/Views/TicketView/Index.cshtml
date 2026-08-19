@@ -4,6 +4,16 @@
 @{
     ViewData["Title"] = L.GetString("tv.title", Model.Number);
 
+    // Toast handoff (PRG): reply-path errors (e.g. attachment size cap) surface here.
+    if (TempData["TvToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["TvToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
     // Mockup pill classes (portal.css): open/wait/test/solved/closed; derived and
     // internal keys map onto them (effortWait→wait, new→open) — Home/Tickets parity.
     static string StatusClass(string key) => key switch

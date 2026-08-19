@@ -9,9 +9,8 @@ namespace RapidsolDestek.Web;
 /// reachable. Default is off (seeded system/offline=false; a missing row also
 /// counts as off).
 /// </summary>
-// TODO(S7): admin/settings-system.html "maintenance mode" switch edits the
-// system/offline setting (ROADMAP §6.3 settings-system: "maintenance mode
-// drives portal/offline"). Until then the flag is data-only.
+// S7: admin/settings-system.html "Yardım masası çevrimiçi" edits this SAME
+// system/offline setting (inverted: online ⇔ !offline) — SettingsSystemController.
 public class MaintenanceModeMiddleware(RequestDelegate next)
 {
     public const string SettingNamespace = "system";

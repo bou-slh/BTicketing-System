@@ -96,4 +96,7 @@
   <data name="kf.errDenied" xml:space="preserve">
     <value>You do not have permission for this action.</value>
   </data>
+  <data name="kf.errAttachTooBig" xml:space="preserve">
+    <value>An attached file exceeds the maximum allowed file size.</value>
+  </data>
 </root>

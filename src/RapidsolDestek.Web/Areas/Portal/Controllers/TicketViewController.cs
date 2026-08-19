@@ -31,6 +31,7 @@ public class TicketViewController(
     IThreadService threads,
     IEffortProposalService efforts,
     IFileStore files,
+    ISettingsService settings,
     IDataProtectionProvider dataProtection) : Controller
 {
     /// <summary>Data-protection purpose shared with CheckStatusController's access-link mail.</summary>
@@ -253,6 +254,16 @@ public class TicketViewController(
 
         if (string.IsNullOrWhiteSpace(body))
             return RedirectToAction(nameof(Index), new { id });
+
+        // Attachment size cap (admin/settings-system Ekler, S7): refuse the whole
+        // reply before anything posts — surfaced as an error toast (PRG).
+        var attachLimits = await settings.GetAttachmentsAsync(ct);
+        if (attachments.Any(f => f.Length > attachLimits.MaxSizeBytes))
+        {
+            TempData["TvToast"] = "tv.errAttachTooBig";
+            TempData["TvToastError"] = true;
+            return RedirectToAction(nameof(Index), new { id });
+        }
 
         var actor = ActorContext.ForUser(user!, HttpContext.Connection.RemoteIpAddress?.ToString());
         // The composer textarea produces plain text (the rd.js editor inserts

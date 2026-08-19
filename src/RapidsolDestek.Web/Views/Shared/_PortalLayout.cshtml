@@ -1,10 +1,15 @@
 @using System.Globalization
+@inject RapidsolDestek.Infrastructure.Services.ISettingsService Settings
+@{
+    // Browser-tab title = the configured helpdesk name (admin/settings-system, S7).
+    var helpdeskTitle = await Settings.GetAsync("core", "helpdesk_title") ?? "RapidsolDestek";
+}
 <!doctype html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RapidsolDestek — @ViewData["Title"]</title>
+<title>@helpdeskTitle — @ViewData["Title"]</title>
 <link rel="icon" href="~/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="~/css/base.css">
 <link rel="stylesheet" href="~/css/portal.css">
@@ -12,6 +17,7 @@
 <script src="~/js/rd.js" defer></script>
 </head>
 <body class="portal" data-panel="portal" data-nav="@ViewData["NavKey"]" data-toast="@ViewData["Toast"]"
+      data-toast-variant="@ViewData["ToastVariant"]"
       data-editor-font="@SL["editor.font"]" data-editor-size="@SL["editor.size"]">
 
 <div id="rd-header">

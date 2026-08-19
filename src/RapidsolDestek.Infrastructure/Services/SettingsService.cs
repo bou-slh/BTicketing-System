@@ -16,6 +16,20 @@ public sealed record EffortSettings(
 public sealed record NumberingSettings(string NumberFormat, int SequenceId, string? DefaultStatusKey);
 
 /// <summary>
+/// Typed view over the "attachments" namespace (admin/settings-system Ekler section, S7).
+/// MaxSizeMb is LIVE — enforced at every upload ingress (portal open/reply, agent
+/// composers, kb-faq). Storage is persisted-only until a second IFileStore backend
+/// exists (only "fs" is registered; the mockup's "Veritabanı" default is sample state —
+/// storing file contents in the database was deliberately dropped, see StoredFile).
+/// AuthRequired is persisted-only: every download endpoint already sits behind auth;
+/// the OFF state needs an anonymous KB route once a public KB exists (TODO, flagged).
+/// </summary>
+public sealed record AttachmentSettings(string Storage, int MaxSizeMb, bool AuthRequired)
+{
+    public long MaxSizeBytes => MaxSizeMb * 1024L * 1024L;
+}
+
+/// <summary>
 /// Typed view over the "tickets" behavior namespace (admin/settings-tickets, S7).
 /// Defaults follow osTicket where the engine consumes the key; mockup checked
 /// states are sample data. Keys without an engine consumer yet are annotated at
@@ -42,6 +56,7 @@ public interface ISettingsService
     Task<IReadOnlyDictionary<string, string>> GetSectionAsync(string ns, CancellationToken ct = default);
 
     Task<EffortSettings> GetEffortAsync(CancellationToken ct = default);
+    Task<AttachmentSettings> GetAttachmentsAsync(CancellationToken ct = default);
     Task<NumberingSettings> GetTicketNumberingAsync(CancellationToken ct = default);
     Task<NumberingSettings> GetTaskNumberingAsync(CancellationToken ct = default);
     Task<TicketBehaviorSettings> GetTicketBehaviorAsync(CancellationToken ct = default);
@@ -86,6 +101,17 @@ public sealed class SettingsService(AppDbContext db) : ISettingsService
             ReminderDays: Int(s, "reminder_days", 3),
             AutoApproveThresholdHours: Decimal(s, "auto_approve_threshold_hours", 0),
             RevisionLimit: Int(s, "revision_limit", 3));
+    }
+
+    public async Task<AttachmentSettings> GetAttachmentsAsync(CancellationToken ct = default)
+    {
+        var s = await LoadAsync("attachments", ct);
+        return new AttachmentSettings(
+            // Honest default "fs": the only registered IFileStore backend (the mockup's
+            // selected "Veritabanı" is sample state — flagged on the ROADMAP row).
+            Storage: s.GetValueOrDefault("storage", "fs"),
+            MaxSizeMb: Int(s, "max_size_mb", 16),
+            AuthRequired: Bool(s, "auth_required", true));
     }
 
     public async Task<IReadOnlyDictionary<string, string>> GetSectionAsync(string ns, CancellationToken ct = default) =>

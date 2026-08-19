@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ss.title" xml:space="preserve">
+    <value>Sistem Ayarları</value>
+  </data>
+  <data name="ss.subtitle" xml:space="preserve">
+    <value>Yardım masasının genel davranışı: durum, adres, tarih-saat, diller ve ek dosya politikası.</value>
+  </data>
+  <data name="ss.secGeneral" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="ss.secDatetime" xml:space="preserve">
+    <value>Tarih ve Saat</value>
+  </data>
+  <data name="ss.secLang" xml:space="preserve">
+    <value>Diller</value>
+  </data>
+  <data name="ss.secAttach" xml:space="preserve">
+    <value>Ekler</value>
+  </data>
+  <data name="ss.online" xml:space="preserve">
+    <value>Yardım masası çevrimiçi</value>
+  </data>
+  <data name="ss.onlineHelp" xml:space="preserve">
+    <value>Kapatıldığında kullanıcı portalı çevrimdışı sayfasını gösterir; temsilciler çalışmaya devam eder.</value>
+  </data>
+  <data name="ss.url" xml:space="preserve">
+    <value>Yardım masası adresi (URL)</value>
+  </data>
+  <data name="ss.urlHelp" xml:space="preserve">
+    <value>E-postalardaki bağlantılar bu adresle oluşturulur.</value>
+  </data>
+  <data name="ss.name" xml:space="preserve">
+    <value>Yardım masası adı / başlığı</value>
+  </data>
+  <data name="ss.nameHelp" xml:space="preserve">
+    <value>Tarayıcı sekmesinde ve giden e-postaların gönderen adında görünür.</value>
+  </data>
+  <data name="ss.defaultDept" xml:space="preserve">
+    <value>Varsayılan departman</value>
+  </data>
+  <data name="ss.defaultDeptHelp" xml:space="preserve">
+    <value>Başka bir kural eşleşmezse yeni talepler bu departmana düşer.</value>
+  </data>
+  <data name="ss.forceHttps" xml:space="preserve">
+    <value>HTTPS zorla</value>
+  </data>
+  <data name="ss.forceHttpsHelp" xml:space="preserve">
+    <value>Tüm HTTP istekleri güvenli HTTPS adresine yönlendirilir.</value>
+  </data>
+  <data name="ss.collision" xml:space="preserve">
+    <value>Çakışma önleme süresi (dakika)</value>
+  </data>
+  <data name="ss.collisionHelp" xml:space="preserve">
+    <value>Bir temsilci yanıt yazarken talep bu süre boyunca diğer temsilcilere kilitlenir.</value>
+  </data>
+  <data name="ss.pageSize" xml:space="preserve">
+    <value>Sayfa boyutu</value>
+  </data>
+  <data name="ss.pageSizeHelp" xml:space="preserve">
+    <value>Listelerde sayfa başına gösterilecek varsayılan kayıt sayısı.</value>
+  </data>
+  <data name="ss.logLevel" xml:space="preserve">
+    <value>Günlük düzeyi</value>
+  </data>
+  <data name="ss.logLevelHelp" xml:space="preserve">
+    <value>Sistem günlüğüne hangi ayrıntı düzeyinde kayıt yazılacağı.</value>
+  </data>
+  <data name="ss.logNone" xml:space="preserve">
+    <value>Kapalı</value>
+  </data>
+  <data name="ss.logError" xml:space="preserve">
+    <value>Yalnızca hatalar</value>
+  </data>
+  <data name="ss.logWarn" xml:space="preserve">
+    <value>Hatalar ve uyarılar</value>
+  </data>
+  <data name="ss.logDebug" xml:space="preserve">
+    <value>Hata ayıklama (tümü)</value>
+  </data>
+  <data name="ss.logPurge" xml:space="preserve">
+    <value>Günlük temizleme</value>
+  </data>
+  <data name="ss.logPurgeHelp" xml:space="preserve">
+    <value>Bu süreden eski günlük kayıtları otomatik silinir.</value>
+  </data>
+  <data name="ss.purgeNever" xml:space="preserve">
+    <value>Asla</value>
+  </data>
+  <data name="ss.purge1m" xml:space="preserve">
+    <value>1 ay sonra</value>
+  </data>
+  <data name="ss.purge3m" xml:space="preserve">
+    <value>3 ay sonra</value>
+  </data>
+  <data name="ss.purge6m" xml:space="preserve">
+    <value>6 ay sonra</value>
+  </data>
+  <data name="ss.purge12m" xml:space="preserve">
+    <value>12 ay sonra</value>
+  </data>
+  <data name="ss.avatars" xml:space="preserve">
+    <value>Avatarları göster</value>
+  </data>
+  <data name="ss.avatarsHelp" xml:space="preserve">
+    <value>Yazışmalarda kullanıcı ve temsilci avatarları görünür.</value>
+  </data>
+  <data name="ss.richtext" xml:space="preserve">
+    <value>Zengin metin (biçimlendirme)</value>
+  </data>
+  <data name="ss.richtextHelp" xml:space="preserve">
+    <value>Yanıt kutularında kalın, liste, bağlantı gibi biçimlendirme araçları sunulur.</value>
+  </data>
+  <data name="ss.iframeList" xml:space="preserve">
+    <value>iFrame izin listesi</value>
+  </data>
+  <data name="ss.iframeListHelp" xml:space="preserve">
+    <value>Portalın iframe içinde gösterilebileceği alan adları (virgülle ayırın).</value>
+  </data>
+  <data name="ss.embedList" xml:space="preserve">
+    <value>Gömülü alan adı listesi</value>
+  </data>
+  <data name="ss.embedListHelp" xml:space="preserve">
+    <value>Yazışmalarda gömülü içeriğine (video vb.) izin verilen alan adları.</value>
+  </data>
+  <data name="ss.acl" xml:space="preserve">
+    <value>Erişim denetimi (ACL) IP listesi</value>
+  </data>
+  <data name="ss.aclHelp" xml:space="preserve">
+    <value>Yalnızca bu IP adreslerinden panele girilebilir. Boşsa sınırlama yoktur.</value>
+  </data>
+  <data name="ss.aclBackend" xml:space="preserve">
+    <value>ACL uygulanacak panel</value>
+  </data>
+  <data name="ss.aclBackendHelp" xml:space="preserve">
+    <value>IP sınırlamasının hangi panelleri kapsayacağı.</value>
+  </data>
+  <data name="ss.aclAdmin" xml:space="preserve">
+    <value>Yalnızca Yönetim</value>
+  </data>
+  <data name="ss.aclStaff" xml:space="preserve">
+    <value>Temsilci + Yönetim</value>
+  </data>
+  <data name="ss.aclAll" xml:space="preserve">
+    <value>Tüm paneller</value>
+  </data>
+  <data name="ss.locale" xml:space="preserve">
+    <value>Yerel ayar</value>
+  </data>
+  <data name="ss.localeHelp" xml:space="preserve">
+    <value>Sayı, para ve tarih biçimlerinin temel alacağı bölge.</value>
+  </data>
+  <data name="ss.timezone" xml:space="preserve">
+    <value>Zaman dilimi</value>
+  </data>
+  <data name="ss.timezoneHelp" xml:space="preserve">
+    <value>Tüm tarih ve saatler bu dilime göre gösterilir.</value>
+  </data>
+  <data name="ss.timeFormatMode" xml:space="preserve">
+    <value>Saat ve tarih biçimi</value>
+  </data>
+  <data name="ss.timeFormatModeHelp" xml:space="preserve">
+    <value>Yerel varsayılan çoğu kurulum için yeterlidir; Gelişmiş seçilirse aşağıdaki kalıplar kullanılır.</value>
+  </data>
+  <data name="ss.fmtLocale" xml:space="preserve">
+    <value>Yerel varsayılan</value>
+  </data>
+  <data name="ss.fmt24" xml:space="preserve">
+    <value>24 saat</value>
+  </data>
+  <data name="ss.fmtAdvanced" xml:space="preserve">
+    <value>Gelişmiş (özel kalıplar)</value>
+  </data>
+  <data name="ss.timeFormat" xml:space="preserve">
+    <value>Saat biçimi</value>
+  </data>
+  <data name="ss.timeFormatHelp" xml:space="preserve">
+    <value>Örnek: HH:mm → 16:29</value>
+  </data>
+  <data name="ss.dateFormat" xml:space="preserve">
+    <value>Tarih biçimi</value>
+  </data>
+  <data name="ss.dateFormatHelp" xml:space="preserve">
+    <value>Örnek: d MMMM y → 6 Ağustos 2026</value>
+  </data>
+  <data name="ss.datetimeFormat" xml:space="preserve">
+    <value>Tarih-saat biçimi</value>
+  </data>
+  <data name="ss.datetimeFormatHelp" xml:space="preserve">
+    <value>Örnek: d MMM y HH:mm → 6 Ağu 2026 16:29</value>
+  </data>
+  <data name="ss.dayFormat" xml:space="preserve">
+    <value>Gün biçimi</value>
+  </data>
+  <data name="ss.dayFormatHelp" xml:space="preserve">
+    <value>Örnek: EEEE, d MMMM → Perşembe, 6 Ağustos</value>
+  </data>
+  <data name="ss.defaultSchedule" xml:space="preserve">
+    <value>Varsayılan takvim</value>
+  </data>
+  <data name="ss.defaultScheduleHelp" xml:space="preserve">
+    <value>SLA sürelerinin hangi çalışma saatlerine göre işleyeceği.</value>
+  </data>
+  <data name="ss.manageSchedules" xml:space="preserve">
+    <value>Takvimleri yönet →</value>
+  </data>
+  <data name="ss.primaryLang" xml:space="preserve">
+    <value>Birincil dil</value>
+  </data>
+  <data name="ss.primaryLangHelp" xml:space="preserve">
+    <value>Arayüzün ve giden e-postaların varsayılan dili.</value>
+  </data>
+  <data name="ss.secondaryLangs" xml:space="preserve">
+    <value>İkincil diller</value>
+  </data>
+  <data name="ss.secondaryLangsHelp" xml:space="preserve">
+    <value>Kullanıcılar ve temsilciler bu diller arasından tercih yapabilir.</value>
+  </data>
+  <data name="ss.addLang" xml:space="preserve">
+    <value>Dil ekle</value>
+  </data>
+  <data name="ss.remove" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="ss.storage" xml:space="preserve">
+    <value>Depolama arka ucu</value>
+  </data>
+  <data name="ss.storageHelp" xml:space="preserve">
+    <value>Ek dosyalarının nerede saklanacağı. Değişiklik yalnızca yeni ekleri etkiler.</value>
+  </data>
+  <data name="ss.storageDb" xml:space="preserve">
+    <value>Veritabanı</value>
+  </data>
+  <data name="ss.storageDisk" xml:space="preserve">
+    <value>Disk (dosya sistemi)</value>
+  </data>
+  <data name="ss.storageS3" xml:space="preserve">
+    <value>S3 uyumlu bulut</value>
+  </data>
+  <data name="ss.maxSize" xml:space="preserve">
+    <value>En büyük dosya boyutu</value>
+  </data>
+  <data name="ss.maxSizeHelp" xml:space="preserve">
+    <value>Tek bir ek dosyası için üst sınır. Sunucu limitleri de geçerlidir.</value>
+  </data>
+  <data name="ss.authRequired" xml:space="preserve">
+    <value>Görüntüleme için giriş zorunlu</value>
+  </data>
+  <data name="ss.authRequiredHelp" xml:space="preserve">
+    <value>Ek dosyalarını yalnızca oturum açmış kullanıcılar indirebilir.</value>
+  </data>
+  <data name="ss.toastSaved" xml:space="preserve">
+    <value>Sistem ayarları kaydedildi.</value>
+  </data>
+  <data name="ss.toastLangs" xml:space="preserve">
+    <value>Dil listesi güncellendi.</value>
+  </data>
+  <data name="ss.errValues" xml:space="preserve">
+    <value>Bazı alanlar geçersiz; değişiklikler kaydedilmedi.</value>
+  </data>
+  <data name="ss.errLang" xml:space="preserve">
+    <value>Dil eklenemedi veya kaldırılamadı.</value>
+  </data>
+</root>

@@ -22,7 +22,7 @@ namespace RapidsolDestek.Web.Areas.Portal.Controllers;
 /// </summary>
 [Area("Portal")]
 [Authorize(Policy = "PortalUser")]
-public class OpenController(AppDbContext db, ITicketService tickets, IFileStore files) : Controller
+public class OpenController(AppDbContext db, ITicketService tickets, IFileStore files, ISettingsService settings) : Controller
 {
     [HttpGet("/open")]
     [NavKey("new")]
@@ -68,6 +68,12 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
                 .Select(p => (int?)p.Id)
                 .SingleOrDefaultAsync(ct)
             : null;
+
+        // Attachment size cap (admin/settings-system Ekler, S7): attachments/max_size_mb
+        // is enforced at every upload ingress — refuse before anything is created.
+        var attachLimits = await settings.GetAttachmentsAsync(ct);
+        if (form.Files.Any(f => f.Length > attachLimits.MaxSizeBytes))
+            ModelState.AddModelError(nameof(OpenForm.Files), "errAttachTooBig");
 
         if (!ModelState.IsValid)
             return View(await BuildVmAsync(user, form, ct));

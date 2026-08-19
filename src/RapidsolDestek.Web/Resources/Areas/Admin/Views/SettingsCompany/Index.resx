@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sc.title" xml:space="preserve">
+    <value>Şirket Ayarları</value>
+  </data>
+  <data name="sc.subtitle" xml:space="preserve">
+    <value>Şirket kimliği, portal sayfaları ve logolar. Buradaki bilgiler kullanıcı portalında ve e-posta şablonlarında görünür.</value>
+  </data>
+  <data name="sc.secBasic" xml:space="preserve">
+    <value>Temel Bilgiler</value>
+  </data>
+  <data name="sc.secPages" xml:space="preserve">
+    <value>Site Sayfaları</value>
+  </data>
+  <data name="sc.secLogos" xml:space="preserve">
+    <value>Logolar</value>
+  </data>
+  <data name="sc.secBackdrop" xml:space="preserve">
+    <value>Giriş Arka Planı</value>
+  </data>
+  <data name="sc.name" xml:space="preserve">
+    <value>Şirket adı</value>
+  </data>
+  <data name="sc.nameHelp" xml:space="preserve">
+    <value>E-posta imzalarında ve portal alt bilgisinde görünen resmi ad.</value>
+  </data>
+  <data name="sc.website" xml:space="preserve">
+    <value>Web sitesi</value>
+  </data>
+  <data name="sc.websiteHelp" xml:space="preserve">
+    <value>Portal alt bilgisindeki şirket bağlantısı.</value>
+  </data>
+  <data name="sc.phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="sc.phoneHelp" xml:space="preserve">
+    <value>Kullanıcılara gösterilen destek telefonu.</value>
+  </data>
+  <data name="sc.address" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="sc.addressHelp" xml:space="preserve">
+    <value>E-posta şablonlarında %{{company.address}} değişkeniyle kullanılabilir.</value>
+  </data>
+  <data name="sc.landing" xml:space="preserve">
+    <value>Karşılama sayfası</value>
+  </data>
+  <data name="sc.landingHelp" xml:space="preserve">
+    <value>Kullanıcı portalının ana sayfasında gösterilen içerik.</value>
+  </data>
+  <data name="sc.offline" xml:space="preserve">
+    <value>Çevrimdışı sayfası</value>
+  </data>
+  <data name="sc.offlineHelp" xml:space="preserve">
+    <value>Yardım masası kapalıyken kullanıcılara gösterilen sayfa.</value>
+  </data>
+  <data name="sc.thanks" xml:space="preserve">
+    <value>Teşekkür sayfası</value>
+  </data>
+  <data name="sc.thanksHelp" xml:space="preserve">
+    <value>Yeni talep oluşturulduktan sonra gösterilen onay sayfası.</value>
+  </data>
+  <data name="sc.managePages" xml:space="preserve">
+    <value>Sayfa içeriklerini düzenle →</value>
+  </data>
+  <data name="sc.clientLogo" xml:space="preserve">
+    <value>Portal logosu</value>
+  </data>
+  <data name="sc.clientLogoHelp" xml:space="preserve">
+    <value>Kullanıcı portalının üst bilgisinde görünen logo.</value>
+  </data>
+  <data name="sc.staffLogo" xml:space="preserve">
+    <value>Panel logosu</value>
+  </data>
+  <data name="sc.staffLogoHelp" xml:space="preserve">
+    <value>Temsilci ve yönetim panellerinin üst bilgisinde görünen logo.</value>
+  </data>
+  <data name="sc.logoDefault" xml:space="preserve">
+    <value>Varsayılan RapidSol logosu</value>
+  </data>
+  <data name="sc.logoCustom" xml:space="preserve">
+    <value>Özel logo yükle</value>
+  </data>
+  <data name="sc.upload" xml:space="preserve">
+    <value>Dosyayı buraya sürükleyin veya seçmek için tıklayın (PNG/SVG, en fazla 2 MB)</value>
+  </data>
+  <data name="sc.current" xml:space="preserve">
+    <value>Geçerli</value>
+  </data>
+  <data name="sc.backdrop" xml:space="preserve">
+    <value>Giriş arka plan görseli</value>
+  </data>
+  <data name="sc.backdropHelp" xml:space="preserve">
+    <value>Temsilci giriş sayfasının arka planında gösterilir. Boş bırakılırsa marka degradesi kullanılır.</value>
+  </data>
+  <data name="sc.toastSaved" xml:space="preserve">
+    <value>Şirket ayarları kaydedildi.</value>
+  </data>
+  <data name="sc.errValues" xml:space="preserve">
+    <value>Bazı alanlar geçersiz; değişiklikler kaydedilmedi.</value>
+  </data>
+  <data name="sc.errLogo" xml:space="preserve">
+    <value>Özel logo seçildi ancak yüklenmiş bir dosya yok.</value>
+  </data>
+  <data name="sc.errLogoFile" xml:space="preserve">
+    <value>Logo dosyası PNG veya SVG olmalı ve 2 MB'ı aşmamalıdır.</value>
+  </data>
+</root>

@@ -121,4 +121,7 @@
   <data name="open.errMaxOpen" xml:space="preserve">
     <value>Açık talep limitinize ulaştınız; mevcut talepleriniz sonuçlanmadan yeni talep açılamaz.</value>
   </data>
+  <data name="open.errAttachTooBig" xml:space="preserve">
+    <value>Ek dosya, izin verilen en büyük dosya boyutunu aşıyor.</value>
+  </data>
 </root>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ss.title" xml:space="preserve">
+    <value>System Settings</value>
+  </data>
+  <data name="ss.subtitle" xml:space="preserve">
+    <value>Overall help desk behavior: status, address, date-time, languages and the attachment policy.</value>
+  </data>
+  <data name="ss.secGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="ss.secDatetime" xml:space="preserve">
+    <value>Date and Time</value>
+  </data>
+  <data name="ss.secLang" xml:space="preserve">
+    <value>Languages</value>
+  </data>
+  <data name="ss.secAttach" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="ss.online" xml:space="preserve">
+    <value>Help desk online</value>
+  </data>
+  <data name="ss.onlineHelp" xml:space="preserve">
+    <value>When turned off, the user portal shows the offline page; agents keep working.</value>
+  </data>
+  <data name="ss.url" xml:space="preserve">
+    <value>Help desk URL</value>
+  </data>
+  <data name="ss.urlHelp" xml:space="preserve">
+    <value>Links in emails are built from this address.</value>
+  </data>
+  <data name="ss.name" xml:space="preserve">
+    <value>Help desk name / title</value>
+  </data>
+  <data name="ss.nameHelp" xml:space="preserve">
+    <value>Shown in the browser tab and as the sender name of outgoing email.</value>
+  </data>
+  <data name="ss.defaultDept" xml:space="preserve">
+    <value>Default department</value>
+  </data>
+  <data name="ss.defaultDeptHelp" xml:space="preserve">
+    <value>New tickets land in this department when no other rule matches.</value>
+  </data>
+  <data name="ss.forceHttps" xml:space="preserve">
+    <value>Force HTTPS</value>
+  </data>
+  <data name="ss.forceHttpsHelp" xml:space="preserve">
+    <value>All HTTP requests are redirected to the secure HTTPS address.</value>
+  </data>
+  <data name="ss.collision" xml:space="preserve">
+    <value>Collision avoidance (minutes)</value>
+  </data>
+  <data name="ss.collisionHelp" xml:space="preserve">
+    <value>While an agent is composing a reply, the ticket stays locked for others for this long.</value>
+  </data>
+  <data name="ss.pageSize" xml:space="preserve">
+    <value>Page size</value>
+  </data>
+  <data name="ss.pageSizeHelp" xml:space="preserve">
+    <value>Default number of records shown per page in lists.</value>
+  </data>
+  <data name="ss.logLevel" xml:space="preserve">
+    <value>Log level</value>
+  </data>
+  <data name="ss.logLevelHelp" xml:space="preserve">
+    <value>How much detail gets written to the system log.</value>
+  </data>
+  <data name="ss.logNone" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="ss.logError" xml:space="preserve">
+    <value>Errors only</value>
+  </data>
+  <data name="ss.logWarn" xml:space="preserve">
+    <value>Errors and warnings</value>
+  </data>
+  <data name="ss.logDebug" xml:space="preserve">
+    <value>Debug (everything)</value>
+  </data>
+  <data name="ss.logPurge" xml:space="preserve">
+    <value>Log purge</value>
+  </data>
+  <data name="ss.logPurgeHelp" xml:space="preserve">
+    <value>Log entries older than this are deleted automatically.</value>
+  </data>
+  <data name="ss.purgeNever" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="ss.purge1m" xml:space="preserve">
+    <value>After 1 month</value>
+  </data>
+  <data name="ss.purge3m" xml:space="preserve">
+    <value>After 3 months</value>
+  </data>
+  <data name="ss.purge6m" xml:space="preserve">
+    <value>After 6 months</value>
+  </data>
+  <data name="ss.purge12m" xml:space="preserve">
+    <value>After 12 months</value>
+  </data>
+  <data name="ss.avatars" xml:space="preserve">
+    <value>Show avatars</value>
+  </data>
+  <data name="ss.avatarsHelp" xml:space="preserve">
+    <value>User and agent avatars appear on conversation threads.</value>
+  </data>
+  <data name="ss.richtext" xml:space="preserve">
+    <value>Rich text (formatting)</value>
+  </data>
+  <data name="ss.richtextHelp" xml:space="preserve">
+    <value>Reply boxes offer formatting tools such as bold, lists and links.</value>
+  </data>
+  <data name="ss.iframeList" xml:space="preserve">
+    <value>iFrame allowlist</value>
+  </data>
+  <data name="ss.iframeListHelp" xml:space="preserve">
+    <value>Domains allowed to embed the portal in an iframe (comma separated).</value>
+  </data>
+  <data name="ss.embedList" xml:space="preserve">
+    <value>Embedded domain allowlist</value>
+  </data>
+  <data name="ss.embedListHelp" xml:space="preserve">
+    <value>Domains whose embedded content (videos etc.) is allowed in threads.</value>
+  </data>
+  <data name="ss.acl" xml:space="preserve">
+    <value>Access control (ACL) IP list</value>
+  </data>
+  <data name="ss.aclHelp" xml:space="preserve">
+    <value>Panels may only be accessed from these IP addresses. Empty means no restriction.</value>
+  </data>
+  <data name="ss.aclBackend" xml:space="preserve">
+    <value>Apply ACL to</value>
+  </data>
+  <data name="ss.aclBackendHelp" xml:space="preserve">
+    <value>Which panels the IP restriction covers.</value>
+  </data>
+  <data name="ss.aclAdmin" xml:space="preserve">
+    <value>Admin only</value>
+  </data>
+  <data name="ss.aclStaff" xml:space="preserve">
+    <value>Agent + Admin</value>
+  </data>
+  <data name="ss.aclAll" xml:space="preserve">
+    <value>All panels</value>
+  </data>
+  <data name="ss.locale" xml:space="preserve">
+    <value>Locale</value>
+  </data>
+  <data name="ss.localeHelp" xml:space="preserve">
+    <value>The region used for number, currency and date formats.</value>
+  </data>
+  <data name="ss.timezone" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+  <data name="ss.timezoneHelp" xml:space="preserve">
+    <value>All dates and times are displayed in this zone.</value>
+  </data>
+  <data name="ss.timeFormatMode" xml:space="preserve">
+    <value>Time and date format</value>
+  </data>
+  <data name="ss.timeFormatModeHelp" xml:space="preserve">
+    <value>Locale default suits most installations; choosing Advanced uses the patterns below.</value>
+  </data>
+  <data name="ss.fmtLocale" xml:space="preserve">
+    <value>Locale default</value>
+  </data>
+  <data name="ss.fmt24" xml:space="preserve">
+    <value>24 hour</value>
+  </data>
+  <data name="ss.fmtAdvanced" xml:space="preserve">
+    <value>Advanced (custom patterns)</value>
+  </data>
+  <data name="ss.timeFormat" xml:space="preserve">
+    <value>Time format</value>
+  </data>
+  <data name="ss.timeFormatHelp" xml:space="preserve">
+    <value>Example: HH:mm → 16:29</value>
+  </data>
+  <data name="ss.dateFormat" xml:space="preserve">
+    <value>Date format</value>
+  </data>
+  <data name="ss.dateFormatHelp" xml:space="preserve">
+    <value>Example: d MMMM y → 6 August 2026</value>
+  </data>
+  <data name="ss.datetimeFormat" xml:space="preserve">
+    <value>Date-time format</value>
+  </data>
+  <data name="ss.datetimeFormatHelp" xml:space="preserve">
+    <value>Example: d MMM y HH:mm → 6 Aug 2026 16:29</value>
+  </data>
+  <data name="ss.dayFormat" xml:space="preserve">
+    <value>Day format</value>
+  </data>
+  <data name="ss.dayFormatHelp" xml:space="preserve">
+    <value>Example: EEEE, d MMMM → Thursday, 6 August</value>
+  </data>
+  <data name="ss.defaultSchedule" xml:space="preserve">
+    <value>Default schedule</value>
+  </data>
+  <data name="ss.defaultScheduleHelp" xml:space="preserve">
+    <value>The business hours SLA timers count against.</value>
+  </data>
+  <data name="ss.manageSchedules" xml:space="preserve">
+    <value>Manage schedules →</value>
+  </data>
+  <data name="ss.primaryLang" xml:space="preserve">
+    <value>Primary language</value>
+  </data>
+  <data name="ss.primaryLangHelp" xml:space="preserve">
+    <value>Default language of the interface and outgoing email.</value>
+  </data>
+  <data name="ss.secondaryLangs" xml:space="preserve">
+    <value>Secondary languages</value>
+  </data>
+  <data name="ss.secondaryLangsHelp" xml:space="preserve">
+    <value>Users and agents can choose among these languages.</value>
+  </data>
+  <data name="ss.addLang" xml:space="preserve">
+    <value>Add language</value>
+  </data>
+  <data name="ss.remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ss.storage" xml:space="preserve">
+    <value>Storage backend</value>
+  </data>
+  <data name="ss.storageHelp" xml:space="preserve">
+    <value>Where attachment files are stored. Changing this affects new attachments only.</value>
+  </data>
+  <data name="ss.storageDb" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="ss.storageDisk" xml:space="preserve">
+    <value>Disk (file system)</value>
+  </data>
+  <data name="ss.storageS3" xml:space="preserve">
+    <value>S3-compatible cloud</value>
+  </data>
+  <data name="ss.maxSize" xml:space="preserve">
+    <value>Maximum file size</value>
+  </data>
+  <data name="ss.maxSizeHelp" xml:space="preserve">
+    <value>Upper limit for a single attachment. Server limits also apply.</value>
+  </data>
+  <data name="ss.authRequired" xml:space="preserve">
+    <value>Sign-in required to view</value>
+  </data>
+  <data name="ss.authRequiredHelp" xml:space="preserve">
+    <value>Only signed-in users can download attachments.</value>
+  </data>
+  <data name="ss.toastSaved" xml:space="preserve">
+    <value>System settings saved.</value>
+  </data>
+  <data name="ss.toastLangs" xml:space="preserve">
+    <value>Language list updated.</value>
+  </data>
+  <data name="ss.errValues" xml:space="preserve">
+    <value>Some fields are invalid; nothing was saved.</value>
+  </data>
+  <data name="ss.errLang" xml:space="preserve">
+    <value>The language could not be added or removed.</value>
+  </data>
+</root>

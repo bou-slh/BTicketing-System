@@ -789,8 +789,8 @@ public static class DomainSeeder
             ("effort", "reminder_days", "3"),
             ("effort", "auto_approve_threshold_hours", "0"),
             ("effort", "revision_limit", "3"),
-            // Maintenance mode (portal/offline.html); default off.
-            // TODO(S7): edited by admin/settings-system.html "maintenance mode".
+            // Maintenance mode (portal/offline.html); default off. Edited by
+            // admin/settings-system.html "Yardım masası çevrimiçi" (S7, inverted).
             ("system", "offline", "false"),
         ];
         db.Settings.AddRange(settings.Select(s => new Setting

@@ -162,6 +162,12 @@ public class TicketOpenController(
         if (string.IsNullOrWhiteSpace(form.Details))
             ModelState.AddModelError(nameof(TicketOpenForm.Details), "errDetails");
 
+        // Attachment size cap (admin/settings-system Ekler, S7): attachments/max_size_mb
+        // is enforced at every upload ingress.
+        var attachLimits = await settings.GetAttachmentsAsync(ct);
+        if (form.Files.Any(f => f.Length > attachLimits.MaxSizeBytes))
+            ModelState.AddModelError(nameof(TicketOpenForm.Files), "errAttachTooBig");
+
         // ---- CC list: comma/semicolon separated addresses (mockup placeholder) ------
         var ccAddresses = (form.Cc ?? "")
             .Split([',', ';'], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)

@@ -121,4 +121,7 @@
   <data name="open.errMaxOpen" xml:space="preserve">
     <value>You have reached your open-ticket limit; a new ticket cannot be opened until existing ones are resolved.</value>
   </data>
+  <data name="open.errAttachTooBig" xml:space="preserve">
+    <value>An attached file exceeds the maximum allowed file size.</value>
+  </data>
 </root>

@@ -34,6 +34,12 @@
   }
   document.addEventListener("change", (e) => {
     if (e.target.matches("input[data-gates]")) syncGates();
+    // Radio masters (settings-company logo default/custom): checking the OTHER
+    // radio of a gating radio's group never fires change on the gating radio
+    // itself — resync whenever any radio sharing its name group changes.
+    else if (e.target.type === "radio" && e.target.name &&
+             document.querySelector(`input[data-gates][type="radio"][name="${CSS.escape(e.target.name)}"]`))
+      syncGates();
   });
 
   /* ---------- B9 scroll-spy: settings section rail follows the scroll ----------

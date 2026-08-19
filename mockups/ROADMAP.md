@@ -669,8 +669,64 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
 - [ ] **system-info.html** — real server/PHP→.NET runtime/db info; update check
 - [ ] **system-logs.html** — filters + Apply work; purge deletes; row detail dialog (B1/B2)
 - [ ] **audit-logs.html** — filters/export/pagination; rows drill down to the audited object (B10)
-- [ ] **settings-company.html** — logo file uploads with preview (B3); page selects live from SitePages
-- [ ] **settings-system.html** — language add/remove rows (B4); attachment storage settings consumed; maintenance mode drives portal/offline
+- [x] **settings-company.html** — logo file uploads with preview (B3); page selects live from SitePages
+      *(S7; /admin/settings-company (SettingsCompanyController) over ISettingsService ns "company" —
+      PRG toasts, B3 server validation writes NOTHING on failure (sc.errValues/errLogo/errLogoFile).
+      LIVE: page selects list REAL SitePage rows per type (the S3 entity + S5 seed already carried the
+      pages.html canon rows Hoş Geldiniz/Bakım Modu/Talep Alındı/KVKK — no new migration); inactive pages
+      stay listed (the canon offline page is disabled — an active-only filter would empty its select);
+      the mockup's second options ("Bordro dönemi duyurusu", "Hafta sonu mesajı", "SLA bilgilendirmeli")
+      are INVENTED sample state absent from the pages.html canon table (flagged). Logo/backdrop uploads =
+      B3 for real: default/custom radios gate the .rd-upload zones (NEW rd.js radio-group data-gates
+      resync — checking the sibling radio now re-syncs), files stream into IFileStore (kb-faq precedent),
+      preview = GET /admin/settings-company/logo?which=client|staff|backdrop serving the stored file back
+      (no base64 anywhere; replaced files are deleted from store+db); PNG/SVG ≤ 2 MB enforced from the
+      sc.upload canon text; custom mode without any file refuses (sc.errLogo). PERSISTED-ONLY (annotated
+      at the VM): company name/website/phone/address TODO(S8 %{company.*} template variables; no portal
+      footer exists to consume them), landing_page_id (portal home content block — pages port),
+      offline_page_id (offline view serves the S5 static twin today), thanks_page_id (post-create
+      confirmation; HelpTopic.SitePageId already overrides per topic), logo modes/file ids (portal
+      header + backoffice topbar logo swap and the agent login backdrop are TODO — the preview endpoint
+      is AdminOnly; a public branding route needs the maintenance-middleware pass-through list, flagged).
+      Canon flags: no removal UI for an uploaded backdrop/logo (mockup defines none — a new upload
+      replaces, default radio falls back for logos); sc.addressHelp's %{company.address} brace-escaped in
+      resx (string.Format hazard). Invented keys (TR/EN twins): sc.toastSaved/errValues/errLogo/errLogoFile.
+      Tests: SettingsSystemCompanyTests — SitePage options + save round-trip, logo upload→setting→preview
+      byte round-trip + 2 MB refusal.)*
+- [x] **settings-system.html** — language add/remove rows (B4); attachment storage settings consumed; maintenance mode drives portal/offline
+      *(S7; /admin/settings-system (SettingsSystemController) over ISettingsService (ns "system"/"core"/
+      "attachments"; NEW AttachmentSettings typed section) — PRG toasts, B3 validation writes NOTHING on
+      failure (ss.errValues). LIVE (5): online switch reads/writes the SAME system/offline Setting the S5
+      MaintenanceModeMiddleware serves portal/offline from (inverted; HTTP-POST flip test: portal serves
+      the offline card, /admin keeps rendering, flip back reopens); helpdesk name = core/helpdesk_title
+      NEWLY consumed by all three layouts' browser-tab <title> (TODO(S8): outgoing-mail sender name);
+      default department = core/default_dept_id (TicketService.CreateAsync cascade, consumed since S4);
+      primary language NEWLY consumed as the request-culture fallback after the cookie (Program.cs
+      CustomRequestCultureProvider — explicit user choice still wins); attachments max_size_mb enforced at
+      EVERY upload ingress (portal open + portal reply, agent reply, agent ticket-open, kb-faq save — the
+      whole POST refuses with invented errAttachTooBig keys on each page's resx, nothing partial persists).
+      B4 language rows: system/secondary_languages csv; row ✕ and "Dil ekle" are real server round-trips
+      (POST /admin/settings-system/languages via the form= attribute — INVENTED mechanics, the mockup's
+      buttons are dead; dlg-seq separate-POST precedent); the add select offers the catalog minus primary
+      minus current rows (mockup statically lists de/fr/ar); de/fr/ar persist with TODO: i18n resources —
+      only TR/EN resx exist, extra languages have no UI translations (canon flag); a primary sitting in the
+      secondary list is dropped on save. PERSISTED-ONLY (each annotated at the VM build): helpdesk_url
+      TODO(S8 email link base), force_https (env-gated UseHttpsRedirection today), collision_minutes
+      (composer lock TTL — IThreadService lock API unwired), page_size (TicketListEngine.PageSize const),
+      log_level + log_purge_months (system-logs port / S8 retention job), show_avatars (thread renderers),
+      rich_text (composer toolbar gate), iframe/embed allowlists + acl_ips/acl_scope TODO(S9 hardening),
+      locale/timezone/time_format_mode + 4 patterns (display-formatting helpers), default_schedule_id (SLA
+      fallback calendar; unset renders the default SLA's schedule); attachments storage select persists but
+      only the "fs" backend is registered — the mockup's selected "Veritabanı" is sample state CONFLICTING
+      with the dropped file_chunk canon (StoredFile), honest default shows Disk (flagged); auth_required
+      persists (every download endpoint already sits behind auth; the OFF state needs an anonymous KB route
+      once a public KB exists). B3 note: the time-format mode select does not gate the advanced pattern
+      inputs (mockup has no gating either — §4 B3 "format selects reveal dependents" left for canon).
+      B3 data-gates + B9 scroll-spy reused from rd.js unchanged. Invented keys (TR/EN twins):
+      ss.toastSaved/toastLangs/errValues/errLang + open./tv.(×2)/to./kf.errAttachTooBig. Tests:
+      SettingsSystemCompanyTests (7) — round-trip + rerender + <title> consumer, invalid-values guard,
+      maintenance flip through the page, language add/remove/primary-guard, agent-reply size cap (refuse +
+      under-limit posts) — suite 192.)*
 - [x] **settings-tickets.html** — all 40 switches gate for real, effort section drives B8 guards; sequence dialog CRUD (B3/B4)
       *(S7; /admin/settings-tickets (SettingsTicketsController) over ISettingsService typed sections
       (NEW TicketBehaviorSettings + the S4 EffortSettings/NumberingSettings) so the page renders exactly

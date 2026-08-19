@@ -96,4 +96,7 @@
   <data name="kf.errDenied" xml:space="preserve">
     <value>Bu işlem için yetkiniz yok.</value>
   </data>
+  <data name="kf.errAttachTooBig" xml:space="preserve">
+    <value>Ek dosya, izin verilen en büyük dosya boyutunu aşıyor.</value>
+  </data>
 </root>

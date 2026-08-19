@@ -20,7 +20,7 @@ namespace RapidsolDestek.Web.Areas.Agent.Controllers;
 /// </summary>
 [Area("Agent")]
 [Authorize(Policy = "Staff")]
-public class KbFaqController(AppDbContext db, IKbService kb, IFileStore files) : Controller
+public class KbFaqController(AppDbContext db, IKbService kb, IFileStore files, ISettingsService settings) : Controller
 {
     [HttpGet("/agent/kb-faq")]
     [NavKey("kb")]
@@ -111,6 +111,12 @@ public class KbFaqController(AppDbContext db, IKbService kb, IFileStore files) :
             HelpTopicIds = topicIds,
             Notes = notes,
         };
+
+        // Attachment size cap (admin/settings-system Ekler, S7): refuse the whole
+        // save before anything persists.
+        var attachLimits = await settings.GetAttachmentsAsync(ct);
+        if (attachments.Any(f => f.Length > attachLimits.MaxSizeBytes))
+            return ToastBack(id, "kf.errAttachTooBig");
 
         int articleId;
         bool created = id is null;

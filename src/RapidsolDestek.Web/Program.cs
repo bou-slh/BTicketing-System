@@ -28,8 +28,19 @@ builder.Services.Configure<RequestLocalizationOptions>(o =>
     o.DefaultRequestCulture = new RequestCulture("tr");
     o.SupportedCultures = cultures;
     o.SupportedUICultures = cultures;
-    // Cookie only: deterministic TR default regardless of browser Accept-Language.
-    o.RequestCultureProviders = [new CookieRequestCultureProvider()];
+    // Cookie first (explicit user choice), then the admin-configured primary
+    // language (admin/settings-system "Birincil dil", S7). No Accept-Language:
+    // the fallback stays deterministic (seed default = TR).
+    o.RequestCultureProviders =
+    [
+        new CookieRequestCultureProvider(),
+        new CustomRequestCultureProvider(async ctx =>
+        {
+            var settings = ctx.RequestServices.GetRequiredService<RapidsolDestek.Infrastructure.Services.ISettingsService>();
+            var primary = await settings.GetAsync("system", "primary_language", ctx.RequestAborted);
+            return primary is "tr" or "en" ? new ProviderCultureResult(primary) : null;
+        }),
+    ];
 });
 
 // ---- Data ------------------------------------------------------------------

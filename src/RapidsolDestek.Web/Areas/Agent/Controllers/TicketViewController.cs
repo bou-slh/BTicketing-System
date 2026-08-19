@@ -245,6 +245,12 @@ public class TicketViewController(
         if (string.IsNullOrWhiteSpace(body))
             return RedirectBack(id, "tv.errEmpty", error: true);
 
+        // Attachment size cap (admin/settings-system Ekler, S7): refuse the whole
+        // reply before anything posts.
+        var attachLimits = await settings.GetAttachmentsAsync(ct);
+        if (attachments.Any(f => f.Length > attachLimits.MaxSizeBytes))
+            return RedirectBack(id, "tv.errAttachTooBig", error: true);
+
         // Recipients snapshot (osTicket recipients): the ticket owner + chosen From
         // identity. NOTE(S8): the signature choice ("sig") applies to the outbound
         // email render — nothing to persist until the mail subsystem lands.

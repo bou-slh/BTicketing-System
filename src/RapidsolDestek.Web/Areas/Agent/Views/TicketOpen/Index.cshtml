@@ -16,6 +16,7 @@
         "errTopic" => L["to.errTopic"].Value,
         "errSummary" => L["to.errSummary"].Value,
         "errDetails" => L["to.errDetails"].Value,
+        "errAttachTooBig" => L["to.errAttachTooBig"].Value,
         "errDenied" => L["to.errDenied"].Value,
         _ when code.StartsWith("errField:") => L["to.errField", code["errField:".Length..]].Value,
         _ when code.StartsWith("errCc:") => L["to.errCc", code["errCc:".Length..]].Value,
