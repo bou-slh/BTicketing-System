@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tp.title" xml:space="preserve">
+    <value>E-posta Şablonları</value>
+  </data>
+  <data name="tp.subtitle" xml:space="preserve">
+    <value>Otomatik e-postaların (yanıtlar, uyarılar, bildirimler) içerik setleri. Bir sete tıklayarak içindeki şablonları düzenleyin.</value>
+  </data>
+  <data name="tp.add" xml:space="preserve">
+    <value>＋ Yeni Set</value>
+  </data>
+  <data name="tp.searchPh" xml:space="preserve">
+    <value>Şablon seti ara…</value>
+  </data>
+  <data name="tp.colName" xml:space="preserve">
+    <value>Şablon Seti</value>
+  </data>
+  <data name="tp.colInUse" xml:space="preserve">
+    <value>Kullanımda</value>
+  </data>
+  <data name="tp.colLang" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="tp.emptyTitle" xml:space="preserve">
+    <value>Henüz şablon seti yok</value>
+  </data>
+  <data name="tp.emptyText" xml:space="preserve">
+    <value>Stok şablonlardan kopyalayarak ilk setinizi oluşturun.</value>
+  </data>
+  <data name="tp.dlgTitle" xml:space="preserve">
+    <value>Yeni Şablon Seti</value>
+  </data>
+  <data name="tp.dlgName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="tp.dlgNameHelp" xml:space="preserve">
+    <value>Seti tanımlayan kısa bir ad, ör. "Kurumsal (TR)".</value>
+  </data>
+  <data name="tp.dlgClone" xml:space="preserve">
+    <value>Kopyalanacak set</value>
+  </data>
+  <data name="tp.dlgCloneHelp" xml:space="preserve">
+    <value>Yeni set bu setin içeriğiyle başlar.</value>
+  </data>
+  <data name="tp.dlgStock" xml:space="preserve">
+    <value>Stok Şablonlar</value>
+  </data>
+  <data name="tp.dlgLang" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="tp.dlgLangHelp" xml:space="preserve">
+    <value>Setin yazılacağı dil; kullanıcının diline göre seçilebilir.</value>
+  </data>
+  <data name="tp.create" xml:space="preserve">
+    <value>Oluştur</value>
+  </data>
+  <data name="tp.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="tp.bulkNone" xml:space="preserve">
+    <value>Seçili şablon seti yok.</value>
+  </data>
+  <data name="tp.bulkDone" xml:space="preserve">
+    <value>{0} şablon seti güncellendi.</value>
+  </data>
+  <data name="tp.bulkPartial" xml:space="preserve">
+    <value>{0} set güncellendi, {1} set atlandı (kullanımda).</value>
+  </data>
+  <data name="tp.deleteConfirm" xml:space="preserve">
+    <value>Seçili şablon setleri kalıcı olarak silinecek. Kullanımda olan setler (varsayılan set veya bir departmana bağlı olanlar) atlanır. Devam edilsin mi?</value>
+  </data>
+  <data name="tp.errName" xml:space="preserve">
+    <value>Set adı boş olamaz.</value>
+  </data>
+  <data name="tp.errNameInUse" xml:space="preserve">
+    <value>Bu adda bir şablon seti zaten var.</value>
+  </data>
+</root>

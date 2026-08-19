@@ -341,6 +341,86 @@
     }
   });
 
+  /* ---------- B5 template variable pills: [data-var-insert] ----------
+     Clicking a pill inserts %{name} at the caret of the pill's form's last-focused
+     text control (subject input or body textarea — variables are legal in both,
+     admin/template-edit); default is the form's textarea. */
+  document.addEventListener("focusin", (e) => {
+    const ctl = e.target.closest('form input[type="text"], form textarea');
+    if (ctl && ctl.form) ctl.form.__rdVarTarget = ctl;
+  });
+  document.addEventListener("click", (e) => {
+    const pill = e.target.closest("[data-var-insert]");
+    if (!pill) return;
+    const form = pill.closest("form");
+    if (!form) return;
+    const last = form.__rdVarTarget;
+    const ta = last && form.contains(last) ? last : form.querySelector("textarea");
+    if (!ta) return;
+    edInsert(ta, `%{${pill.getAttribute("data-var-insert")}}`, "", "");
+  });
+
+  /* ---------- Per-template preview (admin/template-edit): [data-tpl-preview] ----------
+     Posts the dialog form's CURRENT (unsaved) editor state to the expansion
+     endpoint and renders {subject, body} into the form's [data-preview-block]
+     (body arrives server-sanitized). */
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-tpl-preview]");
+    if (!btn) return;
+    e.preventDefault();
+    const form = btn.closest("form");
+    const box = form?.querySelector("[data-preview-block]");
+    if (!form || !box) return;
+    btn.disabled = true;
+    try {
+      const res = await fetch(btn.getAttribute("data-tpl-preview"), { method: "POST", body: new FormData(form) });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const subject = box.querySelector("[data-preview-subject]");
+      if (subject) subject.textContent = data.subject || "";
+      const body = box.querySelector("[data-preview-body]");
+      if (body) body.innerHTML = data.body || "";
+      box.hidden = false;
+    } catch {
+      toast(btn.getAttribute("data-tpl-preview-err") || "!", "error");
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  /* ---------- B10 diagnostic job states: [data-job-poll] ----------
+     The pending banner names its status URL; polling stops on the terminal state
+     and swaps in [data-job-success] or [data-job-failure] (whose data-job-msgs
+     JSON maps the typed stage to a localized message — no literals here). */
+  const jobBanner = document.querySelector("[data-job-poll]");
+  if (jobBanner) {
+    let attempts = 0;
+    const timer = setInterval(async () => {
+      if (++attempts > 90) { clearInterval(timer); finishJob({ state: "failure", stage: "unknown" }); return; }
+      try {
+        const res = await fetch(jobBanner.getAttribute("data-job-poll"));
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        if (data.state === "pending") return;
+        clearInterval(timer);
+        finishJob(data);
+      } catch { /* transient — keep polling until the attempt cap */ }
+    }, 800);
+    function finishJob(data) {
+      jobBanner.hidden = true;
+      const target = document.querySelector(data.state === "success" ? "[data-job-success]" : "[data-job-failure]");
+      if (!target) return;
+      const detail = target.querySelector("[data-job-detail]");
+      if (detail && data.state !== "success") {
+        let msgs = {};
+        try { msgs = JSON.parse(target.getAttribute("data-job-msgs") || "{}"); } catch { /* keep {} */ }
+        const text = msgs[data.stage] || msgs.error || data.stage || "";
+        detail.textContent = data.detail ? `${text} — ${data.detail}` : text;
+      }
+      target.hidden = false;
+    }
+  }
+
   /* ---------- B5 signature preview: radios carry data-sig-text ----------
      The checked radio's text renders into the form's [data-sig-preview] block. */
   document.addEventListener("change", (e) => {

@@ -495,37 +495,15 @@ public static class DomainSeeder
             new CannedResponse { Title = "Efor onayı hatırlatması", Department = depBordro, Response = "<p>Bekleyen efor onayınızı hatırlatırız.</p>" });
 
         // ----- Email template sets (canon admin/templates.html + template-edit) -------
-        (string Code, string Name)[] templateNames =
-        [
-            ("ticket.autoresp", "Yeni Talep Otomatik Yanıtı"),
-            ("ticket.autoreply", "Yeni Talep Oto-cevap"),
-            ("message.autoresp", "Yeni Mesaj Onayı"),
-            ("ticket.notice", "Yeni Talep Bildirimi"),
-            ("ticket.overlimit", "Limit Aşımı Bildirimi"),
-            ("ticket.reply", "Yanıt Şablonu"),
-            ("effort.request", "Efor Onayı İsteği"),
-            ("effort.response", "Efor Yanıtı Uyarısı"),
-            ("ticket.activity.notice", "Yeni Aktivite Bildirimi"),
-            ("ticket.alert", "Yeni Talep Uyarısı"),
-            ("message.alert", "Yeni Mesaj Uyarısı"),
-            ("note.alert", "İç Aktivite Uyarısı"),
-            ("assigned.alert", "Atama Uyarısı"),
-            ("transfer.alert", "Aktarım Uyarısı"),
-            ("ticket.overdue", "Gecikme Uyarısı"),
-            ("task.alert", "Yeni Görev Uyarısı"),
-            ("task.activity.alert", "Yeni Aktivite Uyarısı"),
-            ("task.activity.notice", "Yeni Aktivite Bildirimi (katılımcı)"),
-            ("task.assigned.alert", "Görev Atama Uyarısı"),
-            ("task.transfer.alert", "Görev Aktarım Uyarısı"),
-            ("task.overdue.alert", "Görev Gecikme Uyarısı"),
-        ];
+        // The 21-template stock content lives in EmailTemplateCatalog (S7 templates
+        // port) — shared with set create/clone and the per-template editor.
         EmailTemplateSet MakeSet(string name, string lang, bool active) => new()
         {
             Name = name, Language = lang, IsActive = active,
-            Templates = [.. templateNames.Select(t => new EmailTemplate
+            Templates = [.. EmailTemplateCatalog.All.Select(t => new EmailTemplate
             {
-                CodeName = t.Code, Subject = t.Name,
-                Body = $"<p>{t.Name} — %{{ticket.number}}</p>",
+                CodeName = t.Code, Subject = t.DefaultName,
+                Body = EmailTemplateCatalog.StockBody(t),
             })],
         };
         var tsetTr = MakeSet("Varsayılan (TR)", "tr", true);

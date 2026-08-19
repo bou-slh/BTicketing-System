@@ -130,3 +130,13 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
   font-size: 11px; padding: 0 4px; margin-right: 2px; line-height: 1;
 }
 .rd-tree-toggle:hover { color: var(--rd-primary); }
+
+/* Admin template-edit (S7, B5): the mockup's variable pills are inert <code>
+   chips — click-to-insert is a ROADMAP behavior, so they read as buttons. */
+[data-var-insert] { cursor: pointer; }
+[data-var-insert]:hover { filter: brightness(0.93); }
+
+/* Admin email-diagnostic (S7, B10): typed failure banner — the mockup ships
+   only the success variant (its always-on banner was the S0-audited defect);
+   invented look, flagged on the email-diagnostic ROADMAP row. */
+.rd-banner-error { background: var(--rd-red-bg); color: var(--rd-red); }

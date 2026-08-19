@@ -190,6 +190,11 @@ builder.Services.AddSingleton<IAppEmailSender, DevLoggingEmailSender>();
 builder.Services.AddSingleton<IEmailSecretProtector, EmailSecretProtector>();
 builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailConnectionTester,
     RapidsolDestek.Infrastructure.Services.MailConnectionTester>();
+// S7 admin/email-diagnostic: REAL MailKit test-send + the pending/success/failure
+// job tracker (B10 — tests swap the sender for the capturing fake).
+builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailDiagnosticSender,
+    RapidsolDestek.Infrastructure.Services.MailDiagnosticSender>();
+builder.Services.AddSingleton<IEmailDiagnosticService, EmailDiagnosticService>();
 
 // Interim B8 effort emails (S8 replaces the transport, the handler contract stays).
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortProposed>, EffortEmailHandler>();

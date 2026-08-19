@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tp.title" xml:space="preserve">
+    <value>Email Templates</value>
+  </data>
+  <data name="tp.subtitle" xml:space="preserve">
+    <value>Content sets for automated emails (responses, alerts, notices). Click a set to edit the templates inside it.</value>
+  </data>
+  <data name="tp.add" xml:space="preserve">
+    <value>＋ New Set</value>
+  </data>
+  <data name="tp.searchPh" xml:space="preserve">
+    <value>Search template sets…</value>
+  </data>
+  <data name="tp.colName" xml:space="preserve">
+    <value>Template Set</value>
+  </data>
+  <data name="tp.colInUse" xml:space="preserve">
+    <value>In Use</value>
+  </data>
+  <data name="tp.colLang" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="tp.emptyTitle" xml:space="preserve">
+    <value>No template sets yet</value>
+  </data>
+  <data name="tp.emptyText" xml:space="preserve">
+    <value>Create your first set by copying from the stock templates.</value>
+  </data>
+  <data name="tp.dlgTitle" xml:space="preserve">
+    <value>New Template Set</value>
+  </data>
+  <data name="tp.dlgName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="tp.dlgNameHelp" xml:space="preserve">
+    <value>A short name describing the set, e.g. "Corporate (EN)".</value>
+  </data>
+  <data name="tp.dlgClone" xml:space="preserve">
+    <value>Set to copy</value>
+  </data>
+  <data name="tp.dlgCloneHelp" xml:space="preserve">
+    <value>The new set starts with this set's content.</value>
+  </data>
+  <data name="tp.dlgStock" xml:space="preserve">
+    <value>Stock Templates</value>
+  </data>
+  <data name="tp.dlgLang" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="tp.dlgLangHelp" xml:space="preserve">
+    <value>The language the set is written in; can be chosen per user language.</value>
+  </data>
+  <data name="tp.create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="tp.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="tp.bulkNone" xml:space="preserve">
+    <value>No template sets selected.</value>
+  </data>
+  <data name="tp.bulkDone" xml:space="preserve">
+    <value>{0} template sets updated.</value>
+  </data>
+  <data name="tp.bulkPartial" xml:space="preserve">
+    <value>{0} sets updated, {1} sets skipped (in use).</value>
+  </data>
+  <data name="tp.deleteConfirm" xml:space="preserve">
+    <value>The selected template sets will be permanently deleted. Sets in use (the default set or ones linked to a department) are skipped. Continue?</value>
+  </data>
+  <data name="tp.errName" xml:space="preserve">
+    <value>The set name must not be empty.</value>
+  </data>
+  <data name="tp.errNameInUse" xml:space="preserve">
+    <value>A template set with this name already exists.</value>
+  </data>
+</root>

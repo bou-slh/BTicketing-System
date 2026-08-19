@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Common;
 using RapidsolDestek.Domain.Entities;
+using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure.Auditing;
 
 namespace RapidsolDestek.Infrastructure.Services;
@@ -20,6 +21,25 @@ public interface ISystemTemplateService
     /// body per language). Throws <see cref="DomainRuleException"/> "template-unknown"
     /// for codes outside the catalog.</summary>
     Task SaveAsync(string code, string name, string bodyTr, string bodyEn, ActorContext actor, CancellationToken ct = default);
+
+    /// <summary>
+    /// admin/templates dlg-new-set (S7): creates a set carrying the full 21-template
+    /// canon. <paramref name="cloneSetId"/> null = stock content
+    /// (<see cref="EmailTemplateCatalog"/>); otherwise every template row of the
+    /// source set is copied (system content rows included — "the new set starts with
+    /// this set's content") and missing canon codes are filled from stock. Returns
+    /// the new set's id. Throws "invalid" (empty name / unknown language),
+    /// "name-in-use", or <see cref="DomainNotFoundException"/> for a vanished source.
+    /// </summary>
+    Task<int> CreateSetAsync(string name, string language, int? cloneSetId, ActorContext actor, CancellationToken ct = default);
+
+    /// <summary>
+    /// admin/template-edit per-template editor dialog (S7, B2): upserts ONE template
+    /// of ONE set — unlike <see cref="SaveAsync"/>, which fans out to both active
+    /// sets for the settings pages. Throws "template-unknown" for codes outside the
+    /// 21-template canon and "invalid" for an empty subject or body.
+    /// </summary>
+    Task SaveTemplateAsync(int setId, string code, string subject, string body, ActorContext actor, CancellationToken ct = default);
 }
 
 /// <summary>
@@ -76,9 +96,12 @@ public sealed class SystemTemplateService(AppDbContext db) : ISystemTemplateServ
 
     public async Task<IReadOnlyList<SystemTemplateRow>> GetAsync(IReadOnlyList<string> codes, CancellationToken ct = default)
     {
+        // Several active sets per language can exist (admin/templates set CRUD, S7);
+        // "the active set" = the lowest-Id one, i.e. the seeded canon set.
         var stored = await db.Set<EmailTemplate>()
             .Where(t => codes.Contains(t.CodeName) && t.Set!.IsActive
                         && (t.Set!.Language == "tr" || t.Set!.Language == "en"))
+            .OrderBy(t => t.SetId)
             .Select(t => new { t.CodeName, t.Set!.Language, t.Subject, t.Body })
             .ToListAsync(ct);
 
@@ -104,14 +127,80 @@ public sealed class SystemTemplateService(AppDbContext db) : ISystemTemplateServ
         }
     }
 
+    public async Task<int> CreateSetAsync(string name, string language, int? cloneSetId, ActorContext actor, CancellationToken ct = default)
+    {
+        name = (name ?? "").Trim();
+        if (name.Length == 0)
+            throw new DomainRuleException("invalid", "Template set name must not be empty.");
+        if (language is not ("tr" or "en"))
+            throw new DomainRuleException("invalid", $"'{language}' is not a supported template-set language.");
+        if (await db.EmailTemplateSets.AnyAsync(s => s.Name.ToLower() == name.ToLower(), ct))
+            throw new DomainRuleException("name-in-use", $"Template set '{name}' already exists.");
+
+        var set = new EmailTemplateSet { Name = name, Language = language, IsActive = true };
+
+        if (cloneSetId is { } sourceId)
+        {
+            var source = await db.EmailTemplateSets.Include(s => s.Templates)
+                .SingleOrDefaultAsync(s => s.Id == sourceId, ct)
+                ?? throw new DomainNotFoundException("EmailTemplateSet", sourceId);
+            set.Templates = [.. source.Templates.Select(t => new EmailTemplate
+            {
+                CodeName = t.CodeName, Subject = t.Subject, Body = t.Body, Notes = t.Notes,
+            })];
+        }
+
+        // Stock fill: a fresh set gets the full canon; a cloned set backfills any
+        // canon code its source was missing (older databases).
+        foreach (var d in EmailTemplateCatalog.All.Where(d => set.Templates.All(t => t.CodeName != d.Code)))
+        {
+            set.Templates.Add(new EmailTemplate
+            {
+                CodeName = d.Code, Subject = d.DefaultName, Body = EmailTemplateCatalog.StockBody(d),
+            });
+        }
+
+        db.EmailTemplateSets.Add(set);
+        using (actor.BeginAuditScope())
+            await db.SaveChangesAsync(ct);
+        return set.Id;
+    }
+
+    public async Task SaveTemplateAsync(int setId, string code, string subject, string body, ActorContext actor, CancellationToken ct = default)
+    {
+        if (EmailTemplateCatalog.Find(code) is null)
+            throw new DomainRuleException("template-unknown", $"'{code}' is not a canon email template code.");
+        subject = (subject ?? "").Trim();
+        if (subject.Length == 0)
+            throw new DomainRuleException("invalid", "Template subject must not be empty.");
+        if (string.IsNullOrWhiteSpace(body))
+            throw new DomainRuleException("invalid", "Template body must not be empty.");
+        if (!await db.EmailTemplateSets.AnyAsync(s => s.Id == setId, ct))
+            throw new DomainNotFoundException("EmailTemplateSet", setId);
+
+        var row = await db.Set<EmailTemplate>()
+            .FirstOrDefaultAsync(t => t.SetId == setId && t.CodeName == code, ct);
+        if (row is null)
+        {
+            row = new EmailTemplate { SetId = setId, CodeName = code, Subject = subject, Body = body };
+            db.Set<EmailTemplate>().Add(row);
+        }
+        row.Subject = subject;
+        row.Body = body;
+        using (actor.BeginAuditScope())
+            await db.SaveChangesAsync(ct);
+    }
+
     private async Task UpsertAsync(string code, string language, string name, string body, CancellationToken ct)
     {
         var row = await db.Set<EmailTemplate>()
-            .FirstOrDefaultAsync(t => t.CodeName == code && t.Set!.IsActive && t.Set!.Language == language, ct);
+            .Where(t => t.CodeName == code && t.Set!.IsActive && t.Set!.Language == language)
+            .OrderBy(t => t.SetId).FirstOrDefaultAsync(ct);
         if (row is null)
         {
             var setId = await db.EmailTemplateSets
                 .Where(s => s.IsActive && s.Language == language)
+                .OrderBy(s => s.Id)
                 .Select(s => (int?)s.Id).FirstOrDefaultAsync(ct)
                 ?? throw new DomainRuleException("template-set-missing", $"No active '{language}' template set.");
             row = new EmailTemplate { SetId = setId, CodeName = code, Subject = name, Body = body };

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ed.title" xml:space="preserve">
+    <value>Email Diagnostic</value>
+  </data>
+  <data name="ed.subtitle" xml:space="preserve">
+    <value>Send a test email from the system to verify your outgoing mail settings.</value>
+  </data>
+  <data name="ed.formHead" xml:space="preserve">
+    <value>Send Test Email</value>
+  </data>
+  <data name="ed.success" xml:space="preserve">
+    <value>Test email queued. Check the inbox in a few minutes; if it does not arrive, review the SMTP settings and system logs.</value>
+  </data>
+  <data name="ed.from" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="ed.fromHelp" xml:space="preserve">
+    <value>The system email address the test is sent from; that address's SMTP settings are used.</value>
+  </data>
+  <data name="ed.to" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="ed.toHelp" xml:space="preserve">
+    <value>The address the test should reach — you can use your own address.</value>
+  </data>
+  <data name="ed.subject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="ed.message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="ed.messageHelp" xml:space="preserve">
+    <value>Text written into the body of the test email.</value>
+  </data>
+  <data name="ed.send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="ed.pending" xml:space="preserve">
+    <value>Sending the test email…</value>
+  </data>
+  <data name="ed.fail" xml:space="preserve">
+    <value>The send failed.</value>
+  </data>
+  <data name="ed.failAccount" xml:space="preserve">
+    <value>The chosen sender address no longer exists.</value>
+  </data>
+  <data name="ed.failChannel" xml:space="preserve">
+    <value>This address has no active SMTP channel; configure the outgoing server on the Email Addresses page.</value>
+  </data>
+  <data name="ed.failInput" xml:space="preserve">
+    <value>The send input is invalid.</value>
+  </data>
+  <data name="ed.failDns" xml:space="preserve">
+    <value>The SMTP host name did not resolve.</value>
+  </data>
+  <data name="ed.failConnect" xml:space="preserve">
+    <value>Could not connect to the SMTP server.</value>
+  </data>
+  <data name="ed.failTls" xml:space="preserve">
+    <value>The TLS handshake failed.</value>
+  </data>
+  <data name="ed.failAuth" xml:space="preserve">
+    <value>The SMTP server rejected the credentials.</value>
+  </data>
+  <data name="ed.failSend" xml:space="preserve">
+    <value>The server did not accept the message.</value>
+  </data>
+  <data name="ed.failError" xml:space="preserve">
+    <value>An unexpected error occurred.</value>
+  </data>
+  <data name="ed.failUnknown" xml:space="preserve">
+    <value>The send's status could not be found; verify the outcome in the system logs.</value>
+  </data>
+  <data name="ed.errTo" xml:space="preserve">
+    <value>Enter a valid recipient address.</value>
+  </data>
+  <data name="ed.errFrom" xml:space="preserve">
+    <value>The chosen sender address no longer exists.</value>
+  </data>
+  <data name="ed.defaultSubject" xml:space="preserve">
+    <value>RapidsolDestek test email</value>
+  </data>
+  <data name="ed.defaultBody" xml:space="preserve">
+    <value>This email was sent to verify the RapidsolDestek outgoing mail settings. If it reached you, the SMTP configuration works.</value>
+  </data>
+</root>

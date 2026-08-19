@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="te.back" xml:space="preserve">
+    <value>← Email Templates</value>
+  </data>
+  <data name="te.subtitle" xml:space="preserve">
+    <value>Edit the subject and body of every automated email in this set. Click a template name to open the editor.</value>
+  </data>
+  <data name="te.secHead" xml:space="preserve">
+    <value>Set Details</value>
+  </data>
+  <data name="te.name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="te.nameHelp" xml:space="preserve">
+    <value>A short name describing the set.</value>
+  </data>
+  <data name="te.statusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="te.statusHelp" xml:space="preserve">
+    <value>Disabled sets cannot be selected on departments.</value>
+  </data>
+  <data name="te.enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="te.disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="te.lang" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="te.langHelp" xml:space="preserve">
+    <value>The language the set is written in.</value>
+  </data>
+  <data name="te.colTemplate" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="te.grpTicketUser" xml:space="preserve">
+    <value>Ticket → User</value>
+  </data>
+  <data name="te.grpTicketUserHelp" xml:space="preserve">
+    <value>Emails sent to the ticket owner and collaborators.</value>
+  </data>
+  <data name="te.grpTicketAgent" xml:space="preserve">
+    <value>Ticket → Agent</value>
+  </data>
+  <data name="te.grpTicketAgentHelp" xml:space="preserve">
+    <value>Alert emails sent to agents.</value>
+  </data>
+  <data name="te.grpTask" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="te.grpTaskHelp" xml:space="preserve">
+    <value>Alert and notice emails related to tasks.</value>
+  </data>
+  <data name="te.tNewTicketAutoResp" xml:space="preserve">
+    <value>New Ticket Auto-Response</value>
+  </data>
+  <data name="te.tNewTicketAutoRespD" xml:space="preserve">
+    <value>Confirmation sent to the user when a ticket is opened.</value>
+  </data>
+  <data name="te.tNewTicketAutoReply" xml:space="preserve">
+    <value>New Ticket Auto-Reply</value>
+  </data>
+  <data name="te.tNewTicketAutoReplyD" xml:space="preserve">
+    <value>Canned automatic reply tied to a help topic/filter.</value>
+  </data>
+  <data name="te.tNewMessageConfirm" xml:space="preserve">
+    <value>New Message Confirmation</value>
+  </data>
+  <data name="te.tNewMessageConfirmD" xml:space="preserve">
+    <value>Confirmation sent when the user's new message is received.</value>
+  </data>
+  <data name="te.tNewTicketNotice" xml:space="preserve">
+    <value>New Ticket Notice</value>
+  </data>
+  <data name="te.tNewTicketNoticeD" xml:space="preserve">
+    <value>Notice for a ticket an agent opened on the user's behalf.</value>
+  </data>
+  <data name="te.tOverlimit" xml:space="preserve">
+    <value>Overlimit Notice</value>
+  </data>
+  <data name="te.tOverlimitD" xml:space="preserve">
+    <value>Sent to a user who reached the open-ticket limit.</value>
+  </data>
+  <data name="te.tResponse" xml:space="preserve">
+    <value>Response Template</value>
+  </data>
+  <data name="te.tResponseD" xml:space="preserve">
+    <value>The email body wrapping agent replies.</value>
+  </data>
+  <data name="te.tEffortRequest" xml:space="preserve">
+    <value>Effort Approval Request</value>
+  </data>
+  <data name="te.tEffortRequestD" xml:space="preserve">
+    <value>Sends the user the effort proposal and an approval link.</value>
+  </data>
+  <data name="te.tEffortResponse" xml:space="preserve">
+    <value>Effort Response Alert</value>
+  </data>
+  <data name="te.tEffortResponseD" xml:space="preserve">
+    <value>Notifies the assigned agent of the user's approve/reject decision.</value>
+  </data>
+  <data name="te.tNewActivityNotice" xml:space="preserve">
+    <value>New Activity Notice</value>
+  </data>
+  <data name="te.tNewActivityNoticeD" xml:space="preserve">
+    <value>Notice of new ticket activity to collaborators.</value>
+  </data>
+  <data name="te.tNewTicketAlert" xml:space="preserve">
+    <value>New Ticket Alert</value>
+  </data>
+  <data name="te.tNewTicketAlertD" xml:space="preserve">
+    <value>Sent to agents when a new ticket is opened.</value>
+  </data>
+  <data name="te.tNewMessageAlert" xml:space="preserve">
+    <value>New Message Alert</value>
+  </data>
+  <data name="te.tNewMessageAlertD" xml:space="preserve">
+    <value>Sent when the user writes a reply.</value>
+  </data>
+  <data name="te.tInternalActivity" xml:space="preserve">
+    <value>Internal Activity Alert</value>
+  </data>
+  <data name="te.tInternalActivityD" xml:space="preserve">
+    <value>Sent on internal notes or agent activity.</value>
+  </data>
+  <data name="te.tAssignmentAlert" xml:space="preserve">
+    <value>Assignment Alert</value>
+  </data>
+  <data name="te.tAssignmentAlertD" xml:space="preserve">
+    <value>Sent when a ticket is assigned to an agent/team.</value>
+  </data>
+  <data name="te.tTransferAlert" xml:space="preserve">
+    <value>Transfer Alert</value>
+  </data>
+  <data name="te.tTransferAlertD" xml:space="preserve">
+    <value>Sent when a ticket is transferred to another department.</value>
+  </data>
+  <data name="te.tOverdueAlert" xml:space="preserve">
+    <value>Overdue Alert</value>
+  </data>
+  <data name="te.tOverdueAlertD" xml:space="preserve">
+    <value>Sent when a ticket passes its due date.</value>
+  </data>
+  <data name="te.tTaskNewAlert" xml:space="preserve">
+    <value>New Task Alert</value>
+  </data>
+  <data name="te.tTaskNewAlertD" xml:space="preserve">
+    <value>Sent to agents when a new task is created.</value>
+  </data>
+  <data name="te.tTaskActivityAlert" xml:space="preserve">
+    <value>New Activity Alert</value>
+  </data>
+  <data name="te.tTaskActivityAlertD" xml:space="preserve">
+    <value>Sent to agents on new task activity.</value>
+  </data>
+  <data name="te.tTaskActivityNotice" xml:space="preserve">
+    <value>New Activity Notice (collaborator)</value>
+  </data>
+  <data name="te.tTaskActivityNoticeD" xml:space="preserve">
+    <value>Notice of task activity to collaborators.</value>
+  </data>
+  <data name="te.tTaskAssignment" xml:space="preserve">
+    <value>Task Assignment Alert</value>
+  </data>
+  <data name="te.tTaskAssignmentD" xml:space="preserve">
+    <value>Sent when a task is assigned.</value>
+  </data>
+  <data name="te.tTaskTransfer" xml:space="preserve">
+    <value>Task Transfer Alert</value>
+  </data>
+  <data name="te.tTaskTransferD" xml:space="preserve">
+    <value>Sent when a task is transferred to another department.</value>
+  </data>
+  <data name="te.tTaskOverdue" xml:space="preserve">
+    <value>Task Overdue Alert</value>
+  </data>
+  <data name="te.tTaskOverdueD" xml:space="preserve">
+    <value>Sent when a task passes its due date.</value>
+  </data>
+  <data name="te.dlgTitle" xml:space="preserve">
+    <value>Edit Template</value>
+  </data>
+  <data name="te.dlgSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="te.dlgSubjectHelp" xml:space="preserve">
+    <value>The email's subject line; variables may be used.</value>
+  </data>
+  <data name="te.dlgBody" xml:space="preserve">
+    <value>Body</value>
+  </data>
+  <data name="te.dlgBodyHelp" xml:space="preserve">
+    <value>The email body. The variables below are filled with real values at send time.</value>
+  </data>
+  <data name="te.dlgVars" xml:space="preserve">
+    <value>Supported Variables</value>
+  </data>
+  <data name="te.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy</value>
+  </data>
+  <data name="te.toastCreated" xml:space="preserve">
+    <value>Template set created.</value>
+  </data>
+  <data name="te.toastSaved" xml:space="preserve">
+    <value>Set details saved.</value>
+  </data>
+  <data name="te.toastTplSaved" xml:space="preserve">
+    <value>Template saved.</value>
+  </data>
+  <data name="te.errName" xml:space="preserve">
+    <value>The set name must not be empty.</value>
+  </data>
+  <data name="te.errNameInUse" xml:space="preserve">
+    <value>A template set with this name already exists.</value>
+  </data>
+  <data name="te.errTemplate" xml:space="preserve">
+    <value>The template could not be saved: subject and body must not be empty.</value>
+  </data>
+  <data name="te.varInsert" xml:space="preserve">
+    <value>Click to insert at the caret</value>
+  </data>
+  <data name="te.varUnknown" xml:space="preserve">
+    <value>This variable is not filled with real data; it expands to empty when sent.</value>
+  </data>
+  <data name="te.preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="te.previewTitle" xml:space="preserve">
+    <value>Preview (with sample data)</value>
+  </data>
+  <data name="te.previewFail" xml:space="preserve">
+    <value>The preview could not be rendered.</value>
+  </data>
+</root>

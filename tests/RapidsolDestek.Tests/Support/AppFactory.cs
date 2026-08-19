@@ -23,7 +23,25 @@ public sealed class AppFactory(string connectionString) : WebApplicationFactory<
         builder.ConfigureServices(services =>
         {
             services.AddSingleton<IAppEmailSender>(Emails);
+            // The S7 email-diagnostic transport is a REAL MailKit SMTP submit —
+            // tests capture it into the same fake instead (channel-config failures
+            // still occur for real: they are typed BEFORE the transport runs).
+            services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailDiagnosticSender>(
+                new CapturingDiagnosticSender(Emails));
         });
+    }
+}
+
+/// <summary>Forwards diagnostic sends into <see cref="CapturingEmailSender"/> and
+/// reports the transport success stage.</summary>
+public sealed class CapturingDiagnosticSender(CapturingEmailSender emails)
+    : RapidsolDestek.Infrastructure.Services.IMailDiagnosticSender
+{
+    public async Task<RapidsolDestek.Infrastructure.Services.MailTestResult> SendAsync(
+        RapidsolDestek.Infrastructure.Services.MailSendRequest request, CancellationToken ct = default)
+    {
+        await emails.SendAsync(request.To, request.Subject, request.TextBody, ct);
+        return new RapidsolDestek.Infrastructure.Services.MailTestResult(true, "sent");
     }
 }
 

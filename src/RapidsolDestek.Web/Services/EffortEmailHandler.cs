@@ -66,6 +66,7 @@ public sealed class EffortEmailHandler(
         var setId = (await settings.GetEmailAsync(ct)).DefaultTemplateSetId;
         var template = await db.EmailTemplateSets
             .Where(s => setId > 0 ? s.Id == setId : s.IsActive && s.Language == "tr")
+            .OrderBy(s => s.Id) // several active tr sets can exist (S7 set CRUD) — seeded canon set wins
             .SelectMany(s => s.Templates)
             .Where(t => t.CodeName == templateCode)
             .FirstOrDefaultAsync(ct);

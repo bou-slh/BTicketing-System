@@ -326,7 +326,8 @@ public class EmailsAdminTests(PostgresFixture fixture)
         int enSetId, bordroId, bilgiId, destekId;
         await using (var db = fixture.CreateContext())
         {
-            enSetId = await db.EmailTemplateSets.Where(s => s.Language == "en" && s.IsActive)
+            // Pinned by canon name — template tests create further active en sets.
+            enSetId = await db.EmailTemplateSets.Where(s => s.Name == "English Set (EN)")
                 .Select(s => s.Id).SingleAsync();
             bordroId = await db.EmailAccounts.Where(a => a.Address == "bordro@rapidsol.com.tr").Select(a => a.Id).SingleAsync();
             bilgiId = await db.EmailAccounts.Where(a => a.Address == "bilgi@rapidsol.com.tr").Select(a => a.Id).SingleAsync();
@@ -424,7 +425,8 @@ public class EmailsAdminTests(PostgresFixture fixture)
         string originalSubject;
         await using (var db = fixture.CreateContext())
         {
-            var template = await db.EmailTemplateSets.Where(s => s.Language == "en" && s.IsActive)
+            // Pinned by canon name — template tests create further active en sets.
+            var template = await db.EmailTemplateSets.Where(s => s.Name == "English Set (EN)")
                 .SelectMany(s => s.Templates).SingleAsync(t => t.CodeName == "effort.request");
             enSetId = template.SetId;
             originalSubject = template.Subject;

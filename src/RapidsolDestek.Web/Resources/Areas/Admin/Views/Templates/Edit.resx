@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="te.back" xml:space="preserve">
+    <value>← E-posta Şablonları</value>
+  </data>
+  <data name="te.subtitle" xml:space="preserve">
+    <value>Bu setteki her otomatik e-postanın konusunu ve içeriğini düzenleyin. Bir şablon adına tıklayınca düzenleyici açılır.</value>
+  </data>
+  <data name="te.secHead" xml:space="preserve">
+    <value>Set Bilgileri</value>
+  </data>
+  <data name="te.name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="te.nameHelp" xml:space="preserve">
+    <value>Seti tanımlayan kısa ad.</value>
+  </data>
+  <data name="te.statusLabel" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="te.statusHelp" xml:space="preserve">
+    <value>Devre dışı setler departmanlarda seçilemez.</value>
+  </data>
+  <data name="te.enabled" xml:space="preserve">
+    <value>Etkin</value>
+  </data>
+  <data name="te.disabled" xml:space="preserve">
+    <value>Devre dışı</value>
+  </data>
+  <data name="te.lang" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="te.langHelp" xml:space="preserve">
+    <value>Setin yazıldığı dil.</value>
+  </data>
+  <data name="te.colTemplate" xml:space="preserve">
+    <value>Şablon</value>
+  </data>
+  <data name="te.grpTicketUser" xml:space="preserve">
+    <value>Talep → Kullanıcı</value>
+  </data>
+  <data name="te.grpTicketUserHelp" xml:space="preserve">
+    <value>Talep sahibine ve katılımcılara giden e-postalar.</value>
+  </data>
+  <data name="te.grpTicketAgent" xml:space="preserve">
+    <value>Talep → Temsilci</value>
+  </data>
+  <data name="te.grpTicketAgentHelp" xml:space="preserve">
+    <value>Temsilcilere giden uyarı e-postaları.</value>
+  </data>
+  <data name="te.grpTask" xml:space="preserve">
+    <value>Görev</value>
+  </data>
+  <data name="te.grpTaskHelp" xml:space="preserve">
+    <value>Görevlerle ilgili uyarı ve bildirim e-postaları.</value>
+  </data>
+  <data name="te.tNewTicketAutoResp" xml:space="preserve">
+    <value>Yeni Talep Otomatik Yanıtı</value>
+  </data>
+  <data name="te.tNewTicketAutoRespD" xml:space="preserve">
+    <value>Talep açıldığında kullanıcıya gönderilen alındı onayı.</value>
+  </data>
+  <data name="te.tNewTicketAutoReply" xml:space="preserve">
+    <value>Yeni Talep Oto-cevap</value>
+  </data>
+  <data name="te.tNewTicketAutoReplyD" xml:space="preserve">
+    <value>Yardım konusuna/filtreye bağlı hazır otomatik cevap.</value>
+  </data>
+  <data name="te.tNewMessageConfirm" xml:space="preserve">
+    <value>Yeni Mesaj Onayı</value>
+  </data>
+  <data name="te.tNewMessageConfirmD" xml:space="preserve">
+    <value>Kullanıcının yeni mesajı alındığında gönderilen onay.</value>
+  </data>
+  <data name="te.tNewTicketNotice" xml:space="preserve">
+    <value>Yeni Talep Bildirimi</value>
+  </data>
+  <data name="te.tNewTicketNoticeD" xml:space="preserve">
+    <value>Temsilcinin kullanıcı adına açtığı talebin bildirimi.</value>
+  </data>
+  <data name="te.tOverlimit" xml:space="preserve">
+    <value>Limit Aşımı Bildirimi</value>
+  </data>
+  <data name="te.tOverlimitD" xml:space="preserve">
+    <value>Açık talep sınırına ulaşan kullanıcıya gönderilir.</value>
+  </data>
+  <data name="te.tResponse" xml:space="preserve">
+    <value>Yanıt Şablonu</value>
+  </data>
+  <data name="te.tResponseD" xml:space="preserve">
+    <value>Temsilci yanıtlarını saran e-posta gövdesi.</value>
+  </data>
+  <data name="te.tEffortRequest" xml:space="preserve">
+    <value>Efor Onayı İsteği</value>
+  </data>
+  <data name="te.tEffortRequestD" xml:space="preserve">
+    <value>Kullanıcıya efor önerisini ve onay bağlantısını gönderir.</value>
+  </data>
+  <data name="te.tEffortResponse" xml:space="preserve">
+    <value>Efor Yanıtı Uyarısı</value>
+  </data>
+  <data name="te.tEffortResponseD" xml:space="preserve">
+    <value>Kullanıcının onay/red kararını atanan temsilciye bildirir.</value>
+  </data>
+  <data name="te.tNewActivityNotice" xml:space="preserve">
+    <value>Yeni Aktivite Bildirimi</value>
+  </data>
+  <data name="te.tNewActivityNoticeD" xml:space="preserve">
+    <value>Talepteki yeni aktivitenin katılımcılara bildirimi.</value>
+  </data>
+  <data name="te.tNewTicketAlert" xml:space="preserve">
+    <value>Yeni Talep Uyarısı</value>
+  </data>
+  <data name="te.tNewTicketAlertD" xml:space="preserve">
+    <value>Yeni talep açıldığında temsilcilere gönderilir.</value>
+  </data>
+  <data name="te.tNewMessageAlert" xml:space="preserve">
+    <value>Yeni Mesaj Uyarısı</value>
+  </data>
+  <data name="te.tNewMessageAlertD" xml:space="preserve">
+    <value>Kullanıcı yanıt yazdığında gönderilir.</value>
+  </data>
+  <data name="te.tInternalActivity" xml:space="preserve">
+    <value>İç Aktivite Uyarısı</value>
+  </data>
+  <data name="te.tInternalActivityD" xml:space="preserve">
+    <value>İç not veya temsilci aktivitesi olduğunda gönderilir.</value>
+  </data>
+  <data name="te.tAssignmentAlert" xml:space="preserve">
+    <value>Atama Uyarısı</value>
+  </data>
+  <data name="te.tAssignmentAlertD" xml:space="preserve">
+    <value>Talep bir temsilciye/takıma atandığında gönderilir.</value>
+  </data>
+  <data name="te.tTransferAlert" xml:space="preserve">
+    <value>Aktarım Uyarısı</value>
+  </data>
+  <data name="te.tTransferAlertD" xml:space="preserve">
+    <value>Talep başka departmana aktarıldığında gönderilir.</value>
+  </data>
+  <data name="te.tOverdueAlert" xml:space="preserve">
+    <value>Gecikme Uyarısı</value>
+  </data>
+  <data name="te.tOverdueAlertD" xml:space="preserve">
+    <value>Talep vade süresini aştığında gönderilir.</value>
+  </data>
+  <data name="te.tTaskNewAlert" xml:space="preserve">
+    <value>Yeni Görev Uyarısı</value>
+  </data>
+  <data name="te.tTaskNewAlertD" xml:space="preserve">
+    <value>Yeni görev oluşturulduğunda temsilcilere gönderilir.</value>
+  </data>
+  <data name="te.tTaskActivityAlert" xml:space="preserve">
+    <value>Yeni Aktivite Uyarısı</value>
+  </data>
+  <data name="te.tTaskActivityAlertD" xml:space="preserve">
+    <value>Görevde yeni aktivite olduğunda temsilcilere gönderilir.</value>
+  </data>
+  <data name="te.tTaskActivityNotice" xml:space="preserve">
+    <value>Yeni Aktivite Bildirimi (katılımcı)</value>
+  </data>
+  <data name="te.tTaskActivityNoticeD" xml:space="preserve">
+    <value>Görevdeki aktivitenin katılımcılara bildirimi.</value>
+  </data>
+  <data name="te.tTaskAssignment" xml:space="preserve">
+    <value>Görev Atama Uyarısı</value>
+  </data>
+  <data name="te.tTaskAssignmentD" xml:space="preserve">
+    <value>Görev atandığında gönderilir.</value>
+  </data>
+  <data name="te.tTaskTransfer" xml:space="preserve">
+    <value>Görev Aktarım Uyarısı</value>
+  </data>
+  <data name="te.tTaskTransferD" xml:space="preserve">
+    <value>Görev başka departmana aktarıldığında gönderilir.</value>
+  </data>
+  <data name="te.tTaskOverdue" xml:space="preserve">
+    <value>Görev Gecikme Uyarısı</value>
+  </data>
+  <data name="te.tTaskOverdueD" xml:space="preserve">
+    <value>Görev vadesi geçtiğinde gönderilir.</value>
+  </data>
+  <data name="te.dlgTitle" xml:space="preserve">
+    <value>Şablon Düzenle</value>
+  </data>
+  <data name="te.dlgSubject" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="te.dlgSubjectHelp" xml:space="preserve">
+    <value>E-postanın konu satırı; değişkenler kullanılabilir.</value>
+  </data>
+  <data name="te.dlgBody" xml:space="preserve">
+    <value>İçerik</value>
+  </data>
+  <data name="te.dlgBodyHelp" xml:space="preserve">
+    <value>E-postanın gövdesi. Aşağıdaki değişkenler gönderim anında gerçek değerlerle doldurulur.</value>
+  </data>
+  <data name="te.dlgVars" xml:space="preserve">
+    <value>Desteklenen Değişkenler</value>
+  </data>
+  <data name="te.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy</value>
+  </data>
+  <data name="te.toastCreated" xml:space="preserve">
+    <value>Şablon seti oluşturuldu.</value>
+  </data>
+  <data name="te.toastSaved" xml:space="preserve">
+    <value>Set bilgileri kaydedildi.</value>
+  </data>
+  <data name="te.toastTplSaved" xml:space="preserve">
+    <value>Şablon kaydedildi.</value>
+  </data>
+  <data name="te.errName" xml:space="preserve">
+    <value>Set adı boş olamaz.</value>
+  </data>
+  <data name="te.errNameInUse" xml:space="preserve">
+    <value>Bu adda bir şablon seti zaten var.</value>
+  </data>
+  <data name="te.errTemplate" xml:space="preserve">
+    <value>Şablon kaydedilemedi: konu ve içerik boş olamaz.</value>
+  </data>
+  <data name="te.varInsert" xml:space="preserve">
+    <value>Tıklayın: imlecin olduğu yere ekler</value>
+  </data>
+  <data name="te.varUnknown" xml:space="preserve">
+    <value>Bu değişken gerçek veriyle doldurulamıyor; gönderimde boş kalır.</value>
+  </data>
+  <data name="te.preview" xml:space="preserve">
+    <value>Önizle</value>
+  </data>
+  <data name="te.previewTitle" xml:space="preserve">
+    <value>Önizleme (örnek verilerle)</value>
+  </data>
+  <data name="te.previewFail" xml:space="preserve">
+    <value>Önizleme oluşturulamadı.</value>
+  </data>
+</root>

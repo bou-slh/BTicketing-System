@@ -1,0 +1,102 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@using RapidsolDestek.Web.Services
+@model EmailDiagnosticVm
+@{
+    ViewData["Title"] = L["ed.title"];
+
+    if (TempData["EdToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["EdToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // B10 typed failure stages → localized messages (shared by the Razor-rendered
+    // terminal state and the polling swap via the banner's data-job-msgs payload).
+    var failMessages = new Dictionary<string, string>
+    {
+        ["account"] = L["ed.failAccount"].Value,
+        ["channel"] = L["ed.failChannel"].Value,
+        ["input"] = L["ed.failInput"].Value,
+        ["dns"] = L["ed.failDns"].Value,
+        ["connect"] = L["ed.failConnect"].Value,
+        ["tls"] = L["ed.failTls"].Value,
+        ["auth"] = L["ed.failAuth"].Value,
+        ["send"] = L["ed.failSend"].Value,
+        ["error"] = L["ed.failError"].Value,
+        ["unknown"] = L["ed.failUnknown"].Value,
+    };
+    string FailText(DiagnosticJob job)
+    {
+        var text = failMessages.GetValueOrDefault(job.Stage ?? "error", failMessages["error"]);
+        return string.IsNullOrEmpty(job.Detail) ? text : $"{text} — {job.Detail}";
+    }
+
+    var state = Model.Job?.State; // null = no job on this view
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["ed.title"]</h1>
+        <p>@L["ed.subtitle"]</p>
+    </div>
+</div>
+
+<div class="rd-surface" style="max-width:640px">
+    <div class="rd-surface-head">@L["ed.formHead"]</div>
+    <div class="rd-surface-body">
+
+        @* B10 send states — REAL outcomes only (the mockup's always-on success banner
+           was the S0-audited defect; failure/pending banners are invented UI the row
+           demands). Pending polls /status and swaps to the honest terminal banner;
+           a JS-free refresh re-resolves the same job server-side. *@
+        @if (state == "pending")
+        {
+            <div class="rd-banner rd-banner-info" id="ed-pending"
+                 data-job-poll="/admin/email-diagnostic/status?id=@Model.JobId">
+                <span>…</span>
+                <span>@L["ed.pending"]</span>
+            </div>
+        }
+        <div class="rd-banner rd-banner-success" id="ed-success" data-job-success hidden="@(state != "success")">
+            <span>✓</span>
+            <span>@L["ed.success"]</span>
+        </div>
+        <div class="rd-banner rd-banner-error" id="ed-failure" data-job-failure
+             data-job-msgs="@System.Text.Json.JsonSerializer.Serialize(failMessages)"
+             hidden="@(state != "failure")">
+            <span>✕</span>
+            <span>@L["ed.fail"] <span data-job-detail>@(state == "failure" ? FailText(Model.Job!) : "")</span></span>
+        </div>
+
+        <form method="post" asp-area="Admin" asp-controller="EmailDiagnostic" asp-action="Send">
+            <div class="rd-field">
+                <label class="rd-label" for="ed-from">@L["ed.from"]</label>
+                <select id="ed-from" name="from" class="rd-control">
+                    @foreach (var a in Model.Accounts)
+                    {
+                        <option value="@a.Id">@a.Label</option>
+                    }
+                </select>
+                <p class="rd-help">@L["ed.fromHelp"]</p>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="ed-to">@L["ed.to"]</label>
+                <input id="ed-to" name="to" class="rd-control" type="email" value="@Model.StaffEmail" required>
+                <p class="rd-help">@L["ed.toHelp"]</p>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="ed-subject">@L["ed.subject"]</label>
+                <input id="ed-subject" name="subject" class="rd-control" type="text" value="@L["ed.defaultSubject"]">
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="ed-message">@L["ed.message"]</label>
+                <textarea id="ed-message" name="message" class="rd-control" style="min-height:120px">@L["ed.defaultBody"]</textarea>
+                <p class="rd-help">@L["ed.messageHelp"]</p>
+            </div>
+            <button class="rd-btn-primary">@L["ed.send"]</button>
+        </form>
+    </div>
+</div>

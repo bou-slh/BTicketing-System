@@ -1,0 +1,165 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model TemplateEditVm
+@{
+    ViewData["Title"] = Model.Set.Name;
+
+    // PRG toast handoff after set/template save (emails precedent).
+    if (TempData["TeToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["TeToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    string UpdatedText(DateTimeOffset? value) =>
+        value?.ToLocalTime().ToString(L.GetString("te.dateFmt"), CultureInfo.CurrentUICulture) ?? "—";
+
+    // The mockup's three template groups (Talep → Kullanıcı / Talep → Temsilci / Görev).
+    var groups = new (string Key, string Title, string Help)[]
+    {
+        ("ticket-user", "te.grpTicketUser", "te.grpTicketUserHelp"),
+        ("ticket-agent", "te.grpTicketAgent", "te.grpTicketAgentHelp"),
+        ("task", "te.grpTask", "te.grpTaskHelp"),
+    };
+}
+
+<div class="bo-page-head">
+    <div>
+        <p><a href="/admin/templates">@L["te.back"]</a></p>
+        <h1>@Model.Set.Name</h1>
+        <p>@L["te.subtitle"]</p>
+    </div>
+</div>
+
+<form method="post" asp-area="Admin" asp-controller="Templates" asp-action="Save">
+    <input type="hidden" name="id" value="@Model.Set.Id">
+
+    <div class="rd-surface" style="margin-bottom:18px">
+        <div class="rd-surface-head">@L["te.secHead"]</div>
+        <div class="rd-surface-body">
+            <div class="rd-grid-3">
+                <div class="rd-field">
+                    <label class="rd-label" for="te-name">@L["te.name"]</label>
+                    <input id="te-name" name="name" class="rd-control" type="text" value="@Model.Set.Name" required>
+                    <p class="rd-help">@L["te.nameHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <span class="rd-label">@L["te.statusLabel"]</span>
+                    <label class="rd-check" style="display:inline-flex;margin-right:18px;margin-top:10px">
+                        <input type="radio" name="isActive" value="true" checked="@Model.Set.IsActive"><span>@L["te.enabled"]</span>
+                    </label>
+                    <label class="rd-check" style="display:inline-flex">
+                        <input type="radio" name="isActive" value="false" checked="@(!Model.Set.IsActive)"><span>@L["te.disabled"]</span>
+                    </label>
+                    <p class="rd-help">@L["te.statusHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="te-lang">@L["te.lang"]</label>
+                    <select id="te-lang" name="lang" class="rd-control">
+                        <option value="tr" selected="@(Model.Set.Language != "en")">Türkçe</option>
+                        <option value="en" selected="@(Model.Set.Language == "en")">English</option>
+                    </select>
+                    <p class="rd-help">@L["te.langHelp"]</p>
+                </div>
+            </div>
+            <div class="rd-field mb-0">
+                <label class="rd-label" for="te-notes">@SL["common.notes"]</label>
+                <textarea id="te-notes" name="notes" class="rd-control" style="min-height:70px">@Model.Set.Notes</textarea>
+                <p class="rd-help">@SL["common.notesHelp"]</p>
+            </div>
+        </div>
+    </div>
+
+    @foreach (var g in groups)
+    {
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">
+                <span>@L[g.Title]</span>
+                <small class="rd-muted">@L[g.Help]</small>
+            </div>
+            <table class="rd-table">
+                <thead><tr><th>@L["te.colTemplate"]</th><th>@SL["common.updated"]</th></tr></thead>
+                <tbody>
+                    @foreach (var r in Model.Rows.Where(r => r.Group == g.Key))
+                    {
+                        <tr>
+                            <td>
+                                <a href="#" data-dialog-open="@r.DomId">@L[$"te.{r.NameKey}"]</a><br>
+                                <small class="rd-muted">@L[$"te.{r.NameKey}D"]</small>
+                            </td>
+                            <td>@UpdatedText(r.Updated)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="rd-btn-primary">@SL["common.save"]</button>
+        <a class="rd-btn" href="/admin/templates">@SL["common.cancel"]</a>
+    </div>
+</form>
+
+@* Şablon düzenleyici dialogları (B2): the mockup's ONE hardcoded dlg-editor split
+   into a prefilled dialog per canon code (settings-agents precedent) — every one of
+   the 21 rows opens its OWN subject/body. Kaydet is a REAL submit (the mockup's
+   data-dialog-close swallowed the save); variable pills click-insert at the caret
+   (B5); Önizle renders the CURRENT editor state through the real substitution path
+   over the hero ticket (invented UI — the ROADMAP row demands a per-template
+   preview the mockup never drew). *@
+@foreach (var r in Model.Rows)
+{
+    <dialog class="rd-dialog" id="@r.DomId" style="width:min(760px,calc(100vw - 40px))">
+        <form method="post" asp-area="Admin" asp-controller="Templates" asp-action="SaveTemplate">
+            <input type="hidden" name="id" value="@Model.Set.Id">
+            <input type="hidden" name="code" value="@r.Code">
+            <div class="rd-dialog-head">
+                <span>@L["te.dlgTitle"] — @L[$"te.{r.NameKey}"]</span>
+                <button type="button" class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+            </div>
+            <div class="rd-dialog-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="te-subject-@r.DomId">@L["te.dlgSubject"]</label>
+                    <input id="te-subject-@r.DomId" name="subject" class="rd-control" type="text" value="@r.Subject" required>
+                    <p class="rd-help">@L["te.dlgSubjectHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="te-body-@r.DomId">@L["te.dlgBody"]</label>
+                    <textarea id="te-body-@r.DomId" name="body" class="rd-control" style="min-height:230px" required>@r.Body</textarea>
+                    <p class="rd-help">@L["te.dlgBodyHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <span class="rd-label">@L["te.dlgVars"]</span>
+                    <div style="display:flex;flex-wrap:wrap;gap:7px">
+                        @foreach (var v in r.Variables)
+                        {
+                            <code class="rd-pill rd-pill-teal" data-var-insert="@v" role="button" tabindex="0" title="@L["te.varInsert"]">%{@v}</code>
+                        }
+                        @foreach (var v in r.ExtraVariables)
+                        {
+                            @* Honesty flag: this token is in the body but outside the real
+                               substitution bag — it expands to empty at send time. *@
+                            <code class="rd-pill rd-pill-closed" data-var-insert="@v" role="button" tabindex="0" title="@L["te.varUnknown"]">%{@v}</code>
+                        }
+                    </div>
+                </div>
+                <div class="rd-field mb-0" data-preview-block hidden>
+                    <span class="rd-label">@L["te.previewTitle"]</span>
+                    <div class="rd-surface" style="padding:12px 14px">
+                        <p style="margin:0 0 8px"><b data-preview-subject></b></p>
+                        <div data-preview-body></div>
+                    </div>
+                </div>
+            </div>
+            <div class="rd-dialog-foot">
+                <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                <button type="button" class="rd-btn" data-tpl-preview="/admin/template-edit/preview" data-tpl-preview-err="@L["te.previewFail"]">@L["te.preview"]</button>
+                <button class="rd-btn-primary">@SL["common.save"]</button>
+            </div>
+        </form>
+    </dialog>
+}

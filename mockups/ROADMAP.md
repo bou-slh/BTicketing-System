@@ -947,9 +947,58 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       sentinel-unchanged → replaced; plaintext never rendered, ciphertext at rest), duplicate/incomplete/
       malformed refusals, Test-connection typed "connect" failure on closed 127.0.0.1:1 (fast, no external
       network) + "input" rejection before any I/O, bulk enable/disable + the delete guard — suite 293.)*
-- [ ] **email-diagnostic.html** — real send with pending/success/failure states (B10)
-- [ ] **templates.html / template-edit.html** — set CRUD (create dialog closes properly); 21 templates each
+- [x] **email-diagnostic.html** — real send with pending/success/failure states (B10)
+      *(S7; /admin/email-diagnostic (EmailDiagnosticController). REAL send: submit PRGs to ?job=&lt;guid&gt;
+      (EmailDiagnosticService in-memory tracker, 1h retention), the pending banner polls /status (rd.js
+      data-job-poll, ~72s cap) and swaps to the terminal banner — a JS-free refresh re-resolves the same
+      job server-side. Transport = NEW MailDiagnosticSender: a live MailKit SMTP submit over the chosen
+      account's Smtp channel (MailConnectionTester's typed stages + "send"; stored password decrypted via
+      IEmailSecretProtector; OAuth2 channels submit unauthenticated until the S8 token flow — the server's
+      refusal reports as "send"). Channel misconfig (no active SMTP channel / no host) is a typed "channel"
+      failure BEFORE any I/O — the seeded dev channels (smtp.rapidsol.com.tr) therefore fail honestly at
+      "dns" instead of reproducing the mockup's always-on success banner (S0 defect; the banner now renders
+      only on a real success). FROM = seeded EmailAccount rows; TO prefills the signed-in admin (mockup's
+      umit.akin@ was sample data); subject/body defaults moved to resx so they localize (flagged). INVENTED
+      UI (B10 demands states the mockup never drew): pending rd-banner-info + failure banner with app.css
+      rd-banner-error and per-stage messages (ed.pending/fail/failAccount/failChannel/failInput/failDns/
+      failConnect/failTls/failAuth/failSend/failError/failUnknown/errTo/errFrom/defaultSubject/defaultBody
+      TR/EN twins — needs canon sign-off). Tests: EmailTemplatesDiagnosticTests (3 of 10) — success state
+      with the send captured by the email fake (AppFactory swaps IMailDiagnosticSender; content asserted),
+      typed "channel" failure on bordro@ (no SMTP channel, nothing captured) + input rejection without a
+      job, and the REAL transport probed directly ("input" before I/O, "connect" on closed 127.0.0.1:1).)*
+- [x] **templates.html / template-edit.html** — set CRUD (create dialog closes properly); 21 templates each
       open their own content (B2); variable pills click-to-insert (B5); per-template preview
+      *(S7; /admin/templates + /admin/template-edit?id= (TemplatesController). The 21-template canon moved
+      into Domain EmailTemplateCatalog (code/group/name/variables + stock body) — DomainSeeder and the NEW
+      SystemTemplateService.CreateSetAsync/SaveTemplateAsync consume it (extended, not duplicated; multiple
+      active sets per language now exist, so its GetOrCreate and EffortEmailHandler's default-set fallback
+      deterministically prefer the lowest-Id = seeded set). LIST: B1 over EmailTemplateSet rows (search,
+      sort — name sorted-desc default per mockup, page 8), Kullanımda ✓ = referenced by email-settings
+      default_template_set_id or a department template-set pointer; the same references guard bulk delete
+      (skipped rows → partial toast); bulk enable/disable flips IsActive. dlg-new-set: name (dup guard) +
+      clone select (Stok Şablonlar = catalog stock; cloning copies ALL source rows incl. system content
+      ones, backfilling missing canon codes) + language; Oluştur is a REAL submit — PRG closes the dialog
+      (the S0-audited defect) and lands on the new set's editor (invented destination, mockup silent).
+      EDITOR: set details save (name/status/lang/notes); the mockup's ONE hardcoded dlg-editor split into
+      21 per-code dialogs prefilled from the set's own rows (B2, settings-agents precedent; dialog title
+      composed as retuned te.dlgTitle "Şablon Düzenle" + the row's te.t* name), Kaydet really submits
+      per-set via SaveTemplateAsync (the close-swallows-save fix). B5 pills: rd.js data-var-insert inserts
+      %{var} at the caret of the dialog's last-focused subject/body control; the per-code lists are HONEST
+      — the keys CannedResponseService.BuildVariablesAsync actually fills (7 ticket vars, +3 effort vars on
+      the two effort codes) — the mockup's pill names (user.name/company.name/agent.name/department.name/
+      signature/ticket.link) are off-canon vs the S4 bag and task.* codes get the shared ticket bag until
+      S8 defines task variables (both flagged); body tokens outside the list render as gray rd-pill-closed
+      "expands empty" pills. PREVIEW (invented UI — the row demands it, mockup has none): Önizle posts the
+      CURRENT unsaved editor state to /preview, expanded through the real path (variable bag over hero
+      R716555, falling back to oldest ticket / a static §2 canon bag on an empty DB) and sanitized before
+      rendering. Invented keys (TR/EN twins): tp.dateFmt/bulkNone/bulkDone/bulkPartial/deleteConfirm/
+      errName/errNameInUse; te.dateFmt/toastCreated/toastSaved/toastTplSaved/errName/errNameInUse/
+      errTemplate/varInsert/varUnknown/preview/previewTitle/previewFail. Tests:
+      EmailTemplatesDiagnosticTests (7 of 10) — list + search + name-desc order, stock create = 21 canon
+      rows + dup refusal, clone copies source content, per-set template save round-trip (sibling set
+      untouched; unknown code refused), bulk disable + the reference delete guard (cascade asserted),
+      honest per-code pills (effort vars only on effort dialogs), preview substitutes hero canon data and
+      never leaks %{unknown} — suite 303.)*
 - [ ] **banlist.html** — add/edit/delete real; B1
 - [x] **helptopics.html / helptopic-edit.html** — CRUD; number-format radio gates input; forms tab attach/detach (B3/B4)
       *(S7; /admin/helptopics + /admin/helptopic-edit?id= (HelpTopicsController; no id = create — the

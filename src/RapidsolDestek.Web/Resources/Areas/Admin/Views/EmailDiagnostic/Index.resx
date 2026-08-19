@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ed.title" xml:space="preserve">
+    <value>E-posta Tanılama</value>
+  </data>
+  <data name="ed.subtitle" xml:space="preserve">
+    <value>Giden posta ayarlarınızı test etmek için sistemden deneme e-postası gönderin.</value>
+  </data>
+  <data name="ed.formHead" xml:space="preserve">
+    <value>Test E-postası Gönder</value>
+  </data>
+  <data name="ed.success" xml:space="preserve">
+    <value>Test e-postası kuyruğa alındı. Birkaç dakika içinde gelen kutusunu kontrol edin; ulaşmadıysa SMTP ayarlarını ve sistem kayıtlarını inceleyin.</value>
+  </data>
+  <data name="ed.from" xml:space="preserve">
+    <value>Kimden</value>
+  </data>
+  <data name="ed.fromHelp" xml:space="preserve">
+    <value>Testin gönderileceği sistem e-posta adresi; o adresin SMTP ayarları kullanılır.</value>
+  </data>
+  <data name="ed.to" xml:space="preserve">
+    <value>Kime</value>
+  </data>
+  <data name="ed.toHelp" xml:space="preserve">
+    <value>Testin ulaşacağı adres — kendi adresinizi kullanabilirsiniz.</value>
+  </data>
+  <data name="ed.subject" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="ed.message" xml:space="preserve">
+    <value>Mesaj</value>
+  </data>
+  <data name="ed.messageHelp" xml:space="preserve">
+    <value>Test e-postasının gövdesine yazılacak metin.</value>
+  </data>
+  <data name="ed.send" xml:space="preserve">
+    <value>Gönder</value>
+  </data>
+  <data name="ed.pending" xml:space="preserve">
+    <value>Test e-postası gönderiliyor…</value>
+  </data>
+  <data name="ed.fail" xml:space="preserve">
+    <value>Gönderim başarısız.</value>
+  </data>
+  <data name="ed.failAccount" xml:space="preserve">
+    <value>Seçilen gönderen adresi bulunamadı.</value>
+  </data>
+  <data name="ed.failChannel" xml:space="preserve">
+    <value>Bu adresin etkin bir SMTP kanalı yok; giden sunucuyu E-posta Adresleri sayfasından yapılandırın.</value>
+  </data>
+  <data name="ed.failInput" xml:space="preserve">
+    <value>Gönderim bilgileri geçersiz.</value>
+  </data>
+  <data name="ed.failDns" xml:space="preserve">
+    <value>SMTP sunucu adı çözümlenemedi.</value>
+  </data>
+  <data name="ed.failConnect" xml:space="preserve">
+    <value>SMTP sunucusuna bağlanılamadı.</value>
+  </data>
+  <data name="ed.failTls" xml:space="preserve">
+    <value>TLS el sıkışması başarısız oldu.</value>
+  </data>
+  <data name="ed.failAuth" xml:space="preserve">
+    <value>SMTP sunucusu kimlik bilgilerini reddetti.</value>
+  </data>
+  <data name="ed.failSend" xml:space="preserve">
+    <value>Sunucu mesajı kabul etmedi.</value>
+  </data>
+  <data name="ed.failError" xml:space="preserve">
+    <value>Beklenmeyen bir hata oluştu.</value>
+  </data>
+  <data name="ed.failUnknown" xml:space="preserve">
+    <value>Gönderim durumu bulunamadı; sonucu sistem kayıtlarından doğrulayın.</value>
+  </data>
+  <data name="ed.errTo" xml:space="preserve">
+    <value>Geçerli bir alıcı adresi girin.</value>
+  </data>
+  <data name="ed.errFrom" xml:space="preserve">
+    <value>Seçilen gönderen adresi bulunamadı.</value>
+  </data>
+  <data name="ed.defaultSubject" xml:space="preserve">
+    <value>RapidsolDestek test e-postası</value>
+  </data>
+  <data name="ed.defaultBody" xml:space="preserve">
+    <value>Bu e-posta, RapidsolDestek giden posta ayarlarını doğrulamak için gönderilmiştir. Elinize ulaştıysa SMTP yapılandırması çalışıyor demektir.</value>
+  </data>
+</root>
