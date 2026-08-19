@@ -14,10 +14,16 @@
   /* ---------- B3 switch gating: input[data-gates="selector"] ----------
      A master switch disables every form control inside its target container(s)
      while unchecked (admin settings pages: effort master switch, alert
-     bo-toggle-card recipients). Synced on change and at boot. */
+     bo-toggle-card recipients). Selects join the contract via
+     select[data-gates] + data-gates-on="value": targets are enabled only while
+     the selected value matches (B3 "auth-backend and format selects reveal
+     their dependent inputs" — admin/staff-edit se-backend gates the password
+     controls). Synced on change and at boot. */
   function syncGates() {
-    document.querySelectorAll("input[data-gates]").forEach((sw) => {
-      const off = !sw.checked;
+    document.querySelectorAll("input[data-gates],select[data-gates]").forEach((sw) => {
+      const off = sw.tagName === "SELECT"
+        ? sw.value !== sw.getAttribute("data-gates-on")
+        : !sw.checked;
       document.querySelectorAll(sw.getAttribute("data-gates")).forEach((el) => {
         el.classList.toggle("rd-gated-off", off);
         const controls = el.matches("input,select,textarea,button")
@@ -33,7 +39,7 @@
     });
   }
   document.addEventListener("change", (e) => {
-    if (e.target.matches("input[data-gates]")) syncGates();
+    if (e.target.matches("input[data-gates],select[data-gates]")) syncGates();
     // Radio masters (settings-company logo default/custom): checking the OTHER
     // radio of a gating radio's group never fires change on the gating radio
     // itself — resync whenever any radio sharing its name group changes.

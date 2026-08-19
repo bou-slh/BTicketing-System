@@ -183,6 +183,7 @@ public class ProfileController(
         }
 
         staff.PasswordChangedAt = DateTimeOffset.UtcNow; // pf.passHelp "Son değişiklik"
+        staff.RequirePasswordChange = false; // admin/staff-edit dlg-password flag satisfied
         using (ActorContext.ForStaff(staff, HttpContext.Connection.RemoteIpAddress?.ToString()).BeginAuditScope())
             await db.SaveChangesAsync(ct);
 

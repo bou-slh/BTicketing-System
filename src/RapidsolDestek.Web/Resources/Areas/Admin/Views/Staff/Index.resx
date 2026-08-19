@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sf.title" xml:space="preserve">
+    <value>Temsilciler</value>
+  </data>
+  <data name="sf.subtitle" xml:space="preserve">
+    <value>Yardım masasında çalışan ekip üyeleri. Bir temsilciye tıklayarak hesabını, erişimini, izinlerini ve takımlarını düzenleyin.</value>
+  </data>
+  <data name="sf.add" xml:space="preserve">
+    <value>＋ Yeni Temsilci</value>
+  </data>
+  <data name="sf.searchPh" xml:space="preserve">
+    <value>Temsilci ara…</value>
+  </data>
+  <data name="sf.fltDeptAll" xml:space="preserve">
+    <value>Departman: Tümü</value>
+  </data>
+  <data name="sf.fltTeamAll" xml:space="preserve">
+    <value>Takım: Tümü</value>
+  </data>
+  <data name="sf.colName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="sf.colUsername" xml:space="preserve">
+    <value>Kullanıcı Adı</value>
+  </data>
+  <data name="sf.colDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="sf.colRole" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="sf.colLastLogin" xml:space="preserve">
+    <value>Son Giriş</value>
+  </data>
+  <data name="sf.stActive" xml:space="preserve">
+    <value>Aktif</value>
+  </data>
+  <data name="sf.stLocked" xml:space="preserve">
+    <value>Kilitli</value>
+  </data>
+  <data name="sf.stVacation" xml:space="preserve">
+    <value>Tatilde</value>
+  </data>
+  <data name="sf.lock" xml:space="preserve">
+    <value>Kilitle</value>
+  </data>
+  <data name="sf.emptyTitle" xml:space="preserve">
+    <value>Filtreye uyan temsilci yok</value>
+  </data>
+  <data name="sf.emptyText" xml:space="preserve">
+    <value>Filtreleri değiştirin veya yeni bir temsilci ekleyin.</value>
+  </data>
+  <data name="sf.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="sf.bulkNone" xml:space="preserve">
+    <value>Önce satır seçin.</value>
+  </data>
+  <data name="sf.bulkDone" xml:space="preserve">
+    <value>{0} temsilci güncellendi.</value>
+  </data>
+  <data name="sf.bulkPartial" xml:space="preserve">
+    <value>{0} güncellendi, {1} atlandı (kendi hesabınız, son yönetici veya kayıtları olan temsilciler).</value>
+  </data>
+  <data name="sf.deleteConfirm" xml:space="preserve">
+    <value>Seçili temsilciler kalıcı olarak silinsin mi? Talep, görev veya yazışma kaydı olan temsilciler atlanır.</value>
+  </data>
+  <data name="sf.toastSaved" xml:space="preserve">
+    <value>Temsilci kaydedildi.</value>
+  </data>
+  <data name="sf.toastCreated" xml:space="preserve">
+    <value>Temsilci oluşturuldu.</value>
+  </data>
+</root>

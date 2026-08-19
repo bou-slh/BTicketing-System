@@ -1,0 +1,462 @@
+@using System.Globalization
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model StaffEditVm
+@{
+    var s = Model.Staff;
+    var isNew = s is null;
+    ViewData["Title"] = isNew ? L["se.newTitle"].Value : s!.FullName;
+
+    // PRG toast handoff (B3 refusals write nothing; password/2FA posts land back here).
+    if (TempData["StaffEditToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["StaffEditToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    var isLocal = (s?.AuthBackend ?? "local") == "local";
+    var accessIds = Model.Memberships.Select(m => m.TeamId).ToHashSet();
+
+    // "Bordro Ekibi" → "BE" (mockup avatar convention, teams precedent).
+    string Initials(string name)
+    {
+        var words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length == 0)
+            return "";
+        var first = words[0][..1];
+        var last = words.Length > 1 ? words[^1][..1] : "";
+        return (first + last).ToUpper(CultureInfo.GetCultureInfo("tr-TR"));
+    }
+}
+
+<div class="bo-page-head">
+    <div>
+        <p><a href="/admin/staff">@L["se.back"]</a></p>
+        <h1>@(isNew ? L["se.newTitle"].Value : s!.FullName)</h1>
+        <p>@L["se.subtitle"]</p>
+    </div>
+</div>
+
+<form id="se-form" method="post" asp-area="Admin" asp-controller="Staff" asp-action="Save">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@s!.Id">
+    }
+
+    <div class="rd-tabs" data-tabs data-tabs-scope="main">
+        <button type="button" class="active" data-tab="panel-account">@L["se.tabAccount"]</button>
+        <button type="button" data-tab="panel-access">@L["se.tabAccess"]</button>
+        <button type="button" data-tab="panel-permissions">@L["se.tabPermissions"]</button>
+        <button type="button" data-tab="panel-teams">@L["se.tabTeams"]</button>
+    </div>
+
+    @* ============ Hesap ============ *@
+    <div class="rd-tab-panel active" id="panel-account" data-tab-group="main">
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["se.secIdentity"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="se-first">@L["se.firstName"]</label>
+                        <input id="se-first" name="firstName" class="rd-control" type="text" value="@s?.FirstName" required maxlength="64">
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="se-last">@L["se.lastName"]</label>
+                        <input id="se-last" name="lastName" class="rd-control" type="text" value="@s?.LastName" required maxlength="64">
+                    </div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="se-email">@L["se.email"]</label>
+                    <input id="se-email" name="email" class="rd-control" type="email" value="@s?.Email" required maxlength="254">
+                    <p class="rd-help">@L["se.emailHelp"]</p>
+                </div>
+                <div class="rd-grid-2">
+                    <div class="rd-field mb-0">
+                        <label class="rd-label" for="se-phone">@L["se.phone"]</label>
+                        <div style="display:flex;gap:9px">
+                            <input id="se-phone" name="phone" class="rd-control" type="tel" value="@s?.Phone">
+                            <input name="phoneExt" class="rd-control" type="text" value="@s?.PhoneExt" style="max-width:90px" placeholder="@L["se.ext"]" title="@L["se.ext"]">
+                        </div>
+                    </div>
+                    <div class="rd-field mb-0">
+                        <label class="rd-label" for="se-mobile">@L["se.mobile"]</label>
+                        <input id="se-mobile" name="mobile" class="rd-control" type="tel" value="@s?.Mobile">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["se.secAuth"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="se-username">@L["se.username"]</label>
+                        <div style="display:flex;gap:9px">
+                            <input id="se-username" name="username" class="rd-control" type="text" value="@s?.Username" required maxlength="64">
+                            <button type="button" class="rd-btn" data-dialog-open="dlg-password" data-pw-gate>@L["se.setPassword"]</button>
+                        </div>
+                        <p class="rd-help">@L["se.usernameHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="se-backend">@L["se.backend"]</label>
+                        @* B3 select gating (rd.js data-gates-on): non-local backends
+                           disable the password controls; the server refuses too.
+                           TODO(S9 SSO): "ldap" persists — sign-in still verifies the
+                           local Identity password until a directory backend exists. *@
+                        <select id="se-backend" name="backend" class="rd-control"
+                                data-gates="[data-pw-gate]" data-gates-on="local">
+                            <option value="local" selected="@isLocal">@L["se.backendLocal"]</option>
+                            <option value="ldap" selected="@(!isLocal)">LDAP / Active Directory</option>
+                        </select>
+                        <p class="rd-help">@L["se.backendHelp"]</p>
+                    </div>
+                </div>
+                <div class="rd-field mb-0">
+                    <span class="rd-label">@L["se.twofa"]</span>
+                    <div style="display:flex;align-items:center;gap:12px">
+                        @if (Model.TwoFactorOn && s?.TwoFactorMethod == TwoFactorMethod.Email)
+                        {
+                            <span class="rd-pill rd-pill-solved">@L["se.twofaEmail"]</span>
+                        }
+                        else if (Model.TwoFactorOn)
+                        {
+                            <span class="rd-pill rd-pill-solved">@L["se.twofaState"]</span>
+                        }
+                        else
+                        {
+                            <span class="rd-pill rd-pill-closed">@L["se.twofaOff"]</span>
+                        }
+                        @* Submits the standalone reset form below (the mockup button is
+                           dead; type=submit + form attr keeps the DOM otherwise 1:1). *@
+                        <button type="submit" form="se-2fa-form" class="rd-btn rd-btn-ghost rd-btn-sm"
+                                disabled="@(isNew || !Model.TwoFactorOn)">@SL["common.reset"]</button>
+                    </div>
+                    <p class="rd-help">@L["se.twofaHelp"]</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["se.secStatus"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="locked" value="true" checked="@(s is { IsActive: false })">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["se.locked"]</b>
+                            <small>@L["se.lockedHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="isAdmin" value="true" checked="@(s?.IsAdmin ?? false)">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["se.adminFlag"]</b>
+                            <small>@L["se.adminFlagHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="assignedOnly" value="true" checked="@(s?.AssignedOnly ?? false)">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["se.assignedOnly"]</b>
+                            <small>@L["se.assignedOnlyHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="vacation" value="true" checked="@(s?.OnVacation ?? false)">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["se.vacation"]</b>
+                            <small>@L["se.vacationHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="rd-surface">
+            <div class="rd-surface-head">@L["se.notesHead"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field mb-0">
+                    <textarea name="notes" class="rd-control" style="min-height:80px">@s?.Notes</textarea>
+                    <p class="rd-help">@SL["common.notesHelp"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ============ Erişim ============
+       Primary access edits Staff.DepartmentId/RoleId; the extended rows are
+       StaffDepartmentAccess (B4 rule rows, data-rule-add contract): accessDepts/
+       accessRoles post as parallel arrays in DOM order, accessAlerts pairs by row
+       markers (hidden "row" + checkbox "on" — unchecked checkboxes post nothing).
+       The primary department is dropped from the extended rows server-side. *@
+    <div class="rd-tab-panel" id="panel-access" data-tab-group="main">
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["se.secPrimary"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="se-pdept">@L["se.primaryDept"]</label>
+                        <select id="se-pdept" name="deptId" class="rd-control">
+                            @foreach (var d in Model.Departments)
+                            {
+                                <option value="@d.Id" selected="@(s?.DepartmentId == d.Id)">@d.Label</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["se.primaryDeptHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="se-prole">@L["se.primaryRole"]</label>
+                        <select id="se-prole" name="roleId" class="rd-control">
+                            @foreach (var r in Model.Roles)
+                            {
+                                <option value="@r.Id" selected="@(s?.RoleId == r.Id)">@r.Name</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["se.primaryRoleHelp"]</p>
+                    </div>
+                </div>
+                @* Persisted (osTicket "use primary role on assignment");
+                   TODO(S7 rollout): consumed once assigned-ticket permission
+                   resolution outside accessible departments exists. *@
+                <label class="rd-switch">
+                    <input type="checkbox" name="usePrimaryOnAssigned" value="true" checked="@(s?.UsePrimaryRoleOnAssigned ?? true)">
+                    <span class="track"></span>
+                    <span class="rd-switch-copy">
+                        <b>@L["se.usePrimaryOnAssigned"]</b>
+                        <small>@L["se.usePrimaryOnAssignedHelp"]</small>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <div class="rd-surface">
+            <div class="rd-surface-head">
+                <span>@L["se.secExtended"]</span>
+                <small class="rd-muted">@L["se.extendedHelp"]</small>
+            </div>
+            <div class="rd-surface-body">
+                @foreach (var row in Model.AccessRows)
+                {
+                    <div class="bo-rule-row">
+                        <select class="rd-control" name="accessDepts">
+                            @foreach (var d in Model.Departments)
+                            {
+                                <option value="@d.Id" selected="@(row.DeptId == d.Id)">@d.Label</option>
+                            }
+                        </select>
+                        <select class="rd-control" name="accessRoles">
+                            @foreach (var r in Model.Roles)
+                            {
+                                <option value="@r.Id" selected="@(row.RoleId == r.Id)">@r.Name</option>
+                            }
+                        </select>
+                        <input type="hidden" name="accessAlerts" value="row">
+                        <label class="rd-check"><input type="checkbox" name="accessAlerts" value="on" checked="@row.Alerts"><span>@L["se.alerts"]</span></label>
+                        <button type="button" class="remove" title="@SL["common.delete"]">✕</button>
+                    </div>
+                }
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-rule-add="tpl-access">@L["se.addAccess"]</button>
+                <template id="tpl-access">
+                    <div class="bo-rule-row">
+                        <select class="rd-control" name="accessDepts">
+                            @foreach (var d in Model.Departments)
+                            {
+                                <option value="@d.Id">@d.Label</option>
+                            }
+                        </select>
+                        <select class="rd-control" name="accessRoles">
+                            @foreach (var r in Model.Roles)
+                            {
+                                <option value="@r.Id">@r.Name</option>
+                            }
+                        </select>
+                        <input type="hidden" name="accessAlerts" value="row">
+                        <label class="rd-check"><input type="checkbox" name="accessAlerts" value="on" checked><span>@L["se.alerts"]</span></label>
+                        <button type="button" class="remove" title="@SL["common.delete"]">✕</button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    @* ============ İzinler ============
+       5 bo-toggle-cards from the shared matrix definition (StaffController.Matrix —
+       the 24 PermissionKeys.StaffOverridable keys PermissionService overrides per
+       staff). Masters are tri-state UI only (rd.js data-check-master, B3); children
+       post name="perms". A matrix equal to the primary role's grants stores NULL —
+       the staff keeps inheriting role edits (se.permNote). *@
+    <div class="rd-tab-panel" id="panel-permissions" data-tab-group="main">
+        <div class="rd-banner rd-banner-info">
+            <span>ℹ</span>
+            <span>@L["se.permNote"]</span>
+        </div>
+
+        @foreach (var g in StaffController.Matrix)
+        {
+            var granted = g.Boxes.Count(b => Model.Granted.Contains(b.Key));
+            <div class="bo-toggle-card">
+                <div class="head">
+                    <div>
+                        <b>@L[g.LabelKey]</b>
+                        <small>@L[g.HelpKey]</small>
+                    </div>
+                    <label class="rd-switch">
+                        <input type="checkbox" data-check-master="#perm-@g.Id input[type=checkbox]"
+                               checked="@(granted == g.Boxes.Length)">
+                        <span class="track"></span>
+                    </label>
+                </div>
+                <div class="recipients" id="perm-@g.Id">
+                    @foreach (var box in g.Boxes)
+                    {
+                        <label class="rd-check">
+                            <input type="checkbox" name="perms" value="@box.Key" checked="@Model.Granted.Contains(box.Key)">
+                            <span>@L[box.LabelKey]</span>
+                        </label>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    @* ============ Takımlar ============
+       TeamMember rows from the staff side (B4 rd.js data-roster contract, teams-port
+       mirror): rows post teamIds (hidden) + teamAlertIds (checkbox, value = team id);
+       Ekle clones the template and fills [data-roster-value] with the option's team
+       id; the row's ✕ restores the option. *@
+    <div class="rd-tab-panel" id="panel-teams" data-tab-group="main">
+        <div class="rd-surface" data-roster>
+            <div class="rd-surface-head">
+                <span>@L["se.secTeams"]</span>
+                <small class="rd-muted">@L["se.teamsHelp"]</small>
+            </div>
+            <div class="rd-surface-body">
+                <div data-roster-rows>
+                    @foreach (var m in Model.Memberships)
+                    {
+                        <div class="bo-rule-row" data-roster-staff="@m.TeamId">
+                            <span style="display:inline-flex;align-items:center;gap:10px;flex:1;min-width:180px">
+                                <span class="rd-avatar">@Initials(m.Name)</span> <span data-roster-name>@m.Name</span>
+                            </span>
+                            <label class="rd-check"><input type="checkbox" name="teamAlertIds" value="@m.TeamId" checked="@m.Alerts"><span>@L["se.teamAlerts"]</span></label>
+                            <input type="hidden" name="teamIds" value="@m.TeamId">
+                            <button type="button" class="remove" title="@SL["common.delete"]">✕</button>
+                        </div>
+                    }
+                </div>
+                <div style="display:flex;gap:9px;margin-top:14px;max-width:380px">
+                    <select class="rd-control" data-roster-select>
+                        <option value="" selected>@L["se.addTeamPh"]</option>
+                        @foreach (var t in Model.Teams)
+                        {
+                            @* Current memberships render hidden — rd.js restores the
+                               option when the row is removed (teams precedent). *@
+                            <option value="@t.Id" hidden="@accessIds.Contains(t.Id)" disabled="@accessIds.Contains(t.Id)">@t.Label</option>
+                        }
+                    </select>
+                    <button type="button" class="rd-btn" data-roster-add>@SL["common.add"]</button>
+                </div>
+                <template data-roster-tpl>
+                    <div class="bo-rule-row">
+                        <span style="display:inline-flex;align-items:center;gap:10px;flex:1;min-width:180px">
+                            <span class="rd-avatar"></span> <span data-roster-name></span>
+                        </span>
+                        <label class="rd-check"><input type="checkbox" name="teamAlertIds" data-roster-value checked><span>@L["se.teamAlerts"]</span></label>
+                        <input type="hidden" name="teamIds" data-roster-value>
+                        <button type="button" class="remove" title="@SL["common.delete"]">✕</button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="rd-btn-primary">@SL["common.save"]</button>
+        <a class="rd-btn" href="/admin/staff">@SL["common.cancel"]</a>
+    </div>
+
+    @if (isNew)
+    {
+        @* Create mode: the dialog rides INSIDE the main form (no nested form) — its
+           values post with the create submit and a local-backend staff requires
+           them; the Kaydet button only closes the dialog. Visually 1:1 with the
+           mockup dialog. *@
+        <dialog class="rd-dialog" id="dlg-password">
+            <div class="rd-dialog-head">
+                <span>@L["se.dlgPwTitle"]</span>
+                <button type="button" class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+            </div>
+            <div class="rd-dialog-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="se-pw1">@L["se.dlgPwNew"]</label>
+                    <input id="se-pw1" name="pw1" class="rd-control" type="password"
+                           data-pw-strength="@L["se.errPasswordWeak"]">
+                    <p class="rd-help">@L["se.dlgPwHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="se-pw2">@L["se.dlgPwConfirm"]</label>
+                    <input id="se-pw2" name="pw2" class="rd-control" type="password"
+                           data-pw-match="#se-pw1" data-pw-match-msg="@L["se.errPasswordMismatch"]">
+                </div>
+                <label class="rd-check"><input type="checkbox" name="pwRequireChange" value="true" checked><span>@L["se.dlgPwChange"]</span></label>
+            </div>
+            <div class="rd-dialog-foot">
+                <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                <button type="button" class="rd-btn-primary" data-dialog-close>@SL["common.save"]</button>
+            </div>
+        </dialog>
+    }
+</form>
+
+@if (!isNew)
+{
+    @* Edit mode (B2: validate → save → close → toast): the dialog is its own form —
+       admin reset path, no old password. No data-dialog-close on the submit (the
+       audited close-swallows-save bug). *@
+    <dialog class="rd-dialog" id="dlg-password">
+        <form method="post" asp-area="Admin" asp-controller="Staff" asp-action="SetPassword">
+            <input type="hidden" name="id" value="@s!.Id">
+            <div class="rd-dialog-head">
+                <span>@L["se.dlgPwTitle"]</span>
+                <button type="button" class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+            </div>
+            <div class="rd-dialog-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="se-pw1">@L["se.dlgPwNew"]</label>
+                    <input id="se-pw1" name="pw1" class="rd-control" type="password" required
+                           data-pw-strength="@L["se.errPasswordWeak"]">
+                    <p class="rd-help">@L["se.dlgPwHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="se-pw2">@L["se.dlgPwConfirm"]</label>
+                    <input id="se-pw2" name="pw2" class="rd-control" type="password" required
+                           data-pw-match="#se-pw1" data-pw-match-msg="@L["se.errPasswordMismatch"]">
+                </div>
+                <label class="rd-check"><input type="checkbox" name="pwRequireChange" value="true" checked><span>@L["se.dlgPwChange"]</span></label>
+            </div>
+            <div class="rd-dialog-foot">
+                <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+            </div>
+        </form>
+    </dialog>
+
+    @* Carrier for the 2FA "Sıfırla" button in the Hesap tab. *@
+    <form id="se-2fa-form" method="post" asp-area="Admin" asp-controller="Staff" asp-action="Reset2fa" hidden>
+        <input type="hidden" name="id" value="@s!.Id">
+    </form>
+}

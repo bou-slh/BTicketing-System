@@ -87,6 +87,40 @@ public class Staff : TimestampedEntity
     /// </summary>
     public bool PrimaryDepartmentAlerts { get; set; } = true;
 
+    /// <summary>
+    /// Per-staff permission OVERRIDE set (osTicket <c>staff.permissions</c>;
+    /// admin/staff-edit İzinler tab). <c>null</c> = no override — the staff inherits
+    /// the role's grants (the matrix prefills from the primary role). Non-null: for
+    /// the keys in <see cref="Services.PermissionKeys.StaffOverridable"/> this set
+    /// REPLACES the role's grants in every accessible department (mockup se.permNote
+    /// "rolünden devralınır; … geçersiz kılabilirsiniz"); keys outside the staff
+    /// matrix (ticket.merge, dept.manage, …) stay role-driven.
+    /// </summary>
+    public List<string>? Permissions { get; set; }
+
+    /// <summary>
+    /// The primary role also applies to tickets assigned from other departments
+    /// (osTicket staff "use primary role on assignment" flag; staff-edit
+    /// se.usePrimaryOnAssigned). Persisted; TODO(S7 rollout): consumed once
+    /// assigned-ticket permission resolution outside accessible departments exists.
+    /// </summary>
+    public bool UsePrimaryRoleOnAssigned { get; set; } = true;
+
+    /// <summary>
+    /// Authentication backend (staff-edit se-backend select): "local" = password
+    /// verified against the Identity store; "ldap" persists the mockup's LDAP/AD
+    /// choice and disables local password management. TODO(S9 SSO): no LDAP
+    /// verification exists yet — sign-in still checks the local password.
+    /// </summary>
+    public string AuthBackend { get; set; } = "local";
+
+    /// <summary>
+    /// Admin-set password requires a change at next sign-in (osTicket change_passwd;
+    /// staff-edit dlg-password checkbox). Login nudges to the profile password form;
+    /// cleared by the staff member's own password change.
+    /// </summary>
+    public bool RequirePasswordChange { get; set; }
+
     public List<StaffDepartmentAccess> DepartmentAccess { get; set; } = [];
 
     public string FullName => $"{FirstName} {LastName}";

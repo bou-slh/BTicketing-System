@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="se.back" xml:space="preserve">
+    <value>← Temsilciler</value>
+  </data>
+  <data name="se.subtitle" xml:space="preserve">
+    <value>Hesap bilgileri, departman erişimi, izinler ve takım üyelikleri.</value>
+  </data>
+  <data name="se.tabAccount" xml:space="preserve">
+    <value>Hesap</value>
+  </data>
+  <data name="se.tabAccess" xml:space="preserve">
+    <value>Erişim</value>
+  </data>
+  <data name="se.tabPermissions" xml:space="preserve">
+    <value>İzinler</value>
+  </data>
+  <data name="se.tabTeams" xml:space="preserve">
+    <value>Takımlar</value>
+  </data>
+  <data name="se.secIdentity" xml:space="preserve">
+    <value>Kimlik</value>
+  </data>
+  <data name="se.firstName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="se.lastName" xml:space="preserve">
+    <value>Soyad</value>
+  </data>
+  <data name="se.email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="se.emailHelp" xml:space="preserve">
+    <value>Uyarılar ve parola sıfırlama bu adrese gider.</value>
+  </data>
+  <data name="se.phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="se.ext" xml:space="preserve">
+    <value>Dahili</value>
+  </data>
+  <data name="se.mobile" xml:space="preserve">
+    <value>Mobil</value>
+  </data>
+  <data name="se.secAuth" xml:space="preserve">
+    <value>Kimlik Doğrulama</value>
+  </data>
+  <data name="se.username" xml:space="preserve">
+    <value>Kullanıcı adı</value>
+  </data>
+  <data name="se.usernameHelp" xml:space="preserve">
+    <value>Temsilci paneline girişte kullanılır.</value>
+  </data>
+  <data name="se.setPassword" xml:space="preserve">
+    <value>Parola Belirle…</value>
+  </data>
+  <data name="se.backend" xml:space="preserve">
+    <value>Doğrulama kaynağı</value>
+  </data>
+  <data name="se.backendHelp" xml:space="preserve">
+    <value>Parolanın nerede doğrulanacağı: yerel veritabanı veya kurumsal dizin.</value>
+  </data>
+  <data name="se.backendLocal" xml:space="preserve">
+    <value>Yerel (RapidsolDestek)</value>
+  </data>
+  <data name="se.twofa" xml:space="preserve">
+    <value>İki adımlı doğrulama (2FA)</value>
+  </data>
+  <data name="se.twofaState" xml:space="preserve">
+    <value>Etkin — doğrulayıcı uygulaması</value>
+  </data>
+  <data name="se.twofaHelp" xml:space="preserve">
+    <value>Sıfırlanırsa temsilci bir sonraki girişte 2FA'yı yeniden kurar.</value>
+  </data>
+  <data name="se.secStatus" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="se.locked" xml:space="preserve">
+    <value>Hesap kilitli</value>
+  </data>
+  <data name="se.lockedHelp" xml:space="preserve">
+    <value>Kilitliyken temsilci giriş yapamaz; verileri ve atamaları korunur.</value>
+  </data>
+  <data name="se.adminFlag" xml:space="preserve">
+    <value>Yönetici</value>
+  </data>
+  <data name="se.adminFlagHelp" xml:space="preserve">
+    <value>Yönetici paneline tam erişim verir: tüm ayarlar, temsilciler ve e-postalar. Dikkatli kullanın.</value>
+  </data>
+  <data name="se.assignedOnly" xml:space="preserve">
+    <value>Sadece atananlar</value>
+  </data>
+  <data name="se.assignedOnlyHelp" xml:space="preserve">
+    <value>Temsilci yalnızca kendisine atanmış talepleri görür.</value>
+  </data>
+  <data name="se.vacation" xml:space="preserve">
+    <value>Tatil modu</value>
+  </data>
+  <data name="se.vacationHelp" xml:space="preserve">
+    <value>Tatildeyken yeni atama yapılmaz ve uyarı e-postası gönderilmez.</value>
+  </data>
+  <data name="se.notesHead" xml:space="preserve">
+    <value>Notlar</value>
+  </data>
+  <data name="se.secPrimary" xml:space="preserve">
+    <value>Birincil Erişim</value>
+  </data>
+  <data name="se.primaryDept" xml:space="preserve">
+    <value>Birincil departman</value>
+  </data>
+  <data name="se.primaryDeptHelp" xml:space="preserve">
+    <value>Temsilcinin ana çalıştığı departman.</value>
+  </data>
+  <data name="se.primaryRole" xml:space="preserve">
+    <value>Birincil rol</value>
+  </data>
+  <data name="se.primaryRoleHelp" xml:space="preserve">
+    <value>Birincil departmandaki yetkilerini belirleyen rol.</value>
+  </data>
+  <data name="se.usePrimaryOnAssigned" xml:space="preserve">
+    <value>Atamalarda birincil rolü kullan</value>
+  </data>
+  <data name="se.usePrimaryOnAssignedHelp" xml:space="preserve">
+    <value>Başka departmandan atanan taleplerde de birincil rol geçerli olur.</value>
+  </data>
+  <data name="se.secExtended" xml:space="preserve">
+    <value>Ek Erişim</value>
+  </data>
+  <data name="se.extendedHelp" xml:space="preserve">
+    <value>Birincil departman dışında erişebildiği departmanlar ve oradaki rolü.</value>
+  </data>
+  <data name="se.alerts" xml:space="preserve">
+    <value>Uyarılar</value>
+  </data>
+  <data name="se.addAccess" xml:space="preserve">
+    <value>＋ Departman Ekle</value>
+  </data>
+  <data name="se.permNote" xml:space="preserve">
+    <value>İzinler temsilcinin rolünden devralınır; aşağıdan bu temsilciye özel geçersiz kılabilirsiniz.</value>
+  </data>
+  <data name="se.grpTickets" xml:space="preserve">
+    <value>Talepler</value>
+  </data>
+  <data name="se.grpTicketsHelp" xml:space="preserve">
+    <value>Talepler üzerindeki kişisel yetkiler.</value>
+  </data>
+  <data name="se.grpTasks" xml:space="preserve">
+    <value>Görevler</value>
+  </data>
+  <data name="se.grpTasksHelp" xml:space="preserve">
+    <value>Görevler üzerindeki kişisel yetkiler.</value>
+  </data>
+  <data name="se.grpUsers" xml:space="preserve">
+    <value>Kullanıcılar</value>
+  </data>
+  <data name="se.grpUsersHelp" xml:space="preserve">
+    <value>Kullanıcı kayıtları üzerindeki yetkiler.</value>
+  </data>
+  <data name="se.grpOrgs" xml:space="preserve">
+    <value>Şirketler</value>
+  </data>
+  <data name="se.grpOrgsHelp" xml:space="preserve">
+    <value>Şirket kayıtları üzerindeki yetkiler.</value>
+  </data>
+  <data name="se.grpKb" xml:space="preserve">
+    <value>Bilgi Bankası</value>
+  </data>
+  <data name="se.grpKbHelp" xml:space="preserve">
+    <value>SSS ve hazır yanıt yönetimi.</value>
+  </data>
+  <data name="se.pCreate" xml:space="preserve">
+    <value>Oluştur</value>
+  </data>
+  <data name="se.pEdit" xml:space="preserve">
+    <value>Düzenle</value>
+  </data>
+  <data name="se.pAssign" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="se.pTransfer" xml:space="preserve">
+    <value>Aktar</value>
+  </data>
+  <data name="se.pReply" xml:space="preserve">
+    <value>Yanıtla</value>
+  </data>
+  <data name="se.pEffortPropose" xml:space="preserve">
+    <value>Efor Öner</value>
+  </data>
+  <data name="se.pClose" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="se.pDelete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="se.pManageAccount" xml:space="preserve">
+    <value>Hesap Yönet</value>
+  </data>
+  <data name="se.pFaq" xml:space="preserve">
+    <value>SSS Yönet</value>
+  </data>
+  <data name="se.pCanned" xml:space="preserve">
+    <value>Hazır Yanıtlar</value>
+  </data>
+  <data name="se.secTeams" xml:space="preserve">
+    <value>Takım Üyelikleri</value>
+  </data>
+  <data name="se.teamsHelp" xml:space="preserve">
+    <value>Takıma atanan taleplere erişim sağlar; uyarı kutusu işaretliyse takım uyarıları bu temsilciye de gider.</value>
+  </data>
+  <data name="se.teamAlerts" xml:space="preserve">
+    <value>Takım uyarılarını al</value>
+  </data>
+  <data name="se.addTeamPh" xml:space="preserve">
+    <value>Takım seç…</value>
+  </data>
+  <data name="se.dlgPwTitle" xml:space="preserve">
+    <value>Parola Belirle</value>
+  </data>
+  <data name="se.dlgPwNew" xml:space="preserve">
+    <value>Yeni parola</value>
+  </data>
+  <data name="se.dlgPwConfirm" xml:space="preserve">
+    <value>Yeni parola (tekrar)</value>
+  </data>
+  <data name="se.dlgPwChange" xml:space="preserve">
+    <value>Bir sonraki girişte parola değişikliği iste</value>
+  </data>
+  <data name="se.dlgPwHelp" xml:space="preserve">
+    <value>En az 8 karakter; sistemin parola politikası uygulanır.</value>
+  </data>
+  <data name="se.newTitle" xml:space="preserve">
+    <value>Yeni Temsilci</value>
+  </data>
+  <data name="se.errName" xml:space="preserve">
+    <value>Ad ve soyad zorunludur (en fazla 64 karakter).</value>
+  </data>
+  <data name="se.errUsername" xml:space="preserve">
+    <value>Kullanıcı adı zorunludur (en fazla 64 karakter).</value>
+  </data>
+  <data name="se.errUsernameInUse" xml:space="preserve">
+    <value>Bu kullanıcı adı kullanımda.</value>
+  </data>
+  <data name="se.errEmail" xml:space="preserve">
+    <value>Geçerli bir e-posta adresi girin.</value>
+  </data>
+  <data name="se.errEmailInUse" xml:space="preserve">
+    <value>Bu e-posta adresi kullanımda.</value>
+  </data>
+  <data name="se.errAccess" xml:space="preserve">
+    <value>Birincil departman ve rol seçin.</value>
+  </data>
+  <data name="se.errPasswordRequired" xml:space="preserve">
+    <value>Yeni temsilci için parola belirleyin (Parola Belirle…).</value>
+  </data>
+  <data name="se.errPasswordMismatch" xml:space="preserve">
+    <value>Parolalar eşleşmiyor.</value>
+  </data>
+  <data name="se.errPasswordWeak" xml:space="preserve">
+    <value>Parola en az 8 karakter olmalı, harf ve rakam içermelidir.</value>
+  </data>
+  <data name="se.errSelf" xml:space="preserve">
+    <value>Kendi hesabınızı kilitleyemez veya yönetici yetkinizi kaldıramazsınız.</value>
+  </data>
+  <data name="se.errLastAdmin" xml:space="preserve">
+    <value>Son aktif yönetici kilitlenemez veya yetkisi kaldırılamaz.</value>
+  </data>
+  <data name="se.errBackend" xml:space="preserve">
+    <value>Parola yalnızca yerel doğrulama kaynağında belirlenebilir.</value>
+  </data>
+  <data name="se.toastPassword" xml:space="preserve">
+    <value>Parola güncellendi.</value>
+  </data>
+  <data name="se.toast2faReset" xml:space="preserve">
+    <value>2FA sıfırlandı; temsilci bir sonraki girişte yeniden kurar.</value>
+  </data>
+  <data name="se.twofaOff" xml:space="preserve">
+    <value>Devre dışı</value>
+  </data>
+  <data name="se.twofaEmail" xml:space="preserve">
+    <value>Etkin — e-posta kodu</value>
+  </data>
+</root>

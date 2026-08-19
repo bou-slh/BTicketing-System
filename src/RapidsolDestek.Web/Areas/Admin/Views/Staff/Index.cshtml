@@ -1,0 +1,198 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model StaffIndexVm
+@{
+    ViewData["Title"] = L["sf.title"];
+
+    // PRG toast handoff after save/bulk (teams precedent).
+    if (TempData["StaffToast"] is string toastKey)
+    {
+        var ok = TempData["StaffToastOk"] as int? ?? 0;
+        var skipped = TempData["StaffToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "sf.bulkDone" or "sf.bulkPartial"
+            ? L[toastKey, ok, skipped].Value
+            : L[toastKey].Value;
+        if (TempData["StaffToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Son Giriş cells: the mockup's dd.MM.yyyy HH:mm (sf.dateFmt).
+    string LoginText(DateTimeOffset? value) => value is null
+        ? ""
+        : value.Value.ToLocalTime().ToString(L.GetString("sf.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // "Ümit Y. Akın" → "ÜA" (mockup avatar convention, teams precedent).
+    string Initials(string name)
+    {
+        var words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length == 0)
+            return "";
+        var first = words[0][..1];
+        var last = words.Length > 1 ? words[^1][..1] : "";
+        return (first + last).ToUpper(CultureInfo.GetCultureInfo("tr-TR"));
+    }
+
+    // Canonical querystring builder so header sort / pagination / export preserve state.
+    string BuildUrl(string path, string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("dept", Model.Dept?.ToString());
+        Add("team", Model.Team?.ToString());
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return path + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl("/admin/staff", sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl("/admin/staff", sortOver: key, dirOver: key is "name" or "login" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl("/admin/staff", pageOver: Model.Page);
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["sf.title"]</h1>
+        <p>@L["sf.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <a class="rd-btn-primary" href="/admin/staff-edit">@L["sf.add"]</a>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/admin/staff">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["sf.searchPh"]">
+    <select class="rd-control" name="dept">
+        <option value="" selected="@(Model.Dept is null)">@L["sf.fltDeptAll"]</option>
+        @foreach (var d in Model.DeptOptions)
+        {
+            <option value="@d.Id" selected="@(Model.Dept == d.Id)">@d.Label</option>
+        }
+    </select>
+    <select class="rd-control" name="team">
+        <option value="" selected="@(Model.Team is null)">@L["sf.fltTeamAll"]</option>
+        @foreach (var t in Model.TeamOptions)
+        {
+            <option value="@t.Id" selected="@(Model.Team == t.Id)">@t.Label</option>
+        }
+    </select>
+    <button class="rd-btn" type="submit">@SL["common.apply"]</button>
+    <span class="spacer"></span>
+    @* Mockup's dead bulk buttons act on the checkbox selection (teams precedent).
+       Etkinleştir unlocks, Kilitle locks (Staff.IsActive) — self and the last
+       active admin are guard-skipped server-side. *@
+    <button class="rd-btn" type="submit" form="sf-bulk" name="act" value="enable">@SL["common.enable"]</button>
+    <button class="rd-btn" type="submit" form="sf-bulk" name="act" value="lock">@L["sf.lock"]</button>
+    <a class="rd-btn" href="@BuildUrl("/admin/staff/export")">@SL["common.export"]</a>
+    <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-bulk-delete">@SL["common.delete"]</button>
+</form>
+
+<div class="rd-surface" id="tbl-staff">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Mockup's hidden #empty-staff panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">◍</div>
+            <h3>@L["sf.emptyTitle"]</h3>
+            <p>@L["sf.emptyText"]</p>
+            <a class="rd-btn-primary" href="/admin/staff-edit">@L["sf.add"]</a>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-staff" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("name")"><a href="@SortUrl("name")">@L["sf.colName"]</a></th>
+                    <th class="@SortClass("username")"><a href="@SortUrl("username")">@L["sf.colUsername"]</a></th>
+                    <th class="@SortClass("status")"><a href="@SortUrl("status")">@SL["common.status"]</a></th>
+                    <th class="@SortClass("dept")"><a href="@SortUrl("dept")">@L["sf.colDept"]</a></th>
+                    <th class="@SortClass("role")"><a href="@SortUrl("role")">@L["sf.colRole"]</a></th>
+                    <th class="@SortClass("login")"><a href="@SortUrl("login")">@L["sf.colLastLogin"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="sf-bulk"></td>
+                        <td>
+                            <span style="display:inline-flex;align-items:center;gap:10px">
+                                <span class="rd-avatar">@Initials(r.Name)</span>
+                                <a href="/admin/staff-edit?id=@r.Id">@r.Name</a>
+                            </span>
+                        </td>
+                        <td>@r.Username</td>
+                        @if (!r.Active)
+                        {
+                            <td><span class="rd-pill rd-pill-overdue">@L["sf.stLocked"]</span></td>
+                        }
+                        else if (r.Vacation)
+                        {
+                            <td><span class="rd-pill rd-pill-wait">@L["sf.stVacation"]</span></td>
+                        }
+                        else
+                        {
+                            <td><span class="rd-pill rd-pill-solved">@L["sf.stActive"]</span></td>
+                        }
+                        <td>@r.DeptName</td>
+                        <td>@r.RoleName</td>
+                        <td>@LoginText(r.LastLogin)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@SL["common.showing"]</span><span>@Model.From–@Model.To / @Model.Total</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl("/admin/staff", pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the toolbar bulk actions (teams precedent). *@
+<form id="sf-bulk" method="post" asp-area="Admin" asp-controller="Staff" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+@* Bulk delete confirm dialog: invented UI (B2, teams precedent). Self, the last
+   active admin, and staff referenced by tickets/tasks/threads/leadership are
+   skipped server-side and reported in the partial toast. *@
+<dialog class="rd-dialog" id="dlg-bulk-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <p>@L["sf.deleteConfirm"]</p>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        <button type="submit" class="rd-btn rd-btn-danger" form="sf-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>

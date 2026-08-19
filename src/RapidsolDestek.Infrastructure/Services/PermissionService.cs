@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Common;
 using RapidsolDestek.Domain.Entities;
+using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure.Auditing;
 
 namespace RapidsolDestek.Infrastructure.Services;
@@ -61,13 +62,27 @@ public sealed class PermissionService(AppDbContext db) : IPermissionService
             .SingleOrDefaultAsync(s => s.Id == staffId, ct)
             ?? throw new DomainNotFoundException("Staff", staffId);
 
+        // Per-staff override (staff-edit İzinler, osTicket staff.permissions): a
+        // non-null Staff.Permissions replaces the role's grants for the 24
+        // staff-matrix keys in EVERY accessible department — the mockup's matrix is
+        // agent-global ("kişisel yetkiler"); null inherits the role untouched.
+        IReadOnlySet<string> Effective(List<string> rolePermissions)
+        {
+            var set = ToSet(rolePermissions);
+            if (staff.Permissions is null)
+                return set;
+            set.RemoveWhere(PermissionKeys.StaffOverridable.Contains);
+            set.UnionWith(staff.Permissions.Where(PermissionKeys.StaffOverridable.Contains));
+            return set;
+        }
+
         var byDept = new Dictionary<int, IReadOnlySet<string>>
         {
-            [staff.DepartmentId] = ToSet(staff.Role?.IsEnabled == true ? staff.Role.Permissions : []),
+            [staff.DepartmentId] = Effective(staff.Role?.IsEnabled == true ? staff.Role.Permissions : []),
         };
         foreach (var access in staff.DepartmentAccess)
         {
-            byDept[access.DepartmentId] = ToSet(access.Role?.IsEnabled == true ? access.Role.Permissions : []);
+            byDept[access.DepartmentId] = Effective(access.Role?.IsEnabled == true ? access.Role.Permissions : []);
         }
 
         var set = new StaffPermissionSet

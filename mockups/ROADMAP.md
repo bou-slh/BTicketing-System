@@ -887,8 +887,45 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
 - [ ] **pages.html** — site page CRUD (B2); pages served on portal
 - [ ] **apikeys.html** — key CRUD + regenerate + copy-to-clipboard; IP restriction enforced by the API (B2)
 - [ ] **plugins.html** — feature-flag install/enable/disable per module; per-module configure entry (§3 replaced)
-- [ ] **staff.html / staff-edit.html** — CRUD; permission cards master↔children (B3); access/team rows (B4);
-      LDAP/auth-backend select gates fields; password dialog validated (B2)
+- [x] **staff.html / staff-edit.html** — CRUD; permission cards master↔children (B3); access/team rows (B4);
+      LDAP/auth-backend select gates fields; password dialog validated (B2) *(S7; /admin/staff +
+      /admin/staff-edit?id= (StaffController; no id = create — the mockup's new-button links straight to
+      staff-edit.html). CRUD = the Identity+domain PAIR: create posts also create the StaffUser (Agent role,
+      +Admin when flagged, FullName claim); edits sync username/email/full-name/admin-role to Identity;
+      delete removes both. İzinler cards = per-staff permission OVERRIDE, osTicket staff.permissions parity:
+      NEW S7_StaffPermissions migration adds Staff.Permissions (null = inherit role — the matrix prefills
+      from the primary role), Staff.AuthBackend, Staff.RequirePasswordChange, Staff.UsePrimaryRoleOnAssigned.
+      PermissionService: a non-null override REPLACES the role's grants for the 24 PermissionKeys.
+      StaffOverridable matrix keys in EVERY accessible department (the mockup matrix is agent-global —
+      needs canon sign-off); keys outside the staff matrix stay role-driven; a matrix saved equal to the
+      role's grants stores null so the staff keeps inheriting role edits. Masters = rd.js data-check-master
+      tri-state (role-edit contract). Auth backend: NEW rd.js select gating (select[data-gates] +
+      data-gates-on) — "LDAP / Active Directory" disables Parola Belirle client-side, the server refuses
+      too; ldap persists with TODO(S9 SSO): sign-in still verifies the local Identity password (flagged).
+      Password dialog (B2): edit = its own form → Identity reset-token path (no old password; ≥8 chars with
+      letter+digit mirroring rd.js data-pw-strength/-match — settings-agents password_policy persists but
+      still has no engine, flagged); create = the dialog rides INSIDE the create form (the mockup nests a
+      dead form outside — flagged) and a local-backend create requires the initial password. dlgPwChange =
+      RequirePasswordChange: sign-in redirects to /agent/profile whose own password change clears it (nudge,
+      not a hard wall — flagged); "Hesap kilitli" = Staff.IsActive=false with a NEW login gate (locked staff
+      cannot sign in, lockedOut error). 2FA pill live (app/email/off; se.twofaOff/twofaEmail invented);
+      Sıfırla drops the enrollment via a hidden carrier form (mockup button dead; type=submit + form attr —
+      flagged) — admins re-enroll through /admin/2fa-setup on next login. Erişim (B4): primary dept/role
+      selects + UsePrimaryRoleOnAssigned (persist-only, TODO with assigned-ticket permission resolution);
+      extended rows = StaffDepartmentAccess from the staff side as data-rule-add rows — accessDepts/
+      accessRoles parallel arrays, alerts via an INVENTED row/on marker sequence (unchecked checkboxes post
+      nothing); primary dept dropped server-side. Takımlar (B4): TeamMember roster from the staff side
+      (data-roster contract, teams-port mirror). B1 list: sort name (desc default per the mockup
+      indicator)/username/status/dept/role/lastLogin; search name/username/email; dept+team filter selects
+      with the mockup's Uygula; status pills locked(overdue)/vacation(wait)/active(solved); bulk
+      Etkinleştir/Kilitle/Sil with INVENTED guards (self and the last active admin are skipped; delete
+      skips staff referenced by tickets/tasks/thread entries/dept manager/team lead — teams precedent,
+      needs canon sign-off) + invented confirm dialog; Dışa Aktar = filtered-list CSV UTF-8 BOM; rd-empty =
+      the mockup's hidden #empty-staff reachable. Seed: uakin.Notes = the mockup's Notlar text; staff-edit's
+      other uakin sample state (VIP Masası membership, Destek/Danışmanlık extended rows, task.delete off)
+      contradicts the teams/departments seed canon — NOT reseeded, needs canon sign-off. Invented keys
+      (TR/EN twins): sf.dateFmt/bulk*/deleteConfirm/toastSaved/toastCreated; se.newTitle/err*/toastPassword/
+      toast2faReset/twofaOff/twofaEmail. +10 tests (StaffAdminTests) — suite 235.)*
 - [x] **teams.html** — per-row dialog prefilled; member roster add/remove (B2/B4) *(S7; /admin/teams
       (TeamsController). B1: header sort name/status/lead/updated (name desc default = the mockup's
       sorted-desc indicator), search, pagination (PageSize 8, canned precedent), bulk Etkinleştir/Devre

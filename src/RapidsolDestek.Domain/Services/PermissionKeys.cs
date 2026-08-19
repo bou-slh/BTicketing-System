@@ -54,4 +54,20 @@ public static class PermissionKeys
     public const string BanlistManage = "banlist.manage";
     public const string StatsView = "stats.view";
     public const string SearchAdvanced = "search.advanced";
+
+    /// <summary>
+    /// The 24 keys of the admin/staff-edit İzinler matrix (5 cards). A non-null
+    /// <see cref="Entities.Staff.Permissions"/> override replaces the role's grants
+    /// for exactly these keys (PermissionService); everything else stays role-driven.
+    /// Keep in sync with StaffController.Matrix (the card renderer).
+    /// </summary>
+    public static readonly IReadOnlySet<string> StaffOverridable = new HashSet<string>
+    {
+        TicketCreate, TicketEdit, TicketAssign, TicketTransfer,
+        TicketReply, EffortPropose, TicketClose, TicketDelete,
+        TaskCreate, TaskEdit, TaskAssign, TaskTransfer, TaskReply, TaskClose, TaskDelete,
+        UserCreate, UserEdit, UserDelete, UserManage,
+        OrgCreate, OrgEdit, OrgDelete,
+        FaqManage, CannedManage,
+    };
 }

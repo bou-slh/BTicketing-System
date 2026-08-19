@@ -54,6 +54,13 @@ public abstract class StaffAccountControllerBase(
             ModelState.AddModelError(string.Empty, "notAdmin");
             return View("Login", vm);
         }
+        // admin/staff-edit "Hesap kilitli" (Staff.IsActive=false, osTicket isactive):
+        // a locked agent cannot sign in; data and assignments are kept (se.lockedHelp).
+        if (await db.Staff.AnyAsync(s => s.IdentityUserId == user.Id && !s.IsActive))
+        {
+            ModelState.AddModelError(string.Empty, "lockedOut");
+            return View("Login", vm);
+        }
 
         var result = await signIn.PasswordSignInAsync(user, vm.Password, isPersistent: false, lockoutOnFailure: true);
         if (result.RequiresTwoFactor)
@@ -87,8 +94,20 @@ public abstract class StaffAccountControllerBase(
         if (RequireAdmin && !user.TwoFactorEnabled)
             return Redirect($"{AreaPrefix}/2fa-setup");
 
+        if (await RequiresPasswordChangeAsync(user))
+            return Redirect("/agent/profile");
+
         return LocalRedirect(SafeReturnUrl(vm.ReturnUrl));
     }
+
+    /// <summary>
+    /// staff-edit dlg-password "bir sonraki girişte parola değişikliği iste"
+    /// (osTicket change_passwd): the sign-in lands on the profile page whose
+    /// password dialog clears the flag. Nudge, not a hard wall — navigation away
+    /// is not blocked (flagged on the ROADMAP row).
+    /// </summary>
+    private Task<bool> RequiresPasswordChangeAsync(StaffUser user) =>
+        db.Staff.AnyAsync(s => s.IdentityUserId == user.Id && s.RequirePasswordChange);
 
     /// <summary>
     /// Feeds the directory presence stub. ExecuteUpdate on purpose: a login is not a

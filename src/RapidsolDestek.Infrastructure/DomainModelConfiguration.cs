@@ -155,6 +155,10 @@ public static class DomainModelConfiguration
             e.HasIndex(x => x.OnVacation);
             // DB default so pre-S7 rows keep receiving primary-department alerts.
             e.Property(x => x.PrimaryDepartmentAlerts).HasDefaultValue(true);
+            // S7 staff-edit columns: defaults keep pre-migration rows honest
+            // (local auth, primary-role-on-assignment checked per the mockup DOM).
+            e.Property(x => x.UsePrimaryRoleOnAssigned).HasDefaultValue(true);
+            e.Property(x => x.AuthBackend).HasMaxLength(32).HasDefaultValue("local");
         });
 
         b.Entity<StaffDepartmentAccess>(e =>

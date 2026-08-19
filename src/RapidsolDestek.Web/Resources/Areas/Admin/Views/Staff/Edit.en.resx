@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="se.back" xml:space="preserve">
+    <value>← Agents</value>
+  </data>
+  <data name="se.subtitle" xml:space="preserve">
+    <value>Account details, department access, permissions and team memberships.</value>
+  </data>
+  <data name="se.tabAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="se.tabAccess" xml:space="preserve">
+    <value>Access</value>
+  </data>
+  <data name="se.tabPermissions" xml:space="preserve">
+    <value>Permissions</value>
+  </data>
+  <data name="se.tabTeams" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="se.secIdentity" xml:space="preserve">
+    <value>Identity</value>
+  </data>
+  <data name="se.firstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="se.lastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="se.email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="se.emailHelp" xml:space="preserve">
+    <value>Alerts and password resets go to this address.</value>
+  </data>
+  <data name="se.phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="se.ext" xml:space="preserve">
+    <value>Ext.</value>
+  </data>
+  <data name="se.mobile" xml:space="preserve">
+    <value>Mobile</value>
+  </data>
+  <data name="se.secAuth" xml:space="preserve">
+    <value>Authentication</value>
+  </data>
+  <data name="se.username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="se.usernameHelp" xml:space="preserve">
+    <value>Used to sign in to the agent panel.</value>
+  </data>
+  <data name="se.setPassword" xml:space="preserve">
+    <value>Set Password…</value>
+  </data>
+  <data name="se.backend" xml:space="preserve">
+    <value>Authentication backend</value>
+  </data>
+  <data name="se.backendHelp" xml:space="preserve">
+    <value>Where the password is verified: local database or corporate directory.</value>
+  </data>
+  <data name="se.backendLocal" xml:space="preserve">
+    <value>Local (RapidsolDestek)</value>
+  </data>
+  <data name="se.twofa" xml:space="preserve">
+    <value>Two-factor authentication (2FA)</value>
+  </data>
+  <data name="se.twofaState" xml:space="preserve">
+    <value>Enabled — authenticator app</value>
+  </data>
+  <data name="se.twofaHelp" xml:space="preserve">
+    <value>If reset, the agent sets up 2FA again on their next sign-in.</value>
+  </data>
+  <data name="se.secStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="se.locked" xml:space="preserve">
+    <value>Account locked</value>
+  </data>
+  <data name="se.lockedHelp" xml:space="preserve">
+    <value>While locked the agent cannot sign in; their data and assignments are kept.</value>
+  </data>
+  <data name="se.adminFlag" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="se.adminFlagHelp" xml:space="preserve">
+    <value>Grants full access to the admin panel: all settings, agents and emails. Use with care.</value>
+  </data>
+  <data name="se.assignedOnly" xml:space="preserve">
+    <value>Assigned only</value>
+  </data>
+  <data name="se.assignedOnlyHelp" xml:space="preserve">
+    <value>The agent only sees tickets assigned to them.</value>
+  </data>
+  <data name="se.vacation" xml:space="preserve">
+    <value>Vacation mode</value>
+  </data>
+  <data name="se.vacationHelp" xml:space="preserve">
+    <value>While on vacation, no new assignments are made and no alert emails are sent.</value>
+  </data>
+  <data name="se.notesHead" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="se.secPrimary" xml:space="preserve">
+    <value>Primary Access</value>
+  </data>
+  <data name="se.primaryDept" xml:space="preserve">
+    <value>Primary department</value>
+  </data>
+  <data name="se.primaryDeptHelp" xml:space="preserve">
+    <value>The department the agent mainly works in.</value>
+  </data>
+  <data name="se.primaryRole" xml:space="preserve">
+    <value>Primary role</value>
+  </data>
+  <data name="se.primaryRoleHelp" xml:space="preserve">
+    <value>The role defining their authority in the primary department.</value>
+  </data>
+  <data name="se.usePrimaryOnAssigned" xml:space="preserve">
+    <value>Use primary role on assignments</value>
+  </data>
+  <data name="se.usePrimaryOnAssignedHelp" xml:space="preserve">
+    <value>The primary role also applies to tickets assigned from other departments.</value>
+  </data>
+  <data name="se.secExtended" xml:space="preserve">
+    <value>Extended Access</value>
+  </data>
+  <data name="se.extendedHelp" xml:space="preserve">
+    <value>Departments accessible beyond the primary one, and the role held there.</value>
+  </data>
+  <data name="se.alerts" xml:space="preserve">
+    <value>Alerts</value>
+  </data>
+  <data name="se.addAccess" xml:space="preserve">
+    <value>＋ Add Department</value>
+  </data>
+  <data name="se.permNote" xml:space="preserve">
+    <value>Permissions are inherited from the agent's role; you can override them for this agent below.</value>
+  </data>
+  <data name="se.grpTickets" xml:space="preserve">
+    <value>Tickets</value>
+  </data>
+  <data name="se.grpTicketsHelp" xml:space="preserve">
+    <value>Personal authority over tickets.</value>
+  </data>
+  <data name="se.grpTasks" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="se.grpTasksHelp" xml:space="preserve">
+    <value>Personal authority over tasks.</value>
+  </data>
+  <data name="se.grpUsers" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="se.grpUsersHelp" xml:space="preserve">
+    <value>Authority over user records.</value>
+  </data>
+  <data name="se.grpOrgs" xml:space="preserve">
+    <value>Companies</value>
+  </data>
+  <data name="se.grpOrgsHelp" xml:space="preserve">
+    <value>Authority over company records.</value>
+  </data>
+  <data name="se.grpKb" xml:space="preserve">
+    <value>Knowledge Base</value>
+  </data>
+  <data name="se.grpKbHelp" xml:space="preserve">
+    <value>FAQ and canned-response management.</value>
+  </data>
+  <data name="se.pCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="se.pEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="se.pAssign" xml:space="preserve">
+    <value>Assign</value>
+  </data>
+  <data name="se.pTransfer" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="se.pReply" xml:space="preserve">
+    <value>Reply</value>
+  </data>
+  <data name="se.pEffortPropose" xml:space="preserve">
+    <value>Propose Effort</value>
+  </data>
+  <data name="se.pClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="se.pDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="se.pManageAccount" xml:space="preserve">
+    <value>Manage Account</value>
+  </data>
+  <data name="se.pFaq" xml:space="preserve">
+    <value>Manage FAQ</value>
+  </data>
+  <data name="se.pCanned" xml:space="preserve">
+    <value>Canned Responses</value>
+  </data>
+  <data name="se.secTeams" xml:space="preserve">
+    <value>Team Memberships</value>
+  </data>
+  <data name="se.teamsHelp" xml:space="preserve">
+    <value>Grants access to tickets assigned to the team; when the alert box is checked, team alerts also go to this agent.</value>
+  </data>
+  <data name="se.teamAlerts" xml:space="preserve">
+    <value>Receive team alerts</value>
+  </data>
+  <data name="se.addTeamPh" xml:space="preserve">
+    <value>Select team…</value>
+  </data>
+  <data name="se.dlgPwTitle" xml:space="preserve">
+    <value>Set Password</value>
+  </data>
+  <data name="se.dlgPwNew" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="se.dlgPwConfirm" xml:space="preserve">
+    <value>New password (repeat)</value>
+  </data>
+  <data name="se.dlgPwChange" xml:space="preserve">
+    <value>Require password change at next sign-in</value>
+  </data>
+  <data name="se.dlgPwHelp" xml:space="preserve">
+    <value>At least 8 characters; the system password policy applies.</value>
+  </data>
+  <data name="se.newTitle" xml:space="preserve">
+    <value>New Agent</value>
+  </data>
+  <data name="se.errName" xml:space="preserve">
+    <value>First and last name are required (max 64 characters).</value>
+  </data>
+  <data name="se.errUsername" xml:space="preserve">
+    <value>Username is required (max 64 characters).</value>
+  </data>
+  <data name="se.errUsernameInUse" xml:space="preserve">
+    <value>This username is already in use.</value>
+  </data>
+  <data name="se.errEmail" xml:space="preserve">
+    <value>Enter a valid email address.</value>
+  </data>
+  <data name="se.errEmailInUse" xml:space="preserve">
+    <value>This email address is already in use.</value>
+  </data>
+  <data name="se.errAccess" xml:space="preserve">
+    <value>Choose a primary department and role.</value>
+  </data>
+  <data name="se.errPasswordRequired" xml:space="preserve">
+    <value>Set a password for the new agent (Set Password…).</value>
+  </data>
+  <data name="se.errPasswordMismatch" xml:space="preserve">
+    <value>Passwords do not match.</value>
+  </data>
+  <data name="se.errPasswordWeak" xml:space="preserve">
+    <value>Password must be at least 8 characters with letters and digits.</value>
+  </data>
+  <data name="se.errSelf" xml:space="preserve">
+    <value>You cannot lock your own account or remove your own administrator flag.</value>
+  </data>
+  <data name="se.errLastAdmin" xml:space="preserve">
+    <value>The last active administrator cannot be locked or demoted.</value>
+  </data>
+  <data name="se.errBackend" xml:space="preserve">
+    <value>Passwords can only be set for the local authentication backend.</value>
+  </data>
+  <data name="se.toastPassword" xml:space="preserve">
+    <value>Password updated.</value>
+  </data>
+  <data name="se.toast2faReset" xml:space="preserve">
+    <value>2FA reset; the agent re-enrolls at next sign-in.</value>
+  </data>
+  <data name="se.twofaOff" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="se.twofaEmail" xml:space="preserve">
+    <value>Enabled — email code</value>
+  </data>
+</root>

@@ -200,6 +200,8 @@ public static class DomainSeeder
         // "12 Haz 2026". TwoFactorMethod mirrors the Identity seed: App only when the
         // dev AdminTotpKey actually enabled TOTP for the admin (kept honest otherwise).
         uakin.Mobile = "+90 532 555 0101";
+        // admin/staff-edit.html Notlar canon.
+        uakin.Notes = "Bordro ekibinin lideri; SGK entegrasyonu konularında ilk başvurulacak kişi.";
         uakin.Signature = "Ümit Yaşar Akın\nKıdemli Bordro Danışmanı · RapidSol\nTel: +90 212 555 0101 (Dahili 101)";
         uakin.DefaultSignatureType = SignatureType.Mine;
         uakin.AutoRefreshMinutes = 1;
