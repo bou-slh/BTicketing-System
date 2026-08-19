@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="skb.title" xml:space="preserve">
+    <value>Bilgi Bankası Ayarları</value>
+  </data>
+  <data name="skb.subtitle" xml:space="preserve">
+    <value>Kullanıcı portalındaki bilgi bankası ve temsilcilerin hazır yanıtları için genel anahtarlar.</value>
+  </data>
+  <data name="skb.secGeneral" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="skb.enable" xml:space="preserve">
+    <value>Bilgi Bankasını etkinleştir</value>
+  </data>
+  <data name="skb.enableHelp" xml:space="preserve">
+    <value>Kullanıcı portalında SSS makaleleri ve arama görünür. Kapatıldığında portalın Bilgi Bankası bölümü tamamen gizlenir; mevcut makaleler silinmez, yalnızca yayından kalkar.</value>
+  </data>
+  <data name="skb.requireLogin" xml:space="preserve">
+    <value>Kullanıcı girişi zorunlu</value>
+  </data>
+  <data name="skb.requireLoginHelp" xml:space="preserve">
+    <value>Makaleleri yalnızca oturum açmış kullanıcılar okuyabilir. Şirketlere özel süreç anlatımları (bordro takvimi, onay akışları gibi) içeriyorsanız açık tutmanız önerilir.</value>
+  </data>
+  <data name="skb.canned" xml:space="preserve">
+    <value>Hazır yanıtları etkinleştir</value>
+  </data>
+  <data name="skb.cannedHelp" xml:space="preserve">
+    <value>Temsilciler yanıt yazarken önceden hazırlanmış kalıp metinleri tek tıkla ekleyebilir. Kapatıldığında yanıt kutusundaki hazır yanıt menüsü gizlenir.</value>
+  </data>
+  <data name="skb.banner" xml:space="preserve">
+    <value>Makaleler, kategoriler ve hazır yanıt içerikleri temsilci panelindeki Bilgi Bankası bölümünden yönetilir:</value>
+  </data>
+  <data name="skb.bannerLink" xml:space="preserve">
+    <value>Bilgi Bankasını aç</value>
+  </data>
+  <data name="skb.toastSaved" xml:space="preserve">
+    <value>Bilgi bankası ayarları kaydedildi.</value>
+  </data>
+</root>

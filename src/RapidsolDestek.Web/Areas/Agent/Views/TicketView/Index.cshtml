@@ -355,18 +355,24 @@
                         <input class="rd-control" readonly value="@($"{Model.UserName} <{Model.UserEmail}>")">
                     </div>
                 </div>
-                <div class="rd-field">
-                    <label class="rd-label">@L["tv.canned"]</label>
-                    <select class="rd-control" data-canned-insert="@cannedUrl" data-canned-err="@L["tv.errCanned"]">
-                        <option value="">@L["tv.cannedPh"]</option>
-                        <option value="orig">@L["tv.cannedOrig"]</option>
-                        <option value="last">@L["tv.cannedLast"]</option>
-                        @foreach (var canned in Model.Canned)
-                        {
-                            <option value="@canned.Id">@canned.Title</option>
-                        }
-                    </select>
-                </div>
+                @* admin/settings-kb "Hazır yanıtları etkinleştir" (S7, B3): the whole
+                   canned menu hides while off (osTicket parity — the orig/last quote
+                   options share the select and disappear with it, flagged). *@
+                @if (Model.CannedEnabled)
+                {
+                    <div class="rd-field">
+                        <label class="rd-label">@L["tv.canned"]</label>
+                        <select class="rd-control" data-canned-insert="@cannedUrl" data-canned-err="@L["tv.errCanned"]">
+                            <option value="">@L["tv.cannedPh"]</option>
+                            <option value="orig">@L["tv.cannedOrig"]</option>
+                            <option value="last">@L["tv.cannedLast"]</option>
+                            @foreach (var canned in Model.Canned)
+                            {
+                                <option value="@canned.Id">@canned.Title</option>
+                            }
+                        </select>
+                    </div>
+                }
                 <div class="rd-field">
                     <textarea class="rd-control" name="body" style="min-height:140px" placeholder="@L["tv.replyPh"]"></textarea>
                 </div>

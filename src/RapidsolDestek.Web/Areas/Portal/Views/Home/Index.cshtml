@@ -1,4 +1,5 @@
 @using System.Globalization
+@inject RapidsolDestek.Infrastructure.Services.ISettingsService Settings
 @model RapidsolDestek.Web.Areas.Portal.Controllers.HomeVm
 @{
     ViewData["Title"] = SL["nav.home"];
@@ -103,15 +104,20 @@
             </div>
         </div>
 
-        <div class="rc-surface" style="margin-top:14px">
-            <div class="rc-surface-head">@L["home.kbTitle"]</div>
-            <div class="rc-aside-block">
-                <p class="rd-help" style="margin:0 0 12px">@L["home.kbSub"]</p>
-                <form method="get" action="/kb">
-                    <input class="rc-control" type="search" name="q" placeholder="@L["home.kbPlaceholder"]">
-                </form>
-                <div class="rc-notice"><a href="/kb">@SL["nav.kb"]</a> →</div>
+        @* admin/settings-kb master switch (S7, B3): the KB mini-search card
+           disappears with the portal KB while the switch is off. *@
+        @if ((await Settings.GetKbAsync()).EnableKb)
+        {
+            <div class="rc-surface" style="margin-top:14px">
+                <div class="rc-surface-head">@L["home.kbTitle"]</div>
+                <div class="rc-aside-block">
+                    <p class="rd-help" style="margin:0 0 12px">@L["home.kbSub"]</p>
+                    <form method="get" action="/kb">
+                        <input class="rc-control" type="search" name="q" placeholder="@L["home.kbPlaceholder"]">
+                    </form>
+                    <div class="rc-notice"><a href="/kb">@SL["nav.kb"]</a> →</div>
+                </div>
             </div>
-        </div>
+        }
     </aside>
 </div>

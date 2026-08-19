@@ -89,6 +89,10 @@ public class TicketOpenController(
     [HttpGet("/agent/ticket-open/canned")]
     public async Task<IActionResult> Canned(string what, CancellationToken ct)
     {
+        // admin/settings-kb enable_canned off: refuse (the menu is hidden anyway).
+        if (!(await settings.GetKbAsync(ct)).EnableCanned)
+            return NotFound();
+
         var staff = await db.ResolveStaffAsync(User, ct);
         if (staff is null)
             return Forbid();
@@ -506,11 +510,15 @@ public class TicketOpenController(
 
         // Canned select: every enabled response — the department is being chosen on
         // this very page, so the dept scoping of ticket-view does not apply yet.
-        var canned = await db.CannedResponses
-            .Where(c => c.IsEnabled)
-            .OrderBy(c => c.Title)
-            .Select(c => new CannedOptionVm(c.Id, c.Title))
-            .ToListAsync(ct);
+        // admin/settings-kb enable_canned off: the whole menu hides (ticket-view twin).
+        var cannedEnabled = (await settings.GetKbAsync(ct)).EnableCanned;
+        List<CannedOptionVm> canned = cannedEnabled
+            ? await db.CannedResponses
+                .Where(c => c.IsEnabled)
+                .OrderBy(c => c.Title)
+                .Select(c => new CannedOptionVm(c.Id, c.Title))
+                .ToListAsync(ct)
+            : [];
 
         // Cascade fallbacks when no topic routes: the settings defaults.
         var defaultDeptId = ParseOrNull(await settings.GetAsync("core", "default_dept_id", ct));
@@ -522,7 +530,7 @@ public class TicketOpenController(
             : form.UserQuery;
 
         return new TicketOpenVm(
-            topicVms, departments, slas, priorities, agents, teams, canned,
+            topicVms, departments, slas, priorities, agents, teams, canned, cannedEnabled,
             staff.Signature, defaultDeptId, defaultSlaId, userLabel, form);
     }
 }
@@ -580,6 +588,7 @@ public sealed record TicketOpenVm(
     IReadOnlyList<TicketOpenAssigneeVm> Agents,
     IReadOnlyList<TicketOpenAssigneeVm> Teams,
     IReadOnlyList<CannedOptionVm> Canned,
+    bool CannedEnabled,
     string StaffSignature,
     int? DefaultDeptId,
     int? DefaultSlaId,

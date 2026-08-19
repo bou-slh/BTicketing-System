@@ -765,10 +765,47 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       errSeqInUse/errSeqNext + open.errMaxOpen. Tests: SettingsTicketsTests (9) incl. the S7 exit-gate leg —
       admin HTTP POST flips block-work-until-approved → S4 guard flips for real (staff reply + close throw
       WorkBlockedByEffortException, flip back reopens) — suite 185.)*
-- [ ] **settings-tasks.html** — same pattern as tickets (B3/B4)
+- [x] **settings-tasks.html** — same pattern as tickets (B3/B4)
+      *(S7; /admin/settings-tasks (SettingsTasksController) over ISettingsService (ns "tasks" + task_* keys
+      in "alerts"; NEW TaskSettings typed section) — PRG toasts, B3 validation writes NOTHING on failure
+      (tg.errFormat/errValues). LIVE (2): number_format (consumed by TaskService.CreateAsync since S6 via
+      GetTaskNumberingAsync) + number_mode NEWLY consumed — TaskService.DrawNumberAsync mirrors the ticket
+      draw (Rastgele = collision-checked random digits, counter untouched; Ardışık = the seeded row-locked
+      task sequence). dlg-seq = the settings-tickets B4 CRUD reused (SequenceNumberService.SaveAsync with
+      the same guards — in-use/internal undeletable, Next never moves backwards — through this page's own
+      POST /admin/settings-tasks/sequences so the PRG lands back here; both pages edit the SAME sequence
+      table). PERSISTED-ONLY (annotated at TaskSettings / the controller maps): default_priority (TaskItem
+      has no priority column — osTicket keeps task priority in dynamic form data; TODO(S8) task form
+      output), 5 alert masters + 13 recipient boxes as alerts/task_* keys TODO(S8 alert fan-out; seeded
+      templates cover 4 of 5 masters — task.alert/task.assigned.alert/task.transfer.alert/
+      task.overdue.alert; New-Activity has NO seeded template, flagged). B3 alert masters gate their
+      recipients rows + B9 scroll-spy = rd.js unchanged. Honest-defaults deviations (mockup sample state,
+      need canon sign-off): format input shows the DB truth "T-####" (mockup "G####"), dlg-seq shows the
+      seeded rows Genel Talepler 716600 / Görev Sırası 2042 (mockup Destek 716556 / Görevler 4022).
+      Invented keys (TR/EN twins): tg.toastSaved/toastSeqSaved/errFormat/errValues/errSeqInUse/errSeqNext.
+      Tests: SettingsTasksKbTests (4 of 7) — round-trip + rerender, invalid-format guard, the LIVE
+      numbering flip end-to-end through the admin form (random draw leaves the counter alone, sequential
+      advances it), dlg-seq HTTP add/remove — suite 199.)*
 - [ ] **settings-agents.html** — template Edit dialogs per-row prefilled (B2); lockout policy consumed by B6
 - [ ] **settings-users.html** — 6 template dialogs prefilled (B2); registration mode consumed by portal
-- [ ] **settings-kb.html** — master switch gates portal KB visibility (B3)
+- [x] **settings-kb.html** — master switch gates portal KB visibility (B3)
+      *(S7; /admin/settings-kb (SettingsKbController) over ISettingsService ns "kb" (NEW KbSettings typed
+      section) — PRG toast. LIVE (2): enable_kb master switch — portal /kb + /kb-article (+vote/attachment)
+      answer 404 while off (honest semantics CHOSEN: 404 over redirect, per skb.enableHelp "hidden
+      entirely"; flagged for canon), the portal nav KB item (_PortalHeader) and the home KB mini-search
+      card disappear with it, everything returns on re-enable; enable_canned — the agent composers
+      (ticket-view reply + ticket-open first response) hide their whole canned menu and the canned insert
+      endpoints refuse canned ids (deviation flagged: the ticket-view select also carries the orig/last
+      quote options, which disappear with it — osTicket parity, the whole select is the canned menu).
+      PERSISTED-ONLY: require_login (the whole portal — KB included — already sits behind the rd.customer
+      cookie; the OFF state needs an anonymous KB route + maintenance pass-through, the settings-system
+      auth_required twin — TODO, flagged). B3 in-page: the master data-gates the require_login switch
+      (INVENTED gating — the mockup's static switches are independent; canned stays ungated as an
+      agent-side feature). Honest default: enable_kb=true (osTicket ships KB OFF; the portal KB has been
+      live since S5 and the mockup's checked state agrees — deviation noted). Invented key (TR/EN twins):
+      skb.toastSaved. Tests: SettingsTasksKbTests (3 of 7) — kb round-trip, master flip through the page →
+      portal routes 404 + nav/home links gone + flip back reopens, canned flip → composer menu gone +
+      insert endpoint refuses — suite 199.)*
 - [ ] **email-settings.html** — 16 switches gate; footer button order normalized (S0)
 - [ ] **emails.html / email-edit.html** — account CRUD; IMAP/SMTP config with per-protocol dialogs (B2), protocol
       radios gate fields (B3), OAuth2 tabs, **Test connection**

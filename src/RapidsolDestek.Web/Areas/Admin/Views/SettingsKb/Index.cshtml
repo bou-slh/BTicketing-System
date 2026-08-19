@@ -1,0 +1,78 @@
+@using RapidsolDestek.Infrastructure.Services
+@model KbSettings
+@{
+    ViewData["Title"] = L["skb.title"];
+
+    // Toast handoff (settings-tickets precedent): PRG key via TempData.
+    if (TempData["SkbToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+    }
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["skb.title"]</h1>
+        <p>@L["skb.subtitle"]</p>
+    </div>
+</div>
+
+<div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+        <a href="#sec-general" class="active">@L["skb.secGeneral"]</a>
+    </nav>
+
+    <form class="bo-settings-sections" method="post" asp-area="Admin" asp-controller="SettingsKb" asp-action="Save">
+
+        <section class="rd-surface bo-section" id="sec-general">
+            <div class="rd-surface-head"><span>@L["skb.secGeneral"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-banner rd-banner-info">
+                    <span aria-hidden="true">✎</span>
+                    <span>
+                        <span>@L["skb.banner"]</span>
+                        <a href="/agent/kb">@L["skb.bannerLink"]</a>
+                    </span>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        @* B3: the master switch gates its dependent require-login field
+                           (rd.js data-gates) AND — server-side — the portal KB routes
+                           and nav/home surfaces (the §6.3 row's core promise). *@
+                        <input type="checkbox" name="enable_kb" value="true" checked="@Model.EnableKb" data-gates="[data-kb-dep]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["skb.enable"]</b>
+                            <small>@L["skb.enableHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field" data-kb-dep>
+                    <label class="rd-switch">
+                        <input type="checkbox" name="require_login" value="true" checked="@Model.RequireLogin">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["skb.requireLogin"]</b>
+                            <small>@L["skb.requireLoginHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="enable_canned" value="true" checked="@Model.EnableCanned">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["skb.canned"]</b>
+                            <small>@L["skb.cannedHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+            <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</div>

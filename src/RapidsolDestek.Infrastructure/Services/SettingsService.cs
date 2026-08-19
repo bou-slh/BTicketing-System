@@ -47,6 +47,26 @@ public sealed record TicketBehaviorSettings(
     bool TopLevelCounts,        // enforced by the agent tickets queue-tree count badges
     int DefaultQueueId);        // 0 = built-in default; enforced by agent tickets initial queue
 
+/// <summary>
+/// Typed view over the "tasks" namespace beyond numbering (admin/settings-tasks, S7).
+/// NumberMode is LIVE — TaskService.CreateAsync draws random unguessable numbers or
+/// advances the seeded task sequence. DefaultPriorityKey is persisted-only:
+/// TODO(S8): TaskItem carries no priority column yet (osTicket keeps task priority in
+/// dynamic form data); consumed once the task form designer output lands.
+/// </summary>
+public sealed record TaskSettings(string NumberMode, string DefaultPriorityKey);
+
+/// <summary>
+/// Typed view over the "kb" namespace (admin/settings-kb, S7). EnableKb is the LIVE
+/// master switch: portal /kb + /kb-article (+vote/attachment) return 404 and the
+/// portal nav/home KB surfaces disappear while off. EnableCanned is LIVE: the agent
+/// composers hide their canned-response menu and the canned insert endpoints refuse
+/// canned ids. RequireLogin is persisted-only: the whole portal KB already sits
+/// behind the PortalUser cookie; the OFF state needs an anonymous KB route
+/// (settings-system auth_required twin — TODO, flagged on the ROADMAP row).
+/// </summary>
+public sealed record KbSettings(bool EnableKb, bool RequireLogin, bool EnableCanned);
+
 public interface ISettingsService
 {
     Task<string?> GetAsync(string ns, string key, CancellationToken ct = default);
@@ -60,6 +80,8 @@ public interface ISettingsService
     Task<NumberingSettings> GetTicketNumberingAsync(CancellationToken ct = default);
     Task<NumberingSettings> GetTaskNumberingAsync(CancellationToken ct = default);
     Task<TicketBehaviorSettings> GetTicketBehaviorAsync(CancellationToken ct = default);
+    Task<TaskSettings> GetTasksAsync(CancellationToken ct = default);
+    Task<KbSettings> GetKbAsync(CancellationToken ct = default);
 }
 
 /// <summary>
@@ -133,6 +155,28 @@ public sealed class SettingsService(AppDbContext db) : ISettingsService
             CollabVisibility: Bool(s, "collab_visibility", true),
             TopLevelCounts: Bool(s, "top_level_counts", true),
             DefaultQueueId: Int(s, "default_queue_id", 0));
+    }
+
+    public async Task<TaskSettings> GetTasksAsync(CancellationToken ct = default)
+    {
+        var s = await LoadAsync("tasks", ct);
+        return new TaskSettings(
+            // Seed truth: the task sequence is seeded and referenced, so sequential is
+            // the honest default (the mockup's selected "Ardışık" agrees).
+            NumberMode: s.GetValueOrDefault("number_mode") == "random" ? "random" : "sequential",
+            DefaultPriorityKey: s.GetValueOrDefault("default_priority", "normal"));
+    }
+
+    public async Task<KbSettings> GetKbAsync(CancellationToken ct = default)
+    {
+        var s = await LoadAsync("kb", ct);
+        return new KbSettings(
+            // The portal KB has shipped visible since S5, so enabled is the honest
+            // default (matches the mockup's checked state; osTicket ships KB off —
+            // deviation flagged on the ROADMAP row).
+            EnableKb: Bool(s, "enable_kb", true),
+            RequireLogin: Bool(s, "require_login", false),
+            EnableCanned: Bool(s, "enable_canned", true));
     }
 
     public Task<NumberingSettings> GetTicketNumberingAsync(CancellationToken ct = default) =>

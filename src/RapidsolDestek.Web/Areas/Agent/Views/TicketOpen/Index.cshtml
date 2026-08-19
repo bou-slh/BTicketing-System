@@ -250,20 +250,25 @@
             <details class="rd-advanced" open="@(!string.IsNullOrEmpty(Model.Form.Reply) || !string.IsNullOrEmpty(Model.Form.Note))">
                 <summary>@L["to.secFirst"]</summary>
                 <div class="rd-advanced-body">
-                    <div class="rd-field">
-                        <label class="rd-label" for="to-canned">@L["to.canned"]</label>
-                        @* data-canned-open: page-scoped insert into the reply textarea —
-                           rd.js's data-canned-insert targets the form's FIRST textarea,
-                           which here is the details field. *@
-                        <select id="to-canned" class="rd-control" data-canned-open="/agent/ticket-open/canned?src=open"
-                                data-canned-err="@L["to.errCanned"]">
-                            <option value="">@L["to.cannedPh"]</option>
-                            @foreach (var c in Model.Canned)
-                            {
-                                <option value="@c.Id">@c.Title</option>
-                            }
-                        </select>
-                    </div>
+                    @* admin/settings-kb "Hazır yanıtları etkinleştir" (S7, B3): the
+                       canned menu hides while off (ticket-view twin). *@
+                    @if (Model.CannedEnabled)
+                    {
+                        <div class="rd-field">
+                            <label class="rd-label" for="to-canned">@L["to.canned"]</label>
+                            @* data-canned-open: page-scoped insert into the reply textarea —
+                               rd.js's data-canned-insert targets the form's FIRST textarea,
+                               which here is the details field. *@
+                            <select id="to-canned" class="rd-control" data-canned-open="/agent/ticket-open/canned?src=open"
+                                    data-canned-err="@L["to.errCanned"]">
+                                <option value="">@L["to.cannedPh"]</option>
+                                @foreach (var c in Model.Canned)
+                                {
+                                    <option value="@c.Id">@c.Title</option>
+                                }
+                            </select>
+                        </div>
+                    }
                     <div class="rd-field">
                         <label class="rd-label" for="to-reply">@L["to.replyLabel"]</label>
                         <textarea id="to-reply" class="rd-control" name="Reply" placeholder="@L["to.replyPh"]">@Model.Form.Reply</textarea>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tg.title" xml:space="preserve">
+    <value>Task Settings</value>
+  </data>
+  <data name="tg.subtitle" xml:space="preserve">
+    <value>Task numbering, defaults and agent alerts related to tasks.</value>
+  </data>
+  <data name="tg.secNumbering" xml:space="preserve">
+    <value>Numbering</value>
+  </data>
+  <data name="tg.secDefaults" xml:space="preserve">
+    <value>Defaults</value>
+  </data>
+  <data name="tg.secAlerts" xml:space="preserve">
+    <value>Alerts and Notices</value>
+  </data>
+  <data name="tg.numberFormat" xml:space="preserve">
+    <value>Number format</value>
+  </data>
+  <data name="tg.numberFormatHelp" xml:space="preserve">
+    <value># marks are replaced with digits. Example: G4021</value>
+  </data>
+  <data name="tg.sequence" xml:space="preserve">
+    <value>Sequence</value>
+  </data>
+  <data name="tg.sequenceHelp" xml:space="preserve">
+    <value>Random numbers are unguessable; sequential ones advance from a counter.</value>
+  </data>
+  <data name="tg.seqRandom" xml:space="preserve">
+    <value>Random</value>
+  </data>
+  <data name="tg.seqSequential" xml:space="preserve">
+    <value>Sequential</value>
+  </data>
+  <data name="tg.manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="tg.dlgSeqTitle" xml:space="preserve">
+    <value>Number sequences</value>
+  </data>
+  <data name="tg.dlgSeqHelp" xml:space="preserve">
+    <value>Sequential counters are defined here; tasks may use a separate counter.</value>
+  </data>
+  <data name="tg.seqName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="tg.seqNext" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="tg.addSequence" xml:space="preserve">
+    <value>Add sequence</value>
+  </data>
+  <data name="tg.defPriority" xml:space="preserve">
+    <value>Default priority</value>
+  </data>
+  <data name="tg.defPriorityHelp" xml:space="preserve">
+    <value>New tasks open with this priority.</value>
+  </data>
+  <data name="tg.attachNote" xml:space="preserve">
+    <value>Task attachment rules (allowed types, count, size) are configured on the Attachments field of the Task Details form:</value>
+  </data>
+  <data name="tg.attachNoteLink" xml:space="preserve">
+    <value>Open Forms</value>
+  </data>
+  <data name="tg.alNewTask" xml:space="preserve">
+    <value>New Task Alert</value>
+  </data>
+  <data name="tg.alNewTaskHelp" xml:space="preserve">
+    <value>Sent when a new task is created.</value>
+  </data>
+  <data name="tg.alNewActivity" xml:space="preserve">
+    <value>New Activity Alert</value>
+  </data>
+  <data name="tg.alNewActivityHelp" xml:space="preserve">
+    <value>Sent when a note or reply is added to a task.</value>
+  </data>
+  <data name="tg.alAssignment" xml:space="preserve">
+    <value>Assignment Alert</value>
+  </data>
+  <data name="tg.alAssignmentHelp" xml:space="preserve">
+    <value>Sent when a task is assigned to an agent or team.</value>
+  </data>
+  <data name="tg.alTransfer" xml:space="preserve">
+    <value>Transfer Alert</value>
+  </data>
+  <data name="tg.alTransferHelp" xml:space="preserve">
+    <value>Sent when a task is transferred to another department.</value>
+  </data>
+  <data name="tg.alOverdue" xml:space="preserve">
+    <value>Overdue Alert</value>
+  </data>
+  <data name="tg.alOverdueHelp" xml:space="preserve">
+    <value>Sent when a task passes its due date and becomes overdue.</value>
+  </data>
+  <data name="tg.rcpAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="tg.rcpDeptManager" xml:space="preserve">
+    <value>Department Manager</value>
+  </data>
+  <data name="tg.rcpDeptMembers" xml:space="preserve">
+    <value>Department Members</value>
+  </data>
+  <data name="tg.rcpLastRespondent" xml:space="preserve">
+    <value>Last respondent</value>
+  </data>
+  <data name="tg.rcpAssigned" xml:space="preserve">
+    <value>Assigned agent / team</value>
+  </data>
+  <data name="tg.rcpTeamLead" xml:space="preserve">
+    <value>Team lead</value>
+  </data>
+  <data name="tg.rcpTeamMembers" xml:space="preserve">
+    <value>Team members</value>
+  </data>
+  <data name="tg.toastSaved" xml:space="preserve">
+    <value>Task settings saved.</value>
+  </data>
+  <data name="tg.toastSeqSaved" xml:space="preserve">
+    <value>Number sequences saved.</value>
+  </data>
+  <data name="tg.errFormat" xml:space="preserve">
+    <value>The number format must contain at least one # mark.</value>
+  </data>
+  <data name="tg.errValues" xml:space="preserve">
+    <value>Some fields are invalid; nothing was saved.</value>
+  </data>
+  <data name="tg.errSeqInUse" xml:space="preserve">
+    <value>A sequence that is in use or system-protected cannot be deleted.</value>
+  </data>
+  <data name="tg.errSeqNext" xml:space="preserve">
+    <value>The next value cannot move backwards; it must stay above the highest used number.</value>
+  </data>
+</root>

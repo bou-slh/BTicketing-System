@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Entities;
 using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure;
+using RapidsolDestek.Infrastructure.Services;
 using RapidsolDestek.Web.Navigation;
 
 namespace RapidsolDestek.Web.Areas.Portal.Controllers;
@@ -14,12 +15,24 @@ namespace RapidsolDestek.Web.Areas.Portal.Controllers;
 /// </summary>
 [Area("Portal")]
 [Authorize(Policy = "PortalUser")]
-public class KbController(AppDbContext db, IFileStore files) : Controller
+public class KbController(AppDbContext db, IFileStore files, ISettingsService settings) : Controller
 {
+    /// <summary>
+    /// admin/settings-kb master switch (S7, B3): while off the whole portal KB —
+    /// list, article, vote, attachment — answers 404, honest "hidden entirely"
+    /// semantics (skb.enableHelp; articles stay in the DB, only unpublished).
+    /// The nav link and the home KB card disappear with the same flag.
+    /// </summary>
+    private async Task<bool> KbDisabledAsync(CancellationToken ct) =>
+        !(await settings.GetKbAsync(ct)).EnableKb;
+
     [HttpGet("/kb")]
     [NavKey("kb")]
     public async Task<IActionResult> Index(string? q, int? cat, CancellationToken ct)
     {
+        if (await KbDisabledAsync(ct))
+            return NotFound();
+
         var articles = db.FaqArticles
             .Where(a => a.IsPublished && a.Category!.IsPublic);
 
@@ -55,6 +68,9 @@ public class KbController(AppDbContext db, IFileStore files) : Controller
     [NavKey("kb")]
     public async Task<IActionResult> Article(int id, CancellationToken ct)
     {
+        if (await KbDisabledAsync(ct))
+            return NotFound();
+
         var article = await db.FaqArticles
             .Include(a => a.Category)
             .SingleOrDefaultAsync(a => a.Id == id && a.IsPublished && a.Category!.IsPublic, ct);
@@ -90,6 +106,9 @@ public class KbController(AppDbContext db, IFileStore files) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Vote(int id, bool helpful, CancellationToken ct)
     {
+        if (await KbDisabledAsync(ct))
+            return NotFound();
+
         var updated = helpful
             ? await db.FaqArticles.Where(a => a.Id == id && a.IsPublished)
                 .ExecuteUpdateAsync(s => s.SetProperty(a => a.HelpfulYes, a => a.HelpfulYes + 1), ct)
@@ -106,6 +125,9 @@ public class KbController(AppDbContext db, IFileStore files) : Controller
     [HttpGet("/kb-article/attachment")]
     public async Task<IActionResult> Attachment(int id, CancellationToken ct)
     {
+        if (await KbDisabledAsync(ct))
+            return NotFound();
+
         var attachment = await db.Attachments
             .Include(at => at.File)
             .SingleOrDefaultAsync(at =>

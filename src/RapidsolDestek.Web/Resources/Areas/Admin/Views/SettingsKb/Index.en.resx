@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="skb.title" xml:space="preserve">
+    <value>Knowledge Base Settings</value>
+  </data>
+  <data name="skb.subtitle" xml:space="preserve">
+    <value>Master switches for the user-portal knowledge base and agents' canned responses.</value>
+  </data>
+  <data name="skb.secGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="skb.enable" xml:space="preserve">
+    <value>Enable Knowledge Base</value>
+  </data>
+  <data name="skb.enableHelp" xml:space="preserve">
+    <value>FAQ articles and search appear on the user portal. When off, the portal's Knowledge Base section is hidden entirely; existing articles are not deleted, only unpublished.</value>
+  </data>
+  <data name="skb.requireLogin" xml:space="preserve">
+    <value>Require user sign-in</value>
+  </data>
+  <data name="skb.requireLoginHelp" xml:space="preserve">
+    <value>Only signed-in users can read articles. Recommended if your articles describe company-specific processes (payroll calendars, approval flows and the like).</value>
+  </data>
+  <data name="skb.canned" xml:space="preserve">
+    <value>Enable canned responses</value>
+  </data>
+  <data name="skb.cannedHelp" xml:space="preserve">
+    <value>Agents can insert prepared boilerplate answers with one click while replying. When off, the canned-response menu in the reply box is hidden.</value>
+  </data>
+  <data name="skb.banner" xml:space="preserve">
+    <value>Articles, categories and canned-response content are managed in the agent panel's Knowledge Base section:</value>
+  </data>
+  <data name="skb.bannerLink" xml:space="preserve">
+    <value>Open the Knowledge Base</value>
+  </data>
+  <data name="skb.toastSaved" xml:space="preserve">
+    <value>Knowledge base settings saved.</value>
+  </data>
+</root>

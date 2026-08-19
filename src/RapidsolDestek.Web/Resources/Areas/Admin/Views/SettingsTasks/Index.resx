@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tg.title" xml:space="preserve">
+    <value>Görev Ayarları</value>
+  </data>
+  <data name="tg.subtitle" xml:space="preserve">
+    <value>Görev numaralandırma, varsayılanlar ve görevlerle ilgili temsilci uyarıları.</value>
+  </data>
+  <data name="tg.secNumbering" xml:space="preserve">
+    <value>Numaralandırma</value>
+  </data>
+  <data name="tg.secDefaults" xml:space="preserve">
+    <value>Varsayılanlar</value>
+  </data>
+  <data name="tg.secAlerts" xml:space="preserve">
+    <value>Uyarılar ve Bildirimler</value>
+  </data>
+  <data name="tg.numberFormat" xml:space="preserve">
+    <value>Numara biçimi</value>
+  </data>
+  <data name="tg.numberFormatHelp" xml:space="preserve">
+    <value># işaretleri rakamlarla değiştirilir. Örnek: G4021</value>
+  </data>
+  <data name="tg.sequence" xml:space="preserve">
+    <value>Sıra</value>
+  </data>
+  <data name="tg.sequenceHelp" xml:space="preserve">
+    <value>Rastgele numaralar tahmin edilemez; ardışık sıralar sayaçtan ilerler.</value>
+  </data>
+  <data name="tg.seqRandom" xml:space="preserve">
+    <value>Rastgele</value>
+  </data>
+  <data name="tg.seqSequential" xml:space="preserve">
+    <value>Ardışık</value>
+  </data>
+  <data name="tg.manage" xml:space="preserve">
+    <value>Yönet</value>
+  </data>
+  <data name="tg.dlgSeqTitle" xml:space="preserve">
+    <value>Numara sıraları</value>
+  </data>
+  <data name="tg.dlgSeqHelp" xml:space="preserve">
+    <value>Ardışık sıralar burada tanımlanır; görevler için ayrı bir sayaç kullanılabilir.</value>
+  </data>
+  <data name="tg.seqName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="tg.seqNext" xml:space="preserve">
+    <value>Sıradaki</value>
+  </data>
+  <data name="tg.addSequence" xml:space="preserve">
+    <value>Sıra ekle</value>
+  </data>
+  <data name="tg.defPriority" xml:space="preserve">
+    <value>Varsayılan öncelik</value>
+  </data>
+  <data name="tg.defPriorityHelp" xml:space="preserve">
+    <value>Yeni görevler bu öncelikle açılır.</value>
+  </data>
+  <data name="tg.attachNote" xml:space="preserve">
+    <value>Görev eklerinin kuralları (izin verilen türler, adet, boyut) Görev Detayları formundaki Ekler alanından yapılandırılır:</value>
+  </data>
+  <data name="tg.attachNoteLink" xml:space="preserve">
+    <value>Formları aç</value>
+  </data>
+  <data name="tg.alNewTask" xml:space="preserve">
+    <value>Yeni Görev Uyarısı</value>
+  </data>
+  <data name="tg.alNewTaskHelp" xml:space="preserve">
+    <value>Yeni bir görev oluşturulduğunda gönderilir.</value>
+  </data>
+  <data name="tg.alNewActivity" xml:space="preserve">
+    <value>Yeni Aktivite Uyarısı</value>
+  </data>
+  <data name="tg.alNewActivityHelp" xml:space="preserve">
+    <value>Göreve not veya yanıt eklendiğinde gönderilir.</value>
+  </data>
+  <data name="tg.alAssignment" xml:space="preserve">
+    <value>Atama Uyarısı</value>
+  </data>
+  <data name="tg.alAssignmentHelp" xml:space="preserve">
+    <value>Görev bir temsilciye veya ekibe atandığında gönderilir.</value>
+  </data>
+  <data name="tg.alTransfer" xml:space="preserve">
+    <value>Aktarım Uyarısı</value>
+  </data>
+  <data name="tg.alTransferHelp" xml:space="preserve">
+    <value>Görev başka bir departmana aktarıldığında gönderilir.</value>
+  </data>
+  <data name="tg.alOverdue" xml:space="preserve">
+    <value>Gecikme Uyarısı</value>
+  </data>
+  <data name="tg.alOverdueHelp" xml:space="preserve">
+    <value>Görev bitiş tarihini aşıp gecikmiş duruma düştüğünde gönderilir.</value>
+  </data>
+  <data name="tg.rcpAdmin" xml:space="preserve">
+    <value>Yönetici</value>
+  </data>
+  <data name="tg.rcpDeptManager" xml:space="preserve">
+    <value>Departman Yöneticisi</value>
+  </data>
+  <data name="tg.rcpDeptMembers" xml:space="preserve">
+    <value>Departman Üyeleri</value>
+  </data>
+  <data name="tg.rcpLastRespondent" xml:space="preserve">
+    <value>Son yanıtlayan</value>
+  </data>
+  <data name="tg.rcpAssigned" xml:space="preserve">
+    <value>Atanan temsilci / ekip</value>
+  </data>
+  <data name="tg.rcpTeamLead" xml:space="preserve">
+    <value>Ekip lideri</value>
+  </data>
+  <data name="tg.rcpTeamMembers" xml:space="preserve">
+    <value>Ekip üyeleri</value>
+  </data>
+  <data name="tg.toastSaved" xml:space="preserve">
+    <value>Görev ayarları kaydedildi.</value>
+  </data>
+  <data name="tg.toastSeqSaved" xml:space="preserve">
+    <value>Numara sıraları kaydedildi.</value>
+  </data>
+  <data name="tg.errFormat" xml:space="preserve">
+    <value>Numara biçimi en az bir # işareti içermelidir.</value>
+  </data>
+  <data name="tg.errValues" xml:space="preserve">
+    <value>Bazı alanlar geçersiz; değişiklikler kaydedilmedi.</value>
+  </data>
+  <data name="tg.errSeqInUse" xml:space="preserve">
+    <value>Kullanımda veya sistem tarafından korunan bir sıra silinemez.</value>
+  </data>
+  <data name="tg.errSeqNext" xml:space="preserve">
+    <value>Sıradaki değer geriye alınamaz; kullanılmış en yüksek numaranın üzerinde kalmalıdır.</value>
+  </data>
+</root>

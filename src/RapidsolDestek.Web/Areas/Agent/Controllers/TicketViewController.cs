@@ -176,8 +176,15 @@ public class TicketViewController(
             .ToListAsync(ct);
 
         // ---- Composer data -----------------------------------------------------------
-        var cannedList = (await cannedService.ListForAsync(ticket.DepartmentId, ct))
-            .Select(c => new CannedOptionVm(c.Id, c.Title)).ToList();
+        // admin/settings-kb "Hazır yanıtları etkinleştir" (S7, B3): while off the
+        // composer hides its whole canned menu (osTicket parity — the orig/last quote
+        // options live in the same select and disappear with it, flagged) and the
+        // insert endpoint below refuses canned ids.
+        var cannedEnabled = (await settings.GetKbAsync(ct)).EnableCanned;
+        List<CannedOptionVm> cannedList = cannedEnabled
+            ? (await cannedService.ListForAsync(ticket.DepartmentId, ct))
+                .Select(c => new CannedOptionVm(c.Id, c.Title)).ToList()
+            : [];
 
         var fromAccounts = await db.EmailAccounts
             .OrderBy(a => a.Id)
@@ -220,7 +227,7 @@ public class TicketViewController(
             ticket.UserId, ticket.UserName, ticket.UserEmail, ticket.OrgId, ticket.OrgName,
             ticket.TopicName, ticket.AssigneeName ?? ticket.TeamName,
             effort, effortSettings.Enabled,
-            items, tasks, related, cannedList,
+            items, tasks, related, cannedList, cannedEnabled,
             fromAccounts, ticket.DeptEmailAccountId,
             statusRows, ticket.StatusId,
             assignees, departments, ticket.DepartmentId,
@@ -325,6 +332,10 @@ public class TicketViewController(
         }
         else if (int.TryParse(what, out var cannedId))
         {
+            // settings-kb enable_canned off: canned ids refuse (the menu is hidden
+            // anyway — defense in depth); orig/last quotes stay available above.
+            if (!(await settings.GetKbAsync(ct)).EnableCanned)
+                return NotFound();
             try
             {
                 text = HtmlToComposerText(await cannedService.ExpandAsync(cannedId, id, ct));
@@ -756,6 +767,7 @@ public sealed record AgentTicketViewVm(
     IReadOnlyList<AgentTaskRowVm> Tasks,
     IReadOnlyList<AgentRelatedVm> Related,
     IReadOnlyList<CannedOptionVm> Canned,
+    bool CannedEnabled,
     IReadOnlyList<FromAccountVm> FromAccounts,
     int? DefaultFromAccountId,
     IReadOnlyList<StatusOptionVm> Statuses,

@@ -85,8 +85,7 @@ public sealed class TaskService(
         // fails loudly instead of silently landing work on a vacationing agent.
         await StaffAvailability.EnsureAssignableAsync(db, request.StaffId, ct);
 
-        var numbering = await settings.GetTaskNumberingAsync(ct);
-        var number = await sequences.NextAsync(numbering.SequenceId, numbering.NumberFormat, ct);
+        var number = await DrawNumberAsync(ct);
 
         var task = new TaskItem
         {
@@ -212,6 +211,32 @@ public sealed class TaskService(
         db.Threads.Remove(thread);
         using (actor.BeginAuditScope())
             await db.SaveChangesAsync(ct);
+    }
+
+    /// <summary>
+    /// Task number: tasks.number_mode decides (admin/settings-tasks, S7) — "random"
+    /// draws unguessable digits, anything else advances the seeded task sequence
+    /// (TicketService.DrawNumberAsync twin; tasks have no per-topic sequence).
+    /// </summary>
+    private async Task<string> DrawNumberAsync(CancellationToken ct)
+    {
+        var numbering = await settings.GetTaskNumberingAsync(ct);
+        if ((await settings.GetTasksAsync(ct)).NumberMode != "random")
+            return await sequences.NextAsync(numbering.SequenceId, numbering.NumberFormat, ct);
+
+        // Random mode: fill every '#' with random digits; retry on the (unlikely)
+        // collision with an existing number. The sequence counter stays untouched.
+        var digits = Math.Max(1, numbering.NumberFormat.Count(c => c == '#'));
+        for (var attempt = 0; ; attempt++)
+        {
+            var value = (long)(System.Security.Cryptography.RandomNumberGenerator.GetInt32(1, int.MaxValue)
+                % Math.Pow(10, Math.Min(digits, 9)));
+            var candidate = TicketNumberFormatter.Format(numbering.NumberFormat, value);
+            if (!await db.TaskItems.AnyAsync(t => t.Number == candidate, ct))
+                return candidate;
+            if (attempt >= 9)
+                throw new InvalidOperationException("Could not draw a unique random task number after 10 attempts.");
+        }
     }
 
     private async Task<TaskItem> LoadAsync(int taskId, CancellationToken ct) =>
