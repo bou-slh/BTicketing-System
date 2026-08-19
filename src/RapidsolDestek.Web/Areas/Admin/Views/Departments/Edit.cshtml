@@ -1,0 +1,373 @@
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model DeptEditVm
+@{
+    var d = Model.Dept;
+    var isNew = d is null;
+    ViewData["Title"] = isNew ? L["de.newTitle"].Value : d!.Name;
+
+    // B3 validation failure PRG toast (nothing was written).
+    if (TempData["DeptEditToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        ViewData["ToastVariant"] = "error";
+    }
+
+    var status = d is null ? "active" : d.IsArchived ? "archived" : d.IsActive ? "active" : "disabled";
+    var assignMode = d is null ? "all" : d.AssignPrimaryOnly ? "primary" : d.AssignMembersOnly ? "members" : "all";
+    var alertGroup = d?.AlertGroup switch
+    {
+        DepartmentAlertGroup.ManagerOnly => "manager",
+        DepartmentAlertGroup.MembersAndPrimary => "membersPrimary",
+        _ => "all",
+    };
+    var memberIds = Model.Members.Select(m => m.StaffId).ToHashSet();
+
+    // "Ümit Y. Akın" → "ÜA" (mockup avatar convention, teams precedent).
+    string Initials(string name)
+    {
+        var words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length == 0)
+            return "";
+        var first = words[0][..1];
+        var last = words.Length > 1 ? words[^1][..1] : "";
+        return (first + last).ToUpper(System.Globalization.CultureInfo.GetCultureInfo("tr-TR"));
+    }
+}
+
+<div class="bo-page-head">
+    <div>
+        <p><a href="/admin/departments">@L["de.back"]</a></p>
+        <h1>@(isNew ? L["de.newTitle"].Value : Model.Crumb)</h1>
+        <p>@L["de.subtitle"]</p>
+    </div>
+</div>
+
+<form method="post" asp-area="Admin" asp-controller="Departments" asp-action="Save">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@d!.Id">
+    }
+
+    <div class="rd-tabs" data-tabs data-tabs-scope="main">
+        <button type="button" class="active" data-tab="panel-settings">@L["de.tabSettings"]</button>
+        <button type="button" data-tab="panel-access">@L["de.tabAccess"]</button>
+    </div>
+
+    @* ============ Ayarlar ============ *@
+    <div class="rd-tab-panel active" id="panel-settings" data-tab-group="main">
+
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["de.secGeneral"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="de-parent">@L["de.parent"]</label>
+                        <select id="de-parent" name="parentId" class="rd-control">
+                            <option value="" selected="@(d?.ParentId is null)">@L["de.noParent"]</option>
+                            @foreach (var p in Model.Parents)
+                            {
+                                <option value="@p.Id" selected="@(d?.ParentId == p.Id)">@p.Name</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["de.parentHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="de-name">@L["de.name"]</label>
+                        <input id="de-name" name="name" class="rd-control" type="text" value="@d?.Name" required maxlength="120">
+                        <p class="rd-help">@L["de.nameHelp"]</p>
+                    </div>
+                </div>
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="de-status">@L["de.statusLabel"]</label>
+                        <select id="de-status" name="status" class="rd-control">
+                            <option value="active" selected="@(status == "active")">@L["de.stActive"]</option>
+                            <option value="disabled" selected="@(status == "disabled")">@L["de.stDisabled"]</option>
+                            <option value="archived" selected="@(status == "archived")">@L["de.stArchived"]</option>
+                        </select>
+                        <p class="rd-help">@L["de.statusHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <span class="rd-label">@L["de.visibility"]</span>
+                        <label class="rd-check" style="display:inline-flex;margin-right:18px;margin-top:10px">
+                            <input type="radio" name="isPublic" value="true" checked="@(d?.IsPublic ?? true)"><span>@L["de.visPublic"]</span>
+                        </label>
+                        <label class="rd-check" style="display:inline-flex">
+                            <input type="radio" name="isPublic" value="false" checked="@(d is { IsPublic: false })"><span>@L["de.visPrivate"]</span>
+                        </label>
+                        <p class="rd-help">@L["de.visibilityHelp"]</p>
+                    </div>
+                </div>
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="de-sla">@L["de.sla"]</label>
+                        <select id="de-sla" name="slaId" class="rd-control">
+                            <option value="" selected="@(d?.SlaId is null)">@L["de.sysDefault"]</option>
+                            @foreach (var o in Model.Slas)
+                            {
+                                <option value="@o.Id" selected="@(d?.SlaId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["de.slaHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="de-schedule">@L["de.schedule"]</label>
+                        <select id="de-schedule" name="scheduleId" class="rd-control">
+                            <option value="" selected="@(d?.ScheduleId is null)">@L["de.sysDefault"]</option>
+                            @foreach (var o in Model.Schedules)
+                            {
+                                <option value="@o.Id" selected="@(d?.ScheduleId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["de.scheduleHelp"]</p>
+                    </div>
+                </div>
+                <div class="rd-grid-2">
+                    <div class="rd-field mb-0">
+                        <label class="rd-label" for="de-manager">@L["de.manager"]</label>
+                        <select id="de-manager" name="managerId" class="rd-control">
+                            <option value="" selected="@(d?.ManagerStaffId is null)">@L["de.noManager"]</option>
+                            @foreach (var o in Model.Managers)
+                            {
+                                <option value="@o.Id" selected="@(d?.ManagerStaffId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["de.managerHelp"]</p>
+                    </div>
+                    <div class="rd-field mb-0">
+                        <label class="rd-label" for="de-assign">@L["de.assignMode"]</label>
+                        <select id="de-assign" name="assignMode" class="rd-control">
+                            <option value="all" selected="@(assignMode == "all")">@L["de.amAll"]</option>
+                            <option value="members" selected="@(assignMode == "members")">@L["de.amMembers"]</option>
+                            <option value="primary" selected="@(assignMode == "primary")">@L["de.amPrimary"]</option>
+                        </select>
+                        <p class="rd-help">@L["de.assignModeHelp"]</p>
+                    </div>
+                </div>
+                <details class="rd-advanced">
+                    <summary>@SL["common.advanced"]</summary>
+                    <div class="rd-advanced-body">
+                        <div class="rd-field">
+                            <label class="rd-switch">
+                                <input type="checkbox" name="disableClaim" value="true" checked="@(d?.DisableAutoClaim ?? false)">
+                                <span class="track"></span>
+                                <span class="rd-switch-copy">
+                                    <b>@L["de.disableClaim"]</b>
+                                    <small>@L["de.disableClaimHelp"]</small>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="rd-field mb-0">
+                            <label class="rd-switch">
+                                <input type="checkbox" name="disableReopenAssign" value="true" checked="@(d?.DisableReopenAutoAssign ?? false)">
+                                <span class="track"></span>
+                                <span class="rd-switch-copy">
+                                    <b>@L["de.disableReopenAssign"]</b>
+                                    <small>@L["de.disableReopenAssignHelp"]</small>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["de.secEmail"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-2">
+                    <div class="rd-field mb-0">
+                        <label class="rd-label" for="de-email">@L["de.outEmail"]</label>
+                        <select id="de-email" name="emailId" class="rd-control">
+                            <option value="" selected="@(d?.EmailAccountId is null)">@L["de.sysDefault"]</option>
+                            @foreach (var o in Model.Emails)
+                            {
+                                <option value="@o.Id" selected="@(d?.EmailAccountId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["de.outEmailHelp"]</p>
+                    </div>
+                    <div class="rd-field mb-0">
+                        <label class="rd-label" for="de-template">@L["de.templateSet"]</label>
+                        <select id="de-template" name="templateSetId" class="rd-control">
+                            <option value="" selected="@(d?.TemplateSetId is null)">@L["de.sysDefault"]</option>
+                            @foreach (var o in Model.TemplateSets)
+                            {
+                                <option value="@o.Id" selected="@(d?.TemplateSetId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["de.templateSetHelp"]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* Autoresponder flags persist to the real Department columns; the mockup
+           switches are "disable …" — inverted flags (TicketAutoResponse /
+           MessageAutoResponse). TODO(S8): the mail pipeline consumes them. *@
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["de.secAutoresp"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="arDisableNew" value="true" checked="@(d is { TicketAutoResponse: false })">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["de.arNewTicket"]</b>
+                            <small>@L["de.arNewTicketHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="arDisableMsg" value="true" checked="@(d is null || !d.MessageAutoResponse)">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["de.arNewMessage"]</b>
+                            <small>@L["de.arNewMessageHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field mb-0" style="max-width:380px">
+                    <label class="rd-label" for="de-ar-email">@L["de.arEmail"]</label>
+                    <select id="de-ar-email" name="arEmailId" class="rd-control">
+                        <option value="" selected="@(d?.AutoResponseEmailAccountId is null)">@L["de.sysDefault"]</option>
+                        @foreach (var o in Model.Emails)
+                        {
+                            <option value="@o.Id" selected="@(d?.AutoResponseEmailAccountId == o.Id)">@o.Label</option>
+                        }
+                    </select>
+                    <p class="rd-help">@L["de.arEmailHelp"]</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["de.secAlerts"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field mb-0" style="max-width:380px">
+                    <label class="rd-label" for="de-alert-group">@L["de.alertGroup"]</label>
+                    <select id="de-alert-group" name="alertGroup" class="rd-control">
+                        <option value="all" selected="@(alertGroup == "all")">@L["de.agAll"]</option>
+                        <option value="manager" selected="@(alertGroup == "manager")">@L["de.agManager"]</option>
+                        <option value="membersPrimary" selected="@(alertGroup == "membersPrimary")">@L["de.agMembersPrimary"]</option>
+                    </select>
+                    <p class="rd-help">@L["de.alertGroupHelp"]</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="rd-surface">
+            <div class="rd-surface-head">@L["de.secSignature"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field mb-0">
+                    <textarea name="signature" class="rd-control" style="min-height:90px">@d?.Signature</textarea>
+                    <p class="rd-help">@L["de.signatureHelp"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ============ Erişim ============
+       Member rows = primary members (Staff.DepartmentId, "Birincil" badge — the role
+       select edits their primary RoleId, alerts persist to
+       Staff.PrimaryDepartmentAlerts) + extended access (StaffDepartmentAccess with a
+       per-department role, B4 rd.js data-roster contract as <tr> rows).
+       memberIds/memberRoles post as parallel arrays in DOM order; alertIds carry the
+       checked staff ids. Removing a primary member is refused server-side (the row is
+       restored and reported — flagged on the ROADMAP row). *@
+    <div class="rd-tab-panel" id="panel-access" data-tab-group="main">
+        <div class="rd-surface" data-roster>
+            <div class="rd-surface-head">
+                <span>@L["de.secMembers"]</span>
+                <small class="rd-muted">@L["de.membersHelp"]</small>
+                <span class="spacer"></span>
+                @if (isNew)
+                {
+                    <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" disabled>@SL["common.export"]</button>
+                }
+                else
+                {
+                    <a class="rd-btn rd-btn-ghost rd-btn-sm" href="/admin/department-edit/export?id=@d!.Id">@SL["common.export"]</a>
+                }
+            </div>
+            <table class="rd-table">
+                <thead>
+                    <tr>
+                        <th>@L["de.colAgent"]</th>
+                        <th>@L["de.colRole"]</th>
+                        <th>@L["de.colAlerts"]</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody data-roster-rows>
+                    @foreach (var m in Model.Members)
+                    {
+                        <tr data-roster-staff="@m.StaffId">
+                            <td>
+                                <span style="display:inline-flex;align-items:center;gap:10px">
+                                    <span class="rd-avatar">@Initials(m.Name)</span> <span data-roster-name>@m.Name</span>
+                                    @if (m.IsPrimary)
+                                    {
+                                        <span class="rd-badge-inherited">@L["de.primaryBadge"]</span>
+                                    }
+                                </span>
+                                <input type="hidden" name="memberIds" value="@m.StaffId">
+                            </td>
+                            <td>
+                                <select class="rd-control" name="memberRoles" style="max-width:200px">
+                                    @foreach (var role in Model.Roles)
+                                    {
+                                        <option value="@role.Id" selected="@(m.RoleId == role.Id)">@role.Label</option>
+                                    }
+                                </select>
+                            </td>
+                            <td><label class="rd-check"><input type="checkbox" name="alertIds" value="@m.StaffId" checked="@m.Alerts"><span>@L["de.colAlerts"]</span></label></td>
+                            <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-roster-remove title="@SL["common.delete"]">✕</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+                <div style="display:flex;gap:9px;max-width:380px">
+                    <select class="rd-control" data-roster-select>
+                        <option value="" selected>@L["de.addAgentPh"]</option>
+                        @foreach (var s in Model.Managers)
+                        {
+                            @* Current members render hidden — rd.js restores the option
+                               when the member row is removed (teams precedent). *@
+                            <option value="@s.Id" hidden="@memberIds.Contains(s.Id)" disabled="@memberIds.Contains(s.Id)">@s.Label</option>
+                        }
+                    </select>
+                    <button type="button" class="rd-btn" data-roster-add>@SL["common.add"]</button>
+                </div>
+            </div>
+            <template data-roster-tpl>
+                <tr>
+                    <td>
+                        <span style="display:inline-flex;align-items:center;gap:10px">
+                            <span class="rd-avatar"></span> <span data-roster-name></span>
+                        </span>
+                        <input type="hidden" name="memberIds" data-roster-value>
+                    </td>
+                    <td>
+                        <select class="rd-control" name="memberRoles" style="max-width:200px">
+                            @foreach (var role in Model.Roles)
+                            {
+                                <option value="@role.Id">@role.Label</option>
+                            }
+                        </select>
+                    </td>
+                    <td><label class="rd-check"><input type="checkbox" name="alertIds" data-roster-value checked><span>@L["de.colAlerts"]</span></label></td>
+                    <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-roster-remove title="@SL["common.delete"]">✕</button></td>
+                </tr>
+            </template>
+        </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="rd-btn-primary">@SL["common.save"]</button>
+        <a class="rd-btn" href="/admin/departments">@SL["common.cancel"]</a>
+    </div>
+</form>

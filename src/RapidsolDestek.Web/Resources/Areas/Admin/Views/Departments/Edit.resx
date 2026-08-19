@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="de.back" xml:space="preserve">
+    <value>← Departmanlar</value>
+  </data>
+  <data name="de.subtitle" xml:space="preserve">
+    <value>Departman bilgileri, giden e-posta, otomatik yanıtlar, uyarılar, imza ve üye erişimi.</value>
+  </data>
+  <data name="de.tabSettings" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="de.tabAccess" xml:space="preserve">
+    <value>Erişim</value>
+  </data>
+  <data name="de.secGeneral" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="de.parent" xml:space="preserve">
+    <value>Üst departman</value>
+  </data>
+  <data name="de.parentHelp" xml:space="preserve">
+    <value>Bu departman seçilen departmanın altında yer alır.</value>
+  </data>
+  <data name="de.noParent" xml:space="preserve">
+    <value>— Yok (ana departman) —</value>
+  </data>
+  <data name="de.name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="de.nameHelp" xml:space="preserve">
+    <value>Talep yönlendirme ve raporlarda görünen ad.</value>
+  </data>
+  <data name="de.statusLabel" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="de.statusHelp" xml:space="preserve">
+    <value>Devre dışı/arşivli departmanlara yeni talep yönlendirilemez.</value>
+  </data>
+  <data name="de.stActive" xml:space="preserve">
+    <value>Etkin</value>
+  </data>
+  <data name="de.stDisabled" xml:space="preserve">
+    <value>Devre Dışı</value>
+  </data>
+  <data name="de.stArchived" xml:space="preserve">
+    <value>Arşivlenmiş</value>
+  </data>
+  <data name="de.visibility" xml:space="preserve">
+    <value>Görünürlük</value>
+  </data>
+  <data name="de.visibilityHelp" xml:space="preserve">
+    <value>Özel departmanlar kullanıcı portalında ve imzalarda gizlenir.</value>
+  </data>
+  <data name="de.visPublic" xml:space="preserve">
+    <value>Herkese Açık</value>
+  </data>
+  <data name="de.visPrivate" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="de.sla" xml:space="preserve">
+    <value>SLA planı</value>
+  </data>
+  <data name="de.slaHelp" xml:space="preserve">
+    <value>Bu departmandaki taleplere uygulanan vade planı.</value>
+  </data>
+  <data name="de.sysDefault" xml:space="preserve">
+    <value>Sistem Varsayılanı</value>
+  </data>
+  <data name="de.schedule" xml:space="preserve">
+    <value>Çalışma takvimi</value>
+  </data>
+  <data name="de.scheduleHelp" xml:space="preserve">
+    <value>SLA süreleri bu takvimin mesai saatlerine göre işler.</value>
+  </data>
+  <data name="de.manager" xml:space="preserve">
+    <value>Yönetici</value>
+  </data>
+  <data name="de.managerHelp" xml:space="preserve">
+    <value>Departmandan sorumlu temsilci; yönetici uyarılarını alır.</value>
+  </data>
+  <data name="de.noManager" xml:space="preserve">
+    <value>— Yok —</value>
+  </data>
+  <data name="de.assignMode" xml:space="preserve">
+    <value>Atama modu</value>
+  </data>
+  <data name="de.assignModeHelp" xml:space="preserve">
+    <value>Bu departmandaki talepler kimlere atanabilir?</value>
+  </data>
+  <data name="de.amAll" xml:space="preserve">
+    <value>Tüm temsilciler</value>
+  </data>
+  <data name="de.amMembers" xml:space="preserve">
+    <value>Yalnızca departman üyeleri</value>
+  </data>
+  <data name="de.amPrimary" xml:space="preserve">
+    <value>Yalnızca birincil üyeler</value>
+  </data>
+  <data name="de.disableClaim" xml:space="preserve">
+    <value>Yanıtta üstlenmeyi kapat</value>
+  </data>
+  <data name="de.disableClaimHelp" xml:space="preserve">
+    <value>Temsilci yanıt verdiğinde sahipsiz talep otomatik olarak üzerine atanmaz.</value>
+  </data>
+  <data name="de.disableReopenAssign" xml:space="preserve">
+    <value>Yeniden açılınca otomatik atamayı kapat</value>
+  </data>
+  <data name="de.disableReopenAssignHelp" xml:space="preserve">
+    <value>Yeniden açılan talep, son atanan temsilciye otomatik verilmez.</value>
+  </data>
+  <data name="de.secEmail" xml:space="preserve">
+    <value>Giden E-posta</value>
+  </data>
+  <data name="de.outEmail" xml:space="preserve">
+    <value>E-posta adresi</value>
+  </data>
+  <data name="de.outEmailHelp" xml:space="preserve">
+    <value>Bu departmanın yanıtları bu adresten gönderilir.</value>
+  </data>
+  <data name="de.templateSet" xml:space="preserve">
+    <value>Şablon seti</value>
+  </data>
+  <data name="de.templateSetHelp" xml:space="preserve">
+    <value>Bu departmanın otomatik e-postalarında kullanılacak set.</value>
+  </data>
+  <data name="de.secAutoresp" xml:space="preserve">
+    <value>Otomatik Yanıt</value>
+  </data>
+  <data name="de.arNewTicket" xml:space="preserve">
+    <value>Yeni talep otomatik yanıtını kapat</value>
+  </data>
+  <data name="de.arNewTicketHelp" xml:space="preserve">
+    <value>Bu departmanda açılan taleplere "talebiniz alındı" e-postası gönderilmez.</value>
+  </data>
+  <data name="de.arNewMessage" xml:space="preserve">
+    <value>Yeni mesaj onayını kapat</value>
+  </data>
+  <data name="de.arNewMessageHelp" xml:space="preserve">
+    <value>Kullanıcının yeni mesajına alındı onayı gönderilmez.</value>
+  </data>
+  <data name="de.arEmail" xml:space="preserve">
+    <value>Oto-yanıt e-postası</value>
+  </data>
+  <data name="de.arEmailHelp" xml:space="preserve">
+    <value>Otomatik yanıtların gönderileceği adres.</value>
+  </data>
+  <data name="de.secAlerts" xml:space="preserve">
+    <value>Uyarılar</value>
+  </data>
+  <data name="de.alertGroup" xml:space="preserve">
+    <value>Uyarı alıcı grubu</value>
+  </data>
+  <data name="de.alertGroupHelp" xml:space="preserve">
+    <value>Departmana gelen yeni talep uyarılarının gideceği grup.</value>
+  </data>
+  <data name="de.agAll" xml:space="preserve">
+    <value>Tüm departman üyeleri</value>
+  </data>
+  <data name="de.agManager" xml:space="preserve">
+    <value>Yalnızca yönetici</value>
+  </data>
+  <data name="de.agMembersPrimary" xml:space="preserve">
+    <value>Üyeler + birincil üyeler</value>
+  </data>
+  <data name="de.secSignature" xml:space="preserve">
+    <value>İmza</value>
+  </data>
+  <data name="de.signatureHelp" xml:space="preserve">
+    <value>Yanıt e-postalarında %{{signature}} değişkeninin yerine geçer.</value>
+  </data>
+  <data name="de.secMembers" xml:space="preserve">
+    <value>Departman Üyeleri</value>
+  </data>
+  <data name="de.membersHelp" xml:space="preserve">
+    <value>Üyeler bu departmanın taleplerine erişir; rol, buradaki yetkilerini belirler.</value>
+  </data>
+  <data name="de.colAgent" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="de.colRole" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="de.colAlerts" xml:space="preserve">
+    <value>Uyarılar</value>
+  </data>
+  <data name="de.primaryBadge" xml:space="preserve">
+    <value>Birincil</value>
+  </data>
+  <data name="de.addAgentPh" xml:space="preserve">
+    <value>Temsilci seç…</value>
+  </data>
+  <data name="de.newTitle" xml:space="preserve">
+    <value>Yeni Departman</value>
+  </data>
+  <data name="de.errName" xml:space="preserve">
+    <value>Departman adı zorunludur (en fazla 120 karakter).</value>
+  </data>
+  <data name="de.errNameInUse" xml:space="preserve">
+    <value>Bu ad, seçilen üst departman altında zaten kullanılıyor.</value>
+  </data>
+  <data name="de.errParent" xml:space="preserve">
+    <value>Seçilen üst departman bulunamadı.</value>
+  </data>
+  <data name="de.errParentCycle" xml:space="preserve">
+    <value>Bir departman kendisinin veya alt departmanlarının altına taşınamaz.</value>
+  </data>
+</root>

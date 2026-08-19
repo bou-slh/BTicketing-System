@@ -144,9 +144,13 @@ public static class DomainSeeder
 
         // ----- Departments (canon: Destek, Bordro (child), Danışmanlık) ---------------
         var depDestek = new Department { Name = "Destek", TicketAutoResponse = true };
+        // admin/department-edit.html canon (the Bordro editor): assignment restricted
+        // to department members, new-message confirmation off (MessageAutoResponse
+        // default false), new-ticket autoresponse on, alert group = all members.
         var depBordro = new Department
         {
             Name = "Bordro", Parent = depDestek, Sla = slaStandart, Schedule = schWeek,
+            AssignMembersOnly = true,
             Signature = "RapidSol Bordro Ekibi\nbordro@rapidsol.com.tr · 0212 555 24 80",
         };
         var depDanismanlik = new Department { Name = "Danışmanlık", IsPublic = false };
@@ -164,6 +168,7 @@ public static class DomainSeeder
         await db.SaveChangesAsync();
         depDestek.EmailAccountId = emDestek.Id;
         depBordro.EmailAccountId = emBordro.Id;
+        depBordro.AutoResponseEmailAccountId = emBordro.Id; // department-edit de-ar-email canon
         depDanismanlik.EmailAccountId = emBilgi.Id;
 
         // ----- Staff (canon agent/directory.html roster; §2 dept mapping wins) --------
@@ -208,6 +213,14 @@ public static class DomainSeeder
 
         depDestek.ManagerStaffId = mcetin.Id;
         depBordro.ManagerStaffId = uakin.Id;
+
+        // admin/department-edit.html access-tab canon: Deniz Kaya holds extended access
+        // to Bordro with the Temsilci role, alerts off (the mockup's unchecked box).
+        db.Set<StaffDepartmentAccess>().Add(new StaffDepartmentAccess
+        {
+            StaffId = dkaya.Id, DepartmentId = depBordro.Id,
+            RoleId = roleTemsilci.Id, AlertsEnabled = false,
+        });
 
         // ----- Teams (canon admin/teams.html + "Destek Ekibi" from assign dialogs) ----
         var teamBordro = new Team
@@ -474,7 +487,10 @@ public static class DomainSeeder
                 Body = $"<p>{t.Name} — %{{ticket.number}}</p>",
             })],
         };
-        db.EmailTemplateSets.AddRange(MakeSet("Varsayılan (TR)", "tr", true), MakeSet("English Set (EN)", "en", true));
+        var tsetTr = MakeSet("Varsayılan (TR)", "tr", true);
+        db.EmailTemplateSets.AddRange(tsetTr, MakeSet("English Set (EN)", "en", true));
+        await db.SaveChangesAsync();
+        depBordro.TemplateSetId = tsetTr.Id; // department-edit de-template canon
 
         // ----- Filters, banlist, API keys (canon admin pages) -------------------------
         var fVip = new Filter

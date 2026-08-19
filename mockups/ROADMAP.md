@@ -931,8 +931,39 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       (mockup parity) — IsEnabled moves only via the list bulk buttons. Invented keys (TR/EN twins):
       re.newTitle/errName/errNameInUse; rl.dateFmt/toastSaved/toastCreated/bulkNone/Done/Partial/
       deleteConfirm. +5 tests (RolesTeamsAdminTests) — suite 215.)*
-- [ ] **departments.html / department-edit.html** — CRUD with hierarchy (collapse); autoresponder switches gate;
-      access rows (B3/B4); export
+- [x] **departments.html / department-edit.html** — CRUD with hierarchy (collapse); autoresponder switches gate;
+      access rows (B3/B4); export *(S7; /admin/departments + /admin/department-edit?id=. Hierarchy: the S3
+      ParentId + materialized Path carry the tree; the list renders tree order (children indented with the
+      mockup's └ DOM, sort key orders SIBLINGS — default name desc = the mockup's exact row order; search
+      flattens), collapse = NEW rd.js data-tree-toggle caret on parent rows (INVENTED look, app.css
+      .rd-tree-toggle — the mockup only indents; needs canon sign-off). Save guards self/descendant parents
+      (Path cycle check) and rewrites the whole subtree's paths on reparent; name unique per parent. NEW
+      S7_DeptSettings migration: Department.IsActive (3-state status select: aktif/devre dışı/arşivlenmiş),
+      AssignPrimaryOnly (3-mode atama), DisableAutoClaim, DisableReopenAutoAssign, AlertGroup enum +
+      Staff.PrimaryDepartmentAlerts. Honest flag wiring: DisableAutoClaim gates the global
+      claim_on_response in ThreadService NOW; DisableReopenAutoAssign clears the assignment on reopen in
+      TicketService NOW (mockup help canon: "son atanan temsilciye otomatik verilmez");
+      TicketAutoResponse/MessageAutoResponse (the "kapat" switches are inverted flags),
+      AutoResponseEmailAccountId and AlertGroup persist with TODO(S8) markers — no mail fan-out exists yet.
+      Routing consumers still check only IsArchived (disabled-dept routing guard deferred, flagged).
+      Erişim tab (B4, data-roster contract extended with [data-roster-remove] for <tr> rows): rows = primary
+      members (Staff.DepartmentId, "Birincil" badge — the role select edits their PRIMARY RoleId, alerts →
+      Staff.PrimaryDepartmentAlerts; the row's ✕ is refused server-side, restored + partial toast — mockup
+      shows ✕ on the primary row too, needs canon sign-off) + StaffDepartmentAccess rows whose per-dept role
+      the PermissionService resolves on the next request (tested end-to-end: an access row grants
+      ticket.reply in THAT dept only, removal revokes); memberIds/memberRoles post as DOM-order parallel
+      arrays; new-row role default = first option (Yönetici, mockup defines none — flagged). Seed canon
+      realigned to department-edit: Bordro AssignMembersOnly + TR template set + bordro@ AR address + dkaya
+      extended access (Temsilci, alerts off — TaskServiceTests' "dkaya only sees Destek" premise updated to
+      Danışmanlık). List agent counts are live (primary + extended distinct: Destek 3/Bordro 3/Danışmanlık 1
+      vs the mockup's static 2/1/1 — differ note, seed roster canon wins). Bulk delete guard-skips depts
+      referenced by children/staff/tickets/tasks/topics/canned (mockup has NO reassign dialog — osTicket
+      asks for a target dept; guard-skip per teams precedent, needs canon sign-off) + invented confirm
+      dialog; rd-empty = the mockup's hidden #empty-departments reachable. Export = the Erişim tab's mockup
+      button → member CSV UTF-8 BOM (name/birincil/rol/uyarılar; the LIST has no export control — the row's
+      "export" read as the members export). Invented keys (TR/EN twins): dp.archived/collapseTitle/bulk*/
+      deleteConfirm/toastSaved/toastCreated/toastPrimaryKept; de.newTitle/errName/errNameInUse/errParent/
+      errParentCycle. +10 tests (DepartmentsAdminTests) — suite 225.)*
 
 ## 7. Open decisions (carry-over, timeline questions removed)
 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="dp.title" xml:space="preserve">
+    <value>Departments</value>
+  </data>
+  <data name="dp.subtitle" xml:space="preserve">
+    <value>The working units tickets are routed to. Sub-departments are shown indented under their parent.</value>
+  </data>
+  <data name="dp.add" xml:space="preserve">
+    <value>＋ New Department</value>
+  </data>
+  <data name="dp.searchPh" xml:space="preserve">
+    <value>Search departments…</value>
+  </data>
+  <data name="dp.colName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="dp.colType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="dp.colAgents" xml:space="preserve">
+    <value>Agents</value>
+  </data>
+  <data name="dp.colEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="dp.colManager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="dp.typePublic" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="dp.typePrivate" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="dp.emptyTitle" xml:space="preserve">
+    <value>No departments yet</value>
+  </data>
+  <data name="dp.emptyText" xml:space="preserve">
+    <value>Create the first department to route tickets to.</value>
+  </data>
+  <data name="dp.archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="dp.collapseTitle" xml:space="preserve">
+    <value>Collapse/expand sub-departments</value>
+  </data>
+  <data name="dp.bulkNone" xml:space="preserve">
+    <value>Select records from the list first.</value>
+  </data>
+  <data name="dp.bulkDone" xml:space="preserve">
+    <value>{0} departments updated.</value>
+  </data>
+  <data name="dp.bulkPartial" xml:space="preserve">
+    <value>{0} actions completed, {1} records skipped (departments with sub-departments, agents, tickets, tasks, topics or canned responses cannot be deleted).</value>
+  </data>
+  <data name="dp.deleteConfirm" xml:space="preserve">
+    <value>The selected departments will be permanently deleted; departments with sub-departments, agents, tickets, tasks, topics or canned responses are skipped. Continue?</value>
+  </data>
+  <data name="dp.toastSaved" xml:space="preserve">
+    <value>Department saved.</value>
+  </data>
+  <data name="dp.toastCreated" xml:space="preserve">
+    <value>Department created.</value>
+  </data>
+  <data name="dp.toastPrimaryKept" xml:space="preserve">
+    <value>Department saved; primary members cannot be removed here (change the agent's department on the agent page).</value>
+  </data>
+</root>

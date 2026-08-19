@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="de.back" xml:space="preserve">
+    <value>← Departments</value>
+  </data>
+  <data name="de.subtitle" xml:space="preserve">
+    <value>Department details, outgoing email, auto-responses, alerts, signature and member access.</value>
+  </data>
+  <data name="de.tabSettings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="de.tabAccess" xml:space="preserve">
+    <value>Access</value>
+  </data>
+  <data name="de.secGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="de.parent" xml:space="preserve">
+    <value>Parent department</value>
+  </data>
+  <data name="de.parentHelp" xml:space="preserve">
+    <value>This department sits under the selected department.</value>
+  </data>
+  <data name="de.noParent" xml:space="preserve">
+    <value>— None (top-level) —</value>
+  </data>
+  <data name="de.name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="de.nameHelp" xml:space="preserve">
+    <value>The name shown in ticket routing and reports.</value>
+  </data>
+  <data name="de.statusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="de.statusHelp" xml:space="preserve">
+    <value>New tickets cannot be routed to disabled/archived departments.</value>
+  </data>
+  <data name="de.stActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="de.stDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="de.stArchived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="de.visibility" xml:space="preserve">
+    <value>Visibility</value>
+  </data>
+  <data name="de.visibilityHelp" xml:space="preserve">
+    <value>Private departments are hidden on the user portal and in signatures.</value>
+  </data>
+  <data name="de.visPublic" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="de.visPrivate" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="de.sla" xml:space="preserve">
+    <value>SLA plan</value>
+  </data>
+  <data name="de.slaHelp" xml:space="preserve">
+    <value>The due-date plan applied to tickets in this department.</value>
+  </data>
+  <data name="de.sysDefault" xml:space="preserve">
+    <value>System Default</value>
+  </data>
+  <data name="de.schedule" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="de.scheduleHelp" xml:space="preserve">
+    <value>SLA timers run according to this schedule's business hours.</value>
+  </data>
+  <data name="de.manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="de.managerHelp" xml:space="preserve">
+    <value>The agent responsible for the department; receives manager alerts.</value>
+  </data>
+  <data name="de.noManager" xml:space="preserve">
+    <value>— None —</value>
+  </data>
+  <data name="de.assignMode" xml:space="preserve">
+    <value>Assignment mode</value>
+  </data>
+  <data name="de.assignModeHelp" xml:space="preserve">
+    <value>Who can tickets in this department be assigned to?</value>
+  </data>
+  <data name="de.amAll" xml:space="preserve">
+    <value>All agents</value>
+  </data>
+  <data name="de.amMembers" xml:space="preserve">
+    <value>Department members only</value>
+  </data>
+  <data name="de.amPrimary" xml:space="preserve">
+    <value>Primary members only</value>
+  </data>
+  <data name="de.disableClaim" xml:space="preserve">
+    <value>Disable claim on reply</value>
+  </data>
+  <data name="de.disableClaimHelp" xml:space="preserve">
+    <value>An unassigned ticket is not auto-assigned to the agent who replies.</value>
+  </data>
+  <data name="de.disableReopenAssign" xml:space="preserve">
+    <value>Disable auto-assignment on reopen</value>
+  </data>
+  <data name="de.disableReopenAssignHelp" xml:space="preserve">
+    <value>A reopened ticket is not automatically given to the last assigned agent.</value>
+  </data>
+  <data name="de.secEmail" xml:space="preserve">
+    <value>Outgoing Email</value>
+  </data>
+  <data name="de.outEmail" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="de.outEmailHelp" xml:space="preserve">
+    <value>This department's replies are sent from this address.</value>
+  </data>
+  <data name="de.templateSet" xml:space="preserve">
+    <value>Template set</value>
+  </data>
+  <data name="de.templateSetHelp" xml:space="preserve">
+    <value>The set used for this department's automated emails.</value>
+  </data>
+  <data name="de.secAutoresp" xml:space="preserve">
+    <value>Auto-Response</value>
+  </data>
+  <data name="de.arNewTicket" xml:space="preserve">
+    <value>Disable new-ticket auto-response</value>
+  </data>
+  <data name="de.arNewTicketHelp" xml:space="preserve">
+    <value>No "we received your request" email is sent for tickets opened in this department.</value>
+  </data>
+  <data name="de.arNewMessage" xml:space="preserve">
+    <value>Disable new-message confirmation</value>
+  </data>
+  <data name="de.arNewMessageHelp" xml:space="preserve">
+    <value>No receipt confirmation is sent for the user's new message.</value>
+  </data>
+  <data name="de.arEmail" xml:space="preserve">
+    <value>Auto-response email</value>
+  </data>
+  <data name="de.arEmailHelp" xml:space="preserve">
+    <value>The address automatic responses are sent from.</value>
+  </data>
+  <data name="de.secAlerts" xml:space="preserve">
+    <value>Alerts</value>
+  </data>
+  <data name="de.alertGroup" xml:space="preserve">
+    <value>Alert recipient group</value>
+  </data>
+  <data name="de.alertGroupHelp" xml:space="preserve">
+    <value>The group that new-ticket alerts for this department go to.</value>
+  </data>
+  <data name="de.agAll" xml:space="preserve">
+    <value>All department members</value>
+  </data>
+  <data name="de.agManager" xml:space="preserve">
+    <value>Manager only</value>
+  </data>
+  <data name="de.agMembersPrimary" xml:space="preserve">
+    <value>Members + primary members</value>
+  </data>
+  <data name="de.secSignature" xml:space="preserve">
+    <value>Signature</value>
+  </data>
+  <data name="de.signatureHelp" xml:space="preserve">
+    <value>Replaces the %{{signature}} variable in reply emails.</value>
+  </data>
+  <data name="de.secMembers" xml:space="preserve">
+    <value>Department Members</value>
+  </data>
+  <data name="de.membersHelp" xml:space="preserve">
+    <value>Members can access this department's tickets; the role defines their authority here.</value>
+  </data>
+  <data name="de.colAgent" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="de.colRole" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="de.colAlerts" xml:space="preserve">
+    <value>Alerts</value>
+  </data>
+  <data name="de.primaryBadge" xml:space="preserve">
+    <value>Primary</value>
+  </data>
+  <data name="de.addAgentPh" xml:space="preserve">
+    <value>Select agent…</value>
+  </data>
+  <data name="de.newTitle" xml:space="preserve">
+    <value>New Department</value>
+  </data>
+  <data name="de.errName" xml:space="preserve">
+    <value>The department name is required (120 characters max).</value>
+  </data>
+  <data name="de.errNameInUse" xml:space="preserve">
+    <value>This name is already in use under the selected parent department.</value>
+  </data>
+  <data name="de.errParent" xml:space="preserve">
+    <value>The selected parent department was not found.</value>
+  </data>
+  <data name="de.errParentCycle" xml:space="preserve">
+    <value>A department cannot be moved under itself or one of its sub-departments.</value>
+  </data>
+</root>

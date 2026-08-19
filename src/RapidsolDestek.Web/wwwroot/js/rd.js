@@ -178,11 +178,13 @@
         else ruleAdd.before(tpl.content.cloneNode(true));
       }
     }
-    const ruleRemove = e.target.closest(".bo-rule-row .remove");
+    // Roster/rule row removal: .bo-rule-row .remove (teams dialog) or the table-row
+    // variant [data-roster-remove] (admin/department-edit member rows are <tr>s).
+    const ruleRemove = e.target.closest(".bo-rule-row .remove, [data-roster-remove]");
     if (ruleRemove) {
       e.preventDefault();
-      const row = ruleRemove.closest(".bo-rule-row");
-      // Roster rows (admin/teams): restore the removed member's select option.
+      const row = ruleRemove.closest(".bo-rule-row, [data-roster-staff]");
+      // Roster rows (admin/teams + department-edit): restore the removed member's option.
       const staffId = row?.getAttribute("data-roster-staff");
       if (staffId) {
         const opt = row.closest("[data-roster]")
@@ -190,6 +192,28 @@
         if (opt) { opt.hidden = false; opt.disabled = false; }
       }
       row?.remove();
+    }
+
+    // Hierarchy collapse (admin/departments, B1 + ROADMAP "hierarchy (collapse)"):
+    // a parent row's caret hides/shows every descendant row — rows carry their
+    // materialized path in data-tree-path, the caret carries the parent's path.
+    const treeToggle = e.target.closest("[data-tree-toggle]");
+    if (treeToggle) {
+      e.preventDefault();
+      const path = treeToggle.getAttribute("data-tree-toggle");
+      const collapsed = treeToggle.classList.toggle("collapsed");
+      treeToggle.textContent = collapsed ? "▸" : "▾";
+      document.querySelectorAll("[data-tree-path]").forEach((row) => {
+        const p = row.getAttribute("data-tree-path");
+        if (p !== path && p.startsWith(path)) {
+          row.hidden = collapsed;
+          if (!collapsed) {
+            // Expanding resets nested carets so rows and toggles stay in sync.
+            const nested = row.querySelector("[data-tree-toggle]");
+            if (nested) { nested.classList.remove("collapsed"); nested.textContent = "▾"; }
+          }
+        }
+      });
     }
 
     // Rich-text editor tool buttons

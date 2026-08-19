@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="dp.title" xml:space="preserve">
+    <value>Departmanlar</value>
+  </data>
+  <data name="dp.subtitle" xml:space="preserve">
+    <value>Taleplerin yönlendirildiği çalışma birimleri. Alt departmanlar üst departmanın altında girintili gösterilir.</value>
+  </data>
+  <data name="dp.add" xml:space="preserve">
+    <value>＋ Yeni Departman</value>
+  </data>
+  <data name="dp.searchPh" xml:space="preserve">
+    <value>Departman ara…</value>
+  </data>
+  <data name="dp.colName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="dp.colType" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="dp.colAgents" xml:space="preserve">
+    <value>Temsilci</value>
+  </data>
+  <data name="dp.colEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="dp.colManager" xml:space="preserve">
+    <value>Yönetici</value>
+  </data>
+  <data name="dp.typePublic" xml:space="preserve">
+    <value>Herkese Açık</value>
+  </data>
+  <data name="dp.typePrivate" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="dp.emptyTitle" xml:space="preserve">
+    <value>Henüz departman yok</value>
+  </data>
+  <data name="dp.emptyText" xml:space="preserve">
+    <value>Talepleri yönlendireceğiniz ilk departmanı oluşturun.</value>
+  </data>
+  <data name="dp.archived" xml:space="preserve">
+    <value>Arşivlenmiş</value>
+  </data>
+  <data name="dp.collapseTitle" xml:space="preserve">
+    <value>Alt departmanları daralt/genişlet</value>
+  </data>
+  <data name="dp.bulkNone" xml:space="preserve">
+    <value>Önce listeden kayıt seçin.</value>
+  </data>
+  <data name="dp.bulkDone" xml:space="preserve">
+    <value>{0} departman güncellendi.</value>
+  </data>
+  <data name="dp.bulkPartial" xml:space="preserve">
+    <value>{0} işlem tamamlandı, {1} kayıt atlandı (alt departmanı, temsilcisi, talebi, görevi, konusu veya hazır yanıtı olan departmanlar silinemez).</value>
+  </data>
+  <data name="dp.deleteConfirm" xml:space="preserve">
+    <value>Seçili departmanlar kalıcı olarak silinecek; alt departmanı, temsilcisi, talebi, görevi, konusu veya hazır yanıtı olan departmanlar atlanır. Devam edilsin mi?</value>
+  </data>
+  <data name="dp.toastSaved" xml:space="preserve">
+    <value>Departman kaydedildi.</value>
+  </data>
+  <data name="dp.toastCreated" xml:space="preserve">
+    <value>Departman oluşturuldu.</value>
+  </data>
+  <data name="dp.toastPrimaryKept" xml:space="preserve">
+    <value>Departman kaydedildi; birincil üyeler bu sayfadan çıkarılamaz (temsilcinin departmanını temsilci sayfasından değiştirin).</value>
+  </data>
+</root>

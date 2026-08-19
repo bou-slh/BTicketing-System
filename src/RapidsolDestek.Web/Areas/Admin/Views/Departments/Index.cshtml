@@ -1,0 +1,182 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model DeptsIndexVm
+@{
+    ViewData["Title"] = L["dp.title"];
+
+    // PRG toast handoff after save/bulk (teams precedent).
+    if (TempData["DeptsToast"] is string toastKey)
+    {
+        var ok = TempData["DeptsToastOk"] as int? ?? 0;
+        var skipped = TempData["DeptsToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "dp.bulkDone" or "dp.bulkPartial"
+            ? L[toastKey, ok, skipped].Value
+            : L[toastKey].Value;
+        if (TempData["DeptsToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/departments" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key == "name" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["dp.title"]</h1>
+        <p>@L["dp.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <a class="rd-btn-primary" href="/admin/department-edit">@L["dp.add"]</a>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/admin/departments">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["dp.searchPh"]">
+    <span class="spacer"></span>
+    @* Mockup's dead bulk buttons act on the checkbox selection (teams precedent). *@
+    <button class="rd-btn" type="submit" form="dp-bulk" name="act" value="enable">@SL["common.enable"]</button>
+    <button class="rd-btn" type="submit" form="dp-bulk" name="act" value="disable">@SL["common.disable"]</button>
+    <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-bulk-delete">@SL["common.delete"]</button>
+</form>
+
+<div class="rd-surface" id="tbl-departments">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Mockup's hidden #empty-departments panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">▥</div>
+            <h3>@L["dp.emptyTitle"]</h3>
+            <p>@L["dp.emptyText"]</p>
+            <a class="rd-btn-primary" href="/admin/department-edit">@L["dp.add"]</a>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-departments" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("name")"><a href="@SortUrl("name")">@L["dp.colName"]</a></th>
+                    <th class="@SortClass("status")"><a href="@SortUrl("status")">@SL["common.status"]</a></th>
+                    <th class="@SortClass("type")"><a href="@SortUrl("type")">@L["dp.colType"]</a></th>
+                    <th class="num">@L["dp.colAgents"]</th>
+                    <th>@L["dp.colEmail"]</th>
+                    <th class="@SortClass("manager")"><a href="@SortUrl("manager")">@L["dp.colManager"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr data-tree-path="@(Model.Flat ? null : r.Path)">
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="dp-bulk"></td>
+                        <td>
+                            @if (!Model.Flat && r.Depth > 0)
+                            {
+                                @* Mockup child-row DOM: indented └ prefix. *@
+                                <span style="padding-left:@(r.Depth * 22)px;display:inline-block"><span class="rd-muted">└</span>
+                                    @if (r.HasChildren)
+                                    {
+                                        <button type="button" class="rd-tree-toggle" data-tree-toggle="@r.Path" title="@L["dp.collapseTitle"]">▾</button>
+                                    }
+                                    <a href="/admin/department-edit?id=@r.Id">@r.Name</a></span>
+                            }
+                            else
+                            {
+                                @if (!Model.Flat && r.HasChildren)
+                                {
+                                    <button type="button" class="rd-tree-toggle" data-tree-toggle="@r.Path" title="@L["dp.collapseTitle"]">▾</button>
+                                }
+                                <a href="/admin/department-edit?id=@r.Id">@r.Name</a>
+                            }
+                        </td>
+                        @switch (r.Status)
+                        {
+                            case DeptStatus.Active:
+                                <td><span class="rd-pill rd-pill-teal">@SL["common.active"]</span></td>
+                                break;
+                            case DeptStatus.Disabled:
+                                <td><span class="rd-pill rd-pill-closed">@SL["common.disabled"]</span></td>
+                                break;
+                            default:
+                                <td><span class="rd-pill rd-pill-wait">@L["dp.archived"]</span></td>
+                                break;
+                        }
+                        <td>@L[r.IsPublic ? "dp.typePublic" : "dp.typePrivate"]</td>
+                        <td class="num">@r.Agents</td>
+                        <td>@r.Email</td>
+                        @if (r.Manager is null)
+                        {
+                            <td class="rd-muted">—</td>
+                        }
+                        else
+                        {
+                            <td>@r.Manager</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@SL["common.showing"]</span><span>@Model.From–@Model.To / @Model.Total</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the toolbar bulk actions (teams precedent). *@
+<form id="dp-bulk" method="post" asp-area="Admin" asp-controller="Departments" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+@* Bulk delete confirm dialog: invented UI (B2, teams precedent). Departments
+   referenced by children/staff/tickets/tasks/topics/canned are skipped server-side —
+   the mockup defines no reassign dialog (flagged on the ROADMAP row). *@
+<dialog class="rd-dialog" id="dlg-bulk-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <p>@L["dp.deleteConfirm"]</p>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        <button type="submit" class="rd-btn rd-btn-danger" form="dp-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>

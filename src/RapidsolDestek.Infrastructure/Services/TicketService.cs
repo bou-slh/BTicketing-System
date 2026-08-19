@@ -198,6 +198,17 @@ public sealed class TicketService(
         {
             ticket.ClosedAt = null;
             ticket.ReopenedAt = DateTimeOffset.UtcNow;
+
+            // Department.DisableReopenAutoAssign (admin/department-edit
+            // de.disableReopenAssign, osTicket FLAG_DISABLE_REOPEN_AUTO_ASSIGN):
+            // a reopened ticket is NOT automatically given back to the last
+            // assigned agent — the assignment is cleared on reopen.
+            if (ticket.StaffId is not null
+                && await db.Departments.Where(d => d.Id == ticket.DepartmentId)
+                    .Select(d => d.DisableReopenAutoAssign).FirstOrDefaultAsync(ct))
+            {
+                ticket.StaffId = null;
+            }
         }
 
         using (actor.BeginAuditScope())

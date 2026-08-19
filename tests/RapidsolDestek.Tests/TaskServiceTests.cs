@@ -70,15 +70,16 @@ public class TaskServiceTests(PostgresFixture fixture)
     public async Task Create_RequiresTaskCreatePermissionInTheDepartment()
     {
         using var s = new ServiceScopeBundle(fixture);
-        // dkaya's only department is Destek → denied when creating into Bordro.
+        // dkaya's departments are Destek (primary) and Bordro (S7 extended-access
+        // seed, department-edit canon) → denied when creating into Danışmanlık.
         var dkaya = await TestActors.StaffAsync(s.Db, "dkaya");
-        var bordro = await s.Db.Departments.SingleAsync(d => d.Name == "Bordro");
+        var danismanlik = await s.Db.Departments.SingleAsync(d => d.Name == "Danışmanlık");
 
         await Assert.ThrowsAsync<PermissionDeniedException>(() =>
             s.Get<ITaskService>().CreateAsync(new TaskCreateRequest
             {
                 Title = $"Yetkisiz görev {Guid.NewGuid():N}",
-                DepartmentId = bordro.Id,
+                DepartmentId = danismanlik.Id,
             }, dkaya));
     }
 

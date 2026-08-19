@@ -80,6 +80,13 @@ public class Staff : TimestampedEntity
 
     public DateTimeOffset? LastLoginAt { get; set; }
 
+    /// <summary>
+    /// Receives department alerts for the PRIMARY department (admin/department-edit
+    /// access rows: the primary member's "Uyarılar" checkbox). Extended-access
+    /// departments carry the flag per row on <see cref="StaffDepartmentAccess"/>.
+    /// </summary>
+    public bool PrimaryDepartmentAlerts { get; set; } = true;
+
     public List<StaffDepartmentAccess> DepartmentAccess { get; set; } = [];
 
     public string FullName => $"{FirstName} {LastName}";
@@ -207,17 +214,55 @@ public class Department : TimestampedEntity
     /// <summary>Public departments are selectable on the portal (osTicket ispublic).</summary>
     public bool IsPublic { get; set; } = true;
 
+    /// <summary>
+    /// Disabled departments cannot receive new tickets (osTicket FLAG_ACTIVE inverse;
+    /// department-edit de.stDisabled). Status = Archived &gt; Disabled &gt; Active.
+    /// </summary>
+    public bool IsActive { get; set; } = true;
+
     /// <summary>Archived departments are hidden from routing (osTicket flags bit).</summary>
     public bool IsArchived { get; set; }
 
-    /// <summary>Send "ticket created" auto-response (osTicket ticket_auto_response).</summary>
+    /// <summary>Send "ticket created" auto-response (osTicket ticket_auto_response).
+    /// TODO(S8): consumed by the mail pipeline's new-ticket autoresponse.</summary>
     public bool TicketAutoResponse { get; set; } = true;
 
-    /// <summary>Send auto-response on every new message (osTicket message_auto_response).</summary>
+    /// <summary>Send auto-response on every new message (osTicket message_auto_response).
+    /// TODO(S8): consumed by the mail pipeline's new-message confirmation.</summary>
     public bool MessageAutoResponse { get; set; }
 
     /// <summary>Restrict assignment to department members (osTicket flags bit).</summary>
     public bool AssignMembersOnly { get; set; }
 
+    /// <summary>Restrict assignment to PRIMARY members only (osTicket
+    /// FLAG_ASSIGN_PRIMARY_ONLY; department-edit de.amPrimary).</summary>
+    public bool AssignPrimaryOnly { get; set; }
+
+    /// <summary>A staff reply does not auto-claim unassigned tickets in this department
+    /// (osTicket FLAG_DISABLE_AUTO_CLAIM) — gates the global claim_on_response
+    /// setting in ThreadService.</summary>
+    public bool DisableAutoClaim { get; set; }
+
+    /// <summary>Reopening does not keep the last assigned agent (osTicket
+    /// FLAG_DISABLE_REOPEN_AUTO_ASSIGN): TicketService unassigns on reopen.</summary>
+    public bool DisableReopenAutoAssign { get; set; }
+
+    /// <summary>New-ticket alert recipient group (department-edit de.alertGroup).
+    /// TODO(S8): consumed by the alert mail fan-out.</summary>
+    public DepartmentAlertGroup AlertGroup { get; set; } = DepartmentAlertGroup.All;
+
     public string Signature { get; set; } = "";
+}
+
+/// <summary>department-edit de.alertGroup options (mockup canon order).</summary>
+public enum DepartmentAlertGroup
+{
+    /// <summary>Tüm departman üyeleri.</summary>
+    All,
+
+    /// <summary>Yalnızca yönetici.</summary>
+    ManagerOnly,
+
+    /// <summary>Üyeler + birincil üyeler.</summary>
+    MembersAndPrimary,
 }

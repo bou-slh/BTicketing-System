@@ -123,9 +123,13 @@ public sealed class ThreadService(
                 ticket.IsAnswered = false;
 
             // tickets.claim_on_response (S7 admin/settings-tickets, osTicket
-            // auto_claim_tickets): a staff response on an unassigned ticket claims it.
+            // auto_claim_tickets): a staff response on an unassigned ticket claims it —
+            // unless the ticket's department disables claim-on-reply
+            // (Department.DisableAutoClaim, admin/department-edit de.disableClaim).
             if (type == ThreadEntryType.Response && actor.IsStaff && ticket.StaffId is null
-                && (await settings.GetTicketBehaviorAsync(ct)).ClaimOnResponse)
+                && (await settings.GetTicketBehaviorAsync(ct)).ClaimOnResponse
+                && !await db.Departments.Where(d => d.Id == ticket.DepartmentId)
+                    .Select(d => d.DisableAutoClaim).FirstOrDefaultAsync(ct))
             {
                 ticket.StaffId = actor.Id;
                 autoClaimed = true;

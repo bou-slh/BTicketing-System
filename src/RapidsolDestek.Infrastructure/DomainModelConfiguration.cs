@@ -153,6 +153,8 @@ public static class DomainModelConfiguration
             e.HasIndex(x => x.IdentityUserId).IsUnique();
             e.HasIndex(x => x.IsActive);
             e.HasIndex(x => x.OnVacation);
+            // DB default so pre-S7 rows keep receiving primary-department alerts.
+            e.Property(x => x.PrimaryDepartmentAlerts).HasDefaultValue(true);
         });
 
         b.Entity<StaffDepartmentAccess>(e =>
@@ -184,6 +186,9 @@ public static class DomainModelConfiguration
             e.HasIndex(x => new { x.Name, x.ParentId }).IsUnique();
             e.HasOne(x => x.Parent).WithMany().HasForeignKey(x => x.ParentId)
                 .OnDelete(DeleteBehavior.Restrict);
+            // DB defaults so pre-S7 rows keep working values when the columns land.
+            e.Property(x => x.IsActive).HasDefaultValue(true);
+            e.Property(x => x.AlertGroup).HasDefaultValue(DepartmentAlertGroup.All);
         });
 
         // ----- Routing -----

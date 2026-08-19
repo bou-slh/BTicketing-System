@@ -121,3 +121,12 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
   background: color-mix(in srgb, var(--rd-primary) 45%, light-dark(#cdddda, #33494d));
 }
 .rd-switch input:indeterminate + .track::before { transform: translateX(7px); }
+
+/* Admin departments (S7, B1): hierarchy collapse caret on parent rows — the
+   mockup indents children (└) but ships no collapse control (ROADMAP row asks
+   for "hierarchy (collapse)"; invented look, flagged on the departments row). */
+.rd-tree-toggle {
+  border: 0; background: none; cursor: pointer; color: var(--rd-text-soft);
+  font-size: 11px; padding: 0 4px; margin-right: 2px; line-height: 1;
+}
+.rd-tree-toggle:hover { color: var(--rd-primary); }
