@@ -60,7 +60,7 @@ public abstract class StaffAccountControllerBase(
         {
             // Profile pf-2fa "E-posta kodu": send the 6-digit code now; the shared
             // Login2fa card verifies it against the Email token provider.
-            if (await TwoFactorMethodOfAsync(user) == TwoFactorMethod.Email && user.Email is { } to)
+            if (await EffectiveTwoFactorMethodAsync(user) == TwoFactorMethod.Email && user.Email is { } to)
             {
                 var code = await users.GenerateTwoFactorTokenAsync(user, TokenOptions.DefaultEmailProvider);
                 await mail.SendAsync(to, "RapidsolDestek", code);
@@ -74,10 +74,10 @@ public abstract class StaffAccountControllerBase(
         }
         if (!result.Succeeded)
         {
-            // B6 admin-only lockout policy: stricter threshold/duration than the
-            // staff-wide Identity defaults, applied only at the admin sign-in.
+            // B6 staff-wide lockout policy owned by admin/settings-agents
+            // (sa.maxAttempts / sa.lockDuration).
             ModelState.AddModelError(string.Empty,
-                await ApplyAdminLockoutAsync(user) ? "lockedOut" : "invalidCredentials");
+                await ApplyStaffLockoutAsync(user) ? "lockedOut" : "invalidCredentials");
             return View("Login", vm);
         }
 
@@ -113,29 +113,28 @@ public abstract class StaffAccountControllerBase(
             .Select(s => s.TwoFactorMethod).FirstOrDefaultAsync();
 
     /// <summary>
-    /// Admin-only lockout policy (B6, admin/pwreset row): after a failed attempt at the
-    /// ADMIN sign-in, lock earlier and longer than the staff-wide Identity defaults.
-    /// Identity has already counted the failure (password and 2FA sign-ins both call
-    /// AccessFailedAsync); this only turns the count into a lock at the admin threshold.
-    /// Returns true when this attempt tripped the lock.
+    /// The provider the pending 2FA step must use. A staff member pulled into the step
+    /// only by the agents/require_twofa policy (settings-agents sa.twofa;
+    /// StaffSignInManager.IsTwoFactorEnabledAsync) has no enrollment — the policy's
+    /// promised "e-posta kodu" is their method regardless of the stored preference.
     /// </summary>
-    private async Task<bool> ApplyAdminLockoutAsync(StaffUser user)
+    private async Task<TwoFactorMethod> EffectiveTwoFactorMethodAsync(StaffUser user) =>
+        user.TwoFactorEnabled ? await TwoFactorMethodOfAsync(user) : TwoFactorMethod.Email;
+
+    /// <summary>
+    /// Staff-wide lockout policy (B6) owned by admin/settings-agents (sa.maxAttempts /
+    /// sa.lockDuration; the mockup's fields are staff-wide, so both the agent and admin
+    /// sign-ins apply it — this resolves the earlier INVENTED admin-only 3/30 tightening
+    /// toward the mockup's 5/30 canon). Identity has already counted the failure
+    /// (password and 2FA sign-ins both call AccessFailedAsync); this only turns the
+    /// count into a lock at the configured threshold (the Identity static
+    /// MaxFailedAccessAttempts is parked above every configurable option so the Setting
+    /// owns the policy). Returns true when this attempt tripped the lock.
+    /// </summary>
+    private async Task<bool> ApplyStaffLockoutAsync(StaffUser user)
     {
-        if (!RequireAdmin || !await users.GetLockoutEnabledAsync(user)) return false;
-
-        // TODO(S7): settings-agents consumes — admin/settings-agents.html (sa.maxAttempts /
-        // sa.lockDuration) will own these values; until that page ports, sensible defaults
-        // (3 attempts, 30 min — the mockup select's strictest option + its selected duration)
-        // hardcoded behind the Setting keys below. Flag for canon: the mockup's fields are
-        // staff-wide; the ADMIN-only tightening (3 vs 5) is invented per the B6 row.
-        var attempts = int.TryParse(await settings.GetAsync("agents", "admin_max_login_attempts"), out var a) ? a : 3;
-        var minutes = int.TryParse(await settings.GetAsync("agents", "admin_lockout_minutes"), out var m) ? m : 30;
-
-        if (await users.GetAccessFailedCountAsync(user) < attempts) return false;
-
-        await users.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddMinutes(minutes));
-        await users.ResetAccessFailedCountAsync(user); // Identity's own lockout does the same
-        return true;
+        var agents = await settings.GetAgentsAsync();
+        return await LoginLockoutPolicy.ApplyAsync(users, user, agents.MaxLoginAttempts, agents.LockoutMinutes);
     }
 
     /// <summary>GET login/2fa: flags the email-code variant so the card's help text stays honest.</summary>
@@ -143,7 +142,7 @@ public abstract class StaffAccountControllerBase(
     {
         var user = await signIn.GetTwoFactorAuthenticationUserAsync();
         if (user is null) return Redirect($"{AreaPrefix}/login"); // no pending password step
-        if (await TwoFactorMethodOfAsync(user) == TwoFactorMethod.Email)
+        if (await EffectiveTwoFactorMethodAsync(user) == TwoFactorMethod.Email)
             ViewData["TwofaEmail"] = true;
         return View("Login2fa", new StaffLogin2faVm { ReturnUrl = returnUrl });
     }
@@ -155,7 +154,7 @@ public abstract class StaffAccountControllerBase(
         var user = await signIn.GetTwoFactorAuthenticationUserAsync();
         if (user is null) return Redirect($"{AreaPrefix}/login");
 
-        var method = await TwoFactorMethodOfAsync(user);
+        var method = await EffectiveTwoFactorMethodAsync(user);
         if (method == TwoFactorMethod.Email)
             ViewData["TwofaEmail"] = true; // keep the email help text on error re-renders
 
@@ -171,9 +170,9 @@ public abstract class StaffAccountControllerBase(
         if (!result.Succeeded)
         {
             // Wrong codes count as failed attempts too (Identity increments them);
-            // the admin threshold may turn this one into a lock.
+            // the settings-agents threshold may turn this one into a lock.
             ModelState.AddModelError(string.Empty,
-                await ApplyAdminLockoutAsync(user) ? "lockedOut" : "invalidCode");
+                await ApplyStaffLockoutAsync(user) ? "lockedOut" : "invalidCode");
             return View("Login2fa", vm);
         }
         await StampLastLoginAsync(user);
@@ -188,13 +187,29 @@ public abstract class StaffAccountControllerBase(
 
     // ---- Password reset -----------------------------------------------------
 
+    /// <summary>
+    /// GET pwreset: the whole staff reset flow sits behind settings-agents' sa.pwReset
+    /// switch (agents/allow_pwreset) — while off the request card is not served.
+    /// </summary>
+    protected async Task<IActionResult> PwresetGetCore()
+    {
+        if (!(await settings.GetAgentsAsync()).AllowPwreset)
+            return Redirect($"{AreaPrefix}/login");
+        return View("Pwreset");
+    }
+
     protected async Task<IActionResult> PwresetCore(string email)
     {
-        // Staff reset links now really expire in 30 minutes (StaffResetTokenProvider), matching
-        // the agent + admin pw.help copy and settings-agents' sa.resetWindow default (30).
-        // TODO(S7): settings-agents consumes — sa.resetWindow owns the value once that page
-        // ports (config key StaffAuth:ResetWindowMinutes until then). Portal's 1-hour promise
-        // is a separate customer-side canon item (still on Identity's 1-day default).
+        // settings-agents sa.pwReset (agents/allow_pwreset): resets disabled → no mail,
+        // no enumeration-safe notice either — the card itself is gone.
+        if (!(await settings.GetAgentsAsync()).AllowPwreset)
+            return Redirect($"{AreaPrefix}/login");
+
+        // Staff reset links expire per settings-agents' sa.resetWindow
+        // (agents/reset_window_minutes, default 30 — matches the agent + admin pw.help
+        // copy; StaffResetTokenProvider owns enforcement, the settings-agents save keeps
+        // the options value in sync). Portal's 1-hour promise is a separate
+        // customer-side canon item (still on Identity's 1-day default).
         var user = await users.FindByEmailAsync(email);
         if (user is not null && (!RequireAdmin || await users.IsInRoleAsync(user, "Admin")))
         {

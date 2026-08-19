@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="su.title" xml:space="preserve">
+    <value>Kullanıcı Ayarları</value>
+  </data>
+  <data name="su.subtitle" xml:space="preserve">
+    <value>Kullanıcıların görünümü, kayıt ve giriş kuralları ile kullanıcılara gönderilen şablon içerikleri.</value>
+  </data>
+  <data name="su.secGeneral" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="su.secAuth" xml:space="preserve">
+    <value>Kayıt ve Giriş</value>
+  </data>
+  <data name="su.secTemplates" xml:space="preserve">
+    <value>Şablonlar</value>
+  </data>
+  <data name="su.nameFormat" xml:space="preserve">
+    <value>Ad biçimi</value>
+  </data>
+  <data name="su.nameFormatHelp" xml:space="preserve">
+    <value>Kullanıcı adlarının panellerde ve e-postalarda nasıl görüneceği.</value>
+  </data>
+  <data name="su.nfFull" xml:space="preserve">
+    <value>Ad Soyad</value>
+  </data>
+  <data name="su.nfLastFirst" xml:space="preserve">
+    <value>Soyad, Ad</value>
+  </data>
+  <data name="su.nfShort" xml:space="preserve">
+    <value>Ad S.</value>
+  </data>
+  <data name="su.avatarSource" xml:space="preserve">
+    <value>Avatar kaynağı</value>
+  </data>
+  <data name="su.avatarSourceHelp" xml:space="preserve">
+    <value>Yazışmalarda kullanıcı avatarlarının nereden üretileceği.</value>
+  </data>
+  <data name="su.avInitials" xml:space="preserve">
+    <value>Baş harfler (yerel)</value>
+  </data>
+  <data name="su.avGravatar" xml:space="preserve">
+    <value>Gravatar</value>
+  </data>
+  <data name="su.regRequired" xml:space="preserve">
+    <value>Kayıt zorunlu</value>
+  </data>
+  <data name="su.regRequiredHelp" xml:space="preserve">
+    <value>Talep açmak için hesap gerekir. Kapalıysa misafirler yalnızca e-posta adresiyle talep açabilir.</value>
+  </data>
+  <data name="su.regMode" xml:space="preserve">
+    <value>Kayıt modu</value>
+  </data>
+  <data name="su.regModeHelp" xml:space="preserve">
+    <value>Portalda kimlerin kendi kendine hesap oluşturabileceği.</value>
+  </data>
+  <data name="su.regClosed" xml:space="preserve">
+    <value>Kapalı — hesaplar yalnızca temsilciler tarafından açılır</value>
+  </data>
+  <data name="su.regPublic" xml:space="preserve">
+    <value>Herkese Açık — dileyen kayıt olabilir</value>
+  </data>
+  <data name="su.regPrivate" xml:space="preserve">
+    <value>Özel — yalnızca davet edilenler kayıt olabilir</value>
+  </data>
+  <data name="su.pwPolicy" xml:space="preserve">
+    <value>Parola politikası</value>
+  </data>
+  <data name="su.pwPolicyHelp" xml:space="preserve">
+    <value>Kullanıcı parolalarının karşılaması gereken asgari kurallar.</value>
+  </data>
+  <data name="su.pwNone" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="su.pwBasic" xml:space="preserve">
+    <value>Temel — en az 8 karakter</value>
+  </data>
+  <data name="su.pwStrong" xml:space="preserve">
+    <value>Güçlü — harf, rakam ve simge</value>
+  </data>
+  <data name="su.maxAttempts" xml:space="preserve">
+    <value>En fazla giriş denemesi</value>
+  </data>
+  <data name="su.maxAttemptsHelp" xml:space="preserve">
+    <value>Bu sayıda hatalı denemeden sonra hesap geçici olarak kilitlenir.</value>
+  </data>
+  <data name="su.lockDuration" xml:space="preserve">
+    <value>Kilit süresi</value>
+  </data>
+  <data name="su.lockDurationHelp" xml:space="preserve">
+    <value>Kilitlenen hesabın yeniden denemeden önce bekleyeceği süre.</value>
+  </data>
+  <data name="su.sessionTimeout" xml:space="preserve">
+    <value>Oturum zaman aşımı (dakika)</value>
+  </data>
+  <data name="su.sessionTimeoutHelp" xml:space="preserve">
+    <value>Bu süre boyunca işlem yapılmayan oturum kapatılır. 0 = sınırsız.</value>
+  </data>
+  <data name="su.authTokens" xml:space="preserve">
+    <value>Otomatik giriş bağlantıları</value>
+  </data>
+  <data name="su.authTokensHelp" xml:space="preserve">
+    <value>E-postalardaki bağlantılar, parolasız tek tıkla talebe erişim sağlar.</value>
+  </data>
+  <data name="su.emailVerify" xml:space="preserve">
+    <value>E-posta doğrulama</value>
+  </data>
+  <data name="su.emailVerifyHelp" xml:space="preserve">
+    <value>Yeni hesaplar, e-posta adresi doğrulanana kadar askıda kalır.</value>
+  </data>
+  <data name="su.min15" xml:space="preserve">
+    <value>15 dakika</value>
+  </data>
+  <data name="su.min30" xml:space="preserve">
+    <value>30 dakika</value>
+  </data>
+  <data name="su.hour1" xml:space="preserve">
+    <value>1 saat</value>
+  </data>
+  <data name="su.tplHelp" xml:space="preserve">
+    <value>Kullanıcılara gönderilen sistem içeriklerini iki dilde düzenleyin.</value>
+  </data>
+  <data name="su.tplGuest" xml:space="preserve">
+    <value>Misafir Erişim Bağlantısı</value>
+  </data>
+  <data name="su.tplGuestHelp" xml:space="preserve">
+    <value>Kayıtsız kullanıcıya talebine erişim bağlantısı gönderen e-posta.</value>
+  </data>
+  <data name="su.tplLogin" xml:space="preserve">
+    <value>Giriş Sayfası</value>
+  </data>
+  <data name="su.tplLoginHelp" xml:space="preserve">
+    <value>Kullanıcı giriş sayfasında gösterilen karşılama metni.</value>
+  </data>
+  <data name="su.tplPwreset" xml:space="preserve">
+    <value>Parola Sıfırlama</value>
+  </data>
+  <data name="su.tplPwresetHelp" xml:space="preserve">
+    <value>Parola sıfırlama bağlantısını içeren e-posta.</value>
+  </data>
+  <data name="su.tplVerifyPage" xml:space="preserve">
+    <value>E-posta Doğrulama Sayfası</value>
+  </data>
+  <data name="su.tplVerifyPageHelp" xml:space="preserve">
+    <value>Doğrulama bağlantısına tıklanınca gösterilen sayfa içeriği.</value>
+  </data>
+  <data name="su.tplConfirmEmail" xml:space="preserve">
+    <value>Hesap Onay E-postası</value>
+  </data>
+  <data name="su.tplConfirmEmailHelp" xml:space="preserve">
+    <value>Kayıt sonrası hesabı doğrulamak için gönderilen e-posta.</value>
+  </data>
+  <data name="su.tplConfirmedPage" xml:space="preserve">
+    <value>Hesap Onaylandı Sayfası</value>
+  </data>
+  <data name="su.tplConfirmedPageHelp" xml:space="preserve">
+    <value>Hesap doğrulandıktan sonra gösterilen sayfa içeriği.</value>
+  </data>
+  <data name="su.dlgTitle" xml:space="preserve">
+    <value>Şablonu düzenle</value>
+  </data>
+  <data name="su.dlgName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="su.dlgContent" xml:space="preserve">
+    <value>İçerik</value>
+  </data>
+  <data name="su.dlgContentHelp" xml:space="preserve">
+    <value>%{{user.name}}, %{{link}} gibi değişkenler gönderim sırasında doldurulur.</value>
+  </data>
+  <data name="su.toastSaved" xml:space="preserve">
+    <value>Ayarlar kaydedildi.</value>
+  </data>
+  <data name="su.toastTpl" xml:space="preserve">
+    <value>Şablon kaydedildi.</value>
+  </data>
+  <data name="su.errValues" xml:space="preserve">
+    <value>Geçersiz değerler — hiçbir ayar kaydedilmedi.</value>
+  </data>
+</root>

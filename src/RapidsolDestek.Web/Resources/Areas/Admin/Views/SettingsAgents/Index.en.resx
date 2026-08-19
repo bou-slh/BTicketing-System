@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sa.title" xml:space="preserve">
+    <value>Agent Settings</value>
+  </data>
+  <data name="sa.subtitle" xml:space="preserve">
+    <value>How agents appear, authentication rules, and the template content sent to agents.</value>
+  </data>
+  <data name="sa.secGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="sa.secAuth" xml:space="preserve">
+    <value>Authentication</value>
+  </data>
+  <data name="sa.secTemplates" xml:space="preserve">
+    <value>Templates</value>
+  </data>
+  <data name="sa.nameFormat" xml:space="preserve">
+    <value>Name format</value>
+  </data>
+  <data name="sa.nameFormatHelp" xml:space="preserve">
+    <value>How agent names appear to users and in lists.</value>
+  </data>
+  <data name="sa.nfFull" xml:space="preserve">
+    <value>First Last</value>
+  </data>
+  <data name="sa.nfLastFirst" xml:space="preserve">
+    <value>Last, First</value>
+  </data>
+  <data name="sa.nfShort" xml:space="preserve">
+    <value>First L.</value>
+  </data>
+  <data name="sa.nfUsername" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="sa.masking" xml:space="preserve">
+    <value>Identity masking</value>
+  </data>
+  <data name="sa.maskingHelp" xml:space="preserve">
+    <value>Users do not see the agent's real name; the department or an alias is shown instead.</value>
+  </data>
+  <data name="sa.avatarSource" xml:space="preserve">
+    <value>Avatar source</value>
+  </data>
+  <data name="sa.avatarSourceHelp" xml:space="preserve">
+    <value>Where agent avatars on threads are generated from.</value>
+  </data>
+  <data name="sa.avInitials" xml:space="preserve">
+    <value>Initials (local)</value>
+  </data>
+  <data name="sa.avGravatar" xml:space="preserve">
+    <value>Gravatar</value>
+  </data>
+  <data name="sa.blockCollab" xml:space="preserve">
+    <value>Block agent participants</value>
+  </data>
+  <data name="sa.blockCollabHelp" xml:space="preserve">
+    <value>Agent email addresses cannot be added to tickets as participants; avoids internal-mail loops.</value>
+  </data>
+  <data name="sa.pwPolicy" xml:space="preserve">
+    <value>Password policy</value>
+  </data>
+  <data name="sa.pwPolicyHelp" xml:space="preserve">
+    <value>Minimum rules agent passwords must satisfy.</value>
+  </data>
+  <data name="sa.pwNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="sa.pwBasic" xml:space="preserve">
+    <value>Basic — at least 8 characters</value>
+  </data>
+  <data name="sa.pwStrong" xml:space="preserve">
+    <value>Strong — letters, digits and symbols</value>
+  </data>
+  <data name="sa.pwReset" xml:space="preserve">
+    <value>Allow password resets</value>
+  </data>
+  <data name="sa.pwResetHelp" xml:space="preserve">
+    <value>Agents can reset via email using the 'forgot my password' link.</value>
+  </data>
+  <data name="sa.resetWindow" xml:space="preserve">
+    <value>Reset window (minutes)</value>
+  </data>
+  <data name="sa.resetWindowHelp" xml:space="preserve">
+    <value>How long the reset link stays valid.</value>
+  </data>
+  <data name="sa.twofa" xml:space="preserve">
+    <value>Require 2FA</value>
+  </data>
+  <data name="sa.twofaHelp" xml:space="preserve">
+    <value>All agents must use a second verification step (email code) at sign-in.</value>
+  </data>
+  <data name="sa.maxAttempts" xml:space="preserve">
+    <value>Maximum login attempts</value>
+  </data>
+  <data name="sa.maxAttemptsHelp" xml:space="preserve">
+    <value>After this many failed attempts the account is locked temporarily.</value>
+  </data>
+  <data name="sa.lockDuration" xml:space="preserve">
+    <value>Lockout duration</value>
+  </data>
+  <data name="sa.lockDurationHelp" xml:space="preserve">
+    <value>How long a locked account waits before retrying.</value>
+  </data>
+  <data name="sa.sessionTimeout" xml:space="preserve">
+    <value>Session timeout (minutes)</value>
+  </data>
+  <data name="sa.sessionTimeoutHelp" xml:space="preserve">
+    <value>Idle sessions are signed out after this long. 0 = unlimited.</value>
+  </data>
+  <data name="sa.ipBinding" xml:space="preserve">
+    <value>Bind session to IP</value>
+  </data>
+  <data name="sa.ipBindingHelp" xml:space="preserve">
+    <value>A session only works from the IP it was opened on; neutralizes stolen cookies.</value>
+  </data>
+  <data name="sa.min15" xml:space="preserve">
+    <value>15 minutes</value>
+  </data>
+  <data name="sa.min30" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="sa.hour1" xml:space="preserve">
+    <value>1 hour</value>
+  </data>
+  <data name="sa.tplHelp" xml:space="preserve">
+    <value>Edit the system content sent to agents, in both languages.</value>
+  </data>
+  <data name="sa.tplWelcome" xml:space="preserve">
+    <value>Welcome Email</value>
+  </data>
+  <data name="sa.tplWelcomeHelp" xml:space="preserve">
+    <value>Sent when a new agent account is created.</value>
+  </data>
+  <data name="sa.tplBanner" xml:space="preserve">
+    <value>Sign-in Banner</value>
+  </data>
+  <data name="sa.tplBannerHelp" xml:space="preserve">
+    <value>The announcement text shown on the agent sign-in page.</value>
+  </data>
+  <data name="sa.tplPwreset" xml:space="preserve">
+    <value>Password Reset</value>
+  </data>
+  <data name="sa.tplPwresetHelp" xml:space="preserve">
+    <value>The email containing the password reset link.</value>
+  </data>
+  <data name="sa.tpl2fa" xml:space="preserve">
+    <value>2FA Email</value>
+  </data>
+  <data name="sa.tpl2faHelp" xml:space="preserve">
+    <value>The email containing the sign-in verification code.</value>
+  </data>
+  <data name="sa.dlgTitle" xml:space="preserve">
+    <value>Edit template</value>
+  </data>
+  <data name="sa.dlgName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="sa.dlgContent" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="sa.dlgContentHelp" xml:space="preserve">
+    <value>Variables such as %{{staff.name}} and %{{link}} are filled in at send time.</value>
+  </data>
+  <data name="sa.toastSaved" xml:space="preserve">
+    <value>Settings saved.</value>
+  </data>
+  <data name="sa.toastTpl" xml:space="preserve">
+    <value>Template saved.</value>
+  </data>
+  <data name="sa.errValues" xml:space="preserve">
+    <value>Invalid values — nothing was saved.</value>
+  </data>
+</root>

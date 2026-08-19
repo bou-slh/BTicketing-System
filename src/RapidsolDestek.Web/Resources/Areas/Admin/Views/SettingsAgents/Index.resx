@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sa.title" xml:space="preserve">
+    <value>Temsilci Ayarları</value>
+  </data>
+  <data name="sa.subtitle" xml:space="preserve">
+    <value>Temsilcilerin görünümü, kimlik doğrulama kuralları ve temsilcilere gönderilen şablon içerikleri.</value>
+  </data>
+  <data name="sa.secGeneral" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="sa.secAuth" xml:space="preserve">
+    <value>Kimlik Doğrulama</value>
+  </data>
+  <data name="sa.secTemplates" xml:space="preserve">
+    <value>Şablonlar</value>
+  </data>
+  <data name="sa.nameFormat" xml:space="preserve">
+    <value>Ad biçimi</value>
+  </data>
+  <data name="sa.nameFormatHelp" xml:space="preserve">
+    <value>Temsilci adlarının kullanıcılara ve listelerde nasıl görüneceği.</value>
+  </data>
+  <data name="sa.nfFull" xml:space="preserve">
+    <value>Ad Soyad</value>
+  </data>
+  <data name="sa.nfLastFirst" xml:space="preserve">
+    <value>Soyad, Ad</value>
+  </data>
+  <data name="sa.nfShort" xml:space="preserve">
+    <value>Ad S.</value>
+  </data>
+  <data name="sa.nfUsername" xml:space="preserve">
+    <value>Kullanıcı adı</value>
+  </data>
+  <data name="sa.masking" xml:space="preserve">
+    <value>Kimlik maskeleme</value>
+  </data>
+  <data name="sa.maskingHelp" xml:space="preserve">
+    <value>Kullanıcı temsilci adını görmez; bunun yerine departman veya takma ad gösterilir.</value>
+  </data>
+  <data name="sa.avatarSource" xml:space="preserve">
+    <value>Avatar kaynağı</value>
+  </data>
+  <data name="sa.avatarSourceHelp" xml:space="preserve">
+    <value>Yazışmalarda temsilci avatarlarının nereden üretileceği.</value>
+  </data>
+  <data name="sa.avInitials" xml:space="preserve">
+    <value>Baş harfler (yerel)</value>
+  </data>
+  <data name="sa.avGravatar" xml:space="preserve">
+    <value>Gravatar</value>
+  </data>
+  <data name="sa.blockCollab" xml:space="preserve">
+    <value>Temsilci katılımcıları engelle</value>
+  </data>
+  <data name="sa.blockCollabHelp" xml:space="preserve">
+    <value>Temsilci e-posta adresleri taleplere katılımcı olarak eklenemez; iç yazışma karışıklığını önler.</value>
+  </data>
+  <data name="sa.pwPolicy" xml:space="preserve">
+    <value>Parola politikası</value>
+  </data>
+  <data name="sa.pwPolicyHelp" xml:space="preserve">
+    <value>Temsilci parolalarının karşılaması gereken asgari kurallar.</value>
+  </data>
+  <data name="sa.pwNone" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="sa.pwBasic" xml:space="preserve">
+    <value>Temel — en az 8 karakter</value>
+  </data>
+  <data name="sa.pwStrong" xml:space="preserve">
+    <value>Güçlü — harf, rakam ve simge</value>
+  </data>
+  <data name="sa.pwReset" xml:space="preserve">
+    <value>Parola sıfırlamaya izin ver</value>
+  </data>
+  <data name="sa.pwResetHelp" xml:space="preserve">
+    <value>Temsilciler 'parolamı unuttum' bağlantısıyla e-posta üzerinden sıfırlama yapabilir.</value>
+  </data>
+  <data name="sa.resetWindow" xml:space="preserve">
+    <value>Sıfırlama penceresi (dakika)</value>
+  </data>
+  <data name="sa.resetWindowHelp" xml:space="preserve">
+    <value>Sıfırlama bağlantısının geçerli kalacağı süre.</value>
+  </data>
+  <data name="sa.twofa" xml:space="preserve">
+    <value>2FA zorunlu</value>
+  </data>
+  <data name="sa.twofaHelp" xml:space="preserve">
+    <value>Tüm temsilciler girişte ikinci doğrulama adımı (e-posta kodu) kullanmak zorundadır.</value>
+  </data>
+  <data name="sa.maxAttempts" xml:space="preserve">
+    <value>En fazla giriş denemesi</value>
+  </data>
+  <data name="sa.maxAttemptsHelp" xml:space="preserve">
+    <value>Bu sayıda hatalı denemeden sonra hesap geçici olarak kilitlenir.</value>
+  </data>
+  <data name="sa.lockDuration" xml:space="preserve">
+    <value>Kilit süresi</value>
+  </data>
+  <data name="sa.lockDurationHelp" xml:space="preserve">
+    <value>Kilitlenen hesabın yeniden denemeden önce bekleyeceği süre.</value>
+  </data>
+  <data name="sa.sessionTimeout" xml:space="preserve">
+    <value>Oturum zaman aşımı (dakika)</value>
+  </data>
+  <data name="sa.sessionTimeoutHelp" xml:space="preserve">
+    <value>Bu süre boyunca işlem yapılmayan oturum kapatılır. 0 = sınırsız.</value>
+  </data>
+  <data name="sa.ipBinding" xml:space="preserve">
+    <value>Oturumu IP'ye bağla</value>
+  </data>
+  <data name="sa.ipBindingHelp" xml:space="preserve">
+    <value>Oturum yalnızca açıldığı IP adresinden kullanılabilir; çalıntı çerezleri etkisiz kılar.</value>
+  </data>
+  <data name="sa.min15" xml:space="preserve">
+    <value>15 dakika</value>
+  </data>
+  <data name="sa.min30" xml:space="preserve">
+    <value>30 dakika</value>
+  </data>
+  <data name="sa.hour1" xml:space="preserve">
+    <value>1 saat</value>
+  </data>
+  <data name="sa.tplHelp" xml:space="preserve">
+    <value>Temsilcilere gönderilen sistem içeriklerini iki dilde düzenleyin.</value>
+  </data>
+  <data name="sa.tplWelcome" xml:space="preserve">
+    <value>Hoş Geldin E-postası</value>
+  </data>
+  <data name="sa.tplWelcomeHelp" xml:space="preserve">
+    <value>Yeni temsilci hesabı açıldığında gönderilir.</value>
+  </data>
+  <data name="sa.tplBanner" xml:space="preserve">
+    <value>Giriş Bandosu</value>
+  </data>
+  <data name="sa.tplBannerHelp" xml:space="preserve">
+    <value>Temsilci giriş sayfasında gösterilen duyuru metni.</value>
+  </data>
+  <data name="sa.tplPwreset" xml:space="preserve">
+    <value>Parola Sıfırlama</value>
+  </data>
+  <data name="sa.tplPwresetHelp" xml:space="preserve">
+    <value>Parola sıfırlama bağlantısını içeren e-posta.</value>
+  </data>
+  <data name="sa.tpl2fa" xml:space="preserve">
+    <value>2FA E-postası</value>
+  </data>
+  <data name="sa.tpl2faHelp" xml:space="preserve">
+    <value>Giriş doğrulama kodunu içeren e-posta.</value>
+  </data>
+  <data name="sa.dlgTitle" xml:space="preserve">
+    <value>Şablonu düzenle</value>
+  </data>
+  <data name="sa.dlgName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="sa.dlgContent" xml:space="preserve">
+    <value>İçerik</value>
+  </data>
+  <data name="sa.dlgContentHelp" xml:space="preserve">
+    <value>%{{staff.name}}, %{{link}} gibi değişkenler gönderim sırasında doldurulur.</value>
+  </data>
+  <data name="sa.toastSaved" xml:space="preserve">
+    <value>Ayarlar kaydedildi.</value>
+  </data>
+  <data name="sa.toastTpl" xml:space="preserve">
+    <value>Şablon kaydedildi.</value>
+  </data>
+  <data name="sa.errValues" xml:space="preserve">
+    <value>Geçersiz değerler — hiçbir ayar kaydedilmedi.</value>
+  </data>
+</root>

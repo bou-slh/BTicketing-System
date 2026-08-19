@@ -57,6 +57,63 @@ public sealed record TicketBehaviorSettings(
 public sealed record TaskSettings(string NumberMode, string DefaultPriorityKey);
 
 /// <summary>
+/// Typed view over the "agents" namespace (admin/settings-agents.html, S7).
+/// LIVE: AllowPwreset gates the staff pwreset flow (agent + admin routes),
+/// ResetWindowMinutes owns the staff reset-link lifespan (StaffResetTokenProvider),
+/// RequireTwofa forces an email-code second step for staff without an enrollment
+/// (StaffSignInManager.IsTwoFactorEnabledAsync), and MaxLoginAttempts/LockoutMinutes
+/// are the STAFF-WIDE lockout policy consumed at both sign-ins
+/// (StaffAccountControllerBase.ApplyStaffLockoutAsync — the mockup's fields are
+/// staff-wide; the earlier admin-only 3/30 tightening is resolved to the mockup's
+/// 5/30 canon). Persisted-only (annotated at the controller map): NameFormat /
+/// IdentityMasking / AvatarSource (TODO(S8): staff name/avatar rendering helpers),
+/// BlockCollab (TODO: collaborator add flow — open decision #9 territory),
+/// PasswordPolicy (TODO(S8): policy engine over the Identity statics; "basic" is
+/// today's static floor), SessionTimeoutMinutes + IpBinding (TODO: B6 session work —
+/// staff sessions are not tracked yet).
+/// </summary>
+public sealed record AgentSettings(
+    string NameFormat,          // "full" | "lastfirst" | "short" | "username"
+    bool IdentityMasking,
+    string AvatarSource,        // "initials" | "gravatar"
+    bool BlockCollab,
+    string PasswordPolicy,      // "none" | "basic" | "strong"
+    bool AllowPwreset,
+    int ResetWindowMinutes,
+    bool RequireTwofa,
+    int MaxLoginAttempts,
+    int LockoutMinutes,
+    int SessionTimeoutMinutes,
+    bool IpBinding);
+
+/// <summary>
+/// Typed view over the "users" namespace (admin/settings-users.html, S7).
+/// LIVE: RegistrationMode gates the portal /register route and the login page's
+/// register link ("public" self-serve; "invite"/"closed" refuse — invite tokens are
+/// TODO(S8)); MaxLoginAttempts/LockoutMinutes are the customer lockout policy
+/// (portal AccountController.Login). Persisted-only (annotated at the controller
+/// map): NameFormat/AvatarSource (TODO(S8): user name/avatar rendering helpers),
+/// RegistrationRequired (TODO(S8): guest ticket-open flow does not exist yet),
+/// PasswordPolicy (TODO(S8): policy engine over Identity statics),
+/// SessionTimeoutMinutes (TODO: B6 session work), AuthTokens (TODO(S8): auto-login
+/// links ride the outgoing-mail pipeline), EmailVerify (TODO(S8): register
+/// verification flow over the seeded user.confirm.email / user.verify.page /
+/// user.confirmed.page templates — honest default false: registration signs in
+/// immediately today, the mockup's checked switch is sample state).
+/// </summary>
+public sealed record UserSettings(
+    string NameFormat,          // "full" | "lastfirst" | "short"
+    string AvatarSource,        // "initials" | "gravatar"
+    bool RegistrationRequired,
+    string RegistrationMode,    // "closed" | "public" | "invite"
+    string PasswordPolicy,      // "none" | "basic" | "strong"
+    int MaxLoginAttempts,
+    int LockoutMinutes,
+    int SessionTimeoutMinutes,
+    bool AuthTokens,
+    bool EmailVerify);
+
+/// <summary>
 /// Typed view over the "kb" namespace (admin/settings-kb, S7). EnableKb is the LIVE
 /// master switch: portal /kb + /kb-article (+vote/attachment) return 404 and the
 /// portal nav/home KB surfaces disappear while off. EnableCanned is LIVE: the agent
@@ -82,6 +139,8 @@ public interface ISettingsService
     Task<TicketBehaviorSettings> GetTicketBehaviorAsync(CancellationToken ct = default);
     Task<TaskSettings> GetTasksAsync(CancellationToken ct = default);
     Task<KbSettings> GetKbAsync(CancellationToken ct = default);
+    Task<AgentSettings> GetAgentsAsync(CancellationToken ct = default);
+    Task<UserSettings> GetUsersAsync(CancellationToken ct = default);
 }
 
 /// <summary>
@@ -179,6 +238,50 @@ public sealed class SettingsService(AppDbContext db) : ISettingsService
             EnableCanned: Bool(s, "enable_canned", true));
     }
 
+    public async Task<AgentSettings> GetAgentsAsync(CancellationToken ct = default)
+    {
+        var s = await LoadAsync("agents", ct);
+        return new AgentSettings(
+            NameFormat: Choice(s, "name_format", ["full", "lastfirst", "short", "username"], "full"),
+            IdentityMasking: Bool(s, "identity_masking", false),
+            AvatarSource: Choice(s, "avatar_source", ["initials", "gravatar"], "initials"),
+            BlockCollab: Bool(s, "block_collab", true),
+            // Honest default "basic": the Identity statics enforce exactly the basic
+            // floor today; the mockup's selected "strong" is sample state (flagged).
+            PasswordPolicy: Choice(s, "password_policy", ["none", "basic", "strong"], "basic"),
+            AllowPwreset: Bool(s, "allow_pwreset", true),
+            ResetWindowMinutes: Int(s, "reset_window_minutes", 30),
+            // Honest default false: agents have signed in without a second step since
+            // S6; the mockup's checked switch is sample state (flagged).
+            RequireTwofa: Bool(s, "require_twofa", false),
+            // Staff-wide lockout canon = the mockup's selected 5 attempts / 30 minutes
+            // (resolves the S7 admin-auth 3-vs-5 and 15-vs-30 flags toward the mockup).
+            MaxLoginAttempts: Int(s, "max_login_attempts", 5),
+            LockoutMinutes: Int(s, "lockout_minutes", 30),
+            SessionTimeoutMinutes: Int(s, "session_timeout_minutes", 120),
+            IpBinding: Bool(s, "ip_binding", false));
+    }
+
+    public async Task<UserSettings> GetUsersAsync(CancellationToken ct = default)
+    {
+        var s = await LoadAsync("users", ct);
+        return new UserSettings(
+            NameFormat: Choice(s, "name_format", ["full", "lastfirst", "short"], "full"),
+            AvatarSource: Choice(s, "avatar_source", ["initials", "gravatar"], "initials"),
+            RegistrationRequired: Bool(s, "registration_required", true),
+            // "public" is both the mockup's selected option and today's behavior
+            // (the S5 register flow has always been open).
+            RegistrationMode: Choice(s, "registration_mode", ["closed", "public", "invite"], "public"),
+            PasswordPolicy: Choice(s, "password_policy", ["none", "basic", "strong"], "basic"),
+            MaxLoginAttempts: Int(s, "max_login_attempts", 5),
+            LockoutMinutes: Int(s, "lockout_minutes", 30),
+            SessionTimeoutMinutes: Int(s, "session_timeout_minutes", 0),
+            AuthTokens: Bool(s, "auth_tokens", true),
+            // Honest default false: registration signs the account in immediately
+            // today — the mockup's checked switch is sample state (flagged).
+            EmailVerify: Bool(s, "email_verify", false));
+    }
+
     public Task<NumberingSettings> GetTicketNumberingAsync(CancellationToken ct = default) =>
         GetNumberingAsync("tickets", "R######", ct);
 
@@ -204,6 +307,9 @@ public sealed class SettingsService(AppDbContext db) : ISettingsService
         _memo[ns] = section;
         return section;
     }
+
+    private static string Choice(Dictionary<string, string> s, string key, string[] allowed, string fallback) =>
+        s.TryGetValue(key, out var v) && allowed.Contains(v) ? v : fallback;
 
     private static bool Bool(Dictionary<string, string> s, string key, bool fallback) =>
         s.TryGetValue(key, out var v) && bool.TryParse(v, out var b) ? b : fallback;

@@ -26,8 +26,9 @@ public sealed class StaffResetTokenProviderOptions : DataProtectionTokenProvider
     public StaffResetTokenProviderOptions()
     {
         Name = StaffResetTokenProvider.ProviderName;
-        // TODO(S7): settings-agents consumes — sa.resetWindow (default 30) will own this
-        // value; Program.cs overrides from config StaffAuth:ResetWindowMinutes until then.
+        // settings-agents owns the value (sa.resetWindow → agents/reset_window_minutes):
+        // Program.cs reads it into TokenLifespan lazily, and the SettingsAgents save
+        // keeps the options instance in sync in-process. 30 = the shared canon default.
         TokenLifespan = TimeSpan.FromMinutes(30);
     }
 }

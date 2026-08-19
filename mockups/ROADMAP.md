@@ -641,14 +641,14 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       notice but no mail; new-password step = new admin PwresetNew card (agent-conventions twin — the
       mockup lacks this card entirely, S0 to add). Reset-validity canon: this mockup's pw.help + the
       settings-agents sa.resetWindow default agree on 30 min → staff reset links now really expire in
-      30 min (StaffResetTokenProvider; config StaffAuth:ResetWindowMinutes; TODO(S7) settings-agents
-      consumes sa.resetWindow when it ports; portal's 1-hour pw.help promise still sits on Identity's
-      1-day default — open customer-side canon item). Admin-only lockout: 3 failed attempts (password or
-      2FA code) at the ADMIN sign-in lock the account 30 min (Setting keys agents/admin_max_login_attempts
-      + admin_lockout_minutes, defaults hardcoded, TODO(S7) settings-agents consumes; INVENTED: the
-      mockup's sa.maxAttempts/sa.lockDuration are staff-wide with defaults 5/30 — tightening admins to 3
-      needs canon sign-off); staff-wide Identity lockout stays 5 attempts/15 min (15 ≠ the mockup's
-      selected 30 — align when settings-agents ports); shared auth.lockedOut copy de-hardcoded from
+      30 min (StaffResetTokenProvider; config StaffAuth:ResetWindowMinutes; RESOLVED when settings-agents
+      ported: agents/reset_window_minutes owns the value, config is the fallback only; portal's 1-hour
+      pw.help promise still sits on Identity's 1-day default — open customer-side canon item). Lockout —
+      RESOLVED toward the mockup when settings-agents ported: the interim INVENTED admin-only tightening
+      (3 attempts, keys agents/admin_max_login_attempts + admin_lockout_minutes) is dropped; the policy is
+      STAFF-WIDE per the mockup's fields — agents/max_login_attempts + lockout_minutes, defaults 5/30
+      (sa.maxAttempts/sa.lockDuration selected states), applied at BOTH sign-ins (password or 2FA code);
+      staff-wide duration moved 15 → 30 with it; shared auth.lockedOut copy de-hardcoded from
       "15 dakika" to duration-neutral. +5 tests (AdminAuthTests) — suite 167.)*
 - [x] **dashboard.html** — date range re-renders data-driven charts with tooltips; export; 3 stats tables sortable (B10)
       *(S7; DashboardEngine (TicketListEngine-style split for testability): range resolution (start + 30d/
@@ -786,8 +786,69 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       Tests: SettingsTasksKbTests (4 of 7) — round-trip + rerender, invalid-format guard, the LIVE
       numbering flip end-to-end through the admin form (random draw leaves the counter alone, sequential
       advances it), dlg-seq HTTP add/remove — suite 199.)*
-- [ ] **settings-agents.html** — template Edit dialogs per-row prefilled (B2); lockout policy consumed by B6
-- [ ] **settings-users.html** — 6 template dialogs prefilled (B2); registration mode consumed by portal
+- [x] **settings-agents.html** — template Edit dialogs per-row prefilled (B2); lockout policy consumed by B6
+      *(S7; /admin/settings-agents (SettingsAgentsController) over ISettingsService ns "agents" (NEW
+      AgentSettings typed section) — PRG toasts, B3 validation writes NOTHING on failure (sa.errValues).
+      LIVE (4): max_login_attempts + lockout_minutes = the STAFF-WIDE lockout policy consumed by B6 at BOTH
+      staff sign-ins (StaffAccountControllerBase.ApplyStaffLockoutAsync, password AND wrong-2FA-code paths;
+      Identity's static MaxFailedAccessAttempts parked at 100 so the Setting owns the threshold across the
+      3/5/10 options). LOCKOUT CANON RESOLVED toward this mockup now the page owns the values: the fields
+      are staff-wide with defaults 5 attempts / 30 min (sa.maxAttempts/sa.lockDuration selected states) —
+      the S7 admin-auth INVENTED admin-only 3/30 tightening is dropped (admin pwreset row updated) and
+      the old agents/admin_* keys retired unread; staff-wide duration moves 15 → the mockup's 30.
+      reset_window_minutes owns the staff reset-link lifespan: Program.cs seeds
+      StaffResetTokenProviderOptions.TokenLifespan lazily from the Setting (config
+      StaffAuth:ResetWindowMinutes = fallback only) and the page's save syncs the cached options in-process
+      (single-instance assumption, flagged). allow_pwreset gates the whole staff reset flow — while off,
+      GET/POST /agent/pwreset + /admin/pwreset redirect to their logins (the switch also data-gates the
+      reset-window field client-side — INVENTED B3 gating, settings-kb precedent). require_twofa is real:
+      StaffSignInManager.IsTwoFactorEnabledAsync ORs the policy in, so un-enrolled staff get the promised
+      e-posta kodu step (EffectiveTwoFactorMethodAsync forces the Email provider when no enrollment
+      exists); NOTE: an un-enrolled ADMIN under this policy satisfies AdminOnly via the email code instead
+      of being routed to TOTP enrollment — flag for canon (mandatory-TOTP wording vs the mockup's e-posta
+      kodu promise). Honest-defaults deviations (mockup checked/selected = sample state, need canon
+      sign-off): password_policy ships "basic" (the Identity statics' floor; mockup selects "strong"),
+      require_twofa ships OFF (mockup checked — defaulting on would lock every existing password-only
+      staff login flow into email codes). PERSISTED-ONLY (annotated on AgentSettings): name_format /
+      identity_masking / avatar_source TODO(S8 staff name+avatar rendering helpers), block_collab (TODO:
+      collaborator add flow), password_policy TODO(S8 policy engine over Identity statics),
+      session_timeout_minutes + ip_binding (TODO: B6 session work — staff sessions untracked, the profile
+      row's precedent). B2 dialogs: the mockup's ONE dlg-tpl shared by 4 rows splits into per-row dialogs
+      (canned precedent) server-prefilled via NEW ISystemTemplateService — rows live as EmailTemplate
+      entries (codes staff.welcome/staff.banner/staff.pwreset/staff.2fa) in the two seeded sets, one body
+      per language behind the dialog's Türkçe/English tabs, the single Ad input = shared Subject of both
+      rows; reads fall back to catalog defaults (no writes on GET), saves upsert both sets (audited).
+      Flag for canon: page-content rows (Giriş Bandosu) share the email-template table until a dedicated
+      content mechanism exists; no variable pills (mockup shows none, dlgContentHelp text only). B9
+      scroll-spy = rd.js unchanged. Invented keys (TR/EN twins): sa.toastSaved/toastTpl/errValues.
+      Tests: SettingsAgentsUsersTests (5 of 8) — round-trip + rerender, invalid-values guard, lockout
+      threshold/duration flipped through the page takes effect at the agent login (3 fails → locked ~15
+      min), pwreset gate flip, require_twofa flip end-to-end (email-code step + code accepted, off again =
+      password-only); AdminAuthTests updated to the resolved 5/30 staff-wide canon.)*
+- [x] **settings-users.html** — 6 template dialogs prefilled (B2); registration mode consumed by portal
+      *(S7; /admin/settings-users (SettingsUsersController) over ISettingsService ns "users" (NEW
+      UserSettings typed section) — PRG toasts, B3 validation writes NOTHING on failure (su.errValues).
+      LIVE (3): registration_mode gates the portal register flow HTTP-visibly — "public" self-serves,
+      "closed"/"invite" 404 both GET and POST /register (settings-kb enable_kb 404 precedent) and the
+      login page's "Kayıt olun" foot link disappears (ShowRegister ViewData); "invite" refuses like
+      closed until an invitation mechanism exists — TODO(S8) invite tokens, flagged. max_login_attempts +
+      lockout_minutes = the customer lockout policy consumed at the portal login (LoginLockoutPolicy —
+      the staff twin's shared helper; customer lockout moves from Identity's 5/15 to the mockup's 5/30
+      defaults). PERSISTED-ONLY (annotated on UserSettings): name_format / avatar_source TODO(S8 user
+      name+avatar rendering), registration_required (TODO(S8): guest ticket-open flow does not exist —
+      the switch's "misafirler yalnızca e-posta ile talep açabilir" promise needs it), password_policy
+      TODO(S8 policy engine), session_timeout_minutes (TODO: B6 session work), auth_tokens (TODO(S8):
+      auto-login links ride the outgoing-mail pipeline), email_verify (TODO(S8): register verification
+      flow over the seeded user.confirm.email/user.verify.page/user.confirmed.page templates; honest
+      default OFF — registration signs in immediately today, mockup checked = sample state, flagged).
+      B2 dialogs: 6 per-row dialogs prefilled via ISystemTemplateService (codes user.access.link/
+      user.banner/user.pwreset/user.verify.page/user.confirm.email/user.confirmed.page — the
+      settings-agents treatment; same canon flag on page-content rows sharing the template table).
+      B9 scroll-spy = rd.js unchanged; no in-page B3 master↔dependent pair exists in this mockup (the
+      switches are independent). Invented keys (TR/EN twins): su.toastSaved/toastTpl/errValues.
+      Tests: SettingsAgentsUsersTests (3 of 8) — round-trip, registration-mode flip gates /register +
+      login link end-to-end (closed AND invite, flip back reopens), template dialog save round-trips
+      shared subject + both bodies into both sets, unknown code refused — suite 207.)*
 - [x] **settings-kb.html** — master switch gates portal KB visibility (B3)
       *(S7; /admin/settings-kb (SettingsKbController) over ISettingsService ns "kb" (NEW KbSettings typed
       section) — PRG toast. LIVE (2): enable_kb master switch — portal /kb + /kb-article (+vote/attachment)

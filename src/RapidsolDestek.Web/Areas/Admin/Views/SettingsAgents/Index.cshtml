@@ -1,0 +1,237 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model SettingsAgentsVm
+@{
+    ViewData["Title"] = L["sa.title"];
+
+    // Toast handoff (settings-tickets precedent): PRG keys via TempData.
+    if (TempData["SaToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["SaToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+    var s = Model.Settings;
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["sa.title"]</h1>
+        <p>@L["sa.subtitle"]</p>
+    </div>
+</div>
+
+<div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+        <a href="#sec-general" class="active">@L["sa.secGeneral"]</a>
+        <a href="#sec-auth">@L["sa.secAuth"]</a>
+        <a href="#sec-templates">@L["sa.secTemplates"]</a>
+    </nav>
+
+    <form class="bo-settings-sections" method="post" asp-area="Admin" asp-controller="SettingsAgents" asp-action="Save">
+
+        <section class="rd-surface bo-section" id="sec-general">
+            <div class="rd-surface-head"><span>@L["sa.secGeneral"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="ag-nameformat">@L["sa.nameFormat"]</label>
+                    <select id="ag-nameformat" class="rd-control" name="name_format" style="max-width:340px">
+                        <option value="full" selected="@(s.NameFormat == "full")">@L["sa.nfFull"]</option>
+                        <option value="lastfirst" selected="@(s.NameFormat == "lastfirst")">@L["sa.nfLastFirst"]</option>
+                        <option value="short" selected="@(s.NameFormat == "short")">@L["sa.nfShort"]</option>
+                        <option value="username" selected="@(s.NameFormat == "username")">@L["sa.nfUsername"]</option>
+                    </select>
+                    <div class="rd-help">@L["sa.nameFormatHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="identity_masking" value="true" checked="@s.IdentityMasking">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["sa.masking"]</b>
+                            <small>@L["sa.maskingHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="ag-avatar">@L["sa.avatarSource"]</label>
+                    <select id="ag-avatar" class="rd-control" name="avatar_source" style="max-width:340px">
+                        <option value="initials" selected="@(s.AvatarSource == "initials")">@L["sa.avInitials"]</option>
+                        <option value="gravatar" selected="@(s.AvatarSource == "gravatar")">@L["sa.avGravatar"]</option>
+                    </select>
+                    <div class="rd-help">@L["sa.avatarSourceHelp"]</div>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="block_collab" value="true" checked="@s.BlockCollab">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["sa.blockCollab"]</b>
+                            <small>@L["sa.blockCollabHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-auth">
+            <div class="rd-surface-head"><span>@L["sa.secAuth"]</span></div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="ag-pwpolicy">@L["sa.pwPolicy"]</label>
+                    <select id="ag-pwpolicy" class="rd-control" name="password_policy" style="max-width:340px">
+                        <option value="none" selected="@(s.PasswordPolicy == "none")">@L["sa.pwNone"]</option>
+                        <option value="basic" selected="@(s.PasswordPolicy == "basic")">@L["sa.pwBasic"]</option>
+                        <option value="strong" selected="@(s.PasswordPolicy == "strong")">@L["sa.pwStrong"]</option>
+                    </select>
+                    <div class="rd-help">@L["sa.pwPolicyHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        @* B3: the reset switch gates its dependent reset-window field
+                           (rd.js data-gates — INVENTED gating, the mockup's fields are
+                           independent; settings-kb precedent) AND — server-side — the
+                           whole staff pwreset flow (agent + admin routes). *@
+                        <input type="checkbox" name="allow_pwreset" value="true" checked="@s.AllowPwreset" data-gates="#ag-resetwindow-field">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["sa.pwReset"]</b>
+                            <small>@L["sa.pwResetHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field" id="ag-resetwindow-field">
+                    <label class="rd-label" for="ag-resetwindow">@L["sa.resetWindow"]</label>
+                    <input id="ag-resetwindow" class="rd-control" type="number" name="reset_window_minutes" min="5" value="@s.ResetWindowMinutes" style="max-width:220px">
+                    <div class="rd-help">@L["sa.resetWindowHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="require_twofa" value="true" checked="@s.RequireTwofa">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["sa.twofa"]</b>
+                            <small>@L["sa.twofaHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+
+                <details class="rd-advanced">
+                    <summary>@SL["common.advanced"]</summary>
+                    <div class="rd-advanced-body">
+                        <div class="rd-grid-2">
+                            <div class="rd-field">
+                                <label class="rd-label" for="ag-maxattempts">@L["sa.maxAttempts"]</label>
+                                <select id="ag-maxattempts" class="rd-control" name="max_login_attempts">
+                                    <option value="3" selected="@(s.MaxLoginAttempts == 3)">3</option>
+                                    <option value="5" selected="@(s.MaxLoginAttempts == 5)">5</option>
+                                    <option value="10" selected="@(s.MaxLoginAttempts == 10)">10</option>
+                                </select>
+                                <div class="rd-help">@L["sa.maxAttemptsHelp"]</div>
+                            </div>
+                            <div class="rd-field">
+                                <label class="rd-label" for="ag-lockduration">@L["sa.lockDuration"]</label>
+                                <select id="ag-lockduration" class="rd-control" name="lockout_minutes">
+                                    <option value="15" selected="@(s.LockoutMinutes == 15)">@L["sa.min15"]</option>
+                                    <option value="30" selected="@(s.LockoutMinutes == 30)">@L["sa.min30"]</option>
+                                    <option value="60" selected="@(s.LockoutMinutes == 60)">@L["sa.hour1"]</option>
+                                </select>
+                                <div class="rd-help">@L["sa.lockDurationHelp"]</div>
+                            </div>
+                        </div>
+                        <div class="rd-field">
+                            <label class="rd-label" for="ag-session">@L["sa.sessionTimeout"]</label>
+                            <input id="ag-session" class="rd-control" type="number" name="session_timeout_minutes" min="0" value="@s.SessionTimeoutMinutes" style="max-width:220px">
+                            <div class="rd-help">@L["sa.sessionTimeoutHelp"]</div>
+                        </div>
+                        <div class="rd-field mb-0">
+                            <label class="rd-switch">
+                                <input type="checkbox" name="ip_binding" value="true" checked="@s.IpBinding">
+                                <span class="track"></span>
+                                <span class="rd-switch-copy">
+                                    <b>@L["sa.ipBinding"]</b>
+                                    <small>@L["sa.ipBindingHelp"]</small>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-templates">
+            <div class="rd-surface-head"><span>@L["sa.secTemplates"]</span></div>
+            <div class="rd-surface-body">
+                <p class="rd-help" style="margin:0 0 12px">@L["sa.tplHelp"]</p>
+                @* B2: the mockup's ONE dlg-tpl shared by all rows splits into per-row
+                   dialogs prefilled server-side (canned precedent). *@
+                <div class="bo-def">
+                    @foreach (var (tpl, i) in Model.Templates.Select((t, i) => (t, i)))
+                    {
+                        var rowKey = SettingsAgentsController.TemplateCodes[i] switch
+                        {
+                            "staff.welcome" => "sa.tplWelcome",
+                            "staff.banner" => "sa.tplBanner",
+                            "staff.pwreset" => "sa.tplPwreset",
+                            _ => "sa.tpl2fa",
+                        };
+                        <div class="row">
+                            <span>@L[rowKey]</span>
+                            <span style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+                                <span class="rd-help" style="margin:0">@L[$"{rowKey}Help"]</span>
+                                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-tpl-@i">@SL["common.edit"]</button>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+            <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </form>
+</div>
+
+@foreach (var (tpl, i) in Model.Templates.Select((t, i) => (t, i)))
+{
+    <dialog class="rd-dialog" id="dlg-tpl-@i">
+        <div class="rd-dialog-head">
+            <span>@L["sa.dlgTitle"]</span>
+            <button class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+        </div>
+        @* Submit carries no data-dialog-close (the audited B2 close-swallows-save bug). *@
+        <form method="post" asp-area="Admin" asp-controller="SettingsAgents" asp-action="Template">
+            <input type="hidden" name="code" value="@tpl.Code">
+            <div class="rd-dialog-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="tpl-name-@i">@L["sa.dlgName"]</label>
+                    <input id="tpl-name-@i" class="rd-control" name="name" value="@tpl.Name" required>
+                </div>
+                <div class="rd-field mb-0">
+                    <span class="rd-label">@L["sa.dlgContent"]</span>
+                    <div class="rd-tabs" data-tabs data-tabs-scope="tpl-@i" style="margin-bottom:12px">
+                        <button type="button" class="active" data-tab="tpl-@i-tr">Türkçe</button>
+                        <button type="button" data-tab="tpl-@i-en">English</button>
+                    </div>
+                    @* No `required` on the textareas: the inactive language panel is
+                       display:none and a hidden required control blocks native form
+                       submission. The server refuses empty bodies instead. *@
+                    <div class="rd-tab-panel active" id="tpl-@i-tr" data-tab-group="tpl-@i">
+                        <textarea class="rd-control" name="body_tr">@tpl.BodyTr</textarea>
+                    </div>
+                    <div class="rd-tab-panel" id="tpl-@i-en" data-tab-group="tpl-@i">
+                        <textarea class="rd-control" name="body_en">@tpl.BodyEn</textarea>
+                    </div>
+                    <div class="rd-help">@L["sa.dlgContentHelp"]</div>
+                </div>
+            </div>
+            <div class="rd-dialog-foot">
+                <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+            </div>
+        </form>
+    </dialog>
+}

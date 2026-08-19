@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="su.title" xml:space="preserve">
+    <value>User Settings</value>
+  </data>
+  <data name="su.subtitle" xml:space="preserve">
+    <value>How users appear, registration and sign-in rules, and the template content sent to users.</value>
+  </data>
+  <data name="su.secGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="su.secAuth" xml:space="preserve">
+    <value>Registration and Sign-in</value>
+  </data>
+  <data name="su.secTemplates" xml:space="preserve">
+    <value>Templates</value>
+  </data>
+  <data name="su.nameFormat" xml:space="preserve">
+    <value>Name format</value>
+  </data>
+  <data name="su.nameFormatHelp" xml:space="preserve">
+    <value>How user names appear in panels and emails.</value>
+  </data>
+  <data name="su.nfFull" xml:space="preserve">
+    <value>First Last</value>
+  </data>
+  <data name="su.nfLastFirst" xml:space="preserve">
+    <value>Last, First</value>
+  </data>
+  <data name="su.nfShort" xml:space="preserve">
+    <value>First L.</value>
+  </data>
+  <data name="su.avatarSource" xml:space="preserve">
+    <value>Avatar source</value>
+  </data>
+  <data name="su.avatarSourceHelp" xml:space="preserve">
+    <value>Where user avatars on threads are generated from.</value>
+  </data>
+  <data name="su.avInitials" xml:space="preserve">
+    <value>Initials (local)</value>
+  </data>
+  <data name="su.avGravatar" xml:space="preserve">
+    <value>Gravatar</value>
+  </data>
+  <data name="su.regRequired" xml:space="preserve">
+    <value>Registration required</value>
+  </data>
+  <data name="su.regRequiredHelp" xml:space="preserve">
+    <value>An account is required to open a ticket. When off, guests can open tickets with just an email address.</value>
+  </data>
+  <data name="su.regMode" xml:space="preserve">
+    <value>Registration mode</value>
+  </data>
+  <data name="su.regModeHelp" xml:space="preserve">
+    <value>Who may self-register on the portal.</value>
+  </data>
+  <data name="su.regClosed" xml:space="preserve">
+    <value>Closed — accounts are created by agents only</value>
+  </data>
+  <data name="su.regPublic" xml:space="preserve">
+    <value>Public — anyone can register</value>
+  </data>
+  <data name="su.regPrivate" xml:space="preserve">
+    <value>Private — invited users only</value>
+  </data>
+  <data name="su.pwPolicy" xml:space="preserve">
+    <value>Password policy</value>
+  </data>
+  <data name="su.pwPolicyHelp" xml:space="preserve">
+    <value>Minimum rules user passwords must satisfy.</value>
+  </data>
+  <data name="su.pwNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="su.pwBasic" xml:space="preserve">
+    <value>Basic — at least 8 characters</value>
+  </data>
+  <data name="su.pwStrong" xml:space="preserve">
+    <value>Strong — letters, digits and symbols</value>
+  </data>
+  <data name="su.maxAttempts" xml:space="preserve">
+    <value>Maximum login attempts</value>
+  </data>
+  <data name="su.maxAttemptsHelp" xml:space="preserve">
+    <value>After this many failed attempts the account is locked temporarily.</value>
+  </data>
+  <data name="su.lockDuration" xml:space="preserve">
+    <value>Lockout duration</value>
+  </data>
+  <data name="su.lockDurationHelp" xml:space="preserve">
+    <value>How long a locked account waits before retrying.</value>
+  </data>
+  <data name="su.sessionTimeout" xml:space="preserve">
+    <value>Session timeout (minutes)</value>
+  </data>
+  <data name="su.sessionTimeoutHelp" xml:space="preserve">
+    <value>Idle sessions are signed out after this long. 0 = unlimited.</value>
+  </data>
+  <data name="su.authTokens" xml:space="preserve">
+    <value>Auto-login links</value>
+  </data>
+  <data name="su.authTokensHelp" xml:space="preserve">
+    <value>Links in emails give one-click, passwordless access to the ticket.</value>
+  </data>
+  <data name="su.emailVerify" xml:space="preserve">
+    <value>Email verification</value>
+  </data>
+  <data name="su.emailVerifyHelp" xml:space="preserve">
+    <value>New accounts stay pending until the email address is verified.</value>
+  </data>
+  <data name="su.min15" xml:space="preserve">
+    <value>15 minutes</value>
+  </data>
+  <data name="su.min30" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="su.hour1" xml:space="preserve">
+    <value>1 hour</value>
+  </data>
+  <data name="su.tplHelp" xml:space="preserve">
+    <value>Edit the system content sent to users, in both languages.</value>
+  </data>
+  <data name="su.tplGuest" xml:space="preserve">
+    <value>Guest Access Link</value>
+  </data>
+  <data name="su.tplGuestHelp" xml:space="preserve">
+    <value>Email sending an unregistered user a link to their ticket.</value>
+  </data>
+  <data name="su.tplLogin" xml:space="preserve">
+    <value>Sign-in Page</value>
+  </data>
+  <data name="su.tplLoginHelp" xml:space="preserve">
+    <value>The welcome text shown on the user sign-in page.</value>
+  </data>
+  <data name="su.tplPwreset" xml:space="preserve">
+    <value>Password Reset</value>
+  </data>
+  <data name="su.tplPwresetHelp" xml:space="preserve">
+    <value>The email containing the password reset link.</value>
+  </data>
+  <data name="su.tplVerifyPage" xml:space="preserve">
+    <value>Email Verification Page</value>
+  </data>
+  <data name="su.tplVerifyPageHelp" xml:space="preserve">
+    <value>The page shown after clicking the verification link.</value>
+  </data>
+  <data name="su.tplConfirmEmail" xml:space="preserve">
+    <value>Account Confirmation Email</value>
+  </data>
+  <data name="su.tplConfirmEmailHelp" xml:space="preserve">
+    <value>The email sent after registration to confirm the account.</value>
+  </data>
+  <data name="su.tplConfirmedPage" xml:space="preserve">
+    <value>Account Confirmed Page</value>
+  </data>
+  <data name="su.tplConfirmedPageHelp" xml:space="preserve">
+    <value>The page shown once the account is confirmed.</value>
+  </data>
+  <data name="su.dlgTitle" xml:space="preserve">
+    <value>Edit template</value>
+  </data>
+  <data name="su.dlgName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="su.dlgContent" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="su.dlgContentHelp" xml:space="preserve">
+    <value>Variables such as %{{user.name}} and %{{link}} are filled in at send time.</value>
+  </data>
+  <data name="su.toastSaved" xml:space="preserve">
+    <value>Settings saved.</value>
+  </data>
+  <data name="su.toastTpl" xml:space="preserve">
+    <value>Template saved.</value>
+  </data>
+  <data name="su.errValues" xml:space="preserve">
+    <value>Invalid values — nothing was saved.</value>
+  </data>
+</root>

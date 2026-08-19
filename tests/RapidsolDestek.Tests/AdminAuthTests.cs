@@ -12,8 +12,10 @@ namespace RapidsolDestek.Tests;
 
 /// <summary>
 /// S7 admin/login.html + admin/pwreset.html (B6): mandatory 2FA enrollment for admins
-/// without a second factor, the admin-only lockout policy (3 attempts / 30 min vs the
-/// staff-wide 5 / 15), and the admin reset-link flow end to end.
+/// without a second factor, the STAFF-WIDE settings-owned lockout policy (default
+/// 5 attempts / 30 min — the settings-agents mockup canon; the earlier admin-only
+/// 3/30 tightening was resolved toward the mockup when that page ported), and the
+/// admin reset-link flow end to end.
 /// </summary>
 [Collection("Postgres")]
 public class AdminAuthTests(PostgresFixture fixture)
@@ -125,7 +127,7 @@ public class AdminAuthTests(PostgresFixture fixture)
         Assert.Equal("/admin/login/2fa", PathOf(toTwofa));
 
         var html = await toTwofa.Content.ReadAsStringAsync();
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < 5; i++) // settings-agents default threshold (sa.maxAttempts = 5)
         {
             var token = Regex.Match(html, "__RequestVerificationToken\"[^>]*value=\"([^\"]+)\"").Groups[1].Value;
             var response = await PostFormAsync(client, "/admin/login/2fa", token, ("Code", "000000"));
@@ -140,30 +142,30 @@ public class AdminAuthTests(PostgresFixture fixture)
         Assert.True(locked.LockoutEnd > DateTimeOffset.UtcNow.AddMinutes(25));
     }
 
-    // ---- Admin-only lockout policy (admin/pwreset.html row) ------------------------
+    // ---- Staff-wide settings-owned lockout policy (settings-agents row) -------------
 
     [Fact]
-    public async Task AdminLogin_LocksAfterThreeFailures_ThenUnlocksAfterExpiry()
+    public async Task AdminLogin_LocksAtTheSettingsThreshold_ThenUnlocksAfterExpiry()
     {
         await CreateStaffUserAsync("s7admin2", admin: true);
         var client = fixture.Factory.CreateClient();
 
         string lastHtml = "";
-        for (var i = 0; i < 3; i++)
+        for (var i = 0; i < 5; i++) // settings-agents default threshold (sa.maxAttempts = 5)
         {
             var (token, _) = await GetWithTokenAsync(client, "/admin/login");
             var response = await PostFormAsync(client, "/admin/login", token,
                 ("User", "s7admin2"), ("Password", "yanlış-parola"));
             lastHtml = await response.Content.ReadAsStringAsync();
         }
-        Assert.Contains("kilitlendi", lastHtml); // third failure trips the admin threshold
+        Assert.Contains("kilitlendi", lastHtml); // fifth failure trips the settings threshold
 
         using (var scope = fixture.CreateScope())
         {
             var users = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<StaffUser>>();
             var locked = (await users.FindByNameAsync("s7admin2"))!;
             Assert.NotNull(locked.LockoutEnd);
-            // Admin policy duration: 30 minutes (not the staff-wide 15).
+            // settings-agents default duration: 30 minutes (sa.lockDuration).
             Assert.InRange(locked.LockoutEnd!.Value, DateTimeOffset.UtcNow.AddMinutes(25), DateTimeOffset.UtcNow.AddMinutes(35));
             Assert.Equal(0, locked.AccessFailedCount); // count reset on lock, Identity-style
         }
@@ -189,7 +191,7 @@ public class AdminAuthTests(PostgresFixture fixture)
     }
 
     [Fact]
-    public async Task AgentLogin_ThreeFailures_DoNotLock_StaffWideThresholdIsFive()
+    public async Task AgentLogin_ThreeFailures_DoNotLock_BelowTheSettingsThreshold()
     {
         await CreateStaffUserAsync("s7agent1", admin: false);
         var client = fixture.Factory.CreateClient();
@@ -204,7 +206,7 @@ public class AdminAuthTests(PostgresFixture fixture)
         using var scope = fixture.CreateScope();
         var users = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Identity.UserManager<StaffUser>>();
         var user = (await users.FindByNameAsync("s7agent1"))!;
-        Assert.Null(user.LockoutEnd);          // agent threshold is the Identity default (5)
+        Assert.Null(user.LockoutEnd);          // staff-wide settings default is 5 (sa.maxAttempts)
         Assert.Equal(3, user.AccessFailedCount);
     }
 

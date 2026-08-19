@@ -50,7 +50,7 @@ public class AccountController(
 
     [HttpGet("/agent/pwreset")]
     [AllowAnonymous]
-    public IActionResult Pwreset() => View();
+    public Task<IActionResult> Pwreset() => PwresetGetCore();
 
     [HttpPost("/agent/pwreset")]
     [AllowAnonymous]

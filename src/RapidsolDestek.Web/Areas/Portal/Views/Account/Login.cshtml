@@ -29,8 +29,12 @@
     </form>
 
     <div class="rc-auth-foot">
-        <span>@L["lg.noAccount"]</span>
-        <a href="/register">@L["lg.register"]</a>
+        @* settings-users su.regMode: self-registration links only while public. *@
+        @if (ViewData["ShowRegister"] is not false)
+        {
+            <span>@L["lg.noAccount"]</span>
+            <a href="/register">@L["lg.register"]</a>
+        }
         <div style="margin-top:10px;font-size:12px">
             <a href="/check-status">@L["lg.guestStatus"]</a> ·
             <a href="/agent/login">@L["lg.agent"]</a>

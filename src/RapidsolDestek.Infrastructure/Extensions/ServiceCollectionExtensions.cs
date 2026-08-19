@@ -46,6 +46,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEffortProposalService, EffortProposalService>();
         services.AddScoped<IQueueEngine, QueueEngine>();
         services.AddScoped<ICannedResponseService, CannedResponseService>();
+        services.AddScoped<ISystemTemplateService, SystemTemplateService>();
 
         return services;
     }

@@ -8,6 +8,7 @@ using RapidsolDestek.Domain.Entities;
 using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Infrastructure.Auditing;
 using RapidsolDestek.Infrastructure.Identity;
+using RapidsolDestek.Infrastructure.Services;
 using RapidsolDestek.Web.Controllers;
 using RapidsolDestek.Web.Identity;
 using RapidsolDestek.Web.Services;
@@ -20,7 +21,8 @@ public class AccountController(
     CustomerSignInManager signIn,
     AppDbContext db,
     IAppEmailSender mail,
-    IWebHostEnvironment env) : Controller
+    IWebHostEnvironment env,
+    ISettingsService settings) : Controller
 {
     // ---- Login -------------------------------------------------------------
     // TODO(S7): optional TOTP 2FA step for portal customers (ROADMAP B6; the
@@ -29,13 +31,20 @@ public class AccountController(
 
     [HttpGet("/login")]
     [AllowAnonymous]
-    public IActionResult Login(string? returnUrl) => View(new LoginVm { ReturnUrl = returnUrl });
+    public async Task<IActionResult> Login(string? returnUrl)
+    {
+        // settings-users su.regMode: the register link only renders while
+        // self-registration is public (the /register route is gated the same way).
+        ViewData["ShowRegister"] = (await settings.GetUsersAsync()).RegistrationMode == "public";
+        return View(new LoginVm { ReturnUrl = returnUrl });
+    }
 
     [HttpPost("/login")]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginVm vm)
     {
+        ViewData["ShowRegister"] = (await settings.GetUsersAsync()).RegistrationMode == "public";
         if (!ModelState.IsValid) return View(vm);
 
         var user = await users.FindByEmailAsync(vm.User) ?? await users.FindByNameAsync(vm.User);
@@ -50,6 +59,14 @@ public class AccountController(
                 return LocalRedirect(Url.IsLocalUrl(vm.ReturnUrl) ? vm.ReturnUrl! : "/tickets");
             }
             if (result.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty, "lockedOut");
+                return View(vm);
+            }
+            // B6 customer lockout policy owned by admin/settings-users
+            // (su.maxAttempts / su.lockDuration).
+            var policy = await settings.GetUsersAsync();
+            if (await LoginLockoutPolicy.ApplyAsync(users, user, policy.MaxLoginAttempts, policy.LockoutMinutes))
             {
                 ModelState.AddModelError(string.Empty, "lockedOut");
                 return View(vm);
@@ -72,13 +89,15 @@ public class AccountController(
 
     [HttpGet("/register")]
     [AllowAnonymous]
-    public IActionResult Register() => View(new RegisterVm());
+    public async Task<IActionResult> Register() =>
+        await RegistrationClosedAsync() ? NotFound() : View(new RegisterVm());
 
     [HttpPost("/register")]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterVm vm)
     {
+        if (await RegistrationClosedAsync()) return NotFound();
         if (!vm.Kvkk) ModelState.AddModelError(nameof(vm.Kvkk), "errKvkk");
         if (!ModelState.IsValid) return View(vm);
 
@@ -109,6 +128,15 @@ public class AccountController(
         await signIn.SignInAsync(user, isPersistent: false);
         return Redirect("/");
     }
+
+    /// <summary>
+    /// settings-users su.regMode (users/registration_mode): "public" self-serves;
+    /// "closed" and "invite" hide the route honestly (404 — the settings-kb enable_kb
+    /// precedent). TODO(S8): "invite" accepts invitation tokens once an invite
+    /// mechanism exists; until then it refuses self-registration like "closed".
+    /// </summary>
+    private async Task<bool> RegistrationClosedAsync() =>
+        (await settings.GetUsersAsync()).RegistrationMode != "public";
 
     /// <summary>
     /// Registration must end with a domain <see cref="User"/> row — every portal page

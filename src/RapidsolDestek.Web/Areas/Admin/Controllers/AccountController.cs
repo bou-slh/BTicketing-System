@@ -51,7 +51,7 @@ public class AccountController(
 
     [HttpGet("/admin/pwreset")]
     [AllowAnonymous]
-    public IActionResult Pwreset() => View();
+    public Task<IActionResult> Pwreset() => PwresetGetCore();
 
     [HttpPost("/admin/pwreset")]
     [AllowAnonymous]

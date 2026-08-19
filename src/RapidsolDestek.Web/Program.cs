@@ -110,8 +110,15 @@ static void ConfigureIdentity(IdentityOptions o)
     o.Password.RequireLowercase = true;
     o.Password.RequireUppercase = false;
     o.Password.RequireNonAlphanumeric = false;
-    o.Lockout.MaxFailedAccessAttempts = 5;
-    o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    // Lockout thresholds/durations are OWNED BY SETTINGS since the S7 settings pages
+    // ported: staff-wide agents/max_login_attempts + lockout_minutes (settings-agents,
+    // StaffAccountControllerBase.ApplyStaffLockoutAsync) and customer-side
+    // users/max_login_attempts + lockout_minutes (settings-users, portal login via
+    // LoginLockoutPolicy). Identity's own static counter is parked above every
+    // configurable option (3/5/10) so the Setting decides when a lock happens;
+    // the static duration below is therefore never the one applied.
+    o.Lockout.MaxFailedAccessAttempts = 100;
+    o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
     o.User.RequireUniqueEmail = true;
 }
 
@@ -120,10 +127,30 @@ builder.Services.AddIdentityCore<CustomerUser>(ConfigureIdentity)
     .AddSignInManager<CustomerSignInManager>()
     .AddDefaultTokenProviders();
 
-// Staff reset links expire per the mockups' pw.help ("30 dakika") instead of the 1-day default.
-// TODO(S7): settings-agents consumes — sa.resetWindow will own this value when that page ports.
-builder.Services.Configure<StaffResetTokenProviderOptions>(o =>
-    o.TokenLifespan = TimeSpan.FromMinutes(builder.Configuration.GetValue("StaffAuth:ResetWindowMinutes", 30)));
+// Staff reset links expire per settings-agents' sa.resetWindow (agents/
+// reset_window_minutes; the admin save keeps the options value in sync in-process).
+// Config StaffAuth:ResetWindowMinutes stays as the fallback when the Setting is
+// absent/unreadable (fresh database, options created before the first save).
+builder.Services.AddOptions<StaffResetTokenProviderOptions>()
+    .Configure<IServiceProvider>((o, sp) =>
+    {
+        var fallback = builder.Configuration.GetValue("StaffAuth:ResetWindowMinutes", 30);
+        int minutes;
+        try
+        {
+            using var scope = sp.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<RapidsolDestek.Infrastructure.AppDbContext>();
+            var stored = db.Settings
+                .Where(s => s.Namespace == "agents" && s.Key == "reset_window_minutes")
+                .Select(s => s.Value).FirstOrDefault();
+            minutes = int.TryParse(stored, out var m) && m > 0 ? m : fallback;
+        }
+        catch
+        {
+            minutes = fallback; // options may materialize before the database exists
+        }
+        o.TokenLifespan = TimeSpan.FromMinutes(minutes);
+    });
 
 builder.Services.AddIdentityCore<StaffUser>(o =>
     {
