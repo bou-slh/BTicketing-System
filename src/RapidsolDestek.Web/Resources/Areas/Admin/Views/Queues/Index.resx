@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="qb.title" xml:space="preserve">
+    <value>Kuyruk Oluşturucu</value>
+  </data>
+  <data name="qb.subtitle" xml:space="preserve">
+    <value>Temsilci panelinde görünen talep listelerini tanımlayın: hangi talepler, hangi sütunlarla, hangi sırayla.</value>
+  </data>
+  <data name="qb.name" xml:space="preserve">
+    <value>Kuyruk adı</value>
+  </data>
+  <data name="qb.nameHelp" xml:space="preserve">
+    <value>Temsilci panelindeki kuyruk listesinde görünen ad.</value>
+  </data>
+  <data name="qb.parent" xml:space="preserve">
+    <value>Üst kuyruk</value>
+  </data>
+  <data name="qb.parentHelp" xml:space="preserve">
+    <value>Alt kuyruklar üst kuyruğun kriterlerini devralır ve daraltır.</value>
+  </data>
+  <data name="qb.parentTop" xml:space="preserve">
+    <value>— Üst düzey —</value>
+  </data>
+  <data name="qb.tabCriteria" xml:space="preserve">
+    <value>Kriterler</value>
+  </data>
+  <data name="qb.tabColumns" xml:space="preserve">
+    <value>Sütunlar</value>
+  </data>
+  <data name="qb.tabSort" xml:space="preserve">
+    <value>Sıralama</value>
+  </data>
+  <data name="qb.tabConditions" xml:space="preserve">
+    <value>Koşullar</value>
+  </data>
+  <data name="qb.tabExport" xml:space="preserve">
+    <value>Dışa Aktarma</value>
+  </data>
+  <data name="qb.tabPreview" xml:space="preserve">
+    <value>Önizleme</value>
+  </data>
+  <data name="qb.criteriaHelp" xml:space="preserve">
+    <value>Tüm kriterleri karşılayan talepler bu kuyrukta listelenir.</value>
+  </data>
+  <data name="qb.addCriterion" xml:space="preserve">
+    <value>Kriter ekle</value>
+  </data>
+  <data name="qb.quickFilter" xml:space="preserve">
+    <value>Hızlı filtre alanı</value>
+  </data>
+  <data name="qb.quickFilterHelp" xml:space="preserve">
+    <value>Temsilciler kuyruğu bu alana göre tek tıkla daraltabilir.</value>
+  </data>
+  <data name="qb.qfNone" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="qb.fStatus" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="qb.fPriority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="qb.fDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="qb.fSlaRemaining" xml:space="preserve">
+    <value>SLA kalan süre</value>
+  </data>
+  <data name="qb.fOrgTag" xml:space="preserve">
+    <value>Şirket etiketi</value>
+  </data>
+  <data name="qb.fAssignee" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="qb.opIs" xml:space="preserve">
+    <value>şudur</value>
+  </data>
+  <data name="qb.opIsNot" xml:space="preserve">
+    <value>değildir</value>
+  </data>
+  <data name="qb.opLt" xml:space="preserve">
+    <value>küçüktür</value>
+  </data>
+  <data name="qb.opGt" xml:space="preserve">
+    <value>büyüktür</value>
+  </data>
+  <data name="qb.opContains" xml:space="preserve">
+    <value>içerir</value>
+  </data>
+  <data name="qb.colHeading" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="qb.colWidth" xml:space="preserve">
+    <value>Genişlik</value>
+  </data>
+  <data name="qb.columnsHelp" xml:space="preserve">
+    <value>Sütunları ⋮⋮ tutamacıyla sürükleyerek sıralayın. Başlık, listede görünen etikettir.</value>
+  </data>
+  <data name="qb.addColumn" xml:space="preserve">
+    <value>Sütun ekle</value>
+  </data>
+  <data name="qb.inheritSort" xml:space="preserve">
+    <value>Sıralamayı üst kuyruktan devral</value>
+  </data>
+  <data name="qb.inheritSortHelp" xml:space="preserve">
+    <value>Kapalıysa aşağıdaki sıralama kuralları kullanılır.</value>
+  </data>
+  <data name="qb.sortHelp" xml:space="preserve">
+    <value>Talepler ilk kurala göre, eşitlikte sonraki kurala göre sıralanır.</value>
+  </data>
+  <data name="qb.dirAsc" xml:space="preserve">
+    <value>Artan</value>
+  </data>
+  <data name="qb.dirDesc" xml:space="preserve">
+    <value>Azalan</value>
+  </data>
+  <data name="qb.addSort" xml:space="preserve">
+    <value>Sıralama ekle</value>
+  </data>
+  <data name="qb.conditionsHelp" xml:space="preserve">
+    <value>Koşullar satırın görünümünü değiştirir; hangi taleplerin listeleneceğini etkilemez.</value>
+  </data>
+  <data name="qb.then" xml:space="preserve">
+    <value>→</value>
+  </data>
+  <data name="qb.actHighlightRed" xml:space="preserve">
+    <value>Satırı kırmızı vurgula</value>
+  </data>
+  <data name="qb.actHighlightAmber" xml:space="preserve">
+    <value>Satırı sarı vurgula</value>
+  </data>
+  <data name="qb.actBold" xml:space="preserve">
+    <value>Satırı kalın göster</value>
+  </data>
+  <data name="qb.addCondition" xml:space="preserve">
+    <value>Koşul ekle</value>
+  </data>
+  <data name="qb.exportHelp" xml:space="preserve">
+    <value>CSV dışa aktarımına dahil edilecek alanları seçin.</value>
+  </data>
+  <data name="qb.xTicket" xml:space="preserve">
+    <value>Talep No</value>
+  </data>
+  <data name="qb.xSubject" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="qb.xStatus" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="qb.xPriority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="qb.xDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="qb.xUser" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="qb.xOrg" xml:space="preserve">
+    <value>Şirket</value>
+  </data>
+  <data name="qb.xAssignee" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="qb.xCreated" xml:space="preserve">
+    <value>Oluşturulma</value>
+  </data>
+  <data name="qb.xUpdated" xml:space="preserve">
+    <value>Son Güncelleme</value>
+  </data>
+  <data name="qb.xSla" xml:space="preserve">
+    <value>SLA Kalan</value>
+  </data>
+  <data name="qb.previewHelp" xml:space="preserve">
+    <value>Geçerli kriter ve sütunlarla kuyruğun örnek görünümü.</value>
+  </data>
+  <data name="qb.pvTicket" xml:space="preserve">
+    <value>Talep No</value>
+  </data>
+  <data name="qb.pvSubject" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="qb.pvUser" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="qb.pvSla" xml:space="preserve">
+    <value>SLA Kalan</value>
+  </data>
+  <data name="qb.pvAssignee" xml:space="preserve">
+    <value>Atanan</value>
+  </data>
+  <data name="qb.pickLabel" xml:space="preserve">
+    <value>Düzenlenecek kuyruk</value>
+  </data>
+  <data name="qb.new" xml:space="preserve">
+    <value>＋ Yeni Kuyruk</value>
+  </data>
+  <data name="qb.pickColumn" xml:space="preserve">
+    <value>Eklenecek sütun</value>
+  </data>
+  <data name="qb.aMe" xml:space="preserve">
+    <value>Bana atanan</value>
+  </data>
+  <data name="qb.aMyTeams" xml:space="preserve">
+    <value>Takımıma atanan</value>
+  </data>
+  <data name="qb.aNone" xml:space="preserve">
+    <value>Atanmamış</value>
+  </data>
+  <data name="qb.toastSaved" xml:space="preserve">
+    <value>Kuyruk kaydedildi.</value>
+  </data>
+  <data name="qb.toastCreated" xml:space="preserve">
+    <value>Kuyruk oluşturuldu.</value>
+  </data>
+  <data name="qb.toastDeleted" xml:space="preserve">
+    <value>Kuyruk silindi.</value>
+  </data>
+  <data name="qb.errName" xml:space="preserve">
+    <value>Kuyruk adı gerekli (en fazla 120 karakter).</value>
+  </data>
+  <data name="qb.errParent" xml:space="preserve">
+    <value>Geçersiz üst kuyruk — bir kuyruk kendi altına taşınamaz.</value>
+  </data>
+  <data name="qb.errDupCol" xml:space="preserve">
+    <value>Aynı sütun birden fazla kez eklenemez.</value>
+  </data>
+  <data name="qb.errSystem" xml:space="preserve">
+    <value>Sistem kuyrukları silinemez.</value>
+  </data>
+  <data name="qb.errChildren" xml:space="preserve">
+    <value>Alt kuyruğu olan kuyruk silinemez — önce alt kuyrukları taşıyın veya silin.</value>
+  </data>
+  <data name="qb.previewEmpty" xml:space="preserve">
+    <value>Kriterlere uyan talep yok.</value>
+  </data>
+  <data name="qb.previewError" xml:space="preserve">
+    <value>Önizleme yüklenemedi.</value>
+  </data>
+  <data name="qb.slaFmt" xml:space="preserve">
+    <value>{0}s {1}dk</value>
+  </data>
+</root>

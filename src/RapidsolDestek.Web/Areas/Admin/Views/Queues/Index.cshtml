@@ -1,0 +1,505 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model QueueBuilderVm
+@{
+    var q = Model.Queue;
+    var isNew = q is null;
+    ViewData["Title"] = L["qb.title"].Value;
+
+    // PRG toast handoff (validation failure / guard refusal / saved).
+    if (TempData["QueuesToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["QueuesToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // The mockup's six criteria fields and five operators (B4 rule vocabulary —
+    // rows holding a criteria key outside this list render it verbatim,
+    // filters/schedules precedent).
+    (string Value, string Key)[] fields =
+    [
+        ("status", "qb.fStatus"), ("priority", "qb.fPriority"), ("dept", "qb.fDept"),
+        ("slaRemaining", "qb.fSlaRemaining"), ("orgTag", "qb.fOrgTag"), ("assignee", "qb.fAssignee"),
+    ];
+    (string Value, string Key)[] ops =
+    [
+        ("is", "qb.opIs"), ("not", "qb.opIsNot"), ("lt", "qb.opLt"),
+        ("gt", "qb.opGt"), ("contains", "qb.opContains"),
+    ];
+    (string Value, string Key)[] sortFields =
+    [
+        ("slaRemaining", "qb.fSlaRemaining"), ("priority", "qb.fPriority"),
+        ("status", "qb.fStatus"), ("updated", "qb.xUpdated"),
+    ];
+    (string Value, string Key)[] condActions =
+    [
+        ("highlight-red", "qb.actHighlightRed"),
+        ("highlight-amber", "qb.actHighlightAmber"),
+        ("bold", "qb.actBold"),
+    ];
+    // Export catalog path → mockup checkbox key.
+    string ExportKey(string path) => path switch
+    {
+        "number" => "qb.xTicket",
+        "subject" => "qb.xSubject",
+        "status__key" => "qb.xStatus",
+        "priority__key" => "qb.xPriority",
+        "dept__name" => "qb.xDept",
+        "user__name" => "qb.xUser",
+        "user__organization__name" => "qb.xOrg",
+        "staff__full_name" => "qb.xAssignee",
+        "created_at" => "qb.xCreated",
+        "last_update_at" => "qb.xUpdated",
+        "estimated_due_date" => "qb.xSla",
+        _ => path,
+    };
+    string Indent(int depth) => string.Concat(Enumerable.Repeat("   ", depth));
+    var selfUrl = isNew ? "/admin/queues?id=0" : $"/admin/queues?id={q!.Id}";
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["qb.title"]</h1>
+        <p>@L["qb.subtitle"]</p>
+    </div>
+    @* INVENTED head actions (mockup shows a single filled builder with no queue
+       switcher): picker to open a shared queue, new-queue link, delete with the
+       IsSystem/children guards — filter-edit actions precedent, needs canon sign-off. *@
+    <div class="actions">
+        <form method="get" action="/admin/queues" style="display:inline-flex">
+            <label class="rd-label" for="qb-pick" style="align-self:center;margin:0 8px 0 0">@L["qb.pickLabel"]</label>
+            <select id="qb-pick" name="id" class="rd-control" style="max-width:230px" data-autosubmit>
+                @if (isNew)
+                {
+                    <option value="0" selected></option>
+                }
+                @foreach (var p in Model.Picker)
+                {
+                    <option value="@p.Id" selected="@(p.Id == q?.Id)">@Indent(p.Depth)@p.Title</option>
+                }
+            </select>
+        </form>
+        <a class="rd-btn" href="/admin/queues?id=0">@L["qb.new"]</a>
+        <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete"
+                disabled="@(isNew || q!.IsSystem)" title="@(q?.IsSystem == true ? L["qb.errSystem"].Value : null)">@SL["common.delete"]</button>
+    </div>
+</div>
+
+<form method="post" asp-area="Admin" asp-controller="Queues" asp-action="Save"
+      id="qb-form" data-preview-url="/admin/queues/preview">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@q!.Id">
+    }
+
+    <div class="rd-surface" style="margin-bottom:20px">
+        <div class="rd-surface-body">
+            <div class="rd-grid-2">
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="q-name">@L["qb.name"]</label>
+                    <input id="q-name" name="name" class="rd-control" value="@q?.Title" required maxlength="120">
+                    <div class="rd-help">@L["qb.nameHelp"]</div>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="q-parent">@L["qb.parent"]</label>
+                    <select id="q-parent" name="parentId" class="rd-control">
+                        <option value="0" selected="@(Model.ParentId is null)">@L["qb.parentTop"]</option>
+                        @foreach (var p in Model.ParentOptions)
+                        {
+                            <option value="@p.Id" selected="@(p.Id == Model.ParentId)">@Indent(p.Depth)@p.Title</option>
+                        }
+                    </select>
+                    <div class="rd-help">@L["qb.parentHelp"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rd-tabs" data-tabs data-tabs-scope="qb">
+        <button type="button" class="active" data-tab="qb-criteria">@L["qb.tabCriteria"]</button>
+        <button type="button" data-tab="qb-columns">@L["qb.tabColumns"]</button>
+        <button type="button" data-tab="qb-sort">@L["qb.tabSort"]</button>
+        <button type="button" data-tab="qb-conditions">@L["qb.tabConditions"]</button>
+        <button type="button" data-tab="qb-export">@L["qb.tabExport"]</button>
+        <button type="button" data-tab="qb-preview">@L["qb.tabPreview"]</button>
+    </div>
+
+    @* ============ Kriterler (B4) ============
+       Row = the mockup's field/op/value DOM. The value control follows the field
+       (status/priority/dept/assignee = real-row selects, the rest free text) and
+       mirrors into the hidden cfV so the posted cfF/cfO/cfV arrays align —
+       filter-edit action-row precedent. *@
+    @{
+        async Task CritRowAsync(CritRowVm? r)
+        {
+            var field = r?.Field ?? "status";
+            var op = r?.Op ?? "is";
+            var value = r?.Value ?? "";
+            var isVerbatim = fields.All(f => f.Value != field);
+            var textVisible = isVerbatim || field is "slaRemaining" or "orgTag";
+            <div class="bo-rule-row" data-cf-row>
+                <input type="hidden" name="cfV" value="@value">
+                <select class="rd-control" name="cfF" data-cf-field>
+                    @foreach (var f in fields)
+                    {
+                        <option value="@f.Value" selected="@(field == f.Value)">@L[f.Key]</option>
+                    }
+                    @if (isVerbatim)
+                    {
+                        @* Criteria key outside the mockup's vocabulary (seeded
+                           state/isanswered/closed/effort…) — verbatim option so the
+                           canon tree round-trips loss-free. *@
+                        <option value="@field" selected>@field</option>
+                    }
+                </select>
+                <select class="rd-control" name="cfO">
+                    @foreach (var o in ops)
+                    {
+                        <option value="@o.Value" selected="@(op == o.Value)">@L[o.Key]</option>
+                    }
+                </select>
+                <select class="rd-control" data-cf-val="status" hidden="@(field != "status")">
+                    @foreach (var s in Model.Statuses)
+                    {
+                        <option value="@s.Key" selected="@(field == "status" && value == s.Key)">@SL[$"status.{s.Key}"]</option>
+                    }
+                </select>
+                <select class="rd-control" data-cf-val="priority" hidden="@(field != "priority")">
+                    @foreach (var p in Model.Priorities)
+                    {
+                        <option value="@p.Key" selected="@(field == "priority" && value == p.Key)">@SL[$"priority.{p.Key}"]</option>
+                    }
+                </select>
+                <select class="rd-control" data-cf-val="dept" hidden="@(field != "dept")">
+                    @foreach (var d in Model.Departments)
+                    {
+                        <option value="@d.Id" selected="@(field == "dept" && value == d.Id.ToString())">@d.Label</option>
+                    }
+                </select>
+                <select class="rd-control" data-cf-val="assignee" hidden="@(field != "assignee")">
+                    <option value="me" selected="@(field == "assignee" && value == "me")">@L["qb.aMe"]</option>
+                    <option value="my-teams" selected="@(field == "assignee" && value == "my-teams")">@L["qb.aMyTeams"]</option>
+                    <option value="none" selected="@(field == "assignee" && value == "none")">@L["qb.aNone"]</option>
+                    @foreach (var a in Model.Agents)
+                    {
+                        <option value="@a.Id" selected="@(field == "assignee" && value == a.Id.ToString())">@a.Label</option>
+                    }
+                </select>
+                <input class="rd-control" data-cf-val="_text" hidden="@(!textVisible)"
+                       value="@(textVisible ? value : "")">
+                <button type="button" class="remove" aria-label="Remove">✕</button>
+            </div>
+        }
+    }
+    <div class="rd-tab-panel active" id="qb-criteria" data-tab-group="qb">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <p class="rd-help" style="margin:0 0 14px">@L["qb.criteriaHelp"]</p>
+                @foreach (var r in Model.Criteria)
+                {
+                    await CritRowAsync(r);
+                }
+                <button type="button" class="rd-btn rd-btn-sm" style="margin-bottom:18px"
+                        data-rule-add="qb-crit-tpl">@L["qb.addCriterion"]</button>
+
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="q-quickfilter">@L["qb.quickFilter"]</label>
+                    <select id="q-quickfilter" name="quickFilter" class="rd-control" style="max-width:280px">
+                        <option value="" selected="@(Model.QuickFilter is null)">@L["qb.qfNone"]</option>
+                        <option value="status" selected="@(Model.QuickFilter == "status")">@L["qb.fStatus"]</option>
+                        <option value="priority" selected="@(Model.QuickFilter == "priority")">@L["qb.fPriority"]</option>
+                        <option value="dept" selected="@(Model.QuickFilter == "dept")">@L["qb.fDept"]</option>
+                        <option value="assignee" selected="@(Model.QuickFilter == "assignee")">@L["qb.fAssignee"]</option>
+                    </select>
+                    <div class="rd-help">@L["qb.quickFilterHelp"]</div>
+                </div>
+            </div>
+        </div>
+        <template id="qb-crit-tpl">
+            @{ await CritRowAsync(null); }
+        </template>
+    </div>
+
+    @* ============ Sütunlar (B4 + drag-reorder) ============
+       Rows = SavedQueueColumn (hidden colIds = the QueueColumn def, heading
+       override, width; "auto" persists as 0). Row order posts as the array order —
+       the ⋮⋮ handle drags via the NEW rd.js data-drag-rows contract (INVENTED,
+       the mockups promise the handle but ship no JS). *@
+    @{
+        async Task ColRowAsync(ColRowVm? c)
+        {
+            <tr>
+                <td class="rd-muted" style="cursor:grab" data-drag-handle>⋮⋮<input type="hidden" name="colIds" value="@(c?.ColumnId ?? 0)"></td>
+                <td><input class="rd-control" name="colHeads" value="@c?.Heading"></td>
+                <td><input class="rd-control" name="colWidths" value="@(c?.Width ?? "100")"></td>
+                <td><button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" style="color:var(--rd-red)" data-col-remove>✕</button></td>
+            </tr>
+        }
+    }
+    <div class="rd-tab-panel" id="qb-columns" data-tab-group="qb">
+        <div class="rd-surface">
+            <table class="rd-table">
+                <thead>
+                    <tr>
+                        <th style="width:34px"></th>
+                        <th>@L["qb.colHeading"]</th>
+                        <th style="width:120px">@L["qb.colWidth"]</th>
+                        <th style="width:50px"></th>
+                    </tr>
+                </thead>
+                <tbody id="qb-col-rows" data-drag-rows>
+                    @foreach (var c in Model.Columns)
+                    {
+                        await ColRowAsync(c);
+                    }
+                </tbody>
+            </table>
+            <div class="rd-surface-body" style="padding-top:12px">
+                @* INVENTED column picker next to the mockup's bare add button — a
+                   row must name WHICH QueueColumn definition it renders (filter-edit
+                   action-pick precedent, needs canon sign-off). *@
+                <div style="display:flex;gap:10px;align-items:center">
+                    <select class="rd-control" style="max-width:230px" id="qb-col-pick" title="@L["qb.pickColumn"]" aria-label="@L["qb.pickColumn"]">
+                        @foreach (var o in Model.AvailableColumns)
+                        {
+                            <option value="@o.Id">@o.Label</option>
+                        }
+                    </select>
+                    <button type="button" class="rd-btn rd-btn-sm" id="qb-col-add">@L["qb.addColumn"]</button>
+                </div>
+                <div class="rd-help" style="margin-top:10px">@L["qb.columnsHelp"]</div>
+            </div>
+        </div>
+        <template id="qb-col-tpl">
+            <table><tbody>
+                @{ await ColRowAsync(null); }
+            </tbody></table>
+        </template>
+    </div>
+
+    @* ============ Sıralama (B4) ============
+       Rows compose ONE default QueueSortOption ("field"/"-field" JSON list) the
+       agent list's ResolveSort consumes; the inherit switch clears the queue's own
+       rows (gating is inverted vs data-gates — page script below). *@
+    @{
+        async Task SortRowAsync(SortRowVm? s)
+        {
+            var field = s?.Field ?? "slaRemaining";
+            var desc = s?.Desc ?? false;
+            <div class="bo-rule-row">
+                <select class="rd-control" name="sortFields">
+                    @foreach (var f in sortFields)
+                    {
+                        <option value="@f.Value" selected="@(field == f.Value)">@L[f.Key]</option>
+                    }
+                </select>
+                <select class="rd-control" name="sortDirs">
+                    <option value="asc" selected="@(!desc)">@L["qb.dirAsc"]</option>
+                    <option value="desc" selected="@desc">@L["qb.dirDesc"]</option>
+                </select>
+                <button type="button" class="remove" aria-label="Remove">✕</button>
+            </div>
+        }
+    }
+    <div class="rd-tab-panel" id="qb-sort" data-tab-group="qb">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="inheritSort" id="q-inherit-sort" checked="@Model.InheritSort">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["qb.inheritSort"]</b>
+                            <small>@L["qb.inheritSortHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div id="qb-sort-rows">
+                    <p class="rd-help" style="margin:0 0 14px">@L["qb.sortHelp"]</p>
+                    @foreach (var s in Model.Sorts)
+                    {
+                        await SortRowAsync(s);
+                    }
+                    <button type="button" class="rd-btn rd-btn-sm" data-rule-add="qb-sort-tpl">@L["qb.addSort"]</button>
+                </div>
+            </div>
+        </div>
+        <template id="qb-sort-tpl">
+            @{ await SortRowAsync(null); }
+        </template>
+    </div>
+
+    @* ============ Koşullar (B4) ============
+       osTicket queue conditions: row styling only. Persisted as SavedQueue.Conditions
+       JSON for parity — the agent list renderer does not consume it yet (TODO,
+       ROADMAP-flagged). *@
+    @{
+        async Task CondRowAsync(CondRowVm? c)
+        {
+            var field = c?.Field ?? "slaRemaining";
+            var op = c?.Op ?? "lt";
+            var act = c?.Action ?? "highlight-red";
+            <div class="bo-rule-row">
+                <select class="rd-control" name="condFields">
+                    <option value="slaRemaining" selected="@(field == "slaRemaining")">@L["qb.fSlaRemaining"]</option>
+                    <option value="priority" selected="@(field == "priority")">@L["qb.fPriority"]</option>
+                    <option value="status" selected="@(field == "status")">@L["qb.fStatus"]</option>
+                </select>
+                <select class="rd-control" name="condOps">
+                    <option value="lt" selected="@(op == "lt")">@L["qb.opLt"]</option>
+                    <option value="gt" selected="@(op == "gt")">@L["qb.opGt"]</option>
+                    <option value="is" selected="@(op == "is")">@L["qb.opIs"]</option>
+                </select>
+                <input class="rd-control" name="condVals" value="@c?.Value">
+                <span class="rd-muted">@L["qb.then"]</span>
+                <select class="rd-control" name="condActs">
+                    @foreach (var a in condActions)
+                    {
+                        <option value="@a.Value" selected="@(act == a.Value)">@L[a.Key]</option>
+                    }
+                </select>
+                <button type="button" class="remove" aria-label="Remove">✕</button>
+            </div>
+        }
+    }
+    <div class="rd-tab-panel" id="qb-conditions" data-tab-group="qb">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <p class="rd-help" style="margin:0 0 14px">@L["qb.conditionsHelp"]</p>
+                @foreach (var c in Model.Conditions)
+                {
+                    await CondRowAsync(c);
+                }
+                <button type="button" class="rd-btn rd-btn-sm" data-rule-add="qb-cond-tpl">@L["qb.addCondition"]</button>
+            </div>
+        </div>
+        <template id="qb-cond-tpl">
+            @{ await CondRowAsync(null); }
+        </template>
+    </div>
+
+    @* ============ Dışa Aktarma ============
+       Checked set → SavedQueueExportField rows the agent CSV export honors. *@
+    <div class="rd-tab-panel" id="qb-export" data-tab-group="qb">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <p class="rd-help" style="margin:0 0 14px">@L["qb.exportHelp"]</p>
+                <div class="rd-grid-3">
+                    @foreach (var (path, _, _) in QueuesController.ExportCatalog)
+                    {
+                        <label class="rd-check"><input type="checkbox" name="exportFields" value="@path" checked="@Model.ExportChecked.Contains(path)"><span>@L[ExportKey(path)]</span></label>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ============ Önizleme (B4 live preview) ============
+       Server-rendered through the real QueueEngine; re-fetched with the CURRENT
+       unsaved form state whenever the tab opens (page script below). *@
+    <div class="rd-tab-panel" id="qb-preview" data-tab-group="qb">
+        <div class="rd-surface">
+            <div id="qb-preview-body" data-err="@L.GetString("qb.previewError")">
+                <partial name="_Preview" model="Model.Preview" />
+            </div>
+            <div class="rd-surface-body" style="padding-top:12px">
+                <div class="rd-help">@L["qb.previewHelp"]</div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
+        <a class="rd-btn" href="@selfUrl">@SL["common.cancel"]</a>
+        <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+    </div>
+</form>
+
+@if (!isNew)
+{
+    <form id="qb-del" method="post" asp-area="Admin" asp-controller="Queues" asp-action="Delete" hidden>
+        <input type="hidden" name="id" value="@q!.Id">
+    </form>
+}
+
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p>@SL["common.confirmDelete"]</p></div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="qb-del" disabled="@(isNew || q?.IsSystem == true)">@SL["common.delete"]</button>
+    </div>
+</dialog>
+
+@* Page mechanics (filter-edit page-script precedent): criteria rows show the value
+   control matching their field and mirror it into the hidden cfV; column add/remove;
+   the inherit-sort switch gates its rows (inverted vs the shared data-gates —
+   enabled while UNCHECKED); the Preview tab posts the whole form (antiforgery
+   included) and swaps in the returned fragment. *@
+<script>
+(() => {
+  const form = document.getElementById("qb-form");
+  if (!form) return;
+
+  // ---- criteria rows: value control follows the field select ----
+  const VAL = { status: "status", priority: "priority", dept: "dept", assignee: "assignee" };
+  const syncCritRow = (row) => {
+    const field = row.querySelector("[data-cf-field]").value;
+    const kind = VAL[field] || "_text";
+    let active = "";
+    row.querySelectorAll("[data-cf-val]").forEach((c) => {
+      const on = c.getAttribute("data-cf-val") === kind;
+      c.hidden = !on;
+      if (on) active = c.value;
+    });
+    row.querySelector('input[name="cfV"]').value = active;
+  };
+  const syncAll = () => form.querySelectorAll("[data-cf-row]").forEach(syncCritRow);
+  ["change", "input"].forEach((ev) => document.addEventListener(ev, (e) => {
+    const row = e.target.closest && e.target.closest("[data-cf-row]");
+    if (row && form.contains(row)) syncCritRow(row);
+  }));
+  form.addEventListener("reset", () => setTimeout(syncAll, 0));
+  syncAll();
+
+  // ---- columns: add from the picker, remove, drag handled by rd.js ----
+  document.getElementById("qb-col-add")?.addEventListener("click", () => {
+    const pick = document.getElementById("qb-col-pick");
+    if (!pick || !pick.value) return;
+    const row = document.getElementById("qb-col-tpl").content.querySelector("tr").cloneNode(true);
+    row.querySelector('input[name="colIds"]').value = pick.value;
+    row.querySelector('input[name="colHeads"]').value = pick.selectedOptions[0].textContent.trim();
+    document.getElementById("qb-col-rows").append(row);
+  });
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-col-remove]");
+    if (btn) { e.preventDefault(); btn.closest("tr")?.remove(); }
+  });
+
+  // ---- inherit-sort switch gates the rule rows (enabled while unchecked) ----
+  const inherit = document.getElementById("q-inherit-sort");
+  const sortRows = document.getElementById("qb-sort-rows");
+  const syncInherit = () => {
+    if (!inherit || !sortRows) return;
+    sortRows.classList.toggle("rd-gated-off", inherit.checked);
+    sortRows.querySelectorAll("input,select,button").forEach((c) => { c.disabled = inherit.checked; });
+  };
+  inherit?.addEventListener("change", syncInherit);
+  syncInherit();
+
+  // ---- live preview: refresh from the CURRENT unsaved state on tab open ----
+  const previewBody = document.getElementById("qb-preview-body");
+  document.querySelector('[data-tab="qb-preview"]')?.addEventListener("click", async () => {
+    try {
+      const res = await fetch(form.getAttribute("data-preview-url"), {
+        method: "POST", body: new FormData(form),
+      });
+      if (!res.ok) throw new Error("preview failed");
+      previewBody.innerHTML = await res.text();
+    } catch {
+      window.RD?.toast(previewBody.getAttribute("data-err"), "error");
+    }
+  });
+})();
+</script>

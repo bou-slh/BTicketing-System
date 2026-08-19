@@ -541,6 +541,39 @@
     }
   }
 
+  /* ---------- B4 drag-reorder: [data-drag-rows] + [data-drag-handle] ----------
+     The mockups promise ⋮⋮-handle reordering (queues.html columnsHelp) but define
+     no JS contract — INVENTED minimal HTML5 DnD, shared so the S7 form/list
+     builders reuse it: a container opts in via data-drag-rows; pressing a child
+     row's [data-drag-handle] arms the row, dragging over siblings reorders it in
+     place. The DOM order IS the persisted order (rows post as parallel arrays). */
+  let dragRow = null;
+  document.addEventListener("mousedown", (e) => {
+    const handle = e.target.closest("[data-drag-handle]");
+    const row = handle?.closest("tr, .bo-rule-row, li");
+    if (row && row.parentElement?.hasAttribute("data-drag-rows")) row.draggable = true;
+  });
+  document.addEventListener("dragstart", (e) => {
+    const row = e.target.closest?.("[draggable=true]");
+    if (!row || !row.parentElement?.hasAttribute("data-drag-rows")) return;
+    dragRow = row;
+    e.dataTransfer.effectAllowed = "move";
+    try { e.dataTransfer.setData("text/plain", ""); } catch { /* IE-era quirk guard */ }
+  });
+  document.addEventListener("dragover", (e) => {
+    if (!dragRow) return;
+    const over = e.target.closest("[data-drag-rows] > *");
+    if (!over || over === dragRow || over.parentElement !== dragRow.parentElement) return;
+    e.preventDefault();
+    const rect = over.getBoundingClientRect();
+    over.parentElement.insertBefore(
+      dragRow, e.clientY < rect.top + rect.height / 2 ? over : over.nextSibling);
+  });
+  document.addEventListener("drop", (e) => { if (dragRow) e.preventDefault(); });
+  document.addEventListener("dragend", () => {
+    if (dragRow) { dragRow.draggable = false; dragRow = null; }
+  });
+
   /* ---------- Toast ---------- */
 
   function toast(message, variant) {

@@ -321,6 +321,19 @@ public class SavedQueue : TimestampedEntity
     /// <summary>Queue is visible/enabled (osTicket flags bit).</summary>
     public bool IsEnabled { get; set; } = true;
 
+    /// <summary>
+    /// Seeded canon queue (osTicket FLAG_QUEUE built-ins): protected from deletion
+    /// in the admin builder; settings-tickets renders the System/Custom pill from it.
+    /// </summary>
+    public bool IsSystem { get; set; }
+
+    /// <summary>
+    /// JSON row-styling conditions (osTicket queue conditions: highlight/bold rows
+    /// matching a rule). Persisted by the S7 builder for osTicket parity —
+    /// TODO: consume in the agent list renderer.
+    /// </summary>
+    public string? Conditions { get; set; }
+
     public List<SavedQueueColumn> Columns { get; set; } = [];
     public List<SavedQueueSort> Sorts { get; set; } = [];
     public List<SavedQueueExportField> ExportFields { get; set; } = [];

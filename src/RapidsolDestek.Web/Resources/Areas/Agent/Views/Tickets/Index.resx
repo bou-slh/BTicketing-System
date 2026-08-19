@@ -233,4 +233,7 @@
   <data name="tq.notYet" xml:space="preserve">
     <value>Henüz kullanılamıyor</value>
   </data>
+  <data name="tq.slaFmt" xml:space="preserve">
+    <value>{0}s {1}dk</value>
+  </data>
 </root>

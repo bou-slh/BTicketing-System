@@ -1,0 +1,79 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model QueuePreviewVm
+@{
+    // Rendered inside #qb-preview-body — full-page GET and the live-preview POST
+    // share this fragment. Localized strings arrive via the VM (the fragment is
+    // served standalone by /admin/queues/preview); status/priority labels come
+    // from SharedResources.
+    string StatusPill(string key) => $"rd-pill rd-pill-{(key == "new" ? "open" : key)}";
+}
+<table class="rd-table">
+    <thead>
+        <tr>
+            @foreach (var c in Model.Columns)
+            {
+                <th>@c.Heading</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Rows.Count == 0)
+        {
+            <tr><td colspan="@Model.Columns.Count" class="rd-muted">@Model.EmptyText</td></tr>
+        }
+        @foreach (var r in Model.Rows)
+        {
+            <tr>
+                @foreach (var c in Model.Columns)
+                {
+                    switch (c.Key)
+                    {
+                        case "no":
+                            <td>@r.Number</td>
+                            break;
+                        case "updated":
+                            <td>@r.Updated.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                            break;
+                        case "subject":
+                            <td>@r.Subject</td>
+                            break;
+                        case "user":
+                            <td>@r.UserName@(r.OrgName is not null ? $" · {r.OrgName}" : "")</td>
+                            break;
+                        case "org":
+                            <td>@(r.OrgName ?? "—")</td>
+                            break;
+                        case "priority":
+                            <td>@SL[$"priority.{r.PriorityKey}"]</td>
+                            break;
+                        case "status":
+                            <td><span class="@StatusPill(r.StatusKey)">@SL[$"status.{r.StatusKey}"]</span></td>
+                            break;
+                        case "assigned":
+                            <td>@(r.AssigneeName ?? "—")</td>
+                            break;
+                        case "sla":
+                            @* Countdown chip (mockup "0s 45dk"; thresholds INVENTED
+                               from its samples — danger <60 dk, warn <90 dk). *@
+                            if (r.Due is { } due)
+                            {
+                                var left = due - DateTimeOffset.UtcNow;
+                                if (left < TimeSpan.Zero)
+                                {
+                                    left = TimeSpan.Zero;
+                                }
+                                var cls = left.TotalMinutes < 60 ? " danger" : left.TotalMinutes < 90 ? " warn" : "";
+                                <td><span class="lb-sla@(cls)" style="float:none">@string.Format(Model.SlaFmt, (int)left.TotalHours, left.Minutes)</span></td>
+                                break;
+                            }
+                            <td class="rd-muted">—</td>
+                            break;
+                        default:
+                            <td class="rd-muted">—</td>
+                            break;
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>

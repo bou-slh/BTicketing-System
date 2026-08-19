@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="qb.title" xml:space="preserve">
+    <value>Queue Builder</value>
+  </data>
+  <data name="qb.subtitle" xml:space="preserve">
+    <value>Define the ticket lists agents see: which tickets, with which columns, in which order.</value>
+  </data>
+  <data name="qb.name" xml:space="preserve">
+    <value>Queue name</value>
+  </data>
+  <data name="qb.nameHelp" xml:space="preserve">
+    <value>The name shown in the agent panel's queue list.</value>
+  </data>
+  <data name="qb.parent" xml:space="preserve">
+    <value>Parent queue</value>
+  </data>
+  <data name="qb.parentHelp" xml:space="preserve">
+    <value>Sub-queues inherit and narrow the parent queue's criteria.</value>
+  </data>
+  <data name="qb.parentTop" xml:space="preserve">
+    <value>— Top level —</value>
+  </data>
+  <data name="qb.tabCriteria" xml:space="preserve">
+    <value>Criteria</value>
+  </data>
+  <data name="qb.tabColumns" xml:space="preserve">
+    <value>Columns</value>
+  </data>
+  <data name="qb.tabSort" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="qb.tabConditions" xml:space="preserve">
+    <value>Conditions</value>
+  </data>
+  <data name="qb.tabExport" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="qb.tabPreview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="qb.criteriaHelp" xml:space="preserve">
+    <value>Tickets matching all criteria are listed in this queue.</value>
+  </data>
+  <data name="qb.addCriterion" xml:space="preserve">
+    <value>Add criterion</value>
+  </data>
+  <data name="qb.quickFilter" xml:space="preserve">
+    <value>Quick filter field</value>
+  </data>
+  <data name="qb.quickFilterHelp" xml:space="preserve">
+    <value>Agents can narrow the queue by this field with one click.</value>
+  </data>
+  <data name="qb.qfNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="qb.fStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="qb.fPriority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="qb.fDept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="qb.fSlaRemaining" xml:space="preserve">
+    <value>SLA time remaining</value>
+  </data>
+  <data name="qb.fOrgTag" xml:space="preserve">
+    <value>Company tag</value>
+  </data>
+  <data name="qb.fAssignee" xml:space="preserve">
+    <value>Assignee</value>
+  </data>
+  <data name="qb.opIs" xml:space="preserve">
+    <value>is</value>
+  </data>
+  <data name="qb.opIsNot" xml:space="preserve">
+    <value>is not</value>
+  </data>
+  <data name="qb.opLt" xml:space="preserve">
+    <value>less than</value>
+  </data>
+  <data name="qb.opGt" xml:space="preserve">
+    <value>greater than</value>
+  </data>
+  <data name="qb.opContains" xml:space="preserve">
+    <value>contains</value>
+  </data>
+  <data name="qb.colHeading" xml:space="preserve">
+    <value>Heading</value>
+  </data>
+  <data name="qb.colWidth" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="qb.columnsHelp" xml:space="preserve">
+    <value>Drag columns by the ⋮⋮ handle to reorder. The heading is the label shown in the list.</value>
+  </data>
+  <data name="qb.addColumn" xml:space="preserve">
+    <value>Add column</value>
+  </data>
+  <data name="qb.inheritSort" xml:space="preserve">
+    <value>Inherit sorting from parent queue</value>
+  </data>
+  <data name="qb.inheritSortHelp" xml:space="preserve">
+    <value>When off, the sort rules below are used.</value>
+  </data>
+  <data name="qb.sortHelp" xml:space="preserve">
+    <value>Tickets sort by the first rule; ties fall through to the next rule.</value>
+  </data>
+  <data name="qb.dirAsc" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
+  <data name="qb.dirDesc" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="qb.addSort" xml:space="preserve">
+    <value>Add sort rule</value>
+  </data>
+  <data name="qb.conditionsHelp" xml:space="preserve">
+    <value>Conditions change how a row looks; they do not affect which tickets are listed.</value>
+  </data>
+  <data name="qb.then" xml:space="preserve">
+    <value>→</value>
+  </data>
+  <data name="qb.actHighlightRed" xml:space="preserve">
+    <value>Highlight row red</value>
+  </data>
+  <data name="qb.actHighlightAmber" xml:space="preserve">
+    <value>Highlight row amber</value>
+  </data>
+  <data name="qb.actBold" xml:space="preserve">
+    <value>Show row bold</value>
+  </data>
+  <data name="qb.addCondition" xml:space="preserve">
+    <value>Add condition</value>
+  </data>
+  <data name="qb.exportHelp" xml:space="preserve">
+    <value>Choose the fields included in CSV exports.</value>
+  </data>
+  <data name="qb.xTicket" xml:space="preserve">
+    <value>Ticket #</value>
+  </data>
+  <data name="qb.xSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="qb.xStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="qb.xPriority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="qb.xDept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="qb.xUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="qb.xOrg" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="qb.xAssignee" xml:space="preserve">
+    <value>Assignee</value>
+  </data>
+  <data name="qb.xCreated" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="qb.xUpdated" xml:space="preserve">
+    <value>Last Updated</value>
+  </data>
+  <data name="qb.xSla" xml:space="preserve">
+    <value>SLA Remaining</value>
+  </data>
+  <data name="qb.previewHelp" xml:space="preserve">
+    <value>A sample view of the queue with the current criteria and columns.</value>
+  </data>
+  <data name="qb.pvTicket" xml:space="preserve">
+    <value>Ticket #</value>
+  </data>
+  <data name="qb.pvSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="qb.pvUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="qb.pvSla" xml:space="preserve">
+    <value>SLA Remaining</value>
+  </data>
+  <data name="qb.pvAssignee" xml:space="preserve">
+    <value>Assignee</value>
+  </data>
+  <data name="qb.pickLabel" xml:space="preserve">
+    <value>Queue to edit</value>
+  </data>
+  <data name="qb.new" xml:space="preserve">
+    <value>＋ New Queue</value>
+  </data>
+  <data name="qb.pickColumn" xml:space="preserve">
+    <value>Column to add</value>
+  </data>
+  <data name="qb.aMe" xml:space="preserve">
+    <value>Assigned to me</value>
+  </data>
+  <data name="qb.aMyTeams" xml:space="preserve">
+    <value>Assigned to my teams</value>
+  </data>
+  <data name="qb.aNone" xml:space="preserve">
+    <value>Unassigned</value>
+  </data>
+  <data name="qb.toastSaved" xml:space="preserve">
+    <value>Queue saved.</value>
+  </data>
+  <data name="qb.toastCreated" xml:space="preserve">
+    <value>Queue created.</value>
+  </data>
+  <data name="qb.toastDeleted" xml:space="preserve">
+    <value>Queue deleted.</value>
+  </data>
+  <data name="qb.errName" xml:space="preserve">
+    <value>Queue name is required (max 120 characters).</value>
+  </data>
+  <data name="qb.errParent" xml:space="preserve">
+    <value>Invalid parent queue — a queue cannot be moved under itself.</value>
+  </data>
+  <data name="qb.errDupCol" xml:space="preserve">
+    <value>The same column cannot be added twice.</value>
+  </data>
+  <data name="qb.errSystem" xml:space="preserve">
+    <value>System queues cannot be deleted.</value>
+  </data>
+  <data name="qb.errChildren" xml:space="preserve">
+    <value>A queue with sub-queues cannot be deleted — move or delete the sub-queues first.</value>
+  </data>
+  <data name="qb.previewEmpty" xml:space="preserve">
+    <value>No tickets match the criteria.</value>
+  </data>
+  <data name="qb.previewError" xml:space="preserve">
+    <value>Preview could not be loaded.</value>
+  </data>
+  <data name="qb.slaFmt" xml:space="preserve">
+    <value>{0}h {1}m</value>
+  </data>
+</root>

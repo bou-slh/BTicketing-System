@@ -194,7 +194,14 @@ pattern dead in the mockups.
   the claimable columns. Fresh-seed dependent like the rest of the suite. STAGE CLOSED 2026-08-18: all 18 §6.2 pages ported, both gate legs green, visual-differ pass over the final five pages (kb, kb-faq, canned, profile, live) ×TR/EN×light/dark incl. dialogs — one S1 caught+fixed (cn.fBodyHelp unescaped braces, see canned row) — all 5 at parity.)*
 - **S7 — Admin area** (42 pages, §6.3; B1–B4 everywhere, builders, settings actually consumed by the engine).
   *Gate*: every setting round-trips (flip block-work-until-approved → S4 guard flips); builder-created
-  queue/form/list/filter demonstrably affects the agent panel.
+  queue/form/list/filter demonstrably affects the agent panel. *(Leg 1 GREEN since the settings-tickets
+  port (admin flip → S4 guard flips, SettingsTicketsTests). Leg 2 GREEN 2026-08-19 via the queue builder:
+  E2E `QueueBuilderTests` — admin uakin (password + TOTP) builds "E2E Acil Bordro …" through the real
+  /admin/queues UI (criteria rows dept=Bordro + priority=Acil under parent "Açık"; the live Preview tab is
+  asserted to show R716536 and hide R716561 BEFORE saving), then agent saydin finds the queue in the
+  tickets queue tree, opens it and the list shows exactly the matching R716536 — 5 s against a freshly
+  seeded instance. Filters already run in the live create pipeline (filters row); the forms/lists builder
+  legs stay open with their rows.)*
 - **S8 — Email subsystem.** Outbound: Razor template rendering with variables, event→template map (incl.
   effort request/response), MailKit SMTP, Hangfire send queue with retry, per-department from-addresses.
   Inbound: Hangfire IMAP poll, MimeKit parse, reply-token threading, help-topic routing, attachments,
@@ -962,8 +969,48 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       errRegex/errAction/preview/previewResult/previewMailOnly/previewError; open.errFiltered/
       to.errFiltered. Differ notes: Updated cells show live timestamps (seed carries no canon dates);
       param selects list ALL real rows vs the mockup's samples. +10 tests (FiltersAdminTests) — suite 265.)*
-- [ ] **queues.html** — full builder: criteria/columns/sort/conditions rows (B4), drag-reorder columns, export
+- [x] **queues.html** — full builder: criteria/columns/sort/conditions rows (B4), drag-reorder columns, export
       column set, **live preview**, saved queue appears in agent queue tree
+      *(S7; /admin/queues (QueuesController): ?id=N edits a SHARED queue, id=0 = create, no id lands on the
+      first shared root so the page opens filled like the mockup. Pure EDITOR over the existing engine — no
+      parallel model. Criteria rows (B4) ↔ the flat v1 criteria JSON QueueEngine executes: "is" on
+      status/priority/dept/assignee writes the executed keys (dept as a typed id; assignee offers
+      me/my-teams/none + real staff), slaRemaining/orgTag write the SEEDED descriptive spellings
+      sla_remaining_lt(_gt)/org_tag the engine logs-and-ignores by design, other operators suffix the key
+      (org_tag_contains…); JSON keys outside the mockup's six fields (state/isanswered/isoverdue/closed/
+      effort/topic…) render as VERBATIM rows with typed write-back so the seeded canon tree round-trips
+      loss-free (schedules/filters verbatim-option precedent). Columns tab = SavedQueueColumn rows (heading
+      override, width, "auto" persists as 0) — drag-reorder via the NEW shared rd.js
+      data-drag-rows/data-drag-handle HTML5-DnD contract (INVENTED, mockups promise ⋮⋮ but ship no JS; the
+      S7 form/list builders reuse it); adding needs an INVENTED column-picker select beside the mockup's
+      bare button (a row must name a QueueColumn def — filter-edit action-pick precedent). Sort tab composes
+      ONE default QueueSortOption ("field"/"-field" JSON list, reused when an identical option exists;
+      TicketListEngine.SortFromOptionColumns GENERALIZED from string literals to parse any such list — first
+      mappable entry wins, bare priority__urgency = most urgent first); the inherit switch clears the
+      queue's own rows (true parent-sort inheritance TODO — agent falls back to updated-desc). Conditions
+      tab persists osTicket-parity row-styling JSON in NEW SavedQueue.Conditions — NO consumer yet (TODO:
+      agent list renderer, flagged). Export tab → SavedQueueExportField rows (canonical TR headings); the S6
+      agent CSV export now HONORS the active queue's set (explicit cols param still overrides). Live
+      preview (B4): the Preview tab POSTs the CURRENT unsaved form to /admin/queues/preview → real
+      QueueEngine (admin actor) + ApplySort → HTML fragment rendered with the posted column headings
+      (default = the mockup's five pv columns); the GET renders the same fragment server-side. NEW
+      S7_QueueBuilder migration: SavedQueue.IsSystem (the 12 seeded shared queues; delete guard qb.errSystem;
+      the settings-tickets System/Custom pill now reads the real flag) + SavedQueue.Conditions. Delete also
+      refuses queues with children (qb.errChildren); the parent select excludes self+descendants
+      (materialized-path cycle guard; reparenting rewrites subtree paths); personal queues 404 in the
+      builder — admin manages the SHARED tree only (flagged). INVENTED page-head actions (queue picker
+      select + Yeni Kuyruk + Sil w/ confirm dialog — the mockup shows one filled builder with no switcher;
+      filter-edit precedent, needs canon sign-off). Honest create defaults (the mockup's rows are the sample
+      queue's data): zero criteria/column/sort/condition rows, export = the mockup's 9 checked boxes.
+      Bonus: the agent tickets "SLA Kalan" cell upgraded from due-date text to the countdown chip parked as
+      TODO(S7) on the tickets row — "0s 45dk" per this mockup's preview canon (tq.slaFmt/qb.slaFmt;
+      thresholds INVENTED from its samples: danger <60 dk or overdue, warn <90 dk — needs canon sign-off).
+      Invented keys (TR/EN twins): qb.pickLabel/new/pickColumn/aMe/aMyTeams/aNone/toastSaved/toastCreated/
+      toastDeleted/errName/errParent/errDupCol/errSystem/errChildren/previewEmpty/previewError/slaFmt +
+      tq.slaFmt. Tests: QueuesAdminTests (7) — two-way mapping round-trips (incl. the seeded SLA VIP JSON),
+      whole-page save + column drag order persistence + reconciliation, preview executes UNSAVED state
+      through the engine, agent CSV honors the export set, IsSystem/children delete guards + cycle guard —
+      suite 272. E2E gate leg 2 GREEN: QueueBuilderTests, see the §5 S7 line.)*
 - [ ] **forms.html / form-edit.html** — form designer: field CRUD, per-field config dialog writes back (B2),
       type select reveals options editor, drag-reorder, live preview; output consumed by portal/agent open pages
 - [ ] **lists.html / list-edit.html** — list editor: item CRUD + reorder (sort-mode gates), import dialog works,

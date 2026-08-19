@@ -217,16 +217,60 @@ public static class TicketListEngine
         return ordered.ThenByDescending(t => t.LastUpdateAt ?? t.CreatedAt).ThenBy(t => t.Id);
     }
 
-    /// <summary>Maps a seeded QueueSortOption.Columns JSON to this page's sort keys.</summary>
-    public static (string Sort, bool Desc)? SortFromOptionColumns(string? columnsJson) => columnsJson switch
+    /// <summary>
+    /// Maps a QueueSortOption.Columns JSON (array of "field" / "-field" entries —
+    /// seeded canon AND the S7 queue builder's output) to this page's sort keys.
+    /// The first mappable entry wins (ApplySort's built-in updated tiebreak covers
+    /// the rest); "-" flips direction. Bare "priority__urgency" = ascending urgency
+    /// = most urgent first = this page's ("priority", desc:true) semantics.
+    /// </summary>
+    public static (string Sort, bool Desc)? SortFromOptionColumns(string? columnsJson)
     {
-        """["-last_update_at"]""" => ("updated", true),
-        """["last_update_at"]""" => ("updated", false),
-        """["-created_at"]""" => ("created", true),
-        """["created_at"]""" => ("created", false),
-        """["priority__urgency"]""" => ("priority", true),
-        """["estimated_due_date"]""" or """["due_date"]""" => ("due", false),
-        _ => null,
+        if (string.IsNullOrWhiteSpace(columnsJson))
+            return null;
+        try
+        {
+            using var doc = System.Text.Json.JsonDocument.Parse(columnsJson);
+            if (doc.RootElement.ValueKind != System.Text.Json.JsonValueKind.Array)
+                return null;
+            foreach (var entry in doc.RootElement.EnumerateArray())
+            {
+                if (entry.ValueKind != System.Text.Json.JsonValueKind.String)
+                    continue;
+                var path = entry.GetString()!;
+                var neg = path.StartsWith('-');
+                if (neg)
+                    path = path[1..];
+                (string Sort, bool Desc)? mapped = path switch
+                {
+                    "last_update_at" => ("updated", neg),
+                    "created_at" => ("created", neg),
+                    "subject" => ("subject", neg),
+                    "priority__urgency" => ("priority", !neg),
+                    "estimated_due_date" or "due_date" => ("due", neg),
+                    _ => null,
+                };
+                if (mapped is not null)
+                    return mapped;
+            }
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            // Malformed sort config never breaks the list — default sort applies.
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// SavedQueueExportField.FieldPath → CSV column key. Superset of
+    /// <see cref="ColumnKeyFromPath"/>: the export tab offers dept/created,
+    /// which the list itself never renders.
+    /// </summary>
+    public static string? ExportKeyFromPath(string fieldPath) => fieldPath switch
+    {
+        "created_at" => "created",
+        "dept__name" => "dept",
+        _ => ColumnKeyFromPath(fieldPath),
     };
 
     /// <summary>RFC-4180 CSV field escaping.</summary>

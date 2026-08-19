@@ -148,12 +148,12 @@ public class SettingsTicketsController(
             : sharedQueues.FirstOrDefault(q =>
                 q.ParentId != null && QueueCriteria.Parse(q.Criteria).Assignee == "me")?.Id ?? 0;
 
-        // Queues section table: top-level queues; System pill = shared, Custom = personal
-        // (SavedQueue has no IsSystem flag yet — flagged on the ROADMAP row; the queue
-        // builder page owns adding one with delete protection).
+        // Queues section table: top-level queues; System pill = the real IsSystem
+        // flag (seeded canon rows; the S7 queue builder guards their deletion) —
+        // builder-created shared queues and personal saved searches render Custom.
         var queueTable = await db.SavedQueues.Where(q => q.ParentId == null)
             .OrderBy(q => q.StaffId == null ? 0 : 1).ThenBy(q => q.Sort).ThenBy(q => q.Id)
-            .Select(q => new QueueTableRowVm(q.Title, q.StaffId == null))
+            .Select(q => new QueueTableRowVm(q.Title, q.IsSystem))
             .ToListAsync(ct);
 
         var autoresp = await SectionAsync("autoresp", AutorespMap, ct);

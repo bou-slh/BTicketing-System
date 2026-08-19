@@ -127,7 +127,20 @@ public class TicketsController(
         var (sortKey, desc) = ResolveSort(sort, dir, activeQueue);
         query = TicketListEngine.ApplySort(query, sortKey, desc);
 
-        var visible = ResolveColumns(activeQueue, cols);
+        // Exported field set: explicit cols override > the queue's configured
+        // export column set (S7 admin/queues Dışa Aktarma tab, SavedQueueExportField
+        // rows — heading override included) > the visible columns (S6 behavior).
+        var exportSet = cols.Length == 0
+            ? (activeQueue?.ExportFields ?? [])
+                .OrderBy(f => f.Sort).ThenBy(f => f.Id)
+                .Select(f => (Key: TicketListEngine.ExportKeyFromPath(f.FieldPath), f.Heading))
+                .Where(f => f.Key is not null)
+                .Select(f => (Key: f.Key!, f.Heading))
+                .ToList()
+            : [];
+        var visible = exportSet.Count > 0
+            ? exportSet.Select(f => f.Key).ToList()
+            : (IReadOnlyList<string>)ResolveColumns(activeQueue, cols);
 
         // Page-resx headers (same keys the table renders with).
         var pageL = localizerFactory.Create("Areas.Agent.Views.Tickets.Index", typeof(Program).Assembly.GetName().Name!);
@@ -143,6 +156,7 @@ public class TicketsController(
             "status" => sl["common.status"],
             "assigned" => pageL["tq.colAssigned"],
             "sla" => pageL["tq.colSla"],
+            "created" => sl["common.created"],
             _ => key,
         };
         string Cell(TicketRowVm r, string key) => key switch
@@ -157,13 +171,18 @@ public class TicketsController(
             "status" => sl[$"status.{r.StatusKey}"],
             "assigned" => r.AssigneeName ?? "",
             "sla" => r.Due?.ToLocalTime().ToString("yyyy-MM-dd HH:mm") ?? "",
+            "created" => r.Created.ToLocalTime().ToString("yyyy-MM-dd HH:mm"),
+            "dept" => r.DeptName,
             _ => "",
         };
+        var headers = exportSet.Count > 0
+            ? exportSet.Select(f => f.Heading ?? Header(f.Key))
+            : visible.Select(Header);
 
         Response.ContentType = "text/csv; charset=utf-8";
         Response.Headers.ContentDisposition = "attachment; filename=talepler.csv";
         await using var writer = new StreamWriter(Response.Body, new UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
-        await writer.WriteLineAsync(string.Join(",", visible.Select(k => TicketListEngine.Csv(Header(k)))));
+        await writer.WriteLineAsync(string.Join(",", headers.Select(TicketListEngine.Csv)));
         await foreach (var row in ProjectRows(query).AsAsyncEnumerable().WithCancellation(ct))
             await writer.WriteLineAsync(string.Join(",", visible.Select(k => TicketListEngine.Csv(Cell(row, k)))));
         return new EmptyResult();
@@ -350,6 +369,7 @@ public class TicketsController(
             .Where(x => x.Root == "Ticket" && x.IsEnabled && (x.StaffId == null || x.StaffId == staffId))
             .Include(x => x.Columns).ThenInclude(c => c.Column)
             .Include(x => x.Sorts).ThenInclude(s => s.SortOption)
+            .Include(x => x.ExportFields)
             .OrderBy(x => x.Sort).ThenBy(x => x.Id)
             .AsSplitQuery()
             .ToListAsync(ct);
@@ -494,7 +514,9 @@ public class TicketsController(
             // effort pseudo-statuses live in the Efor column on this page.
             t.IsOverdue && t.Status!.State == TicketState.Open ? "overdue" : t.Status!.Key,
             t.Staff != null ? t.Staff.FullName : null,
-            t.DueDate ?? t.EstimatedDueDate));
+            t.DueDate ?? t.EstimatedDueDate,
+            t.CreatedAt,
+            t.Department!.Name));
 }
 
 public sealed record TicketsIndexVm(
@@ -540,4 +562,6 @@ public sealed record TicketRowVm(
     decimal? EffortHours,
     string StatusKey,
     string? AssigneeName,
-    DateTimeOffset? Due);
+    DateTimeOffset? Due,
+    DateTimeOffset Created,
+    string DeptName);

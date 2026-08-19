@@ -233,4 +233,7 @@
   <data name="tq.notYet" xml:space="preserve">
     <value>Not available yet</value>
   </data>
+  <data name="tq.slaFmt" xml:space="preserve">
+    <value>{0}h {1}m</value>
+  </data>
 </root>

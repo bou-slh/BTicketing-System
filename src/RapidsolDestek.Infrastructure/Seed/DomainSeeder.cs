@@ -571,9 +571,11 @@ public static class DomainSeeder
         db.QueueSortOptions.AddRange(sortRecent, sortSla);
         await db.SaveChangesAsync();
 
+        // Shared canon queues are system rows: the S7 admin builder refuses to
+        // delete them (IsSystem guard; settings-tickets System/Custom pill source).
         SavedQueue Q(string title, SavedQueue? parent, string criteria, int sort) => new()
         {
-            Title = title, Parent = parent, Criteria = criteria, Sort = sort,
+            Title = title, Parent = parent, Criteria = criteria, Sort = sort, IsSystem = true,
         };
         var qOpen = Q("Açık", null, """{"state":"open"}""", 1);
         var qUnanswered = Q("Yanıtlanmamış", qOpen, """{"state":"open","isanswered":false}""", 1);

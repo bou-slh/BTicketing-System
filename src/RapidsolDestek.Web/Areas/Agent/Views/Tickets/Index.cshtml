@@ -354,7 +354,21 @@
                                             <td>@ShortName(r.AssigneeName)</td>
                                             break;
                                         case "sla":
-                                            <td>@(r.Due is { } due ? UpdatedText(due) : "—")</td>
+                                            @* Countdown decorator (admin/queues.html preview canon:
+                                               "0s 45dk" chips; thresholds INVENTED from its samples —
+                                               danger <60 dk or overdue, warn <90 dk). *@
+                                            if (r.Due is { } due)
+                                            {
+                                                var left = due - DateTimeOffset.UtcNow;
+                                                if (left < TimeSpan.Zero)
+                                                {
+                                                    left = TimeSpan.Zero;
+                                                }
+                                                var slaCls = left.TotalMinutes < 60 ? " danger" : left.TotalMinutes < 90 ? " warn" : "";
+                                                <td><span class="lb-sla@(slaCls)" style="float:none">@L.GetString("tq.slaFmt", (int)left.TotalHours, left.Minutes)</span></td>
+                                                break;
+                                            }
+                                            <td class="rd-muted">—</td>
                                             break;
                                     }
                                 }
