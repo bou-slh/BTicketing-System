@@ -168,6 +168,9 @@
   <data name="to.errField" xml:space="preserve">
     <value>“{0}” alanı gerekli.</value>
   </data>
+  <data name="to.errFieldFormat" xml:space="preserve">
+    <value>“{0}” alanına girilen değerin biçimi geçersiz.</value>
+  </data>
   <data name="to.errCc" xml:space="preserve">
     <value>Geçersiz CC adresi: {0}</value>
   </data>

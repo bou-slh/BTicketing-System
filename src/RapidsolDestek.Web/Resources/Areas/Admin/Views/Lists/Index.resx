@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ls.title" xml:space="preserve">
+    <value>Listeler</value>
+  </data>
+  <data name="ls.sub" xml:space="preserve">
+    <value>Formlardaki seçim alanlarını besleyen özel değer listeleri.</value>
+  </data>
+  <data name="ls.searchPh" xml:space="preserve">
+    <value>Liste ara…</value>
+  </data>
+  <data name="ls.new" xml:space="preserve">
+    <value>＋ Yeni Liste</value>
+  </data>
+  <data name="ls.colName" xml:space="preserve">
+    <value>Liste Adı</value>
+  </data>
+  <data name="ls.colItems" xml:space="preserve">
+    <value>Öğe Sayısı</value>
+  </data>
+  <data name="ls.builtin" xml:space="preserve">
+    <value>Yerleşik</value>
+  </data>
+  <data name="ls.showing" xml:space="preserve">
+    <value>{2} listeden {0}–{1} arası gösteriliyor</value>
+  </data>
+  <data name="ls.bulkTitle" xml:space="preserve">
+    <value>Toplu işlemler</value>
+  </data>
+  <data name="ls.bulkHelp" xml:space="preserve">
+    <value>Seçili listelere uygulanır. Yerleşik listeler silinemez.</value>
+  </data>
+  <data name="ls.emptyTitle" xml:space="preserve">
+    <value>Henüz özel liste yok</value>
+  </data>
+  <data name="ls.emptyText" xml:space="preserve">
+    <value>Seçim alanlarında kullanılacak ilk listenizi oluşturun.</value>
+  </data>
+  <data name="ls.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="ls.bulkNone" xml:space="preserve">
+    <value>Önce en az bir liste seçin.</value>
+  </data>
+  <data name="ls.bulkDone" xml:space="preserve">
+    <value>{0} liste güncellendi.</value>
+  </data>
+  <data name="ls.bulkPartial" xml:space="preserve">
+    <value>{0} liste güncellendi, {1} atlandı (yerleşik veya kullanımda).</value>
+  </data>
+  <data name="ls.toastDeleted" xml:space="preserve">
+    <value>Liste silindi.</value>
+  </data>
+</root>

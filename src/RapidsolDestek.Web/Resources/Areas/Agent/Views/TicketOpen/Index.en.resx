@@ -168,6 +168,9 @@
   <data name="to.errField" xml:space="preserve">
     <value>The “{0}” field is required.</value>
   </data>
+  <data name="to.errFieldFormat" xml:space="preserve">
+    <value>The value entered in the “{0}” field has an invalid format.</value>
+  </data>
   <data name="to.errCc" xml:space="preserve">
     <value>Invalid CC address: {0}</value>
   </data>

@@ -1,0 +1,47 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model FormPreviewVm
+@{
+    // Rendered inside #fme-preview-body (queues _Preview precedent): the POSTED,
+    // possibly unsaved designer rows exactly as the portal /open page shows them —
+    // user-visible fields only, choices resolved, defaults pre-filled, hints below.
+    // Localized strings arrive via the VM (the fragment is served standalone).
+    var i = 0;
+}
+@if (Model.Fields.Count == 0)
+{
+    <p class="rd-muted">@Model.EmptyText</p>
+}
+@foreach (var f in Model.Fields)
+{
+    var id = $"fme-pv-{i++}";
+    <div class="rd-field">
+        <label class="rd-label" for="@id">@f.Label</label>
+        @switch (f.Type)
+        {
+            case "choices":
+                <select id="@id" class="rd-control" disabled>
+                    <option value=""></option>
+                    @foreach (var c in f.Choices)
+                    {
+                        <option selected="@(c == f.Default)">@c</option>
+                    }
+                </select>
+                break;
+            case "date":
+                <input id="@id" class="rd-control" type="date" value="@f.Default" disabled>
+                break;
+            case "memo":
+                <textarea id="@id" class="rd-control" data-plain disabled>@f.Default</textarea>
+                break;
+            default:
+                @* text/checkbox/phone/file degrade to a text input — the S6 open
+                   pages render these types the same way (their default branch). *@
+                <input id="@id" class="rd-control" type="text" value="@f.Default" disabled>
+                break;
+        }
+        @if (!string.IsNullOrWhiteSpace(f.Hint))
+        {
+            <div class="rd-help">@f.Hint</div>
+        }
+    </div>
+}

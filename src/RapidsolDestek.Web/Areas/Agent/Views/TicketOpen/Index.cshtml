@@ -20,6 +20,7 @@
         "errDenied" => L["to.errDenied"].Value,
         "errFiltered" => L["to.errFiltered"].Value,
         _ when code.StartsWith("errField:") => L["to.errField", code["errField:".Length..]].Value,
+        _ when code.StartsWith("errFieldFormat:") => L["to.errFieldFormat", code["errFieldFormat:".Length..]].Value,
         _ when code.StartsWith("errCc:") => L["to.errCc", code["errCc:".Length..]].Value,
         _ => code,
     };
@@ -142,7 +143,8 @@
                     {
                         var fieldId = $"to-field-{f.Id}";
                         var name = $"Fields[{f.Id}]";
-                        Model.Form.Fields.TryGetValue(f.Id, out var value);
+                        @* Designer default value pre-fills untouched fields (⚙ dialog). *@
+                        var value = Model.Form.Fields.TryGetValue(f.Id, out var posted) ? posted : f.Default;
                         <div class="rd-field" data-topic-field="@t.Id" hidden="@(!active)">
                             <label class="rd-label" for="@fieldId">@f.Label</label>
                             @switch (f.Type)
@@ -152,7 +154,7 @@
                                         <option value=""></option>
                                         @foreach (var c in f.Choices)
                                         {
-                                            <option value="@c.Id" selected="@(value == c.Id.ToString())">@c.Value</option>
+                                            <option value="@c.Key" selected="@(value == c.Key)">@c.Label</option>
                                         }
                                     </select>
                                     break;

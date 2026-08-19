@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="fme.back" xml:space="preserve">
+    <value>← Forms</value>
+  </data>
+  <data name="fme.sub" xml:space="preserve">
+    <value>Edit the form's title, instructions and fields.</value>
+  </data>
+  <data name="fme.titleLabel" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="fme.titleHelp" xml:space="preserve">
+    <value>Name shown in the agent panel and form lists.</value>
+  </data>
+  <data name="fme.instructions" xml:space="preserve">
+    <value>Instructions</value>
+  </data>
+  <data name="fme.instructionsHelp" xml:space="preserve">
+    <value>Shown to the user above the form.</value>
+  </data>
+  <data name="fme.fieldsHead" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="fme.fieldsHelp" xml:space="preserve">
+    <value>Drag to reorder. Internal fields are visible to agents only.</value>
+  </data>
+  <data name="fme.colLabel" xml:space="preserve">
+    <value>Label</value>
+  </data>
+  <data name="fme.colType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="fme.colVar" xml:space="preserve">
+    <value>Variable</value>
+  </data>
+  <data name="fme.colRequired" xml:space="preserve">
+    <value>Required</value>
+  </data>
+  <data name="fme.colInternal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="fme.tShort" xml:space="preserve">
+    <value>Short Text</value>
+  </data>
+  <data name="fme.tLong" xml:space="preserve">
+    <value>Long Text</value>
+  </data>
+  <data name="fme.tChoice" xml:space="preserve">
+    <value>Choice</value>
+  </data>
+  <data name="fme.tDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="fme.tCheckbox" xml:space="preserve">
+    <value>Checkbox</value>
+  </data>
+  <data name="fme.tPhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="fme.tFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="fme.addField" xml:space="preserve">
+    <value>＋ Add Field</value>
+  </data>
+  <data name="fme.cfgTitle" xml:space="preserve">
+    <value>Field Settings</value>
+  </data>
+  <data name="fme.cfgHelpText" xml:space="preserve">
+    <value>Help text</value>
+  </data>
+  <data name="fme.cfgHelpTextHelp" xml:space="preserve">
+    <value>Explanation shown to the user below the field.</value>
+  </data>
+  <data name="fme.cfgDefault" xml:space="preserve">
+    <value>Default value</value>
+  </data>
+  <data name="fme.cfgDefaultHelp" xml:space="preserve">
+    <value>The field is pre-filled with this value when the form opens.</value>
+  </data>
+  <data name="fme.cfgValidation" xml:space="preserve">
+    <value>Validation</value>
+  </data>
+  <data name="fme.vNone" xml:space="preserve">
+    <value>— None —</value>
+  </data>
+  <data name="fme.vEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="fme.vPhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="fme.vNumber" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="fme.cfgValidationHelp" xml:space="preserve">
+    <value>Checks the format of the entered value.</value>
+  </data>
+  <data name="fme.deleteWarn" xml:space="preserve">
+    <value>Deleting this form also permanently deletes ALL data ever entered into it. Do you want to continue?</value>
+  </data>
+  <data name="fme.newTitle" xml:space="preserve">
+    <value>New Form</value>
+  </data>
+  <data name="fme.errTitle" xml:space="preserve">
+    <value>The form title is required (120 characters max).</value>
+  </data>
+  <data name="fme.errLabel" xml:space="preserve">
+    <value>Existing fields cannot have an empty label.</value>
+  </data>
+  <data name="fme.errSystem" xml:space="preserve">
+    <value>Built-in forms cannot be deleted.</value>
+  </data>
+  <data name="fme.toastSaved" xml:space="preserve">
+    <value>Form saved.</value>
+  </data>
+  <data name="fme.toastCreated" xml:space="preserve">
+    <value>Form created.</value>
+  </data>
+  <data name="fme.toastSavedDisabled" xml:space="preserve">
+    <value>Form saved; {0} fields with existing answers were disabled instead of deleted.</value>
+  </data>
+  <data name="fme.disabledInfo" xml:space="preserve">
+    <value>There are {0} fields disabled with their answers preserved.</value>
+  </data>
+  <data name="fme.optListTitle" xml:space="preserve">
+    <value>Option source list</value>
+  </data>
+  <data name="fme.optCustom" xml:space="preserve">
+    <value>— Custom options —</value>
+  </data>
+  <data name="fme.optChoicesPh" xml:space="preserve">
+    <value>Type one option per line</value>
+  </data>
+  <data name="fme.optChoicesTitle" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="fme.preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="fme.previewHelp" xml:space="preserve">
+    <value>How the fields appear on the open-ticket portal page; unsaved changes included.</value>
+  </data>
+  <data name="fme.previewEmpty" xml:space="preserve">
+    <value>No user-visible fields to preview.</value>
+  </data>
+  <data name="fme.previewError" xml:space="preserve">
+    <value>The preview could not be loaded.</value>
+  </data>
+</root>

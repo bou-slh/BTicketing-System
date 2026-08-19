@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Common;
 using RapidsolDestek.Domain.Entities;
+using RapidsolDestek.Domain.Forms;
 using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Infrastructure.Auditing;
@@ -52,13 +52,22 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
         if (form.Topic is not null && topic is null) // null Topic already carries errTopic via [Required]
             ModelState.AddModelError(nameof(OpenForm.Topic), "errTopic");
 
-        // Dynamic topic fields (B3): required-for-users fields must be filled.
+        // Dynamic topic fields (B3): required-for-users fields must be filled, and
+        // filled values must pass the field's configured format check (the S7 form
+        // designer's ⚙ "Doğrulama" — email/phone/number).
         List<FormField> topicFields = topic is null ? [] : PortalFields(topic);
-        foreach (var field in topicFields.Where(f => f.RequiredForUsers))
+        foreach (var field in topicFields)
         {
             form.Fields.TryGetValue(field.Id, out var raw);
             if (string.IsNullOrWhiteSpace(raw))
-                ModelState.AddModelError($"Fields[{field.Id}]", $"errField:{field.Label}");
+            {
+                if (field.RequiredForUsers)
+                    ModelState.AddModelError($"Fields[{field.Id}]", $"errField:{field.Label}");
+            }
+            else if (!FormFieldConfig.Parse(field.Configuration).IsValidValue(raw.Trim()))
+            {
+                ModelState.AddModelError($"Fields[{field.Id}]", $"errFieldFormat:{field.Label}");
+            }
         }
 
         // Priority select posts a real priority id; only the offered ones are accepted.
@@ -162,17 +171,28 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
                     continue;
                 int? valueId = null;
                 var value = raw.Trim();
-                if (field.Type == "choices" && int.TryParse(value, out var itemId)
-                    && ListId(field) is { } listId)
+                if (field.Type == "choices")
                 {
-                    var item = await db.ListDefinitions
-                        .Where(l => l.Id == listId)
-                        .SelectMany(l => l.Items)
-                        .SingleOrDefaultAsync(i => i.Id == itemId, ct);
-                    if (item is null)
-                        continue;
-                    valueId = item.Id;
-                    value = item.Value;
+                    // List-backed choices post the item id; inline (designer
+                    // textarea) choices post the option string itself.
+                    var config = FormFieldConfig.Parse(field.Configuration);
+                    if (config.ListId is { } listId)
+                    {
+                        if (!int.TryParse(value, out var itemId))
+                            continue;
+                        var item = await db.ListDefinitions
+                            .Where(l => l.Id == listId)
+                            .SelectMany(l => l.Items)
+                            .SingleOrDefaultAsync(i => i.Id == itemId, ct);
+                        if (item is null)
+                            continue;
+                        valueId = item.Id;
+                        value = item.Value;
+                    }
+                    else if (!config.Choices.Contains(value, StringComparer.Ordinal))
+                    {
+                        continue; // not one of the designed options
+                    }
                 }
                 entry.Values.Add(new FormEntryValue { FormFieldId = field.Id, Value = value, ValueId = valueId });
             }
@@ -217,23 +237,6 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
             .ToList();
     }
 
-    private static int? ListId(FormField field)
-    {
-        if (string.IsNullOrWhiteSpace(field.Configuration))
-            return null;
-        try
-        {
-            return JsonDocument.Parse(field.Configuration).RootElement
-                .TryGetProperty("list_id", out var id) && id.TryGetInt32(out var value)
-                ? value
-                : null;
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
-    }
-
     private async Task<OpenVm> BuildVmAsync(User? user, OpenForm form, CancellationToken ct)
     {
         // Topic select: public+active topics in mockup order; each carries its
@@ -246,9 +249,14 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
                     .ThenInclude(d => d!.Fields.OrderBy(x => x.Sort))
             .ToListAsync(ct);
 
-        var listIds = topics.SelectMany(PortalFields).Select(ListId)
-            .OfType<int>().Distinct().ToList();
-        Dictionary<int, List<OpenFieldChoiceVm>> choices = listIds.Count == 0
+        // Field configurations (S7 form designer output): list-backed choices post
+        // the item id, inline designer choices post the option string; defaults
+        // pre-fill the control on first render.
+        var configs = topics.SelectMany(PortalFields)
+            .DistinctBy(f => f.Id)
+            .ToDictionary(f => f.Id, f => FormFieldConfig.Parse(f.Configuration));
+        var listIds = configs.Values.Select(c => c.ListId).OfType<int>().Distinct().ToList();
+        Dictionary<int, List<OpenFieldChoiceVm>> listChoices = listIds.Count == 0
             ? []
             : await db.ListDefinitions
                 .Where(l => listIds.Contains(l.Id))
@@ -256,9 +264,17 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
                 {
                     l.Id,
                     Items = l.Items.Where(i => i.IsEnabled).OrderBy(i => i.Sort)
-                        .Select(i => new OpenFieldChoiceVm(i.Id, i.Value)).ToList(),
+                        .Select(i => new OpenFieldChoiceVm(i.Id.ToString(), i.Value)).ToList(),
                 })
                 .ToDictionaryAsync(l => l.Id, l => l.Items, ct);
+
+        IReadOnlyList<OpenFieldChoiceVm> ChoicesOf(FormField f)
+        {
+            var config = configs[f.Id];
+            if (config.ListId is { } listId)
+                return listChoices.TryGetValue(listId, out var items) ? items : [];
+            return [.. config.Choices.Select(c => new OpenFieldChoiceVm(c, c))];
+        }
 
         var topicVms = topics.Select(t => new OpenTopicVm(
             t.Id,
@@ -269,7 +285,8 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
                 f.Label,
                 f.Hint,
                 f.RequiredForUsers,
-                ListId(f) is { } listId && choices.TryGetValue(listId, out var items) ? items : []))
+                configs[f.Id].Default,
+                ChoicesOf(f)))
                 .ToList()))
             .ToList();
 
@@ -320,8 +337,10 @@ public sealed record OpenTopicFieldVm(
     string Label,
     string? Hint,
     bool RequiredForUsers,
+    string? Default,
     IReadOnlyList<OpenFieldChoiceVm> Choices);
 
-public sealed record OpenFieldChoiceVm(int Id, string Value);
+/// <summary>Key = posted option value (list item id, or the inline choice string).</summary>
+public sealed record OpenFieldChoiceVm(string Key, string Label);
 
 public sealed record OpenPriorityVm(int Id, string Key);

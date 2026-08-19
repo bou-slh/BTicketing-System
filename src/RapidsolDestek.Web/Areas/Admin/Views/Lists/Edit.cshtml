@@ -1,0 +1,370 @@
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model ListEditVm
+@{
+    var l = Model.List;
+    var isNew = l is null;
+    var isSystem = Model.IsSystem;
+    // The mockup's h1 shows the plural spelling ("Modüller") when one exists.
+    var displayName = l?.PluralName ?? l?.Name;
+    ViewData["Title"] = isNew ? L["lse.newTitle"].Value : displayName;
+
+    // PRG toast handoff: validation failure (nothing written), saved/created, or
+    // the import's honest added/skipped report (lse.importResult).
+    if (TempData["ListEditToast"] is string toastKey)
+    {
+        @* GetString: LocalizedHtmlString.Value would return the UNFORMATTED
+           resource (args apply only at WriteTo) — the toast needs the real text. *@
+        ViewData["Toast"] = toastKey == "lse.importResult"
+            ? L.GetString(toastKey, TempData["ListEditToastOk"] as int? ?? 0, TempData["ListEditToastSkipped"] as int? ?? 0).Value
+            : L[toastKey].Value;
+        if (TempData["ListEditToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    var sortMode = l?.SortMode switch
+    {
+        ListSortMode.AlphaDescending => "alphaDesc",
+        ListSortMode.SortColumn => "manual",
+        null => "manual", // create default = the mockup's selected option
+        _ => "alpha",
+    };
+    (string Value, string Key)[] propTypes =
+    [
+        ("text", "lse.tShort"), ("memo", "lse.tLong"), ("choices", "lse.tChoice"),
+        ("date", "lse.tDate"), ("checkbox", "lse.tCheckbox"),
+    ];
+    (string Value, string Key)[] validations =
+    [
+        ("", "lse.vNone"), ("email", "lse.vEmail"), ("phone", "lse.vPhone"), ("number", "lse.vNumber"),
+    ];
+}
+
+<form method="post" asp-area="Admin" asp-controller="Lists" asp-action="Save" id="lse-form">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@l!.Id">
+    }
+
+    <div class="bo-page-head">
+        <div>
+            <a href="/admin/lists" style="font-size:13px">@L["lse.back"]</a>
+            <h1>@(isNew ? L["lse.newTitle"].Value : displayName)</h1>
+            <p>@L["lse.sub"]</p>
+        </div>
+        <div class="actions">
+            @* System lists are fully protected (ls.builtinHelp canon): save/delete
+               refuse server-side, the buttons are disabled honestly here. *@
+            <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete"
+                    disabled="@(isNew || isSystem)"
+                    title="@(isSystem ? L["lse.errSystem"].Value : null)">@SL["common.delete"]</button>
+            <button type="reset" class="rd-btn" disabled="@isSystem">@SL["common.reset"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary" disabled="@isSystem"
+                    title="@(isSystem ? L["lse.errSystem"].Value : null)">@SL["common.save"]</button>
+        </div>
+    </div>
+
+    @if (isSystem)
+    {
+        <div class="rd-banner rd-banner-info" style="margin-bottom:16px"><span>ℹ</span><span>@L["lse.systemNote"]</span></div>
+    }
+
+    <div class="rd-tabs" data-tabs>
+        <button type="button" class="active" data-tab="lse-def">@L["lse.tabDef"]</button>
+        <button type="button" data-tab="lse-items">@L["lse.tabItems"]</button>
+        <button type="button" data-tab="lse-props">@L["lse.tabProps"]</button>
+    </div>
+
+    @* ============ Tanım ============ *@
+    <div class="rd-tab-panel active" id="lse-def">
+        <div class="rd-surface">
+            <div class="rd-surface-body" style="max-width:720px">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="lse-name">@L["lse.name"]</label>
+                        <input id="lse-name" name="name" class="rd-control" value="@l?.Name" required maxlength="120" disabled="@isSystem">
+                        <div class="rd-help">@L["lse.nameHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="lse-plural">@L["lse.plural"]</label>
+                        <input id="lse-plural" name="plural" class="rd-control" value="@l?.PluralName" maxlength="120" disabled="@isSystem">
+                        <div class="rd-help">@L["lse.pluralHelp"]</div>
+                    </div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="lse-sort">@L["lse.sort"]</label>
+                    @* B4 sort-mode gate: manual enables the Sıra inputs, the alpha
+                       modes disable them (rd.js select data-gates contract) and the
+                       server re-orders alphabetically on save. *@
+                    <select id="lse-sort" name="sortMode" class="rd-control" style="max-width:240px"
+                            data-gates=".lse-order" data-gates-on="manual" disabled="@isSystem">
+                        <option value="alpha" selected="@(sortMode == "alpha")">@L["lse.sortAlpha"]</option>
+                        <option value="alphaDesc" selected="@(sortMode == "alphaDesc")">@L["lse.sortAlphaDesc"]</option>
+                        <option value="manual" selected="@(sortMode == "manual")">@L["lse.sortManual"]</option>
+                    </select>
+                    <div class="rd-help">@L["lse.sortHelp"]</div>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="lse-notes">@SL["common.notes"]</label>
+                    <textarea id="lse-notes" name="notes" class="rd-control" style="min-height:80px" disabled="@isSystem">@l?.Notes</textarea>
+                    <div class="rd-help">@SL["common.notesHelp"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ============ Öğeler (B4) ============
+       Row = the mockup's exact DOM plus hidden itemIds (reconciliation) and the
+       itemMarks "row"/"on" marker sequence for the enabled switch (schedules marker
+       precedent). System lists mirror their real table read-only. *@
+    @{
+        async Task ItemRowAsync(ListItemRowVm? it)
+        {
+            <tr class="bo-rule-row">
+                <td>
+                    <input type="hidden" name="itemIds" value="@(it?.Id ?? 0)">
+                    <input type="hidden" name="itemMarks" value="row">
+                    <input class="rd-control" name="itemValues" value="@it?.Value" style="min-width:160px" disabled="@isSystem">
+                </td>
+                <td><input class="rd-control" name="itemAbbrevs" value="@it?.Abbrev" style="width:100px" disabled="@isSystem"></td>
+                <td class="num"><input class="rd-control lse-order" type="number" name="itemSorts" value="@it?.Sort" style="width:76px" disabled="@isSystem"></td>
+                <td><label class="rd-switch"><input type="checkbox" name="itemMarks" value="on" checked="@(it?.Enabled ?? true)" disabled="@isSystem"><span class="track"></span></label></td>
+                <td>
+                    @if (!isSystem)
+                    {
+                        <button type="button" class="remove" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" title="@SL["common.delete"]">✕</button>
+                    }
+                </td>
+            </tr>
+        }
+    }
+    <div class="rd-tab-panel" id="lse-items">
+        <div class="rd-surface">
+            <div class="rd-surface-head">
+                <span>@L["lse.itemsHead"]</span>
+                <span class="spacer"></span>
+                <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-dialog-open="dlg-import"
+                        disabled="@(isNew || isSystem)">@SL["common.import"]</button>
+            </div>
+            <table class="rd-table" id="tbl-items">
+                <thead>
+                    <tr>
+                        <th>@L["lse.colValue"]</th>
+                        <th>@L["lse.colAbbrev"]</th>
+                        <th class="num">@L["lse.colOrder"]</th>
+                        <th>@L["lse.colEnabled"]</th>
+                        <th style="width:36px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var it in Model.Items)
+                    {
+                        await ItemRowAsync(it);
+                    }
+                </tbody>
+            </table>
+            <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+                <div style="display:flex;gap:10px;flex-wrap:wrap">
+                    <input class="rd-control" data-item-add-value placeholder="@L["lse.addPh"]" style="max-width:260px" disabled="@isSystem">
+                    <button type="button" class="rd-btn" data-item-add disabled="@isSystem">@L["lse.addItem"]</button>
+                </div>
+                <div class="rd-help">@L["lse.itemsHelp"]</div>
+            </div>
+        </div>
+        <template id="lse-item-tpl">
+            @{ await ItemRowAsync(null); }
+        </template>
+    </div>
+
+    @* ============ Özellikler (B2/B4) ============
+       The per-item extra-field designer (osTicket list properties form) persisted
+       as the list's configuration JSON. Row = the mockup's exact DOM plus the
+       propMarks "row"/"req"/"int" marker sequence and the ⚙ dialog's per-row
+       hidden config inputs (form-edit designer twin); tbody drag-reorders via the
+       shared rd.js contract — posted order is the stored order. *@
+    @{
+        async Task PropRowAsync(ListPropertyRowVm? p)
+        {
+            var type = p?.Type ?? "text";
+            <tr class="bo-rule-row">
+                <td class="rd-muted" style="cursor:grab" data-drag-handle>⋮⋮<input type="hidden" name="propMarks" value="row"></td>
+                <td><input class="rd-control" name="propLabels" value="@p?.Label" style="min-width:160px" disabled="@isSystem"></td>
+                <td>
+                    <select class="rd-control" name="propTypes" style="min-width:130px" disabled="@isSystem">
+                        @foreach (var t in propTypes)
+                        {
+                            <option value="@t.Value" selected="@(type == t.Value)">@L[t.Key]</option>
+                        }
+                    </select>
+                </td>
+                <td><input class="rd-control" name="propVars" value="@p?.Var" style="min-width:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace" disabled="@isSystem"></td>
+                <td><input type="checkbox" name="propMarks" value="req" checked="@(p?.Required == true)" disabled="@isSystem"></td>
+                <td><input type="checkbox" name="propMarks" value="int" checked="@(p?.Internal == true)" disabled="@isSystem"></td>
+                <td>
+                    <input type="hidden" name="propHints" value="@p?.Hint">
+                    <input type="hidden" name="propDefaults" value="@p?.Default">
+                    <input type="hidden" name="propValidations" value="@p?.Validation">
+                    <button type="button" style="border:0;background:transparent;cursor:pointer;font-size:15px"
+                            data-cfg-open data-dialog-open="dlg-fieldcfg" title="@L["lse.cfgTitle"]" disabled="@isSystem">⚙</button>
+                </td>
+                <td>
+                    @if (!isSystem)
+                    {
+                        <button type="button" class="remove" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" title="@SL["common.delete"]">✕</button>
+                    }
+                </td>
+            </tr>
+        }
+    }
+    <div class="rd-tab-panel" id="lse-props">
+        <div class="rd-surface">
+            <div class="rd-surface-head"><span>@L["lse.propsHead"]</span></div>
+            <table class="rd-table" id="tbl-props">
+                <thead>
+                    <tr>
+                        <th style="width:30px"></th>
+                        <th>@L["lse.colLabel"]</th>
+                        <th>@L["lse.colType"]</th>
+                        <th>@L["lse.colVar"]</th>
+                        <th>@L["lse.colRequired"]</th>
+                        <th>@L["lse.colInternal"]</th>
+                        <th style="width:36px"></th>
+                        <th style="width:36px"></th>
+                    </tr>
+                </thead>
+                <tbody data-drag-rows>
+                    @foreach (var p in Model.Properties)
+                    {
+                        await PropRowAsync(p);
+                    }
+                </tbody>
+            </table>
+            <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+                <button type="button" class="rd-btn rd-btn-ghost" data-rule-add="lse-prop-tpl" data-rule-into="#tbl-props tbody" disabled="@isSystem">@L["lse.addField"]</button>
+                <div class="rd-help">@L["lse.propsHelp"]</div>
+            </div>
+        </div>
+        <template id="lse-prop-tpl">
+            @{ await PropRowAsync(null); }
+        </template>
+    </div>
+</form>
+
+@if (!isNew)
+{
+    <form id="lse-del" method="post" asp-area="Admin" asp-controller="Lists" asp-action="Delete" hidden>
+        <input type="hidden" name="id" value="@l!.Id">
+    </form>
+}
+
+@* İçe aktar (B2/B5): a REAL submit — the mockup's data-dialog-close on the import
+   button is dropped (the audited close-swallows-save bug). *@
+<dialog class="rd-dialog" id="dlg-import">
+    <form method="post" asp-area="Admin" asp-controller="Lists" asp-action="Import">
+        <input type="hidden" name="id" value="@(l?.Id ?? 0)">
+        <div class="rd-dialog-head"><span>@SL["common.import"]</span><button type="button" class="close" data-dialog-close>✕</button></div>
+        <div class="rd-dialog-body">
+            <div class="rd-field mb-0">
+                <label class="rd-label" for="lse-import-ta">@L["lse.importLabel"]</label>
+                <textarea id="lse-import-ta" name="text" class="rd-control" placeholder="@L["lse.importPh"]" style="min-height:130px"></textarea>
+                <div class="rd-help">@L["lse.importHelp"]</div>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.import"]</button>
+        </div>
+    </form>
+</dialog>
+
+@* Alan ayarları (B2): one dialog parameterized by the property row that opened it —
+   ⚙ copies the row's hidden inputs in, Uygula writes them back (form-edit twin). *@
+<dialog class="rd-dialog" id="dlg-fieldcfg">
+    <form method="dialog">
+        <div class="rd-dialog-head"><span>@L["lse.cfgTitle"]</span><button type="button" class="close" data-dialog-close>✕</button></div>
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="lse-cfg-help">@L["lse.cfgHelpText"]</label>
+                <input id="lse-cfg-help" class="rd-control">
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="lse-cfg-default">@L["lse.cfgDefault"]</label>
+                <input id="lse-cfg-default" class="rd-control">
+            </div>
+            <div class="rd-field mb-0">
+                <label class="rd-label" for="lse-cfg-validation">@L["lse.cfgValidation"]</label>
+                <select id="lse-cfg-validation" class="rd-control">
+                    @foreach (var v in validations)
+                    {
+                        <option value="@v.Value">@L[v.Key]</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="button" class="rd-btn rd-btn-primary" data-cfg-apply data-dialog-close>@SL["common.apply"]</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p>@SL["common.confirmDelete"]</p></div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="lse-del" disabled="@(isNew || isSystem)">@SL["common.delete"]</button>
+    </div>
+</dialog>
+
+@* Page mechanics: "＋ Öğe Ekle" appends a template row carrying the staged value
+   (mockup input + button pair); the ⚙ dialog reads/writes its row's hidden config
+   inputs (B2, form-edit twin). The sort-mode gate itself is the shared rd.js
+   data-gates select contract — new rows re-fire it so their Sıra input follows. *@
+<script>
+(() => {
+  const form = document.getElementById("lse-form");
+  if (!form) return;
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("[data-item-add]")) {
+      e.preventDefault();
+      const tpl = document.getElementById("lse-item-tpl");
+      const tbody = document.querySelector("#tbl-items tbody");
+      const staged = document.querySelector("[data-item-add-value]");
+      if (!tpl || !tbody || !staged) return;
+      const row = tpl.content.firstElementChild.cloneNode(true);
+      row.querySelector("input[name=itemValues]").value = staged.value.trim();
+      row.querySelector("input[name=itemSorts]").value = tbody.querySelectorAll("tr").length + 1;
+      tbody.append(row);
+      staged.value = "";
+      // Re-run the shared gate sync so the new Sıra input honors the sort mode.
+      document.getElementById("lse-sort")?.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  });
+
+  // ---- ⚙ config dialog write-back (B2) ----
+  const cfgHelp = document.getElementById("lse-cfg-help");
+  const cfgDefault = document.getElementById("lse-cfg-default");
+  const cfgValidation = document.getElementById("lse-cfg-validation");
+  let cfgRow = null;
+  document.addEventListener("click", (e) => {
+    const open = e.target.closest("[data-cfg-open]");
+    if (open) {
+      cfgRow = open.closest("tr");
+      cfgHelp.value = cfgRow.querySelector("input[name=propHints]").value;
+      cfgDefault.value = cfgRow.querySelector("input[name=propDefaults]").value;
+      cfgValidation.value = cfgRow.querySelector("input[name=propValidations]").value;
+      return;
+    }
+    if (e.target.closest("[data-cfg-apply]") && cfgRow) {
+      cfgRow.querySelector("input[name=propHints]").value = cfgHelp.value;
+      cfgRow.querySelector("input[name=propDefaults]").value = cfgDefault.value;
+      cfgRow.querySelector("input[name=propValidations]").value = cfgValidation.value;
+      cfgRow = null;
+    }
+  });
+})();
+</script>

@@ -282,7 +282,9 @@ public static class DomainSeeder
         {
             Name = "Modül", PluralName = "Modüller", SortMode = ListSortMode.SortColumn,
             Notes = "Bordro Ek Bilgileri formundaki \"Modül\" seçim alanını besler.",
-            Configuration = """{"properties":[{"name":"aciklama","label":"Açıklama","type":"text"},{"name":"sorumlu_ekip","label":"Sorumlu Ekip","type":"choice"}]}""",
+            // Property designer vocabulary (S7 list-edit port): "choices" + the
+            // mockup's checked "Dahili" flag on sorumlu_ekip.
+            Configuration = """{"properties":[{"name":"aciklama","label":"Açıklama","type":"text"},{"name":"sorumlu_ekip","label":"Sorumlu Ekip","type":"choices","internal":true}]}""",
             Items =
             [
                 new ListItem { Value = "Bordro", Abbrev = "BRD", Sort = 1 },
@@ -304,9 +306,21 @@ public static class DomainSeeder
             Title = "Bordro Ek Bilgileri", Name = "bordro_ek",
             Fields =
             [
-                new FormField { Type = "choices", Label = "Modül", Name = "modul", Sort = 1, Configuration = $$"""{"list_id":{{listModuller.Id}}}""" },
-                new FormField { Type = "text", Label = "Personel No", Name = "personel_no", Sort = 2 },
-                new FormField { Type = "date", Label = "Dönem", Name = "donem", Sort = 3 },
+                // Canon rows per admin/form-edit.html (S7 designer port): labels,
+                // order, required/internal flags and the ⚙ hint sample.
+                new FormField
+                {
+                    Type = "text", Label = "Personel Numarası", Name = "personel_no", Sort = 1,
+                    RequiredForUsers = true, RequiredForAgents = true,
+                    Hint = "Bordronuzun sağ üst köşesindeki 6 haneli numara.",
+                },
+                new FormField
+                {
+                    Type = "date", Label = "Dönem", Name = "donem", Sort = 2,
+                    RequiredForUsers = true, RequiredForAgents = true,
+                },
+                new FormField { Type = "choices", Label = "Modül", Name = "modul", Sort = 3, Configuration = $$"""{"list_id":{{listModuller.Id}}}""" },
+                new FormField { Type = "memo", Label = "Ek Açıklama", Name = "ek_aciklama", Sort = 4, VisibleToUsers = false },
             ],
         };
         var formProje = new FormDefinition

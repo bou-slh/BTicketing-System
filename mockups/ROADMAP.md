@@ -200,8 +200,13 @@ pattern dead in the mockups.
   /admin/queues UI (criteria rows dept=Bordro + priority=Acil under parent "Açık"; the live Preview tab is
   asserted to show R716536 and hide R716561 BEFORE saving), then agent saydin finds the queue in the
   tickets queue tree, opens it and the list shows exactly the matching R716536 — 5 s against a freshly
-  seeded instance. Filters already run in the live create pipeline (filters row); the forms/lists builder
-  legs stay open with their rows.)*
+  seeded instance. Filters already run in the live create pipeline (filters row). Forms/lists builder legs
+  GREEN 2026-08-19 (HTTP-level, FormsListsAdminTests GateProof): a form built through the real
+  /admin/form-edit POST (required email field w/ ⚙ validation + inline-choices field) and attached to a
+  fresh public topic through /admin/helptopic-edit renders on BOTH open pages (portal /open + agent
+  /agent/ticket-open — labels, ⚙ hint, choice options), the ⚙ email validation refuses a malformed
+  portal submit, and a valid submit persists the designer fields as FormEntry/Values on the created
+  ticket; the list editor feeds those choice fields (form-edit list select = real ListDefinitions).)*
 - **S8 — Email subsystem.** Outbound: Razor template rendering with variables, event→template map (incl.
   effort request/response), MailKit SMTP, Hangfire send queue with retry, per-department from-addresses.
   Inbound: Hangfire IMAP poll, MimeKit parse, reply-token threading, help-topic routing, attachments,
@@ -1011,10 +1016,83 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       whole-page save + column drag order persistence + reconciliation, preview executes UNSAVED state
       through the engine, agent CSV honors the export set, IsSystem/children delete guards + cycle guard —
       suite 272. E2E gate leg 2 GREEN: QueueBuilderTests, see the §5 S7 line.)*
-- [ ] **forms.html / form-edit.html** — form designer: field CRUD, per-field config dialog writes back (B2),
+- [x] **forms.html / form-edit.html** — form designer: field CRUD, per-field config dialog writes back (B2),
       type select reveals options editor, drag-reorder, live preview; output consumed by portal/agent open pages
-- [ ] **lists.html / list-edit.html** — list editor: item CRUD + reorder (sort-mode gates), import dialog works,
+      *(S7; /admin/forms + /admin/form-edit?id= (FormsController; no id = create). Pure EDITOR over the S3
+      FormDefinition/FormField model both open pages already consume through HelpTopicForm — no parallel
+      model. List: built-in (IsSystem) vs custom tables split per the mockup, shared name/updated header
+      sort, search over both, custom-side pagination + reachable rd-empty, dlg-more bulk enable/disable/
+      delete (system rows guard-skipped; NEW FormDefinition.IsActive via migration S7_FormsLists — disabled
+      forms drop out of the helptopic-edit attach list except already-attached, schedules IsActive
+      precedent; delete removes the entered FormEntry data WITH the form per the fme.deleteWarn canon).
+      Editor: whole-page save (B3 refuses writing NOTHING on bad title/blanked labels); field rows = the
+      mockup DOM + hidden fieldIds + a fieldMarks "row"/"req"/"int" marker sequence (schedules precedent) —
+      posted DOM order IS Sort (tbody = the shared rd.js data-drag-rows/data-drag-handle contract from the
+      queues port); type mapping fme.tShort…tFile ↔ text/memo/choices/date/checkbox/phone/file (checkbox/
+      phone/file degrade to text inputs on the open pages — their default branch, flagged). B2 ⚙ dialog:
+      ONE dialog parameterized by the opening row — hint/default/validation live in per-row hidden inputs,
+      ⚙ copies in, Uygula writes back (rows are client-created, so per-row server dialogs cannot exist;
+      write-back IS the parameterization). B3 options editor: choosing "Seçim" reveals an INVENTED
+      list-select + one-option-per-line textarea under the type select (schedule holiday-mode reveal
+      precedent; needs canon sign-off) → Configuration {"list_id":N} (real ListDefinitions; inactive hidden
+      except current) or {"choices":[…]}; NEW shared Domain FormFieldConfig owns the JSON (list_id/choices/
+      default/validation) and BOTH open controllers now consume it: inline choices render as options and
+      persist as Value-only FormEntryValues, ⚙ defaults pre-fill untouched controls, ⚙ validation
+      (email/phone/number) is enforced server-side at both submits (invented open.errFieldFormat/
+      to.errFieldFormat). Variable names auto-slug TR-aware from the label when blank, uniqued in-form.
+      Field delete honesty (osTicket parity): a removed row with existing answers is soft-disabled
+      (IsDisabled; FormEntryValue→FormField is Restrict) — toast fme.toastSavedDisabled reports the count,
+      fme.disabledInfo surfaces archived fields on the editor (no mockup UI to re-enable them, flagged);
+      answerless rows hard-delete. Live preview (B4): INVENTED head button + dialog (queues/filters
+      precedent, needs canon sign-off) POSTs the CURRENT unsaved rows to /admin/form-edit/preview →
+      fragment rendered as portal /open would (user-visible fields only; internal rows excluded).
+      Seed aligned to the mockup canon: Bordro Ek Bilgileri now carries the mockup's four rows (Personel
+      Numarası req + ⚙ hint sample / Dönem req / Modül choices / Ek Açıklama memo internal — was 3
+      differently-labelled fields). Instructions persist but neither open page renders them yet
+      (fme.instructionsHelp promise — TODO, flagged). Mockup's "required" checkbox maps to BOTH
+      RequiredForUsers+ForAgents (internal fields agent-only). Latent bug found while porting: parameterized
+      toasts composed via LocalizedHtmlString.Value render UNFORMATTED ({0} braces) — these pages use
+      L.GetString(...); the same pattern exists in earlier ports (schedules/slas/helptopics/filters bulk
+      toasts), flagged for a sweep. Invented keys (TR/EN twins): fm.dateFmt/bulkNone/bulkDone/bulkPartial/
+      toastDeleted + re-parameterized fm.showing; fme.newTitle/errTitle/errLabel/errSystem/toastSaved/
+      toastCreated/toastSavedDisabled/disabledInfo/optListTitle/optCustom/optChoicesPh/optChoicesTitle/
+      preview/previewHelp/previewEmpty/previewError. +6 tests (FormsListsAdminTests) incl. the GATE PROOF
+      leg — see the §5 S7 line.)*
+- [x] **lists.html / list-edit.html** — list editor: item CRUD + reorder (sort-mode gates), import dialog works,
       properties fields; system lists protected (B4)
+      *(S7; /admin/lists + /admin/list-edit?id= (ListsController; no id = create). B1 list over
+      ListDefinition rows: name/created/updated header sort (updated-desc default), search (name + plural),
+      pagination + reachable rd-empty; display name = PluralName ?? Name (the mockup rows spell "Modüller").
+      System lists (Type != null — the seeded status/priority mirrors) protected EVERYWHERE per the mockup:
+      disabled selection checkboxes, guard-skipped by every bulk action, item counts mirrored LIVE from the
+      real status/priority tables (canon 7/4 over empty mirror rows), read-only editor (disabled controls +
+      invented lse.systemNote banner) whose item rows render the real TicketStatus/TicketPriority rows, and
+      save/delete/import refuse server-side (lse.errSystem). dlg-more bulk enable/disable/delete (NEW
+      ListDefinition.IsActive, same S7_FormsLists migration — inactive lists hide from the form designer's
+      choice-list select except a field's current one; delete guard-skips lists still referenced by a
+      choices field's list_id, teams precedent). Editor: whole-page save (B3 refuses on blank name, blanked
+      existing item values lse.errItem, TR-case-insensitive duplicate values lse.errDupItem); item rows =
+      mockup DOM + hidden itemIds + itemMarks "row"/"on" markers for the enabled switch; B4 sort-mode
+      gating honest on BOTH sides: the mockup has NO drag handles on items — reorder is the Sıra number
+      column, and the sort select gates it via the shared rd.js select data-gates contract (manual enables;
+      the alpha modes disable the inputs — which then don't post — and the server re-orders by TR collation
+      on save, ascending/descending). "＋ Öğe Ekle" appends a template row carrying the staged input value
+      (client clone, then re-fires the gate sync). dlg-import = a REAL POST (mockup's data-dialog-close on
+      the submit dropped — the audited B2 close-swallows-save bug): value[,abbrev] per line, honest report
+      lse.importResult "{N} added, {M} skipped" (blank lines ignored; duplicates of existing values and
+      in-paste repeats skipped); disabled on create (the list must exist — schedules clone precedent);
+      alpha lists re-order after import. Properties tab = the per-item field designer persisted as the
+      osTicket-parity Configuration JSON {"properties":[{label,type,name,required,internal,help?,default?,
+      validation?}]} — rows drag-reorder (data-drag-rows), ⚙ dialog write-back = the form-edit B2 twin,
+      names auto-slugged/uniqued; seed's sorumlu_ekip normalized to the designer vocabulary ("choice"→
+      "choices") + the mockup's checked Dahili flag. HONESTY FLAGS: per-item property VALUES have no
+      editing UI anywhere in the mockups (ListItem.Properties stays untouched — TODO when canon adds an
+      item dialog); the properties designer's "Seçim" type carries no options editor (the mockup's props
+      rows show none); historic answers keep their copied Value string when an item is deleted
+      (FormEntryValue.ValueId is a soft reference by design). Invented keys (TR/EN twins): ls.dateFmt/
+      bulkNone/bulkDone/bulkPartial/toastDeleted + re-parameterized ls.showing; lse.newTitle/errName/
+      errItem/errDupItem/errSystem/errInUse/toastSaved/toastCreated/importResult/systemNote. +7 tests
+      (FormsListsAdminTests) — suite 285.)*
 - [x] **slas.html** — per-row dialog prefilled (B2); grace/transient switches consumed by SLA engine
       *(S7; /admin/slas (SlasController). B1: header sort name/grace/updated (updated desc default =
       the mockup's indicator AND its exact row order Standart → Dahili Talepler via the id tiebreak),

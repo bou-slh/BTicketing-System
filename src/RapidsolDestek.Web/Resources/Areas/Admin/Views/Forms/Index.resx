@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="fm.title" xml:space="preserve">
+    <value>Formlar</value>
+  </data>
+  <data name="fm.sub" xml:space="preserve">
+    <value>Talep, görev, kullanıcı ve şirket kayıtlarında kullanılan veri formları.</value>
+  </data>
+  <data name="fm.searchPh" xml:space="preserve">
+    <value>Form ara…</value>
+  </data>
+  <data name="fm.new" xml:space="preserve">
+    <value>＋ Yeni Form</value>
+  </data>
+  <data name="fm.builtinHead" xml:space="preserve">
+    <value>Yerleşik Formlar</value>
+  </data>
+  <data name="fm.builtinHelp" xml:space="preserve">
+    <value>Sistemle gelen formlar silinemez; alanları özelleştirilebilir.</value>
+  </data>
+  <data name="fm.customHead" xml:space="preserve">
+    <value>Özel Formlar</value>
+  </data>
+  <data name="fm.customHelp" xml:space="preserve">
+    <value>Yardım konularına ve liste öğelerine bağlanabilen ek formlar.</value>
+  </data>
+  <data name="fm.showing" xml:space="preserve">
+    <value>{2} özel formdan {0}–{1} arası gösteriliyor</value>
+  </data>
+  <data name="fm.bulkTitle" xml:space="preserve">
+    <value>Toplu işlemler</value>
+  </data>
+  <data name="fm.bulkHelp" xml:space="preserve">
+    <value>Seçili özel formlara uygulanır.</value>
+  </data>
+  <data name="fm.emptyTitle" xml:space="preserve">
+    <value>Henüz özel form yok</value>
+  </data>
+  <data name="fm.emptyText" xml:space="preserve">
+    <value>Taleplerde ek bilgi toplamak için ilk özel formunuzu oluşturun.</value>
+  </data>
+  <data name="fm.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="fm.bulkNone" xml:space="preserve">
+    <value>Önce en az bir özel form seçin.</value>
+  </data>
+  <data name="fm.bulkDone" xml:space="preserve">
+    <value>{0} form güncellendi.</value>
+  </data>
+  <data name="fm.bulkPartial" xml:space="preserve">
+    <value>{0} form güncellendi, {1} atlandı (yerleşik veya bulunamadı).</value>
+  </data>
+  <data name="fm.toastDeleted" xml:space="preserve">
+    <value>Form ve girilmiş verileri silindi.</value>
+  </data>
+</root>

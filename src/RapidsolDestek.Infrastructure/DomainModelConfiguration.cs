@@ -276,6 +276,9 @@ public static class DomainModelConfiguration
 
         // ----- Forms & lists -----
 
+        b.Entity<FormDefinition>(e => e.Property(x => x.IsActive).HasDefaultValue(true));
+        b.Entity<ListDefinition>(e => e.Property(x => x.IsActive).HasDefaultValue(true));
+
         b.Entity<FormField>(e =>
         {
             e.HasIndex(x => new { x.FormDefinitionId, x.Name }).IsUnique();

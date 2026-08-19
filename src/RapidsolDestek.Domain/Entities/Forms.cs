@@ -46,6 +46,11 @@ public class FormDefinition : TimestampedEntity
     /// <summary>Built-in forms cannot be deleted (osTicket flag DELETABLE inverted).</summary>
     public bool IsSystem { get; set; }
 
+    /// <summary>Bulk enable/disable (admin/forms dlg-more, S7): inactive custom forms
+    /// are hidden from the helptopic-edit attach list; existing attachments keep
+    /// rendering (schedules IsActive precedent).</summary>
+    public bool IsActive { get; set; } = true;
+
     /// <summary>Shown above the fields on entry forms (osTicket instructions).</summary>
     public string? Instructions { get; set; }
 
@@ -138,6 +143,10 @@ public class ListDefinition : TimestampedEntity
 
     /// <summary>Non-null marks a protected system list (osTicket type).</summary>
     public string? Type { get; set; }
+
+    /// <summary>Bulk enable/disable (admin/lists dlg-more, S7): inactive lists are
+    /// hidden from the form designer's choice-list select (schedules precedent).</summary>
+    public bool IsActive { get; set; } = true;
 
     /// <summary>JSON: extra item-property form definition (osTicket configuration).</summary>
     public string? Configuration { get; set; }

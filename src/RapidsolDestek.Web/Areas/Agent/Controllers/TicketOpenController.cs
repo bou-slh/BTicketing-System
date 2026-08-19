@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Common;
 using RapidsolDestek.Domain.Entities;
+using RapidsolDestek.Domain.Forms;
 using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Infrastructure.Auditing;
@@ -152,13 +153,22 @@ public class TicketOpenController(
         if (topic is null)
             ModelState.AddModelError(nameof(TicketOpenForm.Topic), "errTopic");
 
-        // Dynamic topic fields (B3): agent-required fields must be filled.
+        // Dynamic topic fields (B3): agent-required fields must be filled, and
+        // filled values must pass the field's configured format check (the S7 form
+        // designer's ⚙ "Doğrulama" — email/phone/number).
         List<FormField> topicFields = topic is null ? [] : AgentFields(topic);
-        foreach (var field in topicFields.Where(f => f.RequiredForAgents))
+        foreach (var field in topicFields)
         {
             form.Fields.TryGetValue(field.Id, out var raw);
             if (string.IsNullOrWhiteSpace(raw))
-                ModelState.AddModelError($"Fields[{field.Id}]", $"errField:{field.Label}");
+            {
+                if (field.RequiredForAgents)
+                    ModelState.AddModelError($"Fields[{field.Id}]", $"errField:{field.Label}");
+            }
+            else if (!FormFieldConfig.Parse(field.Configuration).IsValidValue(raw.Trim()))
+            {
+                ModelState.AddModelError($"Fields[{field.Id}]", $"errFieldFormat:{field.Label}");
+            }
         }
 
         if (string.IsNullOrWhiteSpace(form.Summary))
@@ -293,17 +303,28 @@ public class TicketOpenController(
                     continue;
                 int? valueId = null;
                 var value = raw.Trim();
-                if (field.Type == "choices" && int.TryParse(value, out var itemId)
-                    && ListId(field) is { } listId)
+                if (field.Type == "choices")
                 {
-                    var item = await db.ListDefinitions
-                        .Where(l => l.Id == listId)
-                        .SelectMany(l => l.Items)
-                        .SingleOrDefaultAsync(i => i.Id == itemId, ct);
-                    if (item is null)
-                        continue;
-                    valueId = item.Id;
-                    value = item.Value;
+                    // List-backed choices post the item id; inline (designer
+                    // textarea) choices post the option string itself.
+                    var config = FormFieldConfig.Parse(field.Configuration);
+                    if (config.ListId is { } listId)
+                    {
+                        if (!int.TryParse(value, out var itemId))
+                            continue;
+                        var item = await db.ListDefinitions
+                            .Where(l => l.Id == listId)
+                            .SelectMany(l => l.Items)
+                            .SingleOrDefaultAsync(i => i.Id == itemId, ct);
+                        if (item is null)
+                            continue;
+                        valueId = item.Id;
+                        value = item.Value;
+                    }
+                    else if (!config.Choices.Contains(value, StringComparer.Ordinal))
+                    {
+                        continue; // not one of the designed options
+                    }
                 }
                 entry.Values.Add(new FormEntryValue { FormFieldId = field.Id, Value = value, ValueId = valueId });
             }
@@ -400,23 +421,6 @@ public class TicketOpenController(
             .ToList();
     }
 
-    private static int? ListId(FormField field)
-    {
-        if (string.IsNullOrWhiteSpace(field.Configuration))
-            return null;
-        try
-        {
-            return JsonDocument.Parse(field.Configuration).RootElement
-                .TryGetProperty("list_id", out var id) && id.TryGetInt32(out var value)
-                ? value
-                : null;
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
-    }
-
     /// <summary>Sanitized canned HTML → composer plain text (ticket-view parity).</summary>
     private static string HtmlToComposerText(string html)
     {
@@ -472,9 +476,14 @@ public class TicketOpenController(
                     .ThenInclude(d => d!.Fields.OrderBy(x => x.Sort))
             .ToListAsync(ct);
 
-        var listIds = topics.SelectMany(AgentFields).Select(ListId)
-            .OfType<int>().Distinct().ToList();
-        Dictionary<int, List<TicketOpenChoiceVm>> choices = listIds.Count == 0
+        // Field configurations (S7 form designer output): list-backed choices post
+        // the item id, inline designer choices post the option string; defaults
+        // pre-fill the control on first render (portal /open twin).
+        var configs = topics.SelectMany(AgentFields)
+            .DistinctBy(f => f.Id)
+            .ToDictionary(f => f.Id, f => FormFieldConfig.Parse(f.Configuration));
+        var listIds = configs.Values.Select(c => c.ListId).OfType<int>().Distinct().ToList();
+        Dictionary<int, List<TicketOpenChoiceVm>> listChoices = listIds.Count == 0
             ? []
             : await db.ListDefinitions
                 .Where(l => listIds.Contains(l.Id))
@@ -482,9 +491,17 @@ public class TicketOpenController(
                 {
                     l.Id,
                     Items = l.Items.Where(i => i.IsEnabled).OrderBy(i => i.Sort)
-                        .Select(i => new TicketOpenChoiceVm(i.Id, i.Value)).ToList(),
+                        .Select(i => new TicketOpenChoiceVm(i.Id.ToString(), i.Value)).ToList(),
                 })
                 .ToDictionaryAsync(l => l.Id, l => l.Items, ct);
+
+        IReadOnlyList<TicketOpenChoiceVm> ChoicesOf(FormField f)
+        {
+            var config = configs[f.Id];
+            if (config.ListId is { } listId)
+                return listChoices.TryGetValue(listId, out var items) ? items : [];
+            return [.. config.Choices.Select(c => new TicketOpenChoiceVm(c, c))];
+        }
 
         var topicVms = topics.Select(t => new TicketOpenTopicVm(
             t.Id,
@@ -492,7 +509,8 @@ public class TicketOpenController(
             t.DepartmentId, t.PriorityId, t.SlaId,
             AgentFields(t).Select(f => new TicketOpenFieldVm(
                 f.Id, f.Type, f.Label, f.Hint, f.RequiredForAgents,
-                ListId(f) is { } listId && choices.TryGetValue(listId, out var items) ? items : []))
+                configs[f.Id].Default,
+                ChoicesOf(f)))
                 .ToList()))
             .ToList();
 
@@ -625,9 +643,11 @@ public sealed record TicketOpenFieldVm(
     string Label,
     string? Hint,
     bool Required,
+    string? Default,
     IReadOnlyList<TicketOpenChoiceVm> Choices);
 
-public sealed record TicketOpenChoiceVm(int Id, string Value);
+/// <summary>Key = posted option value (list item id, or the inline choice string).</summary>
+public sealed record TicketOpenChoiceVm(string Key, string Label);
 
 public sealed record TicketOpenDeptVm(int Id, string Name, string Signature);
 

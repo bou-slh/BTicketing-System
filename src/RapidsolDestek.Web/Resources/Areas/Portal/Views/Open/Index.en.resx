@@ -118,6 +118,9 @@
   <data name="open.errField" xml:space="preserve">
     <value>Please fill in the "{0}" field.</value>
   </data>
+  <data name="open.errFieldFormat" xml:space="preserve">
+    <value>The value entered in the "{0}" field has an invalid format.</value>
+  </data>
   <data name="open.errMaxOpen" xml:space="preserve">
     <value>You have reached your open-ticket limit; a new ticket cannot be opened until existing ones are resolved.</value>
   </data>

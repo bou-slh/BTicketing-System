@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ls.title" xml:space="preserve">
+    <value>Lists</value>
+  </data>
+  <data name="ls.sub" xml:space="preserve">
+    <value>Custom value lists that feed choice fields on forms.</value>
+  </data>
+  <data name="ls.searchPh" xml:space="preserve">
+    <value>Search lists…</value>
+  </data>
+  <data name="ls.new" xml:space="preserve">
+    <value>＋ New List</value>
+  </data>
+  <data name="ls.colName" xml:space="preserve">
+    <value>List Name</value>
+  </data>
+  <data name="ls.colItems" xml:space="preserve">
+    <value>Item Count</value>
+  </data>
+  <data name="ls.builtin" xml:space="preserve">
+    <value>Built-in</value>
+  </data>
+  <data name="ls.showing" xml:space="preserve">
+    <value>Showing {0}–{1} of {2} lists</value>
+  </data>
+  <data name="ls.bulkTitle" xml:space="preserve">
+    <value>Bulk actions</value>
+  </data>
+  <data name="ls.bulkHelp" xml:space="preserve">
+    <value>Applied to the selected lists. Built-in lists cannot be deleted.</value>
+  </data>
+  <data name="ls.emptyTitle" xml:space="preserve">
+    <value>No custom lists yet</value>
+  </data>
+  <data name="ls.emptyText" xml:space="preserve">
+    <value>Create your first list to use in choice fields.</value>
+  </data>
+  <data name="ls.dateFmt" xml:space="preserve">
+    <value>MMM d, yyyy</value>
+  </data>
+  <data name="ls.bulkNone" xml:space="preserve">
+    <value>Select at least one list first.</value>
+  </data>
+  <data name="ls.bulkDone" xml:space="preserve">
+    <value>{0} lists updated.</value>
+  </data>
+  <data name="ls.bulkPartial" xml:space="preserve">
+    <value>{0} lists updated, {1} skipped (built-in or in use).</value>
+  </data>
+  <data name="ls.toastDeleted" xml:space="preserve">
+    <value>List deleted.</value>
+  </data>
+</root>

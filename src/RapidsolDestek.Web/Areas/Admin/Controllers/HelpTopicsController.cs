@@ -446,8 +446,11 @@ public class HelpTopicsController(AppDbContext db, ISettingsService settings) : 
 
         // Forms tab data: attached rows (fields + per-topic disable set) and every
         // attachable General definition (client templates for "Form ekle").
+        // Bulk-disabled forms (admin/forms dlg-more, S7) drop out of the attach
+        // list unless this topic already carries them (schedules IsActive precedent).
+        var attachedIds = topic?.Forms.Select(f => f.FormDefinitionId).ToList() ?? [];
         var generalForms = await db.FormDefinitions
-            .Where(f => f.Kind == FormKind.General)
+            .Where(f => f.Kind == FormKind.General && (f.IsActive || attachedIds.Contains(f.Id)))
             .Include(f => f.Fields.OrderBy(x => x.Sort))
             .OrderBy(f => f.Title)
             .ToListAsync(ct);

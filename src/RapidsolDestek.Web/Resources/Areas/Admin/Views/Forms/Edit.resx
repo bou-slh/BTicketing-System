@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="fme.back" xml:space="preserve">
+    <value>← Formlar</value>
+  </data>
+  <data name="fme.sub" xml:space="preserve">
+    <value>Form başlığını, yönergesini ve alanlarını düzenleyin.</value>
+  </data>
+  <data name="fme.titleLabel" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="fme.titleHelp" xml:space="preserve">
+    <value>Temsilci panelinde ve form listelerinde görünen ad.</value>
+  </data>
+  <data name="fme.instructions" xml:space="preserve">
+    <value>Yönerge</value>
+  </data>
+  <data name="fme.instructionsHelp" xml:space="preserve">
+    <value>Formun üstünde kullanıcıya gösterilir.</value>
+  </data>
+  <data name="fme.fieldsHead" xml:space="preserve">
+    <value>Alanlar</value>
+  </data>
+  <data name="fme.fieldsHelp" xml:space="preserve">
+    <value>Sürükleyerek sıralayın. Dahili alanlar yalnızca temsilcilere görünür.</value>
+  </data>
+  <data name="fme.colLabel" xml:space="preserve">
+    <value>Etiket</value>
+  </data>
+  <data name="fme.colType" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="fme.colVar" xml:space="preserve">
+    <value>Değişken</value>
+  </data>
+  <data name="fme.colRequired" xml:space="preserve">
+    <value>Zorunlu</value>
+  </data>
+  <data name="fme.colInternal" xml:space="preserve">
+    <value>Dahili</value>
+  </data>
+  <data name="fme.tShort" xml:space="preserve">
+    <value>Kısa Metin</value>
+  </data>
+  <data name="fme.tLong" xml:space="preserve">
+    <value>Uzun Metin</value>
+  </data>
+  <data name="fme.tChoice" xml:space="preserve">
+    <value>Seçim</value>
+  </data>
+  <data name="fme.tDate" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="fme.tCheckbox" xml:space="preserve">
+    <value>Onay Kutusu</value>
+  </data>
+  <data name="fme.tPhone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="fme.tFile" xml:space="preserve">
+    <value>Dosya</value>
+  </data>
+  <data name="fme.addField" xml:space="preserve">
+    <value>＋ Alan Ekle</value>
+  </data>
+  <data name="fme.cfgTitle" xml:space="preserve">
+    <value>Alan Ayarları</value>
+  </data>
+  <data name="fme.cfgHelpText" xml:space="preserve">
+    <value>Yardım metni</value>
+  </data>
+  <data name="fme.cfgHelpTextHelp" xml:space="preserve">
+    <value>Alanın altında kullanıcıya gösterilen açıklama.</value>
+  </data>
+  <data name="fme.cfgDefault" xml:space="preserve">
+    <value>Varsayılan değer</value>
+  </data>
+  <data name="fme.cfgDefaultHelp" xml:space="preserve">
+    <value>Form açıldığında alan bu değerle dolu gelir.</value>
+  </data>
+  <data name="fme.cfgValidation" xml:space="preserve">
+    <value>Doğrulama</value>
+  </data>
+  <data name="fme.vNone" xml:space="preserve">
+    <value>— Yok —</value>
+  </data>
+  <data name="fme.vEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="fme.vPhone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="fme.vNumber" xml:space="preserve">
+    <value>Sayı</value>
+  </data>
+  <data name="fme.cfgValidationHelp" xml:space="preserve">
+    <value>Girilen değerin biçimini denetler.</value>
+  </data>
+  <data name="fme.deleteWarn" xml:space="preserve">
+    <value>Bu formu silmek, forma şimdiye kadar girilmiş TÜM verileri de kalıcı olarak siler. Devam etmek istiyor musunuz?</value>
+  </data>
+  <data name="fme.newTitle" xml:space="preserve">
+    <value>Yeni Form</value>
+  </data>
+  <data name="fme.errTitle" xml:space="preserve">
+    <value>Form başlığı gerekli (en fazla 120 karakter).</value>
+  </data>
+  <data name="fme.errLabel" xml:space="preserve">
+    <value>Mevcut alanların etiketi boş bırakılamaz.</value>
+  </data>
+  <data name="fme.errSystem" xml:space="preserve">
+    <value>Yerleşik formlar silinemez.</value>
+  </data>
+  <data name="fme.toastSaved" xml:space="preserve">
+    <value>Form kaydedildi.</value>
+  </data>
+  <data name="fme.toastCreated" xml:space="preserve">
+    <value>Form oluşturuldu.</value>
+  </data>
+  <data name="fme.toastSavedDisabled" xml:space="preserve">
+    <value>Form kaydedildi; yanıtları bulunan {0} alan silinmek yerine devre dışı bırakıldı.</value>
+  </data>
+  <data name="fme.disabledInfo" xml:space="preserve">
+    <value>Yanıtları korunarak devre dışı bırakılmış {0} alan var.</value>
+  </data>
+  <data name="fme.optListTitle" xml:space="preserve">
+    <value>Seçenek kaynağı listesi</value>
+  </data>
+  <data name="fme.optCustom" xml:space="preserve">
+    <value>— Özel seçenekler —</value>
+  </data>
+  <data name="fme.optChoicesPh" xml:space="preserve">
+    <value>Her satıra bir seçenek yazın</value>
+  </data>
+  <data name="fme.optChoicesTitle" xml:space="preserve">
+    <value>Seçenekler</value>
+  </data>
+  <data name="fme.preview" xml:space="preserve">
+    <value>Önizleme</value>
+  </data>
+  <data name="fme.previewHelp" xml:space="preserve">
+    <value>Alanların açık portaldaki görünümü; kaydedilmemiş değişiklikler dahildir.</value>
+  </data>
+  <data name="fme.previewEmpty" xml:space="preserve">
+    <value>Önizlenecek kullanıcıya görünür alan yok.</value>
+  </data>
+  <data name="fme.previewError" xml:space="preserve">
+    <value>Önizleme yüklenemedi.</value>
+  </data>
+</root>

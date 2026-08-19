@@ -1,0 +1,308 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model FormEditVm
+@{
+    var f = Model.Form;
+    var isNew = f is null;
+    ViewData["Title"] = isNew ? L["fme.newTitle"].Value : f!.Title;
+
+    // PRG toast handoff: validation failure (nothing written) or saved/created;
+    // the soft-disable outcome carries its count (fme.toastSavedDisabled).
+    if (TempData["FormEditToast"] is string toastKey)
+    {
+        @* GetString: LocalizedHtmlString.Value would return the UNFORMATTED resource. *@
+        ViewData["Toast"] = toastKey == "fme.toastSavedDisabled"
+            ? L.GetString(toastKey, TempData["FormEditToastCount"] as int? ?? 0).Value
+            : L[toastKey].Value;
+        if (TempData["FormEditToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // The mockup's type select in its option order (fme.tShort…tFile ↔ osTicket
+    // type keys the open pages render).
+    (string Value, string Key)[] types =
+    [
+        ("text", "fme.tShort"), ("memo", "fme.tLong"), ("choices", "fme.tChoice"),
+        ("date", "fme.tDate"), ("checkbox", "fme.tCheckbox"), ("phone", "fme.tPhone"),
+        ("file", "fme.tFile"),
+    ];
+    (string Value, string Key)[] validations =
+    [
+        ("", "fme.vNone"), ("email", "fme.vEmail"), ("phone", "fme.vPhone"), ("number", "fme.vNumber"),
+    ];
+}
+
+<form method="post" asp-area="Admin" asp-controller="Forms" asp-action="Save"
+      id="fme-form" data-preview-url="/admin/form-edit/preview">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@f!.Id">
+    }
+
+    <div class="bo-page-head">
+        <div>
+            <a href="/admin/forms" style="font-size:13px">@L["fme.back"]</a>
+            <h1>@(isNew ? L["fme.newTitle"].Value : f!.Title)</h1>
+            <p>@L["fme.sub"]</p>
+        </div>
+        <div class="actions">
+            @* Delete is guarded: nothing exists on create, built-ins are protected
+               (fm.builtinHelp canon). Preview = INVENTED control (queues/filters
+               precedent — the mockup ships no preview surface; needs canon sign-off). *@
+            <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-deletedata"
+                    disabled="@(isNew || f!.IsSystem)"
+                    title="@(f?.IsSystem == true ? L["fme.errSystem"].Value : null)">@SL["common.delete"]</button>
+            <button type="button" class="rd-btn" data-dialog-open="dlg-preview">@L["fme.preview"]</button>
+            <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </div>
+
+    <div class="rd-surface" style="margin-bottom:20px">
+        <div class="rd-surface-body" style="max-width:720px">
+            <div class="rd-field">
+                <label class="rd-label" for="fme-title">@L["fme.titleLabel"]</label>
+                <input id="fme-title" name="title" class="rd-control" value="@f?.Title" required maxlength="120">
+                <div class="rd-help">@L["fme.titleHelp"]</div>
+            </div>
+            <div class="rd-field mb-0">
+                <label class="rd-label" for="fme-instr">@L["fme.instructions"]</label>
+                <textarea id="fme-instr" name="instructions" class="rd-control" style="min-height:80px">@f?.Instructions</textarea>
+                <div class="rd-help">@L["fme.instructionsHelp"]</div>
+            </div>
+        </div>
+    </div>
+
+    @* ============ Alanlar (B2/B4) ============
+       Row = the mockup's exact DOM plus: hidden fieldIds (reconciliation), the
+       fieldMarks "row"/"req"/"int" marker sequence (unchecked checkboxes post
+       nothing — schedules marker precedent), the ⚙ dialog's per-row hidden config
+       inputs (B2 write-back), and the INVENTED options editor the type select
+       reveals for "Seçim" fields (custom list select + one-option-per-line
+       textarea; the mockup row cannot express choices otherwise). The tbody is
+       drag-reorderable via the shared rd.js data-drag-rows contract; the posted
+       DOM order is the persisted Sort. *@
+    @{
+        async Task FieldRowAsync(FormFieldRowVm? r)
+        {
+            var type = r?.Type ?? "text";
+            <tr class="bo-rule-row">
+                <td class="rd-muted" style="cursor:grab" data-drag-handle>⋮⋮<input type="hidden" name="fieldIds" value="@(r?.Id ?? 0)"><input type="hidden" name="fieldMarks" value="row"></td>
+                <td><input class="rd-control" name="fieldLabels" value="@r?.Label" style="min-width:170px"></td>
+                <td>
+                    <select class="rd-control" name="fieldTypes" style="min-width:130px" data-field-type>
+                        @foreach (var t in types)
+                        {
+                            <option value="@t.Value" selected="@(type == t.Value)">@L[t.Key]</option>
+                        }
+                    </select>
+                    <div data-opt-editor style="margin-top:6px;display:grid;gap:6px" hidden="@(type != "choices")">
+                        <select class="rd-control" name="fieldLists" title="@L["fme.optListTitle"]">
+                            <option value="0" selected="@((r?.ListId ?? 0) == 0)">@L["fme.optCustom"]</option>
+                            @foreach (var l in Model.Lists)
+                            {
+                                <option value="@l.Id" selected="@(r?.ListId == l.Id)">@l.Label</option>
+                            }
+                        </select>
+                        <textarea class="rd-control" name="fieldChoices" data-plain rows="3"
+                                  placeholder="@L["fme.optChoicesPh"]" title="@L["fme.optChoicesTitle"]"
+                                  style="min-height:64px" hidden="@((r?.ListId ?? 0) != 0)">@r?.ChoicesText</textarea>
+                    </div>
+                </td>
+                <td><input class="rd-control" name="fieldVars" value="@r?.Var" style="min-width:130px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace"></td>
+                <td><input type="checkbox" name="fieldMarks" value="req" checked="@(r?.Required == true)"></td>
+                <td><input type="checkbox" name="fieldMarks" value="int" checked="@(r?.Internal == true)"></td>
+                <td>
+                    <input type="hidden" name="cfgHints" value="@r?.Hint">
+                    <input type="hidden" name="cfgDefaults" value="@r?.Default">
+                    <input type="hidden" name="cfgValidations" value="@r?.Validation">
+                    <button type="button" style="border:0;background:transparent;cursor:pointer;font-size:15px"
+                            data-cfg-open data-dialog-open="dlg-fieldcfg" title="@L["fme.cfgTitle"]">⚙</button>
+                </td>
+                <td><button type="button" class="remove" style="border:0;background:transparent;color:var(--rd-red);cursor:pointer" title="@SL["common.delete"]">✕</button></td>
+            </tr>
+        }
+    }
+    <div class="rd-surface" style="margin-bottom:20px">
+        <div class="rd-surface-head"><span>@L["fme.fieldsHead"]</span></div>
+        <table class="rd-table" id="tbl-fields">
+            <thead>
+                <tr>
+                    <th style="width:30px"></th>
+                    <th>@L["fme.colLabel"]</th>
+                    <th>@L["fme.colType"]</th>
+                    <th>@L["fme.colVar"]</th>
+                    <th>@L["fme.colRequired"]</th>
+                    <th>@L["fme.colInternal"]</th>
+                    <th style="width:36px"></th>
+                    <th style="width:36px"></th>
+                </tr>
+            </thead>
+            <tbody data-drag-rows>
+                @foreach (var r in Model.Fields)
+                {
+                    await FieldRowAsync(r);
+                }
+            </tbody>
+        </table>
+        <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft)">
+            <button type="button" class="rd-btn rd-btn-ghost" data-rule-add="fme-field-tpl" data-rule-into="#tbl-fields tbody">@L["fme.addField"]</button>
+            <div class="rd-help">@L["fme.fieldsHelp"]</div>
+            @if (Model.DisabledFieldCount > 0)
+            {
+                @* Soft-disabled fields (answers preserved) are not editable rows —
+                   surfaced honestly so they don't vanish silently. *@
+                <div class="rd-help">@L["fme.disabledInfo", Model.DisabledFieldCount]</div>
+            }
+        </div>
+    </div>
+    <template id="fme-field-tpl">
+        @{ await FieldRowAsync(null); }
+    </template>
+
+    <div class="rd-surface">
+        <div class="rd-surface-body" style="max-width:720px">
+            <div class="rd-field mb-0">
+                <label class="rd-label" for="fme-notes">@SL["common.notes"]</label>
+                <textarea id="fme-notes" name="notes" class="rd-control" style="min-height:80px">@f?.Notes</textarea>
+                <div class="rd-help">@SL["common.notesHelp"]</div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (!isNew)
+{
+    <form id="fme-del" method="post" asp-area="Admin" asp-controller="Forms" asp-action="Delete" hidden>
+        <input type="hidden" name="id" value="@f!.Id">
+    </form>
+}
+
+@* Alan ayarları (B2): ONE dialog parameterized by the row that opened it — the
+   values live in per-row hidden inputs, ⚙ copies them in, Uygula writes them
+   back (rows are client-created, so a server-prefilled dialog per row cannot
+   exist; the write-back IS the parameterization). *@
+<dialog class="rd-dialog" id="dlg-fieldcfg">
+    <form method="dialog">
+        <div class="rd-dialog-head"><span>@L["fme.cfgTitle"]</span><button type="button" class="close" data-dialog-close>✕</button></div>
+        <div class="rd-dialog-body">
+            <div class="rd-field">
+                <label class="rd-label" for="cfg-help">@L["fme.cfgHelpText"]</label>
+                <input id="cfg-help" class="rd-control">
+                <div class="rd-help">@L["fme.cfgHelpTextHelp"]</div>
+            </div>
+            <div class="rd-field">
+                <label class="rd-label" for="cfg-default">@L["fme.cfgDefault"]</label>
+                <input id="cfg-default" class="rd-control">
+                <div class="rd-help">@L["fme.cfgDefaultHelp"]</div>
+            </div>
+            <div class="rd-field mb-0">
+                <label class="rd-label" for="cfg-validation">@L["fme.cfgValidation"]</label>
+                <select id="cfg-validation" class="rd-control">
+                    @foreach (var v in validations)
+                    {
+                        <option value="@v.Value">@L[v.Key]</option>
+                    }
+                </select>
+                <div class="rd-help">@L["fme.cfgValidationHelp"]</div>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+            <button type="button" class="rd-btn rd-btn-primary" data-cfg-apply data-dialog-close>@SL["common.apply"]</button>
+        </div>
+    </form>
+</dialog>
+
+@* Veriyle birlikte silme onayı (fme.deleteWarn canon: the data goes too). *@
+<dialog class="rd-dialog" id="dlg-deletedata">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+        <div class="rd-banner rd-banner-warn"><span>⚠</span><span>@L["fme.deleteWarn"]</span></div>
+    </div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="fme-del" disabled="@isNew">@SL["common.delete"]</button>
+    </div>
+</dialog>
+
+@* Önizleme (B4 live preview, INVENTED — the fragment POSTs the CURRENT unsaved
+   field rows and renders them as the portal /open page would). *@
+<dialog class="rd-dialog" id="dlg-preview" style="max-width:560px">
+    <div class="rd-dialog-head"><span>@L["fme.preview"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+        <p class="rd-help" style="margin-top:0">@L["fme.previewHelp"]</p>
+        <div id="fme-preview-body" data-err="@L.GetString("fme.previewError")"></div>
+    </div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.close"]</button>
+    </div>
+</dialog>
+
+@* Page mechanics (helptopic-edit page-script precedent): the type select reveals
+   the options editor (B3), the list select gates the inline-options textarea, the
+   ⚙ dialog reads/writes its row's hidden config inputs (B2), and the preview
+   dialog POSTs the whole form through fetch. *@
+<script>
+(() => {
+  const form = document.getElementById("fme-form");
+  if (!form) return;
+
+  // ---- type select → options editor reveal (B3) ----
+  const syncOptionEditors = () => {
+    form.querySelectorAll("select[name=fieldTypes]").forEach((sel) => {
+      const editor = sel.closest("td")?.querySelector("[data-opt-editor]");
+      if (editor) editor.hidden = sel.value !== "choices";
+    });
+    form.querySelectorAll("select[name=fieldLists]").forEach((sel) => {
+      const ta = sel.closest("[data-opt-editor]")?.querySelector("textarea[name=fieldChoices]");
+      if (ta) ta.hidden = sel.value !== "0";
+    });
+  };
+  document.addEventListener("change", syncOptionEditors);
+  // Freshly cloned builder rows (rd.js data-rule-add runs first) need a resync.
+  document.addEventListener("click", () => setTimeout(syncOptionEditors, 0));
+  syncOptionEditors();
+
+  // ---- ⚙ config dialog write-back (B2) ----
+  const dlg = document.getElementById("dlg-fieldcfg");
+  const cfgHelp = document.getElementById("cfg-help");
+  const cfgDefault = document.getElementById("cfg-default");
+  const cfgValidation = document.getElementById("cfg-validation");
+  let cfgRow = null;
+  document.addEventListener("click", (e) => {
+    const open = e.target.closest("[data-cfg-open]");
+    if (open) {
+      cfgRow = open.closest("tr");
+      cfgHelp.value = cfgRow.querySelector("input[name=cfgHints]").value;
+      cfgDefault.value = cfgRow.querySelector("input[name=cfgDefaults]").value;
+      cfgValidation.value = cfgRow.querySelector("input[name=cfgValidations]").value;
+      return;
+    }
+    if (e.target.closest("[data-cfg-apply]") && cfgRow) {
+      cfgRow.querySelector("input[name=cfgHints]").value = cfgHelp.value;
+      cfgRow.querySelector("input[name=cfgDefaults]").value = cfgDefault.value;
+      cfgRow.querySelector("input[name=cfgValidations]").value = cfgValidation.value;
+      cfgRow = null;
+    }
+  });
+
+  // ---- live preview: refresh from the CURRENT unsaved state on open ----
+  const previewBody = document.getElementById("fme-preview-body");
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest('[data-dialog-open="dlg-preview"]')) return;
+    setTimeout(async () => {
+      try {
+        const res = await fetch(form.getAttribute("data-preview-url"), {
+          method: "POST", body: new FormData(form),
+        });
+        if (!res.ok) throw new Error("preview failed");
+        previewBody.innerHTML = await res.text();
+      } catch {
+        window.RD?.toast(previewBody.getAttribute("data-err"), "error");
+      }
+    }, 0);
+  });
+})();
+</script>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="lse.back" xml:space="preserve">
+    <value>← Lists</value>
+  </data>
+  <data name="lse.sub" xml:space="preserve">
+    <value>Edit the list definition, its items and item properties.</value>
+  </data>
+  <data name="lse.tabDef" xml:space="preserve">
+    <value>Definition</value>
+  </data>
+  <data name="lse.tabItems" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="lse.tabProps" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="lse.name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="lse.nameHelp" xml:space="preserve">
+    <value>Singular name; used on field labels.</value>
+  </data>
+  <data name="lse.plural" xml:space="preserve">
+    <value>Plural name</value>
+  </data>
+  <data name="lse.pluralHelp" xml:space="preserve">
+    <value>Used on list pages and headings.</value>
+  </data>
+  <data name="lse.sort" xml:space="preserve">
+    <value>Sort order</value>
+  </data>
+  <data name="lse.sortAlpha" xml:space="preserve">
+    <value>Alphabetical</value>
+  </data>
+  <data name="lse.sortAlphaDesc" xml:space="preserve">
+    <value>Alphabetical (Z→A)</value>
+  </data>
+  <data name="lse.sortManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="lse.sortHelp" xml:space="preserve">
+    <value>The order items appear in choice fields.</value>
+  </data>
+  <data name="lse.itemsHead" xml:space="preserve">
+    <value>List Items</value>
+  </data>
+  <data name="lse.itemsHelp" xml:space="preserve">
+    <value>The abbreviation is a short code used in reports and the API.</value>
+  </data>
+  <data name="lse.colValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="lse.colAbbrev" xml:space="preserve">
+    <value>Abbreviation</value>
+  </data>
+  <data name="lse.colOrder" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="lse.colEnabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="lse.addPh" xml:space="preserve">
+    <value>New item value…</value>
+  </data>
+  <data name="lse.addItem" xml:space="preserve">
+    <value>＋ Add Item</value>
+  </data>
+  <data name="lse.importLabel" xml:space="preserve">
+    <value>Items (one per line)</value>
+  </data>
+  <data name="lse.importPh" xml:space="preserve">
+    <value>Type one item per line</value>
+  </data>
+  <data name="lse.importHelp" xml:space="preserve">
+    <value>You can separate value and abbreviation with a comma: Bordro, BRD</value>
+  </data>
+  <data name="lse.propsHead" xml:space="preserve">
+    <value>Item Properties</value>
+  </data>
+  <data name="lse.propsHelp" xml:space="preserve">
+    <value>Extra fields attached to every list item; filled while editing an item.</value>
+  </data>
+  <data name="lse.colLabel" xml:space="preserve">
+    <value>Label</value>
+  </data>
+  <data name="lse.colType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="lse.colVar" xml:space="preserve">
+    <value>Variable</value>
+  </data>
+  <data name="lse.colRequired" xml:space="preserve">
+    <value>Required</value>
+  </data>
+  <data name="lse.colInternal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="lse.tShort" xml:space="preserve">
+    <value>Short Text</value>
+  </data>
+  <data name="lse.tLong" xml:space="preserve">
+    <value>Long Text</value>
+  </data>
+  <data name="lse.tChoice" xml:space="preserve">
+    <value>Choice</value>
+  </data>
+  <data name="lse.tDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="lse.tCheckbox" xml:space="preserve">
+    <value>Checkbox</value>
+  </data>
+  <data name="lse.addField" xml:space="preserve">
+    <value>＋ Add Field</value>
+  </data>
+  <data name="lse.cfgTitle" xml:space="preserve">
+    <value>Field Settings</value>
+  </data>
+  <data name="lse.cfgHelpText" xml:space="preserve">
+    <value>Help text</value>
+  </data>
+  <data name="lse.cfgDefault" xml:space="preserve">
+    <value>Default value</value>
+  </data>
+  <data name="lse.cfgValidation" xml:space="preserve">
+    <value>Validation</value>
+  </data>
+  <data name="lse.vNone" xml:space="preserve">
+    <value>— None —</value>
+  </data>
+  <data name="lse.vEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="lse.vPhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="lse.vNumber" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="lse.newTitle" xml:space="preserve">
+    <value>New List</value>
+  </data>
+  <data name="lse.errName" xml:space="preserve">
+    <value>The list name is required (120 characters max).</value>
+  </data>
+  <data name="lse.errItem" xml:space="preserve">
+    <value>Existing items cannot have an empty value.</value>
+  </data>
+  <data name="lse.errDupItem" xml:space="preserve">
+    <value>Multiple items cannot share the same value.</value>
+  </data>
+  <data name="lse.errSystem" xml:space="preserve">
+    <value>Built-in lists cannot be edited or deleted.</value>
+  </data>
+  <data name="lse.errInUse" xml:space="preserve">
+    <value>This list is used by a form field; remove the field first.</value>
+  </data>
+  <data name="lse.toastSaved" xml:space="preserve">
+    <value>List saved.</value>
+  </data>
+  <data name="lse.toastCreated" xml:space="preserve">
+    <value>List created.</value>
+  </data>
+  <data name="lse.importResult" xml:space="preserve">
+    <value>{0} items added, {1} lines skipped.</value>
+  </data>
+  <data name="lse.systemNote" xml:space="preserve">
+    <value>Built-in list — its items mirror the system table and cannot be edited here.</value>
+  </data>
+</root>
