@@ -206,7 +206,7 @@ pattern dead in the mockups.
   fresh public topic through /admin/helptopic-edit renders on BOTH open pages (portal /open + agent
   /agent/ticket-open — labels, ⚙ hint, choice options), the ⚙ email validation refuses a malformed
   portal submit, and a valid submit persists the designer fields as FormEntry/Values on the created
-  ticket; the list editor feeds those choice fields (form-edit list select = real ListDefinitions).)*
+  ticket; the list editor feeds those choice fields (form-edit list select = real ListDefinitions). STAGE CLOSED 2026-08-20: all 42 §6.3 pages ported (through 2ed80ff, 323 tests + 7 E2E), both gate legs green, four-batch visual-differ pass ×TR/EN×light/dark over every page incl. dialogs — ~40/42 at parity on first look (several byte-identical), all blockers traced to 3 CSS-class root causes (tr.bo-rule-row flex on table rows; author display rules defeating [hidden]; inline upload labels), fixed + re-verified 6/6. Mockup-side touch-up candidate recorded: mockups/agent/kb-faq.html:150 uses <label class="rd-upload"> and mockup base.css lacks display:block, so the mockup twin itself renders the inline-shrunk zone the app just fixed.)*
 - **S8 — Email subsystem.** Outbound: Razor template rendering with variables, event→template map (incl.
   effort request/response), MailKit SMTP, Hangfire send queue with retry, per-department from-addresses.
   Inbound: Hangfire IMAP poll, MimeKit parse, reply-token threading, help-topic routing, attachments,
