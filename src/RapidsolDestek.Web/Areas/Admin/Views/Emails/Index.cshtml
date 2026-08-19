@@ -1,0 +1,151 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model EmailsIndexVm
+@{
+    ViewData["Title"] = L["em.title"];
+
+    // PRG toast handoff after bulk (teams precedent).
+    if (TempData["EmailsToast"] is string toastKey)
+    {
+        var ok = TempData["EmailsToastOk"] as int? ?? 0;
+        var skipped = TempData["EmailsToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "em.bulkDone" or "em.bulkPartial"
+            ? L.GetString(toastKey, ok, skipped)
+            : L[toastKey].Value;
+        if (TempData["EmailsToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    string UpdatedText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("em.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/emails" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key is "email" or "updated" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["em.title"]</h1>
+        <p>@L["em.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <a class="rd-btn-primary" href="/admin/email-edit">@L["em.add"]</a>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/admin/emails">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["em.searchPh"]">
+    <span class="spacer"></span>
+    @* Mockup's dead bulk buttons act on the checkbox selection (teams precedent);
+       enable/disable flip the accounts' channel IsActive flags. *@
+    <button class="rd-btn" type="submit" form="em-bulk" name="act" value="enable">@SL["common.enable"]</button>
+    <button class="rd-btn" type="submit" form="em-bulk" name="act" value="disable">@SL["common.disable"]</button>
+    <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-bulk-delete">@SL["common.delete"]</button>
+</form>
+
+<div class="rd-surface" id="tbl-emails">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Mockup's hidden #empty-emails panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">✉</div>
+            <h3>@L["em.emptyTitle"]</h3>
+            <p>@L["em.emptyText"]</p>
+            <a class="rd-btn-primary" href="/admin/email-edit">@L["em.add"]</a>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-emails" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("email")"><a href="@SortUrl("email")">@L["em.colEmail"]</a></th>
+                    <th class="@SortClass("priority")"><a href="@SortUrl("priority")">@L["em.colPriority"]</a></th>
+                    <th class="@SortClass("dept")"><a href="@SortUrl("dept")">@L["em.colDept"]</a></th>
+                    <th class="@SortClass("updated")"><a href="@SortUrl("updated")">@SL["common.updated"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="em-bulk"></td>
+                        <td>
+                            <a href="/admin/email-edit?id=@r.Id">@r.Address</a>
+                            @if (!string.IsNullOrEmpty(r.DisplayName))
+                            {
+                                <br><small class="rd-muted">@r.DisplayName</small>
+                            }
+                        </td>
+                        <td>@(r.PriorityKey is null ? "" : SL[$"priority.{r.PriorityKey}"].Value)</td>
+                        <td>@r.DeptName</td>
+                        <td>@UpdatedText(r.Updated)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@SL["common.showing"]</span><span>@Model.From–@Model.To / @Model.Total</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the toolbar bulk actions (teams precedent). *@
+<form id="em-bulk" method="post" asp-area="Admin" asp-controller="Emails" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+@* Bulk delete confirm dialog: invented UI (B2, teams precedent). Accounts referenced
+   by departments, filters or the email settings are skipped server-side. *@
+<dialog class="rd-dialog" id="dlg-bulk-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <p>@L["em.deleteConfirm"]</p>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        <button type="submit" class="rd-btn rd-btn-danger" form="em-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>

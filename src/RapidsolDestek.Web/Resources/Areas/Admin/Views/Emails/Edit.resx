@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ee.back" xml:space="preserve">
+    <value>← E-posta Adresleri</value>
+  </data>
+  <data name="ee.subtitle" xml:space="preserve">
+    <value>Bu posta kutusunun hesap bilgilerini, gelen posta getirme ve giden SMTP ayarlarını yönetin.</value>
+  </data>
+  <data name="ee.tabAccount" xml:space="preserve">
+    <value>Hesap</value>
+  </data>
+  <data name="ee.tabIncoming" xml:space="preserve">
+    <value>Gelen Posta</value>
+  </data>
+  <data name="ee.tabOutgoing" xml:space="preserve">
+    <value>Giden Posta (SMTP)</value>
+  </data>
+  <data name="ee.secIdentity" xml:space="preserve">
+    <value>Kimlik</value>
+  </data>
+  <data name="ee.email" xml:space="preserve">
+    <value>E-posta adresi</value>
+  </data>
+  <data name="ee.emailHelp" xml:space="preserve">
+    <value>Sistemin bu kutu üzerinden alıp göndereceği tam adres.</value>
+  </data>
+  <data name="ee.fromName" xml:space="preserve">
+    <value>Görünen ad</value>
+  </data>
+  <data name="ee.fromNameHelp" xml:space="preserve">
+    <value>Giden e-postalarda "Kimden" satırında görünen ad.</value>
+  </data>
+  <data name="ee.secNewTicket" xml:space="preserve">
+    <value>Yeni Talep Ayarları</value>
+  </data>
+  <data name="ee.newTicketHelp" xml:space="preserve">
+    <value>Bu adrese gelen e-postalardan açılan taleplere uygulanır.</value>
+  </data>
+  <data name="ee.dept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="ee.deptHelp" xml:space="preserve">
+    <value>Bu kutudan açılan talepler hangi departmana düşsün?</value>
+  </data>
+  <data name="ee.priority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="ee.priorityHelp" xml:space="preserve">
+    <value>Talep açılırken atanacak öncelik.</value>
+  </data>
+  <data name="ee.topic" xml:space="preserve">
+    <value>Yardım konusu</value>
+  </data>
+  <data name="ee.topicHelp" xml:space="preserve">
+    <value>Talep açılırken atanacak yardım konusu.</value>
+  </data>
+  <data name="ee.sysDefault" xml:space="preserve">
+    <value>Sistem Varsayılanı</value>
+  </data>
+  <data name="ee.noAutoResp" xml:space="preserve">
+    <value>Otomatik yanıtı kapat</value>
+  </data>
+  <data name="ee.noAutoRespHelp" xml:space="preserve">
+    <value>Bu adresten açılan talepler için "talebiniz alındı" e-postası gönderilmez.</value>
+  </data>
+  <data name="ee.notesHead" xml:space="preserve">
+    <value>İç Notlar</value>
+  </data>
+  <data name="ee.secServer" xml:space="preserve">
+    <value>Sunucu Bağlantısı</value>
+  </data>
+  <data name="ee.host" xml:space="preserve">
+    <value>Sunucu (host)</value>
+  </data>
+  <data name="ee.hostHelp" xml:space="preserve">
+    <value>Gelen posta sunucusunun adresi.</value>
+  </data>
+  <data name="ee.port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="ee.portInHelp" xml:space="preserve">
+    <value>IMAP için genellikle 993, POP3 için 995.</value>
+  </data>
+  <data name="ee.folder" xml:space="preserve">
+    <value>Klasör</value>
+  </data>
+  <data name="ee.folderHelp" xml:space="preserve">
+    <value>Yeni e-postaların okunacağı posta klasörü.</value>
+  </data>
+  <data name="ee.protocol" xml:space="preserve">
+    <value>Protokol</value>
+  </data>
+  <data name="ee.protocolHelp" xml:space="preserve">
+    <value>IMAP klasör desteği sunar; POP3 yalnızca gelen kutusunu okur.</value>
+  </data>
+  <data name="ee.auth" xml:space="preserve">
+    <value>Kimlik doğrulama</value>
+  </data>
+  <data name="ee.authHelp" xml:space="preserve">
+    <value>Sunucuya bağlanırken kullanılacak doğrulama yöntemi.</value>
+  </data>
+  <data name="ee.authBasic" xml:space="preserve">
+    <value>Temel (kullanıcı adı + parola)</value>
+  </data>
+  <data name="ee.configure" xml:space="preserve">
+    <value>Yapılandır…</value>
+  </data>
+  <data name="ee.secFetch" xml:space="preserve">
+    <value>Getirme</value>
+  </data>
+  <data name="ee.fetchEnabled" xml:space="preserve">
+    <value>Getirme durumu</value>
+  </data>
+  <data name="ee.fetchEnabledHelp" xml:space="preserve">
+    <value>Kapalıyken bu kutudan yeni e-posta alınmaz.</value>
+  </data>
+  <data name="ee.enabled" xml:space="preserve">
+    <value>Etkin</value>
+  </data>
+  <data name="ee.disabled" xml:space="preserve">
+    <value>Devre dışı</value>
+  </data>
+  <data name="ee.freq" xml:space="preserve">
+    <value>Sıklık (dk)</value>
+  </data>
+  <data name="ee.freqHelp" xml:space="preserve">
+    <value>Yeni e-postalar kaç dakikada bir kontrol edilsin?</value>
+  </data>
+  <data name="ee.maxFetch" xml:space="preserve">
+    <value>Maks. e-posta / getirme</value>
+  </data>
+  <data name="ee.maxFetchHelp" xml:space="preserve">
+    <value>Tek seferde en fazla kaç e-posta işlensin?</value>
+  </data>
+  <data name="ee.afterFetch" xml:space="preserve">
+    <value>Getirme sonrası</value>
+  </data>
+  <data name="ee.afterFetchHelp" xml:space="preserve">
+    <value>İşlenen e-postalara sunucuda ne yapılsın?</value>
+  </data>
+  <data name="ee.optArchive" xml:space="preserve">
+    <value>Arşiv klasörüne taşı</value>
+  </data>
+  <data name="ee.optDelete" xml:space="preserve">
+    <value>Sunucudan sil</value>
+  </data>
+  <data name="ee.optLeave" xml:space="preserve">
+    <value>Olduğu gibi bırak</value>
+  </data>
+  <data name="ee.archiveFolder" xml:space="preserve">
+    <value>Arşiv klasörü</value>
+  </data>
+  <data name="ee.archiveFolderHelp" xml:space="preserve">
+    <value>"Arşiv klasörüne taşı" seçiliyken kullanılacak klasör.</value>
+  </data>
+  <data name="ee.smtpEnabled" xml:space="preserve">
+    <value>SMTP durumu</value>
+  </data>
+  <data name="ee.smtpEnabledHelp" xml:space="preserve">
+    <value>Kapalıyken bu adresin e-postaları sistemin varsayılan yöntemiyle gönderilir.</value>
+  </data>
+  <data name="ee.portOutHelp" xml:space="preserve">
+    <value>Genellikle 587 (STARTTLS) veya 465 (SSL).</value>
+  </data>
+  <data name="ee.spoofing" xml:space="preserve">
+    <value>Başlık sahteciliğine izin ver</value>
+  </data>
+  <data name="ee.spoofingHelp" xml:space="preserve">
+    <value>Dikkat: "Kimden" başlığının bu adresten farklı olmasına izin verir. Alıcı sunucular bu e-postaları spam olarak işaretleyebilir — yalnızca ne yaptığınızı biliyorsanız açın.</value>
+  </data>
+  <data name="ee.dlgAuthTitle" xml:space="preserve">
+    <value>Kimlik Doğrulama Yapılandırması</value>
+  </data>
+  <data name="ee.dlgTabBasic" xml:space="preserve">
+    <value>Temel</value>
+  </data>
+  <data name="ee.username" xml:space="preserve">
+    <value>Kullanıcı adı</value>
+  </data>
+  <data name="ee.password" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="ee.clientId" xml:space="preserve">
+    <value>İstemci kimliği (Client ID)</value>
+  </data>
+  <data name="ee.clientSecret" xml:space="preserve">
+    <value>İstemci sırrı (Client Secret)</value>
+  </data>
+  <data name="ee.oauthHelp" xml:space="preserve">
+    <value>Sağlayıcınızın (ör. Microsoft 365, Google) uygulama kaydından alınan OAuth2 bilgileri.</value>
+  </data>
+  <data name="ee.newTitle" xml:space="preserve">
+    <value>Yeni E-posta</value>
+  </data>
+  <data name="ee.toastSaved" xml:space="preserve">
+    <value>E-posta hesabı kaydedildi.</value>
+  </data>
+  <data name="ee.toastCreated" xml:space="preserve">
+    <value>E-posta hesabı oluşturuldu.</value>
+  </data>
+  <data name="ee.errEmail" xml:space="preserve">
+    <value>Geçerli bir e-posta adresi girin.</value>
+  </data>
+  <data name="ee.errEmailInUse" xml:space="preserve">
+    <value>Bu e-posta adresi zaten kayıtlı.</value>
+  </data>
+  <data name="ee.errIncoming" xml:space="preserve">
+    <value>Getirme etkinken gelen sunucu adresi ve geçerli bir port gereklidir.</value>
+  </data>
+  <data name="ee.errOutgoing" xml:space="preserve">
+    <value>SMTP etkinken giden sunucu adresi ve geçerli bir port gereklidir.</value>
+  </data>
+  <data name="ee.errPort" xml:space="preserve">
+    <value>Port 1–65535 aralığında olmalıdır.</value>
+  </data>
+  <data name="ee.test" xml:space="preserve">
+    <value>Bağlantıyı Sına</value>
+  </data>
+  <data name="ee.testTesting" xml:space="preserve">
+    <value>Bağlantı deneniyor…</value>
+  </data>
+  <data name="ee.testOk" xml:space="preserve">
+    <value>Bağlantı ve kimlik doğrulama başarılı.</value>
+  </data>
+  <data name="ee.testOkNoAuth" xml:space="preserve">
+    <value>Sunucuya bağlanıldı (OAuth2 oturum doğrulaması S8 kapsamında).</value>
+  </data>
+  <data name="ee.testFailInput" xml:space="preserve">
+    <value>Sunucu adresi ve geçerli bir port girin.</value>
+  </data>
+  <data name="ee.testFailDns" xml:space="preserve">
+    <value>Sunucu adı çözümlenemedi (DNS).</value>
+  </data>
+  <data name="ee.testFailConnect" xml:space="preserve">
+    <value>Sunucuya bağlanılamadı (erişilemiyor veya port kapalı).</value>
+  </data>
+  <data name="ee.testFailTls" xml:space="preserve">
+    <value>Güvenli bağlantı (TLS) el sıkışması başarısız.</value>
+  </data>
+  <data name="ee.testFailAuth" xml:space="preserve">
+    <value>Sunucu kimlik bilgilerini reddetti.</value>
+  </data>
+  <data name="ee.testFailError" xml:space="preserve">
+    <value>Sınama tamamlanamadı; lütfen tekrar deneyin.</value>
+  </data>
+</root>

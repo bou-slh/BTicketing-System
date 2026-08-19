@@ -28,6 +28,7 @@ public class MaintenanceModeTests
         public Task<KbSettings> GetKbAsync(CancellationToken ct = default) => throw new NotSupportedException();
         public Task<AgentSettings> GetAgentsAsync(CancellationToken ct = default) => throw new NotSupportedException();
         public Task<UserSettings> GetUsersAsync(CancellationToken ct = default) => throw new NotSupportedException();
+        public Task<EmailSettings> GetEmailAsync(CancellationToken ct = default) => throw new NotSupportedException();
     }
 
     private static async Task<HttpContext> RunAsync(string path, string? offline, string method = "GET")

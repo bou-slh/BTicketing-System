@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="em.title" xml:space="preserve">
+    <value>Email Addresses</value>
+  </data>
+  <data name="em.subtitle" xml:space="preserve">
+    <value>Mailboxes the system receives requests from and sends replies with. Click an address to edit its account, incoming mail and SMTP settings.</value>
+  </data>
+  <data name="em.add" xml:space="preserve">
+    <value>＋ New Email</value>
+  </data>
+  <data name="em.searchPh" xml:space="preserve">
+    <value>Search email addresses…</value>
+  </data>
+  <data name="em.colEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="em.colPriority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="em.colDept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="em.emptyTitle" xml:space="preserve">
+    <value>No email addresses yet</value>
+  </data>
+  <data name="em.emptyText" xml:space="preserve">
+    <value>Add your first system address to start receiving requests by email.</value>
+  </data>
+  <data name="em.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="em.bulkNone" xml:space="preserve">
+    <value>Select rows from the list first.</value>
+  </data>
+  <data name="em.bulkDone" xml:space="preserve">
+    <value>{0} email addresses updated.</value>
+  </data>
+  <data name="em.bulkPartial" xml:space="preserve">
+    <value>{0} completed, {1} skipped (addresses used by departments, filters or the email settings cannot be deleted).</value>
+  </data>
+  <data name="em.deleteConfirm" xml:space="preserve">
+    <value>The selected email addresses will be permanently deleted; addresses used by departments, filters or the email settings are skipped. Continue?</value>
+  </data>
+</root>

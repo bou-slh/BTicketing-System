@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="es.title" xml:space="preserve">
+    <value>E-posta Ayarları</value>
+  </data>
+  <data name="es.subtitle" xml:space="preserve">
+    <value>Sistem genelinde e-posta davranışı: varsayılan adresler ve şablonlar, gelen posta işleme ve giden posta yöntemi.</value>
+  </data>
+  <data name="es.idxGeneral" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="es.idxIncoming" xml:space="preserve">
+    <value>Gelen</value>
+  </data>
+  <data name="es.idxOutgoing" xml:space="preserve">
+    <value>Giden</value>
+  </data>
+  <data name="es.secGeneral" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="es.defaultTemplate" xml:space="preserve">
+    <value>Varsayılan şablon seti</value>
+  </data>
+  <data name="es.defaultTemplateHelp" xml:space="preserve">
+    <value>Departmanında farklı bir set seçilmemiş tüm e-postalar bu şablonları kullanır.</value>
+  </data>
+  <data name="es.defaultEmail" xml:space="preserve">
+    <value>Varsayılan sistem e-postası</value>
+  </data>
+  <data name="es.defaultEmailHelp" xml:space="preserve">
+    <value>Giden e-postalarda başka adres belirtilmediğinde kullanılacak adres.</value>
+  </data>
+  <data name="es.alertEmail" xml:space="preserve">
+    <value>Uyarı e-postası</value>
+  </data>
+  <data name="es.alertEmailHelp" xml:space="preserve">
+    <value>Temsilcilere gönderilen uyarı ve bildirimlerin çıkış adresi.</value>
+  </data>
+  <data name="es.adminEmail" xml:space="preserve">
+    <value>Yönetici e-postası</value>
+  </data>
+  <data name="es.adminEmailHelp" xml:space="preserve">
+    <value>Sistem hataları ve kritik uyarılar bu adrese gönderilir.</value>
+  </data>
+  <data name="es.verifyDomain" xml:space="preserve">
+    <value>Alan adı doğrulama</value>
+  </data>
+  <data name="es.verifyDomainHelp" xml:space="preserve">
+    <value>E-posta adresleri kaydedilirken alan adının MX kaydı kontrol edilir.</value>
+  </data>
+  <data name="es.secIncoming" xml:space="preserve">
+    <value>Gelen</value>
+  </data>
+  <data name="es.polling" xml:space="preserve">
+    <value>Posta toplama</value>
+  </data>
+  <data name="es.pollingHelp" xml:space="preserve">
+    <value>Sistem, tanımlı posta kutularından düzenli olarak yeni e-posta çeker.</value>
+  </data>
+  <data name="es.cron" xml:space="preserve">
+    <value>Otomatik zamanlama (cron)</value>
+  </data>
+  <data name="es.cronHelp" xml:space="preserve">
+    <value>Posta toplamayı sunucu zamanlayıcısı tetikler; kapalıysa yalnızca sayfa ziyaretleri tetikler.</value>
+  </data>
+  <data name="es.stripQuoted" xml:space="preserve">
+    <value>Alıntılanan yanıtı kırp</value>
+  </data>
+  <data name="es.stripQuotedHelp" xml:space="preserve">
+    <value>Yanıt e-postalarındaki eski yazışma alıntıları talebe eklenmez.</value>
+  </data>
+  <data name="es.separator" xml:space="preserve">
+    <value>Yanıt ayracı</value>
+  </data>
+  <data name="es.separatorHelp" xml:space="preserve">
+    <value>Bu satırın altındaki her şey e-postadan kırpılır.</value>
+  </data>
+  <data name="es.emailPriority" xml:space="preserve">
+    <value>E-posta önceliğini kullan</value>
+  </data>
+  <data name="es.emailPriorityHelp" xml:space="preserve">
+    <value>Gönderenin e-postada işaretlediği öncelik (örn. "yüksek önem") talebe uygulanır.</value>
+  </data>
+  <data name="es.acceptUnregistered" xml:space="preserve">
+    <value>Kayıtsız e-postaları kabul et</value>
+  </data>
+  <data name="es.acceptUnregisteredHelp" xml:space="preserve">
+    <value>Sistemde kayıtlı olmayan adreslerden gelen e-postalar da talep açabilir.</value>
+  </data>
+  <data name="es.autoCollabs" xml:space="preserve">
+    <value>Katılımcıları otomatik ekle</value>
+  </data>
+  <data name="es.autoCollabsHelp" xml:space="preserve">
+    <value>E-postanın CC satırındaki adresler talebe katılımcı olarak eklenir.</value>
+  </data>
+  <data name="es.secOutgoing" xml:space="preserve">
+    <value>Giden</value>
+  </data>
+  <data name="es.defaultSmtp" xml:space="preserve">
+    <value>Varsayılan gönderim yöntemi</value>
+  </data>
+  <data name="es.defaultSmtpHelp" xml:space="preserve">
+    <value>Kendi SMTP ayarı olmayan adreslerin e-postaları bu yolla gönderilir.</value>
+  </data>
+  <data name="es.optPhpMail" xml:space="preserve">
+    <value>PHP mail() — sunucu yerel postası</value>
+  </data>
+  <data name="es.attachments" xml:space="preserve">
+    <value>E-posta ekleri</value>
+  </data>
+  <data name="es.attachmentsHelp" xml:space="preserve">
+    <value>Dosya ekleri giden e-postalara iliştirilir; kapalıysa yalnızca bağlantı gönderilir.</value>
+  </data>
+  <data name="es.toastSaved" xml:space="preserve">
+    <value>E-posta ayarları kaydedildi.</value>
+  </data>
+  <data name="es.errAdminEmail" xml:space="preserve">
+    <value>Yönetici e-postası geçerli bir adres olmalıdır.</value>
+  </data>
+</root>

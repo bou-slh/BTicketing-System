@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="em.title" xml:space="preserve">
+    <value>E-posta Adresleri</value>
+  </data>
+  <data name="em.subtitle" xml:space="preserve">
+    <value>Sistemin talep aldığı ve yanıt gönderdiği posta kutuları. Bir adrese tıklayarak hesap, gelen posta ve SMTP ayarlarını düzenleyin.</value>
+  </data>
+  <data name="em.add" xml:space="preserve">
+    <value>＋ Yeni E-posta</value>
+  </data>
+  <data name="em.searchPh" xml:space="preserve">
+    <value>E-posta adresi ara…</value>
+  </data>
+  <data name="em.colEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="em.colPriority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="em.colDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="em.emptyTitle" xml:space="preserve">
+    <value>Henüz e-posta adresi yok</value>
+  </data>
+  <data name="em.emptyText" xml:space="preserve">
+    <value>E-posta üzerinden talep alabilmek için ilk sistem adresinizi ekleyin.</value>
+  </data>
+  <data name="em.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="em.bulkNone" xml:space="preserve">
+    <value>Önce listeden kayıt seçin.</value>
+  </data>
+  <data name="em.bulkDone" xml:space="preserve">
+    <value>{0} e-posta adresi güncellendi.</value>
+  </data>
+  <data name="em.bulkPartial" xml:space="preserve">
+    <value>{0} işlem tamamlandı, {1} kayıt atlandı (departman, filtre veya e-posta ayarlarında kullanılan adresler silinemez).</value>
+  </data>
+  <data name="em.deleteConfirm" xml:space="preserve">
+    <value>Seçili e-posta adresleri kalıcı olarak silinecek; departman, filtre veya e-posta ayarlarında kullanılan adresler atlanır. Devam edilsin mi?</value>
+  </data>
+</root>

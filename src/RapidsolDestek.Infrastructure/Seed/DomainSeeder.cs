@@ -165,6 +165,31 @@ public static class DomainSeeder
         var emBordro = new EmailAccount { Address = "bordro@rapidsol.com.tr", DisplayName = "RapidSol Bordro", Department = depBordro, PriorityId = prHigh.Id };
         var emBilgi = new EmailAccount { Address = "bilgi@rapidsol.com.tr", DisplayName = "RapidSol Bilgi", Department = depDanismanlik, PriorityId = prLow.Id };
         db.EmailAccounts.AddRange(emDestek, emBordro, emBilgi);
+
+        // destek@ transport canon = admin/email-edit.html's exact editor state (S7):
+        // IMAP 993/INBOX + SMTP 587, OAuth2 selected, fetch 5 min / 30 max / archive
+        // to Arsiv/Islenen. Secrets stay null — the mockup bullets are sample state
+        // (write-only inputs render the sentinel only when a secret is stored; flagged).
+        emDestek.Notes = "Kullanıcı taleplerinin ana giriş kutusu. Değişiklik yapmadan önce Ümit'e haber verin.";
+        emDestek.Channels =
+        [
+            new EmailChannel
+            {
+                Kind = EmailChannelKind.Mailbox, IsActive = true,
+                Protocol = MailProtocol.Imap, AuthKind = MailAuthKind.OAuth2,
+                Host = "imap.rapidsol.com.tr", Port = 993, Folder = "INBOX",
+                Username = "destek@rapidsol.com.tr", OAuthClientId = "8f42c1aa-destek-oauth",
+                FetchFrequencyMinutes = 5, FetchMax = 30,
+                PostFetch = PostFetchAction.Archive, ArchiveFolder = "Arsiv/Islenen",
+            },
+            new EmailChannel
+            {
+                Kind = EmailChannelKind.Smtp, IsActive = true,
+                Protocol = MailProtocol.Smtp, AuthKind = MailAuthKind.OAuth2,
+                Host = "smtp.rapidsol.com.tr", Port = 587,
+                Username = "destek@rapidsol.com.tr", OAuthClientId = "8f42c1aa-destek-oauth",
+            },
+        ];
         await db.SaveChangesAsync();
         depDestek.EmailAccountId = emDestek.Id;
         depBordro.EmailAccountId = emBordro.Id;

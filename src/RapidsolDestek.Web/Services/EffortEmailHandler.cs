@@ -60,8 +60,12 @@ public sealed class EffortEmailHandler(
 
     private async Task SendAsync(int ticketId, string templateCode, bool ToOwner, CancellationToken ct)
     {
+        // LIVE email-settings consumer (S7 admin/email-settings "Varsayılan şablon
+        // seti"): render from the configured set; 0 keeps the pre-S7 behavior
+        // (the active "tr" set).
+        var setId = (await settings.GetEmailAsync(ct)).DefaultTemplateSetId;
         var template = await db.EmailTemplateSets
-            .Where(s => s.IsActive && s.Language == "tr")
+            .Where(s => setId > 0 ? s.Id == setId : s.IsActive && s.Language == "tr")
             .SelectMany(s => s.Templates)
             .Where(t => t.CodeName == templateCode)
             .FirstOrDefaultAsync(ct);

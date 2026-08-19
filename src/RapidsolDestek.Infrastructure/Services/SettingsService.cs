@@ -124,6 +124,36 @@ public sealed record UserSettings(
 /// </summary>
 public sealed record KbSettings(bool EnableKb, bool RequireLogin, bool EnableCanned);
 
+/// <summary>
+/// Typed view over the "email" namespace (admin/email-settings.html, S7).
+/// LIVE: DefaultTemplateSetId — the outgoing effort emails (EffortEmailHandler)
+/// render from this template set (0 = the active "tr" set, the pre-S7 behavior).
+/// PERSISTED-ONLY (annotated per key; the mail PIPELINE is S8):
+/// DefaultEmailAccountId / AlertEmailAccountId / AdminEmail (TODO(S8): outbound
+/// From/alert routing — IAppEmailSender composes no From today), VerifyDomain
+/// (TODO(S8): MX lookup on address save needs a DNS client), FetchEnabled +
+/// FetchAutoCron (TODO(S8): Hangfire fetch pipeline master switches), StripQuoted +
+/// ReplySeparator + UseEmailPriority + AcceptUnregistered + AutoAddCollabs
+/// (TODO(S8): inbound mail processing), DefaultSmtp ("system" or an account id —
+/// TODO(S8): outbound transport selection), AttachmentsInEmail (TODO(S8):
+/// outbound composer). Referenced account ids also feed the emails-page delete guard.
+/// </summary>
+public sealed record EmailSettings(
+    int DefaultTemplateSetId,   // 0 = active "tr" set
+    int DefaultEmailAccountId,  // 0 = unset
+    int AlertEmailAccountId,    // 0 = unset
+    string? AdminEmail,
+    bool VerifyDomain,
+    bool FetchEnabled,
+    bool FetchAutoCron,
+    bool StripQuoted,
+    string ReplySeparator,
+    bool UseEmailPriority,
+    bool AcceptUnregistered,
+    bool AutoAddCollabs,
+    string DefaultSmtp,         // "system" | EmailAccount id (with an SMTP channel)
+    bool AttachmentsInEmail);
+
 public interface ISettingsService
 {
     Task<string?> GetAsync(string ns, string key, CancellationToken ct = default);
@@ -141,6 +171,7 @@ public interface ISettingsService
     Task<KbSettings> GetKbAsync(CancellationToken ct = default);
     Task<AgentSettings> GetAgentsAsync(CancellationToken ct = default);
     Task<UserSettings> GetUsersAsync(CancellationToken ct = default);
+    Task<EmailSettings> GetEmailAsync(CancellationToken ct = default);
 }
 
 /// <summary>
@@ -280,6 +311,34 @@ public sealed class SettingsService(AppDbContext db) : ISettingsService
             // Honest default false: registration signs the account in immediately
             // today — the mockup's checked switch is sample state (flagged).
             EmailVerify: Bool(s, "email_verify", false));
+    }
+
+    public async Task<EmailSettings> GetEmailAsync(CancellationToken ct = default)
+    {
+        var s = await LoadAsync("email", ct);
+        return new EmailSettings(
+            // 0 = the active "tr" set: exactly what the effort emails used before S7,
+            // so the honest default (the mockup's selected "Varsayılan (TR)" agrees).
+            DefaultTemplateSetId: Int(s, "default_template_set_id", 0),
+            // Honest default 0/unset: nothing composes a From address today — the
+            // mockup's selected destek@/bilgi@ rows are sample state (flagged).
+            DefaultEmailAccountId: Int(s, "default_email_id", 0),
+            AlertEmailAccountId: Int(s, "alert_email_id", 0),
+            AdminEmail: s.GetValueOrDefault("admin_email"),
+            VerifyDomain: Bool(s, "verify_domain", true),
+            FetchEnabled: Bool(s, "fetch_enabled", true),
+            FetchAutoCron: Bool(s, "fetch_auto_cron", true),
+            StripQuoted: Bool(s, "strip_quoted", true),
+            // The mockup's sample separator doubles as the default (osTicket ships an
+            // English marker; the TR product text is the canon here).
+            ReplySeparator: s.GetValueOrDefault("reply_separator", "-- lütfen bu satırın üstüne yazın --"),
+            UseEmailPriority: Bool(s, "use_email_priority", false),
+            AcceptUnregistered: Bool(s, "accept_unregistered", true),
+            AutoAddCollabs: Bool(s, "auto_add_collabs", true),
+            // Honest default "system": no account SMTP transport exists until S8 —
+            // the mockup's selected "destek@… — SMTP" is sample state (flagged).
+            DefaultSmtp: s.GetValueOrDefault("default_smtp", "system"),
+            AttachmentsInEmail: Bool(s, "attachments_in_email", true));
     }
 
     public Task<NumberingSettings> GetTicketNumberingAsync(CancellationToken ct = default) =>

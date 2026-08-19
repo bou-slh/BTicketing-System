@@ -1,0 +1,423 @@
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model EmailEditVm
+@{
+    var a = Model.Account;
+    var inbox = Model.Mailbox;
+    var smtp = Model.Smtp;
+    var isNew = a is null;
+    ViewData["Title"] = isNew ? L["ee.newTitle"].Value : a!.Address;
+
+    // PRG toast handoff after save / validation failure.
+    if (TempData["EmailEditToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["EmailEditToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Write-only secrets (B3): render the mockup's bullet sentinel only when a
+    // secret is stored — never the plaintext; bullets-only posts mean "unchanged".
+    string PasswordValue(EmailChannel? c) => c?.PasswordProtected is null ? "" : EmailsController.PasswordSentinel;
+    string SecretValue(EmailChannel? c) => c?.OAuthClientSecretProtected is null ? "" : EmailsController.ClientSecretSentinel;
+}
+
+<div class="bo-page-head">
+    <div>
+        <p><a href="/admin/emails">@L["ee.back"]</a></p>
+        <h1>@(isNew ? L["ee.newTitle"].Value : a!.Address)</h1>
+        <p>@L["ee.subtitle"]</p>
+    </div>
+</div>
+
+<form id="ee-form" method="post" asp-area="Admin" asp-controller="Emails" asp-action="Save">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@a!.Id">
+    }
+
+    <div class="rd-tabs" data-tabs data-tabs-scope="main">
+        <button type="button" class="active" data-tab="panel-account">@L["ee.tabAccount"]</button>
+        <button type="button" data-tab="panel-incoming">@L["ee.tabIncoming"]</button>
+        <button type="button" data-tab="panel-outgoing">@L["ee.tabOutgoing"]</button>
+    </div>
+
+    @* ============ Hesap ============ *@
+    <div class="rd-tab-panel active" id="panel-account" data-tab-group="main">
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["ee.secIdentity"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-email">@L["ee.email"]</label>
+                        <input id="ee-email" name="address" class="rd-control" type="email" value="@a?.Address" required maxlength="120">
+                        <p class="rd-help">@L["ee.emailHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-name">@L["ee.fromName"]</label>
+                        <input id="ee-name" name="fromName" class="rd-control" type="text" value="@a?.DisplayName" maxlength="120">
+                        <p class="rd-help">@L["ee.fromNameHelp"]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">
+                <span>@L["ee.secNewTicket"]</span>
+                <small class="rd-muted">@L["ee.newTicketHelp"]</small>
+            </div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-3">
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-dept">@L["ee.dept"]</label>
+                        <select id="ee-dept" name="deptId" class="rd-control">
+                            <option value="" selected="@(a?.DepartmentId is null)">@L["ee.sysDefault"]</option>
+                            @foreach (var o in Model.Departments)
+                            {
+                                <option value="@o.Id" selected="@(a?.DepartmentId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["ee.deptHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-priority">@L["ee.priority"]</label>
+                        <select id="ee-priority" name="priorityId" class="rd-control">
+                            <option value="" selected="@(a?.PriorityId is null)">@L["ee.sysDefault"]</option>
+                            @foreach (var o in Model.Priorities)
+                            {
+                                <option value="@o.Id" selected="@(a?.PriorityId == o.Id)">@SL[$"priority.{o.Key}"]</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["ee.priorityHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-topic">@L["ee.topic"]</label>
+                        <select id="ee-topic" name="topicId" class="rd-control">
+                            <option value="" selected="@(a?.HelpTopicId is null)">@L["ee.sysDefault"]</option>
+                            @foreach (var o in Model.Topics)
+                            {
+                                <option value="@o.Id" selected="@(a?.HelpTopicId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["ee.topicHelp"]</p>
+                    </div>
+                </div>
+                <label class="rd-switch" style="margin-top:6px">
+                    <input type="checkbox" name="noAutoResp" value="true" checked="@(a?.NoAutoResponse ?? false)">
+                    <span class="track"></span>
+                    <span class="rd-switch-copy">
+                        <b>@L["ee.noAutoResp"]</b>
+                        <small>@L["ee.noAutoRespHelp"]</small>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <div class="rd-surface">
+            <div class="rd-surface-head">@L["ee.notesHead"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field mb-0">
+                    <textarea name="notes" class="rd-control">@a?.Notes</textarea>
+                    <p class="rd-help">@SL["common.notesHelp"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ============ Gelen Posta ============ *@
+    <div class="rd-tab-panel" id="panel-incoming" data-tab-group="main">
+        <div class="rd-surface" style="margin-bottom:18px">
+            <div class="rd-surface-head">@L["ee.secServer"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-grid-3">
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-in-host">@L["ee.host"]</label>
+                        <input id="ee-in-host" name="inHost" class="rd-control" type="text" value="@inbox?.Host">
+                        <p class="rd-help">@L["ee.hostHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-in-port">@L["ee.port"]</label>
+                        <input id="ee-in-port" name="inPort" class="rd-control" type="number" min="1" max="65535" value="@(inbox is null or { Port: 0 } ? "" : inbox.Port)">
+                        <p class="rd-help">@L["ee.portInHelp"]</p>
+                    </div>
+                    @* B3 (invented per ee.protocolHelp — POP3 only reads the inbox):
+                       the protocol select gates the folder field. *@
+                    <div class="rd-field" data-imap-dep>
+                        <label class="rd-label" for="ee-in-folder">@L["ee.folder"]</label>
+                        <input id="ee-in-folder" name="inFolder" class="rd-control" type="text" value="@(inbox?.Folder ?? "INBOX")">
+                        <p class="rd-help">@L["ee.folderHelp"]</p>
+                    </div>
+                </div>
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-in-protocol">@L["ee.protocol"]</label>
+                        <select id="ee-in-protocol" name="inProtocol" class="rd-control" data-gates="[data-imap-dep]" data-gates-on="imap">
+                            <option value="imap" selected="@(inbox is null or { Protocol: MailProtocol.Imap })">IMAP</option>
+                            <option value="pop" selected="@(inbox is { Protocol: MailProtocol.Pop })">POP3</option>
+                        </select>
+                        <p class="rd-help">@L["ee.protocolHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-in-auth">@L["ee.auth"]</label>
+                        <div style="display:flex;gap:9px">
+                            <select id="ee-in-auth" name="inAuth" class="rd-control">
+                                <option value="basic" selected="@(inbox is null or { AuthKind: MailAuthKind.Basic })">@L["ee.authBasic"]</option>
+                                <option value="oauth2" selected="@(inbox is { AuthKind: MailAuthKind.OAuth2 })">OAuth2</option>
+                            </select>
+                            <button type="button" class="rd-btn" data-dialog-open="dlg-auth-in">@L["ee.configure"]</button>
+                        </div>
+                        <p class="rd-help">@L["ee.authHelp"]</p>
+                    </div>
+                </div>
+                @* REAL connection probe (ROADMAP row "Test connection"; invented UI —
+                   the mockup defines no control, flagged). *@
+                <div class="rd-field mb-0">
+                    <div style="display:flex;gap:10px;align-items:center">
+                        <button type="button" class="rd-btn" data-test-conn="in">@L["ee.test"]</button>
+                        <span class="rd-help" style="margin:0" data-test-result="in" aria-live="polite"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rd-surface">
+            <div class="rd-surface-head">@L["ee.secFetch"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <span class="rd-label">@L["ee.fetchEnabled"]</span>
+                    @* B3: the status radios gate the fetch fields (rd.js radio-master contract). *@
+                    <label class="rd-check" style="display:inline-flex;margin-right:18px">
+                        <input type="radio" name="fetchActive" value="true" checked="@(inbox?.IsActive ?? false)" data-gates="[data-fetch-dep]"><span>@L["ee.enabled"]</span>
+                    </label>
+                    <label class="rd-check" style="display:inline-flex">
+                        <input type="radio" name="fetchActive" value="false" checked="@(!(inbox?.IsActive ?? false))"><span>@L["ee.disabled"]</span>
+                    </label>
+                    <p class="rd-help">@L["ee.fetchEnabledHelp"]</p>
+                </div>
+                <div class="rd-grid-2">
+                    <div class="rd-field" data-fetch-dep>
+                        <label class="rd-label" for="ee-freq">@L["ee.freq"]</label>
+                        <input id="ee-freq" name="freq" class="rd-control" type="number" min="1" max="1440" value="@(inbox?.FetchFrequencyMinutes ?? 5)">
+                        <p class="rd-help">@L["ee.freqHelp"]</p>
+                    </div>
+                    <div class="rd-field" data-fetch-dep>
+                        <label class="rd-label" for="ee-max">@L["ee.maxFetch"]</label>
+                        <input id="ee-max" name="maxFetch" class="rd-control" type="number" min="1" max="1000" value="@(inbox?.FetchMax ?? 30)">
+                        <p class="rd-help">@L["ee.maxFetchHelp"]</p>
+                    </div>
+                </div>
+                <div class="rd-grid-2">
+                    <div class="rd-field mb-0" data-fetch-dep>
+                        <label class="rd-label" for="ee-after">@L["ee.afterFetch"]</label>
+                        <select id="ee-after" name="afterFetch" class="rd-control" data-gates="[data-archive-dep]" data-gates-on="archive">
+                            <option value="archive" selected="@(inbox is null or { PostFetch: PostFetchAction.Archive })">@L["ee.optArchive"]</option>
+                            <option value="delete" selected="@(inbox is { PostFetch: PostFetchAction.Delete })">@L["ee.optDelete"]</option>
+                            <option value="leave" selected="@(inbox is { PostFetch: PostFetchAction.Nothing })">@L["ee.optLeave"]</option>
+                        </select>
+                        <p class="rd-help">@L["ee.afterFetchHelp"]</p>
+                    </div>
+                    @* B3 (invented per ee.archiveFolderHelp): the after-fetch select
+                       gates the archive folder. *@
+                    <div class="rd-field mb-0" data-archive-dep>
+                        <label class="rd-label" for="ee-archive">@L["ee.archiveFolder"]</label>
+                        <input id="ee-archive" name="archiveFolder" class="rd-control" type="text" value="@inbox?.ArchiveFolder">
+                        <p class="rd-help">@L["ee.archiveFolderHelp"]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ============ Giden Posta (SMTP) ============ *@
+    <div class="rd-tab-panel" id="panel-outgoing" data-tab-group="main">
+        <div class="rd-surface">
+            <div class="rd-surface-head">SMTP</div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <span class="rd-label">@L["ee.smtpEnabled"]</span>
+                    @* B3: the status radios gate the SMTP fields. *@
+                    <label class="rd-check" style="display:inline-flex;margin-right:18px">
+                        <input type="radio" name="smtpActive" value="true" checked="@(smtp?.IsActive ?? false)" data-gates="[data-smtp-dep]"><span>@L["ee.enabled"]</span>
+                    </label>
+                    <label class="rd-check" style="display:inline-flex">
+                        <input type="radio" name="smtpActive" value="false" checked="@(!(smtp?.IsActive ?? false))"><span>@L["ee.disabled"]</span>
+                    </label>
+                    <p class="rd-help">@L["ee.smtpEnabledHelp"]</p>
+                </div>
+                <div class="rd-grid-2" data-smtp-dep>
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-out-host">@L["ee.host"]</label>
+                        <input id="ee-out-host" name="outHost" class="rd-control" type="text" value="@smtp?.Host">
+                        <p class="rd-help">@L["ee.hostHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="ee-out-port">@L["ee.port"]</label>
+                        <input id="ee-out-port" name="outPort" class="rd-control" type="number" min="1" max="65535" value="@(smtp is null or { Port: 0 } ? "" : smtp.Port)">
+                        <p class="rd-help">@L["ee.portOutHelp"]</p>
+                    </div>
+                </div>
+                <div class="rd-field" data-smtp-dep>
+                    <label class="rd-label" for="ee-out-auth">@L["ee.auth"]</label>
+                    <div style="display:flex;gap:9px;max-width:420px">
+                        <select id="ee-out-auth" name="outAuth" class="rd-control">
+                            <option value="basic" selected="@(smtp is null or { AuthKind: MailAuthKind.Basic })">@L["ee.authBasic"]</option>
+                            <option value="oauth2" selected="@(smtp is { AuthKind: MailAuthKind.OAuth2 })">OAuth2</option>
+                        </select>
+                        <button type="button" class="rd-btn" data-dialog-open="dlg-auth-out">@L["ee.configure"]</button>
+                    </div>
+                    <p class="rd-help">@L["ee.authHelp"]</p>
+                </div>
+                @* REAL connection probe (invented UI twin of the incoming one). *@
+                <div class="rd-field" data-smtp-dep>
+                    <div style="display:flex;gap:10px;align-items:center">
+                        <button type="button" class="rd-btn" data-test-conn="out">@L["ee.test"]</button>
+                        <span class="rd-help" style="margin:0" data-test-result="out" aria-live="polite"></span>
+                    </div>
+                </div>
+
+                <details class="rd-advanced" data-smtp-dep>
+                    <summary>@SL["common.advanced"]</summary>
+                    <div class="rd-advanced-body">
+                        <label class="rd-switch">
+                            <input type="checkbox" name="spoofing" value="true" checked="@(smtp?.AllowSpoofing ?? false)">
+                            <span class="track"></span>
+                            <span class="rd-switch-copy">
+                                <b>@L["ee.spoofing"]</b>
+                                <small>@L["ee.spoofingHelp"]</small>
+                            </span>
+                        </label>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+        <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+        <a class="rd-btn" href="/admin/emails">@SL["common.cancel"]</a>
+    </div>
+</form>
+
+@* Kimlik doğrulama dialogları — B2: the mockup shares ONE dlg-auth between the
+   IMAP and SMTP Configure buttons; split into per-channel dialogs prefilled
+   server-side (teams/canned precedent, flagged). Inputs post with the page form
+   (form attribute): credentials persist on the page Save. Secrets are write-only —
+   bullet sentinel when stored, bullets-only post keeps the stored value. *@
+@{
+    async Task AuthDialogAsync(string suffix, EmailChannel? channel, string userField,
+        string passField, string clientIdField, string clientSecretField)
+    {
+        var oauthActive = channel is { AuthKind: MailAuthKind.OAuth2 };
+        <dialog class="rd-dialog" id="dlg-auth-@suffix">
+            <div class="rd-dialog-head">
+                <span>@L["ee.dlgAuthTitle"]</span>
+                <button type="button" class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+            </div>
+            <div class="rd-dialog-body">
+                <div class="rd-tabs" data-tabs data-tabs-scope="auth-@suffix">
+                    <button type="button" class="@(oauthActive ? null : "active")" data-tab="auth-basic-@suffix">@L["ee.dlgTabBasic"]</button>
+                    <button type="button" class="@(oauthActive ? "active" : null)" data-tab="auth-oauth-@suffix">OAuth2</button>
+                </div>
+                <div class="rd-tab-panel @(oauthActive ? null : "active")" id="auth-basic-@suffix" data-tab-group="auth-@suffix">
+                    <div class="rd-field">
+                        <label class="rd-label" for="auth-user-@suffix">@L["ee.username"]</label>
+                        <input id="auth-user-@suffix" name="@userField" form="ee-form" class="rd-control" type="text" value="@channel?.Username">
+                    </div>
+                    <div class="rd-field mb-0">
+                        <label class="rd-label" for="auth-pass-@suffix">@L["ee.password"]</label>
+                        <input id="auth-pass-@suffix" name="@passField" form="ee-form" class="rd-control" type="password" value="@PasswordValue(channel)" autocomplete="new-password">
+                    </div>
+                </div>
+                <div class="rd-tab-panel @(oauthActive ? "active" : null)" id="auth-oauth-@suffix" data-tab-group="auth-@suffix">
+                    <div class="rd-field">
+                        <label class="rd-label" for="auth-client-id-@suffix">@L["ee.clientId"]</label>
+                        <input id="auth-client-id-@suffix" name="@clientIdField" form="ee-form" class="rd-control" type="text" value="@channel?.OAuthClientId">
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="auth-client-secret-@suffix">@L["ee.clientSecret"]</label>
+                        <input id="auth-client-secret-@suffix" name="@clientSecretField" form="ee-form" class="rd-control" type="password" value="@SecretValue(channel)" autocomplete="new-password">
+                    </div>
+                    <p class="rd-help">@L["ee.oauthHelp"]</p>
+                </div>
+            </div>
+            <div class="rd-dialog-foot">
+                <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                @* Closes only: the credentials ride the page form's Save (no
+                   independent dialog POST — the audited close-swallows-save shape
+                   does not apply, persistence is the page submit). *@
+                <button type="button" class="rd-btn-primary" data-dialog-close>@SL["common.save"]</button>
+            </div>
+        </dialog>
+    }
+
+    await AuthDialogAsync("in", inbox, "inUsername", "inPassword", "inClientId", "inClientSecret");
+    await AuthDialogAsync("out", smtp, "outUsername", "outPassword", "outClientId", "outClientSecret");
+}
+
+@* "Bağlantıyı Sına": posts the CURRENT (unsaved) channel settings to the real
+   MailKit probe endpoint; the typed stage maps to a localized message. *@
+<script>
+(() => {
+  const MSG = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(new Dictionary<string, string>
+  {
+      ["testing"] = L["ee.testTesting"].Value,
+      ["ok"] = L["ee.testOk"].Value,
+      ["ok-noauth"] = L["ee.testOkNoAuth"].Value,
+      ["input"] = L["ee.testFailInput"].Value,
+      ["dns"] = L["ee.testFailDns"].Value,
+      ["connect"] = L["ee.testFailConnect"].Value,
+      ["tls"] = L["ee.testFailTls"].Value,
+      ["auth"] = L["ee.testFailAuth"].Value,
+      ["error"] = L["ee.testFailError"].Value,
+  }));
+  const form = document.getElementById("ee-form");
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-test-conn]");
+    if (!btn) return;
+    e.preventDefault();
+    const kind = btn.getAttribute("data-test-conn");
+    const out = document.querySelector(`[data-test-result="${kind}"]`);
+    const val = (name) => form.querySelector(`[name="${name}"], [form="ee-form"][name="${name}"]`)?.value
+      ?? document.querySelector(`[form="ee-form"][name="${name}"]`)?.value ?? "";
+    const fd = new FormData();
+    const idInput = form.querySelector('input[name="id"]');
+    if (idInput) fd.append("id", idInput.value);
+    fd.append("kind", kind);
+    if (kind === "in") {
+      fd.append("protocol", val("inProtocol"));
+      fd.append("host", val("inHost"));
+      fd.append("port", val("inPort"));
+      fd.append("auth", val("inAuth"));
+      fd.append("username", val("inUsername"));
+      fd.append("password", val("inPassword"));
+    } else {
+      fd.append("protocol", "smtp");
+      fd.append("host", val("outHost"));
+      fd.append("port", val("outPort"));
+      fd.append("auth", val("outAuth"));
+      fd.append("username", val("outUsername"));
+      fd.append("password", val("outPassword"));
+    }
+    fd.append("__RequestVerificationToken",
+      form.querySelector('input[name="__RequestVerificationToken"]').value);
+    btn.disabled = true;
+    if (out) out.textContent = MSG.testing;
+    try {
+      const res = await fetch("/admin/email-edit/test", { method: "POST", body: fd });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const msg = data.ok ? MSG[data.stage] || MSG.ok : MSG[data.stage] || MSG.error;
+      if (out) out.textContent = msg;
+      window.RD?.toast(msg, data.ok ? undefined : "error");
+    } catch {
+      if (out) out.textContent = MSG.error;
+      window.RD?.toast(MSG.error, "error");
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+</script>

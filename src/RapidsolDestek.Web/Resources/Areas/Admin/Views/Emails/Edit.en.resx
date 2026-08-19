@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ee.back" xml:space="preserve">
+    <value>← Email Addresses</value>
+  </data>
+  <data name="ee.subtitle" xml:space="preserve">
+    <value>Manage this mailbox's account details, incoming mail fetching and outgoing SMTP settings.</value>
+  </data>
+  <data name="ee.tabAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="ee.tabIncoming" xml:space="preserve">
+    <value>Incoming Mail</value>
+  </data>
+  <data name="ee.tabOutgoing" xml:space="preserve">
+    <value>Outgoing Mail (SMTP)</value>
+  </data>
+  <data name="ee.secIdentity" xml:space="preserve">
+    <value>Identity</value>
+  </data>
+  <data name="ee.email" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="ee.emailHelp" xml:space="preserve">
+    <value>The full address the system receives and sends through this mailbox.</value>
+  </data>
+  <data name="ee.fromName" xml:space="preserve">
+    <value>Display name</value>
+  </data>
+  <data name="ee.fromNameHelp" xml:space="preserve">
+    <value>The name shown on the "From" line of outgoing emails.</value>
+  </data>
+  <data name="ee.secNewTicket" xml:space="preserve">
+    <value>New Ticket Settings</value>
+  </data>
+  <data name="ee.newTicketHelp" xml:space="preserve">
+    <value>Applied to tickets opened from emails arriving at this address.</value>
+  </data>
+  <data name="ee.dept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="ee.deptHelp" xml:space="preserve">
+    <value>Which department should tickets from this mailbox go to?</value>
+  </data>
+  <data name="ee.priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="ee.priorityHelp" xml:space="preserve">
+    <value>Priority assigned when the ticket is created.</value>
+  </data>
+  <data name="ee.topic" xml:space="preserve">
+    <value>Help topic</value>
+  </data>
+  <data name="ee.topicHelp" xml:space="preserve">
+    <value>Help topic assigned when the ticket is created.</value>
+  </data>
+  <data name="ee.sysDefault" xml:space="preserve">
+    <value>System Default</value>
+  </data>
+  <data name="ee.noAutoResp" xml:space="preserve">
+    <value>Disable auto-response</value>
+  </data>
+  <data name="ee.noAutoRespHelp" xml:space="preserve">
+    <value>No "we received your request" email is sent for tickets opened from this address.</value>
+  </data>
+  <data name="ee.notesHead" xml:space="preserve">
+    <value>Internal Notes</value>
+  </data>
+  <data name="ee.secServer" xml:space="preserve">
+    <value>Server Connection</value>
+  </data>
+  <data name="ee.host" xml:space="preserve">
+    <value>Server (host)</value>
+  </data>
+  <data name="ee.hostHelp" xml:space="preserve">
+    <value>Address of the incoming mail server.</value>
+  </data>
+  <data name="ee.port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="ee.portInHelp" xml:space="preserve">
+    <value>Usually 993 for IMAP, 995 for POP3.</value>
+  </data>
+  <data name="ee.folder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="ee.folderHelp" xml:space="preserve">
+    <value>The mail folder new emails are read from.</value>
+  </data>
+  <data name="ee.protocol" xml:space="preserve">
+    <value>Protocol</value>
+  </data>
+  <data name="ee.protocolHelp" xml:space="preserve">
+    <value>IMAP supports folders; POP3 only reads the inbox.</value>
+  </data>
+  <data name="ee.auth" xml:space="preserve">
+    <value>Authentication</value>
+  </data>
+  <data name="ee.authHelp" xml:space="preserve">
+    <value>How to authenticate when connecting to the server.</value>
+  </data>
+  <data name="ee.authBasic" xml:space="preserve">
+    <value>Basic (username + password)</value>
+  </data>
+  <data name="ee.configure" xml:space="preserve">
+    <value>Configure…</value>
+  </data>
+  <data name="ee.secFetch" xml:space="preserve">
+    <value>Fetching</value>
+  </data>
+  <data name="ee.fetchEnabled" xml:space="preserve">
+    <value>Fetch status</value>
+  </data>
+  <data name="ee.fetchEnabledHelp" xml:space="preserve">
+    <value>When off, no new email is retrieved from this mailbox.</value>
+  </data>
+  <data name="ee.enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="ee.disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="ee.freq" xml:space="preserve">
+    <value>Frequency (min)</value>
+  </data>
+  <data name="ee.freqHelp" xml:space="preserve">
+    <value>How often should new email be checked?</value>
+  </data>
+  <data name="ee.maxFetch" xml:space="preserve">
+    <value>Max emails / fetch</value>
+  </data>
+  <data name="ee.maxFetchHelp" xml:space="preserve">
+    <value>At most how many emails should be processed per run?</value>
+  </data>
+  <data name="ee.afterFetch" xml:space="preserve">
+    <value>After fetching</value>
+  </data>
+  <data name="ee.afterFetchHelp" xml:space="preserve">
+    <value>What should happen to processed emails on the server?</value>
+  </data>
+  <data name="ee.optArchive" xml:space="preserve">
+    <value>Move to archive folder</value>
+  </data>
+  <data name="ee.optDelete" xml:space="preserve">
+    <value>Delete from server</value>
+  </data>
+  <data name="ee.optLeave" xml:space="preserve">
+    <value>Leave as is</value>
+  </data>
+  <data name="ee.archiveFolder" xml:space="preserve">
+    <value>Archive folder</value>
+  </data>
+  <data name="ee.archiveFolderHelp" xml:space="preserve">
+    <value>Folder used when "Move to archive folder" is selected.</value>
+  </data>
+  <data name="ee.smtpEnabled" xml:space="preserve">
+    <value>SMTP status</value>
+  </data>
+  <data name="ee.smtpEnabledHelp" xml:space="preserve">
+    <value>When off, this address's email is sent via the system's default method.</value>
+  </data>
+  <data name="ee.portOutHelp" xml:space="preserve">
+    <value>Usually 587 (STARTTLS) or 465 (SSL).</value>
+  </data>
+  <data name="ee.spoofing" xml:space="preserve">
+    <value>Allow header spoofing</value>
+  </data>
+  <data name="ee.spoofingHelp" xml:space="preserve">
+    <value>Warning: allows the "From" header to differ from this address. Receiving servers may flag these emails as spam — enable only if you know what you are doing.</value>
+  </data>
+  <data name="ee.dlgAuthTitle" xml:space="preserve">
+    <value>Authentication Configuration</value>
+  </data>
+  <data name="ee.dlgTabBasic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="ee.username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="ee.password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="ee.clientId" xml:space="preserve">
+    <value>Client ID</value>
+  </data>
+  <data name="ee.clientSecret" xml:space="preserve">
+    <value>Client Secret</value>
+  </data>
+  <data name="ee.oauthHelp" xml:space="preserve">
+    <value>OAuth2 credentials from your provider's (e.g. Microsoft 365, Google) app registration.</value>
+  </data>
+  <data name="ee.newTitle" xml:space="preserve">
+    <value>New Email</value>
+  </data>
+  <data name="ee.toastSaved" xml:space="preserve">
+    <value>Email account saved.</value>
+  </data>
+  <data name="ee.toastCreated" xml:space="preserve">
+    <value>Email account created.</value>
+  </data>
+  <data name="ee.errEmail" xml:space="preserve">
+    <value>Enter a valid email address.</value>
+  </data>
+  <data name="ee.errEmailInUse" xml:space="preserve">
+    <value>This email address is already registered.</value>
+  </data>
+  <data name="ee.errIncoming" xml:space="preserve">
+    <value>An incoming server host and a valid port are required while fetching is enabled.</value>
+  </data>
+  <data name="ee.errOutgoing" xml:space="preserve">
+    <value>An outgoing server host and a valid port are required while SMTP is enabled.</value>
+  </data>
+  <data name="ee.errPort" xml:space="preserve">
+    <value>Port must be between 1 and 65535.</value>
+  </data>
+  <data name="ee.test" xml:space="preserve">
+    <value>Test connection</value>
+  </data>
+  <data name="ee.testTesting" xml:space="preserve">
+    <value>Testing connection…</value>
+  </data>
+  <data name="ee.testOk" xml:space="preserve">
+    <value>Connection and authentication succeeded.</value>
+  </data>
+  <data name="ee.testOkNoAuth" xml:space="preserve">
+    <value>Connected to the server (OAuth2 sign-in is verified in S8).</value>
+  </data>
+  <data name="ee.testFailInput" xml:space="preserve">
+    <value>Enter a server host and a valid port.</value>
+  </data>
+  <data name="ee.testFailDns" xml:space="preserve">
+    <value>The server name could not be resolved (DNS).</value>
+  </data>
+  <data name="ee.testFailConnect" xml:space="preserve">
+    <value>Could not connect to the server (unreachable or port closed).</value>
+  </data>
+  <data name="ee.testFailTls" xml:space="preserve">
+    <value>The secure connection (TLS) handshake failed.</value>
+  </data>
+  <data name="ee.testFailAuth" xml:space="preserve">
+    <value>The server rejected the credentials.</value>
+  </data>
+  <data name="ee.testFailError" xml:space="preserve">
+    <value>The test could not be completed; please try again.</value>
+  </data>
+</root>

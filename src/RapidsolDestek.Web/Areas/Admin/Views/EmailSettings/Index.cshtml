@@ -1,0 +1,209 @@
+@using RapidsolDestek.Infrastructure.Services
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model EmailSettingsVm
+@{
+    ViewData["Title"] = L["es.title"];
+    var s = Model.Settings;
+
+    // Toast handoff (settings pages precedent): PRG key via TempData.
+    if (TempData["EsToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["EsToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // 0 = unset: render the first option selected (mockup shape — the selects have
+    // no empty row; the value becomes concrete on first save).
+    bool SelAccount(int configured, int id, int index) => configured == id || (configured == 0 && index == 0);
+    var smtpSelected = int.TryParse(s.DefaultSmtp, out var smtpId) ? smtpId : 0;
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["es.title"]</h1>
+        <p>@L["es.subtitle"]</p>
+    </div>
+</div>
+
+<div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+        <a href="#section-general" class="active">@L["es.idxGeneral"]</a>
+        <a href="#section-incoming">@L["es.idxIncoming"]</a>
+        <a href="#section-outgoing">@L["es.idxOutgoing"]</a>
+    </nav>
+
+    <form class="bo-settings-sections" method="post" asp-area="Admin" asp-controller="EmailSettings" asp-action="Save">
+
+        @* ==== Genel ==== *@
+        <section class="rd-surface bo-section" id="section-general">
+            <div class="rd-surface-head">@L["es.secGeneral"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="es-template">@L["es.defaultTemplate"]</label>
+                    <select id="es-template" class="rd-control" name="default_template_set_id">
+                        @* LIVE: the outgoing effort emails render from this set. *@
+                        @foreach (var (o, i) in Model.TemplateSets.Select((o, i) => (o, i)))
+                        {
+                            <option value="@o.Id" selected="@SelAccount(s.DefaultTemplateSetId, o.Id, i)">@o.Label</option>
+                        }
+                    </select>
+                    <p class="rd-help">@L["es.defaultTemplateHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="es-sysemail">@L["es.defaultEmail"]</label>
+                    <select id="es-sysemail" class="rd-control" name="default_email_id">
+                        @foreach (var (o, i) in Model.Accounts.Select((o, i) => (o, i)))
+                        {
+                            <option value="@o.Id" selected="@SelAccount(s.DefaultEmailAccountId, o.Id, i)">@o.Label</option>
+                        }
+                    </select>
+                    <p class="rd-help">@L["es.defaultEmailHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="es-alertemail">@L["es.alertEmail"]</label>
+                    <select id="es-alertemail" class="rd-control" name="alert_email_id">
+                        @foreach (var (o, i) in Model.Accounts.Select((o, i) => (o, i)))
+                        {
+                            <option value="@o.Id" selected="@SelAccount(s.AlertEmailAccountId, o.Id, i)">@o.Label</option>
+                        }
+                    </select>
+                    <p class="rd-help">@L["es.alertEmailHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="es-adminemail">@L["es.adminEmail"]</label>
+                    <input id="es-adminemail" class="rd-control" type="email" name="admin_email" value="@s.AdminEmail">
+                    <p class="rd-help">@L["es.adminEmailHelp"]</p>
+                </div>
+                <details class="rd-advanced">
+                    <summary>@SL["common.advanced"]</summary>
+                    <div class="rd-advanced-body">
+                        <label class="rd-switch">
+                            <input type="checkbox" name="verify_domain" value="true" checked="@s.VerifyDomain">
+                            <span class="track"></span>
+                            <span class="rd-switch-copy">
+                                <b>@L["es.verifyDomain"]</b>
+                                <small>@L["es.verifyDomainHelp"]</small>
+                            </span>
+                        </label>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        @* ==== Gelen ==== *@
+        <section class="rd-surface bo-section" id="section-incoming">
+            <div class="rd-surface-head">@L["es.secIncoming"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        @* B3 in-page (INVENTED — the mockup's switches are independent,
+                           settings-kb precedent): the polling master gates the cron
+                           scheduling switch. *@
+                        <input type="checkbox" name="fetch_enabled" value="true" checked="@s.FetchEnabled" data-gates="[data-fetch-dep]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["es.polling"]</b>
+                            <small>@L["es.pollingHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field" data-fetch-dep>
+                    <label class="rd-switch">
+                        <input type="checkbox" name="fetch_auto_cron" value="true" checked="@s.FetchAutoCron">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["es.cron"]</b>
+                            <small>@L["es.cronHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        @* B3 in-page (INVENTED per es.separatorHelp): strip-quoted
+                           gates its separator input. *@
+                        <input type="checkbox" name="strip_quoted" value="true" checked="@s.StripQuoted" data-gates="[data-strip-dep]">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["es.stripQuoted"]</b>
+                            <small>@L["es.stripQuotedHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field" data-strip-dep>
+                    <label class="rd-label" for="es-separator">@L["es.separator"]</label>
+                    <input id="es-separator" class="rd-control" type="text" name="reply_separator" value="@s.ReplySeparator" style="max-width:360px">
+                    <p class="rd-help">@L["es.separatorHelp"]</p>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="use_email_priority" value="true" checked="@s.UseEmailPriority">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["es.emailPriority"]</b>
+                            <small>@L["es.emailPriorityHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="accept_unregistered" value="true" checked="@s.AcceptUnregistered">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["es.acceptUnregistered"]</b>
+                            <small>@L["es.acceptUnregisteredHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="auto_add_collabs" value="true" checked="@s.AutoAddCollabs">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["es.autoCollabs"]</b>
+                            <small>@L["es.autoCollabsHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        @* ==== Giden ==== *@
+        <section class="rd-surface bo-section" id="section-outgoing">
+            <div class="rd-surface-head">@L["es.secOutgoing"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="es-smtp">@L["es.defaultSmtp"]</label>
+                    <select id="es-smtp" class="rd-control" name="default_smtp">
+                        <option value="system" selected="@(smtpSelected == 0)">@L["es.optPhpMail"]</option>
+                        @foreach (var o in Model.SmtpAccounts)
+                        {
+                            <option value="@o.Id" selected="@(smtpSelected == o.Id)">@o.Label — SMTP</option>
+                        }
+                    </select>
+                    <p class="rd-help">@L["es.defaultSmtpHelp"]</p>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-switch">
+                        <input type="checkbox" name="attachments_in_email" value="true" checked="@s.AttachmentsInEmail">
+                        <span class="track"></span>
+                        <span class="rd-switch-copy">
+                            <b>@L["es.attachments"]</b>
+                            <small>@L["es.attachmentsHelp"]</small>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        @* Footer order = the S0-normalized settings canon (reset → save); the
+           mockup still carries the pre-S0 order — flagged in ROADMAP. *@
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+            <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+
+    </form>
+</div>

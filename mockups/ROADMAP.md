@@ -879,9 +879,74 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       skb.toastSaved. Tests: SettingsTasksKbTests (3 of 7) — kb round-trip, master flip through the page →
       portal routes 404 + nav/home links gone + flip back reopens, canned flip → composer menu gone +
       insert endpoint refuses — suite 199.)*
-- [ ] **email-settings.html** — 16 switches gate; footer button order normalized (S0)
-- [ ] **emails.html / email-edit.html** — account CRUD; IMAP/SMTP config with per-protocol dialogs (B2), protocol
+- [x] **email-settings.html** — 16 switches gate; footer button order normalized (S0)
+      *(S7; /admin/email-settings (EmailSettingsController) over ISettingsService ns "email" (NEW EmailSettings
+      typed section) — PRG toast, B9 scroll-spy rail; selects list REAL rows: active template sets, email
+      accounts, and SMTP-capable accounts for the default-delivery select (the mockup's single "destek@… —
+      SMTP" option = exactly the seeded SMTP channel). LIVE (1): default_template_set_id — the B8 effort
+      emails (EffortEmailHandler) render from the chosen set (0 keeps the pre-S7 behavior, the active "tr"
+      set). PERSISTED-ONLY (annotated on EmailSettings — the mail PIPELINE is S8): default_email_id /
+      alert_email_id / admin_email (TODO(S8): outbound From/alert routing — IAppEmailSender composes no From
+      today), verify_domain (TODO(S8): MX lookup needs a DNS client), fetch_enabled + fetch_auto_cron
+      (TODO(S8): Hangfire fetch masters), strip_quoted / reply_separator / use_email_priority /
+      accept_unregistered / auto_add_collabs (TODO(S8): inbound processing), default_smtp +
+      attachments_in_email (TODO(S8): outbound transport/composer). B3 in-page (INVENTED — the mockup's
+      switches are independent, settings-kb precedent): polling gates the cron switch, strip-quoted gates
+      the separator input. Honest defaults follow today's engine (template set 0, default/alert accounts 0 →
+      first option renders selected, default_smtp "system"; the mockup's selected destek@/bilgi@/SMTP rows
+      are sample state — flagged). NOTE the row's "16 switches" vs the mockup's actual 14 controls
+      (8 switches + 4 selects + 2 inputs) — all 14 persist. Footer = the S0-normalized order (reset → save,
+      flex-end); the email-settings mockup still carries the pre-S0 save→reset order — S0 MISS, flagged for
+      canon. Server validation: admin_email must parse as an email (es.errAdminEmail); vanished ids fall
+      back silently (helptopics precedent). "PHP mail()" option label is osTicket-speak in a C# product —
+      persisted as "system", label kept verbatim per the mockup, flagged for canon. Invented keys (TR/EN
+      twins): es.toastSaved/errAdminEmail. Tests: EmailsAdminTests (2 of 6) — full 14-field round-trip +
+      re-render + admin-email refusal + SMTP-option gating; LIVE consumer: template-set flip → the effort
+      request email renders from the EN set — suite 293.)*
+- [x] **emails.html / email-edit.html** — account CRUD; IMAP/SMTP config with per-protocol dialogs (B2), protocol
       radios gate fields (B3), OAuth2 tabs, **Test connection**
+      *(S7; /admin/emails + /admin/email-edit?id= (EmailsController; no id = create — the mockup's new-button
+      links straight to email-edit.html, no create dialog). NEW S7_EmailAccounts migration:
+      EmailChannel.PasswordProtected / OAuthClientId / OAuthClientSecretProtected. SECRET STORAGE CHOICE
+      (documented on IEmailSecretProtector): DataProtection-encrypted columns, purpose
+      "RapidsolDestek.EmailChannel.Secrets"; write-only UI — the bullet sentinel renders only when a secret
+      is stored, an empty/bullets-only post means "unchanged" (no explicit clear: switch the auth mode
+      instead — flagged); keyring rotation invalidates stored mail credentials (flagged). B1 list: sort
+      email (mockup's desc default) / priority (urgency) / dept / updated, ILIKE search over address +
+      display name, pagination 8, reachable empty state; bulk enable/disable = the account's channel
+      IsActive flags (the account itself has no active column — osTicket parity; INTERPRETATION flagged for
+      canon), bulk delete behind an invented confirm dialog (teams precedent) with the reference guard:
+      accounts used by Department.EmailAccountId / AutoResponseEmailAccountId, Filter.EmailAccountId or the
+      email settings (default / alert / default-SMTP) are skipped in the partial toast. Editor: 3 tabs;
+      identity + new-ticket routing persist to EmailAccount (dept/priority/topic selects list REAL rows;
+      the routing is CONSUMED by the S8 inbound pipeline — TODO(S8)); incoming/outgoing persist to the
+      account's one Mailbox + one Smtp EmailChannel (both materialized on save; create defaults to
+      fetch/SMTP disabled — unconfigured-honest, the mockup's enabled radios are sample state, flagged).
+      B3: the fetch/SMTP status radios gate their field groups (rd.js data-gates); INVENTED gates grounded
+      in the mockup's own help texts (flagged): protocol select (IMAP) gates the folder field, after-fetch
+      (archive) gates the archive folder. Server side: address format + uniqueness, an ENABLED channel
+      requires host + port 1–65535 (ee.errIncoming/errOutgoing), freq/max clamped. B2: the mockup's ONE
+      shared dlg-auth split into per-channel dialogs (dlg-auth-in/out) prefilled server-side, each with the
+      Basic/OAuth2 tabs; the ACTIVE tab follows the stored auth mode (the mockup statically shows Basic
+      active while OAuth2 is selected — data-driven chosen, flagged); dialog inputs ride the page form
+      (form= attribute) so credentials persist on the page Save — the dialog's Save just closes (no
+      independent POST; the audited close-swallows-save shape cannot occur). OAuth2 = provider app
+      credentials only; the token flow is S8 (TODO(S8)). **Test connection = REAL** (INVENTED UI — the
+      ROADMAP row names it, the mockup defines no control; per-channel button + result line, flagged):
+      POST /admin/email-edit/test → MailConnectionTester (NEW MailKit 4.17.0 dep in Infrastructure)
+      attempts a live IMAP/POP3/SMTP connect with a 5s budget, SecureSocketOptions.Auto (the mockup has no
+      encryption select — Auto decides, flagged); typed stages input/dns/connect/tls/auth/ok/ok-noauth
+      (OAuth2 probes connect+TLS only — honest "ok-noauth" until the S8 token flow); a sentinel password
+      with ?id= falls back to the stored decrypted secret. Seed: destek@ gains its email-edit mockup-canon
+      channels (IMAP imap.rapidsol.com.tr:993/INBOX + SMTP :587, OAuth2 client 8f42c1aa-destek-oauth,
+      5 min/30, archive Arsiv/Islenen); secrets stay null — the mockup's bullets imply a stored secret,
+      honesty deviation flagged. Invented keys (TR/EN twins): em.dateFmt/bulkNone/bulkDone/bulkPartial/
+      deleteConfirm; ee.newTitle/toastSaved/toastCreated/errEmail/errEmailInUse/errIncoming/errOutgoing/
+      errPort/test/testTesting/testOk/testOkNoAuth/testFail{Input,Dns,Connect,Tls,Auth,Error}. Tests:
+      EmailsAdminTests (4 of 6) — list + search, CRUD round-trip incl. write-only secret semantics (new →
+      sentinel-unchanged → replaced; plaintext never rendered, ciphertext at rest), duplicate/incomplete/
+      malformed refusals, Test-connection typed "connect" failure on closed 127.0.0.1:1 (fast, no external
+      network) + "input" rejection before any I/O, bulk enable/disable + the delete guard — suite 293.)*
 - [ ] **email-diagnostic.html** — real send with pending/success/failure states (B10)
 - [ ] **templates.html / template-edit.html** — set CRUD (create dialog closes properly); 21 templates each
       open their own content (B2); variable pills click-to-insert (B5); per-template preview

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="es.title" xml:space="preserve">
+    <value>Email Settings</value>
+  </data>
+  <data name="es.subtitle" xml:space="preserve">
+    <value>System-wide email behavior: default addresses and templates, incoming mail processing and the outgoing mail method.</value>
+  </data>
+  <data name="es.idxGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="es.idxIncoming" xml:space="preserve">
+    <value>Incoming</value>
+  </data>
+  <data name="es.idxOutgoing" xml:space="preserve">
+    <value>Outgoing</value>
+  </data>
+  <data name="es.secGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="es.defaultTemplate" xml:space="preserve">
+    <value>Default template set</value>
+  </data>
+  <data name="es.defaultTemplateHelp" xml:space="preserve">
+    <value>All emails use these templates unless the department selects a different set.</value>
+  </data>
+  <data name="es.defaultEmail" xml:space="preserve">
+    <value>Default system email</value>
+  </data>
+  <data name="es.defaultEmailHelp" xml:space="preserve">
+    <value>Address used when no other address is specified on outgoing email.</value>
+  </data>
+  <data name="es.alertEmail" xml:space="preserve">
+    <value>Alert email</value>
+  </data>
+  <data name="es.alertEmailHelp" xml:space="preserve">
+    <value>The sender address for alerts and notifications sent to agents.</value>
+  </data>
+  <data name="es.adminEmail" xml:space="preserve">
+    <value>Admin email</value>
+  </data>
+  <data name="es.adminEmailHelp" xml:space="preserve">
+    <value>System errors and critical alerts are sent to this address.</value>
+  </data>
+  <data name="es.verifyDomain" xml:space="preserve">
+    <value>Verify email domains</value>
+  </data>
+  <data name="es.verifyDomainHelp" xml:space="preserve">
+    <value>The domain's MX record is checked when email addresses are saved.</value>
+  </data>
+  <data name="es.secIncoming" xml:space="preserve">
+    <value>Incoming</value>
+  </data>
+  <data name="es.polling" xml:space="preserve">
+    <value>Email fetching</value>
+  </data>
+  <data name="es.pollingHelp" xml:space="preserve">
+    <value>The system regularly pulls new email from the configured mailboxes.</value>
+  </data>
+  <data name="es.cron" xml:space="preserve">
+    <value>Automatic scheduling (cron)</value>
+  </data>
+  <data name="es.cronHelp" xml:space="preserve">
+    <value>Fetching is triggered by the server scheduler; when off, only page visits trigger it.</value>
+  </data>
+  <data name="es.stripQuoted" xml:space="preserve">
+    <value>Strip quoted reply</value>
+  </data>
+  <data name="es.stripQuotedHelp" xml:space="preserve">
+    <value>Quoted older correspondence in reply emails is not added to the ticket.</value>
+  </data>
+  <data name="es.separator" xml:space="preserve">
+    <value>Reply separator</value>
+  </data>
+  <data name="es.separatorHelp" xml:space="preserve">
+    <value>Everything below this line is trimmed from the email.</value>
+  </data>
+  <data name="es.emailPriority" xml:space="preserve">
+    <value>Use email priority</value>
+  </data>
+  <data name="es.emailPriorityHelp" xml:space="preserve">
+    <value>The priority flagged by the sender (e.g. "high importance") is applied to the ticket.</value>
+  </data>
+  <data name="es.acceptUnregistered" xml:space="preserve">
+    <value>Accept unregistered emails</value>
+  </data>
+  <data name="es.acceptUnregisteredHelp" xml:space="preserve">
+    <value>Emails from addresses not registered in the system can also open tickets.</value>
+  </data>
+  <data name="es.autoCollabs" xml:space="preserve">
+    <value>Auto-add collaborators</value>
+  </data>
+  <data name="es.autoCollabsHelp" xml:space="preserve">
+    <value>Addresses on the email's CC line are added to the ticket as collaborators.</value>
+  </data>
+  <data name="es.secOutgoing" xml:space="preserve">
+    <value>Outgoing</value>
+  </data>
+  <data name="es.defaultSmtp" xml:space="preserve">
+    <value>Default delivery method</value>
+  </data>
+  <data name="es.defaultSmtpHelp" xml:space="preserve">
+    <value>Email from addresses without their own SMTP settings is sent this way.</value>
+  </data>
+  <data name="es.optPhpMail" xml:space="preserve">
+    <value>PHP mail() — server local mail</value>
+  </data>
+  <data name="es.attachments" xml:space="preserve">
+    <value>Email attachments</value>
+  </data>
+  <data name="es.attachmentsHelp" xml:space="preserve">
+    <value>File attachments are included in outgoing email; when off, only a link is sent.</value>
+  </data>
+  <data name="es.toastSaved" xml:space="preserve">
+    <value>Email settings saved.</value>
+  </data>
+  <data name="es.errAdminEmail" xml:space="preserve">
+    <value>The admin email must be a valid address.</value>
+  </data>
+</root>

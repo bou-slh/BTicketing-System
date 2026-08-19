@@ -185,6 +185,11 @@ builder.Services.AddMemoryCache(); // agent tickets queue-count cache (S6)
 builder.Services.AddSignalR(); // B7 live board (agent/live)
 builder.Services.AddScoped<ISidebarBadgeService, SidebarBadgeService>();
 builder.Services.AddSingleton<IAppEmailSender, DevLoggingEmailSender>();
+// S7 admin/email-edit: DataProtection-encrypted mail credentials + the real
+// MailKit "Bağlantıyı Sına" probe.
+builder.Services.AddSingleton<IEmailSecretProtector, EmailSecretProtector>();
+builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailConnectionTester,
+    RapidsolDestek.Infrastructure.Services.MailConnectionTester>();
 
 // Interim B8 effort emails (S8 replaces the transport, the handler contract stays).
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortProposed>, EffortEmailHandler>();

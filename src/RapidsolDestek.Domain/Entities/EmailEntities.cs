@@ -91,6 +91,21 @@ public class EmailChannel : TimestampedEntity
     /// <summary>Reference key into secret storage (password / OAuth token cache).</summary>
     public string? CredentialRef { get; set; }
 
+    /// <summary>
+    /// Basic-auth password, DataProtection-encrypted at rest (S7 admin/email-edit;
+    /// purpose string in the Web protector). Write-only in the UI: rendered as a
+    /// bullet sentinel, never in plaintext.
+    /// </summary>
+    public string? PasswordProtected { get; set; }
+
+    /// <summary>OAuth2 app registration client id (S7 admin/email-edit dlg-auth;
+    /// the token flow itself is S8).</summary>
+    public string? OAuthClientId { get; set; }
+
+    /// <summary>OAuth2 client secret, DataProtection-encrypted at rest (write-only
+    /// in the UI, same sentinel contract as <see cref="PasswordProtected"/>).</summary>
+    public string? OAuthClientSecretProtected { get; set; }
+
     /// <summary>Mailbox folder to fetch from (osTicket folder).</summary>
     public string? Folder { get; set; }
 
