@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="rl.title" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="rl.subtitle" xml:space="preserve">
+    <value>Permission packages defining what agents may do in their departments. Click a role to edit its permission matrix.</value>
+  </data>
+  <data name="rl.add" xml:space="preserve">
+    <value>＋ New Role</value>
+  </data>
+  <data name="rl.searchPh" xml:space="preserve">
+    <value>Search roles…</value>
+  </data>
+  <data name="rl.colName" xml:space="preserve">
+    <value>Role Name</value>
+  </data>
+  <data name="rl.colAgents" xml:space="preserve">
+    <value>Agents</value>
+  </data>
+  <data name="rl.emptyTitle" xml:space="preserve">
+    <value>No roles yet</value>
+  </data>
+  <data name="rl.emptyText" xml:space="preserve">
+    <value>Create the first permission role to assign to agents.</value>
+  </data>
+  <data name="rl.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="rl.toastSaved" xml:space="preserve">
+    <value>Role saved.</value>
+  </data>
+  <data name="rl.toastCreated" xml:space="preserve">
+    <value>Role created.</value>
+  </data>
+  <data name="rl.bulkNone" xml:space="preserve">
+    <value>Select records from the list first.</value>
+  </data>
+  <data name="rl.bulkDone" xml:space="preserve">
+    <value>{0} roles updated.</value>
+  </data>
+  <data name="rl.bulkPartial" xml:space="preserve">
+    <value>{0} actions completed, {1} records skipped (roles assigned to agents cannot be deleted).</value>
+  </data>
+  <data name="rl.deleteConfirm" xml:space="preserve">
+    <value>The selected roles will be permanently deleted; roles assigned to agents are skipped. Continue?</value>
+  </data>
+</root>

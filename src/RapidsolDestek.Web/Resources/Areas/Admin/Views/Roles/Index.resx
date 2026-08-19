@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="rl.title" xml:space="preserve">
+    <value>Roller</value>
+  </data>
+  <data name="rl.subtitle" xml:space="preserve">
+    <value>Temsilcilerin departmanlarındaki yetkilerini belirleyen izin paketleri. Bir role tıklayarak izin matrisini düzenleyin.</value>
+  </data>
+  <data name="rl.add" xml:space="preserve">
+    <value>＋ Yeni Rol</value>
+  </data>
+  <data name="rl.searchPh" xml:space="preserve">
+    <value>Rol ara…</value>
+  </data>
+  <data name="rl.colName" xml:space="preserve">
+    <value>Rol Adı</value>
+  </data>
+  <data name="rl.colAgents" xml:space="preserve">
+    <value>Temsilci Sayısı</value>
+  </data>
+  <data name="rl.emptyTitle" xml:space="preserve">
+    <value>Henüz rol yok</value>
+  </data>
+  <data name="rl.emptyText" xml:space="preserve">
+    <value>Temsilcilere atanacak ilk izin rolünü oluşturun.</value>
+  </data>
+  <data name="rl.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="rl.toastSaved" xml:space="preserve">
+    <value>Rol kaydedildi.</value>
+  </data>
+  <data name="rl.toastCreated" xml:space="preserve">
+    <value>Rol oluşturuldu.</value>
+  </data>
+  <data name="rl.bulkNone" xml:space="preserve">
+    <value>Önce listeden kayıt seçin.</value>
+  </data>
+  <data name="rl.bulkDone" xml:space="preserve">
+    <value>{0} rol güncellendi.</value>
+  </data>
+  <data name="rl.bulkPartial" xml:space="preserve">
+    <value>{0} işlem tamamlandı, {1} kayıt atlandı (temsilcilere atanmış roller silinemez).</value>
+  </data>
+  <data name="rl.deleteConfirm" xml:space="preserve">
+    <value>Seçili roller kalıcı olarak silinecek; temsilcilere atanmış roller atlanır. Devam edilsin mi?</value>
+  </data>
+</root>

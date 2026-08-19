@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tm.title" xml:space="preserve">
+    <value>Takımlar</value>
+  </data>
+  <data name="tm.subtitle" xml:space="preserve">
+    <value>Departmanlardan bağımsız çalışma grupları; talepler doğrudan takıma atanabilir. Bir takıma tıklayarak düzenleyin.</value>
+  </data>
+  <data name="tm.add" xml:space="preserve">
+    <value>＋ Yeni Takım</value>
+  </data>
+  <data name="tm.searchPh" xml:space="preserve">
+    <value>Takım ara…</value>
+  </data>
+  <data name="tm.colName" xml:space="preserve">
+    <value>Takım Adı</value>
+  </data>
+  <data name="tm.colMembers" xml:space="preserve">
+    <value>Üye Sayısı</value>
+  </data>
+  <data name="tm.colLead" xml:space="preserve">
+    <value>Takım Lideri</value>
+  </data>
+  <data name="tm.emptyTitle" xml:space="preserve">
+    <value>Henüz takım yok</value>
+  </data>
+  <data name="tm.emptyText" xml:space="preserve">
+    <value>Talepleri birlikte üstlenecek ilk takımınızı oluşturun.</value>
+  </data>
+  <data name="tm.dlgTitle" xml:space="preserve">
+    <value>Takım Düzenle — Bordro Ekibi</value>
+  </data>
+  <data name="tm.dlgName" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="tm.dlgNameHelp" xml:space="preserve">
+    <value>Atama listelerinde görünen takım adı.</value>
+  </data>
+  <data name="tm.dlgStatus" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="tm.dlgStatusHelp" xml:space="preserve">
+    <value>Devre dışı takımlara yeni talep atanamaz.</value>
+  </data>
+  <data name="tm.dlgActive" xml:space="preserve">
+    <value>Etkin</value>
+  </data>
+  <data name="tm.dlgDisabled" xml:space="preserve">
+    <value>Devre dışı</value>
+  </data>
+  <data name="tm.dlgLead" xml:space="preserve">
+    <value>Takım lideri</value>
+  </data>
+  <data name="tm.dlgLeadHelp" xml:space="preserve">
+    <value>İsteğe bağlı; lider, takım uyarılarında ayrıca vurgulanır.</value>
+  </data>
+  <data name="tm.dlgNoAlerts" xml:space="preserve">
+    <value>Atama uyarılarını kapat</value>
+  </data>
+  <data name="tm.dlgNoAlertsHelp" xml:space="preserve">
+    <value>Takıma talep atandığında üyelere e-posta uyarısı gönderilmez.</value>
+  </data>
+  <data name="tm.dlgNotes" xml:space="preserve">
+    <value>Notlar</value>
+  </data>
+  <data name="tm.dlgMembers" xml:space="preserve">
+    <value>Üyeler</value>
+  </data>
+  <data name="tm.dlgMembersHelp" xml:space="preserve">
+    <value>Uyarı kutusu işaretli üyeler takım uyarılarını alır.</value>
+  </data>
+  <data name="tm.memberAlerts" xml:space="preserve">
+    <value>Uyarılar</value>
+  </data>
+  <data name="tm.addMemberPh" xml:space="preserve">
+    <value>Temsilci seç…</value>
+  </data>
+  <data name="tm.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="tm.dlgNewTitle" xml:space="preserve">
+    <value>Yeni Takım</value>
+  </data>
+  <data name="tm.dlgTitleFmt" xml:space="preserve">
+    <value>Takım Düzenle — {0}</value>
+  </data>
+  <data name="tm.leadNone" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="tm.toastSaved" xml:space="preserve">
+    <value>Takım kaydedildi.</value>
+  </data>
+  <data name="tm.toastCreated" xml:space="preserve">
+    <value>Takım oluşturuldu.</value>
+  </data>
+  <data name="tm.bulkNone" xml:space="preserve">
+    <value>Önce listeden kayıt seçin.</value>
+  </data>
+  <data name="tm.bulkDone" xml:space="preserve">
+    <value>{0} takım güncellendi.</value>
+  </data>
+  <data name="tm.bulkPartial" xml:space="preserve">
+    <value>{0} işlem tamamlandı, {1} kayıt atlandı (talep, görev veya konu yönlendirmesi olan takımlar silinemez).</value>
+  </data>
+  <data name="tm.deleteConfirm" xml:space="preserve">
+    <value>Seçili takımlar kalıcı olarak silinecek; talep, görev veya konu yönlendirmesi olan takımlar atlanır. Devam edilsin mi?</value>
+  </data>
+  <data name="tm.errName" xml:space="preserve">
+    <value>Takım adı gerekli.</value>
+  </data>
+  <data name="tm.errNameInUse" xml:space="preserve">
+    <value>Bu ad başka bir takımda kullanılıyor.</value>
+  </data>
+</root>

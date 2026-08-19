@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="re.back" xml:space="preserve">
+    <value>← Roller</value>
+  </data>
+  <data name="re.subtitle" xml:space="preserve">
+    <value>Bu rolü taşıyan temsilcilerin yapabileceklerini belirleyin. Grup anahtarı tüm grubu açıp kapatır; tek tek izinler aşağıda.</value>
+  </data>
+  <data name="re.tabDef" xml:space="preserve">
+    <value>Tanım</value>
+  </data>
+  <data name="re.tabPerms" xml:space="preserve">
+    <value>İzinler</value>
+  </data>
+  <data name="re.secDef" xml:space="preserve">
+    <value>Rol Bilgileri</value>
+  </data>
+  <data name="re.name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="re.nameHelp" xml:space="preserve">
+    <value>Temsilci erişim ayarlarında görünen rol adı.</value>
+  </data>
+  <data name="re.grpTickets" xml:space="preserve">
+    <value>Talepler</value>
+  </data>
+  <data name="re.grpTicketsHelp" xml:space="preserve">
+    <value>Talep yaşam döngüsü üzerindeki yetkiler.</value>
+  </data>
+  <data name="re.grpTasks" xml:space="preserve">
+    <value>Görevler</value>
+  </data>
+  <data name="re.grpTasksHelp" xml:space="preserve">
+    <value>Görevler üzerindeki yetkiler.</value>
+  </data>
+  <data name="re.grpUsers" xml:space="preserve">
+    <value>Kullanıcılar</value>
+  </data>
+  <data name="re.grpUsersHelp" xml:space="preserve">
+    <value>Kullanıcı kayıtları ve hesapları üzerindeki yetkiler.</value>
+  </data>
+  <data name="re.grpOrgs" xml:space="preserve">
+    <value>Şirketler</value>
+  </data>
+  <data name="re.grpOrgsHelp" xml:space="preserve">
+    <value>Şirket kayıtları üzerindeki yetkiler.</value>
+  </data>
+  <data name="re.grpKb" xml:space="preserve">
+    <value>Bilgi Bankası</value>
+  </data>
+  <data name="re.grpKbHelp" xml:space="preserve">
+    <value>SSS ve hazır yanıt içerikleri üzerindeki yetkiler.</value>
+  </data>
+  <data name="re.grpMisc" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="re.grpMiscHelp" xml:space="preserve">
+    <value>Genel panel yetkileri.</value>
+  </data>
+  <data name="re.pCreate" xml:space="preserve">
+    <value>Oluştur</value>
+  </data>
+  <data name="re.pEdit" xml:space="preserve">
+    <value>Düzenle</value>
+  </data>
+  <data name="re.pAssign" xml:space="preserve">
+    <value>Ata</value>
+  </data>
+  <data name="re.pRelease" xml:space="preserve">
+    <value>Serbest Bırak</value>
+  </data>
+  <data name="re.pTransfer" xml:space="preserve">
+    <value>Aktar</value>
+  </data>
+  <data name="re.pRefer" xml:space="preserve">
+    <value>Yönlendir</value>
+  </data>
+  <data name="re.pMerge" xml:space="preserve">
+    <value>Birleştir</value>
+  </data>
+  <data name="re.pLink" xml:space="preserve">
+    <value>Bağlantıla</value>
+  </data>
+  <data name="re.pReplySend" xml:space="preserve">
+    <value>Yanıt Gönder</value>
+  </data>
+  <data name="re.pEffortPropose" xml:space="preserve">
+    <value>Efor Öner</value>
+  </data>
+  <data name="re.pMarkAnswered" xml:space="preserve">
+    <value>Yanıtlandı İşaretle</value>
+  </data>
+  <data name="re.pClose" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="re.pDelete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="re.pEditThread" xml:space="preserve">
+    <value>Konuşma Düzenle</value>
+  </data>
+  <data name="re.pReply" xml:space="preserve">
+    <value>Yanıtla</value>
+  </data>
+  <data name="re.pManageAccount" xml:space="preserve">
+    <value>Hesap Yönet</value>
+  </data>
+  <data name="re.pDirectory" xml:space="preserve">
+    <value>Dizin</value>
+  </data>
+  <data name="re.pFaq" xml:space="preserve">
+    <value>SSS Yönet</value>
+  </data>
+  <data name="re.pCanned" xml:space="preserve">
+    <value>Hazır Yanıtlar</value>
+  </data>
+  <data name="re.pDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="re.pStaff" xml:space="preserve">
+    <value>Temsilci</value>
+  </data>
+  <data name="re.pBanlist" xml:space="preserve">
+    <value>Engel Listesi</value>
+  </data>
+  <data name="re.pStats" xml:space="preserve">
+    <value>İstatistikler</value>
+  </data>
+  <data name="re.pSearch" xml:space="preserve">
+    <value>Gelişmiş Arama</value>
+  </data>
+  <data name="re.newTitle" xml:space="preserve">
+    <value>Yeni Rol</value>
+  </data>
+  <data name="re.errName" xml:space="preserve">
+    <value>Rol adı gerekli.</value>
+  </data>
+  <data name="re.errNameInUse" xml:space="preserve">
+    <value>Bu ad başka bir rolde kullanılıyor.</value>
+  </data>
+</root>

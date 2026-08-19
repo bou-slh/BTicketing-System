@@ -1,0 +1,90 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model RoleEditVm
+@{
+    var isNew = Model.Id is null;
+    ViewData["Title"] = isNew ? L["re.newTitle"].Value : Model.Name;
+
+    // B3 validation failure PRG toast (nothing was written).
+    if (TempData["RoleEditToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        ViewData["ToastVariant"] = "error";
+    }
+}
+
+<div class="bo-page-head">
+    <div>
+        <p><a href="/admin/roles">@L["re.back"]</a></p>
+        <h1>@(isNew ? L["re.newTitle"].Value : Model.Name)</h1>
+        <p>@L["re.subtitle"]</p>
+    </div>
+</div>
+
+<form method="post" asp-area="Admin" asp-controller="Roles" asp-action="Save">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@Model.Id">
+    }
+
+    <div class="rd-tabs" data-tabs data-tabs-scope="main">
+        <button type="button" class="active" data-tab="panel-def">@L["re.tabDef"]</button>
+        <button type="button" data-tab="panel-perms">@L["re.tabPerms"]</button>
+    </div>
+
+    @* ============ Tanım ============ *@
+    <div class="rd-tab-panel active" id="panel-def" data-tab-group="main">
+        <div class="rd-surface">
+            <div class="rd-surface-head">@L["re.secDef"]</div>
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <label class="rd-label" for="re-name">@L["re.name"]</label>
+                    <input id="re-name" name="name" class="rd-control" type="text" value="@Model.Name" style="max-width:380px" required maxlength="120">
+                    <p class="rd-help">@L["re.nameHelp"]</p>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="re-notes">@SL["common.notes"]</label>
+                    <textarea id="re-notes" name="notes" class="rd-control" style="min-height:80px">@Model.Notes</textarea>
+                    <p class="rd-help">@SL["common.notesHelp"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ============ İzinler ============
+       6 bo-toggle-cards from the shared matrix definition (RolesController.Matrix —
+       the same 36 PermissionKeys the PermissionService enforces). Group masters are
+       tri-state UI only (rd.js data-check-master, B3); children post name="perms". *@
+    <div class="rd-tab-panel" id="panel-perms" data-tab-group="main">
+        @foreach (var g in RolesController.Matrix)
+        {
+            var granted = g.Boxes.Count(b => Model.Granted.Contains(b.Key));
+            <div class="bo-toggle-card">
+                <div class="head">
+                    <div>
+                        <b>@L[g.LabelKey]</b>
+                        <small>@L[g.HelpKey]</small>
+                    </div>
+                    <label class="rd-switch">
+                        <input type="checkbox" data-check-master="#perm-@g.Id input[type=checkbox]"
+                               checked="@(granted == g.Boxes.Length)">
+                        <span class="track"></span>
+                    </label>
+                </div>
+                <div class="recipients" id="perm-@g.Id">
+                    @foreach (var box in g.Boxes)
+                    {
+                        <label class="rd-check">
+                            <input type="checkbox" name="perms" value="@box.Key" checked="@Model.Granted.Contains(box.Key)">
+                            <span>@L[box.LabelKey]</span>
+                        </label>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="rd-btn-primary">@SL["common.save"]</button>
+        <a class="rd-btn" href="/admin/roles">@SL["common.cancel"]</a>
+    </div>
+</form>

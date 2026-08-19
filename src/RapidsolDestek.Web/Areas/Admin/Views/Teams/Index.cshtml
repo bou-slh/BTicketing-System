@@ -1,0 +1,290 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model TeamsIndexVm
+@{
+    ViewData["Title"] = L["tm.title"];
+
+    // PRG toast handoff after create/update/bulk (canned-page precedent).
+    if (TempData["TeamsToast"] is string toastKey)
+    {
+        var ok = TempData["TeamsToastOk"] as int? ?? 0;
+        var skipped = TempData["TeamsToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "tm.bulkDone" or "tm.bulkPartial"
+            ? L[toastKey, ok, skipped].Value
+            : L[toastKey].Value;
+        if (TempData["TeamsToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Updated cell: the mockup's dd.MM.yyyy HH:mm cells (tm.dateFmt).
+    string UpdatedText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("tm.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // "Ümit Y. Akın" → "ÜA" (mockup avatar convention: first + last word initials).
+    string Initials(string name)
+    {
+        var words = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length == 0)
+            return "";
+        var first = words[0][..1];
+        var last = words.Length > 1 ? words[^1][..1] : "";
+        return (first + last).ToUpper(CultureInfo.GetCultureInfo("tr-TR"));
+    }
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/teams" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key is "name" or "updated" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["tm.title"]</h1>
+        <p>@L["tm.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <button class="rd-btn-primary" data-dialog-open="dlg-team">@L["tm.add"]</button>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/admin/teams">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["tm.searchPh"]">
+    <span class="spacer"></span>
+    @* Mockup's dead bulk buttons act on the checkbox selection (canned precedent). *@
+    <button class="rd-btn" type="submit" form="tm-bulk" name="act" value="enable">@SL["common.enable"]</button>
+    <button class="rd-btn" type="submit" form="tm-bulk" name="act" value="disable">@SL["common.disable"]</button>
+    <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-bulk-delete">@SL["common.delete"]</button>
+</form>
+
+<div class="rd-surface" id="tbl-teams">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Mockup's hidden #empty-teams panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">◎</div>
+            <h3>@L["tm.emptyTitle"]</h3>
+            <p>@L["tm.emptyText"]</p>
+            <button class="rd-btn-primary" data-dialog-open="dlg-team">@L["tm.add"]</button>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-teams" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("name")"><a href="@SortUrl("name")">@L["tm.colName"]</a></th>
+                    <th class="@SortClass("status")"><a href="@SortUrl("status")">@SL["common.status"]</a></th>
+                    <th class="num">@L["tm.colMembers"]</th>
+                    <th class="@SortClass("lead")"><a href="@SortUrl("lead")">@L["tm.colLead"]</a></th>
+                    <th class="@SortClass("updated")"><a href="@SortUrl("updated")">@SL["common.updated"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="tm-bulk"></td>
+                        <td><a href="#" data-dialog-open="dlg-team-@r.Id">@r.Name</a></td>
+                        @if (r.IsActive)
+                        {
+                            <td><span class="rd-pill rd-pill-teal">@SL["common.active"]</span></td>
+                        }
+                        else
+                        {
+                            <td><span class="rd-pill rd-pill-closed">@SL["common.disabled"]</span></td>
+                        }
+                        <td class="num">@r.MemberCount</td>
+                        <td>@r.LeadName</td>
+                        <td>@UpdatedText(r.Updated)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@SL["common.showing"]</span><span>@Model.From–@Model.To / @Model.Total</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the toolbar bulk actions (canned precedent). *@
+<form id="tm-bulk" method="post" asp-area="Admin" asp-controller="Teams" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+@* Bulk delete confirm dialog: invented UI (B2, canned/users precedent). Teams
+   referenced by tickets/tasks/help-topic routing are skipped server-side. *@
+<dialog class="rd-dialog" id="dlg-bulk-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <p>@L["tm.deleteConfirm"]</p>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        <button type="submit" class="rd-btn rd-btn-danger" form="tm-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>
+
+@* Team dialog: one create instance (dlg-team, empty) + per-row edit instances
+   prefilled server-side (B2 — the mockup shares ONE hardcoded dlg-team; split per
+   the canned precedent, flagged in ROADMAP). The member roster is the B4 rd.js
+   data-roster contract: rows + select of addable staff + template row; removing a
+   row restores its option, added rows post memberIds/alertIds. *@
+@{
+    async Task TeamDialogAsync(string dialogId, TeamRowVm? team)
+    {
+        var members = team is null ? new List<TeamMemberVm>() : Model.Members[team.Id].ToList();
+        var memberIds = members.Select(m => m.StaffId).ToHashSet();
+        <dialog class="rd-dialog" id="@dialogId" style="width:min(640px,calc(100vw - 40px))">
+            <form method="post" asp-area="Admin" asp-controller="Teams"
+                  asp-action="@(team is null ? "Create" : "Update")">
+                @if (team is not null)
+                {
+                    <input type="hidden" name="id" value="@team.Id">
+                }
+                <input type="hidden" name="returnUrl" value="@currentUrl">
+                <div class="rd-dialog-head">
+                    <span>@(team is null ? L["tm.dlgNewTitle"].Value : L["tm.dlgTitleFmt", team.Name].Value)</span>
+                    <button type="button" class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
+                </div>
+                <div class="rd-dialog-body">
+                    <div class="rd-grid-2">
+                        <div class="rd-field">
+                            <label class="rd-label" for="tm-name-@dialogId">@L["tm.dlgName"]</label>
+                            <input id="tm-name-@dialogId" name="name" class="rd-control" type="text" value="@team?.Name" required maxlength="120">
+                            <p class="rd-help">@L["tm.dlgNameHelp"]</p>
+                        </div>
+                        <div class="rd-field">
+                            <span class="rd-label">@L["tm.dlgStatus"]</span>
+                            <label class="rd-check" style="display:inline-flex;margin-right:18px;margin-top:10px">
+                                <input type="radio" name="active" value="true" checked="@(team?.IsActive ?? true)"><span>@L["tm.dlgActive"]</span>
+                            </label>
+                            <label class="rd-check" style="display:inline-flex">
+                                <input type="radio" name="active" value="false" checked="@(team is { IsActive: false })"><span>@L["tm.dlgDisabled"]</span>
+                            </label>
+                            <p class="rd-help">@L["tm.dlgStatusHelp"]</p>
+                        </div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="tm-lead-@dialogId">@L["tm.dlgLead"]</label>
+                        <select id="tm-lead-@dialogId" name="leadId" class="rd-control">
+                            @* Empty option invented: the help text says the lead is optional,
+                               the mockup select has none (flagged in ROADMAP). *@
+                            <option value="" selected="@(team?.LeadStaffId is null)">@L["tm.leadNone"]</option>
+                            @foreach (var s in Model.StaffOptions)
+                            {
+                                <option value="@s.Id" selected="@(team?.LeadStaffId == s.Id)">@s.Name</option>
+                            }
+                        </select>
+                        <p class="rd-help">@L["tm.dlgLeadHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-switch">
+                            <input type="checkbox" name="noAlerts" value="true" checked="@(team?.NoAlerts ?? false)">
+                            <span class="track"></span>
+                            <span class="rd-switch-copy">
+                                <b>@L["tm.dlgNoAlerts"]</b>
+                                <small>@L["tm.dlgNoAlertsHelp"]</small>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="tm-notes-@dialogId">@L["tm.dlgNotes"]</label>
+                        <textarea id="tm-notes-@dialogId" name="notes" class="rd-control" style="min-height:70px">@team?.Notes</textarea>
+                        <p class="rd-help">@SL["common.notesHelp"]</p>
+                    </div>
+
+                    <div data-roster>
+                        <span class="rd-label">@L["tm.dlgMembers"]</span>
+                        <p class="rd-help" style="margin:0 0 10px">@L["tm.dlgMembersHelp"]</p>
+                        <div data-roster-rows>
+                            @foreach (var m in members)
+                            {
+                                <div class="bo-rule-row" data-roster-staff="@m.StaffId">
+                                    <span style="display:inline-flex;align-items:center;gap:10px;flex:1;min-width:170px">
+                                        <span class="rd-avatar">@Initials(m.Name)</span> <span data-roster-name>@m.Name</span>
+                                    </span>
+                                    <label class="rd-check"><input type="checkbox" name="alertIds" value="@m.StaffId" checked="@m.AlertsEnabled"><span>@L["tm.memberAlerts"]</span></label>
+                                    <input type="hidden" name="memberIds" value="@m.StaffId">
+                                    <button type="button" class="remove" title="@SL["common.delete"]">✕</button>
+                                </div>
+                            }
+                        </div>
+                        <div style="display:flex;gap:9px;margin-top:12px;max-width:360px">
+                            <select class="rd-control" data-roster-select>
+                                <option value="" selected>@L["tm.addMemberPh"]</option>
+                                @foreach (var s in Model.StaffOptions)
+                                {
+                                    @* Current members render hidden — rd.js restores the option
+                                       when the member row is removed. *@
+                                    <option value="@s.Id" hidden="@memberIds.Contains(s.Id)" disabled="@memberIds.Contains(s.Id)">@s.Name</option>
+                                }
+                            </select>
+                            <button type="button" class="rd-btn" data-roster-add>@SL["common.add"]</button>
+                        </div>
+                        <template data-roster-tpl>
+                            <div class="bo-rule-row">
+                                <span style="display:inline-flex;align-items:center;gap:10px;flex:1;min-width:170px">
+                                    <span class="rd-avatar"></span> <span data-roster-name></span>
+                                </span>
+                                <label class="rd-check"><input type="checkbox" name="alertIds" data-roster-value checked><span>@L["tm.memberAlerts"]</span></label>
+                                <input type="hidden" name="memberIds" data-roster-value>
+                                <button type="button" class="remove" title="@SL["common.delete"]">✕</button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="rd-dialog-foot">
+                    <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                    @* No data-dialog-close on the submit — the audited B2 close-swallows-save bug. *@
+                    <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+                </div>
+            </form>
+        </dialog>
+    }
+
+    await TeamDialogAsync("dlg-team", null);
+    foreach (var r in Model.Rows)
+    {
+        await TeamDialogAsync($"dlg-team-{r.Id}", r);
+    }
+}

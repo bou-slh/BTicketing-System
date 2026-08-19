@@ -113,3 +113,11 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
 /* Admin settings pages (S7, B3): containers gated off by an unchecked master
    switch (rd.js data-gates) — the mockups define no gated look, product-only. */
 .rd-gated-off { opacity: 0.45; }
+
+/* Admin role-edit (S7, B3): tri-state group masters — indeterminate = some
+   children checked. Half-filled track with a centered knob (mockup defines no
+   indeterminate look; invented, flagged on the roles ROADMAP row). */
+.rd-switch input:indeterminate + .track {
+  background: color-mix(in srgb, var(--rd-primary) 45%, light-dark(#cdddda, #33494d));
+}
+.rd-switch input:indeterminate + .track::before { transform: translateX(7px); }

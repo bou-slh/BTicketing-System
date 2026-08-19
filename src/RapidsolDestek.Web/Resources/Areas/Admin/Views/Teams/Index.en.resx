@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="tm.title" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="tm.subtitle" xml:space="preserve">
+    <value>Working groups independent of departments; tickets can be assigned directly to a team. Click a team to edit it.</value>
+  </data>
+  <data name="tm.add" xml:space="preserve">
+    <value>＋ New Team</value>
+  </data>
+  <data name="tm.searchPh" xml:space="preserve">
+    <value>Search teams…</value>
+  </data>
+  <data name="tm.colName" xml:space="preserve">
+    <value>Team Name</value>
+  </data>
+  <data name="tm.colMembers" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="tm.colLead" xml:space="preserve">
+    <value>Team Lead</value>
+  </data>
+  <data name="tm.emptyTitle" xml:space="preserve">
+    <value>No teams yet</value>
+  </data>
+  <data name="tm.emptyText" xml:space="preserve">
+    <value>Create your first team to take on tickets together.</value>
+  </data>
+  <data name="tm.dlgTitle" xml:space="preserve">
+    <value>Edit Team — Bordro Ekibi</value>
+  </data>
+  <data name="tm.dlgName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="tm.dlgNameHelp" xml:space="preserve">
+    <value>The team name shown in assignment lists.</value>
+  </data>
+  <data name="tm.dlgStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="tm.dlgStatusHelp" xml:space="preserve">
+    <value>New tickets cannot be assigned to disabled teams.</value>
+  </data>
+  <data name="tm.dlgActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="tm.dlgDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="tm.dlgLead" xml:space="preserve">
+    <value>Team lead</value>
+  </data>
+  <data name="tm.dlgLeadHelp" xml:space="preserve">
+    <value>Optional; the lead is additionally highlighted in team alerts.</value>
+  </data>
+  <data name="tm.dlgNoAlerts" xml:space="preserve">
+    <value>Disable assignment alerts</value>
+  </data>
+  <data name="tm.dlgNoAlertsHelp" xml:space="preserve">
+    <value>No email alert is sent to members when a ticket is assigned to the team.</value>
+  </data>
+  <data name="tm.dlgNotes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="tm.dlgMembers" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="tm.dlgMembersHelp" xml:space="preserve">
+    <value>Members with the alert box checked receive team alerts.</value>
+  </data>
+  <data name="tm.memberAlerts" xml:space="preserve">
+    <value>Alerts</value>
+  </data>
+  <data name="tm.addMemberPh" xml:space="preserve">
+    <value>Select agent…</value>
+  </data>
+  <data name="tm.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="tm.dlgNewTitle" xml:space="preserve">
+    <value>New Team</value>
+  </data>
+  <data name="tm.dlgTitleFmt" xml:space="preserve">
+    <value>Edit Team — {0}</value>
+  </data>
+  <data name="tm.leadNone" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="tm.toastSaved" xml:space="preserve">
+    <value>Team saved.</value>
+  </data>
+  <data name="tm.toastCreated" xml:space="preserve">
+    <value>Team created.</value>
+  </data>
+  <data name="tm.bulkNone" xml:space="preserve">
+    <value>Select records from the list first.</value>
+  </data>
+  <data name="tm.bulkDone" xml:space="preserve">
+    <value>{0} teams updated.</value>
+  </data>
+  <data name="tm.bulkPartial" xml:space="preserve">
+    <value>{0} actions completed, {1} records skipped (teams referenced by tickets, tasks or topic routing cannot be deleted).</value>
+  </data>
+  <data name="tm.deleteConfirm" xml:space="preserve">
+    <value>The selected teams will be permanently deleted; teams referenced by tickets, tasks or topic routing are skipped. Continue?</value>
+  </data>
+  <data name="tm.errName" xml:space="preserve">
+    <value>A team name is required.</value>
+  </data>
+  <data name="tm.errNameInUse" xml:space="preserve">
+    <value>This name is used by another team.</value>
+  </data>
+</root>

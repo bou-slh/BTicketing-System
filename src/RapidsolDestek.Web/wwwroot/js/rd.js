@@ -42,6 +42,67 @@
       syncGates();
   });
 
+  /* ---------- B3 tri-state matrix masters: input[data-check-master="selector"] ----------
+     A group master (role-edit / staff-edit permission cards) toggles every child
+     checkbox the selector matches; child changes sync the master back to
+     checked (all) / indeterminate (some) / unchecked (none). Masters are pure UI —
+     only the children post. */
+  function syncMasters() {
+    document.querySelectorAll("input[data-check-master]").forEach((master) => {
+      const kids = [...document.querySelectorAll(master.getAttribute("data-check-master"))];
+      if (!kids.length) return;
+      const on = kids.filter((k) => k.checked).length;
+      master.checked = on === kids.length;
+      master.indeterminate = on > 0 && on < kids.length;
+    });
+  }
+  document.addEventListener("change", (e) => {
+    const master = e.target.closest("input[data-check-master]");
+    if (master) {
+      document.querySelectorAll(master.getAttribute("data-check-master"))
+        .forEach((k) => { if (!k.disabled) k.checked = master.checked; });
+      master.indeterminate = false;
+      return;
+    }
+    if (e.target.matches('input[type="checkbox"]')
+        && [...document.querySelectorAll("input[data-check-master]")]
+          .some((m) => e.target.matches(m.getAttribute("data-check-master"))))
+      syncMasters();
+  });
+
+  /* ---------- B4 member roster (admin/teams dialog): [data-roster] ----------
+     Container holds the rows ([data-roster-rows]), a <select data-roster-select>
+     of addable staff and a [data-roster-add] button which clones the container's
+     <template data-roster-tpl> — [data-roster-value] inputs get the option's value
+     (staff id), [data-roster-name] the option's text, .rd-avatar the initials.
+     The row's ✕ (shared .bo-rule-row .remove handler below) restores the option. */
+  document.addEventListener("click", (e) => {
+    const add = e.target.closest("[data-roster-add]");
+    if (!add) return;
+    e.preventDefault();
+    const box = add.closest("[data-roster]");
+    const sel = box?.querySelector("select[data-roster-select]");
+    const opt = sel?.selectedOptions[0];
+    const tpl = box?.querySelector("template[data-roster-tpl]");
+    if (!box || !opt || !opt.value || !tpl) return;
+    const row = tpl.content.firstElementChild.cloneNode(true);
+    const name = opt.textContent.trim();
+    row.setAttribute("data-roster-staff", opt.value);
+    row.querySelectorAll("[data-roster-value]").forEach((i) => { i.value = opt.value; });
+    const nameEl = row.querySelector("[data-roster-name]");
+    if (nameEl) nameEl.textContent = name;
+    const avatar = row.querySelector(".rd-avatar");
+    if (avatar) {
+      const words = name.split(/\s+/).filter(Boolean);
+      avatar.textContent = ((words[0]?.[0] || "") + (words.length > 1 ? words[words.length - 1][0] : ""))
+        .toLocaleUpperCase("tr");
+    }
+    box.querySelector("[data-roster-rows]")?.append(row);
+    opt.hidden = true;
+    opt.disabled = true;
+    sel.selectedIndex = 0;
+  });
+
   /* ---------- B9 scroll-spy: settings section rail follows the scroll ----------
      The mockups only click-highlight (.bo-section-index a) — scroll desyncs, the
      ROADMAP B9 spec adds real spying: the last .bo-section above the fold owns
@@ -120,7 +181,15 @@
     const ruleRemove = e.target.closest(".bo-rule-row .remove");
     if (ruleRemove) {
       e.preventDefault();
-      ruleRemove.closest(".bo-rule-row")?.remove();
+      const row = ruleRemove.closest(".bo-rule-row");
+      // Roster rows (admin/teams): restore the removed member's select option.
+      const staffId = row?.getAttribute("data-roster-staff");
+      if (staffId) {
+        const opt = row.closest("[data-roster]")
+          ?.querySelector(`select[data-roster-select] option[value="${CSS.escape(staffId)}"]`);
+        if (opt) { opt.hidden = false; opt.disabled = false; }
+      }
+      row?.remove();
     }
 
     // Rich-text editor tool buttons
@@ -471,6 +540,7 @@
     enhanceTextareas();
     syncFilters();
     syncGates();
+    syncMasters();
     syncScrollSpy();
     // Server-rendered toast handoff: <body data-toast="..."> after a redirect.
     const pending = document.body.getAttribute("data-toast");

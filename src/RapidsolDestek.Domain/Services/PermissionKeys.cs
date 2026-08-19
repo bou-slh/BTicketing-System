@@ -32,10 +32,18 @@ public static class PermissionKeys
     public const string TaskClose = "task.close";
     public const string TaskDelete = "task.delete";
 
+    // user.create/user.delete/org.create/org.delete: role-edit matrix boxes persisted
+    // for parity with the osTicket canon; the S6 services still gate create/delete on
+    // user.edit / user.manage / org.edit (annotated there) — consuming these finer
+    // keys is TODO with the S7 role rollout across endpoints.
+    public const string UserCreate = "user.create";
     public const string UserEdit = "user.edit";
+    public const string UserDelete = "user.delete";
     public const string UserManage = "user.manage";
     public const string UserDirectory = "user.dir";
+    public const string OrgCreate = "org.create";
     public const string OrgEdit = "org.edit";
+    public const string OrgDelete = "org.delete";
 
     public const string FaqManage = "faq.manage";
     public const string CannedManage = "canned.manage";

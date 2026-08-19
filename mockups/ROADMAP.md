@@ -889,8 +889,48 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
 - [ ] **plugins.html** — feature-flag install/enable/disable per module; per-module configure entry (§3 replaced)
 - [ ] **staff.html / staff-edit.html** — CRUD; permission cards master↔children (B3); access/team rows (B4);
       LDAP/auth-backend select gates fields; password dialog validated (B2)
-- [ ] **teams.html** — per-row dialog prefilled; member roster add/remove (B2/B4)
-- [ ] **roles.html / role-edit.html** — 42-box matrix with tri-state masters (B3); role consumed by authz on every endpoint
+- [x] **teams.html** — per-row dialog prefilled; member roster add/remove (B2/B4) *(S7; /admin/teams
+      (TeamsController). B1: header sort name/status/lead/updated (name desc default = the mockup's
+      sorted-desc indicator), search, pagination (PageSize 8, canned precedent), bulk Etkinleştir/Devre
+      Dışı Bırak/Sil over the selection with an invented confirm dialog; rd-empty = the mockup's hidden
+      #empty-teams made reachable. B2: the mockup's ONE hardcoded dlg-team split into a create dialog +
+      per-row dialogs prefilled server-side (name, status radios, lead, no-alerts switch, notes, member
+      rows incl. per-member Uyarılar state — seed's dkaya renders unchecked). B4 roster = NEW rd.js
+      data-roster contract: Ekle clones the dialog's <template>, fills staff id/name/initials and hides
+      the chosen option; the row ✕ (shared .bo-rule-row .remove) restores it; the save reconciles
+      memberIds/alertIds server-side (add/remove/alert flip in one post, dedup + real-Staff validation).
+      Delete guard (flagged choice): teams referenced by tickets, tasks or help-topic routing are skipped
+      in the partial toast; thread-event history is a snapshot and does not block. INVENTED (needs canon
+      sign-off): empty lead option "—" (tm.leadNone — dlgLeadHelp says optional but the mockup select has
+      no empty option); per-dialog titles tm.dlgTitleFmt "Takım Düzenle — {0}" / tm.dlgNewTitle (the
+      mockup hardcodes Bordro Ekibi in tm.dlgTitle). Invented keys (TR/EN twins): tm.dateFmt,
+      toastSaved/Created, bulkNone/Done/Partial, deleteConfirm, errName/errNameInUse. Lead cell shows the
+      staff row's full name (seed "Ümit Yaşar Akın") vs the mockup's short-form sample "Ümit Y. Akın" —
+      dashboard full-name precedent. +3 tests (RolesTeamsAdminTests).)*
+- [x] **roles.html / role-edit.html** — 42-box matrix with tri-state masters (B3); role consumed by authz on every endpoint
+      *(S7; /admin/roles + /admin/role-edit?id= (RolesController; no id = create — the mockup's Yeni Rol
+      button links straight to role-edit.html). Matrix = 36 child boxes + 6 group masters (the row's 42):
+      every box maps 1:1 onto the REAL seeded PermissionKeys the S3/S4 PermissionService already enforces —
+      tickets group carries effort.propose (Efor Öner) and thread.edit (Konuşma Düzenle); users/orgs/kb/misc
+      per PermissionKeys. 4 keys NEWLY ADDED for canon parity (user.create, user.delete, org.create,
+      org.delete): persisted by the matrix + seeded (Yönetici all, Kıdemli minus deletes) but NOT yet
+      consumed — UserService/OrgService still gate create/delete on user.edit/user.manage/org.edit
+      (flagged TODO with the role rollout across endpoints); 0 mockup boxes left unmapped. DomainSeeder
+      Kıdemli realigned to the canon matrix (thread.edit now off, banlist.manage now on — both previously
+      contradicted role-edit.html; no consumer existed for either). B3 tri-state: NEW rd.js
+      data-check-master (master toggles its group; child changes sync the master to
+      checked/indeterminate/unchecked; masters post nothing) + app.css :indeterminate half-track
+      (INVENTED look — the mockup defines none); server drops unknown/duplicate keys, so matrix integrity
+      holds regardless of client state. Propagation: PermissionService is scoped with a per-request memo
+      over Role.Permissions — a saved matrix flips authz on the NEXT request with no cache to invalidate
+      (tested end-to-end: revoking canned.manage refuses CannedResponseService.Create for a holder).
+      B1 list: sort name (desc default per the mockup indicator)/status/updated; live "Temsilci Sayısı" =
+      distinct staff holding the role primary OR via dept-access; search; pagination; bulk
+      enable/disable/delete with in-use guard (role held by any staff is skipped) + invented confirm
+      dialog; rd-empty = the mockup's hidden #empty-roles reachable. The editor has NO status control
+      (mockup parity) — IsEnabled moves only via the list bulk buttons. Invented keys (TR/EN twins):
+      re.newTitle/errName/errNameInUse; rl.dateFmt/toastSaved/toastCreated/bulkNone/Done/Partial/
+      deleteConfirm. +5 tests (RolesTeamsAdminTests) — suite 215.)*
 - [ ] **departments.html / department-edit.html** — CRUD with hierarchy (collapse); autoresponder switches gate;
       access rows (B3/B4); export
 

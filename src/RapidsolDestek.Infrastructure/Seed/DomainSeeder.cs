@@ -113,15 +113,19 @@ public static class DomainSeeder
             "ticket.refer", "ticket.merge", "ticket.link", "ticket.reply", "ticket.markanswered",
             "ticket.close", "ticket.delete", "effort.propose",
             "task.create", "task.edit", "task.assign", "task.transfer", "task.reply", "task.close", "task.delete",
-            "user.edit", "user.manage", "user.dir", "org.edit",
+            "user.create", "user.edit", "user.delete", "user.manage", "user.dir",
+            "org.create", "org.edit", "org.delete",
             "faq.manage", "canned.manage", "thread.edit",
             "dept.manage", "staff.manage", "banlist.manage", "stats.view", "search.advanced",
         ];
         var roleYonetici = new Role { Name = "Yönetici", Permissions = [.. allPerms] };
+        // Exclusions = exactly the unchecked boxes on admin/role-edit.html (the canon
+        // Kıdemli Temsilci matrix): every Delete, Konuşma Düzenle, Departman, Temsilci.
         var roleKidemli = new Role
         {
             Name = "Kıdemli Temsilci",
-            Permissions = [.. allPerms.Where(p => p is not ("ticket.delete" or "task.delete" or "dept.manage" or "staff.manage" or "banlist.manage"))],
+            Permissions = [.. allPerms.Where(p => p is not ("ticket.delete" or "thread.edit"
+                or "task.delete" or "user.delete" or "org.delete" or "dept.manage" or "staff.manage"))],
             Notes = "Silme dışında tüm talep yetkileri; kullanıcı ve şirket kayıtlarını düzenleyebilir.",
         };
         var roleTemsilci = new Role

@@ -1,0 +1,154 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model RolesIndexVm
+@{
+    ViewData["Title"] = L["rl.title"];
+
+    // PRG toast handoff after save/bulk (canned-page precedent).
+    if (TempData["RolesToast"] is string toastKey)
+    {
+        var ok = TempData["RolesToastOk"] as int? ?? 0;
+        var skipped = TempData["RolesToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "rl.bulkDone" or "rl.bulkPartial"
+            ? L[toastKey, ok, skipped].Value
+            : L[toastKey].Value;
+        if (TempData["RolesToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Updated cell: the mockup's dd.MM.yyyy HH:mm cells (rl.dateFmt).
+    string UpdatedText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("rl.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/roles" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key is "name" or "updated" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["rl.title"]</h1>
+        <p>@L["rl.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <a class="rd-btn-primary" href="/admin/role-edit">@L["rl.add"]</a>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/admin/roles">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["rl.searchPh"]">
+    <span class="spacer"></span>
+    @* Mockup's dead bulk buttons act on the checkbox selection (canned precedent):
+       Etkinleştir / Devre Dışı Bırak post directly, Sil chains into the invented
+       confirm dialog. *@
+    <button class="rd-btn" type="submit" form="rl-bulk" name="act" value="enable">@SL["common.enable"]</button>
+    <button class="rd-btn" type="submit" form="rl-bulk" name="act" value="disable">@SL["common.disable"]</button>
+    <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-bulk-delete">@SL["common.delete"]</button>
+</form>
+
+<div class="rd-surface" id="tbl-roles">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Mockup's hidden #empty-roles panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">⛨</div>
+            <h3>@L["rl.emptyTitle"]</h3>
+            <p>@L["rl.emptyText"]</p>
+            <a class="rd-btn-primary" href="/admin/role-edit">@L["rl.add"]</a>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-roles" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("name")"><a href="@SortUrl("name")">@L["rl.colName"]</a></th>
+                    <th class="@SortClass("status")"><a href="@SortUrl("status")">@SL["common.status"]</a></th>
+                    <th class="num">@L["rl.colAgents"]</th>
+                    <th class="@SortClass("updated")"><a href="@SortUrl("updated")">@SL["common.updated"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="rl-bulk"></td>
+                        <td><a href="/admin/role-edit?id=@r.Id">@r.Name</a></td>
+                        @if (r.IsEnabled)
+                        {
+                            <td><span class="rd-pill rd-pill-teal">@SL["common.active"]</span></td>
+                        }
+                        else
+                        {
+                            <td><span class="rd-pill rd-pill-closed">@SL["common.disabled"]</span></td>
+                        }
+                        <td class="num">@r.Agents</td>
+                        <td>@UpdatedText(r.Updated)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@SL["common.showing"]</span><span>@Model.From–@Model.To / @Model.Total</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the toolbar bulk actions (canned rl-bulk precedent). *@
+<form id="rl-bulk" method="post" asp-area="Admin" asp-controller="Roles" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+@* Bulk delete confirm dialog: invented UI (B2, canned/users precedent). Roles held
+   by staff (primary or department access) are skipped server-side. *@
+<dialog class="rd-dialog" id="dlg-bulk-delete">
+    <div class="rd-dialog-head">
+        <span>@SL["common.delete"]</span>
+        <button class="close" data-dialog-close>✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <p>@L["rl.deleteConfirm"]</p>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        <button type="submit" class="rd-btn rd-btn-danger" form="rl-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>
