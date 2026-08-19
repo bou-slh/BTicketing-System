@@ -572,6 +572,38 @@ public static class DomainSeeder
             new ApiKey { Key = "4E88AD10C2F94B7E8A31D6905C74F2A7", IpAddress = "78.186.44.9", IsActive = false, CanCreateTickets = true },
             new ApiKey { Key = "B05C77E952A44F0D8C6E2B19A83413AD", IpAddress = "213.14.77.3", CanCreateTickets = true });
 
+        // ----- System logs (canon admin/system-logs.html rows; SystemLogEntry is
+        // INotAudited — no audit noise). Titles/timestamps/IPs verbatim from the
+        // mockup; the Log detail bodies are invented sample data (the mockup shows
+        // no detail — its row dialog is the S7-invented B2 detail dialog). -------------
+        SystemLogEntry Syslog(SystemLogType type, string title, string log, string logger, string ip, int d, int h, int m) => new()
+        {
+            Type = type, Title = title, Log = log, Logger = logger, IpAddress = ip,
+            CreatedAt = new DateTimeOffset(2026, 8, d, h, m, 0, Tr),
+        };
+        db.SystemLogEntries.AddRange(
+            Syslog(SystemLogType.Error, "Posta alınamadı (destek@rapidsol.com.tr): IMAP bağlantı zaman aşımı",
+                "IMAP sunucusu imap.rapidsol.com.tr:993 30 saniye içinde yanıt vermedi; getirme bir sonraki döngüde yeniden denenecek.",
+                "mail", "10.0.4.21", 11, 9, 12),
+            Syslog(SystemLogType.Error, "Posta alınamadı (bordro@rapidsol.com.tr): kimlik doğrulama reddedildi",
+                "IMAP oturumu AUTHENTICATIONFAILED ile kapandı; hesabın parolası admin/emails sayfasından güncellenmeli.",
+                "mail", "10.0.4.21", 11, 8, 47),
+            Syslog(SystemLogType.Debug, "Cron görevi tamamlandı: 4 uyarı e-postası gönderildi",
+                "SLA uyarı taraması 4 talep için gecikme uyarısı üretti; tümü gönderim kuyruğuna alındı.",
+                "cron", "10.0.4.20", 11, 8, 45),
+            Syslog(SystemLogType.Warning, "Başarısız giriş denemesi: 'merve.cetin' kullanıcısı (3. deneme)",
+                "Parola doğrulaması başarısız; 5. denemede hesap 30 dakika kilitlenecek.",
+                "auth", "88.243.17.90", 10, 22, 31),
+            Syslog(SystemLogType.Debug, "Cron görevi tamamlandı: gecikmiş talep taraması (2 talep işaretlendi)",
+                "Vade taraması 2 açık talebi gecikmiş olarak işaretledi.",
+                "cron", "10.0.4.20", 10, 22, 0),
+            Syslog(SystemLogType.Warning, "SMTP gönderimi yeniden denendi: geçici sunucu hatası (450)",
+                "smtp.rapidsol.com.tr 450 4.7.1 döndürdü; ileti 5 dakika sonra yeniden denenmek üzere kuyruğa alındı.",
+                "mail", "10.0.4.22", 10, 18, 5),
+            Syslog(SystemLogType.Warning, "Başarısız giriş denemesi: bilinmeyen kullanıcı 'admin'",
+                "Kayıtlı olmayan bir kullanıcı adıyla panel girişi denendi.",
+                "auth", "185.220.101.4", 10, 3, 12));
+
         // ----- Queue tree (canon agent/tickets.html + admin/queues.html) --------------
         var colNo = new QueueColumn { Name = "Talep No", PrimaryPath = "number", Decorator = "link" };
         var colUpdated = new QueueColumn { Name = "Son Güncelleme", PrimaryPath = "last_update_at" };

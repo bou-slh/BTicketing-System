@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="si.title" xml:space="preserve">
+    <value>Sistem Bilgisi</value>
+  </data>
+  <data name="si.subtitle" xml:space="preserve">
+    <value>Sunucu, veritabanı ve .NET ortamının salt okunur özeti. Sorun bildirirken bu sayfadaki bilgileri paylaşın.</value>
+  </data>
+  <data name="si.secServer" xml:space="preserve">
+    <value>Sunucu Bilgisi</value>
+  </data>
+  <data name="si.secPhp" xml:space="preserve">
+    <value>Uygulama Bileşenleri</value>
+  </data>
+  <data name="si.secDb" xml:space="preserve">
+    <value>Veritabanı</value>
+  </data>
+  <data name="si.secLang" xml:space="preserve">
+    <value>Dil Paketleri</value>
+  </data>
+  <data name="si.version" xml:space="preserve">
+    <value>RapidsolDestek Sürümü</value>
+  </data>
+  <data name="si.webServer" xml:space="preserve">
+    <value>Web Sunucusu</value>
+  </data>
+  <data name="si.mysqlVersion" xml:space="preserve">
+    <value>PostgreSQL Sürümü</value>
+  </data>
+  <data name="si.phpVersion" xml:space="preserve">
+    <value>.NET Çalışma Zamanı</value>
+  </data>
+  <data name="si.upToDate" xml:space="preserve">
+    <value>Güncel</value>
+  </data>
+  <data name="si.ok" xml:space="preserve">
+    <value>✓ Yüklü</value>
+  </data>
+  <data name="si.recommended" xml:space="preserve">
+    <value>⚠ Önerilir</value>
+  </data>
+  <data name="si.phpHelp" xml:space="preserve">
+    <value>Yeşil işaretli bileşenler yüklü ve çalışıyor; sürümler çalışan süreçten okunur.</value>
+  </data>
+  <data name="si.extGd" xml:space="preserve">
+    <value>Ek dosyalarındaki ve avatarlardaki görselleri işler.</value>
+  </data>
+  <data name="si.extIconv" xml:space="preserve">
+    <value>Farklı karakter kodlamaları arasında dönüştürme yapar.</value>
+  </data>
+  <data name="si.extImap" xml:space="preserve">
+    <value>Posta kutularından e-posta ile talep almayı sağlar.</value>
+  </data>
+  <data name="si.extCtype" xml:space="preserve">
+    <value>Metin türü denetimleri için kullanılır.</value>
+  </data>
+  <data name="si.extXml" xml:space="preserve">
+    <value>XML ayrıştırma; API ve içe aktarma işlemleri için gerekir.</value>
+  </data>
+  <data name="si.extJson" xml:space="preserve">
+    <value>JSON verilerini okur ve üretir; API için gerekir.</value>
+  </data>
+  <data name="si.extMbstring" xml:space="preserve">
+    <value>Türkçe gibi çok baytlı karakterlerin doğru işlenmesini sağlar.</value>
+  </data>
+  <data name="si.extPhar" xml:space="preserve">
+    <value>Eklenti (plugin) paketlerini çalıştırır.</value>
+  </data>
+  <data name="si.extIntl" xml:space="preserve">
+    <value>Tarih, sayı ve para biçimlerini yerel ayara göre gösterir.</value>
+  </data>
+  <data name="si.extFileinfo" xml:space="preserve">
+    <value>Yüklenen ek dosyalarının gerçek türünü algılar.</value>
+  </data>
+  <data name="si.extZip" xml:space="preserve">
+    <value>Yedekleri ve dışa aktarmaları sıkıştırır.</value>
+  </data>
+  <data name="si.extApcu" xml:space="preserve">
+    <value>Bellek içi önbellek; sayfaların daha hızlı açılmasını sağlar.</value>
+  </data>
+  <data name="si.extOpcache" xml:space="preserve">
+    <value>PHP kodunu önbelleğe alarak yanıt süresini kısaltır.</value>
+  </data>
+  <data name="si.dbSchema" xml:space="preserve">
+    <value>Şema</value>
+  </data>
+  <data name="si.dbSize" xml:space="preserve">
+    <value>Veritabanı Boyutu</value>
+  </data>
+  <data name="si.dbAttach" xml:space="preserve">
+    <value>Ek Dosya Alanı</value>
+  </data>
+  <data name="si.dbTz" xml:space="preserve">
+    <value>Veritabanı Zaman Dilimi</value>
+  </data>
+  <data name="si.colLanguage" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="si.colCode" xml:space="preserve">
+    <value>Kod</value>
+  </data>
+  <data name="si.colVersion" xml:space="preserve">
+    <value>Sürüm</value>
+  </data>
+  <data name="si.colStatus" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="si.langActive" xml:space="preserve">
+    <value>✓ Etkin</value>
+  </data>
+  <data name="si.langHelp" xml:space="preserve">
+    <value>Portal ve panellerde kullanılabilen arayüz dilleri. Birincil dil, Sistem ayarlarından seçilir.</value>
+  </data>
+  <data name="si.os" xml:space="preserve">
+    <value>İşletim Sistemi</value>
+  </data>
+  <data name="si.uptime" xml:space="preserve">
+    <value>Çalışma Süresi</value>
+  </data>
+  <data name="si.memory" xml:space="preserve">
+    <value>Bellek Kullanımı</value>
+  </data>
+  <data name="si.uptimeFmt" xml:space="preserve">
+    <value>{0} gün {1} saat {2} dk</value>
+  </data>
+  <data name="si.updateNone" xml:space="preserve">
+    <value>Güncelleme kanalı yapılandırılmadı</value>
+  </data>
+  <data name="si.langMissing" xml:space="preserve">
+    <value>⚠ Çeviri yok</value>
+  </data>
+  <data name="si.compAspnet" xml:space="preserve">
+    <value>Web çatısı; HTTP hattını, kimlik doğrulamayı ve Razor görünümlerini çalıştırır.</value>
+  </data>
+  <data name="si.compEf" xml:space="preserve">
+    <value>Veritabanı erişim katmanı; sorguları ve migrasyonları yönetir.</value>
+  </data>
+  <data name="si.compNpgsql" xml:space="preserve">
+    <value>PostgreSQL bağlantı sürücüsü.</value>
+  </data>
+  <data name="si.compNpgsqlEf" xml:space="preserve">
+    <value>EF Core için PostgreSQL sağlayıcısı.</value>
+  </data>
+  <data name="si.compIdentity" xml:space="preserve">
+    <value>Hesaplar, parolalar ve iki adımlı doğrulama altyapısı.</value>
+  </data>
+  <data name="si.compSignalr" xml:space="preserve">
+    <value>Canlı panoya anlık güncelleme iletir.</value>
+  </data>
+  <data name="si.compMailkit" xml:space="preserve">
+    <value>E-posta gönderimi ve posta kutusu erişimi (SMTP/IMAP).</value>
+  </data>
+  <data name="si.compMimekit" xml:space="preserve">
+    <value>E-posta iletilerini (MIME) oluşturur ve ayrıştırır.</value>
+  </data>
+  <data name="si.compSanitizer" xml:space="preserve">
+    <value>Gelen HTML içeriğini zararlı kod öğelerinden arındırır.</value>
+  </data>
+</root>

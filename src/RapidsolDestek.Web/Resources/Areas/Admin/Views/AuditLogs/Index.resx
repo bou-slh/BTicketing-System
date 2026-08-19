@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="al.title" xml:space="preserve">
+    <value>Denetim Günlükleri</value>
+  </data>
+  <data name="al.subtitle" xml:space="preserve">
+    <value>Kim, ne zaman, neyi değiştirdi? Talepler, kullanıcılar, temsilciler ve ayarlar üzerindeki tüm işlemlerin izi.</value>
+  </data>
+  <data name="al.from" xml:space="preserve">
+    <value>Başlangıç</value>
+  </data>
+  <data name="al.to" xml:space="preserve">
+    <value>Bitiş</value>
+  </data>
+  <data name="al.type" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="al.typeAll" xml:space="preserve">
+    <value>Tümü</value>
+  </data>
+  <data name="al.typeTicket" xml:space="preserve">
+    <value>Talep</value>
+  </data>
+  <data name="al.typeUser" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="al.typeAgent" xml:space="preserve">
+    <value>Temsilci</value>
+  </data>
+  <data name="al.typeSetting" xml:space="preserve">
+    <value>Ayar</value>
+  </data>
+  <data name="al.colTime" xml:space="preserve">
+    <value>Zaman</value>
+  </data>
+  <data name="al.colUser" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="al.colEvent" xml:space="preserve">
+    <value>Olay</value>
+  </data>
+  <data name="al.colObject" xml:space="preserve">
+    <value>Nesne</value>
+  </data>
+  <data name="al.colIp" xml:space="preserve">
+    <value>IP</value>
+  </data>
+  <data name="al.export" xml:space="preserve">
+    <value>CSV Dışa Aktar</value>
+  </data>
+  <data name="al.showing" xml:space="preserve">
+    <value>{0}–{1} / {2} kayıt gösteriliyor</value>
+  </data>
+  <data name="al.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="al.evCreated" xml:space="preserve">
+    <value>{0} oluşturuldu</value>
+  </data>
+  <data name="al.evUpdated" xml:space="preserve">
+    <value>{0} güncellendi</value>
+  </data>
+  <data name="al.evUpdatedFields" xml:space="preserve">
+    <value>{0} güncellendi ({1})</value>
+  </data>
+  <data name="al.evDeleted" xml:space="preserve">
+    <value>{0} silindi</value>
+  </data>
+  <data name="al.objTask" xml:space="preserve">
+    <value>Görev</value>
+  </data>
+  <data name="al.objOrg" xml:space="preserve">
+    <value>Kurum</value>
+  </data>
+  <data name="al.objDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="al.objTopic" xml:space="preserve">
+    <value>Yardım Konusu</value>
+  </data>
+  <data name="al.objRole" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="al.objTeam" xml:space="preserve">
+    <value>Ekip</value>
+  </data>
+  <data name="al.objSla" xml:space="preserve">
+    <value>SLA Planı</value>
+  </data>
+  <data name="al.objSchedule" xml:space="preserve">
+    <value>Takvim</value>
+  </data>
+  <data name="al.objFilter" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="al.objQueue" xml:space="preserve">
+    <value>Kuyruk</value>
+  </data>
+  <data name="al.objForm" xml:space="preserve">
+    <value>Form</value>
+  </data>
+  <data name="al.objList" xml:space="preserve">
+    <value>Liste</value>
+  </data>
+  <data name="al.objSitePage" xml:space="preserve">
+    <value>Sayfa</value>
+  </data>
+  <data name="al.objEmail" xml:space="preserve">
+    <value>E-posta Hesabı</value>
+  </data>
+  <data name="al.objTemplate" xml:space="preserve">
+    <value>Şablon Seti</value>
+  </data>
+  <data name="al.objFaq" xml:space="preserve">
+    <value>SSS Makalesi</value>
+  </data>
+  <data name="al.objKbCat" xml:space="preserve">
+    <value>Bilgi Bankası Kategorisi</value>
+  </data>
+  <data name="al.objCanned" xml:space="preserve">
+    <value>Hazır Yanıt</value>
+  </data>
+  <data name="al.objBan" xml:space="preserve">
+    <value>Yasak Kaydı</value>
+  </data>
+  <data name="al.objApiKey" xml:space="preserve">
+    <value>API Anahtarı</value>
+  </data>
+  <data name="al.objEffort" xml:space="preserve">
+    <value>Efor Önerisi</value>
+  </data>
+  <data name="al.objThread" xml:space="preserve">
+    <value>Konuşma</value>
+  </data>
+  <data name="al.objThreadEntry" xml:space="preserve">
+    <value>Konuşma Girdisi</value>
+  </data>
+  <data name="al.objThreadEvent" xml:space="preserve">
+    <value>Konuşma Olayı</value>
+  </data>
+  <data name="al.objCollab" xml:space="preserve">
+    <value>Paydaş</value>
+  </data>
+</root>

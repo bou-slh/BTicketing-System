@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sl.title" xml:space="preserve">
+    <value>Sistem Günlükleri</value>
+  </data>
+  <data name="sl.subtitle" xml:space="preserve">
+    <value>Uygulamanın kaydettiği hata, uyarı ve hata ayıklama olayları. Günlükler, Sistem ayarlarındaki temizleme süresine göre otomatik silinir.</value>
+  </data>
+  <data name="sl.banner" xml:space="preserve">
+    <value>Günlük düzeyi ve otomatik temizleme süresi Sistem ayarlarından yönetilir:</value>
+  </data>
+  <data name="sl.bannerLink" xml:space="preserve">
+    <value>Sistem ayarlarını aç</value>
+  </data>
+  <data name="sl.from" xml:space="preserve">
+    <value>Başlangıç</value>
+  </data>
+  <data name="sl.to" xml:space="preserve">
+    <value>Bitiş</value>
+  </data>
+  <data name="sl.level" xml:space="preserve">
+    <value>Kayıt Düzeyi</value>
+  </data>
+  <data name="sl.levelAll" xml:space="preserve">
+    <value>Tümü</value>
+  </data>
+  <data name="sl.levelError" xml:space="preserve">
+    <value>HATA</value>
+  </data>
+  <data name="sl.levelWarn" xml:space="preserve">
+    <value>UYARI</value>
+  </data>
+  <data name="sl.levelDebug" xml:space="preserve">
+    <value>HATA AYIKLAMA</value>
+  </data>
+  <data name="sl.colTitle" xml:space="preserve">
+    <value>Başlık</value>
+  </data>
+  <data name="sl.colType" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="sl.colDate" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="sl.colIp" xml:space="preserve">
+    <value>IP</value>
+  </data>
+  <data name="sl.error" xml:space="preserve">
+    <value>HATA</value>
+  </data>
+  <data name="sl.warn" xml:space="preserve">
+    <value>UYARI</value>
+  </data>
+  <data name="sl.debug" xml:space="preserve">
+    <value>HATA AYIKLAMA</value>
+  </data>
+  <data name="sl.deleteSelected" xml:space="preserve">
+    <value>Seçilenleri Sil</value>
+  </data>
+  <data name="sl.dlgTitle" xml:space="preserve">
+    <value>Günlük kayıtlarını sil</value>
+  </data>
+  <data name="sl.showing" xml:space="preserve">
+    <value>{0}–{1} / {2} kayıt gösteriliyor</value>
+  </data>
+  <data name="sl.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="sl.toastDeleted" xml:space="preserve">
+    <value>{0} günlük kaydı silindi</value>
+  </data>
+  <data name="sl.errNone" xml:space="preserve">
+    <value>Silinecek kayıt seçilmedi</value>
+  </data>
+  <data name="sl.dlgDetailTitle" xml:space="preserve">
+    <value>Günlük kaydı</value>
+  </data>
+  <data name="sl.detLogger" xml:space="preserve">
+    <value>Kaynak</value>
+  </data>
+  <data name="sl.detMessage" xml:space="preserve">
+    <value>Ayrıntı</value>
+  </data>
+</root>

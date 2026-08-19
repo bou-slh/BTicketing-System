@@ -678,9 +678,70 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       mockup's FULL staff names (vs §2 short-name cell convention); thread events don't snapshot dept/
       topic/assignee so groups use the ticket's CURRENT values (deviation from osTicket per-event
       snapshots); no empty-state variant (mockup defines none).)*
-- [ ] **system-info.html** — real server/PHP→.NET runtime/db info; update check
-- [ ] **system-logs.html** — filters + Apply work; purge deletes; row detail dialog (B1/B2)
-- [ ] **audit-logs.html** — filters/export/pagination; rows drill down to the audited object (B10)
+- [x] **system-info.html** — real server/PHP→.NET runtime/db info; update check
+      *(S7; /admin/system-info (SystemInfoController) — every value read from the LIVE process/database at
+      request time, nothing sampled: Kestrel + ASP.NET Core version, .NET runtime
+      (RuntimeInformation.FrameworkDescription), PostgreSQL server via SELECT version(), db name/encoding/
+      pg_size_pretty size/TimeZone from current_setting, attachment bytes = the StoredFile ledger sum,
+      app version = assembly informational version (+ short git sha when the SDK embeds one). PHP→.NET
+      label translations (mockup keys kept, VALUES translated in resx — flagged): si.secPhp "PHP
+      Eklentileri"→"Uygulama Bileşenleri", si.mysqlVersion→"PostgreSQL Sürümü", si.phpVersion→".NET Çalışma
+      Zamanı", si.subtitle/phpHelp de-PHP'd; the 13 PHP-extension tiles become the 9 REAL packages
+      (ASP.NET Core, EF Core, Npgsql, Npgsql EF provider, Identity, SignalR, MailKit, MimeKit,
+      HtmlSanitizer) with live assembly versions — same tile DOM, honest count (flagged). INVENTED honest
+      server rows: si.os/si.uptime/si.memory (+ si.uptimeFmt). Update check = honest minimal: no update
+      channel exists, so the mockup's teal "Güncel" pill is replaced by a neutral si.updateNone
+      "Güncelleme kanalı yapılandırılmadı" pill — TODO(S9): update feed (GitHub releases probe); flagged.
+      Language packs: tr/en resx ship in-app (version = app version, Aktif pill); secondary languages
+      configured in settings-system beyond tr/en render honestly with an invented si.langMissing "Çeviri
+      yok" warn pill (settings-system de/fr/ar canon flag consumed). Invented keys (TR/EN twins): si.os/
+      uptime/memory/uptimeFmt/updateNone/langMissing/comp×9; si.ext*/si.upToDate keys kept but unused
+      (PHP-era). Test: SystemInfoLogsAuditTests — 200 + real PostgreSQL/.NET/Kestrel/EF/Npgsql values +
+      language rows + honest update pill.)*
+- [x] **system-logs.html** — filters + Apply work; purge deletes; row detail dialog (B1/B2)
+      *(S7; /admin/system-logs (SystemLogsController) over the S3 SystemLogEntry table — no migration
+      needed. WRITE PATH now real: NEW ISystemLogService (Infrastructure) stores rows per system/log_level
+      (LIVE — resolves the settings-system TODO; cumulative osTicket semantics: none/error/warn/debug,
+      unknown values fall back to warn); honest small hook set (flagged): staff login failures + lockouts
+      (StaffAccountControllerBase — unknown user / N. deneme warnings, tripped lock = error; agent+admin),
+      portal login failures/lockouts (AccountController twin), and the purge itself logs a debug event;
+      the mail pipeline joins in S8, log_purge_months retention stays TODO(S8 Hangfire job) per the
+      banner's own copy. Mockup's 7 canon rows seeded verbatim (titles/dates/IPs; Log detail bodies are
+      INVENTED sample data — flagged). B1: from/to + level filters via GET Apply (mockup's preset 2026-08
+      input values are dead sample state — live page starts unfiltered, flagged), date sort both ways
+      (sorted-desc default), PageSize 7 (= the mockup's 1–7/132 → 19 pages math), windowed 1 2 3 … N
+      pagination, check-all + ids carrier form (banlist precedent). Purge = the mockup's "Seçilenleri Sil"
+      → dlg-purge confirm → REAL ExecuteDelete of the checked rows (empty selection refuses with invented
+      sl.errNone); auto-purge-by-age is the S8 retention job. Row detail dialog (B2) INVENTED: the
+      mockup's title cells are dead text and it defines NO row dialog — titles now open a per-row
+      server-prefilled rd-dialog (title/type/date/IP/logger/detail; flagged for canon). No empty-state
+      variant (mockup defines none). Invented keys (TR/EN twins): sl.dateFmt/toastDeleted/errNone/
+      dlgDetailTitle/detLogger/detMessage + parameterized sl.showing. Tests: SystemInfoLogsAuditTests —
+      log_level write-path matrix (none/error/warn/debug via SettingOverride), failed-login syslog row
+      over HTTP, filter query + prefilled detail dialog, purge deletes selected-only + empty refusal.)*
+- [x] **audit-logs.html** — filters/export/pagination; rows drill down to the audited object (B10)
+      *(S7; /admin/audit-logs (AuditLogsController) over the AuditEvent table the S3 interceptor has been
+      filling on every domain mutation — the trail is real back to the seed. B1: from/to + type filters
+      via GET Apply (mockup's preset dates = sample state, starts unfiltered), time sort both ways,
+      PageSize 10 (mockup's 1–10/1.206), windowed pagination; CSV export = the FILTERED trail (UTF-8 BOM,
+      orgs precedent) sharing the exact row-shaping with the page (IStringLocalizerFactory, dashboard
+      precedent). Type map: Talep→Ticket, Kullanıcı→User, Temsilci→Staff, Ayar→Setting — CANON FLAG:
+      Setting is INotAudited (settings saves write no audit rows; osTicket audits neither), so the Ayar
+      option filters honestly to empty while the mockup's "Ayar: Talepler" rows imply setting audits —
+      needs canon sign-off (enabling it means un-INotAudited + audit scopes in every settings controller).
+      Event cell: the mockup's narrative sentences are sample data — real rows render the interceptor's
+      Action + localized object phrase (+ changed-column names parsed from the Data diff) via INVENTED
+      al.evCreated/evUpdated/evUpdatedFields/evDeleted keys (flagged). Object cell "Talep R716555" /
+      "Kullanıcı: Ad" phrasing per the mockup; type names via al.type* + invented al.obj* keys (~26
+      types), unmapped types fall back to the CLR name (flagged). B10 drill-down (LinkFor map, unit
+      tested): editors take ?id= (ticket/task→agent views, user/org→agent views, staff/dept/topic/role/
+      schedule/filter/form/list/email-edit + queues?id=), dialog-based admin lists get a PARTIAL
+      drill-down to the hosting list page (teams/slas/pages/templates/banlist/apikeys/kb/canned —
+      flagged), pageless types (thread entities, notes, effort proposals, settings) render plain
+      (flagged); composite/non-int ids never build a broken editor link. Invented keys (TR/EN twins):
+      al.dateFmt/ev×4/obj×26 + parameterized al.showing. Tests: SystemInfoLogsAuditTests — staff-actor
+      mutation surfaces with actor/IP/event text + user-view drill-down, ticket-type filter isolation,
+      CSV BOM + content, and the full link-map unit test — suite 323.)*
 - [x] **settings-company.html** — logo file uploads with preview (B3); page selects live from SitePages
       *(S7; /admin/settings-company (SettingsCompanyController) over ISettingsService ns "company" —
       PRG toasts, B3 server validation writes NOTHING on failure (sc.errValues/errLogo/errLogoFile).
@@ -725,7 +786,8 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       secondary list is dropped on save. PERSISTED-ONLY (each annotated at the VM build): helpdesk_url
       TODO(S8 email link base), force_https (env-gated UseHttpsRedirection today), collision_minutes
       (composer lock TTL — IThreadService lock API unwired), page_size (TicketListEngine.PageSize const),
-      log_level + log_purge_months (system-logs port / S8 retention job), show_avatars (thread renderers),
+      log_level (RESOLVED LIVE by the system-logs port: SystemLogService stores per level) +
+      log_purge_months (S8 retention job), show_avatars (thread renderers),
       rich_text (composer toolbar gate), iframe/embed allowlists + acl_ips/acl_scope TODO(S9 hardening),
       locale/timezone/time_format_mode + 4 patterns (display-formatting helpers), default_schedule_id (SLA
       fallback calendar; unset renders the default SLA's schedule); attachments storage select persists but
@@ -1334,8 +1396,8 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       settings-system attachments), audit (the AuditEvent interceptor is a compliance floor and runs
       unconditionally — the mockup's Devre Dışı row is sample state), slack (TODO(S8) notification
       fan-out). Per-module configure entry = INVENTED link under the slug (mockup renders none; flagged):
-      staff/settings-system/settings-agents/audit-logs (audit-logs not ported yet — link matches the
-      sidebar) and none for slack. Module names/descriptions stay hardcoded sample data (mockup keeps them
+      staff/settings-system/settings-agents/audit-logs (audit-logs ported later in S7 — link live) and
+      none for slack. Module names/descriptions stay hardcoded sample data (mockup keeps them
       outside PAGE_I18N — needs canon sign-off). MOCKUP INCONSISTENCY flagged: the canon rows' order
       (LDAP → S3 → Audit) contradicts the table's own sorted-desc Kurulma indicator — the real sort wins.
       Invented keys (TR/EN twins): pl.dateFmt/configure/toastInstalled/bulk*/errUnknown/availNone +

@@ -59,8 +59,9 @@ public class SettingsSystemController(AppDbContext db, ISettingsService settings
     // Language catalog (autonyms — not translated, mockup option text): tr/en are the
     // real cultures (resx exist); de/fr/ar persist as secondary languages with
     // TODO: i18n resources — only TR/EN resx ship, extra languages have no UI
-    // translations yet (flagged for canon on the ROADMAP row).
-    private static readonly LanguageRowVm[] LanguageCatalog =
+    // translations yet (flagged for canon on the ROADMAP row). Public: the S7
+    // system-info language-pack table renders names from the same catalog.
+    public static readonly LanguageRowVm[] LanguageCatalog =
     [
         new("tr", "Türkçe"),
         new("en", "English (United States)"),
@@ -136,7 +137,7 @@ public class SettingsSystemController(AppDbContext db, ISettingsService settings
             ForceHttps: Bool("force_https", true),          // TODO: consumed by the HTTPS redirect policy (env-gated UseHttpsRedirection today)
             CollisionMinutes: Int("collision_minutes", 3),  // TODO: consumed by the composer lock TTL (IThreadService lock API exists, wiring pending with tickets/lock_mode)
             PageSize: Int("page_size", 25),                 // TODO: consumed by list pagination (TicketListEngine.PageSize is a const today)
-            LogLevel: Str("log_level", "warn"),             // TODO: consumed by the SystemLogEntry writer (admin/system-logs port)
+            LogLevel: Str("log_level", "warn"),             // LIVE: SystemLogService stores only levels this allows (S7 system-logs port)
             LogPurgeMonths: Int("log_purge_months", 3),     // TODO(S8): consumed by the Hangfire retention job
             ShowAvatars: Bool("show_avatars", true),        // TODO: consumed by the thread renderers
             RichText: Bool("rich_text", true),              // TODO: consumed by the composer toolbar gate (rd.js enhanceTextareas)

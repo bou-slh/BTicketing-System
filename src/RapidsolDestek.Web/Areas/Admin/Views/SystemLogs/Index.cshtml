@@ -1,0 +1,190 @@
+@using System.Globalization
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model SystemLogsIndexVm
+@{
+    ViewData["Title"] = L["sl.title"];
+
+    // PRG toast handoff after delete (banlist precedent).
+    if (TempData["SlToast"] is string toastKey)
+    {
+        var count = TempData["SlToastCount"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "sl.toastDeleted"
+            ? L.GetString(toastKey, count)
+            : L[toastKey].Value;
+        if (TempData["SlToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    string DateText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("sl.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Canonical querystring builder so Apply / header sort / pagination preserve state.
+    string BuildUrl(string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("from", Model.From);
+        Add("to", Model.To);
+        if (Model.Level != "all")
+            Add("level", Model.Level);
+        Add("dir", dirOver ?? (Model.Desc ? null : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/system-logs" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+
+    // Mockup pagination window: "1 2 3 … 19".
+    var pageWindow = new[] { 1, Model.Page - 1, Model.Page, Model.Page + 1, Model.PageCount }
+        .Where(p => p >= 1 && p <= Model.PageCount).Distinct().Order().ToList();
+
+    (string Css, string Key) PillOf(SystemLogType type) => type switch
+    {
+        SystemLogType.Error => ("rd-pill-overdue", "sl.error"),
+        SystemLogType.Warning => ("rd-pill-wait", "sl.warn"),
+        _ => ("rd-pill-closed", "sl.debug"),
+    };
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["sl.title"]</h1>
+        <p>@L["sl.subtitle"]</p>
+    </div>
+</div>
+
+<div class="rd-banner rd-banner-info">
+    <span aria-hidden="true">ℹ</span>
+    <span>
+        <span>@L["sl.banner"]</span>
+        <a href="/admin/settings-system">@L["sl.bannerLink"]</a>
+    </span>
+</div>
+
+@* B1 filters + Apply: a GET form round-trip (the mockup's inputs are dead; its
+   preset 2026-08 values are sample state — the live page starts unfiltered). *@
+<form class="rd-list-toolbar" method="get" action="/admin/system-logs">
+    @if (!Model.Desc)
+    {
+        <input type="hidden" name="dir" value="asc">
+    }
+    <label class="rd-label mb-0" for="log-from">@L["sl.from"]</label>
+    <input id="log-from" type="date" class="rd-control" name="from" value="@Model.From">
+    <label class="rd-label mb-0" for="log-to">@L["sl.to"]</label>
+    <input id="log-to" type="date" class="rd-control" name="to" value="@Model.To">
+    <label class="rd-label mb-0" for="log-level">@L["sl.level"]</label>
+    <select id="log-level" class="rd-control" name="level">
+        <option value="all" selected="@(Model.Level == "all")">@L["sl.levelAll"]</option>
+        <option value="error" selected="@(Model.Level == "error")">@L["sl.levelError"]</option>
+        <option value="warn" selected="@(Model.Level == "warn")">@L["sl.levelWarn"]</option>
+        <option value="debug" selected="@(Model.Level == "debug")">@L["sl.levelDebug"]</option>
+    </select>
+    <button class="rd-btn" type="submit">@SL["common.apply"]</button>
+    <span class="spacer"></span>
+    <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-purge">@L["sl.deleteSelected"]</button>
+</form>
+
+<div class="rd-surface">
+    <table class="rd-table" id="tbl-syslogs">
+        <thead>
+            <tr>
+                <th class="col-check"><input type="checkbox" data-check-all="#tbl-syslogs" title="@SL["common.selectAll"]"></th>
+                <th>@L["sl.colTitle"]</th>
+                <th>@L["sl.colType"]</th>
+                <th class="@(Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc")">
+                    <a href="@BuildUrl(dirOver: Model.Desc ? "asc" : "desc")">@L["sl.colDate"]</a>
+                </th>
+                <th>@L["sl.colIp"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.Rows)
+            {
+                var (pillCss, pillKey) = PillOf(row.Type);
+                <tr>
+                    <td class="col-check"><input type="checkbox" name="ids" value="@row.Id" form="sl-bulk"></td>
+                    @* Row detail dialog opener (B2) — INVENTED: the mockup's title cells
+                       are plain text and it defines no row dialog (flagged). *@
+                    <td><a href="#" data-dialog-open="dlg-log-@row.Id">@row.Title</a></td>
+                    <td><span class="rd-pill @pillCss">@L[pillKey]</span></td>
+                    <td>@DateText(row.CreatedAt)</td>
+                    <td>@row.Ip</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="rd-pagination">
+        <span>@L.GetString("sl.showing", Model.FromRow, Model.ToRow, Model.Total.ToString("N0", CultureInfo.CurrentUICulture))</span>
+        <div class="pages">
+            @for (var i = 0; i < pageWindow.Count; i++)
+            {
+                var p = pageWindow[i];
+                if (i > 0 && p > pageWindow[i - 1] + 1)
+                {
+                    <span>…</span>
+                }
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@* Selection carrier for the checked rows (banlist bulk precedent). *@
+<form id="sl-bulk" method="post" asp-area="Admin" asp-controller="SystemLogs" asp-action="Delete" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+<dialog class="rd-dialog" id="dlg-purge">
+    <div class="rd-dialog-head">
+        <span>@L["sl.dlgTitle"]</span>
+        <button type="button" class="close" data-dialog-close aria-label="@SL["common.cancel"]">✕</button>
+    </div>
+    <div class="rd-dialog-body">
+        <p>@SL["common.confirmDelete"]</p>
+    </div>
+    <div class="rd-dialog-foot">
+        <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        @* Submits the selection carrier — REAL deletes (no data-dialog-close on the
+           submit: the audited B2 close-swallows-save bug). *@
+        <button type="submit" class="rd-btn rd-btn-danger" form="sl-bulk">@SL["common.delete"]</button>
+    </div>
+</dialog>
+
+@* Per-row detail dialogs (B2, prefilled server-side; INVENTED — see the row opener). *@
+@foreach (var row in Model.Rows)
+{
+    var (pillCss, pillKey) = PillOf(row.Type);
+    <dialog class="rd-dialog" id="dlg-log-@row.Id">
+        <div class="rd-dialog-head">
+            <span>@L["sl.dlgDetailTitle"]</span>
+            <button type="button" class="close" data-dialog-close aria-label="@SL["common.cancel"]">✕</button>
+        </div>
+        <div class="rd-dialog-body">
+            <div class="bo-def">
+                <div class="row"><span>@L["sl.colTitle"]</span><span>@row.Title</span></div>
+                <div class="row"><span>@L["sl.colType"]</span><span><span class="rd-pill @pillCss">@L[pillKey]</span></span></div>
+                <div class="row"><span>@L["sl.colDate"]</span><span>@DateText(row.CreatedAt)</span></div>
+                <div class="row"><span>@L["sl.colIp"]</span><span>@(row.Ip ?? "—")</span></div>
+                <div class="row"><span>@L["sl.detLogger"]</span><span>@(row.Logger ?? "—")</span></div>
+                <div class="row"><span>@L["sl.detMessage"]</span><span>@(string.IsNullOrEmpty(row.Log) ? "—" : row.Log)</span></div>
+            </div>
+        </div>
+        <div class="rd-dialog-foot">
+            <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+        </div>
+    </dialog>
+}

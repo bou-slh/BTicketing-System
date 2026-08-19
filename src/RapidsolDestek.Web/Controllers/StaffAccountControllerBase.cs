@@ -46,6 +46,10 @@ public abstract class StaffAccountControllerBase(
         var user = await users.FindByNameAsync(vm.User) ?? await users.FindByEmailAsync(vm.User);
         if (user is null)
         {
+            // System log (admin/system-logs canon row copy): unknown-account attempts
+            // are the classic syslog warning; stored per system/log_level.
+            await SysLogAsync(SystemLogType.Warning,
+                $"Başarısız giriş denemesi: bilinmeyen kullanıcı '{vm.User}'");
             ModelState.AddModelError(string.Empty, "invalidCredentials");
             return View("Login", vm);
         }
@@ -83,8 +87,17 @@ public abstract class StaffAccountControllerBase(
         {
             // B6 staff-wide lockout policy owned by admin/settings-agents
             // (sa.maxAttempts / sa.lockDuration).
-            ModelState.AddModelError(string.Empty,
-                await ApplyStaffLockoutAsync(user) ? "lockedOut" : "invalidCredentials");
+            var locked = await ApplyStaffLockoutAsync(user);
+            // System log (admin/system-logs canon row copy): failed attempts warn,
+            // a tripped lock is an error; stored per system/log_level.
+            if (locked)
+                await SysLogAsync(SystemLogType.Error,
+                    $"Hesap kilitlendi: '{user.UserName}' kullanıcısı (art arda başarısız girişler)");
+            else
+                await SysLogAsync(SystemLogType.Warning,
+                    $"Başarısız giriş denemesi: '{user.UserName}' kullanıcısı " +
+                    $"({await users.GetAccessFailedCountAsync(user)}. deneme)");
+            ModelState.AddModelError(string.Empty, locked ? "lockedOut" : "invalidCredentials");
             return View("Login", vm);
         }
 
@@ -274,6 +287,16 @@ public abstract class StaffAccountControllerBase(
         }
         return Redirect($"{AreaPrefix}/login");
     }
+
+    /// <summary>
+    /// admin/system-logs writer (S7): auth failures are the syslog's warning canon.
+    /// Resolved from RequestServices so the two thin area controllers keep their
+    /// constructor signatures; whether the row is stored is system/log_level's call.
+    /// </summary>
+    private Task SysLogAsync(SystemLogType type, string title) =>
+        HttpContext.RequestServices.GetRequiredService<ISystemLogService>().LogAsync(
+            type, title,
+            ip: HttpContext.Connection.RemoteIpAddress?.ToString(), logger: "auth");
 
     private string SafeReturnUrl(string? returnUrl) =>
         Url.IsLocalUrl(returnUrl) ? returnUrl! : $"{AreaPrefix}/dashboard";

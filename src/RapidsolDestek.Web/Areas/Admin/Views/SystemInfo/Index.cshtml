@@ -1,0 +1,144 @@
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model SystemInfoVm
+@{
+    ViewData["Title"] = L["si.title"];
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["si.title"]</h1>
+        <p>@L["si.subtitle"]</p>
+    </div>
+</div>
+
+<div class="bo-settings">
+    <nav class="bo-section-index" aria-label="Sections">
+        <a href="#sec-server" class="active">@L["si.secServer"]</a>
+        <a href="#sec-php">@L["si.secPhp"]</a>
+        <a href="#sec-db">@L["si.secDb"]</a>
+        <a href="#sec-lang">@L["si.secLang"]</a>
+    </nav>
+
+    <div class="bo-settings-sections">
+
+        <section class="rd-surface bo-section" id="sec-server">
+            <div class="rd-surface-head"><span>@L["si.secServer"]</span></div>
+            <div class="rd-surface-body">
+                <div class="bo-def">
+                    <div class="row">
+                        <span>@L["si.version"]</span>
+                        @* Update check, honest minimal: no update channel exists, so the
+                           mockup's teal "Güncel" pill would lie — a neutral pill states it.
+                           TODO(S9): update feed (GitHub releases probe) — flagged. *@
+                        <span>
+                            <b>v@(Model.AppVersion)@(Model.GitSha is { } sha ? $" ({sha})" : "")</b>
+                            <span class="rd-pill rd-pill-closed">@L["si.updateNone"]</span>
+                        </span>
+                    </div>
+                    @foreach (var row in Model.ServerRows)
+                    {
+                        <div class="row">
+                            <span>@L[row.LabelKey]</span>
+                            @if (row.Pill == "ok")
+                            {
+                                <span>@row.Value <span class="rd-pill rd-pill-solved">✓</span></span>
+                            }
+                            else
+                            {
+                                <span>@row.Value</span>
+                            }
+                        </div>
+                    }
+                    @* INVENTED honest rows (the mockup's PHP-era section has no process
+                       stats; ROADMAP row asked for memory/uptime "where honest"). *@
+                    <div class="row">
+                        <span>@L["si.uptime"]</span>
+                        <span>@L.GetString("si.uptimeFmt", (int)Model.Uptime.TotalDays, Model.Uptime.Hours, Model.Uptime.Minutes)</span>
+                    </div>
+                    <div class="row">
+                        <span>@L["si.memory"]</span>
+                        <span>@Model.MemoryMiB.ToString("N0") MiB</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        @* Mockup's "PHP Eklentileri" grid → the application's REAL package set (same
+           tile DOM; versions read from the loaded assemblies — honest count, flagged). *@
+        <section class="rd-surface bo-section" id="sec-php">
+            <div class="rd-surface-head"><span>@L["si.secPhp"]</span></div>
+            <div class="rd-surface-body">
+                <p class="rd-help" style="margin:0 0 16px">@L["si.phpHelp"]</p>
+                <div class="rd-grid-2">
+                    @foreach (var comp in Model.Components)
+                    {
+                        <div class="rd-field mb-0">
+                            <span class="rd-label">@comp.Name @comp.Version <span class="rd-pill rd-pill-solved">@L["si.ok"]</span></span>
+                            <div class="rd-help">@L[comp.HelpKey]</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-db">
+            <div class="rd-surface-head"><span>@L["si.secDb"]</span></div>
+            <div class="rd-surface-body">
+                <div class="bo-def">
+                    @foreach (var row in Model.DbRows)
+                    {
+                        <div class="row">
+                            <span>@L[row.LabelKey]</span>
+                            @if (row.Pill == "ok")
+                            {
+                                <span>@row.Value <span class="rd-pill rd-pill-solved">✓</span></span>
+                            }
+                            else
+                            {
+                                <span>@row.Value</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="rd-surface bo-section" id="sec-lang">
+            <div class="rd-surface-head"><span>@L["si.secLang"]</span></div>
+            <table class="rd-table">
+                <thead>
+                    <tr>
+                        <th>@L["si.colLanguage"]</th>
+                        <th>@L["si.colCode"]</th>
+                        <th>@L["si.colVersion"]</th>
+                        <th>@L["si.colStatus"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var lang in Model.Languages)
+                    {
+                        <tr>
+                            <td>@lang.Name</td>
+                            <td>@lang.Code</td>
+                            <td>@lang.Version</td>
+                            @if (lang.Installed)
+                            {
+                                <td><span class="rd-pill rd-pill-solved">@L["si.langActive"]</span></td>
+                            }
+                            else
+                            {
+                                @* Configured secondary language without shipped resx
+                                   (settings-system canon flag) — honest missing state. *@
+                                <td><span class="rd-pill rd-pill-wait">@L["si.langMissing"]</span></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="rd-surface-body" style="padding-top:12px">
+                <div class="rd-help">@L["si.langHelp"]</div>
+            </div>
+        </section>
+
+    </div>
+</div>

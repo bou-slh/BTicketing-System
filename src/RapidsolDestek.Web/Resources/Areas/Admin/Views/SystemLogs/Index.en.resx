@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sl.title" xml:space="preserve">
+    <value>System Logs</value>
+  </data>
+  <data name="sl.subtitle" xml:space="preserve">
+    <value>Error, warning and debug events recorded by the application. Logs are purged automatically per the retention set in System settings.</value>
+  </data>
+  <data name="sl.banner" xml:space="preserve">
+    <value>The log level and automatic purge period are managed in System settings:</value>
+  </data>
+  <data name="sl.bannerLink" xml:space="preserve">
+    <value>Open System settings</value>
+  </data>
+  <data name="sl.from" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="sl.to" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="sl.level" xml:space="preserve">
+    <value>Log Level</value>
+  </data>
+  <data name="sl.levelAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="sl.levelError" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="sl.levelWarn" xml:space="preserve">
+    <value>WARNING</value>
+  </data>
+  <data name="sl.levelDebug" xml:space="preserve">
+    <value>DEBUG</value>
+  </data>
+  <data name="sl.colTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="sl.colType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="sl.colDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="sl.colIp" xml:space="preserve">
+    <value>IP</value>
+  </data>
+  <data name="sl.error" xml:space="preserve">
+    <value>ERROR</value>
+  </data>
+  <data name="sl.warn" xml:space="preserve">
+    <value>WARNING</value>
+  </data>
+  <data name="sl.debug" xml:space="preserve">
+    <value>DEBUG</value>
+  </data>
+  <data name="sl.deleteSelected" xml:space="preserve">
+    <value>Delete Selected</value>
+  </data>
+  <data name="sl.dlgTitle" xml:space="preserve">
+    <value>Delete log entries</value>
+  </data>
+  <data name="sl.showing" xml:space="preserve">
+    <value>Showing {0}–{1} of {2} entries</value>
+  </data>
+  <data name="sl.dateFmt" xml:space="preserve">
+    <value>dd.MM.yyyy HH:mm</value>
+  </data>
+  <data name="sl.toastDeleted" xml:space="preserve">
+    <value>{0} log entries deleted</value>
+  </data>
+  <data name="sl.errNone" xml:space="preserve">
+    <value>No entries selected to delete</value>
+  </data>
+  <data name="sl.dlgDetailTitle" xml:space="preserve">
+    <value>Log entry</value>
+  </data>
+  <data name="sl.detLogger" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="sl.detMessage" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+</root>

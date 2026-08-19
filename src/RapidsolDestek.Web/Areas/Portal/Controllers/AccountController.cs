@@ -69,9 +69,21 @@ public class AccountController(
             var policy = await settings.GetUsersAsync();
             if (await LoginLockoutPolicy.ApplyAsync(users, user, policy.MaxLoginAttempts, policy.LockoutMinutes))
             {
+                // admin/system-logs (S7): a tripped customer lock is a syslog error;
+                // stored per system/log_level.
+                await SysLogAsync(SystemLogType.Error,
+                    $"Hesap kilitlendi: '{user.UserName}' kullanıcısı (art arda başarısız girişler)");
                 ModelState.AddModelError(string.Empty, "lockedOut");
                 return View(vm);
             }
+            await SysLogAsync(SystemLogType.Warning,
+                $"Başarısız giriş denemesi: '{user.UserName}' kullanıcısı " +
+                $"({await users.GetAccessFailedCountAsync(user)}. deneme)");
+        }
+        else
+        {
+            await SysLogAsync(SystemLogType.Warning,
+                $"Başarısız giriş denemesi: bilinmeyen kullanıcı '{vm.User}'");
         }
         ModelState.AddModelError(string.Empty, "invalidCredentials");
         return View(vm);
@@ -85,6 +97,15 @@ public class AccountController(
         await signIn.SignOutAsync();
         return Redirect("/login");
     }
+
+    /// <summary>
+    /// admin/system-logs writer (S7): portal auth failures warn like the staff ones
+    /// (StaffAccountControllerBase twin); system/log_level decides storage.
+    /// </summary>
+    private Task SysLogAsync(SystemLogType type, string title) =>
+        HttpContext.RequestServices.GetRequiredService<ISystemLogService>().LogAsync(
+            type, title,
+            ip: HttpContext.Connection.RemoteIpAddress?.ToString(), logger: "auth");
 
     // ---- Register ----------------------------------------------------------
 

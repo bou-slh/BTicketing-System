@@ -1,0 +1,124 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model AuditLogsIndexVm
+@{
+    ViewData["Title"] = L["al.title"];
+
+    string DateText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("al.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Canonical querystring builder so Apply / header sort / pagination / export
+    // preserve state.
+    string BuildUrl(string? dirOver = null, int? pageOver = null, string path = "/admin/audit-logs")
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("from", Model.From);
+        Add("to", Model.To);
+        if (Model.Type != "all")
+            Add("type", Model.Type);
+        Add("dir", dirOver ?? (Model.Desc ? null : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return path + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+
+    // Mockup pagination window: "1 2 3 … 151".
+    var pageWindow = new[] { 1, Model.Page - 1, Model.Page, Model.Page + 1, Model.PageCount }
+        .Where(p => p >= 1 && p <= Model.PageCount).Distinct().Order().ToList();
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["al.title"]</h1>
+        <p>@L["al.subtitle"]</p>
+    </div>
+</div>
+
+@* B1 filters + Apply: GET round-trip (the mockup's preset 2026-08 dates are sample
+   state — the live page starts unfiltered). Export carries the same filters. *@
+<form class="rd-list-toolbar" method="get" action="/admin/audit-logs">
+    @if (!Model.Desc)
+    {
+        <input type="hidden" name="dir" value="asc">
+    }
+    <label class="rd-label mb-0" for="audit-from">@L["al.from"]</label>
+    <input id="audit-from" type="date" class="rd-control" name="from" value="@Model.From">
+    <label class="rd-label mb-0" for="audit-to">@L["al.to"]</label>
+    <input id="audit-to" type="date" class="rd-control" name="to" value="@Model.To">
+    <label class="rd-label mb-0" for="audit-type">@L["al.type"]</label>
+    <select id="audit-type" class="rd-control" name="type">
+        <option value="all" selected="@(Model.Type == "all")">@L["al.typeAll"]</option>
+        <option value="ticket" selected="@(Model.Type == "ticket")">@L["al.typeTicket"]</option>
+        <option value="user" selected="@(Model.Type == "user")">@L["al.typeUser"]</option>
+        <option value="agent" selected="@(Model.Type == "agent")">@L["al.typeAgent"]</option>
+        @* Honest empty today: Setting is INotAudited (canon flag on the ROADMAP row). *@
+        <option value="setting" selected="@(Model.Type == "setting")">@L["al.typeSetting"]</option>
+    </select>
+    <button class="rd-btn" type="submit">@SL["common.apply"]</button>
+    <span class="spacer"></span>
+    <a class="rd-btn" href="@BuildUrl(path: "/admin/audit-logs/export")">@L["al.export"]</a>
+</form>
+
+<div class="rd-surface">
+    <table class="rd-table">
+        <thead>
+            <tr>
+                <th class="@(Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc")">
+                    <a href="@BuildUrl(dirOver: Model.Desc ? "asc" : "desc")">@L["al.colTime"]</a>
+                </th>
+                <th>@L["al.colUser"]</th>
+                <th>@L["al.colEvent"]</th>
+                <th>@L["al.colObject"]</th>
+                <th>@L["al.colIp"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.Rows)
+            {
+                <tr>
+                    <td>@DateText(row.OccurredAt)</td>
+                    <td>@row.ActorName</td>
+                    <td>@row.EventText</td>
+                    @* B10 drill-down: the object cell links to the audited object's real
+                       page where one exists (AuditLogsController.LinkFor map); types
+                       without a page render plain (flagged). *@
+                    @if (row.Link is { } link)
+                    {
+                        <td><a href="@link">@row.ObjectPhrase</a></td>
+                    }
+                    else
+                    {
+                        <td>@row.ObjectPhrase</td>
+                    }
+                    <td>@row.Ip</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="rd-pagination">
+        <span>@L.GetString("al.showing", Model.FromRow, Model.ToRow, Model.Total.ToString("N0", CultureInfo.CurrentUICulture))</span>
+        <div class="pages">
+            @for (var i = 0; i < pageWindow.Count; i++)
+            {
+                var p = pageWindow[i];
+                if (i > 0 && p > pageWindow[i - 1] + 1)
+                {
+                    <span>…</span>
+                }
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+</div>

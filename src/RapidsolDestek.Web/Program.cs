@@ -184,6 +184,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache(); // agent tickets queue-count cache (S6)
 builder.Services.AddSignalR(); // B7 live board (agent/live)
 builder.Services.AddScoped<ISidebarBadgeService, SidebarBadgeService>();
+// S7 admin/system-logs: the syslog writer (system/log_level decides what is stored).
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Services.ISystemLogService,
+    RapidsolDestek.Infrastructure.Services.SystemLogService>();
 builder.Services.AddSingleton<IAppEmailSender, DevLoggingEmailSender>();
 // S7 admin/email-edit: DataProtection-encrypted mail credentials + the real
 // MailKit "Bağlantıyı Sına" probe.
