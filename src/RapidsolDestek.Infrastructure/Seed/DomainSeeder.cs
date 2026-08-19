@@ -495,16 +495,26 @@ public static class DomainSeeder
         depBordro.TemplateSetId = tsetTr.Id; // department-edit de-template canon
 
         // ----- Filters, banlist, API keys (canon admin pages) -------------------------
+        // VIP filter = the admin/filter-edit.html mockup's exact editor state
+        // (S7 canon: match-ALL + stop-on-match checked, the three rule rows, the
+        // three action rows and the internal note shown on the page).
         var fVip = new Filter
         {
             Name = "VIP kullanıcı önceliklendirme", ExecOrder = 1, Target = FilterTarget.Email,
+            MatchAllRules = true, StopOnMatch = true,
+            Notes = "Tosyalı Holding sözleşmesi gereği 8 saatlik VIP SLA uygulanır.",
             Rules =
             [
-                new FilterRule { What = "email", How = FilterMatchHow.EndsWith, Value = "@ulasim.com.tr" },
-                new FilterRule { What = "email", How = FilterMatchHow.EndsWith, Value = "@tosyali.com.tr" },
+                new FilterRule { What = "org", How = FilterMatchHow.Equal, Value = "Tosyalı Holding" },
+                new FilterRule { What = "email", How = FilterMatchHow.Contains, Value = "@tosyali.com" },
                 new FilterRule { What = "subject", How = FilterMatchHow.Contains, Value = "acil" },
             ],
-            Actions = [new FilterAction { Type = "priority", Sort = 1, Configuration = $$"""{"priority_id":{{prHigh.Id}}}""" }],
+            Actions =
+            [
+                new FilterAction { Type = "priority", Sort = 1, Configuration = $$"""{"priority_id":{{prHigh.Id}}}""" },
+                new FilterAction { Type = "dept", Sort = 2, Configuration = $$"""{"dept_id":{{depBordro.Id}}}""" },
+                new FilterAction { Type = "sla", Sort = 3, Configuration = $$"""{"sla_id":{{slaVip.Id}}}""" },
+            ],
         };
         var fSpam = new Filter
         {

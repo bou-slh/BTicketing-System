@@ -108,6 +108,14 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
                 Source = TicketSource.Web,
             }, actor, ct);
         }
+        catch (TicketRejectedByFilterException)
+        {
+            // A ticket filter's Reject action refused the create (admin/filters,
+            // S7). The filter name stays server-side — end users only see a
+            // generic refusal (osTicket parity: no filter details leak).
+            ModelState.AddModelError(nameof(OpenForm.Summary), "errFiltered");
+            return View(await BuildVmAsync(user, form, ct));
+        }
         catch (DomainRuleException ex) when (ex.Code == "max-open-exceeded")
         {
             // tickets.max_open_per_user (S7 admin/settings-tickets); the mockup's

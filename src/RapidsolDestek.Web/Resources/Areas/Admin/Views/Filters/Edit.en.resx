@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="fle.back" xml:space="preserve">
+    <value>← Ticket Filters</value>
+  </data>
+  <data name="fle.sub" xml:space="preserve">
+    <value>Edit the filter's rules and the actions applied when it matches.</value>
+  </data>
+  <data name="fle.name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="fle.nameHelp" xml:space="preserve">
+    <value>A short name describing the filter.</value>
+  </data>
+  <data name="fle.order" xml:space="preserve">
+    <value>Execution order</value>
+  </data>
+  <data name="fle.orderHelp" xml:space="preserve">
+    <value>Lower numbers run first.</value>
+  </data>
+  <data name="fle.status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="fle.target" xml:space="preserve">
+    <value>Target channel</value>
+  </data>
+  <data name="fle.targetAny" xml:space="preserve">
+    <value>— Any channel —</value>
+  </data>
+  <data name="fle.targetWeb" xml:space="preserve">
+    <value>Web Form</value>
+  </data>
+  <data name="fle.targetApi" xml:space="preserve">
+    <value>API</value>
+  </data>
+  <data name="fle.targetEmailAny" xml:space="preserve">
+    <value>Email (any)</value>
+  </data>
+  <data name="fle.grpSysEmails" xml:space="preserve">
+    <value>System Emails</value>
+  </data>
+  <data name="fle.targetHelp" xml:space="preserve">
+    <value>The filter only applies to requests coming from this channel.</value>
+  </data>
+  <data name="fle.stopOnMatch" xml:space="preserve">
+    <value>Stop on match</value>
+  </data>
+  <data name="fle.stopOnMatchHelp" xml:space="preserve">
+    <value>If this filter matches, later filters are not processed.</value>
+  </data>
+  <data name="fle.tabRules" xml:space="preserve">
+    <value>Rules</value>
+  </data>
+  <data name="fle.tabActions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="fle.tabNotes" xml:space="preserve">
+    <value>Internal Notes</value>
+  </data>
+  <data name="fle.matchLabel" xml:space="preserve">
+    <value>Match condition</value>
+  </data>
+  <data name="fle.matchAll" xml:space="preserve">
+    <value>All rules must match (AND)</value>
+  </data>
+  <data name="fle.matchAny" xml:space="preserve">
+    <value>Any rule is enough (OR)</value>
+  </data>
+  <data name="fle.fName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="fle.fEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="fle.fReplyTo" xml:space="preserve">
+    <value>Reply-To Address</value>
+  </data>
+  <data name="fle.fSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="fle.fTopic" xml:space="preserve">
+    <value>Help Topic</value>
+  </data>
+  <data name="fle.fOrg" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="fle.opEq" xml:space="preserve">
+    <value>equals</value>
+  </data>
+  <data name="fle.opContains" xml:space="preserve">
+    <value>contains</value>
+  </data>
+  <data name="fle.opStarts" xml:space="preserve">
+    <value>starts with</value>
+  </data>
+  <data name="fle.opRegex" xml:space="preserve">
+    <value>matches regex</value>
+  </data>
+  <data name="fle.valuePh" xml:space="preserve">
+    <value>Value…</value>
+  </data>
+  <data name="fle.addRule" xml:space="preserve">
+    <value>＋ Add Rule</value>
+  </data>
+  <data name="fle.rulesHelp" xml:space="preserve">
+    <value>Rules are compared against the request's sender and content data.</value>
+  </data>
+  <data name="fle.aReject" xml:space="preserve">
+    <value>Reject Ticket</value>
+  </data>
+  <data name="fle.aDept" xml:space="preserve">
+    <value>Route to Department</value>
+  </data>
+  <data name="fle.aPriority" xml:space="preserve">
+    <value>Set Priority</value>
+  </data>
+  <data name="fle.aSla" xml:space="preserve">
+    <value>Set SLA</value>
+  </data>
+  <data name="fle.aTeam" xml:space="preserve">
+    <value>Assign Team</value>
+  </data>
+  <data name="fle.aAgent" xml:space="preserve">
+    <value>Assign Agent</value>
+  </data>
+  <data name="fle.aTopic" xml:space="preserve">
+    <value>Set Help Topic</value>
+  </data>
+  <data name="fle.aStatus" xml:space="preserve">
+    <value>Set Status</value>
+  </data>
+  <data name="fle.aNoAutoresp" xml:space="preserve">
+    <value>Disable Auto-Response</value>
+  </data>
+  <data name="fle.aCanned" xml:space="preserve">
+    <value>Send Canned Response</value>
+  </data>
+  <data name="fle.aEmail" xml:space="preserve">
+    <value>Send Email</value>
+  </data>
+  <data name="fle.addAction" xml:space="preserve">
+    <value>Add Action</value>
+  </data>
+  <data name="fle.actionsHelp" xml:space="preserve">
+    <value>Actions are applied in order, following the list layout.</value>
+  </data>
+  <data name="fle.newTitle" xml:space="preserve">
+    <value>New Filter</value>
+  </data>
+  <data name="fle.errName" xml:space="preserve">
+    <value>The filter name cannot be empty (max 120 characters).</value>
+  </data>
+  <data name="fle.errOrder" xml:space="preserve">
+    <value>Execution order must be a number between 1 and 999.</value>
+  </data>
+  <data name="fle.errValues" xml:space="preserve">
+    <value>Some fields are invalid; nothing was saved.</value>
+  </data>
+  <data name="fle.errRule" xml:space="preserve">
+    <value>Check the rule rows: field, condition and value are required.</value>
+  </data>
+  <data name="fle.errRules" xml:space="preserve">
+    <value>Define at least one rule.</value>
+  </data>
+  <data name="fle.errDupRule" xml:space="preserve">
+    <value>The same rule cannot be defined more than once.</value>
+  </data>
+  <data name="fle.errRegex" xml:space="preserve">
+    <value>The pattern in a regex rule is invalid.</value>
+  </data>
+  <data name="fle.errAction" xml:space="preserve">
+    <value>Check the action rows: every action needs a valid parameter.</value>
+  </data>
+  <data name="fle.preview" xml:space="preserve">
+    <value>Match preview</value>
+  </data>
+  <data name="fle.previewResult" xml:space="preserve">
+    <value>{0} of the {1} existing tickets match these rules.</value>
+  </data>
+  <data name="fle.previewMailOnly" xml:space="preserve">
+    <value>{0} rule(s) can only be evaluated on incoming email data and were left out of the count.</value>
+  </data>
+  <data name="fle.previewError" xml:space="preserve">
+    <value>Preview could not be loaded.</value>
+  </data>
+</root>

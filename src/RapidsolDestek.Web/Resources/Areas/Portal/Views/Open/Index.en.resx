@@ -124,4 +124,7 @@
   <data name="open.errAttachTooBig" xml:space="preserve">
     <value>An attached file exceeds the maximum allowed file size.</value>
   </data>
+  <data name="open.errFiltered" xml:space="preserve">
+    <value>Your request was rejected by system rules. Please contact the support team.</value>
+  </data>
 </root>

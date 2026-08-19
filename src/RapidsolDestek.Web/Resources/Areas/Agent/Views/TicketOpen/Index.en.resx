@@ -198,4 +198,7 @@
   <data name="to.errAttachTooBig" xml:space="preserve">
     <value>An attached file exceeds the maximum allowed file size.</value>
   </data>
+  <data name="to.errFiltered" xml:space="preserve">
+    <value>The ticket was rejected by an active ticket filter (Reject Ticket action).</value>
+  </data>
 </root>

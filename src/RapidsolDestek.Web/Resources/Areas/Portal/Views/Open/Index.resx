@@ -124,4 +124,7 @@
   <data name="open.errAttachTooBig" xml:space="preserve">
     <value>Ek dosya, izin verilen en büyük dosya boyutunu aşıyor.</value>
   </data>
+  <data name="open.errFiltered" xml:space="preserve">
+    <value>Talebiniz sistem kuralları tarafından reddedildi. Lütfen destek ekibiyle iletişime geçin.</value>
+  </data>
 </root>

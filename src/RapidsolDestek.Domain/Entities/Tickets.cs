@@ -129,6 +129,14 @@ public class Ticket : TimestampedEntity
     public bool IsOverdue { get; set; }
     public bool IsAnswered { get; set; }
 
+    /// <summary>
+    /// A matching ticket filter's "Otomatik Yanıtı Kapat" action suppressed the
+    /// new-ticket auto-response (admin/filter-edit fle.aNoAutoresp, osTicket
+    /// FA_DisableAutoResponse). Persisted at create; consumed when the outbound
+    /// mail subsystem sends autoresponses — TODO(S8).
+    /// </summary>
+    public bool AutoResponseDisabled { get; set; }
+
     /// <summary>Agent-set hard due date (osTicket duedate).</summary>
     public DateTimeOffset? DueDate { get; set; }
 

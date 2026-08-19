@@ -55,6 +55,7 @@ public sealed class TicketService(
     ISettingsService settings,
     ISequenceNumberService sequences,
     IThreadService threads,
+    IFilterEngine filters,
     IDomainEventDispatcher dispatcher) : ITicketService
 {
     public async Task<Ticket> CreateAsync(TicketCreateRequest request, ActorContext actor, CancellationToken ct = default)
@@ -64,8 +65,49 @@ public sealed class TicketService(
                 ?? throw new DomainNotFoundException("HelpTopic", topicId)
             : null;
 
-        // Routing cascade: topic overrides beat request values beat settings defaults.
-        var departmentId = topic?.DepartmentId
+        // Ticket filters (admin/filters, S7): every active filter runs over the
+        // incoming data before creation, gated by target channel (portal=Web,
+        // agent-recorded phone/other only meet target "Any"; the mail pipeline is
+        // TODO(S8) and will feed Source=Email + ReplyTo). A Reject action refuses
+        // the whole create with a typed exception; routing actions override the
+        // topic cascade below (osTicket parity: filter vars beat topic defaults).
+        var sender = await db.Users.AsNoTracking()
+            .Where(u => u.Id == request.UserId)
+            .Select(u => new
+            {
+                u.Name,
+                Email = u.Emails
+                    .Where(e => e.Id == (request.UserEmailId ?? u.DefaultEmailId))
+                    .Select(e => e.Address).FirstOrDefault(),
+                Org = u.Organization != null ? u.Organization.Name : null,
+            })
+            .SingleOrDefaultAsync(ct);
+        var outcome = await filters.RunAsync(new FilterInput
+        {
+            Source = request.Source,
+            EmailAccountId = request.EmailAccountId,
+            Name = sender?.Name,
+            Email = sender?.Email,
+            Subject = request.Subject,
+            Body = request.Body,
+            TopicName = topic?.Name,
+            OrgName = sender?.Org,
+        }, ct);
+        if (outcome.RejectedBy is { } rejectingFilter)
+            throw new TicketRejectedByFilterException(rejectingFilter);
+
+        // A filter's "Yardım Konusu Ata" swaps the topic BEFORE the cascade so the
+        // new topic's own routing applies (unless a later filter value overrode it).
+        if (outcome.TopicId is { } filterTopicId && filterTopicId != topic?.Id)
+        {
+            topic = await db.HelpTopics.Include(t => t.Parent)
+                .SingleOrDefaultAsync(t => t.Id == filterTopicId, ct) ?? topic;
+        }
+
+        // Routing cascade: filter actions beat topic overrides beat request values
+        // beat settings defaults.
+        var departmentId = outcome.DepartmentId
+            ?? topic?.DepartmentId
             ?? request.DepartmentId
             ?? int.Parse(await settings.GetAsync("core", "default_dept_id", ct)
                 ?? throw new InvalidOperationException("core.default_dept_id is not configured"));
@@ -90,14 +132,32 @@ public sealed class TicketService(
 
         var numbering = await settings.GetTicketNumberingAsync(ct);
         var statusKey = numbering.DefaultStatusKey ?? "open";
-        var statusId = topic?.StatusId
+        var statusId = outcome.StatusId
+            ?? topic?.StatusId
             ?? await db.TicketStatuses.Where(s => s.Key == statusKey).Select(s => s.Id).SingleAsync(ct);
 
+        // Filter "Durum Ata" pointing at a non-open status = honest auto-close:
+        // the ticket is born closed with ClosedAt stamped (admin/filter-edit
+        // fle.aStatus; osTicket FA_SetStatus semantics).
+        DateTimeOffset? closedAt = null;
+        if (outcome.StatusId is { } filterStatusId)
+        {
+            var filterStatusState = await db.TicketStatuses
+                .Where(s => s.Id == filterStatusId).Select(s => (TicketState?)s.State).SingleOrDefaultAsync(ct);
+            if (filterStatusState is null)
+                statusId = topic?.StatusId
+                    ?? await db.TicketStatuses.Where(s => s.Key == statusKey).Select(s => s.Id).SingleAsync(ct);
+            else if (filterStatusState != TicketState.Open)
+                closedAt = DateTimeOffset.UtcNow;
+        }
+
         // Priority cascade ends at core.default_priority (S7; seeded "normal").
-        var priorityId = topic?.PriorityId
+        var priorityId = outcome.PriorityId
+            ?? topic?.PriorityId
             ?? request.PriorityId
             ?? await DefaultPriorityIdAsync(ct);
-        var slaId = topic?.SlaId
+        var slaId = outcome.SlaId
+            ?? topic?.SlaId
             ?? request.SlaId
             ?? ParseOrNull(await settings.GetAsync("core", "default_sla_id", ct));
 
@@ -121,17 +181,21 @@ public sealed class TicketService(
             PriorityId = priorityId,
             SlaId = slaId,
             HelpTopicId = topic?.Id,
-            // Vacation guard (profile Tatil Modu): topic auto-assignment skips an agent
-            // on vacation — the ticket still routes (department/team), only the staff
-            // pin is dropped so it lands unassigned in the queue.
-            StaffId = await StaffAvailability.FilterAutoAssignAsync(db, topic?.StaffId, ct),
-            TeamId = topic?.TeamId,
+            // Vacation guard (profile Tatil Modu): filter/topic auto-assignment skips
+            // an agent on vacation — the ticket still routes (department/team), only
+            // the staff pin is dropped so it lands unassigned in the queue.
+            StaffId = await StaffAvailability.FilterAutoAssignAsync(db, outcome.StaffId ?? topic?.StaffId, ct),
+            TeamId = outcome.TeamId ?? topic?.TeamId,
             EmailAccountId = request.EmailAccountId,
             Source = request.Source,
             SourceExtra = request.SourceExtra,
             IpAddress = actor.IpAddress,
             DueDate = request.DueDate,
             EstimatedDueDate = estimatedDue,
+            // Filter "Otomatik Yanıtı Kapat" — persisted flag, consumed at
+            // autoresponse send time (TODO(S8) outbound mail).
+            AutoResponseDisabled = outcome.DisableAutoResponse,
+            ClosedAt = closedAt,
             LastUpdateAt = DateTimeOffset.UtcNow,
             Thread = new Thread { CreatedAt = DateTimeOffset.UtcNow },
         };
@@ -143,6 +207,14 @@ public sealed class TicketService(
         await threads.PostAsync(ticket.ThreadId, ThreadEntryType.Message, request.Body, actor,
             new PostOptions { Source = request.Source.ToString(), Title = request.Subject }, ct);
         await threads.AddEventAsync(ticket.ThreadId, "created", actor, null, ct);
+
+        // Filter note actions (seed canon type "note"): the configured text lands
+        // as a SYSTEM internal note on the fresh thread.
+        foreach (var note in outcome.Notes)
+        {
+            await threads.PostAsync(ticket.ThreadId, ThreadEntryType.Note, note, ActorContext.System,
+                new PostOptions { Source = request.Source.ToString() }, ct);
+        }
 
         var events = new List<IDomainEvent>
         {

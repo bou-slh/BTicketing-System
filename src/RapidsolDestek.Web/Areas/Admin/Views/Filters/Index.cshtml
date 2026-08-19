@@ -1,0 +1,173 @@
+@using System.Globalization
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model FiltersIndexVm
+@{
+    ViewData["Title"] = L["fl.title"];
+
+    // PRG toast handoff after save/create/delete/bulk (schedules precedent).
+    if (TempData["FiltersToast"] is string toastKey)
+    {
+        var ok = TempData["FiltersToastOk"] as int? ?? 0;
+        var skipped = TempData["FiltersToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "fl.bulkDone" or "fl.bulkPartial"
+            ? L[toastKey, ok, skipped].Value
+            : L[toastKey].Value;
+        if (TempData["FiltersToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Date cells: the mockup's "4 Ağu 2026" format (fl.dateFmt).
+    string DateText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("fl.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Target cells: an email-account-restricted filter shows the mailbox address
+    // (data, not a literal); channel-level targets use the mockup labels.
+    string TargetText(FilterRowVm r) => r.Target switch
+    {
+        FilterTarget.Web => L["fl.targetWeb"].Value,
+        FilterTarget.Api => L["fl.targetApi"].Value,
+        FilterTarget.Email => r.EmailAddress ?? L["fl.targetEmail"].Value,
+        _ => L["fl.targetAny"].Value,
+    };
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/filters" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key == "updated" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["fl.title"]</h1>
+        <p>@L["fl.sub"]</p>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/admin/filters">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["fl.searchPh"]">
+    <span class="spacer"></span>
+    <button class="rd-btn" type="button" data-dialog-open="dlg-more"><span>@SL["common.more"]</span> ▾</button>
+    <a class="rd-btn rd-btn-primary" href="/admin/filter-edit">@L["fl.new"]</a>
+</form>
+
+<div class="rd-surface" id="tbl-filters">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Mockup's hidden #fl-empty panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">⏚</div>
+            <h3>@L["fl.emptyTitle"]</h3>
+            <p>@L["fl.emptyText"]</p>
+            <a class="rd-btn rd-btn-primary" href="/admin/filter-edit">@L["fl.new"]</a>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-filters" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("name")"><a href="@SortUrl("name")">@SL["common.name"]</a></th>
+                    <th>@SL["common.status"]</th>
+                    @* The mockup ships a static sorted-desc on this column while its
+                       rows sit 1→4 ascending — the indicator follows the ACTIVE sort
+                       (helptopics deviation precedent); default = exec order asc. *@
+                    <th class="num @SortClass("order")"><a href="@SortUrl("order")">@L["fl.colOrder"]</a></th>
+                    <th class="num">@L["fl.colRules"]</th>
+                    <th>@L["fl.colTarget"]</th>
+                    <th class="@SortClass("updated")"><a href="@SortUrl("updated")">@SL["common.updated"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="fl-bulk"></td>
+                        <td><a href="/admin/filter-edit?id=@r.Id">@r.Name</a></td>
+                        <td>
+                            @if (r.IsActive)
+                            {
+                                <span class="rd-pill rd-pill-solved">@SL["common.active"]</span>
+                            }
+                            else
+                            {
+                                <span class="rd-pill rd-pill-closed">@SL["common.disabled"]</span>
+                            }
+                        </td>
+                        <td class="num">@r.ExecOrder</td>
+                        <td class="num">@r.RuleCount</td>
+                        <td>@TargetText(r)</td>
+                        <td>@DateText(r.Updated)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@L["fl.showing", Model.From, Model.To, Model.Total]</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the dlg-more bulk actions (schedules precedent). *@
+<form id="fl-bulk" method="post" asp-area="Admin" asp-controller="Filters" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+<dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span>@L["fl.bulkTitle"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+        <p class="rd-help" style="margin-top:0">@L["fl.bulkHelp"]</p>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+            @* No data-dialog-close on the submits — the audited B2 close-swallows-save bug. *@
+            <button class="rd-btn" type="submit" form="fl-bulk" name="act" value="enable">@SL["common.enable"]</button>
+            <button class="rd-btn" type="submit" form="fl-bulk" name="act" value="disable">@SL["common.disable"]</button>
+            <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-delete" data-dialog-close>@SL["common.delete"]</button>
+        </div>
+    </div>
+</dialog>
+
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p>@SL["common.confirmDelete"]</p></div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="fl-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>

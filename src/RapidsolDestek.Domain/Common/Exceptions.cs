@@ -20,6 +20,16 @@ public class DomainRuleException(string code, string message) : DomainException(
     public string Code { get; } = code;
 }
 
+/// <summary>
+/// A ticket filter's Reject action refused the incoming ticket before creation
+/// (admin/filters "Talebi Reddet", osTicket FilterDataChanged/RejectedException).
+/// </summary>
+public class TicketRejectedByFilterException(string filterName)
+    : DomainRuleException("filter-rejected", $"Ticket rejected by filter '{filterName}'.")
+{
+    public string FilterName { get; } = filterName;
+}
+
 /// <summary>An entity referenced by id does not exist (mapped to 404 in Web).</summary>
 public class DomainNotFoundException(string entity, object key)
     : DomainException($"{entity} '{key}' not found.")

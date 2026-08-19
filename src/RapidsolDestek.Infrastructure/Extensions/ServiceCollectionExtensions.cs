@@ -38,6 +38,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISequenceNumberService, SequenceNumberService>();
         services.AddScoped<IPermissionService, PermissionService>();
         services.AddScoped<IThreadService, ThreadService>();
+        services.AddScoped<IFilterEngine, FilterEngine>();
         services.AddScoped<ITicketService, TicketService>();
         services.AddScoped<ITaskService, TaskService>();
         services.AddScoped<IUserService, UserService>();

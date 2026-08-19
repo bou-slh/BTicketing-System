@@ -224,24 +224,36 @@ public class TicketOpenController(
         var body = string.Join("<br>", form.Details.Trim().Split('\n')
             .Select(line => encoder.Encode(line.TrimEnd('\r'))));
 
-        // Real creation through the domain service: sequence number, help-topic
-        // routing cascade (dept/priority/SLA/status/assignee), audit + events and
-        // the initial Message thread entry all happen inside CreateAsync.
-        var ticket = await tickets.CreateAsync(new TicketCreateRequest
+        // Real creation through the domain service: sequence number, ticket
+        // filters (admin/filters, S7 — a Reject action refuses the create),
+        // help-topic routing cascade (dept/priority/SLA/status/assignee), audit +
+        // events and the initial Message thread entry all happen inside CreateAsync.
+        Ticket ticket;
+        try
         {
-            UserId = user.Id,
-            UserEmailId = user.DefaultEmailId,
-            Subject = form.Summary.Trim(),
-            Body = body,
-            HelpTopicId = topic.Id,
-            DepartmentId = departmentId,
-            PriorityId = priorityId,
-            SlaId = slaId,
-            Source = ParseSource(form.Source),
-            DueDate = form.Due is { } due
-                ? new DateTimeOffset(due.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero)
-                : null,
-        }, actor, ct);
+            ticket = await tickets.CreateAsync(new TicketCreateRequest
+            {
+                UserId = user.Id,
+                UserEmailId = user.DefaultEmailId,
+                Subject = form.Summary.Trim(),
+                Body = body,
+                HelpTopicId = topic.Id,
+                DepartmentId = departmentId,
+                PriorityId = priorityId,
+                SlaId = slaId,
+                Source = ParseSource(form.Source),
+                DueDate = form.Due is { } due
+                    ? new DateTimeOffset(due.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero)
+                    : null,
+            }, actor, ct);
+        }
+        catch (TicketRejectedByFilterException)
+        {
+            // NOTE: an inline-created guest user row survives the refusal (the
+            // filter verdict needs the full create context) — harmless, flagged.
+            ModelState.AddModelError(nameof(TicketOpenForm.Summary), "errFiltered");
+            return View(await BuildVmAsync(staff, form, user, ct));
+        }
 
         // B5: uploads → IFileStore content + StoredFile/Attachment rows on the
         // initial Message entry (portal OpenController precedent).

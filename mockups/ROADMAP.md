@@ -914,7 +914,54 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       detachTitle. Differ notes: Updated cells show live timestamps (seed carries no canon dates);
       priority/status selects list ALL real rows vs the mockup's samples. +7 tests
       (HelpTopicsSlasAdminTests).)*
-- [ ] **filters.html / filter-edit.html** — CRUD; rule/action rows add/remove (B4); match-count preview; filters actually run in the mail/ticket pipeline
+- [x] **filters.html / filter-edit.html** — CRUD; rule/action rows add/remove (B4); match-count preview; filters actually run in the mail/ticket pipeline
+      *(S7; /admin/filters + /admin/filter-edit?id= (FiltersController; no id = create — the mockup's
+      new-button links straight to filter-edit.html). NEW S7_Filters migration: Ticket.AutoResponseDisabled
+      (the noautoresp action's persisted per-ticket flag — consumed at autoresponse send, TODO(S8)); the
+      filter/filter_rule/filter_action tables are S3 stock. SEED CANON ALIGNED: the VIP filter now carries
+      the filter-edit mockup's exact editor state (match-ALL + stop-on-match ON, rules org=Tosyalı Holding /
+      email⊃@tosyali.com / subject⊃acil, actions priority high → dept Bordro → SLA VIP, the notes text) —
+      it previously held different S3 sample rules (2× email endswith + subject, single action; list-page
+      rule counts unchanged). B1 list: sort name/order/updated, DEFAULT = exec order ASC (the mockup's
+      static sorted-desc indicator contradicts its own 1→4 rows — indicator follows the ACTIVE sort,
+      helptopics deviation precedent), search, pagination (PageSize 8), dlg-more bulk enable/disable/delete
+      (no in-use guard — nothing references filters), rd-empty = the mockup's hidden #fl-empty reachable;
+      target cells show the mailbox address for email_id-restricted filters, invented fl.targetAny for
+      channel-less ones. Editor: whole-page save (B3 refuses writing NOTHING on bad rows); target select =
+      the 4 mockup channels + REAL EmailAccount rows in the optgroup (persisted as Target+EmailAccountId,
+      osTicket email_id; the seed's third mailbox bilgi@ appears — real-rows precedent); rule rows (B4,
+      data-rule-add clone) = the mockup's 6 fields × 4 operators — rows holding other osTicket tokens (seed
+      what "source", the spam filter's "ends" op) render as verbatim appended options (schedules-timezone
+      precedent, flagged); duplicate rules refused (unique index), regex rules must compile, ≥1 rule
+      enforced (osTicket parity); action rows = the mockup's 11 types + the seed's verbatim "note" — the
+      mockup only shows priority/dept/sla param selects, the other types get their real-data select or a
+      text input (INVENTED per B4, needs canon sign-off); one hidden actValues per row keeps the posted
+      arrays aligned (page script mirrors the visible param control); rows reconcile by hidden id. Create
+      defaults: stop-on-match OFF + target Any (the mockup's checked switch/email target = VIP sample
+      state, flagged), exec order = max+1. ENGINE (the row's bold leg): FilterEngine (Infrastructure;
+      matcher is pure static) runs INSIDE TicketService.CreateAsync for every create channel that exists
+      today — portal open (Web), agent ticket-open (recorded web/email/other/phone; phone/other only meet
+      target "Any"), direct service creates; the MAIL pipeline is TODO(S8) and will feed Source=Email +
+      ReplyTo + the receiving mailbox id. Exec order, match-all/any and stop-on-match honored; reject
+      halts the run. Matching is ordinal case-insensitive (Turkish İ/ı not culture-folded — documented;
+      regex verbatim with 250ms timeout, an invalid pattern matches NOTHING on either polarity). LIVE
+      actions: reject (typed TicketRejectedByFilterException → portal open.errFiltered / agent
+      to.errFiltered form errors; the filter name never leaks to end users; NOTE: an agent-side
+      inline-created guest user row survives the refusal — flagged), dept, priority, sla (grace due date
+      recomputed), topic (re-cascades the new topic's routing), status (a non-open status = honest
+      auto-close, ClosedAt stamped at birth), team, agent (vacation guard applies), noautoresp (persisted
+      flag), note (SYSTEM internal note on the fresh thread). PERSISTED-ONLY: canned + email actions
+      TODO(S8 outbound mail). PREVIEW (B4 "N tickets would match" — INVENTED control, the mockup defines
+      none; needs canon sign-off): a rules-tab button POSTs the CURRENT unsaved rules to
+      /admin/filter-edit/preview; rules are evaluated over the whole ticket store REGARDLESS of target
+      channel (the preview tests the rules; the channel gate only applies to live traffic — documented);
+      mail-only fields (reply-to) cannot match stored tickets — skipped from the count + reported via
+      fle.previewMailOnly; body rules read the thread's first Message. Invented keys (TR/EN twins):
+      fl.targetAny/dateFmt/bulkNone/bulkDone/bulkPartial/toastCreated/toastSaved/toastDeleted +
+      re-parameterized fl.showing; fle.newTitle/errName/errOrder/errValues/errRule/errRules/errDupRule/
+      errRegex/errAction/preview/previewResult/previewMailOnly/previewError; open.errFiltered/
+      to.errFiltered. Differ notes: Updated cells show live timestamps (seed carries no canon dates);
+      param selects list ALL real rows vs the mockup's samples. +10 tests (FiltersAdminTests) — suite 265.)*
 - [ ] **queues.html** — full builder: criteria/columns/sort/conditions rows (B4), drag-reorder columns, export
       column set, **live preview**, saved queue appears in agent queue tree
 - [ ] **forms.html / form-edit.html** — form designer: field CRUD, per-field config dialog writes back (B2),

@@ -11,6 +11,7 @@
         "errSummary" => L["open.errSummary"].Value,
         "errDetails" => L["open.errDetails"].Value,
         "errMaxOpen" => L["open.errMaxOpen"].Value,
+        "errFiltered" => L["open.errFiltered"].Value,
         _ when code.StartsWith("errField:") => L["open.errField", code["errField:".Length..]].Value,
         _ => code,
     };

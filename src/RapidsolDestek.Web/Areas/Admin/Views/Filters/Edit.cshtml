@@ -1,0 +1,387 @@
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model FilterEditVm
+@{
+    var f = Model.Filter;
+    var isNew = f is null;
+    ViewData["Title"] = isNew ? L["fle.newTitle"].Value : f!.Name;
+
+    // PRG toast handoff: validation failure (nothing written, B3).
+    if (TempData["FilterEditToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        if (TempData["FilterEditToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Rule fields/operators = the mockup's select DOM. Rows holding another
+    // osTicket token (seed canon: what "source", how "ends") render it as an
+    // appended verbatim option — schedules-timezone precedent, flagged.
+    (string Value, string Key)[] whats =
+    [
+        ("name", "fle.fName"), ("email", "fle.fEmail"), ("replyto", "fle.fReplyTo"),
+        ("subject", "fle.fSubject"), ("topic", "fle.fTopic"), ("org", "fle.fOrg"),
+    ];
+    (string Value, string Key)[] hows =
+    [
+        ("equal", "fle.opEq"), ("contains", "fle.opContains"),
+        ("starts", "fle.opStarts"), ("regex", "fle.opRegex"),
+    ];
+    // The mockup's eleven action types, in its option order.
+    (string Value, string Key)[] actionTypes =
+    [
+        ("reject", "fle.aReject"), ("dept", "fle.aDept"), ("priority", "fle.aPriority"),
+        ("sla", "fle.aSla"), ("team", "fle.aTeam"), ("agent", "fle.aAgent"),
+        ("topic", "fle.aTopic"), ("status", "fle.aStatus"), ("noautoresp", "fle.aNoAutoresp"),
+        ("canned", "fle.aCanned"), ("email", "fle.aEmail"),
+    ];
+
+    var matchAll = f?.MatchAllRules ?? true; // mockup default: VE checked
+}
+
+<form method="post" asp-area="Admin" asp-controller="Filters" asp-action="Save"
+      id="fle-form" data-preview-url="/admin/filter-edit/preview">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@f!.Id">
+    }
+
+    <div class="bo-page-head">
+        <div>
+            <a href="/admin/filters" style="font-size:13px">@L["fle.back"]</a>
+            <h1>@(isNew ? L["fle.newTitle"].Value : f!.Name)</h1>
+            <p>@L["fle.sub"]</p>
+        </div>
+        <div class="actions">
+            <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" disabled="@isNew">@SL["common.delete"]</button>
+            <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </div>
+
+    <div class="rd-surface" style="margin-bottom:20px">
+        <div class="rd-surface-body">
+            <div class="rd-grid-2">
+                <div class="rd-field">
+                    <label class="rd-label" for="fle-name">@L["fle.name"]</label>
+                    <input id="fle-name" name="name" class="rd-control" value="@f?.Name" required maxlength="120">
+                    <div class="rd-help">@L["fle.nameHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="fle-order">@L["fle.order"]</label>
+                    <input id="fle-order" name="execOrder" class="rd-control" type="number"
+                           value="@(f?.ExecOrder ?? Model.NextExecOrder)" min="1" max="999" style="max-width:120px">
+                    <div class="rd-help">@L["fle.orderHelp"]</div>
+                </div>
+                <div class="rd-field">
+                    <span class="rd-label">@L["fle.status"]</span>
+                    <div style="display:flex;gap:18px;padding:10px 0 2px">
+                        <label class="rd-check"><input type="radio" name="active" value="1" checked="@(f?.IsActive ?? true)"><span>@SL["common.active"]</span></label>
+                        <label class="rd-check"><input type="radio" name="active" value="0" checked="@(!(f?.IsActive ?? true))"><span>@SL["common.disabled"]</span></label>
+                    </div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="fle-target">@L["fle.target"]</label>
+                    <select id="fle-target" name="target" class="rd-control">
+                        <option value="any" selected="@(Model.TargetValue == "any")">@L["fle.targetAny"]</option>
+                        <option value="web" selected="@(Model.TargetValue == "web")">@L["fle.targetWeb"]</option>
+                        <option value="api" selected="@(Model.TargetValue == "api")">@L["fle.targetApi"]</option>
+                        <option value="email" selected="@(Model.TargetValue == "email")">@L["fle.targetEmailAny"]</option>
+                        <optgroup label="@L["fle.grpSysEmails"]">
+                            @* Real EmailAccount rows (the mockup samples destek@/bordro@ live in the seed). *@
+                            @foreach (var e in Model.EmailAccounts)
+                            {
+                                <option value="em:@e.Id" selected="@(Model.TargetValue == $"em:{e.Id}")">@e.Label</option>
+                            }
+                        </optgroup>
+                    </select>
+                    <div class="rd-help">@L["fle.targetHelp"]</div>
+                </div>
+            </div>
+            @* Create default = OFF (osTicket stop_onmatch default; the mockup's
+               checked state is the VIP filter's sample data, flagged). *@
+            <label class="rd-switch">
+                <input type="checkbox" name="stopOnMatch" checked="@(f?.StopOnMatch ?? false)">
+                <span class="track"></span>
+                <span class="rd-switch-copy"><b>@L["fle.stopOnMatch"]</b><small>@L["fle.stopOnMatchHelp"]</small></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="rd-tabs" data-tabs>
+        <button type="button" class="active" data-tab="fle-rules">@L["fle.tabRules"]</button>
+        <button type="button" data-tab="fle-actions">@L["fle.tabActions"]</button>
+        <button type="button" data-tab="fle-notes">@L["fle.tabNotes"]</button>
+    </div>
+
+    @* ============ Kurallar (B4) ============
+       Row = the mockup's exact DOM plus hidden ruleIds (reconciliation). *@
+    @{
+        async Task RuleRowAsync(FilterRuleRowVm? r)
+        {
+            var what = r?.What ?? "name";
+            var how = r?.How ?? "equal";
+            <div class="bo-rule-row">
+                <input type="hidden" name="ruleIds" value="@(r?.Id ?? 0)">
+                <select class="rd-control" name="ruleWhats">
+                    @foreach (var w in whats)
+                    {
+                        <option value="@w.Value" selected="@(what == w.Value)">@L[w.Key]</option>
+                    }
+                    @if (whats.All(w => w.Value != what))
+                    {
+                        <option value="@what" selected>@what</option>
+                    }
+                </select>
+                <select class="rd-control" name="ruleHows">
+                    @foreach (var h in hows)
+                    {
+                        <option value="@h.Value" selected="@(how == h.Value)">@L[h.Key]</option>
+                    }
+                    @if (hows.All(h => h.Value != how))
+                    {
+                        <option value="@how" selected>@how</option>
+                    }
+                </select>
+                <input class="rd-control" name="ruleVals" value="@r?.Value" placeholder="@L["fle.valuePh"]">
+                <button type="button" class="remove" title="@SL["common.delete"]">✕</button>
+            </div>
+        }
+    }
+    <div class="rd-tab-panel active" id="fle-rules">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <div class="rd-field">
+                    <span class="rd-label">@L["fle.matchLabel"]</span>
+                    <div style="display:flex;gap:18px;padding:6px 0 2px;flex-wrap:wrap">
+                        <label class="rd-check"><input type="radio" name="match" value="all" checked="@matchAll"><span>@L["fle.matchAll"]</span></label>
+                        <label class="rd-check"><input type="radio" name="match" value="any" checked="@(!matchAll)"><span>@L["fle.matchAny"]</span></label>
+                    </div>
+                    <div class="rd-help">@L["fle.rulesHelp"]</div>
+                </div>
+
+                @foreach (var r in Model.Rules)
+                {
+                    await RuleRowAsync(r);
+                }
+
+                <button type="button" class="rd-btn rd-btn-ghost" data-rule-add="fle-rule-tpl">@L["fle.addRule"]</button>
+
+                @* INVENTED match-count preview (ROADMAP B4 "N tickets would match" —
+                   the mockup defines no control; needs canon sign-off). Evaluates
+                   the CURRENT unsaved rules against the existing ticket store. *@
+                <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px">
+                    <button type="button" class="rd-btn" id="fle-preview-btn">@L["fle.preview"]</button>
+                    <span class="rd-help" style="margin:0" id="fle-preview-out"
+                          data-fmt-result="@L.GetString("fle.previewResult")"
+                          data-fmt-mailonly="@L.GetString("fle.previewMailOnly")"
+                          data-fmt-error="@L.GetString("fle.previewError")"></span>
+                </div>
+            </div>
+        </div>
+        <template id="fle-rule-tpl">
+            @{ await RuleRowAsync(null); }
+        </template>
+    </div>
+    @* ============ Eylemler (B4) ============
+       Row = the mockup's type select + ONE parameter control + ✕. The mockup only
+       shows param selects for priority/dept/sla; the remaining types get their
+       matching real-data select (team/agent/topic/status/canned — INVENTED per
+       B4, needs canon sign-off) or a text input (email recipient / the seed's
+       verbatim "note" text). Param controls are nameless — the page script
+       mirrors the visible one into the hidden actValues input so the posted
+       actIds/actTypes/actValues arrays align per row. *@
+    @{
+        async Task ActionRowAsync(FilterActionRowVm? a)
+        {
+            var type = a?.Type ?? "reject";
+            var value = a?.Value ?? "";
+            bool Sel(string t, string opt) => type == t && value == opt;
+            <div class="bo-rule-row" data-act-row>
+                <input type="hidden" name="actIds" value="@(a?.Id ?? 0)">
+                <input type="hidden" name="actValues" value="@value">
+                <select class="rd-control" name="actTypes" data-act-type>
+                    @foreach (var t in actionTypes)
+                    {
+                        <option value="@t.Value" selected="@(type == t.Value)">@L[t.Key]</option>
+                    }
+                    @if (type is not null && actionTypes.All(t => t.Value != type))
+                    {
+                        <option value="@type" selected>@type</option>
+                    }
+                </select>
+                <select class="rd-control" data-act-param="dept" hidden="@(type != "dept")">
+                    @foreach (var o in Model.Departments)
+                    {
+                        <option value="@o.Id" selected="@Sel("dept", o.Id.ToString())">@o.Label</option>
+                    }
+                </select>
+                <select class="rd-control" data-act-param="priority" hidden="@(type != "priority")">
+                    @foreach (var o in Model.Priorities)
+                    {
+                        <option value="@o.Id" selected="@Sel("priority", o.Id.ToString())">@SL[$"priority.{o.Key}"]</option>
+                    }
+                </select>
+                <select class="rd-control" data-act-param="sla" hidden="@(type != "sla")">
+                    @foreach (var o in Model.Slas)
+                    {
+                        <option value="@o.Id" selected="@Sel("sla", o.Id.ToString())">@o.Label</option>
+                    }
+                </select>
+                <select class="rd-control" data-act-param="team" hidden="@(type != "team")">
+                    @foreach (var o in Model.Teams)
+                    {
+                        <option value="@o.Id" selected="@Sel("team", o.Id.ToString())">@o.Label</option>
+                    }
+                </select>
+                <select class="rd-control" data-act-param="agent" hidden="@(type != "agent")">
+                    @foreach (var o in Model.Agents)
+                    {
+                        <option value="@o.Id" selected="@Sel("agent", o.Id.ToString())">@o.Label</option>
+                    }
+                </select>
+                <select class="rd-control" data-act-param="topic" hidden="@(type != "topic")">
+                    @foreach (var o in Model.Topics)
+                    {
+                        <option value="@o.Id" selected="@Sel("topic", o.Id.ToString())">@o.Label</option>
+                    }
+                </select>
+                <select class="rd-control" data-act-param="status" hidden="@(type != "status")">
+                    @foreach (var o in Model.Statuses)
+                    {
+                        <option value="@o.Id" selected="@Sel("status", o.Id.ToString())">@SL[$"status.{o.Key}"]</option>
+                    }
+                </select>
+                <select class="rd-control" data-act-param="canned" hidden="@(type != "canned")">
+                    @foreach (var o in Model.Canned)
+                    {
+                        <option value="@o.Id" selected="@Sel("canned", o.Id.ToString())">@o.Label</option>
+                    }
+                </select>
+                <input class="rd-control" data-act-param="_text" hidden="@(type is not ("email" or "note"))"
+                       value="@(type is "email" or "note" ? value : "")" placeholder="@L["fle.valuePh"]">
+                <button type="button" class="remove" title="@SL["common.delete"]">✕</button>
+            </div>
+        }
+    }
+    <div class="rd-tab-panel" id="fle-actions">
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <p class="rd-help" style="margin:0 0 14px">@L["fle.actionsHelp"]</p>
+
+                <div id="fle-act-rows">
+                    @foreach (var a in Model.Actions)
+                    {
+                        await ActionRowAsync(a);
+                    }
+                </div>
+
+                @* Mockup's add row: pick a type, "Eylem Ekle" appends a row of it. *@
+                <div class="bo-rule-row" style="margin-top:14px">
+                    <select class="rd-control" style="max-width:260px" id="fle-act-pick">
+                        @foreach (var t in actionTypes)
+                        {
+                            <option value="@t.Value">@L[t.Key]</option>
+                        }
+                    </select>
+                    <button type="button" class="rd-btn rd-btn-ghost" id="fle-act-add">@L["fle.addAction"]</button>
+                </div>
+            </div>
+        </div>
+        <template id="fle-act-tpl">
+            @{ await ActionRowAsync(null); }
+        </template>
+    </div>
+
+    @* ============ İç Notlar ============ *@
+    <div class="rd-tab-panel" id="fle-notes">
+        <div class="rd-surface">
+            <div class="rd-surface-body" style="max-width:720px">
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="fle-notes-ta">@SL["common.notes"]</label>
+                    <textarea id="fle-notes-ta" name="notes" class="rd-control">@f?.Notes</textarea>
+                    <div class="rd-help">@SL["common.notesHelp"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@if (!isNew)
+{
+    <form id="fle-del" method="post" asp-area="Admin" asp-controller="Filters" asp-action="Delete" hidden>
+        <input type="hidden" name="id" value="@f!.Id">
+    </form>
+}
+
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p>@SL["common.confirmDelete"]</p></div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="fle-del" disabled="@isNew">@SL["common.delete"]</button>
+    </div>
+</dialog>
+
+@* Action-row param mechanics + match-count preview (page-specific; schedule-edit
+   page-script precedent). Each action row shows only the param control matching
+   its type and mirrors that control's value into hidden actValues; "Eylem Ekle"
+   clones the row template with the picked type. The preview POSTs the whole form
+   (antiforgery included) and composes the localized line from data-fmt-*. *@
+<script>
+(() => {
+  const form = document.getElementById("fle-form");
+  if (!form) return;
+
+  const PARAM = {
+    dept: "dept", priority: "priority", sla: "sla", team: "team", agent: "agent",
+    topic: "topic", status: "status", canned: "canned", email: "_text", note: "_text",
+  };
+  const syncActRow = (row) => {
+    const kind = PARAM[row.querySelector("[data-act-type]").value] || null;
+    let active = "";
+    row.querySelectorAll("[data-act-param]").forEach((c) => {
+      const on = c.getAttribute("data-act-param") === kind;
+      c.hidden = !on;
+      if (on) active = c.value;
+    });
+    row.querySelector('input[name="actValues"]').value = active;
+  };
+  const syncAll = () => form.querySelectorAll("[data-act-row]").forEach(syncActRow);
+  ["change", "input"].forEach((ev) => document.addEventListener(ev, (e) => {
+    const row = e.target.closest && e.target.closest("[data-act-row]");
+    if (row) syncActRow(row);
+  }));
+  // A form reset restores the server-rendered values — resync afterwards.
+  form.addEventListener("reset", () => setTimeout(syncAll, 0));
+  syncAll();
+
+  document.getElementById("fle-act-add")?.addEventListener("click", () => {
+    const tpl = document.getElementById("fle-act-tpl");
+    const row = tpl.content.querySelector("[data-act-row]").cloneNode(true);
+    row.querySelector("[data-act-type]").value = document.getElementById("fle-act-pick").value;
+    document.getElementById("fle-act-rows").append(row);
+    syncActRow(row);
+  });
+
+  const out = document.getElementById("fle-preview-out");
+  document.getElementById("fle-preview-btn")?.addEventListener("click", async () => {
+    try {
+      const res = await fetch(form.getAttribute("data-preview-url"), {
+        method: "POST", body: new FormData(form),
+      });
+      if (!res.ok) throw new Error("preview failed");
+      const d = await res.json();
+      let text = out.getAttribute("data-fmt-result")
+        .replace("{0}", d.matches).replace("{1}", d.total);
+      if (d.mailOnly > 0)
+        text += " " + out.getAttribute("data-fmt-mailonly").replace("{0}", d.mailOnly);
+      out.textContent = text;
+    } catch {
+      out.textContent = out.getAttribute("data-fmt-error");
+    }
+  });
+})();
+</script>

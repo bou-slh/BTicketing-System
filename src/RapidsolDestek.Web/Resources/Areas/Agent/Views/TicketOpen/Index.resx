@@ -198,4 +198,7 @@
   <data name="to.errAttachTooBig" xml:space="preserve">
     <value>Ek dosya, izin verilen en büyük dosya boyutunu aşıyor.</value>
   </data>
+  <data name="to.errFiltered" xml:space="preserve">
+    <value>Talep, etkin bir talep filtresi (Talebi Reddet eylemi) tarafından reddedildi.</value>
+  </data>
 </root>
