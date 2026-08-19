@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="pg.title" xml:space="preserve">
+    <value>Site Pages</value>
+  </data>
+  <data name="pg.sub" xml:space="preserve">
+    <value>Landing, offline and thank-you page contents shown on the user portal.</value>
+  </data>
+  <data name="pg.searchPh" xml:space="preserve">
+    <value>Search pages…</value>
+  </data>
+  <data name="pg.new" xml:space="preserve">
+    <value>＋ New Page</value>
+  </data>
+  <data name="pg.colType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="pg.typeLanding" xml:space="preserve">
+    <value>Landing</value>
+  </data>
+  <data name="pg.typeOffline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="pg.typeThanks" xml:space="preserve">
+    <value>Thank-you</value>
+  </data>
+  <data name="pg.typeOther" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="pg.showing" xml:space="preserve">
+    <value>Showing {0}–{1} of {2} pages</value>
+  </data>
+  <data name="pg.bulkTitle" xml:space="preserve">
+    <value>Bulk actions</value>
+  </data>
+  <data name="pg.bulkHelp" xml:space="preserve">
+    <value>Applied to the selected pages.</value>
+  </data>
+  <data name="pg.emptyTitle" xml:space="preserve">
+    <value>No pages yet</value>
+  </data>
+  <data name="pg.emptyText" xml:space="preserve">
+    <value>Create the first content page shown on the portal.</value>
+  </data>
+  <data name="pg.dlgTitle" xml:space="preserve">
+    <value>Site Page</value>
+  </data>
+  <data name="pg.name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="pg.nameHelp" xml:space="preserve">
+    <value>Name identifying the page in the admin panel.</value>
+  </data>
+  <data name="pg.type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="pg.typeHelp" xml:space="preserve">
+    <value>Thank-you pages can be picked on help topics; landing and offline pages are assigned in system settings.</value>
+  </data>
+  <data name="pg.status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="pg.content" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="pg.contentHelp" xml:space="preserve">
+    <value>Variables like %{{company.name}} and %{{ticket.number}} can be used.</value>
+  </data>
+  <data name="pg.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="pg.toastCreated" xml:space="preserve">
+    <value>Page created.</value>
+  </data>
+  <data name="pg.toastSaved" xml:space="preserve">
+    <value>Page saved.</value>
+  </data>
+  <data name="pg.bulkDone" xml:space="preserve">
+    <value>Applied to {0} pages.</value>
+  </data>
+  <data name="pg.bulkPartial" xml:space="preserve">
+    <value>{0} pages updated; {1} skipped because they are in use.</value>
+  </data>
+  <data name="pg.bulkNone" xml:space="preserve">
+    <value>Select at least one page first.</value>
+  </data>
+  <data name="pg.errName" xml:space="preserve">
+    <value>The page name is required (120 characters max).</value>
+  </data>
+  <data name="pg.errNameInUse" xml:space="preserve">
+    <value>A page with this name already exists.</value>
+  </data>
+  <data name="pg.errType" xml:space="preserve">
+    <value>Invalid page type.</value>
+  </data>
+  <data name="pg.errContent" xml:space="preserve">
+    <value>The page content cannot be empty.</value>
+  </data>
+</root>

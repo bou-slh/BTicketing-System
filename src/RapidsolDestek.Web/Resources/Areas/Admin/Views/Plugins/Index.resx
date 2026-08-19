@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="pl.title" xml:space="preserve">
+    <value>Eklentiler</value>
+  </data>
+  <data name="pl.sub" xml:space="preserve">
+    <value>Sistemi kimlik doğrulama, depolama ve entegrasyonlarla genişleten eklentiler.</value>
+  </data>
+  <data name="pl.searchPh" xml:space="preserve">
+    <value>Eklenti ara…</value>
+  </data>
+  <data name="pl.new" xml:space="preserve">
+    <value>＋ Eklenti Kur</value>
+  </data>
+  <data name="pl.installedHead" xml:space="preserve">
+    <value>Kurulu Eklentiler</value>
+  </data>
+  <data name="pl.colVersion" xml:space="preserve">
+    <value>Sürüm</value>
+  </data>
+  <data name="pl.colInstalled" xml:space="preserve">
+    <value>Kurulma</value>
+  </data>
+  <data name="pl.showing" xml:space="preserve">
+    <value>{2} eklentiden {0}–{1} arası gösteriliyor</value>
+  </data>
+  <data name="pl.availHead" xml:space="preserve">
+    <value>Kurulabilir Eklentiler</value>
+  </data>
+  <data name="pl.availHelp" xml:space="preserve">
+    <value>Eklenti dizininde bulunan, tek tıkla kurulabilecek paketler.</value>
+  </data>
+  <data name="pl.install" xml:space="preserve">
+    <value>Kur</value>
+  </data>
+  <data name="pl.bulkTitle" xml:space="preserve">
+    <value>Toplu işlemler</value>
+  </data>
+  <data name="pl.bulkHelp" xml:space="preserve">
+    <value>Seçili eklentilere uygulanır. Silme işlemi eklenti yapılandırmasını da kaldırır.</value>
+  </data>
+  <data name="pl.emptyTitle" xml:space="preserve">
+    <value>Henüz eklenti kurulmadı</value>
+  </data>
+  <data name="pl.emptyText" xml:space="preserve">
+    <value>Aşağıdaki dizinden ilk eklentinizi kurarak sistemi genişletin.</value>
+  </data>
+  <data name="pl.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="pl.configure" xml:space="preserve">
+    <value>Yapılandır</value>
+  </data>
+  <data name="pl.toastInstalled" xml:space="preserve">
+    <value>Eklenti kuruldu; toplu işlemlerden etkinleştirebilirsiniz.</value>
+  </data>
+  <data name="pl.bulkDone" xml:space="preserve">
+    <value>İşlem {0} eklentiye uygulandı.</value>
+  </data>
+  <data name="pl.bulkNone" xml:space="preserve">
+    <value>Önce en az bir eklenti seçin.</value>
+  </data>
+  <data name="pl.errUnknown" xml:space="preserve">
+    <value>Bilinmeyen eklenti.</value>
+  </data>
+  <data name="pl.availNone" xml:space="preserve">
+    <value>Kurulabilir eklenti kalmadı.</value>
+  </data>
+</root>

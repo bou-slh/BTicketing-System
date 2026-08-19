@@ -7,8 +7,17 @@
         <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
     </a>
     <div style="font-size:48px;margin-bottom:14px" aria-hidden="true">🛠</div>
-    <h1>@L["of.title"]</h1>
-    <p>@L["of.text"]</p>
+    @* Pages port (S7): the configured ACTIVE Offline-type SitePage body (already
+       server-sanitized) replaces the static copy; without one the S5 twin stays. *@
+    @if (ViewData["OfflineBody"] is string body)
+    {
+        <div class="rd-offline-body">@Html.Raw(body)</div>
+    }
+    else
+    {
+        <h1>@L["of.title"]</h1>
+        <p>@L["of.text"]</p>
+    }
     <div class="rc-notice">
         <span>@L["of.mail"]</span>
         <a href="mailto:destek@rapidsol.com.tr">destek@rapidsol.com.tr</a>

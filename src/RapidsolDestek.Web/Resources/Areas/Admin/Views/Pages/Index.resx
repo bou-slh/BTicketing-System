@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="pg.title" xml:space="preserve">
+    <value>Site Sayfaları</value>
+  </data>
+  <data name="pg.sub" xml:space="preserve">
+    <value>Kullanıcı portalında gösterilen karşılama, çevrimdışı ve teşekkür sayfası içerikleri.</value>
+  </data>
+  <data name="pg.searchPh" xml:space="preserve">
+    <value>Sayfa ara…</value>
+  </data>
+  <data name="pg.new" xml:space="preserve">
+    <value>＋ Yeni Sayfa</value>
+  </data>
+  <data name="pg.colType" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="pg.typeLanding" xml:space="preserve">
+    <value>Karşılama</value>
+  </data>
+  <data name="pg.typeOffline" xml:space="preserve">
+    <value>Çevrimdışı</value>
+  </data>
+  <data name="pg.typeThanks" xml:space="preserve">
+    <value>Teşekkür</value>
+  </data>
+  <data name="pg.typeOther" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="pg.showing" xml:space="preserve">
+    <value>{2} sayfadan {0}–{1} arası gösteriliyor</value>
+  </data>
+  <data name="pg.bulkTitle" xml:space="preserve">
+    <value>Toplu işlemler</value>
+  </data>
+  <data name="pg.bulkHelp" xml:space="preserve">
+    <value>Seçili sayfalara uygulanır.</value>
+  </data>
+  <data name="pg.emptyTitle" xml:space="preserve">
+    <value>Henüz sayfa yok</value>
+  </data>
+  <data name="pg.emptyText" xml:space="preserve">
+    <value>Portalda gösterilecek ilk içerik sayfanızı oluşturun.</value>
+  </data>
+  <data name="pg.dlgTitle" xml:space="preserve">
+    <value>Site Sayfası</value>
+  </data>
+  <data name="pg.name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="pg.nameHelp" xml:space="preserve">
+    <value>Sayfayı yönetim panelinde tanımlayan ad.</value>
+  </data>
+  <data name="pg.type" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="pg.typeHelp" xml:space="preserve">
+    <value>Teşekkür sayfaları yardım konularında seçilebilir; karşılama ve çevrimdışı sayfalar sistem ayarlarından atanır.</value>
+  </data>
+  <data name="pg.status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="pg.content" xml:space="preserve">
+    <value>İçerik</value>
+  </data>
+  <data name="pg.contentHelp" xml:space="preserve">
+    <value>%{{company.name}} ve %{{ticket.number}} gibi değişkenler kullanılabilir.</value>
+  </data>
+  <data name="pg.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="pg.toastCreated" xml:space="preserve">
+    <value>Sayfa oluşturuldu.</value>
+  </data>
+  <data name="pg.toastSaved" xml:space="preserve">
+    <value>Sayfa kaydedildi.</value>
+  </data>
+  <data name="pg.bulkDone" xml:space="preserve">
+    <value>İşlem {0} sayfaya uygulandı.</value>
+  </data>
+  <data name="pg.bulkPartial" xml:space="preserve">
+    <value>{0} sayfa güncellendi; {1} sayfa kullanımda olduğu için atlandı.</value>
+  </data>
+  <data name="pg.bulkNone" xml:space="preserve">
+    <value>Önce en az bir sayfa seçin.</value>
+  </data>
+  <data name="pg.errName" xml:space="preserve">
+    <value>Sayfa adı zorunludur (en fazla 120 karakter).</value>
+  </data>
+  <data name="pg.errNameInUse" xml:space="preserve">
+    <value>Bu adla bir sayfa zaten var.</value>
+  </data>
+  <data name="pg.errType" xml:space="preserve">
+    <value>Geçersiz sayfa türü.</value>
+  </data>
+  <data name="pg.errContent" xml:space="preserve">
+    <value>Sayfa içeriği boş olamaz.</value>
+  </data>
+</root>

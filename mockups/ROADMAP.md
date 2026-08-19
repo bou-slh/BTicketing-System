@@ -999,7 +999,20 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       untouched; unknown code refused), bulk disable + the reference delete guard (cascade asserted),
       honest per-code pills (effort vars only on effort dialogs), preview substitutes hero canon data and
       never leaks %{unknown} — suite 303.)*
-- [ ] **banlist.html** — add/edit/delete real; B1
+- [x] **banlist.html** — add/edit/delete real; B1 *(S7; /admin/banlist (BanlistController). Model: the
+      existing dedicated BanlistEntry table KEPT over osTicket's system-ban-list-filter shape (the entity
+      doc already flags the deviation — same job, simpler rows); enforcement is osTicket-parity anyway:
+      FilterEngine.RunAsync checks active bans against the sender address BEFORE any filter runs and
+      rejects with the constant BanlistName "Engel Listesi" (silent refusal — no ticket, no auto-response;
+      TicketService + the S8 mail pipeline share the one enforcement point). Addresses normalize to
+      lowercase on save; matching is case-insensitive. B1 list (SLA precedent): search/sort (created desc
+      default)/pagination; the mockup's toolbar bulk buttons are INLINE (no dlg-more, no delete confirm) —
+      DOM parity kept, delete is immediate. B2: dlg-ban split into create + per-row prefilled dialogs
+      (flagged, SLA precedent; invented bl.dlgEditTitle for the edit variant). Agent user-view checked for
+      the S6 "ban" control — neither the mockup nor the port has one, nothing to wire. Invented keys
+      (TR/EN twins): bl.dateFmt/dlgEditTitle/toast*/bulk*/err*. Tests in
+      BanlistPagesApiKeysPluginsTests: seed canon + search, ban add → create from banned (mixed-case)
+      email rejected with nothing persisted → disabled ban admits, edit/validation/bulk delete.)*
 - [x] **helptopics.html / helptopic-edit.html** — CRUD; number-format radio gates input; forms tab attach/detach (B3/B4)
       *(S7; /admin/helptopics + /admin/helptopic-edit?id= (HelpTopicsController; no id = create — the
       mockup's new-button links straight to helptopic-edit.html). NEW S7_HelpTopicSettings migration:
@@ -1274,9 +1287,62 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       as "once", flagged. Invented keys (TR/EN twins): sch.dateFmt/toast*/bulk* + parameterized
       sch.showing; sche.newTitle/toastCloned/cloneNameFmt/entryDateTitle/diagClosed/diagHoliday/
       diagNoHoliday/diagError/err*. +8 tests (SchedulesAdminTests) — suite 255.)*
-- [ ] **pages.html** — site page CRUD (B2); pages served on portal
-- [ ] **apikeys.html** — key CRUD + regenerate + copy-to-clipboard; IP restriction enforced by the API (B2)
-- [ ] **plugins.html** — feature-flag install/enable/disable per module; per-module configure entry (§3 replaced)
+- [x] **pages.html** — site page CRUD (B2); pages served on portal *(S7; /admin/pages (PagesController)
+      over the existing SitePage entity/seed — no migration. B1 list + B2 create/per-row dialogs (SLA
+      precedent, dlg-page split flagged); type select posts landing/offline/thanks/other; dup names refused
+      (INVENTED rule — the settings-company/helptopic selects list pages by name; flagged); bulk delete
+      guards pages referenced by HelpTopic.SitePageId or the company landing/offline/thanks selects
+      (partial toast). "Pages served on portal": the OFFLINE page is LIVE — Portal AccountController.Offline
+      resolves company/offline_page_id (unset ⇒ first Offline-type page) and renders its sanitized body in
+      the offline view while maintenance mode holds; the seeded "Bakım Modu" canon ships DISABLED, so the
+      S5 static copy stays until an admin activates it (honest default). Landing/thank-you consumers still
+      do not exist — their settings-company TODO flags stand (per that port's precedent). Invented keys
+      (TR/EN twins): pg.dateFmt/toast*/bulk*/err* + parameterized pg.showing; pg.contentHelp braces escaped
+      for string.Format. Tests: seed canon + type labels + search, CRUD round-trip + dup refusal +
+      reference delete guard, offline body served on portal routes in maintenance mode (fallback asserted
+      both ways).)*
+- [x] **apikeys.html** — key CRUD + regenerate + copy-to-clipboard; IP restriction enforced by the API (B2)
+      *(S7; /admin/apikeys (ApiKeysController) over the existing ApiKey entity/seed — no migration. Keys
+      are SERVER-generated (ApiKeyAuthenticator.GenerateKey: 128 crypto-random bits as 32 uppercase hex,
+      the seeded format); the create dialog shows a pregenerated key and the save re-mints on any tampered
+      format/collision; the key is immutable on edit — Regenerate replaces it (osTicket delete+recreate,
+      adapted). Copy-to-clipboard = NEW rd.js [data-copy]/[data-copy-msg] contract (INVENTED minimal —
+      no mockup precedent; flagged) + INVENTED Kopyala/Yeniden Üret buttons beside the key input (the
+      mockup renders neither; regenerate posts per-row carrier forms — flagged). IP restriction: mandatory
+      parseable v4/v6, stored canonically; "enforced by the API" = ApiKeyAuthenticator (key exists → active
+      → exact IP match → per-service permission), registered in DI with TODO(S8) — no public REST endpoint
+      exists until the dispatcher stage, the admin page + gate are what is honest today (flagged). MOCKUP
+      INCONSISTENCY flagged: the canon table's truncated cells ("C9E1F274…8B63") contradict the dialog's
+      own full key ("…FB36C8D1") — rows render the honest first8…last4 of the real seeded key. Invented
+      keys (TR/EN twins): ak.dateFmt/dlgEditTitle/copy/copied/regen/toast*/bulk*/errIp + parameterized
+      ak.showing. Tests: seed canon truncation + pregenerated dialog key + search, tampered-key/bad-IP
+      create paths + regenerate + bulk delete, authenticator matrix (success/IP-mismatch/forbidden/
+      inactive/unknown/missing).)*
+- [x] **plugins.html** — feature-flag install/enable/disable per module; per-module configure entry (§3 replaced)
+      *(S7; /admin/plugins (PluginsController). §3 "replaced" honored: the module CATALOG is code (6
+      FeatureModule rows mirroring the mockup: auth_ldap/storage_s3/audit installed per seed, twofa_email/
+      storage_fs/slack available), state is the "features" Setting section — <key>.installed holds the
+      install DATE (renders the Kurulma column; seeded canon dates 12 May/3 Oca/22 Şub 2026), <key>.enabled
+      the switch; typed ISettingsService.GetFeaturesAsync (settings-section precedent, defaults = seed
+      canon). Install lands DISABLED (osTicket parity); bulk enable/disable/delete real (delete =
+      uninstall, clears the module's rows per pl.bulkHelp). LIVE consumers: auth_ldap gates the staff-edit
+      LDAP backend option (StaffController hides the option, coerces tampered ldap posts to local; staff
+      already on ldap keep it — schedules own-selection rule); twofa_email stores NO features/* twin — its
+      enabled state IS the existing agents/require_twofa key (StaffSignInManager email-code step;
+      settings-agents twin edits the SAME switch; uninstall turns it off — flagged). PERSISTED-ONLY
+      (flagged): storage_s3/storage_fs (only the "fs" IFileStore backend registered; configure →
+      settings-system attachments), audit (the AuditEvent interceptor is a compliance floor and runs
+      unconditionally — the mockup's Devre Dışı row is sample state), slack (TODO(S8) notification
+      fan-out). Per-module configure entry = INVENTED link under the slug (mockup renders none; flagged):
+      staff/settings-system/settings-agents/audit-logs (audit-logs not ported yet — link matches the
+      sidebar) and none for slack. Module names/descriptions stay hardcoded sample data (mockup keeps them
+      outside PAGE_I18N — needs canon sign-off). MOCKUP INCONSISTENCY flagged: the canon rows' order
+      (LDAP → S3 → Audit) contradicts the table's own sorted-desc Kurulma indicator — the real sort wins.
+      Invented keys (TR/EN twins): pl.dateFmt/configure/toastInstalled/bulk*/errUnknown/availNone +
+      parameterized pl.showing. Tests: seeded module state + available directory + search, install →
+      enable → uninstall round-trip through GetFeaturesAsync, the shared require_twofa binding both ways,
+      the LDAP gate (option hidden + save coerced + restore). +13 tests
+      (BanlistPagesApiKeysPluginsTests) across the four pages — suite 316.)*
 - [x] **staff.html / staff-edit.html** — CRUD; permission cards master↔children (B3); access/team rows (B4);
       LDAP/auth-backend select gates fields; password dialog validated (B2) *(S7; /admin/staff +
       /admin/staff-edit?id= (StaffController; no id = create — the mockup's new-button links straight to

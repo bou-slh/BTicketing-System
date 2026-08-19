@@ -110,7 +110,13 @@
                         <select id="se-backend" name="backend" class="rd-control"
                                 data-gates="[data-pw-gate]" data-gates-on="local">
                             <option value="local" selected="@isLocal">@L["se.backendLocal"]</option>
-                            <option value="ldap" selected="@(!isLocal)">LDAP / Active Directory</option>
+                            @* Plugins port (S7): the option exists only while the
+                               auth_ldap feature flag is on (admin/plugins); a staff
+                               already on ldap keeps its selection visible. *@
+                            @if (Model.LdapEnabled || !isLocal)
+                            {
+                                <option value="ldap" selected="@(!isLocal)">LDAP / Active Directory</option>
+                            }
                         </select>
                         <p class="rd-help">@L["se.backendHelp"]</p>
                     </div>

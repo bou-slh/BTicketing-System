@@ -654,6 +654,30 @@
     if (dragRow) { dragRow.draggable = false; dragRow = null; }
   });
 
+  /* ---------- Copy-to-clipboard: [data-copy="selector"] ----------
+     Copies the target's value (inputs) or text into the clipboard and toasts the
+     button's server-localized data-copy-msg. INVENTED minimal contract (flagged):
+     the mockups show no clipboard UI — the ROADMAP apikeys row promises
+     copy-to-clipboard. Falls back to select+execCommand off HTTPS. */
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-copy]");
+    if (!btn) return;
+    e.preventDefault();
+    const src = document.querySelector(btn.getAttribute("data-copy"));
+    if (!src) return;
+    const text = src.matches("input,textarea,select") ? src.value : src.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      if (src.select) {
+        src.select();
+        document.execCommand("copy");
+      }
+    }
+    const msg = btn.getAttribute("data-copy-msg");
+    if (msg) toast(msg);
+  });
+
   /* ---------- Toast ---------- */
 
   function toast(message, variant) {

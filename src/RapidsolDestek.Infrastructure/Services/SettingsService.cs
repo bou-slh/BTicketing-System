@@ -125,6 +125,29 @@ public sealed record UserSettings(
 public sealed record KbSettings(bool EnableKb, bool RequireLogin, bool EnableCanned);
 
 /// <summary>
+/// Typed view over the "features" namespace (admin/plugins.html, S7). §3 parity:
+/// osTicket's PHP plugin runtime is REPLACED by feature flags over built-in
+/// modules — each flag is true only while the module is both installed and
+/// enabled (features/&lt;key&gt;.installed holds the install date, .enabled the
+/// switch). LIVE consumers: AuthLdap gates the staff-edit LDAP auth-backend
+/// option (StaffController); TwofaEmail is NOT stored here — it binds to the
+/// existing agents/require_twofa key (StaffSignInManager email-code second step)
+/// so the plugin row and settings-agents edit the SAME switch. Persisted-only
+/// (annotated in PluginsController): StorageS3/StorageFs (only the "fs"
+/// IFileStore backend is registered — attachments.storage twin), AuditLog (the
+/// audit interceptor is a compliance floor and runs unconditionally; the mockup's
+/// disabled row is sample state), SlackNotifications (TODO(S8): notification
+/// fan-out does not exist yet).
+/// </summary>
+public sealed record FeatureSettings(
+    bool AuthLdap,
+    bool StorageS3,
+    bool AuditLog,
+    bool TwofaEmail,
+    bool StorageFs,
+    bool SlackNotifications);
+
+/// <summary>
 /// Typed view over the "email" namespace (admin/email-settings.html, S7).
 /// LIVE: DefaultTemplateSetId — the outgoing effort emails (EffortEmailHandler)
 /// render from this template set (0 = the active "tr" set, the pre-S7 behavior).
@@ -172,6 +195,7 @@ public interface ISettingsService
     Task<AgentSettings> GetAgentsAsync(CancellationToken ct = default);
     Task<UserSettings> GetUsersAsync(CancellationToken ct = default);
     Task<EmailSettings> GetEmailAsync(CancellationToken ct = default);
+    Task<FeatureSettings> GetFeaturesAsync(CancellationToken ct = default);
 }
 
 /// <summary>
@@ -340,6 +364,31 @@ public sealed class SettingsService(AppDbContext db) : ISettingsService
             DefaultSmtp: s.GetValueOrDefault("default_smtp", "system"),
             AttachmentsInEmail: Bool(s, "attachments_in_email", true));
     }
+
+    public async Task<FeatureSettings> GetFeaturesAsync(CancellationToken ct = default)
+    {
+        var s = await LoadAsync("features", ct);
+        // A module is ON while installed AND enabled. Defaults mirror the seeded
+        // plugins.html canon (auth-ldap + storage-s3 installed/active, audit
+        // installed/disabled, the rest uninstalled) so a missing row keeps today's
+        // behavior — e.g. the staff-edit LDAP option stays offered on a fresh db.
+        bool On(string key, bool fallback) =>
+            Installed(s, key, fallback) && Bool(s, $"{key}.enabled", fallback);
+        return new FeatureSettings(
+            AuthLdap: On("auth_ldap", true),
+            StorageS3: On("storage_s3", true),
+            AuditLog: Installed(s, "audit", true) && Bool(s, "audit.enabled", false),
+            // Shared key: the 2FA-email plugin row IS agents/require_twofa
+            // (StaffSignInManager consumer) — no features/* duplicate is stored.
+            TwofaEmail: (await GetAgentsAsync(ct)).RequireTwofa,
+            StorageFs: On("storage_fs", false),
+            SlackNotifications: On("slack", false));
+    }
+
+    /// <summary>features/&lt;key&gt;.installed stores the install DATE (ISO) —
+    /// any non-empty value counts as installed (admin/plugins "Kurulma" column).</summary>
+    private static bool Installed(Dictionary<string, string> s, string key, bool fallback) =>
+        s.TryGetValue($"{key}.installed", out var v) ? v.Length > 0 : fallback;
 
     public Task<NumberingSettings> GetTicketNumberingAsync(CancellationToken ct = default) =>
         GetNumberingAsync("tickets", "R######", ct);

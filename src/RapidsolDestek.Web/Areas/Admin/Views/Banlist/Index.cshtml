@@ -1,0 +1,194 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model BanlistIndexVm
+@{
+    ViewData["Title"] = L["bl.title"];
+
+    // PRG toast handoff after create/update/bulk (SLA precedent).
+    if (TempData["BanlistToast"] is string toastKey)
+    {
+        var ok = TempData["BanlistToastOk"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "bl.bulkDone"
+            ? L.GetString(toastKey, ok)
+            : L[toastKey].Value;
+        if (TempData["BanlistToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Created/Updated cells: the mockup's "07.08.2026" cells (bl.dateFmt).
+    string DateText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("bl.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/banlist" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key == "created" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["bl.title"]</h1>
+        <p>@L["bl.subtitle"]</p>
+    </div>
+    <div class="actions">
+        <button class="rd-btn-primary" type="button" data-dialog-open="dlg-ban">@L["bl.add"]</button>
+    </div>
+</div>
+
+@* The mockup's toolbar bulk buttons are inline (no dlg-more, no delete confirm) —
+   they submit the hidden selection-carrier form directly. *@
+<form class="rd-list-toolbar" method="get" action="/admin/banlist">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["bl.searchPh"]">
+    <button class="rd-btn" type="submit">@SL["common.search"]</button>
+    <span class="spacer"></span>
+    <button class="rd-btn" type="submit" form="bl-bulk" name="act" value="enable">@SL["common.enable"]</button>
+    <button class="rd-btn" type="submit" form="bl-bulk" name="act" value="disable">@SL["common.disable"]</button>
+    <button class="rd-btn rd-btn-danger" type="submit" form="bl-bulk" name="act" value="delete">@SL["common.delete"]</button>
+</form>
+
+<div class="rd-surface" id="tbl-banlist">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Mockup's hidden #empty-banlist panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">⃠</div>
+            <h3>@L["bl.emptyTitle"]</h3>
+            <p>@L["bl.emptyText"]</p>
+            <button class="rd-btn-primary" type="button" data-dialog-open="dlg-ban">@L["bl.add"]</button>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-banlist" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("email")"><a href="@SortUrl("email")">@L["bl.colEmail"]</a></th>
+                    <th class="@SortClass("status")"><a href="@SortUrl("status")">@SL["common.status"]</a></th>
+                    <th class="@SortClass("created")"><a href="@SortUrl("created")">@SL["common.created"]</a></th>
+                    <th class="@SortClass("updated")"><a href="@SortUrl("updated")">@SL["common.updated"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="bl-bulk"></td>
+                        <td><a href="#" data-dialog-open="dlg-ban-@r.Id">@r.Address</a></td>
+                        @if (r.IsActive)
+                        {
+                            <td><span class="rd-pill rd-pill-overdue">@L["bl.stBanned"]</span></td>
+                        }
+                        else
+                        {
+                            <td><span class="rd-pill rd-pill-closed">@L["bl.stPassive"]</span></td>
+                        }
+                        <td>@DateText(r.Created)</td>
+                        <td>@DateText(r.Updated)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@SL["common.showing"]</span><span>@Model.From–@Model.To / @Model.Total</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the toolbar bulk buttons (SLA precedent). *@
+<form id="bl-bulk" method="post" asp-area="Admin" asp-controller="Banlist" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+@* Ban dialog: one create instance (dlg-ban, empty) + per-row edit instances
+   prefilled server-side (B2 — the mockup shares ONE hardcoded dlg-ban between the
+   add-button and all rows; split per the SLA precedent, flagged). *@
+@{
+    async Task BanDialogAsync(string dialogId, BanRowVm? ban)
+    {
+        <dialog class="rd-dialog" id="@dialogId">
+            <form method="post" asp-area="Admin" asp-controller="Banlist"
+                  asp-action="@(ban is null ? "Create" : "Update")">
+                @if (ban is not null)
+                {
+                    <input type="hidden" name="id" value="@ban.Id">
+                }
+                <input type="hidden" name="returnUrl" value="@currentUrl">
+                <div class="rd-dialog-head">
+                    <span>@(ban is null ? L["bl.dlgTitle"].Value : L["bl.dlgEditTitle"].Value)</span>
+                    <button type="button" class="close" data-dialog-close aria-label="@SL["common.cancel"]">✕</button>
+                </div>
+                <div class="rd-dialog-body">
+                    <div class="rd-field">
+                        <label class="rd-label" for="bl-email-@dialogId">@L["bl.dlgEmail"]</label>
+                        <input id="bl-email-@dialogId" name="email" class="rd-control" type="email"
+                               value="@ban?.Address" placeholder="ornek@alanadi.com" required maxlength="254">
+                        <p class="rd-help">@L["bl.dlgEmailHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <span class="rd-label">@L["bl.dlgStatus"]</span>
+                        <label class="rd-check" style="display:inline-flex;margin-right:18px">
+                            <input type="radio" name="active" value="true" checked="@(ban?.IsActive ?? true)"><span>@L["bl.dlgActive"]</span>
+                        </label>
+                        <label class="rd-check" style="display:inline-flex">
+                            <input type="radio" name="active" value="false" checked="@(ban is { IsActive: false })"><span>@L["bl.dlgPassive"]</span>
+                        </label>
+                        <p class="rd-help">@L["bl.dlgStatusHelp"]</p>
+                    </div>
+                    <div class="rd-field mb-0">
+                        <label class="rd-label" for="bl-notes-@dialogId">@L["bl.dlgNotes"]</label>
+                        <textarea id="bl-notes-@dialogId" name="notes" class="rd-control" style="min-height:80px">@ban?.Notes</textarea>
+                        <p class="rd-help">@SL["common.notesHelp"]</p>
+                    </div>
+                </div>
+                <div class="rd-dialog-foot">
+                    <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                    @* No data-dialog-close on the submit — the audited B2 close-swallows-save bug. *@
+                    <button type="submit" class="rd-btn-primary">@SL["common.save"]</button>
+                </div>
+            </form>
+        </dialog>
+    }
+
+    await BanDialogAsync("dlg-ban", null);
+    foreach (var r in Model.Rows)
+    {
+        await BanDialogAsync($"dlg-ban-{r.Id}", r);
+    }
+}

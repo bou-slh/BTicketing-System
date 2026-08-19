@@ -47,6 +47,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEffortProposalService, EffortProposalService>();
         services.AddScoped<IQueueEngine, QueueEngine>();
         services.AddScoped<ICannedResponseService, CannedResponseService>();
+        // TODO(S8): consumed by the public REST endpoints once the dispatcher
+        // ships — the key + IP gate itself is live (admin/apikeys, S7).
+        services.AddScoped<IApiKeyAuthenticator, ApiKeyAuthenticator>();
         services.AddScoped<ISystemTemplateService, SystemTemplateService>();
 
         return services;

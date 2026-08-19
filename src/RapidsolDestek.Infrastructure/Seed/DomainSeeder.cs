@@ -843,6 +843,15 @@ public static class DomainSeeder
             // Maintenance mode (portal/offline.html); default off. Edited by
             // admin/settings-system.html "Yardım masası çevrimiçi" (S7, inverted).
             ("system", "offline", "false"),
+            // Feature flags (admin/plugins.html canon, §3 "replaced"): .installed
+            // holds the install date, .enabled the switch. The 2FA-email module has
+            // NO rows here — its enabled state IS agents/require_twofa (shared key).
+            ("features", "auth_ldap.installed", "2026-05-12"),
+            ("features", "auth_ldap.enabled", "true"),
+            ("features", "storage_s3.installed", "2026-01-03"),
+            ("features", "storage_s3.enabled", "true"),
+            ("features", "audit.installed", "2026-02-22"),
+            ("features", "audit.enabled", "false"),
         ];
         db.Settings.AddRange(settings.Select(s => new Setting
         {

@@ -9,6 +9,7 @@ using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Infrastructure.Auditing;
 using RapidsolDestek.Infrastructure.Identity;
+using RapidsolDestek.Infrastructure.Services;
 using RapidsolDestek.Web.Areas.Agent.Controllers;
 using RapidsolDestek.Web.Identity;
 using RapidsolDestek.Web.Navigation;
@@ -33,7 +34,8 @@ namespace RapidsolDestek.Web.Areas.Admin.Controllers;
 /// </summary>
 [Area("Admin")]
 [Authorize(Policy = "AdminOnly")]
-public class StaffController(AppDbContext db, UserManager<StaffUser> users) : Controller
+public class StaffController(
+    AppDbContext db, UserManager<StaffUser> users, ISettingsService settings) : Controller
 {
     public const int PageSize = 8;
 
@@ -293,6 +295,17 @@ public class StaffController(AppDbContext db, UserManager<StaffUser> users) : Co
         username = (username ?? "").Trim();
         email = (email ?? "").Trim();
         backend = Backends.Contains(backend) ? backend! : "local";
+        // Plugins port (S7): the LDAP option only exists while the auth_ldap
+        // feature flag is on (admin/plugins §3 "replaced") — with the module off,
+        // new picks coerce to local; staff already on ldap keep their backend.
+        if (backend == "ldap" && !(await settings.GetFeaturesAsync(ct)).AuthLdap)
+        {
+            var currentBackend = id is null
+                ? null
+                : await db.Staff.Where(s => s.Id == id).Select(s => s.AuthBackend).SingleOrDefaultAsync(ct);
+            if (currentBackend != "ldap")
+                backend = "local";
+        }
 
         if (firstName.Length is 0 or > 64 || lastName.Length is 0 or > 64)
             return EditToastBack(id, "se.errName");
@@ -661,7 +674,12 @@ public class StaffController(AppDbContext db, UserManager<StaffUser> users) : Co
             twoFactorOn = await db.StaffUsers.Where(u => u.Id == uid)
                 .Select(u => u.TwoFactorEnabled).FirstOrDefaultAsync(ct);
 
-        return new StaffEditVm(staff, twoFactorOn, granted, depts, roles, teams, accessRows, memberships);
+        // Plugins port (S7): the LDAP backend option renders only while the
+        // auth_ldap feature flag is on (a row already on ldap stays visible so
+        // the edit form round-trips — schedules-precedent own-selection rule).
+        var ldapEnabled = (await settings.GetFeaturesAsync(ct)).AuthLdap;
+
+        return new StaffEditVm(staff, twoFactorOn, granted, depts, roles, teams, accessRows, memberships, ldapEnabled);
     }
 
     /// <summary>Deletion reference guard: assignments and structural references
@@ -757,7 +775,8 @@ public sealed record StaffEditVm(
     IReadOnlyList<RoleOptionVm> Roles,
     IReadOnlyList<OptionVm> Teams,
     IReadOnlyList<StaffAccessRowVm> AccessRows,
-    IReadOnlyList<StaffTeamRowVm> Memberships);
+    IReadOnlyList<StaffTeamRowVm> Memberships,
+    bool LdapEnabled);
 
 public sealed record RoleOptionVm(int Id, string Name, List<string> Permissions);
 

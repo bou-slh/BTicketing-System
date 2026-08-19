@@ -1,0 +1,202 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model PluginsIndexVm
+@{
+    ViewData["Title"] = L["pl.title"];
+
+    // PRG toast handoff after install/bulk (SLA precedent).
+    if (TempData["PluginsToast"] is string toastKey)
+    {
+        var ok = TempData["PluginsToastOk"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "pl.bulkDone"
+            ? L.GetString(toastKey, ok)
+            : L[toastKey].Value;
+        if (TempData["PluginsToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Kurulma cell: the mockup's "12 May 2026" cells (pl.dateFmt).
+    string InstalledText(DateOnly value) =>
+        value.ToString(L.GetString("pl.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/plugins" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key == "installed" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+    var mono = "font-family:ui-monospace,SFMono-Regular,Menlo,monospace";
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["pl.title"]</h1>
+        <p>@L["pl.sub"]</p>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/admin/plugins">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["pl.searchPh"]">
+    <span class="spacer"></span>
+    <button class="rd-btn" type="button" data-dialog-open="dlg-more"><span>@SL["common.more"]</span> ▾</button>
+    <a class="rd-btn rd-btn-primary" href="#avail">@L["pl.new"]</a>
+</form>
+
+@* Kurulu eklentiler *@
+<div class="rd-surface" style="margin-bottom:20px" id="tbl-plugins">
+    <div class="rd-surface-head"><span>@L["pl.installedHead"]</span></div>
+    @if (Model.Installed.Count == 0)
+    {
+        @* Mockup's hidden #pl-empty panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">✦</div>
+            <h3>@L["pl.emptyTitle"]</h3>
+            <p>@L["pl.emptyText"]</p>
+            <a class="rd-btn rd-btn-primary" href="#avail">@L["pl.new"]</a>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-plugins" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("name")"><a href="@SortUrl("name")">@SL["common.name"]</a></th>
+                    <th>@L["pl.colVersion"]</th>
+                    <th>@SL["common.status"]</th>
+                    <th class="@SortClass("installed")"><a href="@SortUrl("installed")">@L["pl.colInstalled"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Installed)
+                {
+                    <tr>
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Module.Key" form="pl-bulk"></td>
+                        <td>
+                            <b style="font-weight:500">@r.Module.Name</b>
+                            <div class="rd-muted text-sm" style="@mono">@r.Module.Slug</div>
+                            @* Per-module configure entry (ROADMAP row; INVENTED UI —
+                               the mockup renders no configure control, flagged).
+                               Modules without a settings page render no link. *@
+                            @if (r.Module.ConfigureUrl is { } cfg)
+                            {
+                                <a class="text-sm" href="@cfg">@L["pl.configure"]</a>
+                            }
+                        </td>
+                        <td>@r.Module.Version</td>
+                        @if (r.Enabled)
+                        {
+                            <td><span class="rd-pill rd-pill-solved">@SL["common.active"]</span></td>
+                        }
+                        else
+                        {
+                            <td><span class="rd-pill rd-pill-closed">@SL["common.disabled"]</span></td>
+                        }
+                        @if (r.InstalledOn is { } day)
+                        {
+                            <td>@InstalledText(day)</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@L["pl.showing", Model.From, Model.To, Model.Total]</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Kurulabilir eklentiler *@
+<div class="rd-surface" id="avail">
+    <div class="rd-surface-head"><span>@L["pl.availHead"]</span></div>
+    <div class="rd-surface-body" style="padding:0">
+        @if (Model.Available.Count == 0)
+        {
+            <div style="padding:15px 19px" class="rd-muted text-sm">@L["pl.availNone"]</div>
+        }
+        @for (var i = 0; i < Model.Available.Count; i++)
+        {
+            var m = Model.Available[i];
+            var border = i < Model.Available.Count - 1 ? "border-bottom:1px solid var(--rd-border-soft)" : "";
+            <div style="display:flex;gap:12px;align-items:center;padding:15px 19px;@border">
+                <div style="flex:1">
+                    <b style="font-weight:500;font-size:13px">@m.Name</b>
+                    <div class="rd-muted text-sm">@m.Description — v@(m.Version)</div>
+                </div>
+                <form method="post" asp-area="Admin" asp-controller="Plugins" asp-action="Install">
+                    <input type="hidden" name="key" value="@m.Key">
+                    <input type="hidden" name="returnUrl" value="@currentUrl">
+                    <button class="rd-btn rd-btn-ghost" type="submit">@L["pl.install"]</button>
+                </form>
+            </div>
+        }
+    </div>
+    <div class="rd-surface-body" style="border-top:1px solid var(--rd-border-soft);padding:12px 19px">
+        <span class="rd-help">@L["pl.availHelp"]</span>
+    </div>
+</div>
+
+@* Selection carrier for the dlg-more bulk actions (SLA precedent). *@
+<form id="pl-bulk" method="post" asp-area="Admin" asp-controller="Plugins" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+<dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span>@L["pl.bulkTitle"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+        <p class="rd-help" style="margin-top:0">@L["pl.bulkHelp"]</p>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+            @* No data-dialog-close on the submits — the audited B2 close-swallows-save bug. *@
+            <button class="rd-btn" type="submit" form="pl-bulk" name="act" value="enable">@SL["common.enable"]</button>
+            <button class="rd-btn" type="submit" form="pl-bulk" name="act" value="disable">@SL["common.disable"]</button>
+            <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-delete" data-dialog-close>@SL["common.delete"]</button>
+        </div>
+    </div>
+</dialog>
+
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p>@SL["common.confirmDelete"]</p></div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="pl-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>

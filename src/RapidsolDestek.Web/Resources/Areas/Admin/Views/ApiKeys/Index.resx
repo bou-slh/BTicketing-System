@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ak.title" xml:space="preserve">
+    <value>API Anahtarları</value>
+  </data>
+  <data name="ak.sub" xml:space="preserve">
+    <value>Dış sistemlerin talep oluşturması ve uzak cron çağrıları için erişim anahtarları.</value>
+  </data>
+  <data name="ak.searchPh" xml:space="preserve">
+    <value>IP veya anahtar ara…</value>
+  </data>
+  <data name="ak.new" xml:space="preserve">
+    <value>＋ Yeni Anahtar</value>
+  </data>
+  <data name="ak.colKey" xml:space="preserve">
+    <value>API Anahtarı</value>
+  </data>
+  <data name="ak.colIp" xml:space="preserve">
+    <value>IP Adresi</value>
+  </data>
+  <data name="ak.colServices" xml:space="preserve">
+    <value>Servisler</value>
+  </data>
+  <data name="ak.svcTickets" xml:space="preserve">
+    <value>Talep Oluşturma</value>
+  </data>
+  <data name="ak.svcCron" xml:space="preserve">
+    <value>Cron</value>
+  </data>
+  <data name="ak.showing" xml:space="preserve">
+    <value>{2} anahtardan {0}–{1} arası gösteriliyor</value>
+  </data>
+  <data name="ak.bulkTitle" xml:space="preserve">
+    <value>Toplu işlemler</value>
+  </data>
+  <data name="ak.bulkHelp" xml:space="preserve">
+    <value>Seçili anahtarlara uygulanır.</value>
+  </data>
+  <data name="ak.emptyTitle" xml:space="preserve">
+    <value>Henüz API anahtarı yok</value>
+  </data>
+  <data name="ak.emptyText" xml:space="preserve">
+    <value>Dış sistemleri bağlamak için ilk API anahtarınızı oluşturun.</value>
+  </data>
+  <data name="ak.dlgTitle" xml:space="preserve">
+    <value>Yeni API Anahtarı</value>
+  </data>
+  <data name="ak.key" xml:space="preserve">
+    <value>API anahtarı</value>
+  </data>
+  <data name="ak.keyHelp" xml:space="preserve">
+    <value>Anahtar otomatik oluşturulur; kaydettikten sonra bu değeri dış sisteme kopyalayın.</value>
+  </data>
+  <data name="ak.ip" xml:space="preserve">
+    <value>IP adresi</value>
+  </data>
+  <data name="ak.ipHelp" xml:space="preserve">
+    <value>Zorunlu. Anahtar yalnızca bu IP adresinden gelen isteklerde geçerlidir.</value>
+  </data>
+  <data name="ak.status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="ak.perms" xml:space="preserve">
+    <value>İzinler</value>
+  </data>
+  <data name="ak.permTickets" xml:space="preserve">
+    <value>Talep oluşturabilir (XML/JSON API)</value>
+  </data>
+  <data name="ak.permCron" xml:space="preserve">
+    <value>Cron çalıştırabilir (uzak tetikleme)</value>
+  </data>
+  <data name="ak.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="ak.dlgEditTitle" xml:space="preserve">
+    <value>API Anahtarı</value>
+  </data>
+  <data name="ak.copy" xml:space="preserve">
+    <value>Kopyala</value>
+  </data>
+  <data name="ak.copied" xml:space="preserve">
+    <value>Anahtar panoya kopyalandı.</value>
+  </data>
+  <data name="ak.regen" xml:space="preserve">
+    <value>Yeniden Üret</value>
+  </data>
+  <data name="ak.toastCreated" xml:space="preserve">
+    <value>API anahtarı oluşturuldu.</value>
+  </data>
+  <data name="ak.toastSaved" xml:space="preserve">
+    <value>API anahtarı kaydedildi.</value>
+  </data>
+  <data name="ak.toastRegenerated" xml:space="preserve">
+    <value>Anahtar yeniden üretildi; yeni değeri dış sisteme kopyalayın.</value>
+  </data>
+  <data name="ak.bulkDone" xml:space="preserve">
+    <value>İşlem {0} anahtara uygulandı.</value>
+  </data>
+  <data name="ak.bulkNone" xml:space="preserve">
+    <value>Önce en az bir anahtar seçin.</value>
+  </data>
+  <data name="ak.errIp" xml:space="preserve">
+    <value>Geçerli bir IP adresi girin.</value>
+  </data>
+</root>

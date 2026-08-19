@@ -82,8 +82,25 @@ public sealed class FilterEngine(AppDbContext db) : IFilterEngine
 
     private static readonly TimeSpan RegexTimeout = TimeSpan.FromMilliseconds(250);
 
+    /// <summary>RejectedBy marker for banlist refusals (admin/banlist.html): osTicket
+    /// models the ban list as a SYSTEM filter that runs before every other filter
+    /// with a reject action; our dedicated BanlistEntry table keeps the same
+    /// semantics — the run is halted before any filter executes and the create is
+    /// silently refused (no ticket, no auto-response).</summary>
+    public const string BanlistName = "Engel Listesi";
+
     public async Task<FilterOutcome> RunAsync(FilterInput input, CancellationToken ct = default)
     {
+        // Ban list first (osTicket parity: the system ban-list filter has the
+        // lowest exec order and rejects on sender-email match, case-insensitive).
+        if (input.Email is { Length: > 0 } senderEmail)
+        {
+            var banned = await db.BanlistEntries.AsNoTracking()
+                .AnyAsync(b => b.IsActive && b.Address.ToLower() == senderEmail.ToLower(), ct);
+            if (banned)
+                return new FilterOutcome { RejectedBy = BanlistName };
+        }
+
         var filters = await db.Filters.AsNoTracking()
             .Where(f => f.IsActive)
             .Include(f => f.Rules)

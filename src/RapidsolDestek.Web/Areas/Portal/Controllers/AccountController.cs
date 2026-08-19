@@ -22,7 +22,8 @@ public class AccountController(
     AppDbContext db,
     IAppEmailSender mail,
     IWebHostEnvironment env,
-    ISettingsService settings) : Controller
+    ISettingsService settings,
+    IHtmlSanitizerService sanitizer) : Controller
 {
     // ---- Login -------------------------------------------------------------
     // TODO(S7): optional TOTP 2FA step for portal customers (ROADMAP B6; the
@@ -250,7 +251,24 @@ public class AccountController(
 
     [HttpGet("/offline")]
     [AllowAnonymous]
-    public IActionResult Offline() => View();
+    public async Task<IActionResult> Offline(CancellationToken ct)
+    {
+        // Pages port (S7, "pages served on portal"): the CONFIGURED offline
+        // SitePage body replaces the S5 static copy while maintenance mode holds.
+        // Resolution mirrors settings-company: company/offline_page_id, unset ⇒
+        // the first Offline-type page. An INACTIVE page (the seeded "Bakım Modu"
+        // canon ships disabled) falls back to the static copy — activating it on
+        // admin/pages is the switch that puts the authored content live.
+        var company = await settings.GetSectionAsync("company", ct);
+        var configuredId = int.TryParse(company.GetValueOrDefault("offline_page_id"), out var i) ? i : 0;
+        var offlinePages = db.SitePages.AsNoTracking().Where(p => p.Type == SitePageType.Offline);
+        var page = configuredId > 0
+            ? await offlinePages.SingleOrDefaultAsync(p => p.Id == configuredId, ct)
+            : await offlinePages.OrderBy(p => p.Id).FirstOrDefaultAsync(ct);
+        if (page is { IsActive: true })
+            ViewData["OfflineBody"] = sanitizer.Sanitize(page.Body);
+        return View();
+    }
 
 }
 

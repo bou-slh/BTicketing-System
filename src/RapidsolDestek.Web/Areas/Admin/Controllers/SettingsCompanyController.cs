@@ -75,7 +75,7 @@ public class SettingsCompanyController(
             // Unset ⇒ the seeded canon page of each type (mockup's "(varsayılan)" selection).
             LandingPageId: Or(Int("landing_page_id"), landing),   // TODO: consumed by the portal home content block (pages port)
             LandingPages: landing,
-            OfflinePageId: Or(Int("offline_page_id"), offline),   // TODO: consumed by the offline view body (serves the S5 static twin today)
+            OfflinePageId: Or(Int("offline_page_id"), offline),   // LIVE (S7 pages port): the portal /offline view renders this page's body while maintenance mode holds (Portal AccountController.Offline)
             OfflinePages: offline,
             ThanksPageId: Or(Int("thanks_page_id"), thanks),      // TODO: consumed by the post-create confirmation (HelpTopic.SitePageId overrides per topic)
             ThanksPages: thanks,
