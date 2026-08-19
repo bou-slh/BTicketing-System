@@ -11,7 +11,7 @@
         var ok = TempData["FiltersToastOk"] as int? ?? 0;
         var skipped = TempData["FiltersToastSkipped"] as int? ?? 0;
         ViewData["Toast"] = toastKey is "fl.bulkDone" or "fl.bulkPartial"
-            ? L[toastKey, ok, skipped].Value
+            ? L.GetString(toastKey, ok, skipped)
             : L[toastKey].Value;
         if (TempData["FiltersToastError"] is not null)
         {

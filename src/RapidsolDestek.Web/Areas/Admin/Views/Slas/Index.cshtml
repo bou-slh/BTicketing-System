@@ -10,7 +10,7 @@
         var ok = TempData["SlasToastOk"] as int? ?? 0;
         var skipped = TempData["SlasToastSkipped"] as int? ?? 0;
         ViewData["Toast"] = toastKey is "sla.bulkDone" or "sla.bulkPartial"
-            ? L[toastKey, ok, skipped].Value
+            ? L.GetString(toastKey, ok, skipped)
             : L[toastKey].Value;
         if (TempData["SlasToastError"] is not null)
         {
@@ -154,7 +154,7 @@
                 }
                 <input type="hidden" name="returnUrl" value="@currentUrl">
                 <div class="rd-dialog-head">
-                    <span>@(sla is null ? L["sla.dlgNewTitle"].Value : L["sla.dlgTitleFmt", sla.Name].Value)</span>
+                    <span>@(sla is null ? L["sla.dlgNewTitle"].Value : L.GetString("sla.dlgTitleFmt", sla.Name))</span>
                     <button type="button" class="close" data-dialog-close>✕</button>
                 </div>
                 <div class="rd-dialog-body">

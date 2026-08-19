@@ -9,7 +9,7 @@
         var ok = TempData["DeptsToastOk"] as int? ?? 0;
         var skipped = TempData["DeptsToastSkipped"] as int? ?? 0;
         ViewData["Toast"] = toastKey is "dp.bulkDone" or "dp.bulkPartial"
-            ? L[toastKey, ok, skipped].Value
+            ? L.GetString(toastKey, ok, skipped)
             : L[toastKey].Value;
         if (TempData["DeptsToastError"] is not null)
         {

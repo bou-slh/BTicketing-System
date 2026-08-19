@@ -15,8 +15,8 @@
     {
         var bulkSkipped = TempData["TicketsBulkSkipped"] as int? ?? 0;
         ViewData["Toast"] = bulkSkipped > 0
-            ? L["tq.bulkPartial", bulkOk, bulkSkipped].Value
-            : L["tq.bulkDone", bulkOk].Value;
+            ? L.GetString("tq.bulkPartial", bulkOk, bulkSkipped)
+            : L.GetString("tq.bulkDone", bulkOk);
     }
 
     // Backoffice pill classes (dashboard precedent): derived overdue is computed in

@@ -11,7 +11,7 @@
         var ok = TempData["SchedulesToastOk"] as int? ?? 0;
         var skipped = TempData["SchedulesToastSkipped"] as int? ?? 0;
         ViewData["Toast"] = toastKey is "sch.bulkDone" or "sch.bulkPartial"
-            ? L[toastKey, ok, skipped].Value
+            ? L.GetString(toastKey, ok, skipped)
             : L[toastKey].Value;
         if (TempData["SchedulesToastError"] is not null)
         {

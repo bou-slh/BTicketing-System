@@ -10,7 +10,7 @@
         var ok = TempData["RolesToastOk"] as int? ?? 0;
         var skipped = TempData["RolesToastSkipped"] as int? ?? 0;
         ViewData["Toast"] = toastKey is "rl.bulkDone" or "rl.bulkPartial"
-            ? L[toastKey, ok, skipped].Value
+            ? L.GetString(toastKey, ok, skipped)
             : L[toastKey].Value;
         if (TempData["RolesToastError"] is not null)
         {

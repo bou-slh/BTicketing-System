@@ -10,7 +10,7 @@
         var ok = TempData["CannedToastOk"] as int? ?? 0;
         var skipped = TempData["CannedToastSkipped"] as int? ?? 0;
         ViewData["Toast"] = toastKey is "cn.bulkDone" or "cn.bulkPartial"
-            ? L[toastKey, ok, skipped].Value
+            ? L.GetString(toastKey, ok, skipped)
             : L[toastKey].Value;
         if (TempData["CannedToastError"] is not null)
         {

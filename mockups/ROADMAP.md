@@ -1053,7 +1053,9 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       RequiredForUsers+ForAgents (internal fields agent-only). Latent bug found while porting: parameterized
       toasts composed via LocalizedHtmlString.Value render UNFORMATTED ({0} braces) — these pages use
       L.GetString(...); the same pattern exists in earlier ports (schedules/slas/helptopics/filters bulk
-      toasts), flagged for a sweep. Invented keys (TR/EN twins): fm.dateFmt/bulkNone/bulkDone/bulkPartial/
+      toasts), flagged for a sweep — SWEPT 2026-08-19: all 16 parameterized L[...].Value usages across
+      admin+agent views (incl. S6 tickets/tasks/canned/users bulk toasts and the sla/team dialog titles)
+      replaced with L.GetString(...). Invented keys (TR/EN twins): fm.dateFmt/bulkNone/bulkDone/bulkPartial/
       toastDeleted + re-parameterized fm.showing; fme.newTitle/errTitle/errLabel/errSystem/toastSaved/
       toastCreated/toastSavedDisabled/disabledInfo/optListTitle/optCustom/optChoicesPh/optChoicesTitle/
       preview/previewHelp/previewEmpty/previewError. +6 tests (FormsListsAdminTests) incl. the GATE PROOF

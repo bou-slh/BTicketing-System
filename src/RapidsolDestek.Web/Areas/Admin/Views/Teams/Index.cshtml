@@ -10,7 +10,7 @@
         var ok = TempData["TeamsToastOk"] as int? ?? 0;
         var skipped = TempData["TeamsToastSkipped"] as int? ?? 0;
         ViewData["Toast"] = toastKey is "tm.bulkDone" or "tm.bulkPartial"
-            ? L[toastKey, ok, skipped].Value
+            ? L.GetString(toastKey, ok, skipped)
             : L[toastKey].Value;
         if (TempData["TeamsToastError"] is not null)
         {
@@ -183,7 +183,7 @@
                 }
                 <input type="hidden" name="returnUrl" value="@currentUrl">
                 <div class="rd-dialog-head">
-                    <span>@(team is null ? L["tm.dlgNewTitle"].Value : L["tm.dlgTitleFmt", team.Name].Value)</span>
+                    <span>@(team is null ? L["tm.dlgNewTitle"].Value : L.GetString("tm.dlgTitleFmt", team.Name))</span>
                     <button type="button" class="close" data-dialog-close aria-label="@SL["common.close"]">✕</button>
                 </div>
                 <div class="rd-dialog-body">

@@ -14,8 +14,8 @@
     {
         var bulkSkipped = TempData["TasksBulkSkipped"] as int? ?? 0;
         ViewData["Toast"] = bulkSkipped > 0
-            ? L["ta.bulkPartial", bulkOk, bulkSkipped].Value
-            : L["ta.bulkDone", bulkOk].Value;
+            ? L.GetString("ta.bulkPartial", bulkOk, bulkSkipped)
+            : L.GetString("ta.bulkDone", bulkOk);
     }
 
     // Table-cell agent name convention (§2 canon): "Ümit Yaşar Akın" → "Ümit Y. Akın".
