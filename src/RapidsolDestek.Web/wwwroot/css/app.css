@@ -97,6 +97,30 @@ details.rd-account-menu > .menu button:hover { background: var(--rd-teal-bg); te
    default — the ticket-open inline new-user block toggles via the attribute. */
 .rd-grid-2[hidden] { display: none; }
 
+/* Same class of bug for banners: base.css's .rd-banner display:flex beats the UA
+   [hidden] default — email-diagnostic toggles its pending/success/failure banners
+   via the attribute. */
+.rd-banner[hidden] { display: none; }
+
+/* .bo-rule-row is a flex row for div-based rule editors (admin.css, mockup canon).
+   Ported table editors (form-edit fields, list-edit items/properties, schedule
+   entries, sequence dialogs) reuse it on <tr> as the rd.js remove/reorder hook,
+   where flex destroys table layout — restore table semantics there. */
+tr.bo-rule-row { display: table-row; }
+tr.bo-rule-row > td { display: table-cell; }
+tr.bo-rule-row .rd-control,
+tr.bo-rule-row .rc-control { width: 100%; flex: none; min-width: 0; }
+
+/* form-edit options editor toggles via [hidden]; keep its layout in a class so no
+   inline display can defeat the attribute. */
+[data-opt-editor] { margin-top: 6px; display: grid; gap: 6px; }
+[data-opt-editor][hidden] { display: none; }
+
+/* Mockup upload zones are block <div>s; ported views use <label> for the native
+   file-input click-through (settings-company logos, kb-faq attachments) — inline
+   label shrinks to text width and overlaps the help line below. */
+label.rd-upload { display: block; }
+
 /* Agent user-view (S6): "Geçersiz kıl" inline override form — invented affordance
    (the mockup button is dead; flagged on the ROADMAP user-view row). Class-toggled
    because an author display rule would beat the UA [hidden] default. */

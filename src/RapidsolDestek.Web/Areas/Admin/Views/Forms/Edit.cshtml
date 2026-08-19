@@ -97,7 +97,7 @@
                             <option value="@t.Value" selected="@(type == t.Value)">@L[t.Key]</option>
                         }
                     </select>
-                    <div data-opt-editor style="margin-top:6px;display:grid;gap:6px" hidden="@(type != "choices")">
+                    <div data-opt-editor hidden="@(type != "choices")">
                         <select class="rd-control" name="fieldLists" title="@L["fme.optListTitle"]">
                             <option value="0" selected="@((r?.ListId ?? 0) == 0)">@L["fme.optCustom"]</option>
                             @foreach (var l in Model.Lists)

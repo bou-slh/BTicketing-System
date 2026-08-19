@@ -329,6 +329,9 @@ public static class DomainSeeder
         var formBordroEk = new FormDefinition
         {
             Title = "Bordro Ek Bilgileri", Name = "bordro_ek",
+            // Canon texts per admin/form-edit.html (differ pass 2026-08-20).
+            Instructions = "Bordro talebinizle ilgili ek bilgileri doldurun; personel numarası zorunludur.",
+            Notes = "İK ekibinin isteğiyle eklendi; Bordro yardım konularına bağlıdır.",
             Fields =
             [
                 // Canon rows per admin/form-edit.html (S7 designer port): labels,

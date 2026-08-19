@@ -1060,7 +1060,7 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       rows + dup refusal, clone copies source content, per-set template save round-trip (sibling set
       untouched; unknown code refused), bulk disable + the reference delete guard (cascade asserted),
       honest per-code pills (effort vars only on effort dialogs), preview substitutes hero canon data and
-      never leaks %{unknown} — suite 303.)*
+      never leaks %{unknown} — suite 303. Differ note 2026-08-20: seeded stock bodies are STUBS (subject=template name, one-line body) while the mockup dialog shows full canon-looking copy ("Talebiniz alındı [#%{ticket.number}]…") — EmailTemplateCatalog stock text needs canon sign-off.)*
 - [x] **banlist.html** — add/edit/delete real; B1 *(S7; /admin/banlist (BanlistController). Model: the
       existing dedicated BanlistEntry table KEPT over osTicket's system-ban-list-filter shape (the entity
       doc already flags the deviation — same job, simpler rows); enforcement is osTicket-parity anyway:
