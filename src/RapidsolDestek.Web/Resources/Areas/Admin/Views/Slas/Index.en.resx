@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sla.title" xml:space="preserve">
+    <value>SLA Plans</value>
+  </data>
+  <data name="sla.sub" xml:space="preserve">
+    <value>Time targets a request must be resolved within before it counts as overdue.</value>
+  </data>
+  <data name="sla.searchPh" xml:space="preserve">
+    <value>Search SLA plans…</value>
+  </data>
+  <data name="sla.new" xml:space="preserve">
+    <value>＋ New SLA</value>
+  </data>
+  <data name="sla.colGrace" xml:space="preserve">
+    <value>Grace Period (hours)</value>
+  </data>
+  <data name="sla.colSchedule" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="sla.showing" xml:space="preserve">
+    <value>Showing {0}–{1} of {2} plans</value>
+  </data>
+  <data name="sla.bulkTitle" xml:space="preserve">
+    <value>Bulk actions</value>
+  </data>
+  <data name="sla.bulkHelp" xml:space="preserve">
+    <value>Applied to the selected SLA plans.</value>
+  </data>
+  <data name="sla.emptyTitle" xml:space="preserve">
+    <value>No SLA plans yet</value>
+  </data>
+  <data name="sla.emptyText" xml:space="preserve">
+    <value>Create your first SLA plan to define response-time targets.</value>
+  </data>
+  <data name="sla.dlgTitle" xml:space="preserve">
+    <value>SLA Plan</value>
+  </data>
+  <data name="sla.name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="sla.nameHelp" xml:space="preserve">
+    <value>A short name describing the plan.</value>
+  </data>
+  <data name="sla.status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="sla.grace" xml:space="preserve">
+    <value>Grace period (hours)</value>
+  </data>
+  <data name="sla.graceHelp" xml:space="preserve">
+    <value>The request is marked overdue if not resolved within this period.</value>
+  </data>
+  <data name="sla.schedule" xml:space="preserve">
+    <value>Working schedule</value>
+  </data>
+  <data name="sla.scheduleHelp" xml:space="preserve">
+    <value>The clock only runs during the selected schedule's working hours.</value>
+  </data>
+  <data name="sla.schedDefault" xml:space="preserve">
+    <value>— System default —</value>
+  </data>
+  <data name="sla.transient" xml:space="preserve">
+    <value>Transient SLA</value>
+  </data>
+  <data name="sla.transientHelp" xml:space="preserve">
+    <value>A permanent SLA replaces this plan when the department or topic changes.</value>
+  </data>
+  <data name="sla.alerts" xml:space="preserve">
+    <value>Overdue alerts</value>
+  </data>
+  <data name="sla.alertsHelp" xml:space="preserve">
+    <value>Agents receive an alert email when a request becomes overdue.</value>
+  </data>
+  <data name="sla.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="sla.dlgNewTitle" xml:space="preserve">
+    <value>New SLA Plan</value>
+  </data>
+  <data name="sla.dlgTitleFmt" xml:space="preserve">
+    <value>SLA Plan — {0}</value>
+  </data>
+  <data name="sla.errName" xml:space="preserve">
+    <value>Plan name must be 1–120 characters.</value>
+  </data>
+  <data name="sla.errNameInUse" xml:space="preserve">
+    <value>An SLA plan with this name already exists.</value>
+  </data>
+  <data name="sla.errGrace" xml:space="preserve">
+    <value>The grace period must be between 1 and 8760 hours.</value>
+  </data>
+  <data name="sla.toastSaved" xml:space="preserve">
+    <value>SLA plan saved.</value>
+  </data>
+  <data name="sla.toastCreated" xml:space="preserve">
+    <value>SLA plan created.</value>
+  </data>
+  <data name="sla.bulkNone" xml:space="preserve">
+    <value>No plans selected.</value>
+  </data>
+  <data name="sla.bulkDone" xml:space="preserve">
+    <value>{0} plans updated.</value>
+  </data>
+  <data name="sla.bulkPartial" xml:space="preserve">
+    <value>{0} plans updated, {1} skipped (in use).</value>
+  </data>
+</root>

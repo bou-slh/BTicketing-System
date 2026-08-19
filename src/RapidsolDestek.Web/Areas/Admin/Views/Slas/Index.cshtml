@@ -1,0 +1,251 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model SlasIndexVm
+@{
+    ViewData["Title"] = L["sla.title"];
+
+    // PRG toast handoff after create/update/bulk (teams precedent).
+    if (TempData["SlasToast"] is string toastKey)
+    {
+        var ok = TempData["SlasToastOk"] as int? ?? 0;
+        var skipped = TempData["SlasToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "sla.bulkDone" or "sla.bulkPartial"
+            ? L[toastKey, ok, skipped].Value
+            : L[toastKey].Value;
+        if (TempData["SlasToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Updated cell: the mockup's "4 Ağu 2026" cells (sla.dateFmt).
+    string UpdatedText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("sla.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/slas" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key == "updated" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["sla.title"]</h1>
+        <p>@L["sla.sub"]</p>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/admin/slas">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["sla.searchPh"]">
+    <span class="spacer"></span>
+    <button class="rd-btn" type="button" data-dialog-open="dlg-more"><span>@SL["common.more"]</span> ▾</button>
+    <button class="rd-btn rd-btn-primary" type="button" data-dialog-open="dlg-sla">@L["sla.new"]</button>
+</form>
+
+<div class="rd-surface" id="tbl-slas">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Mockup's hidden #sla-empty panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">⏱</div>
+            <h3>@L["sla.emptyTitle"]</h3>
+            <p>@L["sla.emptyText"]</p>
+            <button class="rd-btn rd-btn-primary" type="button" data-dialog-open="dlg-sla">@L["sla.new"]</button>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-slas" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("name")"><a href="@SortUrl("name")">@SL["common.name"]</a></th>
+                    <th>@SL["common.status"]</th>
+                    <th class="num @SortClass("grace")"><a href="@SortUrl("grace")">@L["sla.colGrace"]</a></th>
+                    <th>@L["sla.colSchedule"]</th>
+                    <th class="@SortClass("updated")"><a href="@SortUrl("updated")">@SL["common.updated"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="sla-bulk"></td>
+                        <td><a href="#" data-dialog-open="dlg-sla-@r.Id">@r.Name</a></td>
+                        @if (r.IsActive)
+                        {
+                            <td><span class="rd-pill rd-pill-solved">@SL["common.active"]</span></td>
+                        }
+                        else
+                        {
+                            <td><span class="rd-pill rd-pill-closed">@SL["common.disabled"]</span></td>
+                        }
+                        <td class="num">@r.GraceHours</td>
+                        @if (r.ScheduleName is null)
+                        {
+                            <td class="rd-muted">@L["sla.schedDefault"]</td>
+                        }
+                        else
+                        {
+                            <td>@r.ScheduleName</td>
+                        }
+                        <td>@UpdatedText(r.Updated)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@L["sla.showing", Model.From, Model.To, Model.Total]</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the dlg-more bulk actions (teams precedent). *@
+<form id="sla-bulk" method="post" asp-area="Admin" asp-controller="Slas" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+@* SLA dialog: one create instance (dlg-sla, empty) + per-row edit instances
+   prefilled server-side (B2 — the mockup shares ONE hardcoded dlg-sla between the
+   new-button and all rows; split per the teams precedent, flagged). *@
+@{
+    async Task SlaDialogAsync(string dialogId, SlaRowVm? sla)
+    {
+        <dialog class="rd-dialog" id="@dialogId">
+            <form method="post" asp-area="Admin" asp-controller="Slas"
+                  asp-action="@(sla is null ? "Create" : "Update")">
+                @if (sla is not null)
+                {
+                    <input type="hidden" name="id" value="@sla.Id">
+                }
+                <input type="hidden" name="returnUrl" value="@currentUrl">
+                <div class="rd-dialog-head">
+                    <span>@(sla is null ? L["sla.dlgNewTitle"].Value : L["sla.dlgTitleFmt", sla.Name].Value)</span>
+                    <button type="button" class="close" data-dialog-close>✕</button>
+                </div>
+                <div class="rd-dialog-body">
+                    <div class="rd-field">
+                        <label class="rd-label" for="sla-name-@dialogId">@L["sla.name"]</label>
+                        <input id="sla-name-@dialogId" name="name" class="rd-control" value="@sla?.Name" required maxlength="120">
+                        <div class="rd-help">@L["sla.nameHelp"]</div>
+                    </div>
+                    <div class="rd-grid-2">
+                        <div class="rd-field">
+                            <label class="rd-label" for="sla-grace-@dialogId">@L["sla.grace"]</label>
+                            <input id="sla-grace-@dialogId" name="grace" class="rd-control" type="number" value="@(sla?.GraceHours ?? 48)" min="1" required>
+                            <div class="rd-help">@L["sla.graceHelp"]</div>
+                        </div>
+                        <div class="rd-field">
+                            <span class="rd-label">@L["sla.status"]</span>
+                            <div style="display:flex;gap:18px;padding:10px 0 2px">
+                                <label class="rd-check"><input type="radio" name="active" value="true" checked="@(sla?.IsActive ?? true)"><span>@SL["common.active"]</span></label>
+                                <label class="rd-check"><input type="radio" name="active" value="false" checked="@(sla is { IsActive: false })"><span>@SL["common.disabled"]</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="sla-schedule-@dialogId">@L["sla.schedule"]</label>
+                        <select id="sla-schedule-@dialogId" name="scheduleId" class="rd-control">
+                            <option value="" selected="@(sla?.ScheduleId is null)">@L["sla.schedDefault"]</option>
+                            @foreach (var o in Model.Schedules)
+                            {
+                                <option value="@o.Id" selected="@(sla?.ScheduleId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["sla.scheduleHelp"]</div>
+                    </div>
+                    <details class="rd-advanced">
+                        <summary>@SL["common.advanced"]</summary>
+                        <div class="rd-advanced-body">
+                            @* Transient is consumed by TicketService.TransferAsync (a permanent
+                               plan replaces it on transfer); the alerts switch persists the
+                               inverted DisableOverdueAlerts for the S8 sweep's alert fan-out. *@
+                            <label class="rd-switch" style="margin-bottom:13px">
+                                <input type="checkbox" name="transient" value="true" checked="@(sla?.IsTransient ?? false)">
+                                <span class="track"></span>
+                                <span class="rd-switch-copy"><b>@L["sla.transient"]</b><small>@L["sla.transientHelp"]</small></span>
+                            </label>
+                            <label class="rd-switch" style="margin-bottom:13px">
+                                <input type="checkbox" name="alerts" value="true" checked="@(sla is null || !sla.DisableOverdueAlerts)">
+                                <span class="track"></span>
+                                <span class="rd-switch-copy"><b>@L["sla.alerts"]</b><small>@L["sla.alertsHelp"]</small></span>
+                            </label>
+                            <div class="rd-field mb-0">
+                                <label class="rd-label" for="sla-notes-@dialogId">@SL["common.notes"]</label>
+                                <textarea id="sla-notes-@dialogId" name="notes" class="rd-control" style="min-height:70px">@sla?.Notes</textarea>
+                                <div class="rd-help">@SL["common.notesHelp"]</div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+                <div class="rd-dialog-foot">
+                    <button type="button" class="rd-btn" data-dialog-close>@SL["common.cancel"]</button>
+                    @* No data-dialog-close on the submit — the audited B2 close-swallows-save bug. *@
+                    <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+                </div>
+            </form>
+        </dialog>
+    }
+
+    await SlaDialogAsync("dlg-sla", null);
+    foreach (var r in Model.Rows)
+    {
+        await SlaDialogAsync($"dlg-sla-{r.Id}", r);
+    }
+}
+
+<dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span>@L["sla.bulkTitle"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+        <p class="rd-help" style="margin-top:0">@L["sla.bulkHelp"]</p>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+            @* No data-dialog-close on the submits — the audited B2 close-swallows-save bug. *@
+            <button class="rd-btn" type="submit" form="sla-bulk" name="act" value="enable">@SL["common.enable"]</button>
+            <button class="rd-btn" type="submit" form="sla-bulk" name="act" value="disable">@SL["common.disable"]</button>
+            <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-delete" data-dialog-close>@SL["common.delete"]</button>
+        </div>
+    </div>
+</dialog>
+
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p>@SL["common.confirmDelete"]</p></div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="sla-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>

@@ -147,7 +147,7 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
                 ObjectId = ticket.Id,
                 Sort = topicForm.Sort,
             };
-            foreach (var field in PortalFields(topicForm.FormDefinition!))
+            foreach (var field in PortalFields(topicForm))
             {
                 form.Fields.TryGetValue(field.Id, out var raw);
                 if (string.IsNullOrWhiteSpace(raw))
@@ -195,14 +195,19 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
 
     private static List<FormField> PortalFields(HelpTopic topic) =>
         topic.Forms.OrderBy(f => f.Sort)
-            .SelectMany(f => PortalFields(f.FormDefinition!))
+            .SelectMany(PortalFields)
             .ToList();
 
-    private static List<FormField> PortalFields(FormDefinition definition) =>
-        definition.Fields
-            .Where(f => f.VisibleToUsers && !f.IsDisabled)
+    /// <summary>Field scope honors the per-topic disable set from the admin forms tab
+    /// (HelpTopicForm.Extra, admin/helptopic-edit) on top of the designer flags.</summary>
+    private static List<FormField> PortalFields(HelpTopicForm topicForm)
+    {
+        var disabled = topicForm.DisabledFieldIds();
+        return topicForm.FormDefinition!.Fields
+            .Where(f => f.VisibleToUsers && !f.IsDisabled && !disabled.Contains(f.Id))
             .OrderBy(f => f.Sort)
             .ToList();
+    }
 
     private static int? ListId(FormField field)
     {

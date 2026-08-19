@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="hte.back" xml:space="preserve">
+    <value>← Help Topics</value>
+  </data>
+  <data name="hte.sub" xml:space="preserve">
+    <value>Edit the help topic — details, new-ticket defaults and extra forms.</value>
+  </data>
+  <data name="hte.tabInfo" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="hte.tabOptions" xml:space="preserve">
+    <value>New Ticket Options</value>
+  </data>
+  <data name="hte.tabForms" xml:space="preserve">
+    <value>Forms</value>
+  </data>
+  <data name="hte.name" xml:space="preserve">
+    <value>Topic name</value>
+  </data>
+  <data name="hte.nameHelp" xml:space="preserve">
+    <value>Full name shown to users. Sub-topics appear as "Parent / Child".</value>
+  </data>
+  <data name="hte.status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="hte.statusArchived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="hte.statusHelp" xml:space="preserve">
+    <value>Archived topics cannot be picked on new requests; they remain visible on old ones.</value>
+  </data>
+  <data name="hte.visibility" xml:space="preserve">
+    <value>Visibility</value>
+  </data>
+  <data name="hte.public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="hte.internal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="hte.visHelp" xml:space="preserve">
+    <value>Internal topics can only be selected in the agent panel.</value>
+  </data>
+  <data name="hte.parent" xml:space="preserve">
+    <value>Parent topic</value>
+  </data>
+  <data name="hte.parentNone" xml:space="preserve">
+    <value>— None —</value>
+  </data>
+  <data name="hte.parentHelp" xml:space="preserve">
+    <value>Pick a parent to group this topic under it.</value>
+  </data>
+  <data name="hte.sysDefault" xml:space="preserve">
+    <value>— System default —</value>
+  </data>
+  <data name="hte.dept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="hte.deptHelp" xml:space="preserve">
+    <value>Requests opened with this topic are routed to this department.</value>
+  </data>
+  <data name="hte.newStatus" xml:space="preserve">
+    <value>Initial status</value>
+  </data>
+  <data name="hte.newStatusHelp" xml:space="preserve">
+    <value>The status a new request starts with.</value>
+  </data>
+  <data name="hte.priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="hte.priorityHelp" xml:space="preserve">
+    <value>Priority assigned to requests opened with this topic.</value>
+  </data>
+  <data name="hte.sla" xml:space="preserve">
+    <value>SLA plan</value>
+  </data>
+  <data name="hte.slaHelp" xml:space="preserve">
+    <value>Sets the response-time target; if empty, the department SLA applies.</value>
+  </data>
+  <data name="hte.thanks" xml:space="preserve">
+    <value>Thank-you page</value>
+  </data>
+  <data name="hte.thanksHelp" xml:space="preserve">
+    <value>Page shown to the user after the request is created.</value>
+  </data>
+  <data name="hte.assign" xml:space="preserve">
+    <value>Auto-assignment</value>
+  </data>
+  <data name="hte.assignNone" xml:space="preserve">
+    <value>— No assignment —</value>
+  </data>
+  <data name="hte.grpAgents" xml:space="preserve">
+    <value>Agents</value>
+  </data>
+  <data name="hte.grpTeams" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="hte.assignHelp" xml:space="preserve">
+    <value>New requests are assigned directly to the chosen agent or team.</value>
+  </data>
+  <data name="hte.numFormat" xml:space="preserve">
+    <value>Ticket number format</value>
+  </data>
+  <data name="hte.numSystem" xml:space="preserve">
+    <value>System default</value>
+  </data>
+  <data name="hte.numCustom" xml:space="preserve">
+    <value>Custom format</value>
+  </data>
+  <data name="hte.numHelp" xml:space="preserve">
+    <value># characters are replaced with digits. E.g. BRD-000123.</value>
+  </data>
+  <data name="hte.numSeq" xml:space="preserve">
+    <value>Number sequence</value>
+  </data>
+  <data name="hte.seqGlobal" xml:space="preserve">
+    <value>Global sequence</value>
+  </data>
+  <data name="hte.seqRandom" xml:space="preserve">
+    <value>Random</value>
+  </data>
+  <data name="hte.numSeqHelp" xml:space="preserve">
+    <value>Controls how the # part of the custom format is generated.</value>
+  </data>
+  <data name="hte.noAutoresp" xml:space="preserve">
+    <value>Disable auto-response</value>
+  </data>
+  <data name="hte.noAutorespHelp" xml:space="preserve">
+    <value>The new-ticket auto-response is not sent for requests opened with this topic.</value>
+  </data>
+  <data name="hte.formsHead" xml:space="preserve">
+    <value>Attached form: Talep Detayları</value>
+  </data>
+  <data name="hte.formsHelp" xml:space="preserve">
+    <value>Checked fields are shown on requests opened with this topic.</value>
+  </data>
+  <data name="hte.fEnabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="hte.fLabel" xml:space="preserve">
+    <value>Label</value>
+  </data>
+  <data name="hte.fType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="hte.fVis" xml:space="preserve">
+    <value>Visibility</value>
+  </data>
+  <data name="hte.fVar" xml:space="preserve">
+    <value>Variable</value>
+  </data>
+  <data name="hte.tShort" xml:space="preserve">
+    <value>Short Text</value>
+  </data>
+  <data name="hte.tLong" xml:space="preserve">
+    <value>Long Text</value>
+  </data>
+  <data name="hte.addForm" xml:space="preserve">
+    <value>Add form</value>
+  </data>
+  <data name="hte.addFormHelp" xml:space="preserve">
+    <value>Extra custom form attached to this topic.</value>
+  </data>
+  <data name="hte.newTitle" xml:space="preserve">
+    <value>New Topic</value>
+  </data>
+  <data name="hte.errName" xml:space="preserve">
+    <value>Topic name must be 1–120 characters.</value>
+  </data>
+  <data name="hte.errNameInUse" xml:space="preserve">
+    <value>This name is already used under the same parent topic.</value>
+  </data>
+  <data name="hte.errParent" xml:space="preserve">
+    <value>Parent topic not found.</value>
+  </data>
+  <data name="hte.errParentCycle" xml:space="preserve">
+    <value>A topic cannot be moved under its own sub-topic.</value>
+  </data>
+  <data name="hte.errFormat" xml:space="preserve">
+    <value>The custom format needs at least one # (e.g. BRD-######).</value>
+  </data>
+  <data name="hte.errInUse" xml:space="preserve">
+    <value>This topic is referenced by tickets or sub-topics and cannot be deleted. Disable it instead.</value>
+  </data>
+  <data name="hte.formsHeadFmt" xml:space="preserve">
+    <value>Attached form: {0}</value>
+  </data>
+  <data name="hte.tChoice" xml:space="preserve">
+    <value>Choice</value>
+  </data>
+  <data name="hte.tDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="hte.addFormPh" xml:space="preserve">
+    <value>Pick a form…</value>
+  </data>
+  <data name="hte.detachTitle" xml:space="preserve">
+    <value>Detach form</value>
+  </data>
+</root>

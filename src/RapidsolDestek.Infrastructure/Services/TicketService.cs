@@ -103,6 +103,13 @@ public sealed class TicketService(
 
         var number = await DrawNumberAsync(topic, numbering, ct);
 
+        // SLA grace consumption (admin/slas sla.grace): the plan's grace period sets
+        // the estimated due instant every due/overdue consumer reads
+        // (DueDate ?? EstimatedDueDate). Wall-clock hours for now —
+        // TODO(S8): the SLA sweep recomputes schedule-aware (the clock only runs
+        // inside the plan's working schedule) and flags IsOverdue.
+        var estimatedDue = await ComputeEstimatedDueAsync(slaId, DateTimeOffset.UtcNow, ct);
+
         var ticket = new Ticket
         {
             Number = number,
@@ -124,6 +131,7 @@ public sealed class TicketService(
             SourceExtra = request.SourceExtra,
             IpAddress = actor.IpAddress,
             DueDate = request.DueDate,
+            EstimatedDueDate = estimatedDue,
             LastUpdateAt = DateTimeOffset.UtcNow,
             Thread = new Thread { CreatedAt = DateTimeOffset.UtcNow },
         };
@@ -250,7 +258,7 @@ public sealed class TicketService(
         var ticket = await LoadAsync(ticketId, ct);
         if (ticket.DepartmentId == departmentId)
             return;
-        _ = await db.Departments.SingleOrDefaultAsync(d => d.Id == departmentId, ct)
+        var department = await db.Departments.SingleOrDefaultAsync(d => d.Id == departmentId, ct)
             ?? throw new DomainNotFoundException("Department", departmentId);
 
         if (actor.IsStaff)
@@ -259,6 +267,26 @@ public sealed class TicketService(
         var oldDepartmentId = ticket.DepartmentId;
         ticket.DepartmentId = departmentId;
         ticket.LastUpdateAt = DateTimeOffset.UtcNow;
+
+        // Transient SLA (admin/slas sla.transient, osTicket SLA flag 8): a transient
+        // plan is replaced by a permanent one when the ticket changes department —
+        // re-resolve topic SLA → new department SLA → system default, and recompute
+        // the estimated due date under the replacement plan.
+        if (ticket.SlaId is { } currentSlaId
+            && await db.SlaPlans.Where(s => s.Id == currentSlaId).Select(s => s.IsTransient).SingleOrDefaultAsync(ct))
+        {
+            var topicSlaId = ticket.HelpTopicId is { } topicId
+                ? await db.HelpTopics.Where(t => t.Id == topicId).Select(t => t.SlaId).SingleOrDefaultAsync(ct)
+                : null;
+            var newSlaId = topicSlaId
+                ?? department.SlaId
+                ?? ParseOrNull(await settings.GetAsync("core", "default_sla_id", ct));
+            if (newSlaId is { } replacement && replacement != currentSlaId)
+            {
+                ticket.SlaId = replacement;
+                ticket.EstimatedDueDate = await ComputeEstimatedDueAsync(replacement, DateTimeOffset.UtcNow, ct);
+            }
+        }
 
         using (actor.BeginAuditScope())
             await db.SaveChangesAsync(ct);
@@ -300,23 +328,39 @@ public sealed class TicketService(
             .Select(p => (int?)p.Id).FirstOrDefaultAsync(ct);
     }
 
+    /// <summary>SLA grace period → estimated due instant (wall-clock; S8 sweep will be schedule-aware).</summary>
+    private async Task<DateTimeOffset?> ComputeEstimatedDueAsync(int? slaId, DateTimeOffset from, CancellationToken ct)
+    {
+        if (slaId is not { } id)
+            return null;
+        var grace = await db.SlaPlans.Where(s => s.Id == id)
+            .Select(s => (int?)s.GracePeriodHours).SingleOrDefaultAsync(ct);
+        return grace is { } hours and > 0 ? from.AddHours(hours) : null;
+    }
+
     /// <summary>
-    /// Public ticket number: the topic's own sequence wins, else tickets.number_mode
-    /// decides — "random" draws unguessable digits (osTicket random sequence),
-    /// anything else advances the configured row-locked sequence.
+    /// Public ticket number: the topic's own numbering wins — random digits when the
+    /// topic asks for them (osTicket sequence_id 0), else its own sequence — then
+    /// tickets.number_mode decides: "random" draws unguessable digits, anything else
+    /// advances the configured row-locked sequence.
     /// </summary>
     private async Task<string> DrawNumberAsync(HelpTopic? topic, NumberingSettings numbering, CancellationToken ct)
     {
         var format = topic?.NumberFormat ?? numbering.NumberFormat;
+        if (topic is { UseRandomNumbers: true })
+            return await DrawRandomAsync(format, ct);
         if (topic?.SequenceId is { } topicSeq)
             return await sequences.NextAsync(topicSeq, format, ct);
 
         var mode = await settings.GetAsync("tickets", "number_mode", ct);
         if (mode != "random")
             return await sequences.NextAsync(numbering.SequenceId, format, ct);
+        return await DrawRandomAsync(format, ct);
+    }
 
-        // Random mode: fill every '#' with random digits; retry on the (unlikely)
-        // collision with an existing number.
+    /// <summary>Fill every '#' with random digits; retry on the (unlikely) collision.</summary>
+    private async Task<string> DrawRandomAsync(string format, CancellationToken ct)
+    {
         var digits = Math.Max(1, format.Count(c => c == '#'));
         for (var attempt = 0; ; attempt++)
         {

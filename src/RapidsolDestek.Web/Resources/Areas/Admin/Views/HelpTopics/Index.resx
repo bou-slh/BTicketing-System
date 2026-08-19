@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ht.title" xml:space="preserve">
+    <value>Yardım Konuları</value>
+  </data>
+  <data name="ht.sub" xml:space="preserve">
+    <value>Kullanıcıların talep açarken seçtiği konular. Her konu departman, öncelik ve SLA atamalarını belirler.</value>
+  </data>
+  <data name="ht.searchPh" xml:space="preserve">
+    <value>Konu ara…</value>
+  </data>
+  <data name="ht.sortMode" xml:space="preserve">
+    <value>Sıralama modu</value>
+  </data>
+  <data name="ht.sortAlpha" xml:space="preserve">
+    <value>Alfabetik</value>
+  </data>
+  <data name="ht.sortManual" xml:space="preserve">
+    <value>Manuel</value>
+  </data>
+  <data name="ht.saveSort" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="ht.new" xml:space="preserve">
+    <value>＋ Yeni Konu</value>
+  </data>
+  <data name="ht.colTopic" xml:space="preserve">
+    <value>Konu</value>
+  </data>
+  <data name="ht.colType" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="ht.colPriority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="ht.colDept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="ht.typePublic" xml:space="preserve">
+    <value>Herkese Açık</value>
+  </data>
+  <data name="ht.typeInternal" xml:space="preserve">
+    <value>Dahili</value>
+  </data>
+  <data name="ht.showing" xml:space="preserve">
+    <value>{2} konudan {0}–{1} arası gösteriliyor</value>
+  </data>
+  <data name="ht.bulkTitle" xml:space="preserve">
+    <value>Toplu işlemler</value>
+  </data>
+  <data name="ht.bulkHelp" xml:space="preserve">
+    <value>Seçili konulara uygulanır.</value>
+  </data>
+  <data name="ht.emptyTitle" xml:space="preserve">
+    <value>Henüz yardım konusu yok</value>
+  </data>
+  <data name="ht.emptyText" xml:space="preserve">
+    <value>Kullanıcıların talep açarken seçeceği ilk konuyu oluşturun.</value>
+  </data>
+  <data name="ht.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="ht.archived" xml:space="preserve">
+    <value>Arşiv</value>
+  </data>
+  <data name="ht.bulkNone" xml:space="preserve">
+    <value>Seçili konu yok.</value>
+  </data>
+  <data name="ht.bulkDone" xml:space="preserve">
+    <value>{0} konu güncellendi.</value>
+  </data>
+  <data name="ht.bulkPartial" xml:space="preserve">
+    <value>{0} konu güncellendi, {1} konu atlandı (kullanımda).</value>
+  </data>
+  <data name="ht.toastMode" xml:space="preserve">
+    <value>Sıralama modu kaydedildi.</value>
+  </data>
+  <data name="ht.toastSaved" xml:space="preserve">
+    <value>Konu kaydedildi.</value>
+  </data>
+  <data name="ht.toastCreated" xml:space="preserve">
+    <value>Konu oluşturuldu.</value>
+  </data>
+  <data name="ht.toastDeleted" xml:space="preserve">
+    <value>Konu silindi.</value>
+  </data>
+</root>

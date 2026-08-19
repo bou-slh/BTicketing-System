@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ht.title" xml:space="preserve">
+    <value>Help Topics</value>
+  </data>
+  <data name="ht.sub" xml:space="preserve">
+    <value>Topics users pick when opening a request. Each topic controls department, priority and SLA assignments.</value>
+  </data>
+  <data name="ht.searchPh" xml:space="preserve">
+    <value>Search topics…</value>
+  </data>
+  <data name="ht.sortMode" xml:space="preserve">
+    <value>Sort mode</value>
+  </data>
+  <data name="ht.sortAlpha" xml:space="preserve">
+    <value>Alphabetical</value>
+  </data>
+  <data name="ht.sortManual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="ht.saveSort" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ht.new" xml:space="preserve">
+    <value>＋ New Topic</value>
+  </data>
+  <data name="ht.colTopic" xml:space="preserve">
+    <value>Topic</value>
+  </data>
+  <data name="ht.colType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ht.colPriority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="ht.colDept" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="ht.typePublic" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="ht.typeInternal" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="ht.showing" xml:space="preserve">
+    <value>Showing {0}–{1} of {2} topics</value>
+  </data>
+  <data name="ht.bulkTitle" xml:space="preserve">
+    <value>Bulk actions</value>
+  </data>
+  <data name="ht.bulkHelp" xml:space="preserve">
+    <value>Applied to the selected topics.</value>
+  </data>
+  <data name="ht.emptyTitle" xml:space="preserve">
+    <value>No help topics yet</value>
+  </data>
+  <data name="ht.emptyText" xml:space="preserve">
+    <value>Create the first topic users will pick when opening a request.</value>
+  </data>
+  <data name="ht.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="ht.archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="ht.bulkNone" xml:space="preserve">
+    <value>No topics selected.</value>
+  </data>
+  <data name="ht.bulkDone" xml:space="preserve">
+    <value>{0} topics updated.</value>
+  </data>
+  <data name="ht.bulkPartial" xml:space="preserve">
+    <value>{0} topics updated, {1} skipped (in use).</value>
+  </data>
+  <data name="ht.toastMode" xml:space="preserve">
+    <value>Sort mode saved.</value>
+  </data>
+  <data name="ht.toastSaved" xml:space="preserve">
+    <value>Topic saved.</value>
+  </data>
+  <data name="ht.toastCreated" xml:space="preserve">
+    <value>Topic created.</value>
+  </data>
+  <data name="ht.toastDeleted" xml:space="preserve">
+    <value>Topic deleted.</value>
+  </data>
+</root>

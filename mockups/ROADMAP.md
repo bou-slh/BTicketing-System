@@ -874,7 +874,46 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
 - [ ] **templates.html / template-edit.html** — set CRUD (create dialog closes properly); 21 templates each
       open their own content (B2); variable pills click-to-insert (B5); per-template preview
 - [ ] **banlist.html** — add/edit/delete real; B1
-- [ ] **helptopics.html / helptopic-edit.html** — CRUD; number-format radio gates input; forms tab attach/detach (B3/B4)
+- [x] **helptopics.html / helptopic-edit.html** — CRUD; number-format radio gates input; forms tab attach/detach (B3/B4)
+      *(S7; /admin/helptopics + /admin/helptopic-edit?id= (HelpTopicsController; no id = create — the
+      mockup's new-button links straight to helptopic-edit.html). NEW S7_HelpTopicSettings migration:
+      HelpTopic.IsArchived (the editor's 3-state status select, department twin — archived implies
+      inactive so the S5/S6 IsActive consumers keep working) + UseRandomNumbers (osTicket sequence_id 0).
+      B1 list: tree order with children indented under their parent (departments precedent; child rows
+      show the full "Bordro / Yol Ücreti" label per the mockup DOM; search flattens); DEFAULT row order =
+      the toolbar's sort-mode select — Kaydet persists tickets/topic_sort_mode (manual = Sort column =
+      the mockup's exact row order, alfabetik = TR collation); header sort on Konu/Güncellenme orders
+      SIBLINGS; DEVIATION flagged: the mockup's static sorted-desc indicator on Güncellenme contradicts
+      its own manual row order — the indicator now follows the ACTIVE sort only. dlg-more bulk
+      enable/disable/delete over the selection (delete guard: topics referenced by child topics or
+      tickets are skipped — teams precedent, needs canon sign-off); rd-empty = the mockup's hidden
+      #ht-empty reachable. Editor: every control persists — parent select (cycle guard walks the
+      ancestor chain), routing selects = REAL rows with "— Sistem varsayılanı —" as the null the S4
+      CreateAsync cascade falls through (dept/initial status/priority/SLA/thank-you page); assign =
+      s:{id}/t:{id} optgroups (ticket-open Ata parity); thank-you select lists ThankYou-type SitePages
+      only (settings-company per-type precedent — the mockup's "Hoş Geldiniz" option is Landing-type
+      sample state, flagged). B3: the custom number-format radio data-gates the format input (rd.js,
+      settings-company radio precedent) and the server refuses a '#'-less custom format (hte.errFormat);
+      the sequence select = seeded Sequence rows joined onto the mockup's two options — empty "Genel
+      sıra" = the global numbering settings, "Rastgele" = the NEW per-topic UseRandomNumbers, honored by
+      TicketService.DrawNumberAsync (tested: an admin-edited format is drawn on the next ticket; random
+      leaves the global counter untouched); sequence CRUD stays on settings-tickets. Forms tab (B4):
+      one block per attached HelpTopicForm — head "Ek form: {0}" (invented hte.formsHeadFmt; the
+      mockup's hte.formsHead hardcodes "Talep Detayları" — its 4 sample rows are the BUILT-IN ticket
+      form while the seed attaches Bordro Ek Bilgileri, sample-state conflict flagged), per-field enable
+      checkboxes persisted as the osTicket-parity Extra {"disable":[ids]} which BOTH open pages now
+      honor (portal open + agent ticket-open field scopes; tested end-to-end: a disabled field
+      disappears from /open); attach = "Form ekle" clones a per-form <template> client-side (page
+      script, portal-open precedent — the mockup button is dead), detach = INVENTED ✕ per block (the
+      ROADMAP row asks for detach, the mockup defines no control — needs canon sign-off); the add
+      select lists General-kind definitions only (the mockup's "Şirket Bilgileri" option is the builtin
+      org form — sample state, flagged); everything reconciles in the ONE page save. Editor delete =
+      dlg-delete confirm → topics referenced by tickets/children are REFUSED (hte.errInUse — mockup has
+      no reassign flow; archive instead, flagged). Invented keys (TR/EN twins): ht.dateFmt/archived/
+      bulk*/toast* + parameterized ht.showing; hte.newTitle/err*/formsHeadFmt/tChoice/tDate/addFormPh/
+      detachTitle. Differ notes: Updated cells show live timestamps (seed carries no canon dates);
+      priority/status selects list ALL real rows vs the mockup's samples. +7 tests
+      (HelpTopicsSlasAdminTests).)*
 - [ ] **filters.html / filter-edit.html** — CRUD; rule/action rows add/remove (B4); match-count preview; filters actually run in the mail/ticket pipeline
 - [ ] **queues.html** — full builder: criteria/columns/sort/conditions rows (B4), drag-reorder columns, export
       column set, **live preview**, saved queue appears in agent queue tree
@@ -882,7 +921,31 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       type select reveals options editor, drag-reorder, live preview; output consumed by portal/agent open pages
 - [ ] **lists.html / list-edit.html** — list editor: item CRUD + reorder (sort-mode gates), import dialog works,
       properties fields; system lists protected (B4)
-- [ ] **slas.html** — per-row dialog prefilled (B2); grace/transient switches consumed by SLA engine
+- [x] **slas.html** — per-row dialog prefilled (B2); grace/transient switches consumed by SLA engine
+      *(S7; /admin/slas (SlasController). B1: header sort name/grace/updated (updated desc default =
+      the mockup's indicator AND its exact row order Standart → Dahili Talepler via the id tiebreak),
+      search, pagination (PageSize 8), dlg-more bulk enable/disable/delete (delete guard: plans
+      referenced by tickets/departments/help topics or the core default_sla_id pointer are skipped —
+      teams precedent, flagged); rd-empty = the mockup's hidden #sla-empty reachable. B2: the mockup's
+      ONE hardcoded dlg-sla split into a create dialog + per-row dialogs prefilled server-side (name,
+      grace, status radios, schedule select = BusinessHours schedules only — holiday calendars are no
+      SLA clock, flagged; transient + alerts switches, notes; per-dialog titles sla.dlgTitleFmt/
+      dlgNewTitle invented, teams precedent); submit drops the mockup's data-dialog-close (the audited
+      B2 close-swallows-save bug). ENGINE CONSUMPTION — grace: TicketService.CreateAsync now stamps
+      EstimatedDueDate = create + GracePeriodHours whenever an SLA lands on the ticket, so the value
+      every existing due/overdue consumer reads (DueDate ?? EstimatedDueDate: live board chips, agent
+      list due sort, dashboards, ticket view) follows the admin-edited grace (tested end-to-end:
+      dialog-created 6h plan → ticket due ≈ +6h); wall-clock hours for now — TODO(S8): the SLA sweep
+      recomputes schedule-aware (the clock only runs inside the plan's working schedule) and flags
+      IsOverdue/escalation. Transient: TicketService.TransferAsync re-resolves a transient plan (topic
+      SLA → new department SLA → core default) and recomputes the due date under the replacement
+      (osTicket FLAG_TRANSIENT semantics; tested: transfer to Bordro swaps the transient plan for
+      Standart); topic changes have no edit path yet — the transfer leg is the wired one. Overdue-alerts
+      switch persists as the inverted DisableOverdueAlerts TODO(S8 sweep alert fan-out);
+      EscalateOnOverdue has no mockup control (osTicket flag kept on the entity, untouched). Invented
+      keys (TR/EN twins): sla.dateFmt/dlgNewTitle/dlgTitleFmt/err*/toast*/bulk* + parameterized
+      sla.showing. Differ note: Updated cells show live timestamps (seed carries no canon dates).
+      +5 tests (HelpTopicsSlasAdminTests) — suite 247.)*
 - [ ] **schedules.html / schedule-edit.html** — entry/holiday rows add/remove (B4); timezone; **diagnostic answers**; Clone works
 - [ ] **pages.html** — site page CRUD (B2); pages served on portal
 - [ ] **apikeys.html** — key CRUD + regenerate + copy-to-clipboard; IP restriction enforced by the API (B2)

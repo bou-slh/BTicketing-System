@@ -1,0 +1,198 @@
+@using System.Globalization
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model TopicsIndexVm
+@{
+    ViewData["Title"] = L["ht.title"];
+
+    // PRG toast handoff after save/sort-mode/bulk (departments precedent).
+    if (TempData["TopicsToast"] is string toastKey)
+    {
+        var ok = TempData["TopicsToastOk"] as int? ?? 0;
+        var skipped = TempData["TopicsToastSkipped"] as int? ?? 0;
+        ViewData["Toast"] = toastKey is "ht.bulkDone" or "ht.bulkPartial"
+            ? L[toastKey, ok, skipped].Value
+            : L[toastKey].Value;
+        if (TempData["TopicsToastError"] is not null)
+        {
+            ViewData["ToastVariant"] = "error";
+        }
+    }
+
+    // Updated cell: the mockup's "28 Tem 2026" cells (ht.dateFmt).
+    string UpdatedText(DateTimeOffset value) =>
+        value.ToLocalTime().ToString(L.GetString("ht.dateFmt"), CultureInfo.CurrentUICulture);
+
+    // Priority cell: the shared priority.* keys the mockup uses; custom priorities
+    // fall back to their row name.
+    string PriorityText(TopicRowVm r) => r.PriorityKey switch
+    {
+        "low" or "normal" or "high" or "emergency" => SL[$"priority.{r.PriorityKey}"].Value,
+        _ => r.PriorityName ?? "—",
+    };
+
+    // Canonical querystring builder so header sort / pagination preserve state.
+    string BuildUrl(string? sortOver = null, string? dirOver = null, int? pageOver = null)
+    {
+        var parts = new List<string>();
+        void Add(string k, string? v)
+        {
+            if (!string.IsNullOrEmpty(v))
+                parts.Add($"{k}={Uri.EscapeDataString(v)}");
+        }
+        Add("q", Model.Query);
+        Add("sort", sortOver ?? Model.Sort);
+        if ((sortOver ?? Model.Sort) is { Length: > 0 })
+            Add("dir", dirOver ?? (Model.Desc ? "desc" : "asc"));
+        if (pageOver is { } pg && pg > 1)
+            Add("page", pg.ToString());
+        return "/admin/helptopics" + (parts.Count > 0 ? "?" + string.Join("&", parts) : "");
+    }
+    string SortUrl(string key) => Model.Sort == key
+        ? BuildUrl(sortOver: key, dirOver: Model.Desc ? "asc" : "desc")
+        : BuildUrl(sortOver: key, dirOver: key == "updated" ? "desc" : "asc");
+    string SortClass(string key) => Model.Sort != key ? "sortable" : Model.Desc ? "sortable sorted-desc" : "sortable sorted-asc";
+    var currentUrl = BuildUrl(pageOver: Model.Page);
+}
+
+<div class="bo-page-head">
+    <div>
+        <h1>@L["ht.title"]</h1>
+        <p>@L["ht.sub"]</p>
+    </div>
+</div>
+
+<form class="rd-list-toolbar" method="get" action="/admin/helptopics">
+    <input type="hidden" name="sort" value="@Model.Sort">
+    <input type="hidden" name="dir" value="@(Model.Desc ? "desc" : "asc")">
+    <input type="search" class="rd-control" name="q" value="@Model.Query" placeholder="@L["ht.searchPh"]">
+    @* Sort-mode select + Kaydet persist tickets/topic_sort_mode (osTicket
+       help_topic_sort_mode) through the hidden POST carrier — the saved mode owns
+       the default row order. *@
+    <select class="rd-control" name="mode" form="ht-sortmode" title="@L["ht.sortMode"]" style="min-width:130px">
+        <option value="alpha" selected="@(Model.Mode == "alpha")">@L["ht.sortAlpha"]</option>
+        <option value="manual" selected="@(Model.Mode != "alpha")">@L["ht.sortManual"]</option>
+    </select>
+    <button class="rd-btn rd-btn-sm" type="submit" form="ht-sortmode">@L["ht.saveSort"]</button>
+    <span class="spacer"></span>
+    <button class="rd-btn" type="button" data-dialog-open="dlg-more"><span>@SL["common.more"]</span> ▾</button>
+    <a class="rd-btn rd-btn-primary" href="/admin/helptopic-edit">@L["ht.new"]</a>
+</form>
+
+<div class="rd-surface" id="tbl-topics">
+    @if (Model.Rows.Count == 0)
+    {
+        @* Mockup's hidden #ht-empty panel, reachable for real (B1). *@
+        <div class="rd-empty">
+            <div class="icon">❓</div>
+            <h3>@L["ht.emptyTitle"]</h3>
+            <p>@L["ht.emptyText"]</p>
+            <a class="rd-btn rd-btn-primary" href="/admin/helptopic-edit">@L["ht.new"]</a>
+        </div>
+    }
+    else
+    {
+    <div style="overflow-x:auto">
+        <table class="rd-table">
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" data-check-all="#tbl-topics" title="@SL["common.selectAll"]"></th>
+                    <th class="@SortClass("topic")"><a href="@SortUrl("topic")">@L["ht.colTopic"]</a></th>
+                    <th>@SL["common.status"]</th>
+                    <th>@L["ht.colType"]</th>
+                    <th>@L["ht.colPriority"]</th>
+                    <th>@L["ht.colDept"]</th>
+                    <th class="@SortClass("updated")"><a href="@SortUrl("updated")">@SL["common.updated"]</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.Rows)
+                {
+                    <tr>
+                        <td class="col-check"><input type="checkbox" name="ids" value="@r.Id" form="ht-bulk"></td>
+                        @if (!Model.Flat && r.Depth > 0)
+                        {
+                            @* Mockup child-row DOM: indented └ prefix, full "Üst / Alt" label. *@
+                            <td style="padding-left:@(r.Depth * 34)px"><span class="rd-muted">└</span> <a href="/admin/helptopic-edit?id=@r.Id">@r.FullName</a></td>
+                        }
+                        else
+                        {
+                            <td><a href="/admin/helptopic-edit?id=@r.Id">@(Model.Flat ? r.FullName : r.Name)</a></td>
+                        }
+                        @switch (r.Status)
+                        {
+                            case TopicStatus.Active:
+                                <td><span class="rd-pill rd-pill-solved">@SL["common.active"]</span></td>
+                                break;
+                            case TopicStatus.Disabled:
+                                <td><span class="rd-pill rd-pill-closed">@SL["common.disabled"]</span></td>
+                                break;
+                            default:
+                                <td><span class="rd-pill rd-pill-wait">@L["ht.archived"]</span></td>
+                                break;
+                        }
+                        <td>@L[r.IsPublic ? "ht.typePublic" : "ht.typeInternal"]</td>
+                        <td>@PriorityText(r)</td>
+                        @if (r.Department is null)
+                        {
+                            <td class="rd-muted">—</td>
+                        }
+                        else
+                        {
+                            <td>@r.Department</td>
+                        }
+                        <td>@UpdatedText(r.Updated)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="rd-pagination">
+        <span>@L["ht.showing", Model.From, Model.To, Model.Total]</span>
+        <div class="pages">
+            @for (var p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == Model.Page)
+                {
+                    <span class="current">@p</span>
+                }
+                else
+                {
+                    <a href="@BuildUrl(pageOver: p)">@p</a>
+                }
+            }
+        </div>
+    </div>
+    }
+</div>
+
+@* Selection carrier for the dlg-more bulk actions (teams precedent). *@
+<form id="ht-bulk" method="post" asp-area="Admin" asp-controller="HelpTopics" asp-action="Bulk" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+@* Sort-mode carrier (the toolbar select/button post through it). *@
+<form id="ht-sortmode" method="post" asp-area="Admin" asp-controller="HelpTopics" asp-action="SortMode" hidden>
+    <input type="hidden" name="returnUrl" value="@currentUrl">
+</form>
+
+<dialog class="rd-dialog" id="dlg-more">
+    <div class="rd-dialog-head"><span>@L["ht.bulkTitle"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body">
+        <p class="rd-help" style="margin-top:0">@L["ht.bulkHelp"]</p>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+            @* No data-dialog-close on the submits — the audited B2 close-swallows-save bug. *@
+            <button class="rd-btn" type="submit" form="ht-bulk" name="act" value="enable">@SL["common.enable"]</button>
+            <button class="rd-btn" type="submit" form="ht-bulk" name="act" value="disable">@SL["common.disable"]</button>
+            <button class="rd-btn rd-btn-danger" type="button" data-dialog-open="dlg-delete" data-dialog-close>@SL["common.delete"]</button>
+        </div>
+    </div>
+</dialog>
+
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p>@SL["common.confirmDelete"]</p></div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="ht-bulk" name="act" value="delete">@SL["common.delete"]</button>
+    </div>
+</dialog>

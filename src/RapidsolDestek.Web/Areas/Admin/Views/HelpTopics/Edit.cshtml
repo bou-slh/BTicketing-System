@@ -1,0 +1,363 @@
+@using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Web.Areas.Admin.Controllers
+@model TopicEditVm
+@{
+    var t = Model.Topic;
+    var isNew = t is null;
+    ViewData["Title"] = isNew ? L["hte.newTitle"].Value : Model.Crumb;
+
+    // B3 validation failure PRG toast (nothing was written).
+    if (TempData["TopicEditToast"] is string toastKey)
+    {
+        ViewData["Toast"] = L[toastKey].Value;
+        ViewData["ToastVariant"] = "error";
+    }
+
+    var status = t is null ? "active" : t.IsArchived ? "archived" : t.IsActive ? "active" : "disabled";
+    var customFormat = t?.NumberFormat is not null;
+    var sequenceValue = t is null ? "" : t.UseRandomNumbers ? "random" : t.SequenceId?.ToString() ?? "";
+    var assignValue = t?.StaffId is { } sid ? $"s:{sid}" : t?.TeamId is { } tid ? $"t:{tid}" : "";
+    var attachedIds = Model.AttachedForms.Select(f => f.Id).ToHashSet();
+
+    // Field type cell: the mockup's Kısa/Uzun Metin labels + invented keys for the
+    // remaining designer types (choices/date); unknown types render verbatim.
+    string TypeLabel(string type) => type switch
+    {
+        "text" => L["hte.tShort"].Value,
+        "memo" => L["hte.tLong"].Value,
+        "choices" => L["hte.tChoice"].Value,
+        "date" => L["hte.tDate"].Value,
+        _ => type,
+    };
+}
+
+<form method="post" asp-area="Admin" asp-controller="HelpTopics" asp-action="Save">
+    @if (!isNew)
+    {
+        <input type="hidden" name="id" value="@t!.Id">
+    }
+
+    <div class="bo-page-head">
+        <div>
+            <a href="/admin/helptopics" style="font-size:13px">@L["hte.back"]</a>
+            <h1>@(isNew ? L["hte.newTitle"].Value : Model.Crumb)</h1>
+            <p>@L["hte.sub"]</p>
+        </div>
+        <div class="actions">
+            @* Delete posts through the hidden carrier below (dlg-delete confirm);
+               disabled on create — there is nothing to delete yet. *@
+            <button type="button" class="rd-btn rd-btn-danger" data-dialog-open="dlg-delete" disabled="@isNew">@SL["common.delete"]</button>
+            <button type="reset" class="rd-btn">@SL["common.reset"]</button>
+            <button type="submit" class="rd-btn rd-btn-primary">@SL["common.save"]</button>
+        </div>
+    </div>
+
+    <div class="rd-tabs" data-tabs>
+        <button type="button" class="active" data-tab="hte-info">@L["hte.tabInfo"]</button>
+        <button type="button" data-tab="hte-options">@L["hte.tabOptions"]</button>
+        <button type="button" data-tab="hte-forms">@L["hte.tabForms"]</button>
+    </div>
+
+    @* ============ Bilgiler ============ *@
+    <div class="rd-tab-panel active" id="hte-info">
+        <div class="rd-surface">
+            <div class="rd-surface-body" style="max-width:720px">
+                <div class="rd-field">
+                    <label class="rd-label" for="hte-name">@L["hte.name"]</label>
+                    <input id="hte-name" name="name" class="rd-control" value="@t?.Name" required maxlength="120">
+                    <div class="rd-help">@L["hte.nameHelp"]</div>
+                </div>
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="hte-status">@L["hte.status"]</label>
+                        <select id="hte-status" name="status" class="rd-control">
+                            <option value="active" selected="@(status == "active")">@SL["common.active"]</option>
+                            <option value="disabled" selected="@(status == "disabled")">@SL["common.disabled"]</option>
+                            <option value="archived" selected="@(status == "archived")">@L["hte.statusArchived"]</option>
+                        </select>
+                        <div class="rd-help">@L["hte.statusHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <span class="rd-label">@L["hte.visibility"]</span>
+                        <div style="display:flex;gap:18px;padding:10px 0 2px">
+                            <label class="rd-check"><input type="radio" name="isPublic" value="true" checked="@(t?.IsPublic ?? true)"><span>@L["hte.public"]</span></label>
+                            <label class="rd-check"><input type="radio" name="isPublic" value="false" checked="@(t is { IsPublic: false })"><span>@L["hte.internal"]</span></label>
+                        </div>
+                        <div class="rd-help">@L["hte.visHelp"]</div>
+                    </div>
+                </div>
+                <div class="rd-field">
+                    <label class="rd-label" for="hte-parent">@L["hte.parent"]</label>
+                    <select id="hte-parent" name="parentId" class="rd-control">
+                        <option value="" selected="@(t?.ParentId is null)">@L["hte.parentNone"]</option>
+                        @foreach (var p in Model.Parents)
+                        {
+                            <option value="@p.Id" selected="@(t?.ParentId == p.Id)">@p.Label</option>
+                        }
+                    </select>
+                    <div class="rd-help">@L["hte.parentHelp"]</div>
+                </div>
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="hte-notes">@SL["common.notes"]</label>
+                    <textarea id="hte-notes" name="notes" class="rd-control">@t?.Notes</textarea>
+                    <div class="rd-help">@SL["common.notesHelp"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ============ Yeni Talep Seçenekleri ============
+       Every select lists REAL rows; empty = system default — exactly the nullable
+       routing columns TicketService.CreateAsync cascades over (S4). *@
+    <div class="rd-tab-panel" id="hte-options">
+        <div class="rd-surface">
+            <div class="rd-surface-body" style="max-width:720px">
+                <div class="rd-grid-2">
+                    <div class="rd-field">
+                        <label class="rd-label" for="hte-dept">@L["hte.dept"]</label>
+                        <select id="hte-dept" name="deptId" class="rd-control">
+                            <option value="" selected="@(t?.DepartmentId is null)">@L["hte.sysDefault"]</option>
+                            @foreach (var o in Model.Departments)
+                            {
+                                <option value="@o.Id" selected="@(t?.DepartmentId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["hte.deptHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="hte-newstatus">@L["hte.newStatus"]</label>
+                        <select id="hte-newstatus" name="statusId" class="rd-control">
+                            <option value="" selected="@(t?.StatusId is null)">@L["hte.sysDefault"]</option>
+                            @foreach (var o in Model.Statuses)
+                            {
+                                <option value="@o.Id" selected="@(t?.StatusId == o.Id)">@SL[$"status.{o.Key}"]</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["hte.newStatusHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="hte-priority">@L["hte.priority"]</label>
+                        <select id="hte-priority" name="priorityId" class="rd-control">
+                            <option value="" selected="@(t?.PriorityId is null)">@L["hte.sysDefault"]</option>
+                            @foreach (var o in Model.Priorities)
+                            {
+                                <option value="@o.Id" selected="@(t?.PriorityId == o.Id)">@SL[$"priority.{o.Key}"]</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["hte.priorityHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="hte-sla">@L["hte.sla"]</label>
+                        <select id="hte-sla" name="slaId" class="rd-control">
+                            <option value="" selected="@(t?.SlaId is null)">@L["hte.sysDefault"]</option>
+                            @foreach (var o in Model.Slas)
+                            {
+                                <option value="@o.Id" selected="@(t?.SlaId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["hte.slaHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="hte-thanks">@L["hte.thanks"]</label>
+                        <select id="hte-thanks" name="pageId" class="rd-control">
+                            <option value="" selected="@(t?.SitePageId is null)">@L["hte.sysDefault"]</option>
+                            @foreach (var o in Model.ThankYouPages)
+                            {
+                                <option value="@o.Id" selected="@(t?.SitePageId == o.Id)">@o.Label</option>
+                            }
+                        </select>
+                        <div class="rd-help">@L["hte.thanksHelp"]</div>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="hte-assign">@L["hte.assign"]</label>
+                        <select id="hte-assign" name="assign" class="rd-control">
+                            <option value="" selected="@(assignValue == "")">@L["hte.assignNone"]</option>
+                            <optgroup label="@L["hte.grpAgents"]">
+                                @foreach (var o in Model.Agents)
+                                {
+                                    <option value="s:@o.Id" selected="@(assignValue == $"s:{o.Id}")">@o.Label</option>
+                                }
+                            </optgroup>
+                            <optgroup label="@L["hte.grpTeams"]">
+                                @foreach (var o in Model.Teams)
+                                {
+                                    <option value="t:@o.Id" selected="@(assignValue == $"t:{o.Id}")">@o.Label</option>
+                                }
+                            </optgroup>
+                        </select>
+                        <div class="rd-help">@L["hte.assignHelp"]</div>
+                    </div>
+                </div>
+
+                <details class="rd-advanced">
+                    <summary>@SL["common.advanced"]</summary>
+                    <div class="rd-advanced-body">
+                        <div class="rd-field">
+                            <span class="rd-label">@L["hte.numFormat"]</span>
+                            <div style="display:flex;gap:18px;padding:6px 0 8px">
+                                <label class="rd-check"><input type="radio" name="numMode" value="system" checked="@(!customFormat)"><span>@L["hte.numSystem"]</span></label>
+                                @* B3: the custom radio gates the format input (rd.js data-gates,
+                                   settings-company radio precedent); the server refuses a
+                                   custom save without a '#' slot. *@
+                                <label class="rd-check"><input type="radio" name="numMode" value="custom" checked="@customFormat" data-gates="#hte-numfmt-input"><span>@L["hte.numCustom"]</span></label>
+                            </div>
+                            <input id="hte-numfmt-input" name="numberFormat" class="rd-control" value="@t?.NumberFormat" maxlength="32" style="max-width:240px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace">
+                            <div class="rd-help">@L["hte.numHelp"]</div>
+                        </div>
+                        <div class="rd-field">
+                            <label class="rd-label" for="hte-seq">@L["hte.numSeq"]</label>
+                            <select id="hte-seq" name="sequence" class="rd-control" style="max-width:240px">
+                                @* Real Sequence rows join the mockup's two options: empty =
+                                   the global numbering settings, "random" = per-topic random
+                                   digits (osTicket sequence_id 0). *@
+                                <option value="" selected="@(sequenceValue == "")">@L["hte.seqGlobal"]</option>
+                                @foreach (var o in Model.Sequences)
+                                {
+                                    <option value="@o.Id" selected="@(sequenceValue == o.Id.ToString())">@o.Label</option>
+                                }
+                                <option value="random" selected="@(sequenceValue == "random")">@L["hte.seqRandom"]</option>
+                            </select>
+                            <div class="rd-help">@L["hte.numSeqHelp"]</div>
+                        </div>
+                        <label class="rd-switch">
+                            <input type="checkbox" name="noAutoresp" value="true" checked="@(t?.NoAutoResponse ?? false)">
+                            <span class="track"></span>
+                            <span class="rd-switch-copy"><b>@L["hte.noAutoresp"]</b><small>@L["hte.noAutorespHelp"]</small></span>
+                        </label>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    @* ============ Formlar ============
+       B4: attached HelpTopicForm rows render as one block per form — hidden
+       formIds input + per-field enable checkboxes (unchecked = per-topic disabled,
+       persisted to HelpTopicForm.Extra and consumed by both open pages). "Form
+       ekle" clones the matching <template> client-side (page script below — the
+       mockup's button is dead); the invented ✕ detaches a block and restores its
+       option (the ROADMAP row asks for detach, the mockup defines no control —
+       flagged). Everything reconciles in the ONE page save. *@
+    <div class="rd-tab-panel" id="hte-forms">
+        @{
+            async Task FormBlockAsync(TopicFormVm f)
+            {
+                <div class="rd-surface" style="margin-bottom:18px" data-form-block="@f.Id">
+                    <input type="hidden" name="formIds" value="@f.Id">
+                    <div class="rd-surface-head">
+                        <span>@L["hte.formsHeadFmt", f.Title]</span>
+                        <span class="spacer"></span>
+                        <button type="button" class="rd-btn rd-btn-ghost rd-btn-sm" data-form-detach title="@L["hte.detachTitle"]">✕</button>
+                    </div>
+                    <table class="rd-table">
+                        <thead>
+                            <tr>
+                                <th>@L["hte.fEnabled"]</th>
+                                <th>@L["hte.fLabel"]</th>
+                                <th>@L["hte.fType"]</th>
+                                <th>@L["hte.fVis"]</th>
+                                <th>@L["hte.fVar"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var field in f.Fields)
+                            {
+                                <tr>
+                                    <td><input type="checkbox" name="enabledFields" value="@field.Id" checked="@field.Enabled"></td>
+                                    <td>@field.Label</td>
+                                    <td>@TypeLabel(field.Type)</td>
+                                    <td>@L[field.VisibleToUsers ? "hte.public" : "hte.internal"]</td>
+                                    <td style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace">@field.Variable</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+        <div id="hte-form-blocks">
+            @foreach (var f in Model.AttachedForms)
+            {
+                await FormBlockAsync(f);
+            }
+        </div>
+        <div class="rd-surface">
+            <div class="rd-surface-body">
+                <p class="rd-help" style="margin:0 0 14px">@L["hte.formsHelp"]</p>
+                <div class="rd-field mb-0">
+                    <label class="rd-label" for="hte-addform">@L["hte.addForm"]</label>
+                    <div style="display:flex;gap:10px">
+                        <select id="hte-addform" class="rd-control" style="max-width:280px">
+                            <option value="" selected>@L["hte.addFormPh"]</option>
+                            @foreach (var f in Model.AvailableForms)
+                            {
+                                @* Attached forms render hidden — the detach ✕ restores them
+                                   (roster-option precedent). *@
+                                <option value="@f.Id" hidden="@attachedIds.Contains(f.Id)" disabled="@attachedIds.Contains(f.Id)">@f.Title</option>
+                            }
+                        </select>
+                        <button type="button" class="rd-btn" data-form-attach>@SL["common.add"]</button>
+                    </div>
+                    <div class="rd-help">@L["hte.addFormHelp"]</div>
+                </div>
+            </div>
+        </div>
+        @* Inert clone sources for "Form ekle": one full block per attachable form,
+           every field enabled by default. *@
+        @foreach (var f in Model.AvailableForms)
+        {
+            <template id="hte-form-tpl-@f.Id">
+                @{ await FormBlockAsync(f); }
+            </template>
+        }
+    </div>
+</form>
+
+@* Forms-tab attach/detach mechanics (page-specific; portal open page-script precedent). *@
+<script>
+(() => {
+  const sel = document.getElementById("hte-addform");
+  const blocks = document.getElementById("hte-form-blocks");
+  if (!sel || !blocks) return;
+  document.addEventListener("click", (e) => {
+    const attach = e.target.closest("[data-form-attach]");
+    if (attach) {
+      e.preventDefault();
+      const id = sel.value;
+      const tpl = id && document.getElementById("hte-form-tpl-" + id);
+      if (tpl) {
+        blocks.append(tpl.content.cloneNode(true));
+        const opt = sel.querySelector('option[value="' + id + '"]');
+        if (opt) { opt.hidden = true; opt.disabled = true; }
+        sel.selectedIndex = 0;
+      }
+    }
+    const detach = e.target.closest("[data-form-detach]");
+    if (detach) {
+      e.preventDefault();
+      const block = detach.closest("[data-form-block]");
+      if (!block) return;
+      const opt = sel.querySelector('option[value="' + block.getAttribute("data-form-block") + '"]');
+      if (opt) { opt.hidden = false; opt.disabled = false; }
+      block.remove();
+    }
+  });
+})();
+</script>
+
+@* Delete carrier + confirm dialog (mockup dlg-delete; the topic delete endpoint
+   refuses topics referenced by tickets or sub-topics). *@
+@if (!isNew)
+{
+    <form id="hte-del" method="post" asp-area="Admin" asp-controller="HelpTopics" asp-action="Delete" hidden>
+        <input type="hidden" name="id" value="@t!.Id">
+    </form>
+}
+<dialog class="rd-dialog" id="dlg-delete">
+    <div class="rd-dialog-head"><span>@SL["common.delete"]</span><button class="close" data-dialog-close>✕</button></div>
+    <div class="rd-dialog-body"><p>@SL["common.confirmDelete"]</p></div>
+    <div class="rd-dialog-foot">
+        <button class="rd-btn" type="button" data-dialog-close>@SL["common.cancel"]</button>
+        <button class="rd-btn rd-btn-danger" type="submit" form="hte-del" disabled="@isNew">@SL["common.delete"]</button>
+    </div>
+</dialog>

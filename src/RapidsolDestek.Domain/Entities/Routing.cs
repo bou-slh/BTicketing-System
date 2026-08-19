@@ -19,6 +19,12 @@ public class HelpTopic : TimestampedEntity
 
     public bool IsActive { get; set; } = true;
 
+    /// <summary>
+    /// Archived topics cannot be picked on new tickets but stay visible on old ones
+    /// (osTicket FLAG_ARCHIVED; Department twin — archived implies inactive).
+    /// </summary>
+    public bool IsArchived { get; set; }
+
     /// <summary>Suppress the new-ticket auto-response (osTicket noautoresp).</summary>
     public bool NoAutoResponse { get; set; }
 
@@ -35,6 +41,12 @@ public class HelpTopic : TimestampedEntity
     public int? SitePageId { get; set; }
 
     public int? SequenceId { get; set; }
+
+    /// <summary>
+    /// Draw random digits instead of advancing a sequence (osTicket's special
+    /// sequence_id 0 "Random"); wins over <see cref="SequenceId"/>.
+    /// </summary>
+    public bool UseRandomNumbers { get; set; }
 
     /// <summary>Number format override, e.g. "R######" (osTicket number_format).</summary>
     public string? NumberFormat { get; set; }
@@ -57,8 +69,45 @@ public class HelpTopicForm : EntityBase
 
     public int Sort { get; set; } = 1;
 
-    /// <summary>JSON: per-topic field overrides (osTicket extra).</summary>
+    /// <summary>JSON: per-topic field overrides (osTicket extra), e.g. {"disable":[fieldIds]}.</summary>
     public string? Extra { get; set; }
+
+    /// <summary>
+    /// Per-topic disabled field ids from <see cref="Extra"/> (osTicket extra.disable):
+    /// unchecked fields on the admin forms tab are hidden from tickets opened with the
+    /// topic, without touching the form definition itself.
+    /// </summary>
+    public IReadOnlySet<int> DisabledFieldIds()
+    {
+        if (string.IsNullOrWhiteSpace(Extra))
+            return EmptyIds;
+        try
+        {
+            using var doc = System.Text.Json.JsonDocument.Parse(Extra);
+            if (!doc.RootElement.TryGetProperty("disable", out var disable)
+                || disable.ValueKind != System.Text.Json.JsonValueKind.Array)
+                return EmptyIds;
+            var ids = new HashSet<int>();
+            foreach (var item in disable.EnumerateArray())
+            {
+                if (item.TryGetInt32(out var id))
+                    ids.Add(id);
+            }
+            return ids;
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            return EmptyIds;
+        }
+    }
+
+    /// <summary>Inverse of <see cref="DisabledFieldIds"/>: null when nothing is disabled.</summary>
+    public static string? BuildExtra(IReadOnlyCollection<int> disabledFieldIds) =>
+        disabledFieldIds.Count == 0
+            ? null
+            : System.Text.Json.JsonSerializer.Serialize(new { disable = disabledFieldIds.Order().ToArray() });
+
+    private static readonly IReadOnlySet<int> EmptyIds = new HashSet<int>();
 }
 
 /// <summary>Mirrors osTicket <c>sla</c>; flag bits unpacked into explicit booleans.</summary>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="hte.back" xml:space="preserve">
+    <value>← Yardım Konuları</value>
+  </data>
+  <data name="hte.sub" xml:space="preserve">
+    <value>Yardım konusunu düzenleyin — bilgiler, yeni talep varsayılanları ve ek formlar.</value>
+  </data>
+  <data name="hte.tabInfo" xml:space="preserve">
+    <value>Bilgiler</value>
+  </data>
+  <data name="hte.tabOptions" xml:space="preserve">
+    <value>Yeni Talep Seçenekleri</value>
+  </data>
+  <data name="hte.tabForms" xml:space="preserve">
+    <value>Formlar</value>
+  </data>
+  <data name="hte.name" xml:space="preserve">
+    <value>Konu adı</value>
+  </data>
+  <data name="hte.nameHelp" xml:space="preserve">
+    <value>Kullanıcıya gösterilen tam ad. Alt konular "Üst / Alt" biçiminde görünür.</value>
+  </data>
+  <data name="hte.status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="hte.statusArchived" xml:space="preserve">
+    <value>Arşiv</value>
+  </data>
+  <data name="hte.statusHelp" xml:space="preserve">
+    <value>Arşivlenen konular yeni taleplerde seçilemez; eski taleplerde görünmeye devam eder.</value>
+  </data>
+  <data name="hte.visibility" xml:space="preserve">
+    <value>Görünürlük</value>
+  </data>
+  <data name="hte.public" xml:space="preserve">
+    <value>Herkese Açık</value>
+  </data>
+  <data name="hte.internal" xml:space="preserve">
+    <value>Dahili</value>
+  </data>
+  <data name="hte.visHelp" xml:space="preserve">
+    <value>Dahili konular yalnızca temsilci panelinde seçilebilir.</value>
+  </data>
+  <data name="hte.parent" xml:space="preserve">
+    <value>Üst konu</value>
+  </data>
+  <data name="hte.parentNone" xml:space="preserve">
+    <value>— Yok —</value>
+  </data>
+  <data name="hte.parentHelp" xml:space="preserve">
+    <value>Konuyu bir üst başlığın altında gruplamak için seçin.</value>
+  </data>
+  <data name="hte.sysDefault" xml:space="preserve">
+    <value>— Sistem varsayılanı —</value>
+  </data>
+  <data name="hte.dept" xml:space="preserve">
+    <value>Departman</value>
+  </data>
+  <data name="hte.deptHelp" xml:space="preserve">
+    <value>Bu konudan açılan talepler bu departmana yönlendirilir.</value>
+  </data>
+  <data name="hte.newStatus" xml:space="preserve">
+    <value>Başlangıç durumu</value>
+  </data>
+  <data name="hte.newStatusHelp" xml:space="preserve">
+    <value>Yeni talebin oluşturulduğu andaki durumu.</value>
+  </data>
+  <data name="hte.priority" xml:space="preserve">
+    <value>Öncelik</value>
+  </data>
+  <data name="hte.priorityHelp" xml:space="preserve">
+    <value>Bu konudan açılan taleplere atanacak öncelik.</value>
+  </data>
+  <data name="hte.sla" xml:space="preserve">
+    <value>SLA planı</value>
+  </data>
+  <data name="hte.slaHelp" xml:space="preserve">
+    <value>Yanıt süresi hedefini belirler; boşsa departman SLA'sı geçerlidir.</value>
+  </data>
+  <data name="hte.thanks" xml:space="preserve">
+    <value>Teşekkür sayfası</value>
+  </data>
+  <data name="hte.thanksHelp" xml:space="preserve">
+    <value>Talep oluşturulduktan sonra kullanıcıya gösterilecek sayfa.</value>
+  </data>
+  <data name="hte.assign" xml:space="preserve">
+    <value>Otomatik atama</value>
+  </data>
+  <data name="hte.assignNone" xml:space="preserve">
+    <value>— Atama yok —</value>
+  </data>
+  <data name="hte.grpAgents" xml:space="preserve">
+    <value>Temsilciler</value>
+  </data>
+  <data name="hte.grpTeams" xml:space="preserve">
+    <value>Takımlar</value>
+  </data>
+  <data name="hte.assignHelp" xml:space="preserve">
+    <value>Yeni talep doğrudan seçilen temsilciye veya takıma atanır.</value>
+  </data>
+  <data name="hte.numFormat" xml:space="preserve">
+    <value>Talep numarası biçimi</value>
+  </data>
+  <data name="hte.numSystem" xml:space="preserve">
+    <value>Sistem varsayılanı</value>
+  </data>
+  <data name="hte.numCustom" xml:space="preserve">
+    <value>Özel biçim</value>
+  </data>
+  <data name="hte.numHelp" xml:space="preserve">
+    <value># karakterleri rakamla değiştirilir. Örn: BRD-000123.</value>
+  </data>
+  <data name="hte.numSeq" xml:space="preserve">
+    <value>Numara sırası</value>
+  </data>
+  <data name="hte.seqGlobal" xml:space="preserve">
+    <value>Genel sıra</value>
+  </data>
+  <data name="hte.seqRandom" xml:space="preserve">
+    <value>Rastgele</value>
+  </data>
+  <data name="hte.numSeqHelp" xml:space="preserve">
+    <value>Özel biçimdeki # bölümünün nasıl üretileceğini belirler.</value>
+  </data>
+  <data name="hte.noAutoresp" xml:space="preserve">
+    <value>Otomatik yanıtı kapat</value>
+  </data>
+  <data name="hte.noAutorespHelp" xml:space="preserve">
+    <value>Bu konudan açılan talepler için yeni talep otomatik yanıtı gönderilmez.</value>
+  </data>
+  <data name="hte.formsHead" xml:space="preserve">
+    <value>Ek form: Talep Detayları</value>
+  </data>
+  <data name="hte.formsHelp" xml:space="preserve">
+    <value>İşaretli alanlar bu konudan açılan taleplerde gösterilir.</value>
+  </data>
+  <data name="hte.fEnabled" xml:space="preserve">
+    <value>Etkin</value>
+  </data>
+  <data name="hte.fLabel" xml:space="preserve">
+    <value>Etiket</value>
+  </data>
+  <data name="hte.fType" xml:space="preserve">
+    <value>Tür</value>
+  </data>
+  <data name="hte.fVis" xml:space="preserve">
+    <value>Görünürlük</value>
+  </data>
+  <data name="hte.fVar" xml:space="preserve">
+    <value>Değişken</value>
+  </data>
+  <data name="hte.tShort" xml:space="preserve">
+    <value>Kısa Metin</value>
+  </data>
+  <data name="hte.tLong" xml:space="preserve">
+    <value>Uzun Metin</value>
+  </data>
+  <data name="hte.addForm" xml:space="preserve">
+    <value>Form ekle</value>
+  </data>
+  <data name="hte.addFormHelp" xml:space="preserve">
+    <value>Bu konuya bağlanacak ek özel form.</value>
+  </data>
+  <data name="hte.newTitle" xml:space="preserve">
+    <value>Yeni Konu</value>
+  </data>
+  <data name="hte.errName" xml:space="preserve">
+    <value>Konu adı 1–120 karakter olmalı.</value>
+  </data>
+  <data name="hte.errNameInUse" xml:space="preserve">
+    <value>Bu ad aynı üst konu altında zaten kullanılıyor.</value>
+  </data>
+  <data name="hte.errParent" xml:space="preserve">
+    <value>Üst konu bulunamadı.</value>
+  </data>
+  <data name="hte.errParentCycle" xml:space="preserve">
+    <value>Bir konu kendi alt konusunun altına taşınamaz.</value>
+  </data>
+  <data name="hte.errFormat" xml:space="preserve">
+    <value>Özel biçim en az bir # içermeli (örn. BRD-######).</value>
+  </data>
+  <data name="hte.errInUse" xml:space="preserve">
+    <value>Bu konu taleplerde veya alt konularda kullanılıyor; silinemez. Bunun yerine devre dışı bırakın.</value>
+  </data>
+  <data name="hte.formsHeadFmt" xml:space="preserve">
+    <value>Ek form: {0}</value>
+  </data>
+  <data name="hte.tChoice" xml:space="preserve">
+    <value>Seçim</value>
+  </data>
+  <data name="hte.tDate" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="hte.addFormPh" xml:space="preserve">
+    <value>Form seç…</value>
+  </data>
+  <data name="hte.detachTitle" xml:space="preserve">
+    <value>Formu kaldır</value>
+  </data>
+</root>

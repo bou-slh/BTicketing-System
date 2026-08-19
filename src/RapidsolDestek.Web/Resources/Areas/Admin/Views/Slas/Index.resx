@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="sla.title" xml:space="preserve">
+    <value>SLA Planları</value>
+  </data>
+  <data name="sla.sub" xml:space="preserve">
+    <value>Taleplerin gecikmiş sayılmadan önce çözülmesi gereken süre hedefleri.</value>
+  </data>
+  <data name="sla.searchPh" xml:space="preserve">
+    <value>SLA planı ara…</value>
+  </data>
+  <data name="sla.new" xml:space="preserve">
+    <value>＋ Yeni SLA</value>
+  </data>
+  <data name="sla.colGrace" xml:space="preserve">
+    <value>Süre Limiti (saat)</value>
+  </data>
+  <data name="sla.colSchedule" xml:space="preserve">
+    <value>Takvim</value>
+  </data>
+  <data name="sla.showing" xml:space="preserve">
+    <value>{2} plandan {0}–{1} arası gösteriliyor</value>
+  </data>
+  <data name="sla.bulkTitle" xml:space="preserve">
+    <value>Toplu işlemler</value>
+  </data>
+  <data name="sla.bulkHelp" xml:space="preserve">
+    <value>Seçili SLA planlarına uygulanır.</value>
+  </data>
+  <data name="sla.emptyTitle" xml:space="preserve">
+    <value>Henüz SLA planı yok</value>
+  </data>
+  <data name="sla.emptyText" xml:space="preserve">
+    <value>Yanıt süresi hedeflerini tanımlamak için ilk SLA planınızı oluşturun.</value>
+  </data>
+  <data name="sla.dlgTitle" xml:space="preserve">
+    <value>SLA Planı</value>
+  </data>
+  <data name="sla.name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="sla.nameHelp" xml:space="preserve">
+    <value>Planı tanımlayan kısa bir ad.</value>
+  </data>
+  <data name="sla.status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="sla.grace" xml:space="preserve">
+    <value>Süre limiti (saat)</value>
+  </data>
+  <data name="sla.graceHelp" xml:space="preserve">
+    <value>Talep bu süre içinde çözülmezse gecikmiş olarak işaretlenir.</value>
+  </data>
+  <data name="sla.schedule" xml:space="preserve">
+    <value>Çalışma takvimi</value>
+  </data>
+  <data name="sla.scheduleHelp" xml:space="preserve">
+    <value>Süre yalnızca seçilen takvimin çalışma saatlerinde işler.</value>
+  </data>
+  <data name="sla.schedDefault" xml:space="preserve">
+    <value>— Sistem varsayılanı —</value>
+  </data>
+  <data name="sla.transient" xml:space="preserve">
+    <value>Geçici SLA</value>
+  </data>
+  <data name="sla.transientHelp" xml:space="preserve">
+    <value>Departman veya konu değişince kalıcı bir SLA bu planın yerini alır.</value>
+  </data>
+  <data name="sla.alerts" xml:space="preserve">
+    <value>Gecikme uyarıları</value>
+  </data>
+  <data name="sla.alertsHelp" xml:space="preserve">
+    <value>Talep gecikince temsilcilere uyarı e-postası gönderilir.</value>
+  </data>
+  <data name="sla.dateFmt" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
+  <data name="sla.dlgNewTitle" xml:space="preserve">
+    <value>Yeni SLA Planı</value>
+  </data>
+  <data name="sla.dlgTitleFmt" xml:space="preserve">
+    <value>SLA Planı — {0}</value>
+  </data>
+  <data name="sla.errName" xml:space="preserve">
+    <value>Plan adı 1–120 karakter olmalı.</value>
+  </data>
+  <data name="sla.errNameInUse" xml:space="preserve">
+    <value>Bu adla bir SLA planı zaten var.</value>
+  </data>
+  <data name="sla.errGrace" xml:space="preserve">
+    <value>Süre limiti 1–8760 saat arasında olmalı.</value>
+  </data>
+  <data name="sla.toastSaved" xml:space="preserve">
+    <value>SLA planı kaydedildi.</value>
+  </data>
+  <data name="sla.toastCreated" xml:space="preserve">
+    <value>SLA planı oluşturuldu.</value>
+  </data>
+  <data name="sla.bulkNone" xml:space="preserve">
+    <value>Seçili plan yok.</value>
+  </data>
+  <data name="sla.bulkDone" xml:space="preserve">
+    <value>{0} plan güncellendi.</value>
+  </data>
+  <data name="sla.bulkPartial" xml:space="preserve">
+    <value>{0} plan güncellendi, {1} plan atlandı (kullanımda).</value>
+  </data>
+</root>
