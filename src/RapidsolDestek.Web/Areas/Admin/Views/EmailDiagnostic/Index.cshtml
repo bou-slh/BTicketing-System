@@ -25,6 +25,10 @@
         ["tls"] = L["ed.failTls"].Value,
         ["auth"] = L["ed.failAuth"].Value,
         ["send"] = L["ed.failSend"].Value,
+        // S8 slice 6: the OAuth2 channel's own failure modes, typed before any I/O.
+        ["oauth-config"] = L["ed.failOauthConfig"].Value,
+        ["oauth-consent"] = L["ed.failOauthConsent"].Value,
+        ["oauth-refresh"] = L["ed.failOauthRefresh"].Value,
         ["error"] = L["ed.failError"].Value,
         ["unknown"] = L["ed.failUnknown"].Value,
     };

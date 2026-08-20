@@ -78,6 +78,15 @@
   <data name="ed.failSend" xml:space="preserve">
     <value>The server did not accept the message.</value>
   </data>
+  <data name="ed.failOauthConfig" xml:space="preserve">
+    <value>OAuth2 application details are missing (client id / secret).</value>
+  </data>
+  <data name="ed.failOauthConsent" xml:space="preserve">
+    <value>The outgoing channel is not authorized (or the grant was revoked); authorize it on the email edit page.</value>
+  </data>
+  <data name="ed.failOauthRefresh" xml:space="preserve">
+    <value>The access token could not be refreshed; the provider was unreachable or refused the request.</value>
+  </data>
   <data name="ed.failError" xml:space="preserve">
     <value>An unexpected error occurred.</value>
   </data>

@@ -222,6 +222,15 @@ builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailConnec
 builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailDiagnosticSender,
     RapidsolDestek.Infrastructure.Services.MailDiagnosticSender>();
 builder.Services.AddSingleton<IEmailDiagnosticService, EmailDiagnosticService>();
+// S8 slice 6: OAuth2 mailbox authentication. The provider token endpoints are reached
+// through a plain typed HttpClient (hand-rolled OAuth2 — see HttpMailOAuthTokenClient
+// for why MSAL/Google.Apis are the heavier path here); the consent state parameter is
+// a time-limited DataProtection payload carrying the PKCE verifier.
+builder.Services.AddHttpClient<RapidsolDestek.Infrastructure.Services.IMailOAuthTokenClient,
+    RapidsolDestek.Infrastructure.Services.HttpMailOAuthTokenClient>(
+    RapidsolDestek.Infrastructure.Services.HttpMailOAuthTokenClient.HttpClientName,
+    http => http.Timeout = TimeSpan.FromSeconds(20));
+builder.Services.AddSingleton<IMailOAuthStateService, MailOAuthStateService>();
 
 // Effort emails (B8 flow; S8: catalog templates through the renderer + mail queue).
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortProposed>, EffortEmailHandler>();

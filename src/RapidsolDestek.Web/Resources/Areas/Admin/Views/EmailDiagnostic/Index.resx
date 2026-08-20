@@ -78,6 +78,15 @@
   <data name="ed.failSend" xml:space="preserve">
     <value>Sunucu mesajı kabul etmedi.</value>
   </data>
+  <data name="ed.failOauthConfig" xml:space="preserve">
+    <value>OAuth2 uygulama bilgileri eksik (istemci kimliği/sırrı).</value>
+  </data>
+  <data name="ed.failOauthConsent" xml:space="preserve">
+    <value>Giden kanal yetkilendirilmemiş (veya yetki iptal edilmiş); e-posta düzenleme sayfasından yetki verin.</value>
+  </data>
+  <data name="ed.failOauthRefresh" xml:space="preserve">
+    <value>Erişim jetonu yenilenemedi; sağlayıcıya ulaşılamadı veya istek reddedildi.</value>
+  </data>
   <data name="ed.failError" xml:space="preserve">
     <value>Beklenmeyen bir hata oluştu.</value>
   </data>

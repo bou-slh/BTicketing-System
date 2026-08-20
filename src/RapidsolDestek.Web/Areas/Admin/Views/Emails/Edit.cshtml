@@ -1,4 +1,5 @@
 @using RapidsolDestek.Domain.Entities
+@using RapidsolDestek.Infrastructure.Services
 @using RapidsolDestek.Web.Areas.Admin.Controllers
 @model EmailEditVm
 @{
@@ -308,9 +309,11 @@
    bullet sentinel when stored, bullets-only post keeps the stored value. *@
 @{
     async Task AuthDialogAsync(string suffix, EmailChannel? channel, string userField,
-        string passField, string clientIdField, string clientSecretField)
+        string passField, string clientIdField, string clientSecretField,
+        string providerField, string tenantField, string scopesField)
     {
         var oauthActive = channel is { AuthKind: MailAuthKind.OAuth2 };
+        var consented = channel?.OAuthConsentAt is not null;
         <dialog class="rd-dialog" id="dlg-auth-@suffix">
             <div class="rd-dialog-head">
                 <span>@L["ee.dlgAuthTitle"]</span>
@@ -333,6 +336,13 @@
                 </div>
                 <div class="rd-tab-panel @(oauthActive ? "active" : null)" id="auth-oauth-@suffix" data-tab-group="auth-@suffix">
                     <div class="rd-field">
+                        <label class="rd-label" for="auth-provider-@suffix">@L["ee.oauthProvider"]</label>
+                        <select id="auth-provider-@suffix" name="@providerField" form="ee-form" class="rd-control">
+                            <option value="microsoft" selected="@(channel?.OAuthProvider != MailOAuthProvider.Google)">@L["ee.oauthProviderMicrosoft"]</option>
+                            <option value="google" selected="@(channel?.OAuthProvider == MailOAuthProvider.Google)">@L["ee.oauthProviderGoogle"]</option>
+                        </select>
+                    </div>
+                    <div class="rd-field">
                         <label class="rd-label" for="auth-client-id-@suffix">@L["ee.clientId"]</label>
                         <input id="auth-client-id-@suffix" name="@clientIdField" form="ee-form" class="rd-control" type="text" value="@channel?.OAuthClientId">
                     </div>
@@ -340,7 +350,50 @@
                         <label class="rd-label" for="auth-client-secret-@suffix">@L["ee.clientSecret"]</label>
                         <input id="auth-client-secret-@suffix" name="@clientSecretField" form="ee-form" class="rd-control" type="password" value="@SecretValue(channel)" autocomplete="new-password">
                     </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="auth-tenant-@suffix">@L["ee.oauthTenant"]</label>
+                        <input id="auth-tenant-@suffix" name="@tenantField" form="ee-form" class="rd-control" type="text" value="@channel?.OAuthTenant" placeholder="common">
+                        <p class="rd-help">@L["ee.oauthTenantHelp"]</p>
+                    </div>
+                    <div class="rd-field">
+                        <label class="rd-label" for="auth-scopes-@suffix">@L["ee.oauthScopes"]</label>
+                        <input id="auth-scopes-@suffix" name="@scopesField" form="ee-form" class="rd-control" type="text" value="@channel?.OAuthScopes" placeholder="@(channel is null ? "" : MailOAuthProviders.ScopesFor(channel))">
+                        <p class="rd-help">@L["ee.oauthScopesHelp"]</p>
+                    </div>
                     <p class="rd-help">@L["ee.oauthHelp"]</p>
+                    <p class="rd-help">@L["ee.oauthRedirectUri"] <code>@Model.OAuthRedirectUri</code></p>
+
+                    @* Consent (S8 slice 6, INVENTED control): a POST that redirects the
+                       admin to the provider; the callback stores the refresh token.
+                       Only the FACT of consent is rendered — never a token. *@
+                    <div class="rd-field mb-0">
+                        <label class="rd-label">@L["ee.oauthConsent"]</label>
+                        <p class="rd-help" data-oauth-status="@suffix">
+                            @if (consented)
+                            {
+                                @L["ee.oauthConsentOn",
+                                    channel!.OAuthConsentAccount ?? channel.Username ?? "—",
+                                    channel.OAuthConsentAt!.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")]
+                            }
+                            else
+                            {
+                                @L["ee.oauthConsentNone"]
+                            }
+                        </p>
+                        @if (isNew)
+                        {
+                            <p class="rd-help">@L["ee.oauthConsentSaveFirst"]</p>
+                        }
+                        else
+                        {
+                            <form method="post" action="/admin/email-oauth/start" style="margin-top:8px">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@a!.Id">
+                                <input type="hidden" name="kind" value="@suffix">
+                                <button type="submit" class="rd-btn">@(consented ? L["ee.oauthReauthorize"] : L["ee.oauthAuthorize"])</button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
             <div class="rd-dialog-foot">
@@ -353,8 +406,10 @@
         </dialog>
     }
 
-    await AuthDialogAsync("in", inbox, "inUsername", "inPassword", "inClientId", "inClientSecret");
-    await AuthDialogAsync("out", smtp, "outUsername", "outPassword", "outClientId", "outClientSecret");
+    await AuthDialogAsync("in", inbox, "inUsername", "inPassword", "inClientId", "inClientSecret",
+        "inProvider", "inTenant", "inScopes");
+    await AuthDialogAsync("out", smtp, "outUsername", "outPassword", "outClientId", "outClientSecret",
+        "outProvider", "outTenant", "outScopes");
 }
 
 @* "Bağlantıyı Sına": posts the CURRENT (unsaved) channel settings to the real
@@ -371,6 +426,9 @@
       ["connect"] = L["ee.testFailConnect"].Value,
       ["tls"] = L["ee.testFailTls"].Value,
       ["auth"] = L["ee.testFailAuth"].Value,
+      ["oauth-config"] = L["ee.testFailOauthConfig"].Value,
+      ["oauth-consent"] = L["ee.testFailOauthConsent"].Value,
+      ["oauth-refresh"] = L["ee.testFailOauthRefresh"].Value,
       ["error"] = L["ee.testFailError"].Value,
   }));
   const form = document.getElementById("ee-form");

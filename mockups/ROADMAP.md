@@ -210,7 +210,11 @@ pattern dead in the mockups.
 - **S8 — Email subsystem.** Outbound: Razor template rendering with variables, event→template map (incl.
   effort request/response), MailKit SMTP, Hangfire send queue with retry, per-department from-addresses.
   Inbound: Hangfire IMAP poll, MimeKit parse, reply-token threading, help-topic routing, attachments,
-  banlist + loop/bounce protection. *Gate*: staging round trip — mail → ticket → agent reply → customer
+  banlist + loop/bounce protection. Slice 6 (DONE): OAuth2 mailbox authentication — Microsoft 365 and
+  Google Workspace presets, an admin authorization-code consent flow with a PKCE-carrying signed state,
+  DataProtection-encrypted refresh/access tokens per channel (migration S8_MailOAuth) and
+  SaslMechanismOAuth2 wired into all four MailKit connect paths (fetch, send, tester, diagnostic).
+  *Gate*: staging round trip — mail → ticket → agent reply → customer
   mail → customer reply → thread appends.
 - **S9 — Hardening & launch.** Security review + authz matrix tests (every role × endpoint), rate limiting,
   CSRF/headers, dependency scan; KVKK (data inventory, retention jobs, consent texts); performance (index
@@ -1030,29 +1034,61 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       active while OAuth2 is selected — data-driven chosen, flagged); dialog inputs ride the page form
       (form= attribute) so credentials persist on the page Save — the dialog's Save just closes (no
       independent POST; the audited close-swallows-save shape cannot occur). OAuth2 = provider app
-      credentials only; the token flow is S8 (TODO(S8)). **Test connection = REAL** (INVENTED UI — the
+      credentials only in S7; **LIVE (S8 slice 6): the OAuth2 grant is real** — the dialog gained a
+      provider select (Microsoft 365 / Google Workspace presets), tenant and an optional scope override,
+      and an INVENTED "Yetkilendir" button (flagged) that runs the authorization-code consent flow
+      (POST /admin/email-oauth/start → provider → GET /admin/email-oauth/callback, both AdminOnly). State
+      = a 10-minute time-limited DataProtection payload carrying the PKCE (S256) verifier, so a tampered,
+      expired or foreign-session state is refused before any code is exchanged; the redirect URI is
+      derived from core/helpdesk_url and rendered on the page. Refresh + access tokens land in new
+      DataProtection-encrypted EmailChannel columns (migration S8_MailOAuth) and are NEVER rendered back —
+      the page shows only which mailbox consented and when. Changing the client id / provider / scopes
+      drops the stored grant (it belonged to a different app registration; flagged).
+      Scopes (delegated, deliberately NOT the `.default` form which is a client-credentials idiom):
+      Microsoft `offline_access openid email https://outlook.office.com/{IMAP,POP}.AccessAsUser.All` for
+      the mailbox channel and `…/SMTP.Send` for the SMTP channel — the two directions consent separately;
+      Google `openid email https://mail.google.com/` with access_type=offline (Gmail's XOAUTH2 accepts no
+      narrower scope). Dependency decision: hand-rolled code/refresh exchange over MSAL / Google.Apis.Auth
+      — the contract is two form POSTs, while both SDKs would add their own token caches we cannot use
+      (tokens must live in the encrypted channel columns, shared across Hangfire workers) and would bury
+      the HTTP seam the tests script. **Test connection = REAL** (INVENTED UI — the
       ROADMAP row names it, the mockup defines no control; per-channel button + result line, flagged):
       POST /admin/email-edit/test → MailConnectionTester (NEW MailKit 4.17.0 dep in Infrastructure)
       attempts a live IMAP/POP3/SMTP connect with a 5s budget, SecureSocketOptions.Auto (the mockup has no
       encryption select — Auto decides, flagged); typed stages input/dns/connect/tls/auth/ok/ok-noauth
-      (OAuth2 probes connect+TLS only — honest "ok-noauth" until the S8 token flow); a sentinel password
+      (S8 slice 6 replaced the OAuth2 half-answer: the probe now performs a REAL SaslMechanismOAuth2
+      sign-in over the saved channel's token, and the new typed stages oauth-config / oauth-consent /
+      oauth-refresh say honestly why it cannot — an UNSAVED OAuth2 channel stops at oauth-consent before
+      any network I/O, since a token can only come from a stored grant); a sentinel password
       with ?id= falls back to the stored decrypted secret. Seed: destek@ gains its email-edit mockup-canon
-      channels (IMAP imap.rapidsol.com.tr:993/INBOX + SMTP :587, OAuth2 client 8f42c1aa-destek-oauth,
+      channels (IMAP imap.rapidsol.com.tr:993/INBOX + SMTP :587, canon OAuth2 client 8f42c1aa-destek-oauth
+      kept but the auth mode seeded as **Basic** — S8 slice 6 DEVIATION, flagged: OAuth2 now needs a real
+      app registration plus an interactive admin consent no seed can fabricate, and an unconsented OAuth2
+      channel can neither send nor fetch; the mockup's own dlg-auth renders the Basic tab active anyway —
       5 min/30, archive Arsiv/Islenen); secrets stay null — the mockup's bullets imply a stored secret,
       honesty deviation flagged. Invented keys (TR/EN twins): em.dateFmt/bulkNone/bulkDone/bulkPartial/
       deleteConfirm; ee.newTitle/toastSaved/toastCreated/errEmail/errEmailInUse/errIncoming/errOutgoing/
-      errPort/test/testTesting/testOk/testOkNoAuth/testFail{Input,Dns,Connect,Tls,Auth,Error}. Tests:
+      errPort/test/testTesting/testOk/testOkNoAuth/testFail{Input,Dns,Connect,Tls,Auth,Error};
+      S8 slice 6 adds ee.testFailOauth{Config,Consent,Refresh}, ee.oauthProvider(+Microsoft/Google),
+      oauthTenant(+Help), oauthScopes(+Help), oauthRedirectUri, oauthConsent{,None,On,SaveFirst},
+      oauthAuthorize/oauthReauthorize, oauthToastOk, oauthErr{Config,Unsaved,Provider,Exchange} and
+      em.oauthErrState. Tests:
       EmailsAdminTests (4 of 6) — list + search, CRUD round-trip incl. write-only secret semantics (new →
       sentinel-unchanged → replaced; plaintext never rendered, ciphertext at rest), duplicate/incomplete/
       malformed refusals, Test-connection typed "connect" failure on closed 127.0.0.1:1 (fast, no external
-      network) + "input" rejection before any I/O, bulk enable/disable + the delete guard — suite 293.)*
+      network) + "input" rejection before any I/O, bulk enable/disable + the delete guard; S8 slice 6 adds
+      the consent-fact rendering + grant-invalidation case here and the whole flow in MailOAuthTests
+      (state signing/tamper, code→token persistence, refresh-vs-reuse margin, revoked grant, credential
+      selection at the connect seams) — suite 406.)*
 - [x] **email-diagnostic.html** — real send with pending/success/failure states (B10)
       *(S7; /admin/email-diagnostic (EmailDiagnosticController). REAL send: submit PRGs to ?job=&lt;guid&gt;
       (EmailDiagnosticService in-memory tracker, 1h retention), the pending banner polls /status (rd.js
       data-job-poll, ~72s cap) and swaps to the terminal banner — a JS-free refresh re-resolves the same
       job server-side. Transport = NEW MailDiagnosticSender: a live MailKit SMTP submit over the chosen
       account's Smtp channel (MailConnectionTester's typed stages + "send"; stored password decrypted via
-      IEmailSecretProtector; OAuth2 channels submit unauthenticated until the S8 token flow — the server's
+      IEmailSecretProtector; S8 slice 6: OAuth2 channels sign in with SaslMechanismOAuth2 over the token
+      resolved from the stored consent, and a missing/dead grant is a typed oauth-config/oauth-consent/
+      oauth-refresh failure BEFORE any I/O instead of the old unauthenticated relay — the server's
       refusal reports as "send"). Channel misconfig (no active SMTP channel / no host) is a typed "channel"
       failure BEFORE any I/O — the seeded dev channels (smtp.rapidsol.com.tr) therefore fail honestly at
       "dns" instead of reproducing the mockup's always-on success banner (S0 defect; the banner now renders

@@ -33,7 +33,8 @@ public class EmailsController(
     AppDbContext db,
     ISettingsService settings,
     IEmailSecretProtector secrets,
-    IMailConnectionTester tester) : Controller
+    IMailConnectionTester tester,
+    IMailOAuthTokenService oauth) : Controller
 {
     public const int PageSize = 8;
 
@@ -173,10 +174,19 @@ public class EmailsController(
                 return NotFound();
         }
 
+        // S8 slice 6: the exact redirect URI an admin must register with Microsoft /
+        // Google, derived from core/helpdesk_url so it is never guessed wrong.
+        var baseUrl = (await settings.GetAsync("core", "helpdesk_url", ct))?.Trim();
+        if (string.IsNullOrEmpty(baseUrl))
+            baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/";
+        if (!baseUrl.EndsWith('/'))
+            baseUrl += "/";
+
         return View(new EmailEditVm(
             account,
             account?.Channels.FirstOrDefault(c => c.Kind == EmailChannelKind.Mailbox),
             account?.Channels.FirstOrDefault(c => c.Kind == EmailChannelKind.Smtp),
+            new Uri(new Uri(baseUrl), EmailOAuthController.CallbackPath).ToString(),
             await db.Departments.OrderBy(d => d.Path)
                 .Select(d => new OptionVm(d.Id, d.Name)).ToListAsync(ct),
             // Mockup order Düşük → Kritik = descending urgency value (lower = more urgent).
@@ -199,8 +209,10 @@ public class EmailsController(
         string? inHost, int? inPort, string? inFolder, string? inProtocol, string? inAuth,
         bool fetchActive, int? freq, int? maxFetch, string? afterFetch, string? archiveFolder,
         string? inUsername, string? inPassword, string? inClientId, string? inClientSecret,
+        string? inProvider, string? inTenant, string? inScopes,
         bool smtpActive, string? outHost, int? outPort, string? outAuth,
         string? outUsername, string? outPassword, string? outClientId, string? outClientSecret,
+        string? outProvider, string? outTenant, string? outScopes,
         bool spoofing, CancellationToken ct)
     {
         var staff = await db.ResolveStaffAsync(User, ct);
@@ -271,7 +283,8 @@ public class EmailsController(
                 _ => PostFetchAction.Archive,
             };
             mailbox.ArchiveFolder = string.IsNullOrWhiteSpace(archiveFolder) ? null : archiveFolder.Trim();
-            ApplyCredentials(mailbox, inUsername, inPassword, inClientId, inClientSecret);
+            ApplyCredentials(mailbox, inUsername, inPassword, inClientId, inClientSecret,
+                inProvider, inTenant, inScopes);
 
             // ---- Outgoing Smtp channel -------------------------------------------------
             var smtp = Channel(account, EmailChannelKind.Smtp);
@@ -281,7 +294,8 @@ public class EmailsController(
             smtp.Host = outHost;
             smtp.Port = outPort ?? 0;
             smtp.AllowSpoofing = spoofing;
-            ApplyCredentials(smtp, outUsername, outPassword, outClientId, outClientSecret);
+            ApplyCredentials(smtp, outUsername, outPassword, outClientId, outClientSecret,
+                outProvider, outTenant, outScopes);
 
             await db.SaveChangesAsync(ct);
             id = account.Id;
@@ -296,7 +310,11 @@ public class EmailsController(
     /// control): a live MailKit probe of the POSTED, unsaved settings with a short
     /// timeout, returning a typed stage (input/dns/connect/tls/auth/ok/ok-noauth).
     /// A sentinel password falls back to the stored (decrypted) secret when ?id= is
-    /// a saved account.
+    /// a saved account. S8 slice 6: an OAuth2 channel now performs a REAL XOAUTH2
+    /// sign-in — the access token comes from the SAVED channel's stored consent (the
+    /// one thing that cannot be probed from unsaved form values), and a missing or
+    /// dead grant answers with the typed oauth-config/oauth-consent/oauth-refresh
+    /// stage instead of the old "connected, sign-in not implemented" half-answer.
     /// </summary>
     [HttpPost("/admin/email-edit/test")]
     [ValidateAntiForgeryToken]
@@ -306,6 +324,36 @@ public class EmailsController(
     {
         var isSmtp = kind == "out";
         var channelKind = isSmtp ? EmailChannelKind.Smtp : EmailChannelKind.Mailbox;
+        var isOAuth = auth != "basic";
+
+        if (isOAuth)
+        {
+            var channel = id is null
+                ? null
+                : await db.EmailAccounts.Where(a => a.Id == id)
+                    .SelectMany(a => a.Channels).AsNoTracking()
+                    .SingleOrDefaultAsync(c => c.Kind == channelKind, ct);
+            if (channel is null || channel.AuthKind != MailAuthKind.OAuth2)
+                return Json(new { ok = false, stage = MailOAuthException.ConsentStage });
+
+            string accessToken;
+            try
+            {
+                accessToken = await oauth.GetAccessTokenAsync(channel, ct);
+            }
+            catch (MailOAuthException ex)
+            {
+                return Json(new { ok = false, stage = ex.Stage });
+            }
+
+            var oauthResult = await tester.TestAsync(new MailTestRequest(
+                channelKind,
+                isSmtp ? MailProtocol.Smtp : protocol == "pop" ? MailProtocol.Pop : MailProtocol.Imap,
+                (host ?? "").Trim(), port ?? 0, MailAuthKind.OAuth2,
+                string.IsNullOrWhiteSpace(username) ? channel.Username : username.Trim(),
+                Password: null, AccessToken: accessToken), ct);
+            return Json(new { ok = oauthResult.Success, stage = oauthResult.Stage });
+        }
 
         if (SecretUnchanged(password) && id is not null)
         {
@@ -326,7 +374,7 @@ public class EmailsController(
             isSmtp ? MailProtocol.Smtp : protocol == "pop" ? MailProtocol.Pop : MailProtocol.Imap,
             (host ?? "").Trim(),
             port ?? 0,
-            auth == "basic" ? MailAuthKind.Basic : MailAuthKind.OAuth2,
+            MailAuthKind.Basic,
             string.IsNullOrWhiteSpace(username) ? null : username.Trim(),
             password), ct);
 
@@ -348,17 +396,47 @@ public class EmailsController(
         return channel;
     }
 
-    /// <summary>Write-only secret contract: empty / bullets-only posted values keep
-    /// the stored ciphertext (there is no explicit "clear" — switch the auth mode
-    /// instead; flagged).</summary>
-    private void ApplyCredentials(EmailChannel channel, string? username, string? password, string? clientId, string? clientSecret)
+    /// <summary>
+    /// Write-only secret contract: empty / bullets-only posted values keep the stored
+    /// ciphertext (there is no explicit "clear" — switch the auth mode instead;
+    /// flagged). S8 slice 6 adds the OAuth2 grant parameters, plus the invalidation
+    /// rule that keeps consent honest: changing the app registration, the provider or
+    /// the scopes means the stored refresh token was issued for a DIFFERENT grant, so
+    /// it is dropped and the page reports the channel as unauthorized again.
+    /// </summary>
+    private void ApplyCredentials(
+        EmailChannel channel, string? username, string? password, string? clientId, string? clientSecret,
+        string? provider, string? tenant, string? scopes)
     {
         channel.Username = string.IsNullOrWhiteSpace(username) ? null : username.Trim();
-        channel.OAuthClientId = string.IsNullOrWhiteSpace(clientId) ? null : clientId.Trim();
+
+        var newClientId = string.IsNullOrWhiteSpace(clientId) ? null : clientId.Trim();
+        var newProvider = provider == "google" ? MailOAuthProvider.Google : MailOAuthProvider.Microsoft;
+        var newTenant = string.IsNullOrWhiteSpace(tenant) ? null : tenant.Trim();
+        var newScopes = string.IsNullOrWhiteSpace(scopes) ? null : scopes.Trim();
+        var grantChanged = newClientId != channel.OAuthClientId
+            || newProvider != channel.OAuthProvider
+            || newTenant != channel.OAuthTenant
+            || newScopes != channel.OAuthScopes;
+
+        channel.OAuthClientId = newClientId;
+        channel.OAuthProvider = newProvider;
+        channel.OAuthTenant = newTenant;
+        channel.OAuthScopes = newScopes;
+
         if (!SecretUnchanged(password))
             channel.PasswordProtected = secrets.Protect(password!);
         if (!SecretUnchanged(clientSecret))
             channel.OAuthClientSecretProtected = secrets.Protect(clientSecret!);
+
+        if (grantChanged && channel.OAuthConsentAt is not null)
+        {
+            channel.OAuthRefreshTokenProtected = null;
+            channel.OAuthAccessTokenProtected = null;
+            channel.OAuthAccessTokenExpiresAt = null;
+            channel.OAuthConsentAt = null;
+            channel.OAuthConsentAccount = null;
+        }
     }
 
     private static bool SecretUnchanged(string? value) =>
@@ -451,6 +529,8 @@ public sealed record EmailEditVm(
     EmailAccount? Account,
     EmailChannel? Mailbox,
     EmailChannel? Smtp,
+    /// <summary>The OAuth2 redirect URI this installation hands the providers.</summary>
+    string OAuthRedirectUri,
     IReadOnlyList<OptionVm> Departments,
     IReadOnlyList<StatusOptionVm> Priorities,
     IReadOnlyList<OptionVm> Topics);

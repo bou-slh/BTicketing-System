@@ -235,7 +235,7 @@
     <value>Bağlantı ve kimlik doğrulama başarılı.</value>
   </data>
   <data name="ee.testOkNoAuth" xml:space="preserve">
-    <value>Sunucuya bağlanıldı (OAuth2 oturum doğrulaması S8 kapsamında).</value>
+    <value>Sunucuya bağlanıldı (kimlik bilgisi tanımlı olmadığından oturum açılmadı).</value>
   </data>
   <data name="ee.testFailInput" xml:space="preserve">
     <value>Sunucu adresi ve geçerli bir port girin.</value>
@@ -254,5 +254,71 @@
   </data>
   <data name="ee.testFailError" xml:space="preserve">
     <value>Sınama tamamlanamadı; lütfen tekrar deneyin.</value>
+  </data>
+  <data name="ee.testFailOauthConfig" xml:space="preserve">
+    <value>OAuth2 uygulama bilgileri eksik (istemci kimliği/sırrı).</value>
+  </data>
+  <data name="ee.testFailOauthConsent" xml:space="preserve">
+    <value>Bu kanal henüz yetkilendirilmemiş (veya yetki iptal edilmiş). "Yetkilendir" ile izin verin.</value>
+  </data>
+  <data name="ee.testFailOauthRefresh" xml:space="preserve">
+    <value>Erişim jetonu yenilenemedi; sağlayıcıya ulaşılamadı veya istek reddedildi.</value>
+  </data>
+  <data name="ee.oauthProvider" xml:space="preserve">
+    <value>Sağlayıcı</value>
+  </data>
+  <data name="ee.oauthProviderMicrosoft" xml:space="preserve">
+    <value>Microsoft 365 / Outlook</value>
+  </data>
+  <data name="ee.oauthProviderGoogle" xml:space="preserve">
+    <value>Google Workspace / Gmail</value>
+  </data>
+  <data name="ee.oauthTenant" xml:space="preserve">
+    <value>Kiracı (Tenant)</value>
+  </data>
+  <data name="ee.oauthTenantHelp" xml:space="preserve">
+    <value>Yalnızca Microsoft için: kiracı kimliği veya alan adı. Boş bırakılırsa "common" kullanılır.</value>
+  </data>
+  <data name="ee.oauthScopes" xml:space="preserve">
+    <value>Kapsamlar (Scopes)</value>
+  </data>
+  <data name="ee.oauthScopesHelp" xml:space="preserve">
+    <value>Boş bırakın: sağlayıcıya ve protokole göre önerilen kapsamlar kullanılır.</value>
+  </data>
+  <data name="ee.oauthRedirectUri" xml:space="preserve">
+    <value>Uygulama kaydına eklenecek yönlendirme adresi:</value>
+  </data>
+  <data name="ee.oauthConsent" xml:space="preserve">
+    <value>Yetkilendirme</value>
+  </data>
+  <data name="ee.oauthConsentNone" xml:space="preserve">
+    <value>Bu kanal henüz yetkilendirilmedi.</value>
+  </data>
+  <data name="ee.oauthConsentOn" xml:space="preserve">
+    <value>Yetkilendirildi: {0} ({1})</value>
+  </data>
+  <data name="ee.oauthConsentSaveFirst" xml:space="preserve">
+    <value>Yetkilendirme için önce e-posta adresini kaydedin.</value>
+  </data>
+  <data name="ee.oauthAuthorize" xml:space="preserve">
+    <value>Yetkilendir</value>
+  </data>
+  <data name="ee.oauthReauthorize" xml:space="preserve">
+    <value>Yeniden yetkilendir</value>
+  </data>
+  <data name="ee.oauthToastOk" xml:space="preserve">
+    <value>Yetkilendirme tamamlandı.</value>
+  </data>
+  <data name="ee.oauthErrConfig" xml:space="preserve">
+    <value>Önce OAuth2 sağlayıcı ve uygulama bilgilerini kaydedin.</value>
+  </data>
+  <data name="ee.oauthErrUnsaved" xml:space="preserve">
+    <value>Yetkilendirme için kanalı önce kaydedin.</value>
+  </data>
+  <data name="ee.oauthErrProvider" xml:space="preserve">
+    <value>Sağlayıcı yetkilendirmeyi tamamlamadı (izin verilmedi veya iptal edildi).</value>
+  </data>
+  <data name="ee.oauthErrExchange" xml:space="preserve">
+    <value>Yetkilendirme kodu jetona çevrilemedi; sağlayıcı isteği reddetti.</value>
   </data>
 </root>

@@ -8,7 +8,9 @@ using RapidsolDestek.Domain.Entities;
 namespace RapidsolDestek.Infrastructure.Services;
 
 /// <summary>One real test-email submission for admin/email-diagnostic (S7, B10):
-/// the chosen account's SMTP channel settings plus the form's message.</summary>
+/// the chosen account's SMTP channel settings plus the form's message.
+/// <see cref="AccessToken"/> is the S8 slice 6 OAuth2 bearer token, resolved from the
+/// channel's stored consent before the job runs.</summary>
 public sealed record MailSendRequest(
     string Host,
     int Port,
@@ -19,7 +21,8 @@ public sealed record MailSendRequest(
     string? FromName,
     string To,
     string Subject,
-    string TextBody);
+    string TextBody,
+    string? AccessToken = null);
 
 public interface IMailDiagnosticSender
 {
@@ -49,6 +52,9 @@ public sealed class MailDiagnosticSender : IMailDiagnosticSender
         if (!MailboxAddress.TryParse(request.To, out var to)
             || !MailboxAddress.TryParse(request.FromAddress, out var from))
             return MailTestResult.Fail("input");
+        // S8 slice 6: no token, no sign-in — reported before any network I/O.
+        if (request.Auth == MailAuthKind.OAuth2 && string.IsNullOrEmpty(request.AccessToken))
+            return MailTestResult.Fail(MailOAuthException.ConsentStage);
         from.Name = request.FromName ?? "";
 
         var message = new MimeMessage();
@@ -81,10 +87,22 @@ public sealed class MailDiagnosticSender : IMailDiagnosticSender
 
         try
         {
-            // OAuth2: no token exists before the S8 flow — an OAuth2-only channel
-            // can still submit where the server allows unauthenticated relay;
-            // otherwise the server's rejection reports as the honest "send" stage.
-            if (request.Auth == MailAuthKind.Basic && !string.IsNullOrEmpty(request.Username))
+            // S8 slice 6: an OAuth2 channel signs in with XOAUTH2 over the resolved
+            // access token; without a valid grant the diagnostic reports the honest
+            // "oauth-consent" stage instead of attempting an unauthenticated relay.
+            if (request.Auth == MailAuthKind.OAuth2)
+            {
+                try
+                {
+                    await client.AuthenticateAsync(
+                        new SaslMechanismOAuth2(request.Username ?? "", request.AccessToken), cts.Token);
+                }
+                catch (AuthenticationException ex)
+                {
+                    return MailTestResult.Fail("auth", ex.Message);
+                }
+            }
+            else if (!string.IsNullOrEmpty(request.Username))
             {
                 try
                 {

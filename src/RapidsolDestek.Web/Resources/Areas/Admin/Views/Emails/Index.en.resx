@@ -54,4 +54,7 @@
   <data name="em.deleteConfirm" xml:space="preserve">
     <value>The selected email addresses will be permanently deleted; addresses used by departments, filters or the email settings are skipped. Continue?</value>
   </data>
+  <data name="em.oauthErrState" xml:space="preserve">
+    <value>The OAuth2 authorization could not be verified (invalid or expired link). Please start the authorization again.</value>
+  </data>
 </root>

@@ -9,7 +9,10 @@ using RapidsolDestek.Domain.Entities;
 namespace RapidsolDestek.Infrastructure.Services;
 
 /// <summary>One live connection attempt for the admin/email-edit "Bağlantıyı Sına"
-/// button (S7 invented UI, ROADMAP-flagged): the posted, UNSAVED settings.</summary>
+/// button (S7 invented UI, ROADMAP-flagged): the posted, UNSAVED settings.
+/// <see cref="AccessToken"/> is the S8 slice 6 exception to "unsaved": an OAuth2
+/// access token can only come from the SAVED channel's stored consent, so the
+/// controller resolves it before probing.</summary>
 public sealed record MailTestRequest(
     EmailChannelKind Kind,
     MailProtocol Protocol,
@@ -17,14 +20,18 @@ public sealed record MailTestRequest(
     int Port,
     MailAuthKind Auth,
     string? Username,
-    string? Password);
+    string? Password,
+    string? AccessToken = null);
 
 /// <summary>
 /// Typed outcome. <see cref="Stage"/> is a stable key the page maps to i18n:
 /// "input" (rejected before any network I/O), "dns" (host did not resolve),
 /// "connect" (TCP refused / timed out), "tls" (SSL/STARTTLS handshake failed),
 /// "auth" (server rejected the credentials), "ok" (authenticated), or
-/// "ok-noauth" (connected + TLS fine; OAuth2 sign-in itself is the S8 token flow).
+/// "ok-noauth" (connected + TLS fine, but no credential was configured at all).
+/// S8 slice 6 adds the OAuth2 stages: "oauth-config" (client id/secret missing),
+/// "oauth-consent" (no valid grant — an administrator must authorize) and
+/// "oauth-refresh" (the provider refused this token request).
 /// </summary>
 public sealed record MailTestResult(bool Success, string Stage, string? Detail = null)
 {
@@ -56,6 +63,10 @@ public sealed class MailConnectionTester : IMailConnectionTester
         if (request.Kind == EmailChannelKind.Smtp ? request.Protocol != MailProtocol.Smtp
             : request.Protocol is not (MailProtocol.Imap or MailProtocol.Pop))
             return MailTestResult.Fail("input");
+        // S8 slice 6: an OAuth2 channel with no resolved token cannot possibly sign in
+        // — say so before dialing, instead of reporting a half-truth about the server.
+        if (request.Auth == MailAuthKind.OAuth2 && string.IsNullOrEmpty(request.AccessToken))
+            return MailTestResult.Fail(MailOAuthException.ConsentStage);
 
         using var client = CreateClient(request.Protocol);
         client.Timeout = (int)Timeout.TotalMilliseconds;
@@ -85,9 +96,18 @@ public sealed class MailConnectionTester : IMailConnectionTester
 
         try
         {
-            // OAuth2: no token exists before the S8 flow — report the reachable +
-            // TLS-clean server honestly instead of a fake credential check.
-            if (request.Auth != MailAuthKind.Basic || string.IsNullOrEmpty(request.Username))
+            // S8 slice 6: an OAuth2 channel now performs a REAL XOAUTH2 sign-in with
+            // the access token the caller resolved from the stored consent. A missing
+            // token is never downgraded to an unauthenticated "ok" — it is the honest
+            // "authorize this channel first" answer.
+            if (request.Auth == MailAuthKind.OAuth2)
+            {
+                await client.AuthenticateAsync(
+                    new SaslMechanismOAuth2(request.Username ?? "", request.AccessToken), cts.Token);
+                return MailTestResult.Ok(authenticated: true);
+            }
+
+            if (string.IsNullOrEmpty(request.Username))
                 return MailTestResult.Ok(authenticated: false);
 
             await client.AuthenticateAsync(request.Username, request.Password ?? "", cts.Token);

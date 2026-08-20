@@ -21,7 +21,9 @@ public static class MailPipelineHeaders
 }
 
 /// <summary>Connection settings for one fetch pass over a mailbox channel
-/// (decrypted secret included — the caller resolves it, MailConnectionTester shape).</summary>
+/// (decrypted secret included — the caller resolves it, MailConnectionTester shape).
+/// <see cref="AccessToken"/> is the S8 slice 6 OAuth2 bearer token the fetch job
+/// resolved from the channel's stored consent.</summary>
 public sealed record InboundConnection(
     MailProtocol Protocol,
     string Host,
@@ -29,7 +31,8 @@ public sealed record InboundConnection(
     MailAuthKind Auth,
     string? Username,
     string? Password,
-    string? Folder);
+    string? Folder,
+    string? AccessToken = null);
 
 /// <summary>
 /// The S8 fetch pipeline's mailbox seam: MailFetchJob talks to this, the real
@@ -62,9 +65,10 @@ public interface IInboundMailSession : IAsyncDisposable
 /// <summary>
 /// Real MailKit mailbox access for the fetch pipeline: the MailConnectionTester
 /// client setup (Auto TLS, hard timeout) carried to message listing/download and
-/// the post-fetch actions. OAuth2 channels connect unauthenticated for now — the
-/// token flow is the next S8 slice (tester precedent); servers refuse the listing
-/// and the failure surfaces as honest channel error bookkeeping.
+/// the post-fetch actions. S8 slice 6: OAuth2 channels authenticate for real via
+/// <see cref="SaslMechanismOAuth2"/> over the access token MailFetchJob resolved from
+/// the stored consent; a channel with no grant throws before any listing, and the
+/// job's catch turns that into the usual ErrorCount / LastErrorMessage / syslog trail.
 /// </summary>
 public sealed class MailKitInboundMailClient : IInboundMailClient
 {
@@ -84,8 +88,7 @@ public sealed class MailKitInboundMailClient : IInboundMailClient
             try
             {
                 await pop.ConnectAsync(host, connection.Port, SecureSocketOptions.Auto, ct);
-                if (connection.Auth == MailAuthKind.Basic && !string.IsNullOrEmpty(connection.Username))
-                    await pop.AuthenticateAsync(connection.Username, connection.Password ?? "", ct);
+                await AuthenticateAsync(pop, connection, ct);
                 return await Pop3Session.OpenAsync(pop, ct);
             }
             catch
@@ -99,8 +102,7 @@ public sealed class MailKitInboundMailClient : IInboundMailClient
         try
         {
             await imap.ConnectAsync(host, connection.Port, SecureSocketOptions.Auto, ct);
-            if (connection.Auth == MailAuthKind.Basic && !string.IsNullOrEmpty(connection.Username))
-                await imap.AuthenticateAsync(connection.Username, connection.Password ?? "", ct);
+            await AuthenticateAsync(imap, connection, ct);
 
             var folder = string.IsNullOrWhiteSpace(connection.Folder)
                 ? imap.Inbox
@@ -113,6 +115,29 @@ public sealed class MailKitInboundMailClient : IInboundMailClient
             imap.Dispose();
             throw;
         }
+    }
+
+    /// <summary>
+    /// One sign-in for either protocol: XOAUTH2 for OAuth2 channels (S8 slice 6),
+    /// username/password for Basic, and nothing at all for a channel with no
+    /// credential (an open dev mailbox). A missing OAuth2 token throws — silently
+    /// continuing unauthenticated would fetch nothing and blame the mailbox.
+    /// </summary>
+    private static async Task AuthenticateAsync(IMailService client, InboundConnection connection, CancellationToken ct)
+    {
+        if (connection.Auth == MailAuthKind.OAuth2)
+        {
+            if (string.IsNullOrEmpty(connection.AccessToken))
+            {
+                throw new MailOAuthException(MailOAuthException.ConsentStage,
+                    "OAuth2 mailbox channel has no access token — an administrator must grant consent.");
+            }
+            await client.AuthenticateAsync(
+                new SaslMechanismOAuth2(connection.Username ?? "", connection.AccessToken), ct);
+            return;
+        }
+        if (!string.IsNullOrEmpty(connection.Username))
+            await client.AuthenticateAsync(connection.Username, connection.Password ?? "", ct);
     }
 
     private sealed class ImapSession(ImapClient client, IMailFolder folder) : IInboundMailSession

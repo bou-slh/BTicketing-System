@@ -11,7 +11,8 @@ namespace RapidsolDestek.Infrastructure.Services;
 /// switches: email/fetch_enabled kills fetching entirely, email/fetch_auto_cron
 /// gates this scheduled path (both S7-persisted keys go LIVE here). Per channel:
 /// connect through <see cref="IInboundMailClient"/> (MailKit IMAP/POP3; secrets via
-/// IMailCredentialResolver), list up to FetchMax pending messages, hand each to
+/// IMailCredentialResolver; OAuth2 access tokens via IMailOAuthTokenService, S8
+/// slice 6), list up to FetchMax pending messages, hand each to
 /// <see cref="InboundMailProcessor"/>, then apply the channel's persisted post-fetch
 /// action (mark seen / archive-move / delete). Bookkeeping mirrors the S7 admin
 /// email cluster: success stamps LastActivityAt and clears the error counters, a
@@ -24,6 +25,7 @@ public sealed class MailFetchJob(
     ISettingsService settings,
     IInboundMailClient client,
     IMailCredentialResolver credentials,
+    IMailOAuthTokenService oauth,
     InboundMailProcessor processor,
     ISystemLogService syslog,
     TimeProvider clock,
@@ -63,9 +65,18 @@ public sealed class MailFetchJob(
         var processed = 0;
         try
         {
+            // S8 slice 6: an OAuth2 mailbox gets a freshly validated access token
+            // (refreshed here when the cached one is inside the safety margin). A dead
+            // grant throws MailOAuthException and lands in the catch below — the same
+            // ErrorCount / LastErrorMessage / syslog trail every other fetch failure uses.
+            var accessToken = channel.AuthKind == MailAuthKind.OAuth2
+                ? await oauth.GetAccessTokenAsync(channel, ct)
+                : null;
+
             await using var session = await client.ConnectAsync(new InboundConnection(
                 channel.Protocol, channel.Host, channel.Port, channel.AuthKind,
-                channel.Username, credentials.ResolvePassword(channel), channel.Folder), ct);
+                channel.Username, credentials.ResolvePassword(channel), channel.Folder,
+                accessToken), ct);
 
             foreach (var uid in await session.ListPendingUidsAsync(Math.Max(1, channel.FetchMax), ct))
             {

@@ -62,6 +62,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAlertRecipientResolver, AlertRecipientResolver>();
         services.AddSingleton<ISmtpMailTransport, MailKitSmtpTransport>();
 
+        // S8 slice 6: OAuth2 mailbox authentication. The token service owns the
+        // per-channel refresh/persist cycle; the token endpoint itself sits behind
+        // IMailOAuthTokenClient (Program.cs binds the HttpClient — tests script it).
+        services.AddScoped<IMailOAuthTokenService, MailOAuthTokenService>();
+
         // S8 inbound mail: signed reply tokens, the MailKit mailbox seam (tests swap
         // a scripted fake), the MimeMessage → ticket/thread processor and the
         // recurring fetch job (Program.cs schedules it behind the server gate).

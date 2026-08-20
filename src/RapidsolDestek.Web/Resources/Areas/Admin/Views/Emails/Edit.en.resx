@@ -235,7 +235,7 @@
     <value>Connection and authentication succeeded.</value>
   </data>
   <data name="ee.testOkNoAuth" xml:space="preserve">
-    <value>Connected to the server (OAuth2 sign-in is verified in S8).</value>
+    <value>Connected to the server (no credential configured, so no sign-in was attempted).</value>
   </data>
   <data name="ee.testFailInput" xml:space="preserve">
     <value>Enter a server host and a valid port.</value>
@@ -254,5 +254,71 @@
   </data>
   <data name="ee.testFailError" xml:space="preserve">
     <value>The test could not be completed; please try again.</value>
+  </data>
+  <data name="ee.testFailOauthConfig" xml:space="preserve">
+    <value>OAuth2 application details are missing (client id / secret).</value>
+  </data>
+  <data name="ee.testFailOauthConsent" xml:space="preserve">
+    <value>This channel is not authorized yet (or the grant was revoked). Use "Authorize" to consent.</value>
+  </data>
+  <data name="ee.testFailOauthRefresh" xml:space="preserve">
+    <value>The access token could not be refreshed; the provider was unreachable or refused the request.</value>
+  </data>
+  <data name="ee.oauthProvider" xml:space="preserve">
+    <value>Provider</value>
+  </data>
+  <data name="ee.oauthProviderMicrosoft" xml:space="preserve">
+    <value>Microsoft 365 / Outlook</value>
+  </data>
+  <data name="ee.oauthProviderGoogle" xml:space="preserve">
+    <value>Google Workspace / Gmail</value>
+  </data>
+  <data name="ee.oauthTenant" xml:space="preserve">
+    <value>Tenant</value>
+  </data>
+  <data name="ee.oauthTenantHelp" xml:space="preserve">
+    <value>Microsoft only: tenant id or domain. Left empty, "common" is used.</value>
+  </data>
+  <data name="ee.oauthScopes" xml:space="preserve">
+    <value>Scopes</value>
+  </data>
+  <data name="ee.oauthScopesHelp" xml:space="preserve">
+    <value>Leave empty to use the recommended scopes for the provider and protocol.</value>
+  </data>
+  <data name="ee.oauthRedirectUri" xml:space="preserve">
+    <value>Redirect URI to register with the application:</value>
+  </data>
+  <data name="ee.oauthConsent" xml:space="preserve">
+    <value>Authorization</value>
+  </data>
+  <data name="ee.oauthConsentNone" xml:space="preserve">
+    <value>This channel has not been authorized yet.</value>
+  </data>
+  <data name="ee.oauthConsentOn" xml:space="preserve">
+    <value>Authorized: {0} ({1})</value>
+  </data>
+  <data name="ee.oauthConsentSaveFirst" xml:space="preserve">
+    <value>Save the email address first to authorize it.</value>
+  </data>
+  <data name="ee.oauthAuthorize" xml:space="preserve">
+    <value>Authorize</value>
+  </data>
+  <data name="ee.oauthReauthorize" xml:space="preserve">
+    <value>Re-authorize</value>
+  </data>
+  <data name="ee.oauthToastOk" xml:space="preserve">
+    <value>Authorization completed.</value>
+  </data>
+  <data name="ee.oauthErrConfig" xml:space="preserve">
+    <value>Save the OAuth2 provider and application details first.</value>
+  </data>
+  <data name="ee.oauthErrUnsaved" xml:space="preserve">
+    <value>Save the channel before authorizing it.</value>
+  </data>
+  <data name="ee.oauthErrProvider" xml:space="preserve">
+    <value>The provider did not complete the authorization (consent denied or cancelled).</value>
+  </data>
+  <data name="ee.oauthErrExchange" xml:space="preserve">
+    <value>The authorization code could not be exchanged for a token; the provider refused the request.</value>
   </data>
 </root>

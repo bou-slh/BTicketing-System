@@ -102,7 +102,8 @@ public class InboundMailTests(PostgresFixture fixture)
     private async Task RunFetchAsync(ServiceScopeBundle s, FakeInboundMailClient client, DateTimeOffset? now = null)
     {
         var job = new MailFetchJob(s.Db, s.Get<ISettingsService>(), client,
-            s.Get<IMailCredentialResolver>(), s.Get<InboundMailProcessor>(),
+            s.Get<IMailCredentialResolver>(), s.Get<IMailOAuthTokenService>(),
+            s.Get<InboundMailProcessor>(),
             s.Get<ISystemLogService>(), new FixedTime(now ?? Now), NullLogger<MailFetchJob>.Instance);
         await job.RunAsync(CancellationToken.None);
     }

@@ -108,8 +108,10 @@ public class EmailsAdminTests(PostgresFixture fixture)
             ("inHost", ""), ("inPort", ""), ("inFolder", "INBOX"), ("inProtocol", "imap"), ("inAuth", "basic"),
             ("fetchActive", "false"), ("freq", "5"), ("maxFetch", "30"), ("afterFetch", "archive"), ("archiveFolder", ""),
             ("inUsername", ""), ("inPassword", ""), ("inClientId", ""), ("inClientSecret", ""),
+            ("inProvider", "microsoft"), ("inTenant", ""), ("inScopes", ""),
             ("smtpActive", "false"), ("outHost", ""), ("outPort", ""), ("outAuth", "basic"),
             ("outUsername", ""), ("outPassword", ""), ("outClientId", ""), ("outClientSecret", ""),
+            ("outProvider", "microsoft"), ("outTenant", ""), ("outScopes", ""),
         };
         foreach (var (key, value) in overrides)
         {
@@ -240,6 +242,80 @@ public class EmailsAdminTests(PostgresFixture fixture)
         }
     }
 
+    /// <summary>
+    /// S8 slice 6: OAuth2 grant parameters round-trip, an existing consent is rendered
+    /// as FACT only (never as a token), and changing the app registration drops the
+    /// stored grant — a refresh token issued for another client id is worthless.
+    /// </summary>
+    [Fact]
+    public async Task OAuthConsent_RendersFactNotTokens_AndIsDroppedWhenTheGrantChanges()
+    {
+        var admin = await AdminClientAsync();
+        // "a…" keeps this row below the canon addresses in the list's address-desc order.
+        var address = $"aoa{Guid.NewGuid():N}"[..12] + "@rapidsol.com.tr";
+
+        var (token, _) = await GetWithTokenAsync(admin, "/admin/email-edit");
+        var landed = await PostFormAsync(admin, "/admin/email-edit", token, [.. EditForm(
+            ("address", address),
+            ("smtpActive", "true"), ("outHost", "smtp.example.test"), ("outPort", "587"),
+            ("outAuth", "oauth2"), ("outClientId", "app-one"), ("outClientSecret", "app-one-secret"),
+            ("outProvider", "google"), ("outScopes", ""))]);
+        var id = int.Parse(Regex.Match(landed.RequestMessage!.RequestUri!.Query, @"id=(\d+)").Groups[1].Value);
+
+        var protector = fixture.Factory.Services.GetRequiredService<IEmailSecretProtector>();
+        int channelId;
+        await using (var db = fixture.CreateContext())
+        {
+            var smtp = await db.EmailAccounts.Where(x => x.Id == id).SelectMany(x => x.Channels)
+                .SingleAsync(c => c.Kind == EmailChannelKind.Smtp);
+            channelId = smtp.Id;
+            Assert.Equal(MailOAuthProvider.Google, smtp.OAuthProvider);
+            Assert.Null(smtp.OAuthConsentAt); // saving credentials is not consenting
+
+            // Simulate a completed consent (the flow itself is covered in MailOAuthTests).
+            smtp.OAuthRefreshTokenProtected = protector.Protect("refresh-token-plaintext");
+            smtp.OAuthAccessTokenProtected = protector.Protect("access-token-plaintext");
+            smtp.OAuthAccessTokenExpiresAt = DateTimeOffset.UtcNow.AddHours(1);
+            smtp.OAuthConsentAt = DateTimeOffset.UtcNow;
+            smtp.OAuthConsentAccount = address;
+            await db.SaveChangesAsync();
+        }
+
+        // The page reports WHO consented and when — and never a token, in plaintext or
+        // ciphertext (the ciphertext would be an offline-attack surface of its own).
+        var html = Decode(await admin.GetStringAsync($"/admin/email-edit?id={id}"));
+        Assert.Contains("Yetkilendirildi", html);
+        Assert.DoesNotContain("refresh-token-plaintext", html);
+        Assert.DoesNotContain("access-token-plaintext", html);
+        Assert.DoesNotContain("app-one-secret", html);
+        await using (var db = fixture.CreateContext())
+        {
+            var smtp = await db.Set<EmailChannel>().SingleAsync(c => c.Id == channelId);
+            Assert.DoesNotContain(smtp.OAuthRefreshTokenProtected!, html);
+            Assert.DoesNotContain(smtp.OAuthAccessTokenProtected!, html);
+            Assert.DoesNotContain(smtp.OAuthClientSecretProtected!, html);
+        }
+
+        // Repointing the channel at a different app registration invalidates consent.
+        var (token2, _) = await GetWithTokenAsync(admin, $"/admin/email-edit?id={id}");
+        await PostFormAsync(admin, "/admin/email-edit", token2, [.. EditForm(
+            ("id", id.ToString()), ("address", address),
+            ("smtpActive", "true"), ("outHost", "smtp.example.test"), ("outPort", "587"),
+            ("outAuth", "oauth2"), ("outClientId", "app-two"),
+            ("outClientSecret", EmailsController.ClientSecretSentinel),
+            ("outProvider", "google"))]);
+        await using (var db = fixture.CreateContext())
+        {
+            var smtp = await db.Set<EmailChannel>().SingleAsync(c => c.Id == channelId);
+            Assert.Equal("app-two", smtp.OAuthClientId);
+            Assert.Null(smtp.OAuthRefreshTokenProtected);
+            Assert.Null(smtp.OAuthAccessTokenProtected);
+            Assert.Null(smtp.OAuthConsentAt);
+            // The client secret itself was posted back as the sentinel = unchanged.
+            Assert.Equal("app-one-secret", protector.Unprotect(smtp.OAuthClientSecretProtected));
+        }
+    }
+
     [Fact]
     public async Task Save_RefusesDuplicateAddress_AndIncompleteEnabledChannel()
     {
@@ -291,10 +367,19 @@ public class EmailsAdminTests(PostgresFixture fixture)
 
         // SMTP leg of the same contract.
         var res2 = await PostFormAsync(admin, "/admin/email-edit/test", token,
-            ("kind", "out"), ("host", "127.0.0.1"), ("port", "1"), ("auth", "oauth2"));
+            ("kind", "out"), ("host", "127.0.0.1"), ("port", "1"), ("auth", "basic"));
         using var json2 = JsonDocument.Parse(await res2.Content.ReadAsStringAsync());
         Assert.False(json2.RootElement.GetProperty("ok").GetBoolean());
         Assert.Equal("connect", json2.RootElement.GetProperty("stage").GetString());
+
+        // S8 slice 6: an OAuth2 probe of an UNSAVED channel cannot borrow a token from
+        // anywhere, so it stops at "oauth-consent" before touching the network — the
+        // pre-slice behaviour (connect + a fake "ok-noauth") is gone for good.
+        var res3 = await PostFormAsync(admin, "/admin/email-edit/test", token,
+            ("kind", "out"), ("host", "127.0.0.1"), ("port", "1"), ("auth", "oauth2"));
+        using var json3 = JsonDocument.Parse(await res3.Content.ReadAsStringAsync());
+        Assert.False(json3.RootElement.GetProperty("ok").GetBoolean());
+        Assert.Equal("oauth-consent", json3.RootElement.GetProperty("stage").GetString());
     }
 
     [Fact]

@@ -167,16 +167,23 @@ public static class DomainSeeder
         db.EmailAccounts.AddRange(emDestek, emBordro, emBilgi);
 
         // destek@ transport canon = admin/email-edit.html's exact editor state (S7):
-        // IMAP 993/INBOX + SMTP 587, OAuth2 selected, fetch 5 min / 30 max / archive
-        // to Arsiv/Islenen. Secrets stay null — the mockup bullets are sample state
-        // (write-only inputs render the sentinel only when a secret is stored; flagged).
+        // IMAP 993/INBOX + SMTP 587, fetch 5 min / 30 max / archive to Arsiv/Islenen.
+        // Secrets stay null — the mockup bullets are sample state (write-only inputs
+        // render the sentinel only when a secret is stored; flagged).
+        // S8 slice 6 DEVIATION (flagged): the mockup's auth select shows OAuth2, but
+        // OAuth2 is now a REAL grant — it needs a Microsoft/Google app registration and
+        // an interactive admin consent, neither of which a seed can honestly fabricate,
+        // and an unconsented OAuth2 channel can no longer send or fetch AT ALL. Seeding
+        // Basic keeps the demo pipeline usable; the mockup's own dlg-auth renders the
+        // Basic tab active anyway, and the canon OAuth2 client id is kept on both
+        // channels so the editor still shows the app registration.
         emDestek.Notes = "Kullanıcı taleplerinin ana giriş kutusu. Değişiklik yapmadan önce Ümit'e haber verin.";
         emDestek.Channels =
         [
             new EmailChannel
             {
                 Kind = EmailChannelKind.Mailbox, IsActive = true,
-                Protocol = MailProtocol.Imap, AuthKind = MailAuthKind.OAuth2,
+                Protocol = MailProtocol.Imap, AuthKind = MailAuthKind.Basic,
                 Host = "imap.rapidsol.com.tr", Port = 993, Folder = "INBOX",
                 Username = "destek@rapidsol.com.tr", OAuthClientId = "8f42c1aa-destek-oauth",
                 FetchFrequencyMinutes = 5, FetchMax = 30,
@@ -185,7 +192,7 @@ public static class DomainSeeder
             new EmailChannel
             {
                 Kind = EmailChannelKind.Smtp, IsActive = true,
-                Protocol = MailProtocol.Smtp, AuthKind = MailAuthKind.OAuth2,
+                Protocol = MailProtocol.Smtp, AuthKind = MailAuthKind.Basic,
                 Host = "smtp.rapidsol.com.tr", Port = 587,
                 Username = "destek@rapidsol.com.tr", OAuthClientId = "8f42c1aa-destek-oauth",
             },

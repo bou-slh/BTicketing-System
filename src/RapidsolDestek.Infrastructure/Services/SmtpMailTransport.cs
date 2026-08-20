@@ -7,13 +7,17 @@ using RapidsolDestek.Domain.Entities;
 
 namespace RapidsolDestek.Infrastructure.Services;
 
-/// <summary>One resolved SMTP hop for a queued send (channel settings + decrypted secret).</summary>
+/// <summary>One resolved SMTP hop for a queued send (channel settings + decrypted
+/// secret). <see cref="AccessToken"/> carries the S8 slice 6 OAuth2 bearer token the
+/// send job resolved from the channel's stored consent; it is set only for OAuth2
+/// channels and is mutually exclusive with <see cref="Password"/>.</summary>
 public sealed record SmtpTransportSettings(
     string Host,
     int Port,
     MailAuthKind Auth,
     string? Username,
-    string? Password);
+    string? Password,
+    string? AccessToken = null);
 
 /// <summary>One file to attach to an outbound message (S8 slice 5,
 /// email/attachments_in_email): decoded bytes plus the original name and type.</summary>
@@ -76,10 +80,20 @@ public interface IMailFallbackSender
 
 /// <summary>Decrypts an <see cref="EmailChannel"/>'s stored basic-auth password.
 /// Implemented in Web over the DataProtection-based IEmailSecretProtector (the
-/// keyring lives with the app); Infrastructure only consumes plaintext at send.</summary>
+/// keyring lives with the app); Infrastructure only consumes plaintext at send.
+/// S8 slice 6 widened it into the general channel-secret codec, because the OAuth2
+/// token service must also read the client secret / refresh token and write freshly
+/// issued ones back — the keyring must not leak into Infrastructure for that.</summary>
 public interface IMailCredentialResolver
 {
     string? ResolvePassword(EmailChannel channel);
+
+    /// <summary>Decrypts any protected channel column; null when the payload is
+    /// absent or undecryptable (rotated keyring).</summary>
+    string? Unprotect(string? protectedValue);
+
+    /// <summary>Encrypts a secret for storage in a protected channel column.</summary>
+    string Protect(string plaintext);
 }
 
 /// <summary>
@@ -99,6 +113,10 @@ public sealed class MailKitSmtpTransport : ISmtpMailTransport
         if (!MailboxAddress.TryParse(message.To, out var to)
             || !MailboxAddress.TryParse(message.FromAddress, out var from))
             return MailTestResult.Fail("input");
+        // S8 slice 6: a tokenless OAuth2 channel cannot sign in — refuse before dialing
+        // rather than attempting an unauthenticated relay that blames the wrong stage.
+        if (smtp.Auth == MailAuthKind.OAuth2 && string.IsNullOrEmpty(smtp.AccessToken))
+            return MailTestResult.Fail(MailOAuthException.ConsentStage);
         from.Name = message.FromName ?? "";
 
         var mime = new MimeMessage();
@@ -174,10 +192,23 @@ public sealed class MailKitSmtpTransport : ISmtpMailTransport
 
         try
         {
-            // OAuth2: no token flow exists yet (S8 later slice) — submit where the
-            // server allows unauthenticated relay, otherwise the rejection reports
-            // as the honest "send" stage (MailDiagnosticSender precedent).
-            if (smtp.Auth == MailAuthKind.Basic && !string.IsNullOrEmpty(smtp.Username))
+            // S8 slice 6: OAuth2 channels submit with a REAL XOAUTH2 sign-in over the
+            // access token the send job resolved; a channel with no valid grant fails
+            // at "oauth-consent" rather than quietly attempting an unauthenticated
+            // relay that would leave the outbox row blaming the wrong stage.
+            if (smtp.Auth == MailAuthKind.OAuth2)
+            {
+                try
+                {
+                    await client.AuthenticateAsync(
+                        new SaslMechanismOAuth2(smtp.Username ?? "", smtp.AccessToken), cts.Token);
+                }
+                catch (AuthenticationException ex)
+                {
+                    return MailTestResult.Fail("auth", ex.Message);
+                }
+            }
+            else if (!string.IsNullOrEmpty(smtp.Username))
             {
                 try
                 {

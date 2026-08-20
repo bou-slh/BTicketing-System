@@ -65,6 +65,23 @@ public enum MailAuthKind
 }
 
 /// <summary>
+/// The identity provider an OAuth2 mailbox channel authenticates against (S8 slice 6).
+/// Only the two providers helpdesks actually meet are modeled as presets — each one
+/// pins its authorize/token endpoints and the IMAP/POP3/SMTP scopes; a hand-rolled
+/// authority string is deliberately NOT offered (an unknown provider's XOAUTH2
+/// dialect cannot be verified, and a half-working preset is worse than none).
+/// osTicket has no equivalent enum — its plugin stores a bare "auth_bk" string.
+/// </summary>
+public enum MailOAuthProvider
+{
+    /// <summary>Microsoft 365 / Outlook (Entra ID app registration).</summary>
+    Microsoft,
+
+    /// <summary>Google Workspace / Gmail (Google Cloud OAuth client).</summary>
+    Google,
+}
+
+/// <summary>
 /// Transport configuration for one direction of an <see cref="EmailAccount"/>
 /// (osTicket <c>email_account</c>): at most one Mailbox (fetch) and one Smtp (send)
 /// channel per address. Secrets are not stored here — <see cref="CredentialRef"/> points
@@ -99,12 +116,49 @@ public class EmailChannel : TimestampedEntity
     public string? PasswordProtected { get; set; }
 
     /// <summary>OAuth2 app registration client id (S7 admin/email-edit dlg-auth;
-    /// the token flow itself is S8).</summary>
+    /// the token flow went live in S8 slice 6).</summary>
     public string? OAuthClientId { get; set; }
 
     /// <summary>OAuth2 client secret, DataProtection-encrypted at rest (write-only
     /// in the UI, same sentinel contract as <see cref="PasswordProtected"/>).</summary>
     public string? OAuthClientSecretProtected { get; set; }
+
+    /// <summary>Which provider preset supplies the endpoints + default scopes
+    /// (S8 slice 6). Only meaningful while <see cref="AuthKind"/> is OAuth2.</summary>
+    public MailOAuthProvider OAuthProvider { get; set; } = MailOAuthProvider.Microsoft;
+
+    /// <summary>Entra ID tenant (id, domain, or "common"/"organizations") for the
+    /// Microsoft preset's authority; ignored by Google. Null = "common".</summary>
+    public string? OAuthTenant { get; set; }
+
+    /// <summary>Space-separated scope override; null = the provider preset's
+    /// defaults (<c>MailOAuthProviders</c>). Stored so an admin can widen/narrow
+    /// consent without a code change.</summary>
+    public string? OAuthScopes { get; set; }
+
+    /// <summary>
+    /// Long-lived refresh token from the admin consent flow, DataProtection-encrypted
+    /// at rest. Never rendered — the UI shows only whether consent exists
+    /// (<see cref="OAuthConsentAt"/>) and the account it was granted for.
+    /// </summary>
+    public string? OAuthRefreshTokenProtected { get; set; }
+
+    /// <summary>Cached access token, DataProtection-encrypted at rest; refreshed by
+    /// the token service when <see cref="OAuthAccessTokenExpiresAt"/> is inside the
+    /// safety margin. Never rendered.</summary>
+    public string? OAuthAccessTokenProtected { get; set; }
+
+    /// <summary>Absolute expiry of the cached access token (provider expires_in
+    /// applied at issue time); null = nothing cached.</summary>
+    public DateTimeOffset? OAuthAccessTokenExpiresAt { get; set; }
+
+    /// <summary>When the authorization-code consent last completed; null = never
+    /// consented (the channel cannot authenticate).</summary>
+    public DateTimeOffset? OAuthConsentAt { get; set; }
+
+    /// <summary>Mailbox the consent was granted for, as reported by the provider's
+    /// id_token/userinfo — evidence in the UI that the right account was used.</summary>
+    public string? OAuthConsentAccount { get; set; }
 
     /// <summary>Mailbox folder to fetch from (osTicket folder).</summary>
     public string? Folder { get; set; }

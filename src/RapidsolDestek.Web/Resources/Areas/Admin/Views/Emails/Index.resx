@@ -54,4 +54,7 @@
   <data name="em.deleteConfirm" xml:space="preserve">
     <value>Seçili e-posta adresleri kalıcı olarak silinecek; departman, filtre veya e-posta ayarlarında kullanılan adresler atlanır. Devam edilsin mi?</value>
   </data>
+  <data name="em.oauthErrState" xml:space="preserve">
+    <value>OAuth2 yetkilendirmesi doğrulanamadı (bağlantı geçersiz veya süresi dolmuş). Lütfen yetkilendirmeyi yeniden başlatın.</value>
+  </data>
 </root>

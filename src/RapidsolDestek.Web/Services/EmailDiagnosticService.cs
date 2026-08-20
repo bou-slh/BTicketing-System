@@ -64,31 +64,50 @@ public sealed class EmailDiagnosticService(
         try
         {
             EmailAccount? account;
+            EmailChannel? smtp;
+            string? accessToken = null;
             using (var scope = scopes.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 account = await db.EmailAccounts.Include(a => a.Channels)
                     .AsNoTracking().SingleOrDefaultAsync(a => a.Id == accountId);
-            }
-            if (account is null)
-            {
-                Finish(id, "failure", "account", null);
-                return;
-            }
+                if (account is null)
+                {
+                    Finish(id, "failure", "account", null);
+                    return;
+                }
 
-            // "That address's SMTP settings are used" (ed.fromHelp): an account
-            // without a usable outgoing channel is an honest typed failure.
-            var smtp = account.Channels.FirstOrDefault(c => c.Kind == EmailChannelKind.Smtp);
-            if (smtp is null || !smtp.IsActive || string.IsNullOrWhiteSpace(smtp.Host) || smtp.Port is < 1 or > 65535)
-            {
-                Finish(id, "failure", "channel", null);
-                return;
+                // "That address's SMTP settings are used" (ed.fromHelp): an account
+                // without a usable outgoing channel is an honest typed failure.
+                smtp = account.Channels.FirstOrDefault(c => c.Kind == EmailChannelKind.Smtp);
+                if (smtp is null || !smtp.IsActive || string.IsNullOrWhiteSpace(smtp.Host) || smtp.Port is < 1 or > 65535)
+                {
+                    Finish(id, "failure", "channel", null);
+                    return;
+                }
+
+                // S8 slice 6: an OAuth2 channel's diagnostic send authenticates for
+                // real; a dead grant is reported with its own typed stage BEFORE any
+                // network I/O, exactly like the channel misconfiguration above.
+                if (smtp.AuthKind == MailAuthKind.OAuth2)
+                {
+                    try
+                    {
+                        accessToken = await scope.ServiceProvider
+                            .GetRequiredService<IMailOAuthTokenService>().GetAccessTokenAsync(smtp);
+                    }
+                    catch (MailOAuthException ex)
+                    {
+                        Finish(id, "failure", ex.Stage, ex.Message);
+                        return;
+                    }
+                }
             }
 
             var result = await sender.SendAsync(new MailSendRequest(
                 smtp.Host, smtp.Port, smtp.AuthKind, smtp.Username,
                 secrets.Unprotect(smtp.PasswordProtected),
-                account.Address, account.DisplayName, to, subject, message));
+                account.Address, account.DisplayName, to, subject, message, accessToken));
             Finish(id, result.Success ? "success" : "failure", result.Success ? null : result.Stage, result.Detail);
         }
         catch (Exception ex)

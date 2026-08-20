@@ -30,6 +30,8 @@ public sealed class OutboundMailJob(
     ISettingsService settings,
     ISmtpMailTransport transport,
     IMailCredentialResolver credentials,
+    IMailOAuthTokenService oauth,
+    ISystemLogService syslog,
     IMailThreadTokenService threadToken,
     Domain.Services.IFileStore files,
     ILogger<OutboundMailJob> logger,
@@ -96,9 +98,34 @@ public sealed class OutboundMailJob(
                 .OrderByDescending(i => i.Id).Select(i => i.MessageId).FirstOrDefaultAsync(ct);
         }
 
+        // S8 slice 6: an OAuth2 SMTP channel needs a live access token before the
+        // transport runs. A dead grant is not a transport failure — it is channel
+        // state, so it gets the mailbox channels' bookkeeping (ErrorCount +
+        // LastErrorMessage/At) and a syslog Error row, and a "consent" failure stops
+        // retrying immediately (only an admin re-authorization can fix it).
+        string? accessToken = null;
+        if (smtp.AuthKind == MailAuthKind.OAuth2)
+        {
+            try
+            {
+                accessToken = await oauth.GetAccessTokenAsync(smtp, ct);
+            }
+            catch (MailOAuthException ex)
+            {
+                await RecordChannelOAuthFailureAsync(smtp.Id, account.Address, ex, ct);
+                row.LastError = $"{ex.Stage}: {ex.Message}";
+                var giveUp = ex.Stage != MailOAuthException.RefreshStage || row.Attempts >= MaxAttempts;
+                row.Status = giveUp ? EmailOutboundStatus.Failed : EmailOutboundStatus.Pending;
+                await db.SaveChangesAsync(ct);
+                if (!giveUp)
+                    throw new MailSendException(row.Id, row.LastError);
+                return;
+            }
+        }
+
         var result = await transport.SendAsync(
             new SmtpTransportSettings(smtp.Host, smtp.Port, smtp.AuthKind, smtp.Username,
-                credentials.ResolvePassword(smtp)),
+                credentials.ResolvePassword(smtp), accessToken),
             new OutboundSmtpMessage(account.Address, fromName,
                 row.ToAddress, row.CcAddresses, row.Subject, row.HtmlBody,
                 messageId, references)
@@ -131,6 +158,28 @@ public sealed class OutboundMailJob(
 
         if (!exhausted)
             throw new MailSendException(row.Id, row.LastError); // AutomaticRetry reschedules
+    }
+
+    /// <summary>
+    /// Channel error bookkeeping for an OAuth2 send failure, mirroring what
+    /// MailFetchJob stamps on the mailbox side so both directions of an address report
+    /// a dead grant the same way (admin/emails surfaces ErrorCount/LastErrorMessage).
+    /// ExecuteUpdate keeps the outbox row's own pending changes out of it.
+    /// </summary>
+    private async Task RecordChannelOAuthFailureAsync(
+        int channelId, string address, MailOAuthException ex, CancellationToken ct)
+    {
+        var message = $"{ex.Stage}: {ex.Message}";
+        var now = (DateTimeOffset?)DateTimeOffset.UtcNow;
+        await db.Set<EmailChannel>().Where(c => c.Id == channelId)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(c => c.ErrorCount, c => c.ErrorCount + 1)
+                .SetProperty(c => c.LastErrorMessage, message)
+                .SetProperty(c => c.LastErrorAt, now), ct);
+        await syslog.LogAsync(SystemLogType.Error,
+            $"OAuth2 gönderim kimlik doğrulaması başarısız ({address})", message,
+            logger: "mail", ct: CancellationToken.None);
+        logger.LogWarning(ex, "Outbound OAuth2 authentication failed for {Address}", address);
     }
 
     /// <summary>
