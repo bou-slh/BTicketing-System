@@ -208,8 +208,9 @@
             <button class="rd-btn" style="justify-content:flex-start" data-dialog-close data-dialog-open="dlg-addorg">@L["us.mAddOrg"]</button>
             @* Parola sıfırlama needs outbound mail (S8) — disabled, never dead-looking. *@
             <button class="rd-btn" style="justify-content:flex-start" disabled title="@L["us.notYet"]">@L["us.mPwReset"]</button>
-            @* Kaydet (guest → portal account invite) has no service yet — TODO(S8). *@
-            <button class="rd-btn" style="justify-content:flex-start" disabled title="@L["us.notYet"]">@L["us.mRegister"]</button>
+            @* Kaydet (guest → portal account invite): S8 slice 5 mails a signed
+               one-shot activation link to each selected guest without an account. *@
+            <button class="rd-btn" style="justify-content:flex-start" type="submit" form="us-bulk" name="act" value="invite">@L["us.mRegister"]</button>
             @* No data-dialog-close on submits — the audited B2 bug (close swallows the
                save); the POST navigates away, closing the dialog with the page. *@
             <button class="rd-btn" style="justify-content:flex-start" type="submit" form="us-bulk" name="act" value="lock">@L["us.mLock"]</button>

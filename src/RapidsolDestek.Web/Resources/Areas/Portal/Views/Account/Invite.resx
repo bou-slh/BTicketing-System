@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="iv.title" xml:space="preserve">
+    <value>Hesabınızı etkinleştirin</value>
+  </data>
+  <data name="iv.sub" xml:space="preserve">
+    <value>Sizin için bir portal hesabı açıldı. Parolanızı belirleyin; ardından taleplerinizi takip edebilirsiniz.</value>
+  </data>
+  <data name="iv.email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="iv.password" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="iv.password2" xml:space="preserve">
+    <value>Parola (tekrar)</value>
+  </data>
+  <data name="iv.passHelp" xml:space="preserve">
+    <value>En az 8 karakter; harf ve rakam içermelidir.</value>
+  </data>
+  <data name="iv.submit" xml:space="preserve">
+    <value>Hesabı etkinleştir</value>
+  </data>
+  <data name="iv.badTitle" xml:space="preserve">
+    <value>Davet bağlantısı geçersiz</value>
+  </data>
+  <data name="iv.badSub" xml:space="preserve">
+    <value>Davet bağlantısı geçersiz, süresi dolmuş veya daha önce kullanılmış. Yeni bir davet için destek ekibiyle iletişime geçin.</value>
+  </data>
+  <data name="iv.backLogin" xml:space="preserve">
+    <value>← Girişe dön</value>
+  </data>
+  <data name="iv.errPasswordWeak" xml:space="preserve">
+    <value>Parola en az 8 karakter olmalı; harf ve rakam içermelidir.</value>
+  </data>
+  <data name="iv.errPasswordMismatch" xml:space="preserve">
+    <value>Parolalar eşleşmiyor.</value>
+  </data>
+  <data name="iv.errTaken" xml:space="preserve">
+    <value>Bu e-posta adresi için zaten bir hesap var. Giriş yapmayı deneyin.</value>
+  </data>
+</root>

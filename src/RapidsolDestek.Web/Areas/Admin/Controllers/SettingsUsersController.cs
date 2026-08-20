@@ -20,7 +20,10 @@ public sealed record SettingsUsersVm(
 /// failure). LIVE: registration_mode gates the portal /register route + the login
 /// page's register link (the §6.3 row's core promise — portal AccountController),
 /// and max_login_attempts + lockout_minutes are the customer lockout policy (portal
-/// login via LoginLockoutPolicy). Persisted-only keys are annotated on
+/// login via LoginLockoutPolicy). S8 slice 5 adds two more: auth_tokens puts a signed
+/// auto-login token on the ticket links in customer mail, and email_verify turns
+/// registration into a verify-by-mail flow over the su.tplConfirmEmail row below.
+/// Persisted-only keys are annotated on
 /// <see cref="UserSettings"/>. B2: the six su.tpl* rows get per-row Edit dialogs
 /// server-prefilled from <see cref="ISystemTemplateService"/> and saved back
 /// (subject + TR/EN bodies).

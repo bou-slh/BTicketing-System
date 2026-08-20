@@ -385,7 +385,12 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       tv.errStatus. Canned select = dept+global CannedResponses from DB plus the mockup's Orijinal/Son Mesaj
       quote options; expansion server-side (CannedResponseService variables) → rd.js data-canned-insert inserts
       at the caret. Signature radios preview the staff/department signature into an added rd-help block —
-      NOTE(S8): applying the chosen signature happens at outbound-mail render, nothing to persist yet.
+      DONE(S8 slice 5): the choice is resolved to text at post time (dept signature only while the dept is
+      public, osTicket parity) and rides ThreadEntryAdded into the reply mail's render, where it fills
+      %{signature} or, for templates that do not place it, appends to %{response}. The reply itself now
+      mails the owner (collaborators Cc) from the composer's Gönderen account with Reply-To + the signed
+      reply-token Message-Id, carries the reply's attachments per email/attachments_in_email, and goes out
+      WITHOUT Auto-Submitted (human-authored).
       DONE — header: Aktar/Ata dialogs drive TransferAsync/AssignAsync (staff "s:{id}"/team "t:{id}" options;
       the optional comment posts as an internal note, osTicket parity); Yazdır = rd.js [data-print] +
       product-only @media print block in app.css (mockups define NO print CSS — design needs canon sign-off).
@@ -475,8 +480,11 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       INVENTED org-select dialog dlg-addorg (B2, tasks dlg-bulk-transfer precedent — needs canon sign-off);
       Sil chains into an INVENTED confirm dialog, hard delete with a service guard — users with tickets or
       collaborator rows are skipped and reported (tickets.user_id FK is Restrict); submit buttons drop the
-      mockup's data-dialog-close (the audited B2 close-swallows-save bug). Parola Sıfırlama Gönder + Kaydet
-      disabled with us.notYet titles — both need outbound mail / an invite service (TODO S8). CSV import: the
+      mockup's data-dialog-close (the audited B2 close-swallows-save bug). Kaydet is LIVE (S8 slice 5): it
+      mails each selected account-less guest a signed one-shot invitation opening /invite (set password →
+      Identity account linked to the EXISTING domain user); guests who already signed up, or have no
+      address, count as skipped. Parola Sıfırlama Gönder stays disabled with its us.notYet title (needs a
+      customer-side reset issuer — TODO). CSV import: the
       dead İçe Aktar button gains data-dialog-open onto an INVENTED dlg-import (admin/list-edit dlg-import
       DOM with a file input, B2/B5 — needs canon sign-off); strict name,email[,org] parser (optional header,
       quoted fields) creates users with org-by-name or domain auto-link and toasts created/skipped counts.
@@ -917,17 +925,25 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       UserSettings typed section) — PRG toasts, B3 validation writes NOTHING on failure (su.errValues).
       LIVE (3): registration_mode gates the portal register flow HTTP-visibly — "public" self-serves,
       "closed"/"invite" 404 both GET and POST /register (settings-kb enable_kb 404 precedent) and the
-      login page's "Kayıt olun" foot link disappears (ShowRegister ViewData); "invite" refuses like
-      closed until an invitation mechanism exists — TODO(S8) invite tokens, flagged. max_login_attempts +
+      login page's "Kayıt olun" foot link disappears (ShowRegister ViewData); "invite" refuses SELF-
+      registration like closed, and invited people join through /invite with a signed one-shot token
+      (S8 slice 5 — issued from the agent users page's "Kaydet" bulk action). max_login_attempts +
       lockout_minutes = the customer lockout policy consumed at the portal login (LoginLockoutPolicy —
       the staff twin's shared helper; customer lockout moves from Identity's 5/15 to the mockup's 5/30
       defaults). PERSISTED-ONLY (annotated on UserSettings): name_format / avatar_source TODO(S8 user
       name+avatar rendering), registration_required (TODO(S8): guest ticket-open flow does not exist —
       the switch's "misafirler yalnızca e-posta ile talep açabilir" promise needs it), password_policy
-      TODO(S8 policy engine), session_timeout_minutes (TODO: B6 session work), auth_tokens (TODO(S8):
-      auto-login links ride the outgoing-mail pipeline), email_verify (TODO(S8): register verification
-      flow over the seeded user.confirm.email/user.verify.page/user.confirmed.page templates; honest
-      default OFF — registration signs in immediately today, mockup checked = sample state, flagged).
+      TODO(S8 policy engine), session_timeout_minutes (TODO: B6 session work).
+      LIVE (S8 slice 5): auth_tokens puts a signed auto-login token on the ticket link inside customer
+      mail (%{ticket.link} / %{recipient.ticket_link}); the token IS the S5 check-status guest token,
+      reused with a 7-day life, so the link opens the read-only portal ticket view — osTicket's authtoken
+      never expires and grants full client access (flagged deviation, ours is bounded and read-only).
+      email_verify turns registration into a verify-by-mail flow over the seeded user.confirm.email
+      template (/register/sent → /register/verify, resend re-issues and invalidates the old link), and
+      blocks sign-in until it is followed. Honest default stays OFF (mockup checked = sample state,
+      flagged); accounts registered while OFF are confirmed at creation so switching it on later never
+      locks anyone out. user.verify.page / user.confirmed.page remain page-content rows — the flow's own
+      pages are localized views (resx twins), not template bodies; flagged.
       B2 dialogs: 6 per-row dialogs prefilled via ISystemTemplateService (codes user.access.link/
       user.banner/user.pwreset/user.verify.page/user.confirm.email/user.confirmed.page — the
       settings-agents treatment; same canon flag on page-content rows sharing the template table).
@@ -968,10 +984,10 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       MailFetchJob masters (per-channel fetchfreq is the real cadence), strip_quoted + reply_separator
       LIVE via QuotedReplyStripper, use_email_priority LIVE (X-Priority/Importance → high/low),
       accept_unregistered LIVE (unknown-sender gate) and auto_add_collabs LIVE (To/Cc →
-      ThreadCollaborator). PERSISTED-ONLY (annotated on EmailSettings):
-      verify_domain (TODO(S8): MX lookup needs a DNS client),
-      attachments_in_email (TODO(S8): outbound composer — inbound accept is capped by
-      attachments/max_size_mb instead). B3 in-page (INVENTED — the mockup's
+      ThreadCollaborator), attachments_in_email LIVE (S8 slice 5: the agent reply mail carries the
+      reply's own files, osTicket emailAttachments — inbound accept stays capped by
+      attachments/max_size_mb). PERSISTED-ONLY (annotated on EmailSettings):
+      verify_domain (TODO(S8): MX lookup needs a DNS client). B3 in-page (INVENTED — the mockup's
       switches are independent, settings-kb precedent): polling gates the cron switch, strip-quoted gates
       the separator input. Honest defaults follow today's engine (template set 0, default/alert accounts 0 →
       first option renders selected, default_smtp "system"; the mockup's selected destek@/bilgi@/SMTP rows

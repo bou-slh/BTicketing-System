@@ -1,0 +1,34 @@
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["vf.sentTitle"];
+}
+@* S8 slice 5 — users/email_verify: registration ends here instead of signing in.
+   Mirrors the PwresetSent card (same shape, same dev-link affordance). *@
+<div style="display:grid;gap:26px;width:min(420px,100%)">
+    <a class="rc-logo" href="/" style="justify-content:center">
+        <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <div>
+        <div class="rc-auth-card" style="width:100%;text-align:center">
+            <div style="font-size:40px;margin-bottom:12px" aria-hidden="true">✉</div>
+            <h1>@L["vf.sentTitle"]</h1>
+            <p>@L["vf.sentSub"]</p>
+            @if (TempData["DevVerifyLink"] is string link)
+            {
+                <div class="rc-notice" style="word-break:break-all">
+                    <span>DEV:</span> <a href="@link">@link</a>
+                </div>
+            }
+            <form method="post" action="/register/resend" class="rc-form-grid" style="margin-top:8px">
+                <div>
+                    <label class="rc-label" for="vf-email">@L["vf.email"]</label>
+                    <input id="vf-email" class="rc-control" type="email" name="email" required autocomplete="email">
+                </div>
+                <button type="submit" class="rc-button-primary" style="justify-content:center">@L["vf.resend"]</button>
+            </form>
+            <div class="rc-auth-foot">
+                <a href="/login">@L["vf.backLogin"]</a>
+            </div>
+        </div>
+    </div>
+</div>

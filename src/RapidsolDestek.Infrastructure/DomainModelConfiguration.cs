@@ -386,6 +386,14 @@ public static class DomainModelConfiguration
             // (EmailOutbound precedent): the fetch log outlives channel/ticket deletes.
         });
 
+        b.Entity<MailToken>(e =>
+        {
+            e.HasIndex(x => x.Jti).IsUnique(); // redemption lookup key
+            e.HasIndex(x => new { x.UserId, x.Purpose }); // resend / revoke-previous sweep
+            // UserId is a soft ref (EmailOutbound precedent): a deleted user's
+            // outstanding tokens simply never resolve.
+        });
+
         // ----- System -----
 
         b.Entity<Setting>(e => e.HasIndex(x => new { x.Namespace, x.Key }).IsUnique());

@@ -69,7 +69,30 @@ public static class EmailTemplateCatalog
     public static EmailTemplateDefinition? Find(string code) =>
         All.FirstOrDefault(d => d.Code == code);
 
-    /// <summary>Stock body a fresh (non-cloned) set starts with — the S3 seed canon.</summary>
-    public static string StockBody(EmailTemplateDefinition definition) =>
-        $"<p>{definition.DefaultName} — %{{ticket.number}}</p>";
+    /// <summary>
+    /// Templates whose whole point is to carry authored content: without the content
+    /// placeholder their stock body would mail a bare ticket number and silently drop
+    /// the agent's reply or the customer's message (S8 slice 5 — %{response} on the
+    /// reply template is what the exit gate sends). Value = the placeholder.
+    /// </summary>
+    private static readonly Dictionary<string, string> ContentPlaceholders = new()
+    {
+        ["ticket.reply"] = "%{response}",
+        ["message.autoresp"] = "%{message}",
+        ["ticket.activity.notice"] = "%{message}",
+        ["message.alert"] = "%{message}",
+        ["note.alert"] = "%{message}",
+        ["task.activity.alert"] = "%{message}",
+        ["task.activity.notice"] = "%{message}",
+    };
+
+    /// <summary>Stock body a fresh (non-cloned) set starts with — the S3 seed canon,
+    /// plus the content placeholder for the templates that exist to deliver content.</summary>
+    public static string StockBody(EmailTemplateDefinition definition)
+    {
+        var body = $"<p>{definition.DefaultName} — %{{ticket.number}}</p>";
+        return ContentPlaceholders.TryGetValue(definition.Code, out var placeholder)
+            ? body + placeholder
+            : body;
+    }
 }

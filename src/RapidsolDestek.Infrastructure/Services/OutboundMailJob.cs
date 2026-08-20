@@ -20,7 +20,10 @@ public sealed class MailSendException(int outboundId, string error)
 /// explicit from-account (dept address) → email/default_smtp ("system" =
 /// email/default_email_id, else an account id) → no usable SMTP account at all falls
 /// back to the Development logging sender (row Sent + note) or, without a fallback
-/// (production), an honest Failed.
+/// (production), an honest Failed. Per-row message shaping (S8 slice 5): ticket mail
+/// gets Reply-To = the sending mailbox, <see cref="EmailOutbound.IsAutomated"/> decides
+/// the RFC 3834 Auto-Submitted header, and <see cref="EmailOutbound.IncludeAttachments"/>
+/// pulls the thread entry's files onto the message.
 /// </summary>
 public sealed class OutboundMailJob(
     AppDbContext db,
@@ -28,6 +31,7 @@ public sealed class OutboundMailJob(
     ISmtpMailTransport transport,
     IMailCredentialResolver credentials,
     IMailThreadTokenService threadToken,
+    Domain.Services.IFileStore files,
     ILogger<OutboundMailJob> logger,
     IMailFallbackSender? fallback = null)
 {
@@ -97,7 +101,17 @@ public sealed class OutboundMailJob(
                 credentials.ResolvePassword(smtp)),
             new OutboundSmtpMessage(account.Address, fromName,
                 row.ToAddress, row.CcAddresses, row.Subject, row.HtmlBody,
-                messageId, references), ct);
+                messageId, references)
+            {
+                // Ticket mail advertises the fetched mailbox as the reply target so a
+                // customer answer reaches the inbound pipeline; account mail (resets,
+                // access links) has no thread to return to.
+                ReplyTo = row.TicketId is null ? null : account.Address,
+                AutoSubmitted = row.IsAutomated,
+                Attachments = row.IncludeAttachments && row.ThreadEntryId is { } entryId
+                    ? await LoadAttachmentsAsync(entryId, ct)
+                    : [],
+            }, ct);
 
         if (result.Success)
         {
@@ -117,6 +131,40 @@ public sealed class OutboundMailJob(
 
         if (!exhausted)
             throw new MailSendException(row.Id, row.LastError); // AutomaticRetry reschedules
+    }
+
+    /// <summary>
+    /// The thread entry's stored files, decoded for the transport (S8 slice 5,
+    /// email/attachments_in_email). Inline parts are attached too — the mail body is
+    /// the sanitized entry HTML, whose inline references are already stripped, so an
+    /// inline image would otherwise vanish. A file missing from the store is skipped
+    /// with a warning: an unsendable attachment must not lose the reply itself.
+    /// </summary>
+    private async Task<IReadOnlyList<OutboundAttachment>> LoadAttachmentsAsync(int entryId, CancellationToken ct)
+    {
+        var rows = await db.Attachments
+            .Where(a => a.ObjectType == AttachmentObjectType.ThreadEntry && a.ObjectId == entryId)
+            .Join(db.StoredFiles, a => a.FileId, f => f.Id, (a, f) => new { Name = a.Name ?? f.Name, File = f })
+            .AsNoTracking()
+            .ToListAsync(ct);
+
+        var list = new List<OutboundAttachment>(rows.Count);
+        foreach (var row in rows)
+        {
+            try
+            {
+                await using var stream = await files.OpenAsync(row.File, ct);
+                using var buffer = new MemoryStream();
+                await stream.CopyToAsync(buffer, ct);
+                list.Add(new OutboundAttachment(row.Name, row.File.MimeType, buffer.ToArray()));
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                logger.LogWarning(ex, "Attachment {File} of entry {EntryId} could not be read; mail sent without it",
+                    row.File.Id, entryId);
+            }
+        }
+        return list;
     }
 
     /// <summary>Explicit account → default_smtp account id → "system" default_email_id;

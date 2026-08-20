@@ -39,7 +39,24 @@ public sealed record TicketAssigned(
 public sealed record TicketTransferred(
     int TicketId, int OldDepartmentId, int NewDepartmentId, int? ActorStaffId = null) : DomainEventBase;
 
-public sealed record ThreadEntryAdded(int ThreadId, int EntryId, Entities.ThreadEntryType Type, int? TicketId) : DomainEventBase;
+/// <summary>
+/// A thread entry was posted. S8 slice 5 carries the poster's outbound-mail choices
+/// alongside, because osTicket makes them arguments of the notify call rather than
+/// stored state (postReply <c>$vars['signature']/['from_email_id']</c>,
+/// onMessage <c>$autorespond</c>): <see cref="SignatureText"/> is the resolved
+/// signature the reply mail must render, <see cref="FromEmailAccountId"/> the chosen
+/// sending identity, and <see cref="SuppressNotifications"/> mutes the autoresponse,
+/// collaborator notices and staff alert for THIS post only (auto-submitted inbound mail).
+/// </summary>
+public sealed record ThreadEntryAdded(int ThreadId, int EntryId, Entities.ThreadEntryType Type, int? TicketId)
+    : DomainEventBase
+{
+    public string? SignatureText { get; init; }
+
+    public int? FromEmailAccountId { get; init; }
+
+    public bool SuppressNotifications { get; init; }
+}
 
 public sealed record EffortProposed(int TicketId, int ProposalId, int RevisionNo, decimal Hours) : DomainEventBase;
 

@@ -15,6 +15,10 @@ public sealed record SmtpTransportSettings(
     string? Username,
     string? Password);
 
+/// <summary>One file to attach to an outbound message (S8 slice 5,
+/// email/attachments_in_email): decoded bytes plus the original name and type.</summary>
+public sealed record OutboundAttachment(string FileName, string MimeType, byte[] Content);
+
 /// <summary>One outbound message as the S8 queue hands it to the transport.
 /// <c>MessageId</c> (no angle brackets) is the signed reply token for ticket mail —
 /// null lets MimeKit generate a plain id; <c>InReplyTo</c> is the ticket's last
@@ -27,7 +31,25 @@ public sealed record OutboundSmtpMessage(
     string Subject,
     string HtmlBody,
     string? MessageId = null,
-    string? InReplyTo = null);
+    string? InReplyTo = null)
+{
+    /// <summary>Reply-To for ticket mail: the mailbox we actually fetch, so a
+    /// customer's reply reaches the inbound pipeline even when From carries a
+    /// different display identity (osTicket sets the department address as the
+    /// sending identity for the same reason).</summary>
+    public string? ReplyTo { get; init; }
+
+    /// <summary>
+    /// RFC 3834 <c>Auto-Submitted: auto-generated</c> is stamped only when true.
+    /// Human-authored mail (the agent reply) MUST go out without it: the header tells
+    /// the recipient's mail system not to respond, which would suppress exactly the
+    /// customer replies the ticket thread depends on (osTicket stamps it on its
+    /// 'notice'/'autoreply' sends only — never on postReply).
+    /// </summary>
+    public bool AutoSubmitted { get; init; } = true;
+
+    public IReadOnlyList<OutboundAttachment> Attachments { get; init; } = [];
+}
 
 /// <summary>
 /// The S8 outbound pipeline's SMTP seam: the Hangfire send job talks to this, the
@@ -87,17 +109,38 @@ public sealed class MailKitSmtpTransport : ISmtpMailTransport
             if (MailboxAddress.TryParse(cc, out var ccAddress))
                 mime.Cc.Add(ccAddress);
         }
+        if (MailboxAddress.TryParse(message.ReplyTo ?? "", out var replyTo))
+            mime.ReplyTo.Add(replyTo);
         mime.Subject = message.Subject;
-        mime.Body = new BodyBuilder { HtmlBody = message.HtmlBody }.ToMessageBody();
 
-        // S8 inbound slice — loop/threading headers on EVERY outbound mail:
-        // the loop tag lets the fetch pipeline recognize mail that came back to us
-        // (MailPipelineHeaders.MaxPasses), Auto-Submitted marks the queue's automated
-        // notifications so remote autoresponders stay quiet (osTicket Mailer parity;
-        // revisit when agent replies ride this queue), and the signed Message-Id +
-        // References carry the ticket reply token.
+        var body = new BodyBuilder { HtmlBody = message.HtmlBody };
+        foreach (var attachment in message.Attachments)
+        {
+            // ContentType.Parse throws on garbage stored types — fall back to octet-stream.
+            ContentType type;
+            try
+            {
+                type = ContentType.Parse(attachment.MimeType);
+            }
+            catch (ParseException)
+            {
+                type = new ContentType("application", "octet-stream");
+            }
+            body.Attachments.Add(attachment.FileName, attachment.Content, type);
+        }
+        mime.Body = body.ToMessageBody();
+
+        // S8 inbound slice — loop/threading headers on EVERY outbound mail: the loop
+        // tag lets the fetch pipeline recognize mail that came back to us
+        // (MailPipelineHeaders.MaxPasses), and the signed Message-Id + References
+        // carry the ticket reply token.
         mime.Headers.Add(MailPipelineHeaders.LoopTag, "1");
-        mime.Headers.Add(HeaderId.AutoSubmitted, "auto-generated");
+        // Auto-Submitted is PER MESSAGE (S8 slice 5 fix): automated notifications say
+        // "auto-generated" so remote autoresponders stay quiet; human-authored agent
+        // replies carry no such header, because it would tell the customer's mail
+        // system not to answer the very message that invites an answer.
+        if (message.AutoSubmitted)
+            mime.Headers.Add(HeaderId.AutoSubmitted, "auto-generated");
         if (!string.IsNullOrEmpty(message.MessageId))
             mime.MessageId = message.MessageId;
         if (!string.IsNullOrEmpty(message.InReplyTo))

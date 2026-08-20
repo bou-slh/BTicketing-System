@@ -259,8 +259,7 @@ public class TicketViewController(
             return RedirectBack(id, "tv.errAttachTooBig", error: true);
 
         // Recipients snapshot (osTicket recipients): the ticket owner + chosen From
-        // identity. NOTE(S8): the signature choice ("sig") applies to the outbound
-        // email render — nothing to persist until the mail subsystem lands.
+        // identity.
         var to = await db.Users.Where(u => u.Id == ticket.UserId)
             .Select(u => new
             {
@@ -272,18 +271,42 @@ public class TicketViewController(
             .Select(a => a.Address).FirstOrDefaultAsync(ct);
         var recipients = JsonSerializer.Serialize(new { to = new[] { $"{to.Name} <{to.Email}>" }, from });
 
-        ThreadEntry entry;
+        // ROADMAP NOTE(S8) resolved: the composer's signature radio is applied at the
+        // outbound-mail render, so the choice is resolved to TEXT here and travels with
+        // the post (osTicket postReply $vars['signature']: "mine" = the agent's own,
+        // "dept" = the department's — and only while that department is public, so a
+        // private department's identity never leaks to a customer).
+        string? signature = null;
+        if (sig == "mine" && !string.IsNullOrWhiteSpace(staff.Signature))
+        {
+            signature = staff.Signature;
+        }
+        else if (sig == "dept")
+        {
+            signature = await db.Departments.Where(d => d.Id == ticket.DepartmentId && d.IsPublic)
+                .Select(d => d.Signature).FirstOrDefaultAsync(ct);
+        }
+
         try
         {
-            entry = await threads.PostAsync(ticket.ThreadId, ThreadEntryType.Response, body, actor,
-                new PostOptions { Format = "text", Recipients = recipients }, ct);
+            await threads.PostAsync(ticket.ThreadId, ThreadEntryType.Response, body, actor,
+                new PostOptions
+                {
+                    Format = "text",
+                    Recipients = recipients,
+                    SignatureText = signature,
+                    FromEmailAccountId = fromAccountId,
+                    // Store the files before the reply mail is composed — with
+                    // email/attachments_in_email on it sends them along.
+                    OnPosted = (posted, token) => SaveAttachmentsAsync(posted.Id, attachments, actor, token),
+                }, ct);
         }
         catch (WorkBlockedByEffortException)
         {
             return RedirectBack(id, "tv.errWorkBlocked", error: true);
         }
 
-        await SaveAttachmentsAsync(entry.Id, attachments, actor, ct);
+        // Attachments were stored by the OnPosted hook, before the reply mail composed.
         return await ApplyStatusAsync(id, ticket, statusId, actor, "tv.toastReply", ct);
     }
 

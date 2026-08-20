@@ -71,6 +71,7 @@ public class AppDbContext : DbContext
     public DbSet<EmailTemplateSet> EmailTemplateSets => Set<EmailTemplateSet>();
     public DbSet<EmailOutbound> EmailOutbounds => Set<EmailOutbound>();
     public DbSet<EmailInbound> EmailInbounds => Set<EmailInbound>();
+    public DbSet<MailToken> MailTokens => Set<MailToken>();
     public DbSet<BanlistEntry> BanlistEntries => Set<BanlistEntry>();
     public DbSet<ApiKey> ApiKeys => Set<ApiKey>();
     public DbSet<SitePage> SitePages => Set<SitePage>();

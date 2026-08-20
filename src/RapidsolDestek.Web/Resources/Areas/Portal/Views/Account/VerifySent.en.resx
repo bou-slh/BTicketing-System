@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="vf.sentTitle" xml:space="preserve">
+    <value>Verification email sent</value>
+  </data>
+  <data name="vf.sentSub" xml:space="preserve">
+    <value>Click the link in the email to activate your account. Check your inbox and your spam folder. The link is valid for 2 days.</value>
+  </data>
+  <data name="vf.email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="vf.resend" xml:space="preserve">
+    <value>Resend the link</value>
+  </data>
+  <data name="vf.backLogin" xml:space="preserve">
+    <value>← Back to sign in</value>
+  </data>
+</root>

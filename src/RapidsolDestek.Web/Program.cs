@@ -206,6 +206,10 @@ if (builder.Configuration.GetValue("Hangfire:ServerEnabled", true))
 // dev logger is now the queue's Development-only no-SMTP fallback transport.
 builder.Services.AddScoped<IAppEmailSender, QueueBackedEmailSender>();
 builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailCredentialResolver, EmailChannelCredentialResolver>();
+// S8 slice 5: the signed links mail carries — ticket auto-login (users/auth_tokens),
+// registration verification, guest invitations.
+builder.Services.AddScoped<IMailLinkTokenService, MailLinkTokenService>();
+builder.Services.AddScoped<IPortalAccountMailer, PortalAccountMailer>();
 if (builder.Environment.IsDevelopment())
     builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailFallbackSender, DevLoggingEmailSender>();
 // S7 admin/email-edit: DataProtection-encrypted mail credentials + the real

@@ -1,0 +1,29 @@
+@model bool
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = Model ? L["vf.okTitle"].Value : L["vf.badTitle"].Value;
+}
+@* S8 slice 5 — the verification link's landing page (osTicket "account confirmed"
+   / dead-link states). True = confirmed and already signed in. *@
+<div style="display:grid;gap:26px;width:min(420px,100%)">
+    <a class="rc-logo" href="/" style="justify-content:center">
+        <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <div>
+        <div class="rc-auth-card" style="width:100%;text-align:center">
+            <div style="font-size:40px;margin-bottom:12px" aria-hidden="true">@(Model ? "✔" : "⚠")</div>
+            <h1>@(Model ? L["vf.okTitle"] : L["vf.badTitle"])</h1>
+            <p>@(Model ? L["vf.okSub"] : L["vf.badSub"])</p>
+            <div class="rc-auth-foot">
+                @if (Model)
+                {
+                    <a href="/tickets">@L["vf.goPortal"]</a>
+                }
+                else
+                {
+                    <a href="/register/sent">@L["vf.resend"]</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

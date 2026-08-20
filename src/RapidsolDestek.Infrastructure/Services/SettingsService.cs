@@ -89,17 +89,22 @@ public sealed record AgentSettings(
 /// <summary>
 /// Typed view over the "users" namespace (admin/settings-users.html, S7).
 /// LIVE: RegistrationMode gates the portal /register route and the login page's
-/// register link ("public" self-serve; "invite"/"closed" refuse — invite tokens are
-/// TODO(S8)); MaxLoginAttempts/LockoutMinutes are the customer lockout policy
-/// (portal AccountController.Login). Persisted-only (annotated at the controller
-/// map): NameFormat/AvatarSource (TODO(S8): user name/avatar rendering helpers),
+/// register link ("public" self-serve; "invite"/"closed" refuse self-registration —
+/// invited people join through /invite with a signed token instead, which is what
+/// makes "invite" different from "closed"); MaxLoginAttempts/LockoutMinutes are the
+/// customer lockout policy (portal AccountController.Login); AuthTokens (S8 slice 5)
+/// puts a signed auto-login token on the ticket link in customer mail
+/// (%{ticket.link} / %{recipient.ticket_link} — TicketMailHandler over
+/// IMailLinkTokenService); EmailVerify (S8 slice 5) makes registration mail a
+/// verification link built from the seeded user.confirm.email template and blocks
+/// sign-in until it is followed (resend at /register/sent). Honest default for
+/// EmailVerify stays false — the mockup's checked switch is sample state, and
+/// accounts registered while it is off are confirmed on creation so switching it on
+/// never locks anyone out. Persisted-only (annotated at the controller map):
+/// NameFormat/AvatarSource (TODO(S8): user name/avatar rendering helpers),
 /// RegistrationRequired (TODO(S8): guest ticket-open flow does not exist yet),
 /// PasswordPolicy (TODO(S8): policy engine over Identity statics),
-/// SessionTimeoutMinutes (TODO: B6 session work), AuthTokens (TODO(S8): auto-login
-/// links ride the outgoing-mail pipeline), EmailVerify (TODO(S8): register
-/// verification flow over the seeded user.confirm.email / user.verify.page /
-/// user.confirmed.page templates — honest default false: registration signs in
-/// immediately today, the mockup's checked switch is sample state).
+/// SessionTimeoutMinutes (TODO: B6 session work).
 /// </summary>
 public sealed record UserSettings(
     string NameFormat,          // "full" | "lastfirst" | "short"
@@ -159,11 +164,11 @@ public sealed record FeatureSettings(
 /// StripQuoted + ReplySeparator — quoted-reply removal (QuotedReplyStripper),
 /// UseEmailPriority — X-Priority/Importance → ticket priority, AcceptUnregistered —
 /// unknown-sender gate, AutoAddCollabs — To/Cc → ThreadCollaborator (all consumed
-/// by InboundMailProcessor). PERSISTED-ONLY (annotated per key): VerifyDomain
-/// (TODO(S8): MX lookup on address save needs a DNS client), AttachmentsInEmail
-/// (TODO(S8): outbound composer — inbound attachment accept is governed by the
-/// attachments/max_size_mb cap instead). Referenced account ids also feed the
-/// emails-page delete guard.
+/// by InboundMailProcessor); AttachmentsInEmail — the agent reply mail carries the
+/// reply's own files (S8 slice 5, osTicket emailAttachments; inbound attachment
+/// accept stays governed by the attachments/max_size_mb cap). PERSISTED-ONLY
+/// (annotated per key): VerifyDomain (TODO(S8): MX lookup on address save needs a
+/// DNS client). Referenced account ids also feed the emails-page delete guard.
 /// </summary>
 public sealed record EmailSettings(
     int DefaultTemplateSetId,   // 0 = active "tr" set

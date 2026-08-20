@@ -29,6 +29,39 @@ public sealed record PostOptions
 
     /// <summary>Skip the B8 work gate (used by system-generated entries).</summary>
     public bool BypassWorkGate { get; init; }
+
+    /// <summary>
+    /// S8 slice 5: the agent composer's signature choice, already resolved to text
+    /// ("mine" → the agent's, "dept" → the public department's, "none" → null).
+    /// osTicket passes it as postReply's <c>$vars['signature']</c>; it is composer
+    /// state with nothing to persist, so it rides the <see cref="ThreadEntryAdded"/>
+    /// event to the outbound-mail render instead of a column.
+    /// </summary>
+    public string? SignatureText { get; init; }
+
+    /// <summary>S8 slice 5: the composer's "send from" identity (osTicket
+    /// <c>$vars['from_email_id']</c>); null = the department's account decides.</summary>
+    public int? FromEmailAccountId { get; init; }
+
+    /// <summary>
+    /// S8 slice 5: mute every notification THIS post would trigger — the customer
+    /// autoresponse, the collaborator notices and the staff alert. osTicket sets one
+    /// <c>$autorespond</c> flag for auto-submitted inbound mail and gates all three on
+    /// it (postMessage: <c>onMessage($message, $autorespond &amp;&amp; $alerts, $reopen)</c>
+    /// then <c>if (!($alerts &amp;&amp; $autorespond)) return</c>). Distinct from
+    /// Ticket.AutoResponseDisabled, which mutes the ticket forever.
+    /// </summary>
+    public bool SuppressNotifications { get; init; }
+
+    /// <summary>
+    /// Runs after the entry is committed but BEFORE its domain events fan out (S8
+    /// slice 5). Attachments need it: they can only be written once the entry has an
+    /// id, yet the reply mail that must carry them is composed by the
+    /// <see cref="Domain.Events.ThreadEntryAdded"/> handler. Storing them afterwards
+    /// is a race the mail loses. Callers put file persistence here and nothing else —
+    /// a throw from the hook aborts the notification, entry already saved.
+    /// </summary>
+    public Func<ThreadEntry, CancellationToken, Task>? OnPosted { get; init; }
 }
 
 public interface IThreadService
@@ -139,9 +172,21 @@ public sealed class ThreadService(
         using (actor.BeginAuditScope())
             await db.SaveChangesAsync(ct);
 
+        // Entry is durable and has an id — the caller's attachments land here, before
+        // the mail handlers below read them off the entry.
+        if (options.OnPosted is { } onPosted)
+            await onPosted(entry, ct);
+
         var events = new List<Domain.Events.IDomainEvent>
         {
-            new ThreadEntryAdded(threadId, entry.Id, type, ticket?.Id),
+            new ThreadEntryAdded(threadId, entry.Id, type, ticket?.Id)
+            {
+                // S8 slice 5: per-post outbound-mail choices travel with the event —
+                // the mail handler is the only consumer and nothing here is state.
+                SignatureText = options.SignatureText,
+                FromEmailAccountId = options.FromEmailAccountId,
+                SuppressNotifications = options.SuppressNotifications,
+            },
         };
         if (autoClaimed)
         {

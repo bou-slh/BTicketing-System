@@ -9,7 +9,9 @@ using RapidsolDestek.Web.Areas.Admin.Controllers;
 namespace RapidsolDestek.Web.Services;
 
 /// <summary>
-/// S8 slice 2: ticket autoresponses (customer-facing) + agent alert fan-out over the
+/// S8 slices 2 and 5: ticket autoresponses (customer-facing), the agent reply mail
+/// (staff Response → owner + collaborators, see <c>OnResponseAsync</c>) and the
+/// agent alert fan-out over the
 /// catalog templates, subscribing to the S4 domain events (EffortEmailHandler style:
 /// resolve settings → resolve recipients → render per recipient → enqueue on the
 /// persistent mail queue). Recipient semantics model osTicket class.ticket.php
@@ -36,6 +38,7 @@ public sealed class TicketMailHandler(
     ISettingsService settings,
     IAlertRecipientResolver recipients,
     IMailQueue queue,
+    IMailLinkTokenService links,
     ILogger<TicketMailHandler> logger) :
     IDomainEventHandler<TicketCreated>,
     IDomainEventHandler<ThreadEntryAdded>,
@@ -50,6 +53,10 @@ public sealed class TicketMailHandler(
 
     private static readonly Dictionary<string, bool> AlertDefaults =
         SettingsTicketsController.AlertsMap.ToDictionary(m => m.Key, m => m.Default);
+
+    /// <summary>Markup-only encoder for text thread bodies (EmailTemplateRenderer's).</summary>
+    private static readonly System.Text.Encodings.Web.HtmlEncoder BodyEncoder =
+        System.Text.Encodings.Web.HtmlEncoder.Create(System.Text.Unicode.UnicodeRanges.All);
 
     private IReadOnlyDictionary<string, string>? _autoresp;
     private IReadOnlyDictionary<string, string>? _alerts;
@@ -128,6 +135,10 @@ public sealed class TicketMailHandler(
         var messageHtml = AsHtml(entry.Body, entry.Format);
         if (evt.Type == ThreadEntryType.Message)
         {
+            // osTicket postMessage: an auto-submitted inbound mail still threads, but
+            // the whole notify cascade for that post stays silent.
+            if (evt.SuppressNotifications)
+                return;
             await OnNewMessageAsync(ticketId, t, entry.UserId, entry.StaffId, messageHtml, ct);
         }
         else if (evt.Type == ThreadEntryType.Note && await AlertOnAsync("new_activity", ct))
@@ -148,8 +159,58 @@ public sealed class TicketMailHandler(
 
             await FanoutAsync("note.alert", list, entry.StaffId, ticketId, messageHtml, ct);
         }
-        // Staff Responses: the customer-facing reply mail is a later S8 slice —
-        // no staff alert exists for a response (osTicket parity).
+        else if (evt.Type == ThreadEntryType.Response)
+        {
+            // Staff reply → the customer (osTicket postReply). No staff alert exists
+            // for a response; the agent's own mail IS the notification.
+            await OnResponseAsync(evt, ticketId, t, entry.StaffId, messageHtml, ct);
+        }
+    }
+
+    /// <summary>
+    /// The customer-facing reply mail (osTicket <c>Ticket::postReply</c>): owner in To,
+    /// active collaborators in Cc, rendered from the catalog's ticket.reply template
+    /// with %{response} carrying the sanitized reply HTML and the composer's chosen
+    /// signature. From-account = the agent's "send from" choice, else the department's
+    /// address (osTicket <c>$vars['from_email_id'] ?: $dept->getEmail()</c>).
+    ///
+    /// The mail is NOT gated by the autoresp.* switches — those govern machine-written
+    /// confirmations; a reply is the agent talking, and osTicket sends it whenever
+    /// postReply's <c>$alert</c> holds. Ticket.AutoResponseDisabled likewise does not
+    /// suppress it. It is marked human-authored so no Auto-Submitted header goes out,
+    /// and it carries the reply's attachments when email/attachments_in_email is on.
+    ///
+    /// Deviation from osTicket, flagged: osTicket puts the auth-token ticket link in
+    /// only when the owner is the sole recipient of a ticket that HAS collaborators;
+    /// here every recipient gets their own %{recipient.ticket_link}, since the link is
+    /// scoped to the ticket either way and the narrower rule reads as an accident.
+    /// </summary>
+    private async Task OnResponseAsync(ThreadEntryAdded evt, int ticketId, TicketSnapshot t,
+        int? posterStaffId, string responseHtml, CancellationToken ct)
+    {
+        if (posterStaffId is null)
+            return; // only staff author Responses; a system-posted one mails nobody.
+
+        var owner = await recipients.OwnerAsync(ticketId, ct);
+        if (owner is null)
+            return; // no deliverable address on the ticket owner — nothing to send.
+
+        // Collaborators ride as Cc on the owner's message (osTicket MailingList: one
+        // send, owner To + active collabs Cc), never as separate copies.
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { owner.Email };
+        var cc = (await recipients.CollaboratorsAsync(t.ThreadId, ct))
+            .Where(c => seen.Add(c.Email))
+            .Select(c => c.Email)
+            .ToList();
+
+        var email = await settings.GetEmailAsync(ct);
+        await SendAsync("ticket.reply", owner, evt.FromEmailAccountId ?? t.DeptFrom, ticketId, null, ct,
+            responseHtml: responseHtml,
+            signature: evt.SignatureText,
+            cc: cc.Count > 0 ? string.Join(", ", cc) : null,
+            threadEntryId: evt.EntryId,
+            isAutomated: false,
+            includeAttachments: email.AttachmentsInEmail);
     }
 
     private async Task OnNewMessageAsync(int ticketId, TicketSnapshot t, int? posterUserId, int? posterStaffId,
@@ -412,7 +473,9 @@ public sealed class TicketMailHandler(
     }
 
     private async Task SendAsync(string templateCode, MailRecipient to, int? fromAccountId, int? ticketId,
-        string? messageHtml, CancellationToken ct)
+        string? messageHtml, CancellationToken ct,
+        string? responseHtml = null, string? signature = null, string? cc = null, int? threadEntryId = null,
+        bool isAutomated = true, bool includeAttachments = false)
     {
         var rendered = await renderer.RenderAsync(templateCode, new EmailRenderContext
         {
@@ -420,6 +483,13 @@ public sealed class TicketMailHandler(
             RecipientName = to.Name,
             RecipientEmail = to.Email,
             MessageHtml = messageHtml,
+            ResponseHtml = responseHtml,
+            SignatureText = signature,
+            // users/auth_tokens (osTicket allow_auth_tokens): while on, the ticket
+            // link in customer mail carries a signed access token so the recipient
+            // lands on their ticket without signing in. Off ⇒ the renderer's plain
+            // link stands, so the override is only computed when it changes something.
+            Extra = ticketId is { } id ? await TicketLinkOverrideAsync(id, ct) : null,
         }, ct);
         if (rendered is null)
         {
@@ -429,13 +499,34 @@ public sealed class TicketMailHandler(
         }
         await queue.EnqueueAsync(new OutboundEmailRequest(to.Email, rendered.Subject, rendered.HtmlBody)
         {
+            Cc = cc,
             FromEmailAccountId = fromAccountId,
             TicketId = ticketId,
+            ThreadEntryId = threadEntryId,
+            IsAutomated = isAutomated,
+            IncludeAttachments = includeAttachments,
         }, ct);
     }
 
+    /// <summary>%{ticket.link} / %{recipient.ticket_link} with the auto-login token,
+    /// or null while users/auth_tokens is off (renderer keeps its plain link).</summary>
+    private async Task<IReadOnlyDictionary<string, string?>?> TicketLinkOverrideAsync(int ticketId, CancellationToken ct)
+    {
+        if (!(await settings.GetUsersAsync(ct)).AuthTokens)
+            return null;
+        var baseUrl = await settings.GetAsync("core", "helpdesk_url", ct) ?? "https://destek.rapidsol.com.tr/";
+        var link = await links.TicketLinkAsync(ticketId, baseUrl, ct);
+        return new Dictionary<string, string?>
+        {
+            ["ticket.link"] = link,
+            ["recipient.ticket_link"] = link,
+        };
+    }
+
     /// <summary>Thread entry body as mail-safe HTML: html entries are already
-    /// sanitized at ingress; text entries get encoded with newlines kept.</summary>
+    /// sanitized at ingress; text entries get encoded with newlines kept. Markup
+    /// characters only — the EmailTemplateRenderer encoder, so Turkish stays literal
+    /// in the mail instead of arriving as a wall of numeric entities.</summary>
     private static string AsHtml(string body, string? format) =>
-        format == "html" ? body : System.Net.WebUtility.HtmlEncode(body).Replace("\n", "<br>");
+        format == "html" ? body : BodyEncoder.Encode(body).Replace("\n", "<br>");
 }

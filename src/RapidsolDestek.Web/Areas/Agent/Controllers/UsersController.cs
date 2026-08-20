@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Common;
+using RapidsolDestek.Domain.Entities;
 using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Infrastructure.Auditing;
 using RapidsolDestek.Infrastructure.Services;
 using RapidsolDestek.Web.Identity;
 using RapidsolDestek.Web.Navigation;
+using RapidsolDestek.Web.Services;
 
 namespace RapidsolDestek.Web.Areas.Agent.Controllers;
 
@@ -19,7 +21,11 @@ namespace RapidsolDestek.Web.Areas.Agent.Controllers;
 /// </summary>
 [Area("Agent")]
 [Authorize(Policy = "Staff")]
-public class UsersController(AppDbContext db, IUserService userService) : Controller
+public class UsersController(
+    AppDbContext db,
+    IUserService userService,
+    IMailLinkTokenService tokens,
+    IPortalAccountMailer accountMail) : Controller
 {
     public const int PageSize = 8;
 
@@ -186,6 +192,16 @@ public class UsersController(AppDbContext db, IUserService userService) : Contro
                         await userService.DeleteAsync(id, actor, ct);
                         ok++;
                         break;
+                    case "invite":
+                        // "Kaydet" (guest → portal account): mails a signed, one-shot
+                        // activation link. Guests who already have an account, or who
+                        // have no address to mail, are skipped rather than failed —
+                        // the bulk menu runs over a whole selection.
+                        if (await InviteAsync(id, ct))
+                            ok++;
+                        else
+                            skipped++;
+                        break;
                     default:
                         return LocalRedirectOrIndex(returnUrl);
                 }
@@ -215,6 +231,33 @@ public class UsersController(AppDbContext db, IUserService userService) : Contro
             TempData["UsersToast"] = blocked + skipped > 0 ? "us.bulkPartial" : "us.bulkDone";
         }
         return LocalRedirectOrIndex(returnUrl);
+    }
+
+    /// <summary>
+    /// Issues one portal-account invitation (S8 slice 5, resolving the users-page
+    /// "Kaydet" marker): a signed one-shot token mailed to the guest's default address, which
+    /// opens the /invite set-password flow and links the new Identity account to THIS
+    /// domain user. False = nothing to invite (no address, or the user already signed
+    /// up); re-inviting is allowed and invalidates the previous link.
+    /// </summary>
+    private async Task<bool> InviteAsync(int userId, CancellationToken ct)
+    {
+        var target = await db.Users.Where(u => u.Id == userId && u.IdentityUserId == null)
+            .Select(u => new
+            {
+                u.Name,
+                Email = u.Emails.Where(e => e.Id == u.DefaultEmailId).Select(e => e.Address).FirstOrDefault()
+                    ?? u.Emails.Select(e => e.Address).FirstOrDefault(),
+            })
+            .SingleOrDefaultAsync(ct);
+        if (target?.Email is null)
+            return false;
+
+        var token = await tokens.IssueAsync(MailTokenPurpose.Invite, userId,
+            MailLinkTokenService.InviteLifetime, ct);
+        var link = $"{Request.Scheme}://{Request.Host}/invite?token={Uri.EscapeDataString(token)}";
+        await accountMail.SendInviteAsync(target.Email, target.Name, link, ct);
+        return true;
     }
 
     /// <summary>dlg-import submit: strict name,email[,org] CSV through UserService; reports created/skipped.</summary>

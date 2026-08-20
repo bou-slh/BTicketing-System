@@ -15,6 +15,14 @@ public sealed record OutboundEmailRequest(string To, string Subject, string Html
     public int? TicketId { get; init; }
 
     public int? ThreadEntryId { get; init; }
+
+    /// <summary>False for human-authored prose to a customer (agent replies) — the
+    /// RFC 3834 Auto-Submitted header is then omitted. Default true: everything the
+    /// system composes by itself.</summary>
+    public bool IsAutomated { get; init; } = true;
+
+    /// <summary>Attach <see cref="ThreadEntryId"/>'s files (email/attachments_in_email).</summary>
+    public bool IncludeAttachments { get; init; }
 }
 
 /// <summary>
@@ -47,6 +55,8 @@ public sealed class MailQueue(IServiceScopeFactory scopes, IBackgroundJobClient 
             FromEmailAccountId = request.FromEmailAccountId,
             TicketId = request.TicketId,
             ThreadEntryId = request.ThreadEntryId,
+            IsAutomated = request.IsAutomated,
+            IncludeAttachments = request.IncludeAttachments,
             Status = EmailOutboundStatus.Pending,
         };
         using (var scope = scopes.CreateScope())

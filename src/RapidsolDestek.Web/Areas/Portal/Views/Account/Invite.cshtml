@@ -1,0 +1,68 @@
+@model RapidsolDestek.Web.Areas.Portal.Controllers.InviteVm
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = L["iv.title"];
+
+    // B3 error presentation (PwresetNew pattern): controller codes → page i18n.
+    var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+    string ErrorText(string code) => code switch
+    {
+        "passwordWeak" => L["iv.errPasswordWeak"].Value,
+        "passwordMismatch" => L["iv.errPasswordMismatch"].Value,
+        "emailTaken" => L["iv.errTaken"].Value,
+        _ => code,
+    };
+}
+@* S8 slice 5 — the invited guest activates their portal account here: the domain
+   User already exists (agent-created or opened by mail), so only the credentials
+   are new. Address is display-only; the token decides whose account is created. *@
+<div style="display:grid;gap:26px;width:min(420px,100%)">
+    <a class="rc-logo" href="/" style="justify-content:center">
+        <span class="rc-logo-mark"></span><span>RAPID<span class="rc-logo-accent">SOL</span></span>
+    </a>
+    <div>
+        <div class="rc-auth-card" style="width:100%">
+            @if (Model.Invalid)
+            {
+                <h1>@L["iv.badTitle"]</h1>
+                <p>@L["iv.badSub"]</p>
+            }
+            else
+            {
+                <h1>@L["iv.title"]</h1>
+                <p>@L["iv.sub"]</p>
+                <form method="post" class="rc-form-grid" action="/invite">
+                    @if (errors.Count > 0)
+                    {
+                        <div class="rd-form-error" role="alert">
+                            @foreach (var e in errors)
+                            {
+                                <div>@ErrorText(e)</div>
+                            }
+                        </div>
+                    }
+                    <input type="hidden" asp-for="Token">
+                    <div>
+                        <label class="rc-label" for="iv-email">@L["iv.email"]</label>
+                        <input id="iv-email" class="rc-control" type="email" value="@Model.Email" disabled>
+                    </div>
+                    <div>
+                        <label class="rc-label" for="iv-pw">@L["iv.password"]</label>
+                        <input id="iv-pw" class="rc-control" type="password" asp-for="Password" autocomplete="new-password"
+                               required minlength="8" data-pw-strength="@L["iv.errPasswordWeak"]">
+                    </div>
+                    <div>
+                        <label class="rc-label" for="iv-pw2">@L["iv.password2"]</label>
+                        <input id="iv-pw2" class="rc-control" type="password" asp-for="Password2" autocomplete="new-password"
+                               required data-pw-match="#iv-pw" data-pw-match-msg="@L["iv.errPasswordMismatch"]">
+                        <div class="rd-help">@L["iv.passHelp"]</div>
+                    </div>
+                    <button type="submit" class="rc-button-primary" style="justify-content:center">@L["iv.submit"]</button>
+                </form>
+            }
+            <div class="rc-auth-foot">
+                <a href="/login">@L["iv.backLogin"]</a>
+            </div>
+        </div>
+    </div>
+</div>

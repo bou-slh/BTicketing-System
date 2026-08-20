@@ -28,6 +28,14 @@ public sealed record EmailRenderContext
     /// <summary>%{response} — sanitized HTML (staff reply body), injected raw.</summary>
     public string? ResponseHtml { get; init; }
 
+    /// <summary>
+    /// %{signature} — the agent composer's signature choice as PLAIN TEXT
+    /// (Staff.Signature / Department.Signature). osTicket passes it as its own
+    /// template variable; see <see cref="EmailTemplateRenderer"/> for what happens
+    /// when the template does not place it.
+    /// </summary>
+    public string? SignatureText { get; init; }
+
     /// <summary>Caller-specific plain-value overrides/additions (merged last).</summary>
     public IReadOnlyDictionary<string, string?>? Extra { get; init; }
 }
@@ -42,6 +50,13 @@ public sealed record EmailRenderContext
 /// subject, status, priority, dept, topic, owner, assignee, link via core/
 /// helpdesk_url…), %{recipient.*}, %{staff.*} (assigned agent), %{company.*}
 /// (company/* settings), %{effort.*} (latest proposal), %{message}/%{response}.
+///
+/// %{signature} (S8 slice 5): the reply signature is its own variable, osTicket-style.
+/// A template that PLACES %{signature} decides where it goes and %{response} stays the
+/// bare reply. A template that does NOT place it — the whole stock catalog does not —
+/// gets the signature appended to %{response} instead, so an agent's explicit
+/// composer choice can never silently vanish. Deliberate refinement of osTicket,
+/// which drops the signature outright in that case (flagged for canon).
 /// </summary>
 public interface IEmailTemplateRenderer
 {
@@ -57,7 +72,10 @@ public interface IEmailTemplateRenderer
 public sealed class EmailTemplateRenderer(AppDbContext db, ISettingsService settings) : IEmailTemplateRenderer
 {
     /// <summary>Content variables: already-sanitized HTML, never re-encoded.</summary>
-    private static readonly string[] ContentKeys = ["message", "response"];
+    private static readonly string[] ContentKeys = ["message", "response", "signature"];
+
+    /// <summary>The %{signature} placeholder, as it appears in a template body.</summary>
+    private const string SignaturePlaceholder = "%{signature}";
 
     /// <summary>Encodes markup characters only — Turkish text stays literal in mail
     /// bodies (WebUtility would numeric-encode every non-ASCII character).</summary>
@@ -81,10 +99,23 @@ public sealed class EmailTemplateRenderer(AppDbContext db, ISettingsService sett
         var raw = await BuildVariablesAsync(context, ct);
 
         // Subject is plain text — raw values. Body is HTML — encode every plain
-        // value; content variables (%{message}/%{response}) pass through as-is.
+        // value; content variables (%{message}/%{response}/%{signature}) pass through
+        // as-is.
         var encoded = raw.ToDictionary(
             p => p.Key,
             p => ContentKeys.Contains(p.Key) || p.Value is null ? p.Value : Encoder.Encode(p.Value));
+
+        // Signature placement (see the type doc): the template decides where it goes,
+        // or %{response} adopts it. It crosses into the body as HTML, so it is encoded
+        // HERE and rides the ContentKeys raw path — the subject bag stays untouched.
+        if (SignatureHtml(context.SignatureText) is { } signatureHtml)
+        {
+            if (template.Body.Contains(SignaturePlaceholder, StringComparison.Ordinal))
+                encoded["signature"] = signatureHtml;
+            else
+                encoded["response"] = (encoded["response"] ?? "") + signatureHtml;
+        }
+
         return new EmailRenderResult(
             TemplateVariableExpander.Expand(template.Subject, raw),
             TemplateVariableExpander.Expand(template.Body, encoded));
@@ -98,6 +129,8 @@ public sealed class EmailTemplateRenderer(AppDbContext db, ISettingsService sett
             ["recipient.email"] = context.RecipientEmail,
             ["message"] = context.MessageHtml,
             ["response"] = context.ResponseHtml,
+            // Raw bag keeps the signature as authored; RenderAsync owns its HTML form.
+            ["signature"] = context.SignatureText,
         };
 
         // %{company.*} from company/* settings (admin/settings-company; fallbacks =
@@ -178,4 +211,14 @@ public sealed class EmailTemplateRenderer(AppDbContext db, ISettingsService sett
 
     /// <summary>CannedResponseService's stamp format — one canon for mail dates.</summary>
     private static string? Stamp(DateTimeOffset? at) => at?.ToString("dd.MM.yyyy HH:mm");
+
+    /// <summary>Plain-text signature → a separated HTML block (encoded, newlines kept).
+    /// Null/blank signatures render nothing at all — not an empty separator.</summary>
+    private static string? SignatureHtml(string? signature)
+    {
+        if (string.IsNullOrWhiteSpace(signature))
+            return null;
+        var lines = signature.Trim().Replace("\r\n", "\n").Split('\n').Select(Encoder.Encode);
+        return $"<p>--<br>{string.Join("<br>", lines)}</p>";
+    }
 }

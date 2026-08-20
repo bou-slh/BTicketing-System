@@ -26,14 +26,20 @@ public sealed record InboundProcessResult(
 /// protection gates (osTicket parity): duplicate bookkeeping → self-mail → loop tag
 /// (<see cref="MailPipelineHeaders.LoopTag"/> ≥ <see cref="MailPipelineHeaders.MaxPasses"/>)
 /// → bounce/DSN (flags the correlated outbound row Failed, never creates tickets)
-/// → auto-submitted (Auto-Submitted != no, X-Auto-Response-Suppress AutoReply,
-/// Precedence bulk/auto_reply/junk/list — deviation flag: osTicket still creates a
-/// ticket with autoresponse+reopen muted; we drop the mail with a logged reason)
 /// → banlist + filter Reject (FilterEngine.RunAsync — the Email-target filters built
 /// in S7 go LIVE here) → reply threading (signed Message-Id token, outbox Message-Id
 /// lookup, subject [#number] last resort with the sender-must-participate guard)
 /// → append or create. Every message ends as one persisted EmailInbound row; drops
 /// and rejects additionally hit the syslog (admin/system-logs).
+///
+/// Auto-submitted mail (Auto-Submitted != no, X-Auto-Response-Suppress AutoReply,
+/// Precedence bulk/auto_reply/junk/list, X-Autoreply…) is deliberately NOT a gate: it
+/// creates or appends like any other message, but with the whole notify cascade muted
+/// and — on an existing ticket — no reopen (osTicket <c>$autorespond = $reopen =
+/// false</c> in postMessage/Ticket::create). Slice 4 dropped these outright; that lost
+/// real customer content sent from mailing-list and helpdesk-to-helpdesk setups, and
+/// is realigned here. Genuine loops stay hard drops: our own <c>X-RapidsolDestek-Mail</c>
+/// tag past <see cref="MailPipelineHeaders.MaxPasses"/>, self-addressed mail, and DSNs.
 /// </summary>
 public sealed partial class InboundMailProcessor(
     AppDbContext db,
@@ -93,8 +99,11 @@ public sealed partial class InboundMailProcessor(
             return await SkipAsync(failed ? "bounce" : "delivery-report");
         }
 
-        if (IsAutoSubmitted(message))
-            return await SkipAsync("auto-submitted", SystemLogType.Debug);
+        // Auto-submitted mail is NOT dropped (osTicket postMessage / Ticket::create):
+        // it threads or opens a ticket like any other message, with the autoresponse
+        // and — on an existing ticket — the reopen muted, so an out-of-office bounce
+        // neither answers itself nor resurrects a closed ticket.
+        var autoSubmitted = IsAutoSubmitted(message);
 
         // ---- ban gate + filter reject (S7 Email-target filters go LIVE here) ----------
         var existingUser = await db.Users
@@ -129,8 +138,10 @@ public sealed partial class InboundMailProcessor(
         // ---- reply threading ----------------------------------------------------------
         var matched = await MatchTicketAsync(message, senderAddress, ct);
         var result = matched is { } ticketId
-            ? await AppendAsync(ticketId, account, sender!, senderAddress, subject, body, message, email, ct)
-            : await CreateAsync(account, sender!, senderAddress, subject, body, replyTo, topicId, message, email, ct);
+            ? await AppendAsync(ticketId, account, sender!, senderAddress, subject, body, message, email,
+                autoSubmitted, ct)
+            : await CreateAsync(account, sender!, senderAddress, subject, body, replyTo, topicId, message, email,
+                autoSubmitted, ct);
 
         return await RecordAsync(account, channel, uid, mid, senderAddress, subject, result,
             result.Status is EmailInboundStatus.TicketCreated or EmailInboundStatus.ThreadAppended
@@ -143,7 +154,7 @@ public sealed partial class InboundMailProcessor(
     private async Task<InboundProcessResult> CreateAsync(
         EmailAccount account, MailboxAddress sender, string senderAddress, string subject,
         string body, string? replyTo, int? topicId, MimeMessage message, EmailSettings email,
-        CancellationToken ct)
+        bool autoSubmitted, CancellationToken ct)
     {
         var (user, userEmailId) = await FindOrCreateUserAsync(
             DisplayName(sender, senderAddress), senderAddress, email.AcceptUnregistered, ct);
@@ -166,7 +177,10 @@ public sealed partial class InboundMailProcessor(
                 Source = TicketSource.Email,
                 ReplyTo = replyTo,
                 // osTicket email noautoresp: the account mutes its autoresponses.
-                DisableAutoResponse = account.NoAutoResponse,
+                // An auto-submitted first mail joins it (osTicket Ticket::create:
+                // "$autorespond = false if $message->isAutoReply()") — answering a
+                // robot is how mail loops start.
+                DisableAutoResponse = account.NoAutoResponse || autoSubmitted,
             }, ActorContext.System, ct);
         }
         catch (TicketRejectedByFilterException ex)
@@ -189,7 +203,8 @@ public sealed partial class InboundMailProcessor(
 
     private async Task<InboundProcessResult> AppendAsync(
         int ticketId, EmailAccount account, MailboxAddress sender, string senderAddress,
-        string subject, string body, MimeMessage message, EmailSettings email, CancellationToken ct)
+        string subject, string body, MimeMessage message, EmailSettings email,
+        bool autoSubmitted, CancellationToken ct)
     {
         var ticket = await db.Tickets.SingleAsync(t => t.Id == ticketId, ct);
         var participant = await db.Users
@@ -232,9 +247,11 @@ public sealed partial class InboundMailProcessor(
         // Closed-ticket reply → reopen (osTicket Ticket::onMessage): only when the
         // current status allows it; target = the status's configured reopen status,
         // else the default open status. System actor — the reopen is the pipeline's,
-        // not the sender's (no staff permission check applies).
+        // not the sender's (no staff permission check applies). An auto-submitted mail
+        // never reopens: osTicket's $reopen rides the same flag as $autorespond
+        // precisely so a vacation responder cannot resurrect a closed ticket.
         var status = await db.TicketStatuses.SingleAsync(s => s.Id == ticket.StatusId, ct);
-        if (status.State != TicketState.Open && status.AllowReopen)
+        if (!autoSubmitted && status.State != TicketState.Open && status.AllowReopen)
         {
             var reopenTo = status.ReopenStatusId
                 ?? await db.TicketStatuses.Where(s => s.Key == "open").Select(s => s.Id).SingleAsync(ct);
@@ -242,8 +259,16 @@ public sealed partial class InboundMailProcessor(
         }
 
         var entry = await threads.PostAsync(ticket.ThreadId, type, body, actor,
-            new PostOptions { Source = "Email", Title = subject.Length > 0 ? subject : null, BypassWorkGate = true }, ct);
-        await SaveAttachmentsAsync(message, entry.Id, ct);
+            new PostOptions
+            {
+                Source = "Email",
+                Title = subject.Length > 0 ? subject : null,
+                BypassWorkGate = true,
+                SuppressNotifications = autoSubmitted,
+                // Files must exist before the mail handlers read the entry (a staff
+                // reply-by-email is forwarded to the customer with its attachments).
+                OnPosted = (posted, token) => SaveAttachmentsAsync(message, posted.Id, token),
+            }, ct);
         await AddCollaboratorsAsync(message, ticket.ThreadId, ticket.UserId, senderAddress, email, ct);
 
         return new InboundProcessResult(EmailInboundStatus.ThreadAppended, null, ticket.Id, entry.Id);

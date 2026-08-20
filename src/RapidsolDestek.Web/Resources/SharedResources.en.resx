@@ -390,6 +390,9 @@
   <data name="auth.invalidCredentials" xml:space="preserve">
     <value>Incorrect email/username or password.</value>
   </data>
+  <data name="auth.emailUnverified" xml:space="preserve">
+    <value>Your account is not verified yet. Click the verification link in your email, or request a new one.</value>
+  </data>
   <data name="auth.lockedOut" xml:space="preserve">
     <value>Too many failed attempts — the account is temporarily locked. Try again later.</value>
   </data>

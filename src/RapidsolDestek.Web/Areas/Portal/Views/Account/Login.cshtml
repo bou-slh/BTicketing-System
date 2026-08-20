@@ -12,6 +12,15 @@
 
     <form method="post" class="rc-form-grid" asp-action="Login">
         <partial name="_FormErrors" />
+        @* users/email_verify (S8): an unverified sign-in offers the way out instead
+           of leaving the visitor stuck on an error. *@
+        @if (ViewData["ResendEmail"] is string unverified)
+        {
+            <div style="font-size:12px;margin:-6px 0 2px">
+                <a href="/register/sent">@L["lg.resendVerify"]</a>
+                <span style="color:var(--rd-muted)"> · @unverified</span>
+            </div>
+        }
         <input type="hidden" asp-for="ReturnUrl">
         <div>
             <label class="rc-label" for="lg-user">@L["lg.user"]</label>

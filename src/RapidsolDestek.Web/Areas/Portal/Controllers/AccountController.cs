@@ -23,7 +23,9 @@ public class AccountController(
     IAppEmailSender mail,
     IWebHostEnvironment env,
     ISettingsService settings,
-    IHtmlSanitizerService sanitizer) : Controller
+    IHtmlSanitizerService sanitizer,
+    IMailLinkTokenService tokens,
+    IPortalAccountMailer accountMail) : Controller
 {
     // ---- Login -------------------------------------------------------------
     // TODO(S7): optional TOTP 2FA step for portal customers (ROADMAP B6; the
@@ -54,6 +56,17 @@ public class AccountController(
             var result = await signIn.PasswordSignInAsync(user, vm.Password, vm.Remember, lockoutOnFailure: true);
             if (result.Succeeded)
             {
+                // users/email_verify (osTicket): an unverified account may hold correct
+                // credentials and still not get in — the check sits AFTER the password
+                // so an attacker learns nothing new. Accounts that predate the switch,
+                // and every account registered while it was off, are already confirmed.
+                if ((await settings.GetUsersAsync()).EmailVerify && !user.EmailConfirmed)
+                {
+                    await signIn.SignOutAsync();
+                    ViewData["ResendEmail"] = user.Email;
+                    ModelState.AddModelError(string.Empty, "emailUnverified");
+                    return View(vm);
+                }
                 // Saved language preference (profile page) wins over the cookie default.
                 if (user.Language is { } lang && CultureController.Supported.Contains(lang))
                     CultureController.ApplyCultureCookie(Response, lang);
@@ -146,16 +159,191 @@ public class AccountController(
                 });
             return View(vm);
         }
-        await LinkDomainUserAsync(user, vm);
+        var domainUser = await LinkDomainUserAsync(user, vm);
+
+        // users/email_verify (osTicket): with verification on, the account exists but
+        // cannot sign in until the mailed link is followed. With it off, the account is
+        // confirmed on the spot — so switching the setting on later never locks out
+        // people who registered under the old rule.
+        if ((await settings.GetUsersAsync()).EmailVerify)
+        {
+            await SendVerificationAsync(user, domainUser.Id, vm.Name.Trim());
+            return RedirectToAction(nameof(VerifySent));
+        }
+
+        user.EmailConfirmed = true;
+        await users.UpdateAsync(user);
         await signIn.SignInAsync(user, isPersistent: false);
         return Redirect("/");
+    }
+
+    // ---- Email verification (users/email_verify) ----------------------------
+
+    /// <summary>"We mailed you a link" page, with the resend form.</summary>
+    [HttpGet("/register/sent")]
+    [AllowAnonymous]
+    public IActionResult VerifySent() => View();
+
+    /// <summary>
+    /// Follows the mailed verification link: the one-shot token is consumed, the
+    /// account is confirmed and the visitor is signed straight in (osTicket's
+    /// "account confirmed" page). A dead link — expired, already used, or issued for
+    /// another purpose — lands on the same page with an honest failure state, never a
+    /// silent success.
+    /// </summary>
+    [HttpGet("/register/verify")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Verify(string? token, CancellationToken ct)
+    {
+        var userId = await tokens.RedeemAsync(MailTokenPurpose.EmailVerify, token, ct);
+        if (userId is null)
+            return View("Verify", false);
+
+        var identityId = await db.Users.Where(u => u.Id == userId)
+            .Select(u => u.IdentityUserId).SingleOrDefaultAsync(ct);
+        var identity = identityId is { } id ? await users.FindByIdAsync(id.ToString()) : null;
+        if (identity is null)
+            return View("Verify", false);
+
+        identity.EmailConfirmed = true;
+        await users.UpdateAsync(identity);
+        await signIn.SignInAsync(identity, isPersistent: false);
+        return View("Verify", true);
+    }
+
+    /// <summary>Resend path: a fresh token invalidates the previous link. Always
+    /// reports "sent" — an unknown address must not be distinguishable.</summary>
+    [HttpPost("/register/resend")]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> VerifyResend(string? email, CancellationToken ct)
+    {
+        var identity = string.IsNullOrWhiteSpace(email) ? null : await users.FindByEmailAsync(email.Trim());
+        if (identity is { EmailConfirmed: false }
+            && await db.Users.Where(u => u.IdentityUserId == identity.Id)
+                .Select(u => (int?)u.Id).SingleOrDefaultAsync(ct) is { } domainUserId)
+        {
+            await SendVerificationAsync(identity, domainUserId, identity.FullName ?? identity.Email ?? "");
+        }
+        return RedirectToAction(nameof(VerifySent));
+    }
+
+    private async Task SendVerificationAsync(CustomerUser identity, int domainUserId, string name)
+    {
+        var token = await tokens.IssueAsync(MailTokenPurpose.EmailVerify, domainUserId,
+            MailLinkTokenService.VerifyLifetime);
+        var link = $"{Request.Scheme}://{Request.Host}/register/verify?token={Uri.EscapeDataString(token)}";
+        await accountMail.SendVerificationAsync(identity.Email!, name, link);
+        if (env.IsDevelopment()) TempData["DevVerifyLink"] = link;
+    }
+
+    // ---- Invitation (guest → portal account) --------------------------------
+
+    /// <summary>
+    /// The invited guest's landing page: the token is only PEEKED at here, so a
+    /// refreshed or bookmarked form still works — it is consumed on the POST that
+    /// actually creates the account.
+    /// </summary>
+    [HttpGet("/invite")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Invite(string? token, CancellationToken ct)
+    {
+        var userId = await tokens.PeekAsync(MailTokenPurpose.Invite, token, ct);
+        if (userId is null)
+            return View(new InviteVm { Invalid = true });
+
+        var invitee = await db.Users.Where(u => u.Id == userId)
+            .Select(u => new
+            {
+                u.Name,
+                Email = u.Emails.Where(e => e.Id == u.DefaultEmailId).Select(e => e.Address).FirstOrDefault()
+                    ?? u.Emails.Select(e => e.Address).FirstOrDefault(),
+            })
+            .SingleOrDefaultAsync(ct);
+        return invitee?.Email is null
+            ? View(new InviteVm { Invalid = true })
+            : View(new InviteVm { Token = token!, Name = invitee.Name, Email = invitee.Email });
+    }
+
+    /// <summary>
+    /// Redeems the invitation: creates the Identity account for the EXISTING domain
+    /// user (agent- or mail-created guest) and links the two, confirmed immediately —
+    /// following the mailed link already proves the address. Registration mode does not
+    /// gate this route: "invite" exists precisely so invited people can join while
+    /// self-registration is shut.
+    /// </summary>
+    [HttpPost("/invite")]
+    [AllowAnonymous]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Invite(InviteVm vm, CancellationToken ct)
+    {
+        if (!ModelState.IsValid)
+            return View(await RefillInviteAsync(vm, ct));
+
+        // Consume FIRST: a token that survives a failed password attempt would be a
+        // second live invitation.
+        var userId = await tokens.RedeemAsync(MailTokenPurpose.Invite, vm.Token, ct);
+        if (userId is null)
+            return View(new InviteVm { Invalid = true });
+
+        var domainUser = await db.Users.Include(u => u.Emails).SingleOrDefaultAsync(u => u.Id == userId, ct);
+        var address = domainUser?.Emails.FirstOrDefault(e => e.Id == domainUser.DefaultEmailId)?.Address
+            ?? domainUser?.Emails.FirstOrDefault()?.Address;
+        if (domainUser is null || address is null || domainUser.IdentityUserId is not null)
+            return View(new InviteVm { Invalid = true });
+
+        var identity = new CustomerUser
+        {
+            UserName = address,
+            Email = address,
+            FullName = domainUser.Name,
+            PhoneNumber = domainUser.Phone,
+            EmailConfirmed = true,
+            TimeZone = "Europe/Istanbul",
+        };
+        var result = await users.CreateAsync(identity, vm.Password);
+        if (!result.Succeeded)
+        {
+            foreach (var e in result.Errors)
+                ModelState.AddModelError(string.Empty, e.Code switch
+                {
+                    "DuplicateUserName" or "DuplicateEmail" => "emailTaken",
+                    _ when e.Code.StartsWith("Password") => "passwordWeak",
+                    _ => e.Description,
+                });
+            // The token is spent; a failed create leaves the invitation unusable, so
+            // say so instead of showing a form that can no longer succeed.
+            return View(new InviteVm { Invalid = true });
+        }
+
+        domainUser.IdentityUserId = identity.Id;
+        await db.SaveChangesAsync(ct);
+        await signIn.SignInAsync(identity, isPersistent: false);
+        return Redirect("/");
+    }
+
+    private async Task<InviteVm> RefillInviteAsync(InviteVm vm, CancellationToken ct)
+    {
+        var userId = await tokens.PeekAsync(MailTokenPurpose.Invite, vm.Token, ct);
+        if (userId is null)
+            return new InviteVm { Invalid = true };
+        var invitee = await db.Users.Where(u => u.Id == userId)
+            .Select(u => new
+            {
+                u.Name,
+                Email = u.Emails.Where(e => e.Id == u.DefaultEmailId).Select(e => e.Address).FirstOrDefault()
+                    ?? u.Emails.Select(e => e.Address).FirstOrDefault(),
+            })
+            .SingleOrDefaultAsync(ct);
+        return vm with { Name = invitee?.Name ?? vm.Name, Email = invitee?.Email ?? vm.Email };
     }
 
     /// <summary>
     /// settings-users su.regMode (users/registration_mode): "public" self-serves;
     /// "closed" and "invite" hide the route honestly (404 — the settings-kb enable_kb
-    /// precedent). TODO(S8): "invite" accepts invitation tokens once an invite
-    /// mechanism exists; until then it refuses self-registration like "closed".
+    /// precedent). "invite" refuses SELF-registration exactly like "closed"; invited
+    /// people arrive through /invite with a signed token instead, which is what makes
+    /// the mode different from "closed" (S8 slice 5).
     /// </summary>
     private async Task<bool> RegistrationClosedAsync() =>
         (await settings.GetUsersAsync()).RegistrationMode != "public";
@@ -167,7 +355,7 @@ public class AccountController(
     /// this address (agent/guest-created records), else creates one, auto-linking the
     /// organization by email domain (Organization.Domain, comma-separated).
     /// </summary>
-    private async Task LinkDomainUserAsync(CustomerUser identity, RegisterVm vm)
+    private async Task<User> LinkDomainUserAsync(CustomerUser identity, RegisterVm vm)
     {
         var address = vm.Email.Trim();
         using var _ = new ActorContext(ActorType.User, null, vm.Name.Trim()).BeginAuditScope();
@@ -184,7 +372,7 @@ public class AccountController(
                 existing.Phone ??= vm.Phone;
                 await db.SaveChangesAsync();
             }
-            return;
+            return existing;
         }
 
         var host = address[(address.IndexOf('@') + 1)..];
@@ -207,6 +395,7 @@ public class AccountController(
         await db.SaveChangesAsync();
         domainUser.DefaultEmailId = domainUser.Emails[0].Id;
         await db.SaveChangesAsync();
+        return domainUser;
     }
 
     // ---- Password reset (3-step flow) --------------------------------------
@@ -322,6 +511,27 @@ public class RegisterVm
 
     /// <summary>KVKK (Turkish DPA) consent — must be ticked to register.</summary>
     public bool Kvkk { get; set; }
+}
+
+/// <summary>The /invite set-password form. <see cref="Invalid"/> renders the dead-link
+/// state instead of the form (expired, already redeemed, or foreign token).</summary>
+public record InviteVm
+{
+    public string Token { get; init; } = "";
+
+    /// <summary>Display only — the account is created for the invited domain user,
+    /// never for whatever address a poster might submit.</summary>
+    public string? Name { get; init; }
+
+    public string? Email { get; init; }
+
+    public bool Invalid { get; init; }
+
+    [Required(ErrorMessage = "passwordWeak"), MinLength(8, ErrorMessage = "passwordWeak")]
+    public string Password { get; init; } = "";
+
+    [Compare(nameof(Password), ErrorMessage = "passwordMismatch")]
+    public string Password2 { get; init; } = "";
 }
 
 public class PwresetNewVm

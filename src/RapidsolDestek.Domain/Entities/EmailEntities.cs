@@ -164,6 +164,25 @@ public class EmailOutbound : TimestampedEntity, INotAudited
 
     public int? ThreadEntryId { get; set; }
 
+    /// <summary>
+    /// False for mail whose body is human-authored prose to a customer (the agent
+    /// reply/response path); true for everything the system writes by itself
+    /// (autoresponses, alerts, notices, account mail). Decides the RFC 3834
+    /// <c>Auto-Submitted: auto-generated</c> header at send time — osTicket stamps it
+    /// only on its 'notice'/'autoreply' sends (class.mailer.php), never on postReply,
+    /// and marking a human reply auto-generated tells the recipient's system not to
+    /// answer it. Slice 4 stamped every message; this column is the fix.
+    /// </summary>
+    public bool IsAutomated { get; set; } = true;
+
+    /// <summary>
+    /// Attach the files of <see cref="ThreadEntryId"/> to the outgoing message
+    /// (osTicket <c>email/attachments_in_email</c> → postReply's
+    /// <c>$response->getAttachments()</c>). Only the reply composer sets it; the row
+    /// keeps the reference instead of the bytes, so a purged file simply drops out.
+    /// </summary>
+    public bool IncludeAttachments { get; set; }
+
     public EmailOutboundStatus Status { get; set; } = EmailOutboundStatus.Pending;
 
     /// <summary>
@@ -236,6 +255,44 @@ public class EmailInbound : TimestampedEntity, INotAudited
     public int? TicketId { get; set; }
 
     public int? ThreadEntryId { get; set; }
+}
+
+/// <summary>What a <see cref="MailToken"/> authorizes (S8 slice 5 token flows).</summary>
+public enum MailTokenPurpose
+{
+    /// <summary>Registration email verification (osTicket <c>email_verify</c>).</summary>
+    EmailVerify,
+
+    /// <summary>Guest → portal account invitation (osTicket registration mode
+    /// "invite"; agent users page "Kaydet").</summary>
+    Invite,
+}
+
+/// <summary>
+/// Redemption ledger for the ONE-SHOT signed links the mail pipeline sends
+/// (verification + invitation). The token itself is a DataProtection payload — it
+/// already carries scope and expiry and is unforgeable — so this row exists purely to
+/// make a token single-use and revocable: <see cref="ConsumedAt"/> is stamped on the
+/// first successful redemption and every later presentation is refused. Reusable
+/// links (the ticket-access auto-login token) stay stateless and have NO row here.
+/// osTicket has no equivalent table (its auth tokens are replayable HMACs of ticket +
+/// user); single-use is a deliberate hardening, flagged. Marked INotAudited: token
+/// churn is technical state, and the issuing action is already audited.
+/// </summary>
+public class MailToken : TimestampedEntity, INotAudited
+{
+    /// <summary>Token identity embedded in the protected payload (the "jti").</summary>
+    public Guid Jti { get; set; }
+
+    public MailTokenPurpose Purpose { get; set; }
+
+    /// <summary>Domain user the token is scoped to.</summary>
+    public int UserId { get; set; }
+
+    public DateTimeOffset ExpiresAt { get; set; }
+
+    /// <summary>First (and only) successful redemption; null while unused.</summary>
+    public DateTimeOffset? ConsumedAt { get; set; }
 }
 
 /// <summary>Template set (osTicket <c>email_template_group</c>), e.g. "Varsayılan" (tr).</summary>

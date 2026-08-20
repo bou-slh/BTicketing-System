@@ -390,6 +390,9 @@
   <data name="auth.invalidCredentials" xml:space="preserve">
     <value>E-posta/kullanıcı adı veya parola hatalı.</value>
   </data>
+  <data name="auth.emailUnverified" xml:space="preserve">
+    <value>Hesabınız henüz doğrulanmadı. E-postanızdaki doğrulama bağlantısına tıklayın veya yeni bir bağlantı isteyin.</value>
+  </data>
   <data name="auth.lockedOut" xml:space="preserve">
     <value>Çok fazla hatalı deneme — hesap geçici olarak kilitlendi. Daha sonra tekrar deneyin.</value>
   </data>

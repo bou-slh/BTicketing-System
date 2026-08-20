@@ -45,4 +45,7 @@
   <data name="lg.agent" xml:space="preserve">
     <value>Danışman girişi (RapidSol ekibi)</value>
   </data>
+  <data name="lg.resendVerify" xml:space="preserve">
+    <value>Doğrulama bağlantısını yeniden gönder</value>
+  </data>
 </root>

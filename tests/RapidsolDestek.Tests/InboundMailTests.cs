@@ -438,31 +438,71 @@ public class InboundMailTests(PostgresFixture fixture)
         Assert.Equal("self-mail", result.Reason);
     }
 
+    // ---- auto-submitted: creates/appends, autoresponse + reopen muted (slice 5
+    // realignment of the slice-4 drop; osTicket postMessage / Ticket::create) --------
+
     [Theory]
     [InlineData("Auto-Submitted", "auto-replied")]
     [InlineData("Precedence", "bulk")]
     [InlineData("X-Auto-Response-Suppress", "DR, RN, OOF, AutoReply")]
-    public async Task AutoSubmittedMail_IsSkipped(string header, string value)
+    public async Task AutoSubmittedMail_CreatesTheTicket_WithAutoResponseMuted(string header, string value)
     {
         using var s = new ServiceScopeBundle(fixture);
         var address = $"oto{Guid.NewGuid():N}"[..12] + "@disariden.example";
+        var subject = $"Ofis dışındayım {Guid.NewGuid():N}"[..28];
+        fixture.Factory.Emails.Clear();
 
-        var result = await ProcessAsync(s, Mail(address, "destek@rapidsol.com.tr", "Ofis dışındayım",
+        var result = await ProcessAsync(s, Mail(address, "destek@rapidsol.com.tr", subject,
             "otomatik yanıt", customize: m => m.Headers.Add(header, value)));
 
-        Assert.Equal(EmailInboundStatus.Skipped, result.Status);
-        Assert.Equal("auto-submitted", result.Reason);
-        Assert.False(await s.Db.Tickets.AnyAsync(t => t.Subject == "Ofis dışındayım"));
+        // The content is kept — a robot's mail is still the customer's mail.
+        Assert.Equal(EmailInboundStatus.TicketCreated, result.Status);
+        Assert.Null(result.Reason);
+        var ticket = await s.Db.Tickets.SingleAsync(t => t.Id == result.TicketId);
+        Assert.Equal(subject, ticket.Subject);
+        // …but the ticket never answers it (osTicket $autorespond = false).
+        Assert.True(ticket.AutoResponseDisabled);
+        Assert.DoesNotContain(fixture.Factory.Emails.Sent, m => m.To.Equals(address, StringComparison.OrdinalIgnoreCase));
     }
 
     [Fact]
-    public async Task AutoSubmittedNo_IsNotSkipped()
+    public async Task AutoSubmittedReply_AppendsWithoutReopeningOrNotifying()
+    {
+        using var s = new ServiceScopeBundle(fixture);
+        var ticket = await OwnTicketAsync(s);
+        var closed = await s.Db.TicketStatuses.SingleAsync(x => x.Key == "closed");
+        await s.Get<ITicketService>().TransitionStatusAsync(ticket.Id, closed.Id, ActorContext.System);
+        var owner = await s.Db.Users.SingleAsync(u => u.Id == ticket.UserId);
+        var ownerEmail = await s.Db.UserEmails.Where(e => e.UserId == owner.Id)
+            .Select(e => e.Address).FirstAsync();
+        var mid = await s.Get<IMailThreadTokenService>().CreateMessageIdAsync(ticket.Id, "rapidsol.com.tr");
+        fixture.Factory.Emails.Clear();
+
+        var result = await ProcessAsync(s, Mail(ownerEmail, "destek@rapidsol.com.tr", "Re: kapalı talep",
+            "ofisteyim değilim", customize: m =>
+            {
+                m.InReplyTo = mid;
+                m.Headers.Add("Auto-Submitted", "auto-replied");
+            }));
+
+        Assert.Equal(EmailInboundStatus.ThreadAppended, result.Status);
+        Assert.Equal(ticket.Id, result.TicketId);
+        // Closed stays closed: a vacation responder must not resurrect a ticket.
+        var reloaded = await s.Db.Tickets.AsNoTracking().SingleAsync(t => t.Id == ticket.Id);
+        Assert.Equal(closed.Id, reloaded.StatusId);
+        // …and the whole notify cascade for that post stays silent.
+        Assert.Empty(fixture.Factory.Emails.Sent);
+    }
+
+    [Fact]
+    public async Task AutoSubmittedNo_IsTreatedAsHumanMail()
     {
         using var s = new ServiceScopeBundle(fixture);
         var address = $"insan{Guid.NewGuid():N}"[..12] + "@disariden.example";
         var result = await ProcessAsync(s, Mail(address, "destek@rapidsol.com.tr", "Elle yazıldı", "gövde",
             customize: m => m.Headers.Add("Auto-Submitted", "no")));
         Assert.Equal(EmailInboundStatus.TicketCreated, result.Status);
+        Assert.False((await s.Db.Tickets.SingleAsync(t => t.Id == result.TicketId)).AutoResponseDisabled);
     }
 
     [Fact]

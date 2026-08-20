@@ -45,4 +45,7 @@
   <data name="lg.agent" xml:space="preserve">
     <value>Agent sign-in (RapidSol team)</value>
   </data>
+  <data name="lg.resendVerify" xml:space="preserve">
+    <value>Resend the verification link</value>
+  </data>
 </root>
