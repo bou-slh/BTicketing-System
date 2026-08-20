@@ -215,7 +215,27 @@ pattern dead in the mockups.
   DataProtection-encrypted refresh/access tokens per channel (migration S8_MailOAuth) and
   SaslMechanismOAuth2 wired into all four MailKit connect paths (fetch, send, tester, diagnostic).
   *Gate*: staging round trip — mail → ticket → agent reply → customer
-  mail → customer reply → thread appends.
+  mail → customer reply → thread appends. **GREEN 2026-08-20** — E2E
+  `tests/RapidsolDestek.E2E/MailRoundTripTests.cs` runs the whole loop against a real
+  `greenmail/standalone:2.1.12` SMTP+IMAP container (Testcontainers), with the real
+  `MailKitSmtpTransport` + `MailKitInboundMailClient` asserted by type so a future DI swap to
+  fakes fails the gate; only the Hangfire scheduler is substituted (jobs invoked inline for
+  determinism). Proves: customer mail → ticket (Source=Email, account help-topic override →
+  that topic's department, owner auto-created, Turkish text intact) → the autoresponse
+  **fetched back out of the customer's mailbox over IMAP** with variable substitution and
+  `Auto-Submitted: auto-generated` → agent reply delivered with a signed reply-token
+  Message-Id, Reply-To, and NO Auto-Submitted (asserted as a pair with the autoresponse) →
+  customer reply threads onto the SAME ticket with the quoted original stripped. The reply
+  template deliberately carries no `#number` token, so threading can only come from the signed
+  Message-Id, not the subject fallback. ~9 s. STAGE CLOSED 2026-08-20 (through 9e58e1f;
+  406 unit tests + 8 E2E). **Open item, S6 live-board leg:** `LiveBoardTests` measures
+  Playwright's `ClickAsync` **plus** propagation against its 1000 ms budget and now lands at
+  1003–1016 ms over three fresh-seed runs (the inner `ToBeVisibleAsync(1000)` itself passes, so
+  post-click propagation is under budget). S8's mail handlers contributed ~90 ms, removed in
+  9e58e1f by registering LiveBoardHandler ahead of them; the residual ~650 ms is the pre-existing
+  ClaimAsync path, and the client debounce is only 200 ms. Needs a canon decision: either time
+  propagation from click-completion (matching the gate's stated intent) or optimize the claim
+  transaction. Deliberately NOT relaxed here.
 - **S9 — Hardening & launch.** Security review + authz matrix tests (every role × endpoint), rate limiting,
   CSRF/headers, dependency scan; KVKK (data inventory, retention jobs, consent texts); performance (index
   audit, slow-query profiling, load test lists+search); backups/monitoring/health checks; data migration
