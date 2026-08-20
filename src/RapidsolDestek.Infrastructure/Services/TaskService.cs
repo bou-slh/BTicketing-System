@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Common;
 using RapidsolDestek.Domain.Entities;
+using RapidsolDestek.Domain.Events;
 using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure.Auditing;
+using RapidsolDestek.Infrastructure.Events;
 using Thread = RapidsolDestek.Domain.Entities.Thread;
 
 namespace RapidsolDestek.Infrastructure.Services;
@@ -55,7 +57,8 @@ public sealed class TaskService(
     IPermissionService permissions,
     ISettingsService settings,
     ISequenceNumberService sequences,
-    IThreadService threads) : ITaskService
+    IThreadService threads,
+    IDomainEventDispatcher dispatcher) : ITaskService
 {
     public async Task<IQueryable<TaskItem>> VisibleAsync(ActorContext actor, CancellationToken ct = default)
     {
@@ -110,8 +113,17 @@ public sealed class TaskService(
                 new PostOptions { Format = "text", Title = task.Title }, ct);
         }
         await threads.AddEventAsync(task.ThreadId, "created", actor, null, ct);
+
+        // S8 alert fan-out (TicketService twin): TaskCreated always; an initial
+        // assignee additionally raises TaskAssigned (TaskMailHandler consumes both).
+        var actorStaffId = actor.IsStaff ? actor.Id : null;
+        var events = new List<IDomainEvent> { new TaskCreated(task.Id, task.Number, task.DepartmentId, actorStaffId) };
         if (task.StaffId is not null)
+        {
             await threads.AddEventAsync(task.ThreadId, "assigned", actor, new { staffId = task.StaffId, teamId = (int?)null }, ct);
+            events.Add(new TaskAssigned(task.Id, task.StaffId, null, actorStaffId));
+        }
+        await dispatcher.DispatchAsync(events, ct);
 
         return task;
     }
@@ -154,6 +166,7 @@ public sealed class TaskService(
             await db.SaveChangesAsync(ct);
 
         await threads.AddEventAsync(task.ThreadId, "assigned", actor, new { staffId, teamId }, ct);
+        await dispatcher.DispatchAsync([new TaskAssigned(task.Id, staffId, teamId, actor.IsStaff ? actor.Id : null)], ct);
     }
 
     public async Task TransferAsync(int taskId, int departmentId, ActorContext actor, CancellationToken ct = default)
@@ -174,6 +187,8 @@ public sealed class TaskService(
 
         await threads.AddEventAsync(task.ThreadId, "transferred", actor,
             new { from = oldDepartmentId, to = departmentId }, ct);
+        await dispatcher.DispatchAsync([new TaskTransferred(task.Id, oldDepartmentId, departmentId,
+            actor.IsStaff ? actor.Id : null)], ct);
     }
 
     public async Task UpdateAsync(int taskId, string title, DateTimeOffset? dueDate, ActorContext actor, CancellationToken ct = default)

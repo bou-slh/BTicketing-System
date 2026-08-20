@@ -24,6 +24,11 @@ public sealed record TicketCreateRequest
     public TicketSource Source { get; init; } = TicketSource.Web;
     public string? SourceExtra { get; init; }
     public DateTimeOffset? DueDate { get; init; }
+
+    /// <summary>Agent ticket-open notify choice, consumed at outbound-mail send
+    /// (S8): null/"all" = default, "user" = user autoresponse only, "none" = no
+    /// mail for this create. Rides the TicketCreated/TicketAssigned events.</summary>
+    public string? NotifyMode { get; init; }
 }
 
 public interface ITicketService
@@ -38,7 +43,10 @@ public interface ITicketService
     /// <summary>Status change with permission + B8 work-gate checks; stamps Closed/Reopened.</summary>
     Task TransitionStatusAsync(int ticketId, int statusId, ActorContext actor, CancellationToken ct = default);
 
-    Task AssignAsync(int ticketId, int? staffId, int? teamId, ActorContext actor, CancellationToken ct = default);
+    /// <summary><paramref name="suppressAlert"/> (S8): the agent ticket-open notify
+    /// choice mutes the assignment alert for the assignment made on create.</summary>
+    Task AssignAsync(int ticketId, int? staffId, int? teamId, ActorContext actor,
+        bool suppressAlert = false, CancellationToken ct = default);
 
     /// <summary>Self-assign ("Üstlen"); allowed for any visible unassigned ticket.</summary>
     Task ClaimAsync(int ticketId, ActorContext actor, CancellationToken ct = default);
@@ -117,7 +125,8 @@ public sealed class TicketService(
 
         // tickets.max_open_per_user (S7 admin/settings-tickets): end-user creates over
         // the limit are refused; staff/system creates bypass (osTicket parity).
-        // TODO(S8): the "overlimit notice" autoresponse mails the refused user.
+        // LIVE (S8): the portal OpenController catch mails the refused user the
+        // "overlimit notice" (TicketMailHandler.SendOverlimitNoticeAsync).
         var behavior = await settings.GetTicketBehaviorAsync(ct);
         if (!actor.IsStaff && behavior.MaxOpenPerUser > 0)
         {
@@ -192,8 +201,8 @@ public sealed class TicketService(
             IpAddress = actor.IpAddress,
             DueDate = request.DueDate,
             EstimatedDueDate = estimatedDue,
-            // Filter "Otomatik Yanıtı Kapat" — persisted flag, consumed at
-            // autoresponse send time (TODO(S8) outbound mail).
+            // Filter "Otomatik Yanıtı Kapat" — persisted flag, LIVE (S8): consumed
+            // at autoresponse send time (TicketMailHandler suppression layer).
             AutoResponseDisabled = outcome.DisableAutoResponse,
             ClosedAt = closedAt,
             LastUpdateAt = DateTimeOffset.UtcNow,
@@ -218,13 +227,17 @@ public sealed class TicketService(
 
         var events = new List<IDomainEvent>
         {
-            new TicketCreated(ticket.Id, ticket.Number, ticket.UserId, ticket.DepartmentId),
+            new TicketCreated(ticket.Id, ticket.Number, ticket.UserId, ticket.DepartmentId,
+                actor.IsStaff ? actor.Id : null, request.NotifyMode),
         };
         if (ticket.StaffId is not null || ticket.TeamId is not null)
         {
             await threads.AddEventAsync(ticket.ThreadId, "assigned", ActorContext.System,
                 new { staffId = ticket.StaffId, teamId = ticket.TeamId }, ct);
-            events.Add(new TicketAssigned(ticket.Id, ticket.StaffId, ticket.TeamId, "SYSTEM"));
+            // Auto-assignment during create: the ticket-open notify choice covers
+            // it — anything but the default suppresses the assignment alert too.
+            events.Add(new TicketAssigned(ticket.Id, ticket.StaffId, ticket.TeamId, "SYSTEM",
+                SuppressAlert: request.NotifyMode is "user" or "none"));
         }
 
         await dispatcher.DispatchAsync(events, ct);
@@ -299,13 +312,14 @@ public sealed class TicketService(
         await dispatcher.DispatchAsync([new TicketStatusChanged(ticket.Id, oldStatusId, statusId, actor.Name)], ct);
     }
 
-    public async Task AssignAsync(int ticketId, int? staffId, int? teamId, ActorContext actor, CancellationToken ct = default)
+    public async Task AssignAsync(int ticketId, int? staffId, int? teamId, ActorContext actor,
+        bool suppressAlert = false, CancellationToken ct = default)
     {
         var ticket = await LoadAsync(ticketId, ct);
         if (actor.IsStaff)
             await permissions.EnsureAsync(actor, PermissionKeys.TicketAssign, ticket.DepartmentId, ct);
 
-        await ApplyAssignmentAsync(ticket, staffId, teamId, actor, ct);
+        await ApplyAssignmentAsync(ticket, staffId, teamId, actor, suppressAlert, ct);
     }
 
     public async Task ClaimAsync(int ticketId, ActorContext actor, CancellationToken ct = default)
@@ -322,7 +336,7 @@ public sealed class TicketService(
         if (!set.IsAdmin && !set.DepartmentIds.Contains(ticket.DepartmentId))
             throw new PermissionDeniedException(PermissionKeys.TicketAssign, ticket.DepartmentId);
 
-        await ApplyAssignmentAsync(ticket, actor.Id, ticket.TeamId, actor, ct);
+        await ApplyAssignmentAsync(ticket, actor.Id, ticket.TeamId, actor, suppressAlert: false, ct);
     }
 
     public async Task TransferAsync(int ticketId, int departmentId, ActorContext actor, CancellationToken ct = default)
@@ -365,13 +379,15 @@ public sealed class TicketService(
 
         await threads.AddEventAsync(ticket.ThreadId, "transferred", actor,
             new { from = oldDepartmentId, to = departmentId }, ct);
-        await dispatcher.DispatchAsync([new TicketTransferred(ticket.Id, oldDepartmentId, departmentId)], ct);
+        await dispatcher.DispatchAsync([new TicketTransferred(ticket.Id, oldDepartmentId, departmentId,
+            actor.IsStaff ? actor.Id : null)], ct);
     }
 
     public Task<bool> IsWorkAllowedAsync(int ticketId, CancellationToken ct = default) =>
         EffortWorkGate.IsWorkAllowedAsync(db, settings, ticketId, ct);
 
-    private async Task ApplyAssignmentAsync(Ticket ticket, int? staffId, int? teamId, ActorContext actor, CancellationToken ct)
+    private async Task ApplyAssignmentAsync(Ticket ticket, int? staffId, int? teamId, ActorContext actor,
+        bool suppressAlert, CancellationToken ct)
     {
         // Vacation guard (profile Tatil Modu): covers Assign, Claim and the bulk paths.
         await StaffAvailability.EnsureAssignableAsync(db, staffId, ct);
@@ -384,7 +400,8 @@ public sealed class TicketService(
             await db.SaveChangesAsync(ct);
 
         await threads.AddEventAsync(ticket.ThreadId, "assigned", actor, new { staffId, teamId }, ct);
-        await dispatcher.DispatchAsync([new TicketAssigned(ticket.Id, staffId, teamId, actor.Name)], ct);
+        await dispatcher.DispatchAsync([new TicketAssigned(ticket.Id, staffId, teamId, actor.Name,
+            actor.IsStaff ? actor.Id : null, suppressAlert)], ct);
     }
 
     private async Task<Ticket> LoadAsync(int ticketId, CancellationToken ct) =>

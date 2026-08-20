@@ -279,7 +279,9 @@ public class MailPipelineTests(PostgresFixture fixture)
         Assert.Contains(number, send.HtmlBody);
 
         // Durable outbox row: linked to the ticket, from the dept account, Sent.
-        var row = await s.Db.EmailOutbounds.SingleAsync(o => o.TicketId == ticketId);
+        // (S8 slice 2: the create itself also queues autoresponse/alert rows for
+        // this ticket — filter to the effort request.)
+        var row = await s.Db.EmailOutbounds.SingleAsync(o => o.TicketId == ticketId && o.Subject == "Efor Onayı İsteği");
         Assert.Equal(EmailOutboundStatus.Sent, row.Status);
         Assert.Equal(destekId, row.FromEmailAccountId);
         Assert.Equal("Efor Onayı İsteği", row.Subject);

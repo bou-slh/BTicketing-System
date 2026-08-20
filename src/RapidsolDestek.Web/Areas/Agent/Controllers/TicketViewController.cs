@@ -448,7 +448,7 @@ public class TicketViewController(
 
         try
         {
-            await ticketService.AssignAsync(id, staffId, teamId, actor, ct);
+            await ticketService.AssignAsync(id, staffId, teamId, actor, ct: ct);
         }
         catch (DomainException)
         {
@@ -492,7 +492,7 @@ public class TicketViewController(
 
         try
         {
-            await ticketService.AssignAsync(id, null, null, actor, ct);
+            await ticketService.AssignAsync(id, null, null, actor, ct: ct);
         }
         catch (DomainException)
         {

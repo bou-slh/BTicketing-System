@@ -255,6 +255,10 @@ public class TicketOpenController(
                 DueDate = form.Due is { } due
                     ? new DateTimeOffset(due.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero)
                     : null,
+                // LIVE (S8): the notify radio rides the domain events and is
+                // consumed at send time (TicketMailHandler): "user" mutes staff
+                // alerts, "none" mutes the user notice too.
+                NotifyMode = form.Notify is "user" or "none" ? form.Notify : "all",
             }, actor, ct);
         }
         catch (TicketRejectedByFilterException)
@@ -362,7 +366,10 @@ public class TicketOpenController(
         {
             try
             {
-                await tickets.AssignAsync(ticket.Id, assignStaffId, assignTeamId, actor, ct);
+                // The notify choice covers the whole create: anything but the
+                // default also mutes the assignment alert for this assignment.
+                await tickets.AssignAsync(ticket.Id, assignStaffId, assignTeamId, actor,
+                    suppressAlert: form.Notify is "user" or "none", ct);
             }
             catch (DomainException)
             {
@@ -372,8 +379,9 @@ public class TicketOpenController(
 
         // Advanced section (B5): optional first response as a staff Response entry
         // (recipients snapshot, ticket-view Reply parity) + optional internal note.
-        // NOTE(S8): the signature radio ("Sig") and the Notify choice apply at
-        // outbound-mail render — nothing to persist until the mail subsystem lands.
+        // NOTE(S8): the signature radio ("Sig") applies at reply-mail render — the
+        // customer-facing reply mail is a later S8 slice; the Notify choice is LIVE
+        // (rides TicketCreateRequest.NotifyMode above).
         if (!string.IsNullOrWhiteSpace(form.Reply))
         {
             var toEmail = await db.UserEmails.Where(e => e.Id == user.DefaultEmailId)
@@ -584,7 +592,8 @@ public class TicketOpenForm
 
     public string? Cc { get; set; }
 
-    /// <summary>all | user | none. TODO(S8): consumed at outbound-mail send.</summary>
+    /// <summary>all | user | none. LIVE (S8): consumed at outbound-mail send
+    /// (TicketMailHandler via TicketCreateRequest.NotifyMode).</summary>
     public string? Notify { get; set; }
 
     public string? Source { get; set; }

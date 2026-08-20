@@ -132,8 +132,8 @@ public class Ticket : TimestampedEntity
     /// <summary>
     /// A matching ticket filter's "Otomatik Yanıtı Kapat" action suppressed the
     /// new-ticket auto-response (admin/filter-edit fle.aNoAutoresp, osTicket
-    /// FA_DisableAutoResponse). Persisted at create; consumed when the outbound
-    /// mail subsystem sends autoresponses — TODO(S8).
+    /// FA_DisableAutoResponse). Persisted at create; LIVE (S8): TicketMailHandler
+    /// suppresses every autoresponse on a flagged ticket.
     /// </summary>
     public bool AutoResponseDisabled { get; set; }
 

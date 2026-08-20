@@ -95,8 +95,8 @@
             </div>
             <div class="rd-field" style="margin-bottom:0">
                 <span class="rd-label">@L["to.notify"]</span>
-                @* TODO(S8): the notify choice is accepted but consumed only when the
-                   outbound mail subsystem lands. *@
+                @* LIVE (S8): the notify choice is consumed at send time
+                   (TicketMailHandler — user = autoresponse only, none = no mail). *@
                 <div style="display:flex;flex-wrap:wrap;gap:9px 22px">
                     <label class="rd-check"><input type="radio" name="Notify" value="all" checked="@(notify == "all")"><span>@L["to.notifyAll"]</span></label>
                     <label class="rd-check"><input type="radio" name="Notify" value="user" checked="@(notify == "user")"><span>@L["to.notifyUser"]</span></label>

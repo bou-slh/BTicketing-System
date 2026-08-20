@@ -59,6 +59,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEmailTemplateRenderer, EmailTemplateRenderer>();
         services.AddScoped<IMailQueue, MailQueue>();
         services.AddScoped<OutboundMailJob>();
+        services.AddScoped<IAlertRecipientResolver, AlertRecipientResolver>();
         services.AddSingleton<ISmtpMailTransport, MailKitSmtpTransport>();
 
         return services;

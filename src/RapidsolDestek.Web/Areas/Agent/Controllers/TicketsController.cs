@@ -335,7 +335,7 @@ public class TicketsController(
                 switch (act)
                 {
                     case "assign":
-                        await ticketService.AssignAsync(id, staff.Id, null, actor, ct);
+                        await ticketService.AssignAsync(id, staff.Id, null, actor, ct: ct);
                         ok++;
                         break;
                     case "status":

@@ -243,8 +243,8 @@ public class Department : TimestampedEntity
     public int? EmailAccountId { get; set; }
 
     /// <summary>Address used for auto-responses (osTicket autoresp_email_id).
-    /// LIVE (S8): preferred from-account for user-facing request mails
-    /// (effort.request); the autoresponse fan-out proper is a later S8 slice.</summary>
+    /// LIVE (S8): preferred from-account for every customer-facing mail
+    /// (effort.request + the TicketMailHandler autoresponses).</summary>
     public int? AutoResponseEmailAccountId { get; set; }
 
     public int? ManagerStaffId { get; set; }
@@ -262,11 +262,11 @@ public class Department : TimestampedEntity
     public bool IsArchived { get; set; }
 
     /// <summary>Send "ticket created" auto-response (osTicket ticket_auto_response).
-    /// TODO(S8): consumed by the mail pipeline's new-ticket autoresponse.</summary>
+    /// LIVE (S8): TicketMailHandler new-ticket autoresponse suppression layer.</summary>
     public bool TicketAutoResponse { get; set; } = true;
 
     /// <summary>Send auto-response on every new message (osTicket message_auto_response).
-    /// TODO(S8): consumed by the mail pipeline's new-message confirmation.</summary>
+    /// LIVE (S8): TicketMailHandler new-message confirmation suppression layer.</summary>
     public bool MessageAutoResponse { get; set; }
 
     /// <summary>Restrict assignment to department members (osTicket flags bit).</summary>
@@ -285,8 +285,11 @@ public class Department : TimestampedEntity
     /// FLAG_DISABLE_REOPEN_AUTO_ASSIGN): TicketService unassigns on reopen.</summary>
     public bool DisableReopenAutoAssign { get; set; }
 
-    /// <summary>New-ticket alert recipient group (department-edit de.alertGroup).
-    /// TODO(S8): consumed by the alert mail fan-out.</summary>
+    /// <summary>Department-member alert recipient group (department-edit
+    /// de.alertGroup ↔ osTicket group_membership). LIVE (S8): shapes the
+    /// AlertRecipientResolver dept-member expansion — All = primary members,
+    /// MembersAndPrimary = primary + extended-access members, ManagerOnly = the
+    /// manager alone.</summary>
     public DepartmentAlertGroup AlertGroup { get; set; } = DepartmentAlertGroup.All;
 
     public string Signature { get; set; } = "";

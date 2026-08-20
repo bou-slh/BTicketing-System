@@ -153,8 +153,9 @@ public sealed record FeatureSettings(
 /// from this template set (0 = the active "tr" set, the pre-S7 behavior);
 /// DefaultSmtp ("system" or an account id) + DefaultEmailAccountId — the S8
 /// OutboundMailJob transport selection (explicit from-account → default_smtp →
-/// "system" = default_email_id). PERSISTED-ONLY (annotated per key):
-/// AlertEmailAccountId / AdminEmail (TODO(S8): alert fan-out routing), VerifyDomain
+/// "system" = default_email_id); AlertEmailAccountId + AdminEmail — S8 alert
+/// fan-out from-account and admin alert recipient (Ticket/TaskMailHandler).
+/// PERSISTED-ONLY (annotated per key): VerifyDomain
 /// (TODO(S8): MX lookup on address save needs a DNS client), FetchEnabled +
 /// FetchAutoCron (TODO(S8): Hangfire fetch pipeline master switches), StripQuoted +
 /// ReplySeparator + UseEmailPriority + AcceptUnregistered + AutoAddCollabs

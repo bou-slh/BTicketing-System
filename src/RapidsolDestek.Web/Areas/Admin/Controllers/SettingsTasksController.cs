@@ -23,10 +23,9 @@ public sealed record SettingsTasksVm(
 /// the settings-tickets treatment — every control persists into the Setting table
 /// through <see cref="ISettingsService"/>. LIVE: number format + sequence mode
 /// (TaskService.DrawNumberAsync) and the dlg-seq sequence CRUD (the settings-tickets
-/// SequenceNumberService.SaveAsync with the same guards). Persisted-only:
-/// default priority (TaskItem has no priority column — TaskSettings annotation) and
-/// the five task alert masters + recipients (TODO(S8): alert fan-out over the seeded
-/// task.* templates).
+/// SequenceNumberService.SaveAsync with the same guards) and the five task alert
+/// masters + recipient checkboxes (S8 TaskMailHandler fan-out). Persisted-only:
+/// default priority (TaskItem has no priority column — TaskSettings annotation).
 /// </summary>
 [Area("Admin")]
 [Authorize(Policy = "AdminOnly")]
@@ -36,11 +35,12 @@ public class SettingsTasksController(
     ISequenceNumberService sequences) : Controller
 {
     // ---- task alert switches (ns "alerts", task_* keys — no collision with the
-    // ticket alert keys); consumers: TODO(S8) alert fan-out. Seeded templates exist
-    // for four of the five masters (task.alert / task.assigned.alert /
-    // task.transfer.alert / task.overdue.alert; new-activity has no seeded template —
-    // flagged on the ROADMAP row). Defaults mirror the mockup's checked states.
-    private static readonly (string Field, string Key, bool Default)[] AlertsMap =
+    // ticket alert keys); ALL LIVE (S8): TaskMailHandler fan-out over the seeded
+    // task.* templates (task.alert / task.activity.alert / task.assigned.alert /
+    // task.transfer.alert / task.overdue.alert — the full catalog set is seeded).
+    // Internal: the handler reads the same key defaults (settings-tickets precedent).
+    // Defaults mirror the mockup's checked states.
+    internal static readonly (string Field, string Key, bool Default)[] AlertsMap =
     [
         ("tal_new", "task_new", true),
         ("tal_new_admin", "task_new_admin", true),
@@ -122,7 +122,7 @@ public class SettingsTasksController(
         // annotation) — TODO(S8): consumed once task priority lands.
         await settings.SetAsync("tasks", "default_priority", priorityKey, ct);
 
-        // Persisted-only: TODO(S8) alert fan-out (seeded task.* templates).
+        // LIVE (S8): TaskMailHandler alert fan-out (seeded task.* templates).
         foreach (var (field, key, _) in AlertsMap)
             await settings.SetAsync("alerts", key, Chk(field).ToString(), ct);
 

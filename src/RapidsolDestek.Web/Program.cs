@@ -225,6 +225,21 @@ builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHand
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortApproved>, EffortEmailHandler>();
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRejected>, EffortEmailHandler>();
 
+// S8 slice 2: ticket autoresponses + alert fan-out (TicketMailHandler; the concrete
+// registration also serves the portal overlimit-notice path) + task alert fan-out.
+builder.Services.AddScoped<TicketMailHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketCreated>>(sp => sp.GetRequiredService<TicketMailHandler>());
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.ThreadEntryAdded>>(sp => sp.GetRequiredService<TicketMailHandler>());
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketAssigned>>(sp => sp.GetRequiredService<TicketMailHandler>());
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketTransferred>>(sp => sp.GetRequiredService<TicketMailHandler>());
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketOverdue>>(sp => sp.GetRequiredService<TicketMailHandler>());
+builder.Services.AddScoped<TaskMailHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TaskCreated>>(sp => sp.GetRequiredService<TaskMailHandler>());
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TaskAssigned>>(sp => sp.GetRequiredService<TaskMailHandler>());
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TaskTransferred>>(sp => sp.GetRequiredService<TaskMailHandler>());
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TaskOverdue>>(sp => sp.GetRequiredService<TaskMailHandler>());
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.ThreadEntryAdded>>(sp => sp.GetRequiredService<TaskMailHandler>());
+
 // B7 live board: domain events → LiveBoardHub broadcasts (EffortEmailHandler precedent).
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketCreated>, LiveBoardHandler>();
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketAssigned>, LiveBoardHandler>();

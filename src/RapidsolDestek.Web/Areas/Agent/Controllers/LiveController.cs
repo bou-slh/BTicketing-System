@@ -123,7 +123,7 @@ public class LiveController(AppDbContext db, IQueueEngine queue, ITicketService 
                     await tickets.TransitionStatusAsync(id, statusId, actor, ct);
                     break;
                 case "unassigned":
-                    await tickets.AssignAsync(id, null, null, actor, ct);
+                    await tickets.AssignAsync(id, null, null, actor, ct: ct);
                     break;
                 default:
                     return BadRequest(new { code = "derived" });

@@ -422,8 +422,10 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       not fail creation). Advanced: first response posts a staff Response ("text" + recipients snapshot), iç not
       posts a Note; canned select inserts via /agent/ticket-open/canned — body returned UNEXPANDED (%{vars}
       resolve only against an existing ticket; page-scoped handler because rd.js data-canned-insert targets the
-      form's first textarea = details). Redirects /agent/ticket-view?id=. NOTE(S8): Bildirim radios + signature
-      choice accepted but only consumed when outbound mail lands (sig radios preview via data-sig-text, dept sig
+      form's first textarea = details). Redirects /agent/ticket-view?id=. S8: Bildirim radios LIVE — the choice
+      rides TicketCreateRequest.NotifyMode into the domain events and TicketMailHandler consumes it at send time
+      (all = notice + alerts, user = notice only, none = silent, incl. the Ata assignment alert); signature
+      choice still applies only when the reply mail lands (sig radios preview via data-sig-text, dept sig
       follows the dept select). Layout gained an optional ViewData["MainStyle"] so <main> carries the mockup's
       max-width:880px. Invented keys (TR/EN twins): to.err*/newUser*/noUserResults/slaFmt/grpAgents/grpTeams —
       grp* localize the mockup's hardcoded optgroup labels "Temsilciler"/"Takımlar" (mockup bug: not data-i18n).)*
@@ -813,7 +815,8 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       state), default_status / default_priority (cascade fallback NEWLY wired in CreateAsync) / default_sla,
       default_queue_id + top_level_counts (agent TicketsController landing queue + queue-tree badges),
       max_open_per_user (end-user creates refused over the limit, staff bypass — portal open shows invented
-      open.errMaxOpen; TODO(S8) overlimit mail), claim_on_response (NEW: ThreadService auto-claims on staff
+      open.errMaxOpen; S8: the refused user now also gets the ticket.overlimit mail —
+      TicketMailHandler.SendOverlimitNoticeAsync from the portal catch), claim_on_response (NEW: ThreadService auto-claims on staff
       response + assigned event/TicketAssigned, osTicket auto_claim parity), require_topic_to_close (NEW
       close guard in TransitionStatusAsync → existing agent tv.errStatus toast), effort enabled /
       block_work_until_approved / mandatory_reject_note / auto_approve_threshold / revision_limit (S4 gates,
@@ -822,9 +825,13 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       the controller maps): lock_mode (IThreadService lock API exists, composer wiring pending), captcha
       TODO(S9), auto_refer_on_close (needs the referral mechanism), allow_external_images TODO(S8),
       collab_visibility (open decision #9), default_topic_id TODO(S8 inbound mail), effort unit (canon flag:
-      proposals are hours everywhere) + reminder_days TODO(S8 Hangfire reminder), 5 autoresponses + 6 alert
-      masters + 24 recipient boxes TODO(S8 alert fan-out); system-errors master stays checked+disabled per
-      mockup (not persisted). dlg-seq = real CRUD (B4, SequenceNumberService.SaveAsync): rows become
+      proposals are hours everywhere) + reminder_days TODO(S8 Hangfire reminder). S8 slice 2: the 5
+      autoresponses + 6 alert masters + 24 recipient boxes are LIVE — TicketMailHandler (autoresponses +
+      ticket alert fan-out over the catalog templates, osTicket recipient semantics: dedupe, skip-actor,
+      availability, dept AlertGroup expansion) and EffortEmailHandler (effort_response_assigned/_dept_manager
+      join the response alert); overdue master+boxes consumed by the subscribed TicketOverdue handler (the
+      sweep that raises it is the next slice); system_errors_* persist only (no error-alert producer yet;
+      master stays checked+disabled per mockup, not persisted). dlg-seq = real CRUD (B4, SequenceNumberService.SaveAsync): rows become
       name/next inputs (INVENTED — mockup rows are static text, needs canon sign-off), ✕ removes, Sıra ekle
       appends via data-rule-add + NEW data-rule-into rd.js contract; guards: internal/in-use sequences
       (settings pointer, help topics) undeletable (st.errSeqInUse), Next can never move backwards — stays
@@ -852,9 +859,12 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       POST /admin/settings-tasks/sequences so the PRG lands back here; both pages edit the SAME sequence
       table). PERSISTED-ONLY (annotated at TaskSettings / the controller maps): default_priority (TaskItem
       has no priority column — osTicket keeps task priority in dynamic form data; TODO(S8) task form
-      output), 5 alert masters + 13 recipient boxes as alerts/task_* keys TODO(S8 alert fan-out; seeded
-      templates cover 4 of 5 masters — task.alert/task.assigned.alert/task.transfer.alert/
-      task.overdue.alert; New-Activity has NO seeded template, flagged). B3 alert masters gate their
+      output). S8 slice 2: the 5 alert masters + 13 recipient boxes (alerts/task_* keys) are LIVE —
+      TaskMailHandler fan-out over the seeded task.* templates (all 5 masters have seeded templates —
+      task.alert/task.activity.alert/task.assigned.alert/task.transfer.alert/task.overdue.alert; the
+      earlier "New-Activity has no template" note was stale — task.activity.alert is in the catalog);
+      TaskService now raises TaskCreated/TaskAssigned/TaskTransferred, task activity rides
+      ThreadEntryAdded, TaskOverdue handler subscribed for the sweep slice. B3 alert masters gate their
       recipients rows + B9 scroll-spy = rd.js unchanged. Honest-defaults deviations (mockup sample state,
       need canon sign-off): format input shows the DB truth "T-####" (mockup "G####"), dlg-seq shows the
       seeded rows Genel Talepler 716600 / Görev Sırası 2042 (mockup Destek 716556 / Görevler 4022).
@@ -951,8 +961,10 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       EmailTemplateRenderer (all catalog mails) renders from the chosen set (0 keeps the pre-S7 behavior,
       the active "tr" set); default_smtp + default_email_id — OutboundMailJob transport selection
       (explicit from-account → default_smtp → "system" = default_email_id → dev fallback/typed Failed).
-      PERSISTED-ONLY (annotated on EmailSettings): alert_email_id / admin_email (TODO(S8): alert fan-out
-      routing), verify_domain (TODO(S8): MX lookup needs a DNS client), fetch_enabled + fetch_auto_cron
+      S8 slice 2: alert_email_id (alert fan-out from-account, else the transport default chain) +
+      admin_email (the "admin" recipient checkbox of new-ticket/new-task alerts) are LIVE
+      (Ticket/TaskMailHandler). PERSISTED-ONLY (annotated on EmailSettings):
+      verify_domain (TODO(S8): MX lookup needs a DNS client), fetch_enabled + fetch_auto_cron
       (TODO(S8): Hangfire fetch masters), strip_quoted / reply_separator / use_email_priority /
       accept_unregistered / auto_add_collabs (TODO(S8): inbound processing),
       attachments_in_email (TODO(S8): outbound composer). B3 in-page (INVENTED — the mockup's
@@ -1121,7 +1133,8 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
 - [x] **filters.html / filter-edit.html** — CRUD; rule/action rows add/remove (B4); match-count preview; filters actually run in the mail/ticket pipeline
       *(S7; /admin/filters + /admin/filter-edit?id= (FiltersController; no id = create — the mockup's
       new-button links straight to filter-edit.html). NEW S7_Filters migration: Ticket.AutoResponseDisabled
-      (the noautoresp action's persisted per-ticket flag — consumed at autoresponse send, TODO(S8)); the
+      (the noautoresp action's persisted per-ticket flag — S8: LIVE, TicketMailHandler suppresses every
+      autoresponse on the flagged ticket); the
       filter/filter_rule/filter_action tables are S3 stock. SEED CANON ALIGNED: the VIP filter now carries
       the filter-edit mockup's exact editor state (match-ALL + stop-on-match ON, rules org=Tosyalı Holding /
       email⊃@tosyali.com / subject⊃acil, actions priority high → dept Bordro → SLA VIP, the notes text) —
@@ -1501,8 +1514,11 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       Staff.PrimaryDepartmentAlerts. Honest flag wiring: DisableAutoClaim gates the global
       claim_on_response in ThreadService NOW; DisableReopenAutoAssign clears the assignment on reopen in
       TicketService NOW (mockup help canon: "son atanan temsilciye otomatik verilmez");
-      TicketAutoResponse/MessageAutoResponse (the "kapat" switches are inverted flags),
-      AutoResponseEmailAccountId and AlertGroup persist with TODO(S8) markers — no mail fan-out exists yet.
+      TicketAutoResponse/MessageAutoResponse (the "kapat" switches are inverted flags — S8: LIVE
+      suppression layers on TicketMailHandler's new-ticket/new-message autoresponses),
+      AutoResponseEmailAccountId (S8: from-account for every customer-facing mail) and AlertGroup
+      (S8: shapes the dept-member alert expansion — All=primary members, MembersAndPrimary=primary+extended,
+      ManagerOnly=manager alone; osTicket group_membership mapping, needs canon sign-off) are all consumed.
       Routing consumers still check only IsArchived (disabled-dept routing guard deferred, flagged).
       Erişim tab (B4, data-roster contract extended with [data-roster-remove] for <tr> rows): rows = primary
       members (Staff.DepartmentId, "Birincil" badge — the role select edits their PRIMARY RoleId, alerts →

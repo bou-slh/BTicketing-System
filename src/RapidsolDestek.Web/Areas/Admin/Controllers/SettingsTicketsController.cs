@@ -54,22 +54,25 @@ public class SettingsTicketsController(
     ISettingsService settings,
     ISequenceNumberService sequences) : Controller
 {
-    // ---- autoresponse switches (ns "autoresp"); consumers: effort_proposal is live
-    // (EffortEmailHandler request mail), the rest are TODO(S8): outbound mail pipeline.
+    // ---- autoresponse switches (ns "autoresp"); ALL LIVE (S8): TicketMailHandler
+    // autoresponses + EffortEmailHandler effort.request. The maps are internal —
+    // the mail handlers read the same key defaults (single source of truth).
     // Defaults mirror the mockup's checked states (osTicket autoresponder defaults).
-    private static readonly (string Field, string Key, bool Default)[] AutorespMap =
+    internal static readonly (string Field, string Key, bool Default)[] AutorespMap =
     [
-        ("ar_new_ticket", "new_ticket", true),            // TODO(S8): new-ticket confirmation mail
-        ("ar_agent_new_ticket", "agent_new_ticket", true),// TODO(S8): agent-opened notice
-        ("ar_new_message", "new_message", false),         // TODO(S8): message-received confirmation
-        ("ar_new_message_collab", "new_message_collab", true), // TODO(S8): participant copies
-        ("ar_overlimit", "overlimit", true),              // TODO(S8): overlimit notice (guard itself is live)
+        ("ar_new_ticket", "new_ticket", true),            // LIVE: ticket.autoresp to owner (TicketMailHandler)
+        ("ar_agent_new_ticket", "agent_new_ticket", true),// LIVE: ticket.notice on agent-opened tickets
+        ("ar_new_message", "new_message", false),         // LIVE: message.autoresp to the poster
+        ("ar_new_message_collab", "new_message_collab", true), // LIVE: ticket.activity.notice participant copies
+        ("ar_overlimit", "overlimit", true),              // LIVE: ticket.overlimit to the refused user
         ("ar_effort", "effort_proposal", true),           // LIVE: gates EffortEmailHandler effort.request
     ];
 
-    // ---- agent alert switches (ns "alerts"); consumers: effort_response master is
-    // live (EffortEmailHandler response mail), everything else TODO(S8): alert fan-out.
-    private static readonly (string Field, string Key, bool Default)[] AlertsMap =
+    // ---- agent alert switches (ns "alerts"); ALL LIVE (S8): TicketMailHandler alert
+    // fan-out masters + recipient checkboxes; effort_* gate EffortEmailHandler.
+    // system_errors_* persist only (no error-alert producer yet — master stays
+    // checked+disabled in the mockup).
+    internal static readonly (string Field, string Key, bool Default)[] AlertsMap =
     [
         ("al_new_ticket", "new_ticket", true),
         ("al_new_ticket_admin", "new_ticket_admin", true),

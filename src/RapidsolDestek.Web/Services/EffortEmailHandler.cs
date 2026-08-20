@@ -18,6 +18,7 @@ public sealed class EffortEmailHandler(
     AppDbContext db,
     IEmailTemplateRenderer renderer,
     ISettingsService settings,
+    IAlertRecipientResolver alertRecipients,
     IMailQueue queue,
     ILogger<EffortEmailHandler> logger) :
     IDomainEventHandler<EffortProposed>,
@@ -50,13 +51,46 @@ public sealed class EffortEmailHandler(
             await SendAsync(ticketId, "effort.request", toOwner: true, ct);
     }
 
-    /// <summary>alerts.effort_response (S7 "Efor Yanıtı Uyarısı" master switch; default on).
-    /// TODO(S8): recipient checkboxes (assigned / dept manager) join the alert fan-out.</summary>
+    /// <summary>alerts.effort_response (S7 "Efor Yanıtı Uyarısı" master switch; default
+    /// on). LIVE (S8): the recipient checkboxes join the fan-out — the proposing agent
+    /// stays the primary recipient, effort_response_assigned (default on) adds the
+    /// assigned agent, effort_response_dept_manager (default off) the department
+    /// manager; deduped by email, unavailable staff skipped.</summary>
     private async Task SendResponseAlertAsync(int ticketId, CancellationToken ct)
     {
         if (await settings.GetAsync("alerts", "effort_response", ct) == "false")
             return;
         await SendAsync(ticketId, "effort.response", toOwner: false, ct);
+
+        var ticket = await db.Tickets.Where(t => t.Id == ticketId)
+            .Select(t => new { t.StaffId, t.DepartmentId, ProposerId = db.EffortProposals
+                .Where(p => p.TicketId == ticketId).OrderByDescending(p => p.RevisionNo)
+                .Select(p => (int?)p.ProposedByStaffId).FirstOrDefault() })
+            .SingleOrDefaultAsync(ct);
+        if (ticket is null)
+            return;
+
+        var extras = new List<MailRecipient?>();
+        if (await settings.GetAsync("alerts", "effort_response_assigned", ct) != "false"
+            && ticket.StaffId is { } assignedId && assignedId != ticket.ProposerId)
+        {
+            extras.Add(await alertRecipients.StaffAsync(assignedId, ct));
+        }
+        if (await settings.GetAsync("alerts", "effort_response_dept_manager", ct) == "true")
+            extras.Add(await alertRecipients.DeptManagerAsync(ticket.DepartmentId, ct));
+
+        var proposerEmail = ticket.ProposerId is { } proposerId
+            ? await db.Staff.Where(s => s.Id == proposerId).Select(s => s.Email).SingleOrDefaultAsync(ct)
+            : null;
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (proposerEmail is not null)
+            seen.Add(proposerEmail); // already mailed by SendAsync above
+        foreach (var recipient in extras)
+        {
+            if (recipient is null || !seen.Add(recipient.Email))
+                continue;
+            await SendToAsync(ticketId, "effort.response", recipient.Name, recipient.Email, ct);
+        }
     }
 
     private async Task SendAsync(int ticketId, string templateCode, bool toOwner, CancellationToken ct)
@@ -82,11 +116,19 @@ public sealed class EffortEmailHandler(
             return;
         }
 
+        await SendToAsync(ticketId, templateCode, recipient.Name, recipient.Email, ct, toOwner);
+    }
+
+    /// <summary>Renders + enqueues one copy (S8 fan-out entry point; staff copies
+    /// ride the department's response account like the primary recipient).</summary>
+    private async Task SendToAsync(int ticketId, string templateCode, string name, string email,
+        CancellationToken ct, bool toOwner = false)
+    {
         var rendered = await renderer.RenderAsync(templateCode, new EmailRenderContext
         {
             TicketId = ticketId,
-            RecipientName = recipient.Name,
-            RecipientEmail = recipient.Email,
+            RecipientName = name,
+            RecipientEmail = email,
         }, ct);
         if (rendered is null)
         {
@@ -103,7 +145,7 @@ public sealed class EffortEmailHandler(
             ? dept.AutoResponseEmailAccountId ?? dept.EmailAccountId
             : dept.EmailAccountId;
 
-        await queue.EnqueueAsync(new OutboundEmailRequest(recipient.Email, rendered.Subject, rendered.HtmlBody)
+        await queue.EnqueueAsync(new OutboundEmailRequest(email, rendered.Subject, rendered.HtmlBody)
         {
             FromEmailAccountId = fromAccountId,
             TicketId = ticketId,

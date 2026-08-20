@@ -22,7 +22,12 @@ namespace RapidsolDestek.Web.Areas.Portal.Controllers;
 /// </summary>
 [Area("Portal")]
 [Authorize(Policy = "PortalUser")]
-public class OpenController(AppDbContext db, ITicketService tickets, IFileStore files, ISettingsService settings) : Controller
+public class OpenController(
+    AppDbContext db,
+    ITicketService tickets,
+    IFileStore files,
+    ISettingsService settings,
+    Services.TicketMailHandler ticketMail) : Controller
 {
     [HttpGet("/open")]
     [NavKey("new")]
@@ -128,7 +133,10 @@ public class OpenController(AppDbContext db, ITicketService tickets, IFileStore 
         catch (DomainRuleException ex) when (ex.Code == "max-open-exceeded")
         {
             // tickets.max_open_per_user (S7 admin/settings-tickets); the mockup's
-            // maxOpenHelp promises rejection + notice. TODO(S8): overlimit email.
+            // maxOpenHelp promises rejection + notice. LIVE (S8): the refused user
+            // gets the "overlimit notice" mail (osTicket onOpenLimit,
+            // autoresp.overlimit master).
+            await ticketMail.SendOverlimitNoticeAsync(user.Id, form.Topic, ct);
             ModelState.AddModelError(nameof(OpenForm.Summary), "errMaxOpen");
             return View(await BuildVmAsync(user, form, ct));
         }
