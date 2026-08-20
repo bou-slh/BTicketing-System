@@ -232,6 +232,22 @@ builder.Services.AddHttpClient<RapidsolDestek.Infrastructure.Services.IMailOAuth
     http => http.Timeout = TimeSpan.FromSeconds(20));
 builder.Services.AddSingleton<IMailOAuthStateService, MailOAuthStateService>();
 
+// B7 live board: domain events → LiveBoardHub broadcasts (EffortEmailHandler precedent).
+// Registered BEFORE the mail handlers deliberately: the dispatcher awaits subscribers in
+// registration order, so composing templates and queueing mail ahead of the broadcast would
+// add its latency to every live-board update (measured ~1.1 s on claim, over the <1 s gate).
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketCreated>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketAssigned>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketStatusChanged>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketTransferred>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.ThreadEntryAdded>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortProposed>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRevised>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortWithdrawn>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortApproved>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRejected>, LiveBoardHandler>();
+builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketOverdue>, LiveBoardHandler>();
+
 // Effort emails (B8 flow; S8: catalog templates through the renderer + mail queue).
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortProposed>, EffortEmailHandler>();
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRevised>, EffortEmailHandler>();
@@ -252,19 +268,6 @@ builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHand
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TaskTransferred>>(sp => sp.GetRequiredService<TaskMailHandler>());
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TaskOverdue>>(sp => sp.GetRequiredService<TaskMailHandler>());
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.ThreadEntryAdded>>(sp => sp.GetRequiredService<TaskMailHandler>());
-
-// B7 live board: domain events → LiveBoardHub broadcasts (EffortEmailHandler precedent).
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketCreated>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketAssigned>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketStatusChanged>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketTransferred>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.ThreadEntryAdded>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortProposed>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRevised>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortWithdrawn>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortApproved>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRejected>, LiveBoardHandler>();
-builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.TicketOverdue>, LiveBoardHandler>();
 
 var app = builder.Build();
 

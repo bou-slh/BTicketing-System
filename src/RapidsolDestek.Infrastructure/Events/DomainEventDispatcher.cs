@@ -22,6 +22,9 @@ public interface IDomainEventDispatcher
 /// Minimal in-proc dispatcher (deliberately no MediatR — the codebase is hand-rolled).
 /// S8's email pipeline and B7's live board subscribe by registering
 /// <see cref="IDomainEventHandler{TEvent}"/> implementations; S4 code never changes.
+/// Handlers run sequentially, awaited, in DI registration order, so a slow subscriber
+/// delays every later one: register latency-sensitive handlers (the live board's SignalR
+/// broadcast) ahead of the mail handlers, which compose templates and hit the database.
 /// </summary>
 public sealed class DomainEventDispatcher(IServiceProvider services, ILogger<DomainEventDispatcher> logger)
     : IDomainEventDispatcher
