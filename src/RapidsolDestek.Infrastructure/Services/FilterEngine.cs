@@ -8,8 +8,9 @@ namespace RapidsolDestek.Infrastructure.Services;
 /// <summary>
 /// Snapshot of an incoming ticket the filters run over (osTicket's vars array).
 /// Field keys mirror osTicket filter_rule.what: name/email/replyto/subject/body/
-/// topic/org/source. Reply-To only exists for mail — it stays null on the create
-/// channels that exist today (TODO(S8): the mail pipeline fills it).
+/// topic/org/source. Reply-To only exists for mail — LIVE (S8): the inbound
+/// pipeline fills it (InboundMailProcessor / TicketCreateRequest.ReplyTo); it
+/// stays null on the web/API channels.
 /// </summary>
 public sealed record FilterInput
 {
@@ -28,8 +29,11 @@ public sealed record FilterInput
 /// Aggregate of every matching filter's actions, applied in exec order (later
 /// matches overwrite earlier values, osTicket parity). A Reject action halts the
 /// run immediately. Live consumers: TicketService.CreateAsync routing overrides,
-/// the AutoResponseDisabled ticket flag and internal Note entries. Canned/send-
-/// email actions have no consumer until the mail subsystem — TODO(S8).
+/// the AutoResponseDisabled ticket flag and internal Note entries; LIVE (S8): the
+/// inbound mail pipeline runs the engine over fetched mail (Email targets +
+/// account pinning + replyto rules; Reject drops the mail with a logged reason).
+/// Canned-autoreply/send-email ACTIONS still have no consumer — TODO(S8+), they
+/// need the reply composer's outbound path.
 /// </summary>
 public sealed class FilterOutcome
 {
@@ -250,7 +254,8 @@ public sealed class FilterEngine(AppDbContext db) : IFilterEngine
     /// <summary>Folds one action into the outcome. Types mirror osTicket filter
     /// actions; configuration JSON keys follow the seed canon ({"dept_id":N}…).
     /// "canned" (send canned autoreply) and "email" (send email) persist on the
-    /// filter but have no consumer until the mail subsystem — TODO(S8).</summary>
+    /// filter but still have no consumer — TODO(S8+): they need the reply
+    /// composer's outbound path (the rest of the mail pipeline is live).</summary>
     private static void Apply(FilterOutcome outcome, FilterAction action, string filterName)
     {
         switch (action.Type)

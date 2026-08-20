@@ -284,11 +284,11 @@ if (app.Environment.IsDevelopment())
     await DomainSeeder.SeedAsync(scope.ServiceProvider);
 }
 
-// S8 slice 3: recurring sweeps behind the same Hangfire server gate (tests disable
-// the server and invoke the job classes directly). Cadences are constants on each
-// job class; Hangfire evaluates cron in UTC. The email fetch pipeline master
-// switches (email/fetch_enabled + fetch_autocron) stay TODO(S8 inbound) — nothing
-// here consumes them.
+// S8 slice 3/4: recurring sweeps + the inbound mail fetch behind the same Hangfire
+// server gate (tests disable the server and invoke the job classes directly).
+// Cadences are constants on each job class; Hangfire evaluates cron in UTC. The
+// fetch job ticks every minute and honors email/fetch_enabled + fetch_auto_cron
+// plus each channel's own FetchFrequencyMinutes (S8 slice 4 — LIVE).
 if (builder.Configuration.GetValue("Hangfire:ServerEnabled", true))
 {
     using var scope = app.Services.CreateScope();
@@ -305,6 +305,9 @@ if (builder.Configuration.GetValue("Hangfire:ServerEnabled", true))
     recurring.AddOrUpdate<RapidsolDestek.Infrastructure.Services.RetentionPurgeJob>(
         "retention-purge", j => j.RunAsync(CancellationToken.None),
         RapidsolDestek.Infrastructure.Services.RetentionPurgeJob.Cron);
+    recurring.AddOrUpdate<RapidsolDestek.Infrastructure.Services.MailFetchJob>(
+        "mail-fetch", j => j.RunAsync(CancellationToken.None),
+        RapidsolDestek.Infrastructure.Services.MailFetchJob.Cron);
 }
 
 app.Run();

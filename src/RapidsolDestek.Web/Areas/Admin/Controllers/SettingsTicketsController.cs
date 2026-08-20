@@ -172,8 +172,8 @@ public class SettingsTicketsController(
             priorityKeys,
             ParseOrZero(await settings.GetAsync("core", "default_sla_id", ct)),
             slas.Select(s => new SlaOptionVm(s.Id, s.Name, s.GracePeriodHours)).ToList(),
-            // TODO(S8): core.default_topic_id is consumed by the inbound mail pipeline
-            // (email-created tickets without a chosen topic).
+            // LIVE (S8): core.default_topic_id is consumed by the inbound mail pipeline
+            // (email-created tickets without an account-level topic override).
             ParseOrZero(await settings.GetAsync("core", "default_topic_id", ct)),
             topics,
             effectiveQueueId,
@@ -238,8 +238,9 @@ public class SettingsTicketsController(
         await settings.SetAsync("tickets", "number_format", numberFormat, ct);
         await settings.SetAsync("tickets", "number_mode", numberMode, ct);
 
-        // Defaults (LIVE: TicketService.CreateAsync cascade; default_topic_id TODO(S8);
-        // default_queue_id + top_level_counts LIVE: agent TicketsController).
+        // Defaults (LIVE: TicketService.CreateAsync cascade; default_topic_id LIVE (S8):
+        // inbound mail routing; default_queue_id + top_level_counts LIVE: agent
+        // TicketsController).
         await settings.SetAsync("tickets", "default_status", statusKey, ct);
         await settings.SetAsync("core", "default_priority", priorityKey, ct);
         await settings.SetAsync("core", "default_sla_id", slaId.ToString(), ct);

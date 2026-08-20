@@ -373,6 +373,17 @@ public static class DomainModelConfiguration
             // FromEmailAccountId / TicketId / ThreadEntryId are deliberate soft refs
             // (EmailAccount.DepartmentId precedent): outbox rows outlive account and
             // ticket deletions as a send log.
+            e.HasIndex(x => x.MessageId); // inbound reply-threading + bounce correlation
+        });
+
+        b.Entity<EmailInbound>(e =>
+        {
+            // Idempotency guard: one row per (channel, server UID).
+            e.HasIndex(x => new { x.EmailChannelId, x.Uid }).IsUnique();
+            e.HasIndex(x => x.MessageId); // cross-channel duplicate backstop
+            e.HasIndex(x => x.TicketId);  // per-ticket inbound mail log
+            // EmailChannelId / EmailAccountId / TicketId / ThreadEntryId are soft refs
+            // (EmailOutbound precedent): the fetch log outlives channel/ticket deletes.
         });
 
         // ----- System -----

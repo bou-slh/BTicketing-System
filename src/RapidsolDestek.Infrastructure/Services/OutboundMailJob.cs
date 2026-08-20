@@ -27,6 +27,7 @@ public sealed class OutboundMailJob(
     ISettingsService settings,
     ISmtpMailTransport transport,
     IMailCredentialResolver credentials,
+    IMailThreadTokenService threadToken,
     ILogger<OutboundMailJob> logger,
     IMailFallbackSender? fallback = null)
 {
@@ -74,11 +75,29 @@ public sealed class OutboundMailJob(
             ? await settings.GetAsync("core", "helpdesk_title", ct) ?? "RapidsolDestek"
             : account.DisplayName;
 
+        // S8 inbound slice: ticket mail carries the signed reply token as its
+        // Message-Id (inbound In-Reply-To/References thread back to the ticket) and
+        // References the last inbound mail of the ticket so the recipient's client
+        // threads our reply correctly. Non-ticket mail keeps a plain generated id.
+        string? messageId = null;
+        string? references = null;
+        if (row.TicketId is { } ticketId)
+        {
+            var at = account.Address.IndexOf('@');
+            messageId = await threadToken.CreateMessageIdAsync(
+                ticketId, at >= 0 ? account.Address[(at + 1)..] : "", ct);
+            row.MessageId = messageId; // persisted with the outcome save below
+            references = await db.EmailInbounds
+                .Where(i => i.TicketId == ticketId && i.MessageId != null)
+                .OrderByDescending(i => i.Id).Select(i => i.MessageId).FirstOrDefaultAsync(ct);
+        }
+
         var result = await transport.SendAsync(
             new SmtpTransportSettings(smtp.Host, smtp.Port, smtp.AuthKind, smtp.Username,
                 credentials.ResolvePassword(smtp)),
             new OutboundSmtpMessage(account.Address, fromName,
-                row.ToAddress, row.CcAddresses, row.Subject, row.HtmlBody), ct);
+                row.ToAddress, row.CcAddresses, row.Subject, row.HtmlBody,
+                messageId, references), ct);
 
         if (result.Success)
         {

@@ -15,14 +15,19 @@ public sealed record SmtpTransportSettings(
     string? Username,
     string? Password);
 
-/// <summary>One outbound message as the S8 queue hands it to the transport.</summary>
+/// <summary>One outbound message as the S8 queue hands it to the transport.
+/// <c>MessageId</c> (no angle brackets) is the signed reply token for ticket mail —
+/// null lets MimeKit generate a plain id; <c>InReplyTo</c> is the ticket's last
+/// inbound Message-Id so recipients' clients thread our reply.</summary>
 public sealed record OutboundSmtpMessage(
     string FromAddress,
     string? FromName,
     string To,
     string? Cc,
     string Subject,
-    string HtmlBody);
+    string HtmlBody,
+    string? MessageId = null,
+    string? InReplyTo = null);
 
 /// <summary>
 /// The S8 outbound pipeline's SMTP seam: the Hangfire send job talks to this, the
@@ -84,6 +89,23 @@ public sealed class MailKitSmtpTransport : ISmtpMailTransport
         }
         mime.Subject = message.Subject;
         mime.Body = new BodyBuilder { HtmlBody = message.HtmlBody }.ToMessageBody();
+
+        // S8 inbound slice — loop/threading headers on EVERY outbound mail:
+        // the loop tag lets the fetch pipeline recognize mail that came back to us
+        // (MailPipelineHeaders.MaxPasses), Auto-Submitted marks the queue's automated
+        // notifications so remote autoresponders stay quiet (osTicket Mailer parity;
+        // revisit when agent replies ride this queue), and the signed Message-Id +
+        // References carry the ticket reply token.
+        mime.Headers.Add(MailPipelineHeaders.LoopTag, "1");
+        mime.Headers.Add(HeaderId.AutoSubmitted, "auto-generated");
+        if (!string.IsNullOrEmpty(message.MessageId))
+            mime.MessageId = message.MessageId;
+        if (!string.IsNullOrEmpty(message.InReplyTo))
+        {
+            var parent = message.InReplyTo.Trim().Trim('<', '>');
+            mime.InReplyTo = parent;
+            mime.References.Add(parent);
+        }
 
         using var client = new SmtpClient();
         client.Timeout = (int)Timeout.TotalMilliseconds;

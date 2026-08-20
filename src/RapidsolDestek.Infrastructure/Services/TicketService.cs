@@ -25,6 +25,14 @@ public sealed record TicketCreateRequest
     public string? SourceExtra { get; init; }
     public DateTimeOffset? DueDate { get; init; }
 
+    /// <summary>Reply-To header of a mail-sourced create (S8 inbound pipeline) —
+    /// only feeds the filter engine's mail-only "replyto" rules.</summary>
+    public string? ReplyTo { get; init; }
+
+    /// <summary>Suppress autoresponses for this ticket regardless of filter outcome
+    /// (S8 inbound: the receiving EmailAccount's NoAutoResponse flag).</summary>
+    public bool DisableAutoResponse { get; init; }
+
     /// <summary>Agent ticket-open notify choice, consumed at outbound-mail send
     /// (S8): null/"all" = default, "user" = user autoresponse only, "none" = no
     /// mail for this create. Rides the TicketCreated/TicketAssigned events.</summary>
@@ -75,8 +83,8 @@ public sealed class TicketService(
 
         // Ticket filters (admin/filters, S7): every active filter runs over the
         // incoming data before creation, gated by target channel (portal=Web,
-        // agent-recorded phone/other only meet target "Any"; the mail pipeline is
-        // TODO(S8) and will feed Source=Email + ReplyTo). A Reject action refuses
+        // agent-recorded phone/other only meet target "Any"; LIVE (S8): the inbound
+        // mail pipeline feeds Source=Email + ReplyTo). A Reject action refuses
         // the whole create with a typed exception; routing actions override the
         // topic cascade below (osTicket parity: filter vars beat topic defaults).
         var sender = await db.Users.AsNoTracking()
@@ -96,6 +104,7 @@ public sealed class TicketService(
             EmailAccountId = request.EmailAccountId,
             Name = sender?.Name,
             Email = sender?.Email,
+            ReplyTo = request.ReplyTo,
             Subject = request.Subject,
             Body = request.Body,
             TopicName = topic?.Name,
@@ -202,8 +211,9 @@ public sealed class TicketService(
             DueDate = request.DueDate,
             EstimatedDueDate = estimatedDue,
             // Filter "Otomatik Yanıtı Kapat" — persisted flag, LIVE (S8): consumed
-            // at autoresponse send time (TicketMailHandler suppression layer).
-            AutoResponseDisabled = outcome.DisableAutoResponse,
+            // at autoresponse send time (TicketMailHandler suppression layer). The
+            // request flag is the mail account's NoAutoResponse (osTicket noautoresp).
+            AutoResponseDisabled = outcome.DisableAutoResponse || request.DisableAutoResponse,
             ClosedAt = closedAt,
             LastUpdateAt = DateTimeOffset.UtcNow,
             Thread = new Thread { CreatedAt = DateTimeOffset.UtcNow },

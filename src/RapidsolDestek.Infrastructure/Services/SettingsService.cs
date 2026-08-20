@@ -154,13 +154,16 @@ public sealed record FeatureSettings(
 /// DefaultSmtp ("system" or an account id) + DefaultEmailAccountId — the S8
 /// OutboundMailJob transport selection (explicit from-account → default_smtp →
 /// "system" = default_email_id); AlertEmailAccountId + AdminEmail — S8 alert
-/// fan-out from-account and admin alert recipient (Ticket/TaskMailHandler).
-/// PERSISTED-ONLY (annotated per key): VerifyDomain
-/// (TODO(S8): MX lookup on address save needs a DNS client), FetchEnabled +
-/// FetchAutoCron (TODO(S8): Hangfire fetch pipeline master switches), StripQuoted +
-/// ReplySeparator + UseEmailPriority + AcceptUnregistered + AutoAddCollabs
-/// (TODO(S8): inbound mail processing), AttachmentsInEmail (TODO(S8):
-/// outbound composer). Referenced account ids also feed the emails-page delete guard.
+/// fan-out from-account and admin alert recipient (Ticket/TaskMailHandler);
+/// FetchEnabled + FetchAutoCron — the MailFetchJob master switches (S8 inbound);
+/// StripQuoted + ReplySeparator — quoted-reply removal (QuotedReplyStripper),
+/// UseEmailPriority — X-Priority/Importance → ticket priority, AcceptUnregistered —
+/// unknown-sender gate, AutoAddCollabs — To/Cc → ThreadCollaborator (all consumed
+/// by InboundMailProcessor). PERSISTED-ONLY (annotated per key): VerifyDomain
+/// (TODO(S8): MX lookup on address save needs a DNS client), AttachmentsInEmail
+/// (TODO(S8): outbound composer — inbound attachment accept is governed by the
+/// attachments/max_size_mb cap instead). Referenced account ids also feed the
+/// emails-page delete guard.
 /// </summary>
 public sealed record EmailSettings(
     int DefaultTemplateSetId,   // 0 = active "tr" set

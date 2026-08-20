@@ -824,8 +824,9 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       EffortEmailHandler request/response mails). PERSISTED-ONLY (each annotated at TicketBehaviorSettings /
       the controller maps): lock_mode (IThreadService lock API exists, composer wiring pending), captcha
       TODO(S9), auto_refer_on_close (needs the referral mechanism), allow_external_images TODO(S8),
-      collab_visibility (open decision #9), default_topic_id TODO(S8 inbound mail), effort unit (canon flag:
-      proposals are hours everywhere); reminder_days is LIVE (S8 slice 3: daily EffortReminderJob). S8 slice 2: the 5
+      collab_visibility (open decision #9), effort unit (canon flag:
+      proposals are hours everywhere); reminder_days is LIVE (S8 slice 3: daily EffortReminderJob) and
+      default_topic_id is LIVE (S8 slice 4: inbound mail help-topic routing, after the account override). S8 slice 2: the 5
       autoresponses + 6 alert masters + 24 recipient boxes are LIVE — TicketMailHandler (autoresponses +
       ticket alert fan-out over the catalog templates, osTicket recipient semantics: dedupe, skip-actor,
       availability, dept AlertGroup expansion) and EffortEmailHandler (effort_response_assigned/_dept_manager
@@ -963,11 +964,14 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       (explicit from-account → default_smtp → "system" = default_email_id → dev fallback/typed Failed).
       S8 slice 2: alert_email_id (alert fan-out from-account, else the transport default chain) +
       admin_email (the "admin" recipient checkbox of new-ticket/new-task alerts) are LIVE
-      (Ticket/TaskMailHandler). PERSISTED-ONLY (annotated on EmailSettings):
-      verify_domain (TODO(S8): MX lookup needs a DNS client), fetch_enabled + fetch_auto_cron
-      (TODO(S8): Hangfire fetch masters), strip_quoted / reply_separator / use_email_priority /
-      accept_unregistered / auto_add_collabs (TODO(S8): inbound processing),
-      attachments_in_email (TODO(S8): outbound composer). B3 in-page (INVENTED — the mockup's
+      (Ticket/TaskMailHandler). S8 slice 4 (inbound): fetch_enabled + fetch_auto_cron are the LIVE
+      MailFetchJob masters (per-channel fetchfreq is the real cadence), strip_quoted + reply_separator
+      LIVE via QuotedReplyStripper, use_email_priority LIVE (X-Priority/Importance → high/low),
+      accept_unregistered LIVE (unknown-sender gate) and auto_add_collabs LIVE (To/Cc →
+      ThreadCollaborator). PERSISTED-ONLY (annotated on EmailSettings):
+      verify_domain (TODO(S8): MX lookup needs a DNS client),
+      attachments_in_email (TODO(S8): outbound composer — inbound accept is capped by
+      attachments/max_size_mb instead). B3 in-page (INVENTED — the mockup's
       switches are independent, settings-kb precedent): polling gates the cron switch, strip-quoted gates
       the separator input. Honest defaults follow today's engine (template set 0, default/alert accounts 0 →
       first option renders selected, default_smtp "system"; the mockup's selected destek@/bilgi@/SMTP rows
@@ -996,7 +1000,9 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       accounts used by Department.EmailAccountId / AutoResponseEmailAccountId, Filter.EmailAccountId or the
       email settings (default / alert / default-SMTP) are skipped in the partial toast. Editor: 3 tabs;
       identity + new-ticket routing persist to EmailAccount (dept/priority/topic selects list REAL rows;
-      the routing is CONSUMED by the S8 inbound pipeline — TODO(S8)); incoming/outgoing persist to the
+      LIVE (S8 slice 4): the routing IS consumed by the inbound pipeline — account dept/priority/topic
+      feed the mail-created ticket, noautoresp mutes its autoresponses; the mailbox channel's
+      host/port/protocol/folder/fetchfreq/fetchmax/after-fetch drive MailFetchJob); incoming/outgoing persist to the
       account's one Mailbox + one Smtp EmailChannel (both materialized on save; create defaults to
       fetch/SMTP disabled — unconfigured-honest, the mockup's enabled radios are sample state, flagged).
       B3: the fetch/SMTP status radios gate their field groups (rd.js data-gates); INVENTED gates grounded
@@ -1158,8 +1164,10 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       state, flagged), exec order = max+1. ENGINE (the row's bold leg): FilterEngine (Infrastructure;
       matcher is pure static) runs INSIDE TicketService.CreateAsync for every create channel that exists
       today — portal open (Web), agent ticket-open (recorded web/email/other/phone; phone/other only meet
-      target "Any"), direct service creates; the MAIL pipeline is TODO(S8) and will feed Source=Email +
-      ReplyTo + the receiving mailbox id. Exec order, match-all/any and stop-on-match honored; reject
+      target "Any"), direct service creates; LIVE (S8 slice 4): the inbound MAIL pipeline runs it as a
+      pre-gate over fetched mail with Source=Email + ReplyTo + the receiving mailbox id, so Email-target
+      filters and the banlist finally have their real channel (a reject drops the mail with a logged
+      reason instead of creating a ticket). Exec order, match-all/any and stop-on-match honored; reject
       halts the run. Matching is ordinal case-insensitive (Turkish İ/ı not culture-folded — documented;
       regex verbatim with 250ms timeout, an invalid pattern matches NOTHING on either polarity). LIVE
       actions: reject (typed TicketRejectedByFilterException → portal open.errFiltered / agent

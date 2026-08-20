@@ -94,7 +94,8 @@ public sealed record CapturedEmail(string To, string Subject, string HtmlBody, D
 
 /// <summary>One send as it crossed the S8 SMTP transport seam (queue → job → SMTP).</summary>
 public sealed record CapturedSmtpSend(
-    string FromAddress, string? FromName, string To, string? Cc, string Subject, string HtmlBody);
+    string FromAddress, string? FromName, string To, string? Cc, string Subject, string HtmlBody,
+    string? MessageId = null, string? InReplyTo = null);
 
 /// <summary>
 /// S8 SMTP transport fake: successful sends land in <see cref="Sent"/> AND in the
@@ -134,7 +135,8 @@ public sealed class CapturingSmtpTransport(CapturingEmailSender emails) : ISmtpM
             if (_script.TryDequeue(out var scripted) && !scripted.Success)
                 return scripted;
             _sent.Add(new CapturedSmtpSend(message.FromAddress, message.FromName,
-                message.To, message.Cc, message.Subject, message.HtmlBody));
+                message.To, message.Cc, message.Subject, message.HtmlBody,
+                message.MessageId, message.InReplyTo));
         }
         await emails.SendAsync(message.To, message.Subject, message.HtmlBody, ct);
         return new RapidsolDestek.Infrastructure.Services.MailTestResult(true, "sent");

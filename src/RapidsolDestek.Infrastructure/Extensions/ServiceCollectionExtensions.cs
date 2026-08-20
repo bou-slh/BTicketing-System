@@ -62,6 +62,14 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAlertRecipientResolver, AlertRecipientResolver>();
         services.AddSingleton<ISmtpMailTransport, MailKitSmtpTransport>();
 
+        // S8 inbound mail: signed reply tokens, the MailKit mailbox seam (tests swap
+        // a scripted fake), the MimeMessage → ticket/thread processor and the
+        // recurring fetch job (Program.cs schedules it behind the server gate).
+        services.AddScoped<IMailThreadTokenService, MailThreadTokenService>();
+        services.AddSingleton<IInboundMailClient, MailKitInboundMailClient>();
+        services.AddScoped<InboundMailProcessor>();
+        services.AddScoped<MailFetchJob>();
+
         // S8 slice 3: recurring sweeps (Program.cs registers the Hangfire schedules
         // behind the server gate; job classes stay directly invocable for tests).
         // TimeProvider is the sweeps' clock seam — the rest of the codebase reads

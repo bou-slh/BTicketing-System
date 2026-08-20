@@ -166,6 +166,15 @@ public class EmailOutbound : TimestampedEntity, INotAudited
 
     public EmailOutboundStatus Status { get; set; } = EmailOutboundStatus.Pending;
 
+    /// <summary>
+    /// RFC 5322 Message-Id stamped at send time for ticket mail (S8 inbound slice):
+    /// carries the signed reply token (<c>RD1-…@domain</c>) so inbound
+    /// In-Reply-To/References headers thread back to the ticket, and doubles as the
+    /// bounce-correlation key (a DSN's original-message id marks this row Failed).
+    /// Null until sent, and for non-ticket mail (Identity resets etc.).
+    /// </summary>
+    public string? MessageId { get; set; }
+
     /// <summary>Send executions so far (success or failure).</summary>
     public int Attempts { get; set; }
 
@@ -173,6 +182,60 @@ public class EmailOutbound : TimestampedEntity, INotAudited
     public string? LastError { get; set; }
 
     public DateTimeOffset? SentAt { get; set; }
+}
+
+/// <summary>Outcome of one processed inbound mail (S8 inbound pipeline).</summary>
+public enum EmailInboundStatus
+{
+    /// <summary>A new ticket was created from the mail.</summary>
+    TicketCreated,
+    /// <summary>The mail threaded onto an existing ticket.</summary>
+    ThreadAppended,
+    /// <summary>Dropped before any domain effect (auto-submitted, loop, bounce,
+    /// self-mail, unregistered sender…) — <see cref="EmailInbound.Reason"/> says why.</summary>
+    Skipped,
+    /// <summary>Refused by the banlist or a filter Reject action.</summary>
+    Rejected,
+}
+
+/// <summary>
+/// Per-message bookkeeping of the S8 fetch pipeline: one row per inbound mail the
+/// processor handled, keyed by (channel, UID) — the idempotency guard that keeps a
+/// re-listed message (post-fetch "Nothing", POP3 without deletion) from being
+/// processed twice; <see cref="MessageId"/> is the cross-channel backstop (UIDVALIDITY
+/// resets, POP3 servers without stable UIDL). osTicket has no such table — it relies
+/// on marking messages seen/deleted at the server; the persisted log is a deliberate
+/// deviation that also serves as the observable drop/reject trail (ROADMAP §2 mail
+/// rows). Ticket/channel references are soft (EmailOutbound precedent): rows outlive
+/// channel and ticket deletions as a fetch log. Marked INotAudited: high-churn
+/// technical state.
+/// </summary>
+public class EmailInbound : TimestampedEntity, INotAudited
+{
+    public int EmailChannelId { get; set; }
+
+    public int EmailAccountId { get; set; }
+
+    /// <summary>Server-side identity within the channel (IMAP UID / POP3 UIDL, else
+    /// a fallback index).</summary>
+    public required string Uid { get; set; }
+
+    /// <summary>Normalized Message-Id header (no angle brackets); null when absent.</summary>
+    public string? MessageId { get; set; }
+
+    public string? FromAddress { get; set; }
+
+    public string? Subject { get; set; }
+
+    public EmailInboundStatus Status { get; set; }
+
+    /// <summary>Skip/reject reason key (+ detail), e.g. "auto-submitted", "loop",
+    /// "bounce", "banlist", "filter:Spam Engeli".</summary>
+    public string? Reason { get; set; }
+
+    public int? TicketId { get; set; }
+
+    public int? ThreadEntryId { get; set; }
 }
 
 /// <summary>Template set (osTicket <c>email_template_group</c>), e.g. "Varsayılan" (tr).</summary>
