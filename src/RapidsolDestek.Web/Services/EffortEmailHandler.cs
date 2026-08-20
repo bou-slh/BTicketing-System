@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using RapidsolDestek.Domain.Events;
-using RapidsolDestek.Domain.Services;
 using RapidsolDestek.Infrastructure;
 using RapidsolDestek.Infrastructure.Events;
 using RapidsolDestek.Infrastructure.Services;
@@ -8,16 +7,18 @@ using RapidsolDestek.Infrastructure.Services;
 namespace RapidsolDestek.Web.Services;
 
 /// <summary>
-/// Interim B8 email plumbing: renders the two seeded effort templates
+/// Effort email plumbing (B8 → S8): renders the two effort catalog templates
 /// (effort.request → ticket owner on propose/revise, effort.response → proposing
-/// agent on approve/reject) through <see cref="IAppEmailSender"/>. S8 replaces the
-/// transport with the Hangfire + MailKit pipeline; the template contract stays.
+/// agent on approve/reject) through <see cref="IEmailTemplateRenderer"/> and rides
+/// the persistent mail queue (<see cref="IMailQueue"/> → Hangfire send job). The
+/// from-address is the ticket department's account (user-facing request prefers the
+/// department's auto-response address, osTicket getAutoRespEmail precedent).
 /// </summary>
 public sealed class EffortEmailHandler(
     AppDbContext db,
-    ICannedResponseService variables,
+    IEmailTemplateRenderer renderer,
     ISettingsService settings,
-    IAppEmailSender mail,
+    IMailQueue queue,
     ILogger<EffortEmailHandler> logger) :
     IDomainEventHandler<EffortProposed>,
     IDomainEventHandler<EffortRevised>,
@@ -46,7 +47,7 @@ public sealed class EffortEmailHandler(
         var pending = await db.EffortProposals
             .AnyAsync(p => p.Id == proposalId && p.State == Domain.Entities.EffortState.Pending, ct);
         if (pending)
-            await SendAsync(ticketId, "effort.request", ToOwner: true, ct);
+            await SendAsync(ticketId, "effort.request", toOwner: true, ct);
     }
 
     /// <summary>alerts.effort_response (S7 "Efor Yanıtı Uyarısı" master switch; default on).
@@ -55,45 +56,57 @@ public sealed class EffortEmailHandler(
     {
         if (await settings.GetAsync("alerts", "effort_response", ct) == "false")
             return;
-        await SendAsync(ticketId, "effort.response", ToOwner: false, ct);
+        await SendAsync(ticketId, "effort.response", toOwner: false, ct);
     }
 
-    private async Task SendAsync(int ticketId, string templateCode, bool ToOwner, CancellationToken ct)
+    private async Task SendAsync(int ticketId, string templateCode, bool toOwner, CancellationToken ct)
     {
-        // LIVE email-settings consumer (S7 admin/email-settings "Varsayılan şablon
-        // seti"): render from the configured set; 0 keeps the pre-S7 behavior
-        // (the active "tr" set).
-        var setId = (await settings.GetEmailAsync(ct)).DefaultTemplateSetId;
-        var template = await db.EmailTemplateSets
-            .Where(s => setId > 0 ? s.Id == setId : s.IsActive && s.Language == "tr")
-            .OrderBy(s => s.Id) // several active tr sets can exist (S7 set CRUD) — seeded canon set wins
-            .SelectMany(s => s.Templates)
-            .Where(t => t.CodeName == templateCode)
-            .FirstOrDefaultAsync(ct);
-        if (template is null)
-        {
-            logger.LogWarning("Effort template {Code} missing; email skipped for ticket {TicketId}", templateCode, ticketId);
-            return;
-        }
-
-        var to = ToOwner
+        var recipient = toOwner
             ? await db.Tickets.Where(t => t.Id == ticketId)
-                .Select(t => t.User!.Emails.Where(e => e.Id == t.User!.DefaultEmailId)
-                    .Select(e => e.Address).FirstOrDefault() ?? t.User!.Emails.Select(e => e.Address).FirstOrDefault())
+                .Select(t => new
+                {
+                    Name = t.User!.Name,
+                    Email = t.User!.Emails.Where(e => e.Id == t.User!.DefaultEmailId)
+                        .Select(e => e.Address).FirstOrDefault()
+                        ?? t.User!.Emails.Select(e => e.Address).FirstOrDefault(),
+                })
                 .SingleOrDefaultAsync(ct)
             : await db.EffortProposals.Where(p => p.TicketId == ticketId)
                 .OrderByDescending(p => p.RevisionNo)
-                .Join(db.Staff, p => p.ProposedByStaffId, s => s.Id, (p, s) => s.Email)
+                .Join(db.Staff, p => p.ProposedByStaffId, s => s.Id,
+                    (p, s) => new { Name = s.FirstName + " " + s.LastName, Email = (string?)s.Email })
                 .FirstOrDefaultAsync(ct);
-        if (string.IsNullOrEmpty(to))
+        if (string.IsNullOrEmpty(recipient?.Email))
         {
             logger.LogWarning("No recipient for {Code} on ticket {TicketId}; email skipped", templateCode, ticketId);
             return;
         }
 
-        var bag = await variables.BuildVariablesAsync(ticketId, ct);
-        await mail.SendAsync(to,
-            TemplateVariableExpander.Expand(template.Subject, bag),
-            TemplateVariableExpander.Expand(template.Body, bag), ct);
+        var rendered = await renderer.RenderAsync(templateCode, new EmailRenderContext
+        {
+            TicketId = ticketId,
+            RecipientName = recipient.Name,
+            RecipientEmail = recipient.Email,
+        }, ct);
+        if (rendered is null)
+        {
+            logger.LogWarning("Effort template {Code} missing; email skipped for ticket {TicketId}", templateCode, ticketId);
+            return;
+        }
+
+        // From = the ticket department's address; the user-facing request prefers
+        // the department's auto-response account (department-edit de-ar-email).
+        var dept = await db.Tickets.Where(t => t.Id == ticketId)
+            .Select(t => new { t.Department!.EmailAccountId, t.Department!.AutoResponseEmailAccountId })
+            .SingleAsync(ct);
+        var fromAccountId = toOwner
+            ? dept.AutoResponseEmailAccountId ?? dept.EmailAccountId
+            : dept.EmailAccountId;
+
+        await queue.EnqueueAsync(new OutboundEmailRequest(recipient.Email, rendered.Subject, rendered.HtmlBody)
+        {
+            FromEmailAccountId = fromAccountId,
+            TicketId = ticketId,
+        }, ct);
     }
 }

@@ -128,6 +128,53 @@ public class EmailChannel : TimestampedEntity
     public DateTimeOffset? LastActivityAt { get; set; }
 }
 
+/// <summary>Send state of one <see cref="EmailOutbound"/> row (S8 outbox).</summary>
+public enum EmailOutboundStatus
+{
+    Pending,
+    Sending,
+    Sent,
+    Failed,
+}
+
+/// <summary>
+/// One queued outbound email (S8 persistent outbox). Rows are written by
+/// <c>IMailQueue.EnqueueAsync</c> and driven to Sent/Failed by the Hangfire send job
+/// (Hangfire AutomaticRetry reschedules failures; <see cref="Attempts"/> mirrors the
+/// executions). osTicket has no outbox table — its sends are fire-and-forget inside
+/// the request; the durable queue is a deliberate deviation (ROADMAP §2 mail rows).
+/// Marked INotAudited: high-churn technical state, not a domain mutation.
+/// </summary>
+public class EmailOutbound : TimestampedEntity, INotAudited
+{
+    public required string ToAddress { get; set; }
+
+    /// <summary>Comma-separated CC list; null = none (no consumer fills it yet).</summary>
+    public string? CcAddresses { get; set; }
+
+    public required string Subject { get; set; }
+
+    public required string HtmlBody { get; set; }
+
+    /// <summary>Explicit from-account (e.g. the ticket department's address); null =
+    /// the email settings default (default_smtp / default_email_id) decides at send.</summary>
+    public int? FromEmailAccountId { get; set; }
+
+    public int? TicketId { get; set; }
+
+    public int? ThreadEntryId { get; set; }
+
+    public EmailOutboundStatus Status { get; set; } = EmailOutboundStatus.Pending;
+
+    /// <summary>Send executions so far (success or failure).</summary>
+    public int Attempts { get; set; }
+
+    /// <summary>Last transport failure ("stage: detail"), or the dev-fallback note.</summary>
+    public string? LastError { get; set; }
+
+    public DateTimeOffset? SentAt { get; set; }
+}
+
 /// <summary>Template set (osTicket <c>email_template_group</c>), e.g. "Varsayılan" (tr).</summary>
 public class EmailTemplateSet : TimestampedEntity
 {

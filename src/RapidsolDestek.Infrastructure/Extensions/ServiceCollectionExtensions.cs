@@ -52,6 +52,15 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IApiKeyAuthenticator, ApiKeyAuthenticator>();
         services.AddScoped<ISystemTemplateService, SystemTemplateService>();
 
+        // S8 outbound mail core: renderer + persistent outbox + Hangfire send job.
+        // The Hangfire client/server and IMailCredentialResolver/IMailFallbackSender
+        // registrations live in Web (Program.cs) — Infrastructure only declares the
+        // job and its SMTP transport seam (tests swap the transport for a capture).
+        services.AddScoped<IEmailTemplateRenderer, EmailTemplateRenderer>();
+        services.AddScoped<IMailQueue, MailQueue>();
+        services.AddScoped<OutboundMailJob>();
+        services.AddSingleton<ISmtpMailTransport, MailKitSmtpTransport>();
+
         return services;
     }
 }

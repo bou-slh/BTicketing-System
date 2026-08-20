@@ -366,6 +366,15 @@ public static class DomainModelConfiguration
 
         b.Entity<BanlistEntry>(e => e.HasIndex(x => x.Address).IsUnique());
 
+        b.Entity<EmailOutbound>(e =>
+        {
+            e.HasIndex(x => x.Status);      // pending sweep / admin outbox filters
+            e.HasIndex(x => x.TicketId);    // per-ticket mail log
+            // FromEmailAccountId / TicketId / ThreadEntryId are deliberate soft refs
+            // (EmailAccount.DepartmentId precedent): outbox rows outlive account and
+            // ticket deletions as a send log.
+        });
+
         // ----- System -----
 
         b.Entity<Setting>(e => e.HasIndex(x => new { x.Namespace, x.Key }).IsUnique());

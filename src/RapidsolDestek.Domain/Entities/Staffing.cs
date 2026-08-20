@@ -237,10 +237,14 @@ public class Department : TimestampedEntity
     /// <summary>Template set used for this department's emails (osTicket tpl_id).</summary>
     public int? TemplateSetId { get; set; }
 
-    /// <summary>Outgoing email identity (osTicket email_id).</summary>
+    /// <summary>Outgoing email identity (osTicket email_id). LIVE (S8): the
+    /// department's ticket mails ride the queue with this from-account
+    /// (EffortEmailHandler; the settings default fills in when null).</summary>
     public int? EmailAccountId { get; set; }
 
-    /// <summary>Address used for auto-responses (osTicket autoresp_email_id).</summary>
+    /// <summary>Address used for auto-responses (osTicket autoresp_email_id).
+    /// LIVE (S8): preferred from-account for user-facing request mails
+    /// (effort.request); the autoresponse fan-out proper is a later S8 slice.</summary>
     public int? AutoResponseEmailAccountId { get; set; }
 
     public int? ManagerStaffId { get; set; }

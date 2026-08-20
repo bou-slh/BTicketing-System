@@ -1,4 +1,6 @@
 using System.Globalization;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -187,7 +189,25 @@ builder.Services.AddScoped<ISidebarBadgeService, SidebarBadgeService>();
 // S7 admin/system-logs: the syslog writer (system/log_level decides what is stored).
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Services.ISystemLogService,
     RapidsolDestek.Infrastructure.Services.SystemLogService>();
-builder.Services.AddSingleton<IAppEmailSender, DevLoggingEmailSender>();
+// S8 outbound mail core: Hangfire storage + server drive the persistent outbox
+// (IMailQueue → EmailOutbound row → OutboundMailJob with AutomaticRetry backoff).
+// Tests set Hangfire:ServerEnabled=false and stub IBackgroundJobClient — jobs are
+// invoked directly there, no server polls the test container. No dashboard
+// (deliberate: no admin surface for it yet — the outbox table is the observable).
+builder.Services.AddHangfire(cfg => cfg
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(o => o.UseNpgsqlConnection(builder.Configuration.GetConnectionString("Default"))));
+if (builder.Configuration.GetValue("Hangfire:ServerEnabled", true))
+    builder.Services.AddHangfireServer();
+
+// S8: app mails (Identity resets, check-status guest link) ride the queue; the old
+// dev logger is now the queue's Development-only no-SMTP fallback transport.
+builder.Services.AddScoped<IAppEmailSender, QueueBackedEmailSender>();
+builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailCredentialResolver, EmailChannelCredentialResolver>();
+if (builder.Environment.IsDevelopment())
+    builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailFallbackSender, DevLoggingEmailSender>();
 // S7 admin/email-edit: DataProtection-encrypted mail credentials + the real
 // MailKit "Bağlantıyı Sına" probe.
 builder.Services.AddSingleton<IEmailSecretProtector, EmailSecretProtector>();
@@ -199,7 +219,7 @@ builder.Services.AddSingleton<RapidsolDestek.Infrastructure.Services.IMailDiagno
     RapidsolDestek.Infrastructure.Services.MailDiagnosticSender>();
 builder.Services.AddSingleton<IEmailDiagnosticService, EmailDiagnosticService>();
 
-// Interim B8 effort emails (S8 replaces the transport, the handler contract stays).
+// Effort emails (B8 flow; S8: catalog templates through the renderer + mail queue).
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortProposed>, EffortEmailHandler>();
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortRevised>, EffortEmailHandler>();
 builder.Services.AddScoped<RapidsolDestek.Infrastructure.Events.IDomainEventHandler<RapidsolDestek.Domain.Events.EffortApproved>, EffortEmailHandler>();

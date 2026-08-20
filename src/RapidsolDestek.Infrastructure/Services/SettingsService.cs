@@ -149,16 +149,16 @@ public sealed record FeatureSettings(
 
 /// <summary>
 /// Typed view over the "email" namespace (admin/email-settings.html, S7).
-/// LIVE: DefaultTemplateSetId — the outgoing effort emails (EffortEmailHandler)
-/// render from this template set (0 = the active "tr" set, the pre-S7 behavior).
-/// PERSISTED-ONLY (annotated per key; the mail PIPELINE is S8):
-/// DefaultEmailAccountId / AlertEmailAccountId / AdminEmail (TODO(S8): outbound
-/// From/alert routing — IAppEmailSender composes no From today), VerifyDomain
+/// LIVE: DefaultTemplateSetId — EmailTemplateRenderer (all catalog mails) renders
+/// from this template set (0 = the active "tr" set, the pre-S7 behavior);
+/// DefaultSmtp ("system" or an account id) + DefaultEmailAccountId — the S8
+/// OutboundMailJob transport selection (explicit from-account → default_smtp →
+/// "system" = default_email_id). PERSISTED-ONLY (annotated per key):
+/// AlertEmailAccountId / AdminEmail (TODO(S8): alert fan-out routing), VerifyDomain
 /// (TODO(S8): MX lookup on address save needs a DNS client), FetchEnabled +
 /// FetchAutoCron (TODO(S8): Hangfire fetch pipeline master switches), StripQuoted +
 /// ReplySeparator + UseEmailPriority + AcceptUnregistered + AutoAddCollabs
-/// (TODO(S8): inbound mail processing), DefaultSmtp ("system" or an account id —
-/// TODO(S8): outbound transport selection), AttachmentsInEmail (TODO(S8):
+/// (TODO(S8): inbound mail processing), AttachmentsInEmail (TODO(S8):
 /// outbound composer). Referenced account ids also feed the emails-page delete guard.
 /// </summary>
 public sealed record EmailSettings(
@@ -344,8 +344,9 @@ public sealed class SettingsService(AppDbContext db) : ISettingsService
             // 0 = the active "tr" set: exactly what the effort emails used before S7,
             // so the honest default (the mockup's selected "Varsayılan (TR)" agrees).
             DefaultTemplateSetId: Int(s, "default_template_set_id", 0),
-            // Honest default 0/unset: nothing composes a From address today — the
-            // mockup's selected destek@/bilgi@ rows are sample state (flagged).
+            // Honest default 0/unset: the S8 queue then has no "system" account and
+            // dev-falls-back/fails typed — the mockup's selected destek@/bilgi@ rows
+            // are sample state (flagged).
             DefaultEmailAccountId: Int(s, "default_email_id", 0),
             AlertEmailAccountId: Int(s, "alert_email_id", 0),
             AdminEmail: s.GetValueOrDefault("admin_email"),
@@ -359,8 +360,8 @@ public sealed class SettingsService(AppDbContext db) : ISettingsService
             UseEmailPriority: Bool(s, "use_email_priority", false),
             AcceptUnregistered: Bool(s, "accept_unregistered", true),
             AutoAddCollabs: Bool(s, "auto_add_collabs", true),
-            // Honest default "system": no account SMTP transport exists until S8 —
-            // the mockup's selected "destek@… — SMTP" is sample state (flagged).
+            // LIVE (S8 OutboundMailJob): "system" = default_email_id, else an
+            // account id — the mockup's selected "destek@… — SMTP" is sample state.
             DefaultSmtp: s.GetValueOrDefault("default_smtp", "system"),
             AttachmentsInEmail: Bool(s, "attachments_in_email", true));
     }

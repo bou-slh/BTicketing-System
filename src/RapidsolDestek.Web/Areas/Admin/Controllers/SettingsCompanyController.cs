@@ -12,7 +12,7 @@ namespace RapidsolDestek.Web.Areas.Admin.Controllers;
 // ---- view model ---------------------------------------------------------------------
 
 public sealed record SettingsCompanyVm(
-    string Name,                              // company/* — TODO(S8): %{company.*} template variables
+    string Name,                              // company/* — LIVE (S8): %{company.*} template variables (EmailTemplateRenderer)
     string Website,
     string Phone,
     string Address,

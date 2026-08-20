@@ -755,8 +755,8 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       preview = GET /admin/settings-company/logo?which=client|staff|backdrop serving the stored file back
       (no base64 anywhere; replaced files are deleted from store+db); PNG/SVG ≤ 2 MB enforced from the
       sc.upload canon text; custom mode without any file refuses (sc.errLogo). PERSISTED-ONLY (annotated
-      at the VM): company name/website/phone/address TODO(S8 %{company.*} template variables; no portal
-      footer exists to consume them), landing_page_id (portal home content block — pages port),
+      at the VM): company name/website/phone/address RESOLVED LIVE by S8 (%{company.*} template variables,
+      EmailTemplateRenderer; still no portal footer), landing_page_id (portal home content block — pages port),
       offline_page_id (offline view serves the S5 static twin today), thanks_page_id (post-create
       confirmation; HelpTopic.SitePageId already overrides per topic), logo modes/file ids (portal
       header + backoffice topbar logo swap and the agent login backdrop are TODO — the preview endpoint
@@ -772,7 +772,8 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       failure (ss.errValues). LIVE (5): online switch reads/writes the SAME system/offline Setting the S5
       MaintenanceModeMiddleware serves portal/offline from (inverted; HTTP-POST flip test: portal serves
       the offline card, /admin keeps rendering, flip back reopens); helpdesk name = core/helpdesk_title
-      NEWLY consumed by all three layouts' browser-tab <title> (TODO(S8): outgoing-mail sender name);
+      NEWLY consumed by all three layouts' browser-tab <title> (S8: also the outgoing From display-name
+      fallback, OutboundMailJob);
       default department = core/default_dept_id (TicketService.CreateAsync cascade, consumed since S4);
       primary language NEWLY consumed as the request-culture fallback after the cookie (Program.cs
       CustomRequestCultureProvider — explicit user choice still wins); attachments max_size_mb enforced at
@@ -784,7 +785,8 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       minus current rows (mockup statically lists de/fr/ar); de/fr/ar persist with TODO: i18n resources —
       only TR/EN resx exist, extra languages have no UI translations (canon flag); a primary sitting in the
       secondary list is dropped on save. PERSISTED-ONLY (each annotated at the VM build): helpdesk_url
-      TODO(S8 email link base), force_https (env-gated UseHttpsRedirection today), collision_minutes
+      RESOLVED LIVE by S8 (%{ticket.link} base, EmailTemplateRenderer), force_https (env-gated
+      UseHttpsRedirection today), collision_minutes
       (composer lock TTL — IThreadService lock API unwired), page_size (TicketListEngine.PageSize const),
       log_level (RESOLVED LIVE by the system-logs port: SystemLogService stores per level) +
       log_purge_months (S8 retention job), show_avatars (thread renderers),
@@ -945,14 +947,15 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       *(S7; /admin/email-settings (EmailSettingsController) over ISettingsService ns "email" (NEW EmailSettings
       typed section) — PRG toast, B9 scroll-spy rail; selects list REAL rows: active template sets, email
       accounts, and SMTP-capable accounts for the default-delivery select (the mockup's single "destek@… —
-      SMTP" option = exactly the seeded SMTP channel). LIVE (1): default_template_set_id — the B8 effort
-      emails (EffortEmailHandler) render from the chosen set (0 keeps the pre-S7 behavior, the active "tr"
-      set). PERSISTED-ONLY (annotated on EmailSettings — the mail PIPELINE is S8): default_email_id /
-      alert_email_id / admin_email (TODO(S8): outbound From/alert routing — IAppEmailSender composes no From
-      today), verify_domain (TODO(S8): MX lookup needs a DNS client), fetch_enabled + fetch_auto_cron
+      SMTP" option = exactly the seeded SMTP channel). LIVE (3, S8 outbound core): default_template_set_id —
+      EmailTemplateRenderer (all catalog mails) renders from the chosen set (0 keeps the pre-S7 behavior,
+      the active "tr" set); default_smtp + default_email_id — OutboundMailJob transport selection
+      (explicit from-account → default_smtp → "system" = default_email_id → dev fallback/typed Failed).
+      PERSISTED-ONLY (annotated on EmailSettings): alert_email_id / admin_email (TODO(S8): alert fan-out
+      routing), verify_domain (TODO(S8): MX lookup needs a DNS client), fetch_enabled + fetch_auto_cron
       (TODO(S8): Hangfire fetch masters), strip_quoted / reply_separator / use_email_priority /
-      accept_unregistered / auto_add_collabs (TODO(S8): inbound processing), default_smtp +
-      attachments_in_email (TODO(S8): outbound transport/composer). B3 in-page (INVENTED — the mockup's
+      accept_unregistered / auto_add_collabs (TODO(S8): inbound processing),
+      attachments_in_email (TODO(S8): outbound composer). B3 in-page (INVENTED — the mockup's
       switches are independent, settings-kb precedent): polling gates the cron switch, strip-quoted gates
       the separator input. Honest defaults follow today's engine (template set 0, default/alert accounts 0 →
       first option renders selected, default_smtp "system"; the mockup's selected destek@/bilgi@/SMTP rows

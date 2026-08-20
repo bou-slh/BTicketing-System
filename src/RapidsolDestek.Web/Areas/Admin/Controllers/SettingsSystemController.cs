@@ -211,8 +211,8 @@ public class SettingsSystemController(AppDbContext db, ISettingsService settings
         // General. Online is LIVE: same key MaintenanceModeMiddleware reads (inverted).
         await settings.SetAsync(MaintenanceModeMiddleware.SettingNamespace,
             MaintenanceModeMiddleware.SettingKey, (!Chk("online")).ToString(), ct);
-        await settings.SetAsync("core", "helpdesk_url", url, ct);       // TODO(S8): email link base
-        await settings.SetAsync("core", "helpdesk_title", title, ct);   // LIVE: layout <title>; TODO(S8): mail sender name
+        await settings.SetAsync("core", "helpdesk_url", url, ct);       // LIVE (S8): %{ticket.link} base (EmailTemplateRenderer)
+        await settings.SetAsync("core", "helpdesk_title", title, ct);   // LIVE: layout <title>; S8: From display-name fallback (OutboundMailJob)
         await settings.SetAsync("core", "default_dept_id", deptId.ToString(), ct); // LIVE: TicketService.CreateAsync cascade
 
         // Advanced general — persisted-only, consumers annotated on the VM build above.
