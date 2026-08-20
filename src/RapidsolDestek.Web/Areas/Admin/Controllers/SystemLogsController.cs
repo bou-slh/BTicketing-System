@@ -39,8 +39,8 @@ public sealed record SystemLogsIndexVm(
 /// is system/log_level's call, which this page's banner links to). "Seçilenleri Sil"
 /// really deletes the checked rows behind the mockup's dlg-purge confirm; each row
 /// opens a detail dialog (B2) — INVENTED: the mockup defines no row dialog, only the
-/// purge confirm (flagged). Automatic retention (log_purge_months) stays TODO(S8
-/// Hangfire job) per the banner's own copy.
+/// purge confirm (flagged). Automatic retention (log_purge_months) is LIVE (S8):
+/// the daily RetentionPurgeJob deletes rows older than the configured months.
 /// </summary>
 [Area("Admin")]
 [Authorize(Policy = "AdminOnly")]

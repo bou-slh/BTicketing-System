@@ -174,9 +174,9 @@ public sealed class TicketService(
 
         // SLA grace consumption (admin/slas sla.grace): the plan's grace period sets
         // the estimated due instant every due/overdue consumer reads
-        // (DueDate ?? EstimatedDueDate). Wall-clock hours for now —
-        // TODO(S8): the SLA sweep recomputes schedule-aware (the clock only runs
-        // inside the plan's working schedule) and flags IsOverdue.
+        // (DueDate ?? EstimatedDueDate). Wall-clock hours at create — LIVE (S8):
+        // SlaOverdueSweepJob recomputes schedule-aware (the clock only runs inside
+        // the plan's working schedule) and flags IsOverdue.
         var estimatedDue = await ComputeEstimatedDueAsync(slaId, DateTimeOffset.UtcNow, ct);
 
         var ticket = new Ticket

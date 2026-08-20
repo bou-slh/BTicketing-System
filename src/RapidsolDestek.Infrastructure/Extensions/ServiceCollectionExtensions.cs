@@ -62,6 +62,16 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAlertRecipientResolver, AlertRecipientResolver>();
         services.AddSingleton<ISmtpMailTransport, MailKitSmtpTransport>();
 
+        // S8 slice 3: recurring sweeps (Program.cs registers the Hangfire schedules
+        // behind the server gate; job classes stay directly invocable for tests).
+        // TimeProvider is the sweeps' clock seam — the rest of the codebase reads
+        // DateTimeOffset.UtcNow directly; widening the seam is a deliberate non-goal.
+        services.AddSingleton(TimeProvider.System);
+        services.AddScoped<SlaOverdueSweepJob>();
+        services.AddScoped<TaskOverdueSweepJob>();
+        services.AddScoped<EffortReminderJob>();
+        services.AddScoped<RetentionPurgeJob>();
+
         return services;
     }
 }

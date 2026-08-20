@@ -284,6 +284,29 @@ if (app.Environment.IsDevelopment())
     await DomainSeeder.SeedAsync(scope.ServiceProvider);
 }
 
+// S8 slice 3: recurring sweeps behind the same Hangfire server gate (tests disable
+// the server and invoke the job classes directly). Cadences are constants on each
+// job class; Hangfire evaluates cron in UTC. The email fetch pipeline master
+// switches (email/fetch_enabled + fetch_autocron) stay TODO(S8 inbound) — nothing
+// here consumes them.
+if (builder.Configuration.GetValue("Hangfire:ServerEnabled", true))
+{
+    using var scope = app.Services.CreateScope();
+    var recurring = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+    recurring.AddOrUpdate<RapidsolDestek.Infrastructure.Services.SlaOverdueSweepJob>(
+        "sla-overdue-sweep", j => j.RunAsync(CancellationToken.None),
+        RapidsolDestek.Infrastructure.Services.SlaOverdueSweepJob.Cron);
+    recurring.AddOrUpdate<RapidsolDestek.Infrastructure.Services.TaskOverdueSweepJob>(
+        "task-overdue-sweep", j => j.RunAsync(CancellationToken.None),
+        RapidsolDestek.Infrastructure.Services.TaskOverdueSweepJob.Cron);
+    recurring.AddOrUpdate<RapidsolDestek.Infrastructure.Services.EffortReminderJob>(
+        "effort-reminder", j => j.RunAsync(CancellationToken.None),
+        RapidsolDestek.Infrastructure.Services.EffortReminderJob.Cron);
+    recurring.AddOrUpdate<RapidsolDestek.Infrastructure.Services.RetentionPurgeJob>(
+        "retention-purge", j => j.RunAsync(CancellationToken.None),
+        RapidsolDestek.Infrastructure.Services.RetentionPurgeJob.Cron);
+}
+
 app.Run();
 
 public partial class Program;

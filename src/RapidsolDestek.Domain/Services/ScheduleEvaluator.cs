@@ -85,6 +85,60 @@ public static class ScheduleEvaluator
         return OpenRangesOn(schedule, date).Any(r => time >= r.Start && time < r.End);
     }
 
+    /// <summary>Safety horizon for <see cref="AddWorkingHours"/>: a schedule that
+    /// stays closed for a whole year cannot consume the grace period — the caller
+    /// falls back to wall-clock (osTicket addGracePeriod does the same when
+    /// addWorkingHours fails).</summary>
+    private const int WorkingHoursHorizonDays = 366;
+
+    /// <summary>
+    /// Adds <paramref name="hours"/> working hours to <paramref name="start"/>,
+    /// counting only instants where the schedule is open (the S8 SLA sweep's clock —
+    /// osTicket BusinessHours::addWorkingHours semantics, modeled not copied): the
+    /// instant is converted to the schedule's wall clock, then open ranges (entries
+    /// minus holidays) are consumed day by day until the hours are spent. Returns
+    /// null when the schedule never opens long enough within a one-year horizon —
+    /// callers fall back to wall-clock addition.
+    /// </summary>
+    public static DateTimeOffset? AddWorkingHours(
+        Schedule schedule, DateTimeOffset start, decimal hours, TimeZoneInfo timezone)
+    {
+        if (hours <= 0)
+            return start;
+
+        var local = TimeZoneInfo.ConvertTime(start, timezone);
+        var firstDate = DateOnly.FromDateTime(local.Date);
+        var startTime = TimeOnly.FromTimeSpan(local.TimeOfDay);
+        var remaining = TimeSpan.FromHours((double)hours);
+
+        for (var offset = 0; offset <= WorkingHoursHorizonDays; offset++)
+        {
+            var date = firstDate.AddDays(offset);
+            foreach (var (open, close) in OpenRangesOn(schedule, date))
+            {
+                var from = open;
+                if (offset == 0)
+                {
+                    // First day: the clock starts at `start`, not at the range opening.
+                    if (startTime >= close)
+                        continue;
+                    if (startTime > open)
+                        from = startTime;
+                }
+
+                var available = close - from;
+                if (available >= remaining)
+                {
+                    var dt = date.ToDateTime(from).Add(remaining);
+                    return new DateTimeOffset(dt, timezone.GetUtcOffset(dt));
+                }
+                remaining -= available;
+            }
+        }
+
+        return null; // never opened long enough — wall-clock fallback is the caller's
+    }
+
     /// <summary>Resolves an IANA id to a <see cref="TimeZoneInfo"/>; null/unknown ids
     /// fall back to <paramref name="fallbackId"/>, then to the machine's zone.</summary>
     public static TimeZoneInfo ResolveTimeZone(string? id, string? fallbackId = null)

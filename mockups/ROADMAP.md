@@ -326,16 +326,16 @@ behavior. (Component inventory source: the three mockup audits, 2026-08-13.)
       refused, card snaps back + toast; drag/drop styles added in app.css (mockup ships none). SLA
       chips tick every 6 s (lv.autoNote cadence) with warn<5 min/danger<1 min from the mockup JS (the
       static markup contradicts it — 12:37 rendered warn; the JS thresholds win) and RECOVER both on
-      tick and on event re-render; chips render only where a due instant or overdue flag exists (most
-      seeds have neither — EstimatedDueDate stays unset until the S8 SLA sweep, which also owns
-      TicketOverdue: subscribed, never raised yet), remaining >1 h shows as total-minutes mm:ss. Pause
+      tick and on event re-render; chips render only where a due instant or overdue flag exists (S8
+      slice 3 resolves the seed sparsity: SlaOverdueSweepJob stamps EstimatedDueDate on every open SLA
+      ticket and raises TicketOverdue for real), remaining >1 h shows as total-minutes mm:ss. Pause
       buffers ticker items (cap 8) and collapses membership refetches into one on resume — flagged
       choice, the mockup simply drops its fake tick. Canlı Akış backfill reconstructs the last 6 items
       from thread_event rows + customer messages (domain events aren't persisted); Ekip Durumu = the
       active+visible roster with live open counts, away = Tatil Modu (canon defines no presence
       source — needs sign-off). E2E `LiveBoardTests` needs a freshly seeded DB (the single Destek
       claimable card is consumed per run — suite precedent, GoldenPath's hero step is equally
-      one-shot). Differ 2026-08-18 PASS; canon question: mockup shows an SLA countdown chip on EVERY card, app only where a due instant exists (seed sparse until S8 EstimatedDueDate sweep).)*
+      one-shot). Differ 2026-08-18 PASS; canon question: mockup shows an SLA countdown chip on EVERY card, app only where a due instant exists (the S8 sweep now populates due instants for open SLA tickets).)*
 - [x] **tickets.html** — queue tree filters for real (counts live, active state moves); B1 full list engine;
       advanced-search dialog: rule rows add/remove, column picker, sort, **save as queue**; export CSV; bulk bar
       *(S6; queue tree renders the seeded SavedQueue tree (+ the staff's personal queues under "Kayıtlı
@@ -707,14 +707,14 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       unknown values fall back to warn); honest small hook set (flagged): staff login failures + lockouts
       (StaffAccountControllerBase — unknown user / N. deneme warnings, tripped lock = error; agent+admin),
       portal login failures/lockouts (AccountController twin), and the purge itself logs a debug event;
-      the mail pipeline joins in S8, log_purge_months retention stays TODO(S8 Hangfire job) per the
-      banner's own copy. Mockup's 7 canon rows seeded verbatim (titles/dates/IPs; Log detail bodies are
+      the mail pipeline joins in S8, log_purge_months retention is LIVE (S8 slice 3: daily
+      RetentionPurgeJob, also prunes sent outbox rows on the same months dial). Mockup's 7 canon rows seeded verbatim (titles/dates/IPs; Log detail bodies are
       INVENTED sample data — flagged). B1: from/to + level filters via GET Apply (mockup's preset 2026-08
       input values are dead sample state — live page starts unfiltered, flagged), date sort both ways
       (sorted-desc default), PageSize 7 (= the mockup's 1–7/132 → 19 pages math), windowed 1 2 3 … N
       pagination, check-all + ids carrier form (banlist precedent). Purge = the mockup's "Seçilenleri Sil"
       → dlg-purge confirm → REAL ExecuteDelete of the checked rows (empty selection refuses with invented
-      sl.errNone); auto-purge-by-age is the S8 retention job. Row detail dialog (B2) INVENTED: the
+      sl.errNone); auto-purge-by-age = the S8 RetentionPurgeJob (live). Row detail dialog (B2) INVENTED: the
       mockup's title cells are dead text and it defines NO row dialog — titles now open a per-row
       server-prefilled rd-dialog (title/type/date/IP/logger/detail; flagged for canon). No empty-state
       variant (mockup defines none). Invented keys (TR/EN twins): sl.dateFmt/toastDeleted/errNone/
@@ -825,7 +825,7 @@ Shared: every list page gets B1 (sort/search/pagination/selection/bulk/empty sta
       the controller maps): lock_mode (IThreadService lock API exists, composer wiring pending), captcha
       TODO(S9), auto_refer_on_close (needs the referral mechanism), allow_external_images TODO(S8),
       collab_visibility (open decision #9), default_topic_id TODO(S8 inbound mail), effort unit (canon flag:
-      proposals are hours everywhere) + reminder_days TODO(S8 Hangfire reminder). S8 slice 2: the 5
+      proposals are hours everywhere); reminder_days is LIVE (S8 slice 3: daily EffortReminderJob). S8 slice 2: the 5
       autoresponses + 6 alert masters + 24 recipient boxes are LIVE — TicketMailHandler (autoresponses +
       ticket alert fan-out over the catalog templates, osTicket recipient semantics: dedupe, skip-actor,
       availability, dept AlertGroup expansion) and EffortEmailHandler (effort_response_assigned/_dept_manager

@@ -180,6 +180,10 @@ public class EffortProposal : TimestampedEntity
 
     /// <summary>Mandatory on rejection when the settings gate requires it.</summary>
     public string? DecisionNote { get; set; }
+
+    /// <summary>Last pending-decision reminder mail instant (S8 effort reminder job;
+    /// effort/reminder_days cadence). Null = never reminded for this revision.</summary>
+    public DateTimeOffset? ReminderSentAt { get; set; }
 }
 
 public enum EffortState

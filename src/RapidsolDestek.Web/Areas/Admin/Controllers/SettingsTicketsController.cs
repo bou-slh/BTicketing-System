@@ -259,10 +259,11 @@ public class SettingsTicketsController(
         await settings.SetAsync("tickets", "allow_external_images", Chk("external_images").ToString(), ct);
         await settings.SetAsync("tickets", "collab_visibility", Chk("collab_visibility").ToString(), ct);
 
-        // Effort (B8 — ALL LIVE except unit/reminder_days: enabled + block_work +
-        // reject_note + auto_approve + revision_limit gate EffortProposalService /
-        // EffortWorkGate the moment they land; reminder_days TODO(S8): Hangfire
-        // reminder job; unit persisted-only, flagged for canon).
+        // Effort (B8 — ALL LIVE except unit: enabled + block_work + reject_note +
+        // auto_approve + revision_limit gate EffortProposalService / EffortWorkGate
+        // the moment they land; reminder_days drives the S8 EffortReminderJob
+        // (daily Hangfire sweep, ReminderSentAt cadence guard); unit persisted-only,
+        // flagged for canon).
         await settings.SetAsync("effort", "enabled", Chk("ef_enabled").ToString(), ct);
         await settings.SetAsync("effort", "block_work_until_approved", Chk("ef_block_work").ToString(), ct);
         await settings.SetAsync("effort", "mandatory_reject_note", Chk("ef_reject_note").ToString(), ct);

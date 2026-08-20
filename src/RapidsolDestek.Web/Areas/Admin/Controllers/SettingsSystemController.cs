@@ -138,7 +138,7 @@ public class SettingsSystemController(AppDbContext db, ISettingsService settings
             CollisionMinutes: Int("collision_minutes", 3),  // TODO: consumed by the composer lock TTL (IThreadService lock API exists, wiring pending with tickets/lock_mode)
             PageSize: Int("page_size", 25),                 // TODO: consumed by list pagination (TicketListEngine.PageSize is a const today)
             LogLevel: Str("log_level", "warn"),             // LIVE: SystemLogService stores only levels this allows (S7 system-logs port)
-            LogPurgeMonths: Int("log_purge_months", 3),     // TODO(S8): consumed by the Hangfire retention job
+            LogPurgeMonths: Int("log_purge_months", 3),     // LIVE (S8): RetentionPurgeJob (syslog + sent outbox rows; 0 = never)
             ShowAvatars: Bool("show_avatars", true),        // TODO: consumed by the thread renderers
             RichText: Bool("rich_text", true),              // TODO: consumed by the composer toolbar gate (rd.js enhanceTextareas)
             IframeAllowlist: Str("iframe_allowlist", ""),   // TODO(S9): consumed by CSP frame-ancestors
